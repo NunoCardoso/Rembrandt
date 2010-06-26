@@ -1,0 +1,73 @@
+Qual a estratégia: 
+
+Apanhar a categoria da Wikipédia "Poetas romenos" -> debitar tudo
+
+Resultado:
+
+select page_id, page_title from pt_page, pt_categorylinks where page_id=cl_from and cl_to="Poetas_da_Roménia";
++---------+------------------+
+| page_id | page_title       |
++---------+------------------+
+|  123615 | Paul_Celan       | 
+|  231034 | Mihai_Eminescu   | 
+|   75873 | Tristan_Tzara    | 
+|  212773 | Isabel_de_Wied   | 
+| 1604056 | Andrei_Mureşanu  | 
++---------+------------------+
+5 rows in set (0.32 sec)
+
+mysql> select page_id, page_title from en_page, en_categorylinks where page_id=cl_from and cl_to="Romanian_poets" LIMIT 20;
++----------+---------------------------------+
+| page_id  | page_title                      |
++----------+---------------------------------+
+|   421445 | List_of_Romanian_language_poets | 
+| 16369009 | Constantin_Abăluţă              | 
+|  7319225 | Haig_Acterian                   | 
+| 16369071 | Felix_Aderca                    | 
+|  7562835 | Horia_Agarici                   | 
+| 16369141 | George_Alboiu                   | 
+|  1034858 | Vasile_Alecsandri               | 
+| 16369298 | Grigore_Alexandrescu            | 
+| 16369556 | Ioan_Alexandru                  | 
+| 16369681 | Alexandru_Andriţoiu             | 
+| 16369954 | Dimitrie_Anghel                 | 
+|   588018 | Tudor_Arghezi                   | 
+|  6342517 | Gheorghe_Asachi                 | 
+|  4737468 | Elisabeth_Axmann                | 
+| 16370097 | Ioan_Baba                       | 
+| 16696278 | Maria_Baciu                     | 
+| 16696466 | Ştefan_Baciu                    | 
+| 16696771 | Anatol_E._Baconsky              | 
+|  1748074 | George_Bacovia                  | 
+| 16697021 | Vasile_Baghiu                   | 
++----------+---------------------------------+
+20 rows in set (0.90 sec)
+Como foi gerado:
+
+echo "ă" | native2ascii -encoding UTF-8
+\u0103
+echo "ţ" | native2ascii -encoding UTF-8
+\u0163
+echo "ş" | native2ascii -encoding UTF-8
+\u015f
+
+Gerado manualmente pelo generatedAnswers.
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Paul Celan", "pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Mihai Eminescu", "pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Tristan Tzara", "pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Isabel de Wied", "pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Andrei Mure\\u015fanu", "pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Constantin Ab\\u0103lu\\u0163\\u0103", "en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Haig Acterian", "en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Felix Aderca", "en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Horia Agarici", "en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("George Alboiu", "en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Vasile Alecsandri", "en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Grigore Alexandrescu", "en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Ioan Alexandru", "en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Alexandru Andri\\u0163oiu", "en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Dimitrie Anghel", "en")
+
+nota: http://dbpedia.org/page/Category:Romanian_poets
+Tem muitos mais.

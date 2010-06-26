@@ -1,0 +1,14 @@
+SELECT * WHERE {
+?s skos:subject <http://dbpedia.org/resource/Category:Rivers_of_Germany> .
+?s dbpedia-owl:length ?t 
+} 
+
+:Elbe 	"1091"
+:Havel 	"325"^^dbpedia:ontology/kilometre
+:Rhine 	"1320"^^dbpedia:ontology/kilometre
+:Spree 	"400"^^dbpedia:ontology/kilometre
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Elbe","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Havel","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Rhine","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Spree","en")

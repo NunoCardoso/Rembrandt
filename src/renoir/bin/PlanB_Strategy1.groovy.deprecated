@@ -1,0 +1,64 @@
+/** This file is part of REMBRANDT - Named Entity Recognition Software
+ *  (http://xldb.di.fc.ul.pt/Rembrandt)
+ *  Copyright (c) 2008-2009, Nuno Cardoso, University of Lisboa and Linguateca.
+ *
+ *  REMBRANDT is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  REMBRANDT is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package renoir.bin
+
+import org.apache.log4j.*
+import rembrandtpool.io.RembrandtedDoc
+import rembrandtpool.bin.RembrandtPool
+import renoir.obj.Question
+
+/** Plan: get the Wikipedia page of an object, look for entities within a given class */
+class PlanB_Strategy1 {
+	
+
+	static Logger log = Logger.getLogger("RenoirMain")
+	RembrandtPool rp
+	String version = rembrandt.bin.Rembrandt.version
+	String comment = "For GikiCLEF"
+	Question q
+	
+	public PlanB_Strategy1() {
+		rp = new RembrandtPool()
+	}
+	
+	/*public List<RembrandtedDoc> getWikipediaRembrandtedPages(List targetedWikipediaPageIDs) {
+		if (!targetedWikipediaPageIDs) return
+		List<RembrandtedDoc> rembrandtedDocs = []
+		targetedWikipediaPageIDs.each{id -> 
+			log.debug "Got id: $id. Getting RembrandtDoc with this id"
+			RembrandtedDoc rdoc 
+			rdoc= RembrandtedDoc.getFromIDOriginalDoc(id)
+			if (!rdoc) {
+				log.warn "No rdoc found for id $id. I will tag it." 				
+				wr.convertWikipediaDocumentToWikiRembrandt(id, version, comment)
+				rdoc = RembrandtedDoc.getFromIDOriginalDoc(id)
+			}
+			if (!rdoc) {
+				// if there was no original text, anything...
+				log.fatal "There's no RembrandtedDoc, period. Skipping."
+			} else {
+			
+			// let's get the NE stuff - it'll parse on demand...
+				wr.analyseNEsFromRembrandtedDocument(rdoc)
+				rembrandtedDocs << rdoc
+			}
+		}
+		return rembrandtedDocs	
+	}*/ 
+}

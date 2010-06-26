@@ -1,0 +1,63 @@
+package renoir.bin
+
+
+import org.junit.*
+import org.junit.runner.*
+import org.apache.log4j.*
+import renoir.qa.*
+import renoir.bin.*
+import renoir.rules.*
+import rembrandt.obj.*
+import saskia.bin.Configuration
+import com.thoughtworks.xstream.*
+import saskia.dbpedia.DBpediaAPI
+import saskia.wikipedia.WikipediaAPI
+import saskia.wikipedia.WikipediaDocument
+
+	DBpediaAPI dbpedia = DBpediaAPI.newInstance()
+	WikipediaAPI wiki = WikipediaAPI.newInstance("pt")
+
+MG4JQuery mg4j = new MG4JQuery()
+List urls = mg4j.query(args[0], 1000)
+List pages = mg4j.getContents(urls)
+	//urls.each{url -> println url}
+List goodPages = []
+pages.each{p -> 
+		def m = p =~ /.*<title>(.*)<\/title>.*/
+		if (m.matches()) {
+			def rawtitle = m.group(1)
+			def m2 = rawtitle =~ /^(.*) - Wikip.dia. a enciclop.dia livre$/
+			if (m2.matches()) {
+				def title = m2.group(1)
+				println "Got title: $title"
+				
+				WikipediaDocument wd = wiki.getPageDocumentFromTitle(title)
+				println "Got WD with id: ${wd?.id}"
+				List resource = []
+				if (wd) {
+					resource << dbpedia.getDBpediaResourceFromWikipediaPageTitle(title, "pt")
+					println "resource: $resource"
+					resource?.each{r -> 
+						if (r) {
+							def x = dbpedia.getDBpediaOntologyClassFromDBpediaResource(r)
+							println "$r has class $x"
+					
+							if (r.contains("http://dbpedia.org/resource/Country")) {
+								println "Got a county."
+							goodPages << title
+							}
+						}
+					}
+				}
+	
+			} else {
+				println "did not get title."
+			}
+		} else {
+			println "did not get raw title."
+		}
+	}
+goodPages.each{p -> 
+	println "P: $p"
+}
+	

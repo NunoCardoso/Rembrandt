@@ -1,0 +1,15 @@
+Como foi gerado:
+
+Gerado manualmente pelo generatedAnswers.
+
+def resource1 << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Itália", "pt")
+def resource2 << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Ernest Hemingway", "pt")
+
+Qual a estratégia: 
+
+Foi para o plano B - apanhar a página de Ernest Hemingway (id:808), 
+Rembrandteá-la, procurar locais, filtrar por locais em Itália
+
+Resultado:
+
+A página wikipédia PT de Ernest Hemingway não tem nenhum local em Itália, só o país. 

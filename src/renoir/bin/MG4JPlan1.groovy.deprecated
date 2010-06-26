@@ -1,0 +1,92 @@
+/** Rembrandt 
+ * Copyright (C) 2008 Nuno Cardoso. ncardoso@xldb.di.fc.ul.pt
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+package renoir.bin
+
+import org.apache.log4j.*
+import renoir.qa.Question
+/**
+ *
+ */
+public class MG4JPlan1 {
+	
+	MG4JQuery mg4jAll, mg4jTitle 
+	
+	static Logger log = Logger.getLogger("MG4JMain")
+		
+	/**
+	 * Constructor. 
+	 */
+	public MG4JPlan1() {
+		String[] title = ["title"]
+		mg4jTitle = new MG4JQuery(title)
+		mg4jAll = new MG4JQuery()
+	    }
+
+	void process(Question q) {
+		String subject, object
+		
+		if (q.subject) {
+			println "Subject terms text:"+q.subject.terms*.text
+			println "Subject terms lemma:"+q.subject.terms*.lemma
+			subject = "( "+q.subject.terms*.text.join(" ")+" " + q.subject.terms*.lemma.join(" ")+") "
+		}
+		if (q.conditions) {
+			println "Conditions predicate terms text:"+q.conditions[0].predicate.terms*.text
+			println "Conditions predicate terms lemma:"+q.conditions[0].predicate.terms*.lemma
+			println "Conditions object terms text:"+q.conditions[0].object.ne.terms*.text
+			println "Conditions object terms lemma:"+q.conditions[0].object.ne.terms*.lemma
+			object = "( "+q.conditions[0].object.ne.terms*.text.join(" ")+" ) "
+		}
+		
+	def query = q.conditions[0].object.ne.terms*.text.join(" ")
+	println "Query 2 MG4J Title: $query"
+	List results = mg4jTitle.query(query)
+	results.each{r -> 
+		println "Title: $r"
+	}
+	
+	query = "$subject $object"
+	println "Query 2 MG4J All: $query"
+	List results2 = mg4jAll.query(query)
+	results2.each{r -> 
+		println "All: $r"
+	}
+	
+		
+	}
+	/*	ZipFile zipfile = new ZipFile("index/wikipedia-pt-plain-files.zip")
+	ZipEntry entry
+	Enumeration e = zipfile.entries()
+	while (e.hasMoreElements()) {
+		entry = (ZipEntry) e.nextElement()
+		def entryName = entry.getName().toString()
+		if (needles.contains(entryName)) {
+			log.debug "Found on zip entry " + entry
+			String text = ""
+			BufferedReader br = new BufferedReader( 
+				new InputStreamReader(zipfile.getInputStream(entry)))
+			String line
+ 			while ((line = br.readLine()) != null) {text += line}
+    		wikipediaContents[entry] = text	
+		}
+	}
+	
+*/	
+	
+}

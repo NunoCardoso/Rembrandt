@@ -1,0 +1,21 @@
+SELECT * WHERE {
+?s skos:subject <http://dbpedia.org/resource/Category:Mountains_of_Nepal> .
+?s dbpedia-owl:elevation ?x .
+FILTER (?x > "8000"^^dbpedia-owl:metre)
+}
+
+:Annapurna 	"8091"^^dbpedia:ontology/metre
+:Cho_Oyu 	"8201"^^dbpedia:ontology/metre
+:Dhaulagiri 	"8167"^^dbpedia:ontology/metre
+:Lhotse 	"8516"^^dbpedia:ontology/metre
+:Makalu 	"8462"^^dbpedia:ontology/metre
+:Manaslu 	"8156"^^dbpedia:ontology/metre
+:Mount_Everest 	"8848"^^dbpedia:ontology/metre
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Annapurna","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Cho Oyu","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Dhaulagiri","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Lhotse","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Makalu","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Manaslu","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Mount Everest","en")

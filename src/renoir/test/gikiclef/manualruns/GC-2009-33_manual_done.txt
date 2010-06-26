@@ -1,0 +1,20 @@
+GC-2009-33 pt/á/u/s/Áustria_c845.html {pt/a/l/p/Alpes.html }
+GC-2009-33 bg/а/в/с/Австрия_c9ba.html {bg/а/л/п/Алпи_7e28.html}
+GC-2009-33 de/ö/s/t/Österreich_b472.html {de/a/l/p/Alpen.html}
+GC-2009-33 en/a/u/s/Austria.html {en/a/l/p/Alps.html}
+GC-2009-33 es/a/u/s/Austria.html {es/a/l/p/Alpes.html}
+GC-2009-33 it/a/u/s/Austria.html {it/a/l/p/Alpi.html}
+GC-2009-33 nl/o/o/s/Oostenrijk.html {nl/a/l/p/Alpen.html}
+GC-2009-33 nn/a/u/s/Austerrike.html {nn/a/l/p/Alpane.html}
+GC-2009-33 no/ø/s/t/Østerrike_76b9.html {no/a/l/p/Alpene.html}
+GC-2009-33 ro/a/u/s/Austria.html {ro/a/l/p/Alpi.html}
+GC-2009-33 pt/i/t/á/Itália.html {pt/a/l/p/Alpes.html }
+GC-2009-33 bg/и/т/а/Италия_6576.html {bg/а/л/п/Алпи_7e28.html}
+GC-2009-33 de/i/t/a/Italien.html {de/a/l/p/Alpen.html}
+GC-2009-33 en/i/t/a/Italy.html {en/a/l/p/Alps.html}
+GC-2009-33 es/i/t/a/Italia.html {es/a/l/p/Alpes.html}
+GC-2009-33 it/i/t/a/Italia.html {it/a/l/p/Alpi.html}
+GC-2009-33 nl/i/t/a/Italië.html {nl/a/l/p/Alpen.html}
+GC-2009-33 nn/i/t/a/Italia.html {nn/a/l/p/Alpane.html}
+GC-2009-33 no/i/t/a/Italia.html {no/a/l/p/Alpene.html}
+GC-2009-33 ro/i/t/a/Italia.html {ro/a/l/p/Alpi.html}

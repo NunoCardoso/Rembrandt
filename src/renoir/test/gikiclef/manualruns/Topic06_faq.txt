@@ -1,0 +1,29 @@
+Categoria 
+http://pt.wikipedia.org/wiki/Categoria:Violinistas dos Países Baixos
+
+Janine Jansen
+André Rieu
+Harry Sacksioni
+
+http://dbpedia.org/class/yago/DutchViolinists
+	
+dbpedia:Emmy Verhey
+dbpedia:Frank Van Essen
+dbpedia:Jaap van Zweden
+dbpedia:Lucy van Dael
+dbpedia:Mathieu van Bellen
+dbpedia:Monica Germino
+dbpedia:Pieter Hellendaal
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Janine Jansen","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("André Rieu","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Harry Sacksioni","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Emmy Verhey","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Frank Van Essen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Jaap van Zweden","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Lucy van Dael","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Mathieu van Bellen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Monica Germino","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Pieter Hellendaal","en")
+
+

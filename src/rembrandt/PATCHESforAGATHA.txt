@@ -1,0 +1,304 @@
+
+//3 Meter Holanda como alias para Netherlands
+// O problema é que há WOEID, só que a DBpedia não tem rdf:type dbpedia-owl
+// o ent_id de Holand é 11762
+// ADICIONADO
+update entity set ent_dbpedia_class='Country' where ent_dbpedia_resource="Holland"
+
+//4 wget http://where.yahooapis.com/v1/places.q%28%27Holland%27%29?appid=4BRSnHPV34HYpwBrOfGATRwQnVKjocXU9ptBmEidG7UBOQF4LzCwdvHVipMZ_W8C8Fym
+// dá a mesma coisa que a Netherlands (WOEID 23424909) portanto é um redirect 
+// o WOEID 2 não estava a ser usado, mas isto não é bonito, tenho de alterar de forma a permitir NULL no woeid
+// ADICIONADO
+
+insert into geoscope(geo_name, geo_woeid, geo_woeid_type, geo_woeid_place) VALUES("pt:Holanda;en:Holland",2, NULL,"301\t2009-12-08 17:54:54\t23424909");
+
+//5 ADICIONADO. NOTAR QUE NA AGATHA HÁ MAIS GEOSCOPES
+insert into entity_has_geoscope values(11762, 2);
+insert into entity_has_geoscope values(11762, 181991)
+
+//6 ADICIONADO.
+select ent_id from entity where ent_dbpedia_resource="North_Sea"; 
+update entity set ent_dbpedia_class="BodyOfWater" where ent_dbpedia_resource="North_Sea"; 
+
+//7 ADICIONADO wget http://where.yahooapis.com/v1/places.q%28%27North%20Sea%27%29?appid=4BRSnHPV34HYpwBrOfGATRwQnVKjocXU9ptBmEidG7UBOQF4LzCwdvHVipMZ_W8C8Fym
+
+insert into geoscope(geo_id, geo_name, geo_woeid, geo_woeid_type, geo_woeid_place) values(0, "pt:Mar do Norte;en:North Sea", 55959673, 38, "<place xmlns=\"http://where.yahooapis.com/v1/schema.rng\" yahoo:uri=\"http://where.yahooapis.com/v1/place/55959673\" xmlns:yahoo=\"http://www.yahooapis.com/v1/base.rng\">\n<woeid>55959673</woeid>\n<placeTypeName code=\"38\" lang=\"en\">Sea</placeTypeName>\n<placeTypeName code=\"38\" lang=\"pt\">Mar</placeTypeName>\n<name lang=\"en\">North Sea</name>\n<name lang=\"pt\">Mar do Norte</name>\n<centroid>\n<latitude>56.914780</latitude>\n<longitude>2.499290</longitude>\n</centroid>\n<boundingBox>\n<southWest>\n<latitude>50.870861</latitude>\n<longitude>-4.012470</longitude>\n</southWest>\n<northEast>\n<latitude>62.958691</latitude>\n<longitude>9.011050</longitude>\n</northEast>\n</boundingBox>\n</place>");
+select geo_id from geoscope where geo_woeid=55959673;
+insert into entity_has_geoscope values(21187, 17757);
+insert into entity_has_geoscope values(21187, 181992);
+
+// 12 ADICIONADO 
+insert into entity values(0,NULL,'Frankfurt_am_Main','City'); 
+select ent_id from entity where ent_dbpedia_resource='Frankfurt_am_Main';
+(39130)
+select * from geoscope where geo_name like "%rankfurt%";
+
+// wget http://where.yahooapis.com/v1/places.q%28%27Frankfurt%20am%20Main%27%29?appid=4BRSnHPV34HYpwBrOfGATRwQnVKjocXU9ptBmEidG7UBOQF4LzCwdvHVipMZ_W8C8Fym
+insert into geoscope(geo_id, geo_name, geo_woeid, geo_woeid_type, geo_woeid_place) values(0, "pt:Francoforte;en:Frankfurt am Main", 650272, 7, "<place xmlns=\"http://where.yahooapis.com/v1/schema.rng\" yahoo:uri=\"http://where.yahooapis.com/v1/place/55959673\" xmlns:yahoo=\"http://www.yahooapis.com/v1/base.rng\">\n<woeid>650272</woeid>\n<placeTypeName code=\"7\" lang=\"en\">Town</placeTypeName>\n<placeTypeName code=\"7\" lang=\"pt\">Cidade</placeTypeName>\n<name lang=\"en\">Frankfurt</name>\n<name lang=\"pt\">Francoforte/name>\n<country type=\"Country\" code=\"DE\" lang=\"en\">Germany</country>\n<admin1 type=\"Land\" code=\"DE-HE\" lang=\"en\">Hesse</admin1>\n<admin2 type=\"District\" code=\"\" lang=\"en\">Frankfurt</admin2>\n<admin3></admin3>\n<locality1 type=\"Town\" lang=\"en\">Frankfurt</locality1>\n<locality2>\n</locality2>\n<postal></postal>\n<centroid>\n<latitude>50.112041</latitude><longitude>8.683420</longitude></centroid><boundingBox><southWest><latitude>50.015301</latitude><longitude>8.471810</longitude></southWest><northEast><latitude>50.226730</latitude><longitude>8.799590</longitude></northEast></boundingBox></place>");
+
+select geo_id from geoscope where geo_woeid=650272;
+(18073)
+insert into entity_has_geoscope values(39130, 18073);
+
+// 13 ADICIONADO
+select * from entity where ent_dbpedia_resource='Quebec' (id:7175)
+select geo_id from geoscope where geo_woeid=2344924; (196)
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource='Quebec'
+insert into entity_has_geoscope values(7175,196)
+
+// 14 ADICIONADO
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource='Ruhr'
+// descobri que há muitos entitys que estão ligados ao geoscope null, isso é ,mau.
+
+// null geo = select geo_id from geoscope where geo_woeid=0;
+
+delete from entity_has_geoscope where ehg_geoscope=2391; 
+
+// 15 ADICIONADO
+select ent_id from entity where ent_dbpedia_resource="Sea_of_Japan";
+(20073)
+update entity set ent_dbpedia_class="Sea" where ent_dbpedia_resource='Sea_of_Japan' 
+// wget http://where.yahooapis.com/v1/places.q%28%27Sea%20of%20Japan%27%29?appid=4BRSnHPV34HYpwBrOfGATRwQnVKjocXU9ptBmEidG7UBOQF4LzCwdvHVipMZ_W8C8Fym
+
+insert into  geoscope values(0,"pt:Mar do Japão;en:Sea of Japan",55959693,38,"200\t2010-05-14 14:25:29\t<place xmlns=\"http://where.yahooapis.com/v1/schema.rng\" yahoo:uri=\"http://where.yahooapis.com/v1/place/23509507\" xmlns:yahoo=\"http://www.yahooapis.com/v1/base.rng\">\n<woeid>55959693</woeid>\n<placeTypeName code=\"38\" lang=\"pt\">Mar</placeTypeName>\n<name lang=\"pt\">Mar do Japão</name>\n<country lang=\"pt\"/>\n<admin1 lang=\"pt\"/>\n  <admin2/>\n<admin3/>\n<locality1 lang=\"pt\"/>\n<locality2 lang=\"pt\"/>\n<postal/>\n<centroid>\n    <latitude>43.509541</latitude>\n<longitude>138.257446</longitude>\n</centroid>\n<boundingBox>\n<southWest>\n      <latitude>34.918209</latitude>\n<longitude>127.332008</longitude>\n</southWest>\n<northEast>\n     <latitude>52.100868</latitude>\n<longitude>142.251907</longitude>n</northEast>\n</boundingBox>\n<placeTypeName code=\"38\" lang=\"en\">Sea</placeTypeName>\n<name lang=\"en\">Sea of Japan</name>\n<country lang=\"en\"/>\n<admin1 lang=\"en\"/>\n  <admin2 lang=\"en\"/>\n  <admin3 lang=\"en\"/>\n<locality1 lang=\"en\"/>\n<locality2 lang=\"en\"/>\n</place>",NULL, NULL,  NULL, NULL,  NULL, NULL)
+
+woeid:55959693
+(já há, 18026)
+insert into entity_has_geoscope values(20073,18026);
+
+
+// 16: ADICIONADO
+select ent_id from entity where ent_dbpedia_resource='Middle_East';
+(1266)
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource='Middle_East';
+Middle east: woeid = 24865721
+select geo_id from geoscope where geo_woeid=24865721;
+17741
+select * from entity_has_geoscope where ehg_entity= 18026 OR ehg_geoscope=17741;
+enpty
+insert into entity_has_geoscope values(1266, 17741);
+
+// 17: ADICIONADO
+select * from entity where ent_dbpedia_resource='Southeast_Asia';
+(18547)
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource='Southeast_Asia';
+Southeast Asia: woeid = 28289414
+select geo_id from geoscope where geo_woeid=28289414;
+17743
+select * from entity_has_geoscope where ehg_entity= 18547 OR ehg_geoscope=17743;
+enpty
+insert into entity_has_geoscope values(18547, 17743);
+
+// 18  ADICIONADO
+select * from entity where ent_dbpedia_resource='Caucasus';
+(843)
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource='Caucasus';
+Caucasus: woeid = 55949072
+select geo_id from geoscope where geo_woeid=55949072;
+17752
+select * from entity_has_geoscope where ehg_entity= 843 OR ehg_geoscope=17752;
+enpty
+insert into entity_has_geoscope values(843, 17752);
+
+// 19 ADICIONADO
+select * from entity where ent_dbpedia_resource='Atlantic_Ocean';
+(457)
+Atlantic_Ocean: woeid = 55959709
+select geo_id from geoscope where geo_woeid=55959709;
+18042
+select * from entity_has_geoscope where ehg_entity= 457 OR ehg_geoscope=18042;
+insert into entity_has_geoscope values(457, 18042);
+
+// 20 ADICIONADO
+select * from entity where ent_dbpedia_resource='New_England';
+(10373)
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource='New_England';
+New_England: woeid = 23509507
+select geo_id from geoscope where geo_woeid=23509507;
+null
+select * from entity_has_geoscope where ehg_entity= 457 OR ehg_geoscope=18042;
+
+insert into entity_has_geoscope values(457, 18042);
+insert into geoscope(geo_id, geo_name, geo_woeid, geo_woeid_type, geo_woeid_place) values(0, "pt:Nova Inglaterra;en:New England", 23509507, 24, "<place xmlns=\"http://where.yahooapis.com/v1/schema.rng\" yahoo:uri=\"http://where.yahooapis.com/v1/place/23509507\" xmlns:yahoo=\"http://www.yahooapis.com/v1/base.rng\">\n<woeid>23509507</woeid>
+<placeTypeName code=\"24\" lang=\"en\">Colloquial</placeTypeName>\n<placeTypeName code=\"24\" lang=\"pt\">Coloquial</placeTypeName>\n<name lang=\"en\">New England</name>\n<name lang=\"pt\">New England</name>\n<country type=\"Country\" code=\"US\" lang=\"en\">United States</country>\n<country type=\"País\" code=\"US\" lang=\"pt\">Estados Unidos da América</country>\n<centroid>\n<latitude>44.451569</latitude>\n<longitude>-70.028679</longitude>\n</centroid>\n<boundingBox>
+<southWest>\n<latitude>40.980549</latitude>\n<longitude>-73.725700</longitude>\n</southWest>\n<northEast>\n<latitude>47.459831</latitude>\n<longitude>-66.932640</longitude>\n</northEast>\n</boundingBox>\n</place>");
+
+(geo-id:18074)
+select * from entity_has_geoscope where ehg_entity= 10373 OR ehg_geoscope=18074;
+empty
+insert into entity_has_geoscope values(10373, 18074);
+
+// 21 ADICIONADO
+
+select * from entity where ent_dbpedia_resource='Yugoslavia';
+(6908)
+update entity set ent_dbpedia_class="Country" where ent_dbpedia_resource='Yugoslavia';
+
+Yugoslavia: woeid = 26793662
+select geo_id from geoscope where geo_woeid=26793662;
+10478
+select * from entity_has_geoscope where ehg_entity= 6908 OR ehg_geoscope=10478;
+
+insert into entity_has_geoscope values(6908, 10478);
+
+// 22 ADICIONADO 
+select * from entity where ent_dbpedia_resource='Newfoundland';
+insert into entity values(0,NULL,'Newfoundland','Place');
+(39132)
+Newfoundland: woeid = 2344919
+select geo_id from geoscope where geo_woeid=23509507;
+9670
+select * from entity_has_geoscope where ehg_entity= 39132 OR ehg_geoscope=9670;
+insert into entity_has_geoscope values(39132, 9670);
+
+// 23  ADICIONADO
+Eastern Europe: woeid 28289419, no children in DB. Geo_id = 10480
+
+Bulgaria, Poland, the Czech Republic, Slovakia, Hungary, Romania, Ukraine, Belarus, Lithuania, Estonia, Latvia and the European part of Russia.
+
+update geoscope set geo_woeid_children='200\t2010-05-28 17:54:54\t23424771;23424923;23424810;23424877;23424844;23424933;23424976;23424765;23424875;23424805;23424874;23424936' where geo_woeid=28289419;
+
+select * from entity where ent_dbpedia_resource="Eastern_Europe";
++--------+--------------------+----------------------+-------------------+
+| ent_id | ent_wikipedia_page | ent_dbpedia_resource | ent_dbpedia_class |
++--------+--------------------+----------------------+-------------------+
+|  25151 | NULL               | Eastern_Europe       | NULL              | 
++--------+--------------------+----------------------+-------------------+
+
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource='Eastern_Europe';
+insert into entity_has_geoscope values(25151, 10480);
+
+// 24  ADICIONADO
+Northern Europe: woeid 55949067 no children in DB. Geo_id = 10484
+
+Denmark, Finland, Iceland, Norway, Sweden, Estonia, Latvia, Belgium, the Netherlands, Luxembourg, Ireland, Lithuania, and the UK. The north of Germany and Poland as well as the north-east of Russia also belong to Northern Europe.
+
+select * from entity where ent_dbpedia_resource="Northern_Europe";
++--------+--------------------+----------------------+-------------------+
+| ent_id | ent_wikipedia_page | ent_dbpedia_resource | ent_dbpedia_class |
++--------+--------------------+----------------------+-------------------+
+|   9637 | NULL               | Northern_Europe      | NULL              | 
++--------+--------------------+----------------------+-------------------+
+
+update geoscope set geo_woeid_children='200\t2010-05-28 17:54:54\t23424796;23424812;23424845;23424910;23424954;23424805;23424874;23424757;23424909;23424881;23424845;23424875;23424975;23424829;23424923;23424936' where geo_woeid=55949067;
+
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource='Northern_Europe';
+insert into entity_has_geoscope values(9637, 10484);
+
+// 25 ADICIONADO
+select * from entity where ent_dbpedia_resource like "%Mediterranean%";
+Mediterratean_Sea: ent_id=11741, Mediterranean:ent_id=39131
+
+woeid:55959718
+select geo_id from geoscope where geo_woeid=55959718
+geo_id: 18049
+
+insert into entity_has_geoscope values(11741,18049);
+insert into entity_has_geoscope values(39131,18049);
+
+
+// 26 não adicionado
+
+Península ibérica: woeid=24865713
+select geo_id from geoscope where geo_woeid=24865713
+10476
+select * from entity where ent_dbpedia_resource="Iberian_Peninsula";
+3987
+select * from entity_has_geoscope where ehg_entity=3987 OR ehg_geoscope=10476;
+empty
+
+http://where.yahooapis.com/v1/place/24865713/children;count=0?appid=4BRSnHPV34HYpwBrOfGATRwQnVKjocXU9ptBmEidG7UBOQF4LzCwdvHVipMZ_W8C8Fym
+update geoscope set geo_woeid_children='200\t2010-05-28 17:54:54\t23424744;23424825;23424925;23424950' where geo_woeid=24865713;
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource="Iberian_Peninsula";
+insert into entity_has_geoscope values(3987,10476);
+
+
+// 27 não adicionado
+Norte áfrica: woeid=24865722
+select geo_id from geoscope where geo_woeid=24865722
+17775
+select * from entity where ent_dbpedia_resource LIKE "North%_Africa";
++--------+--------------------+----------------------+-------------------+
+| ent_id | ent_wikipedia_page | ent_dbpedia_resource | ent_dbpedia_class |
++--------+--------------------+----------------------+-------------------+
+|  41065 | NULL               | Northern_Africa      | NULL              | 
+|  17582 | NULL               | Northwest_Africa     | NULL              | 
+|   8802 | NULL               | North_Africa         | NULL              | 
++--------+--------------------+----------------------+-------------------+
+
+select * from entity_has_geoscope where ehg_entity=41065 OR ehg_entity= 8802 OR ehg_geoscope=17775;
+empty
+
+http://where.yahooapis.com/v1/place/24865722/children;count=0?appid=4BRSnHPV34HYpwBrOfGATRwQnVKjocXU9ptBmEidG7UBOQF4LzCwdvHVipMZ_W8C8Fym
+23424740;Algeria 23424802;Egypt 23424882;Libya 23424893;Morocco 23424952;Sudan 23424967;Tunisia 23424990:Western Sahara
+
+update geoscope set geo_woeid_children='200\t2010-05-28 17:54:54\t23424740;23424802;23424882;23424893;23424952;23424967;23424990' where geo_woeid=24865722;
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource LIKE "North%_Africa";
+insert into entity_has_geoscope values(41065,17775);
+insert into entity_has_geoscope values(8802,17775);
+
+
+// 28 adicionado
+Oceano pacífico: woeid=55959717
+select geo_id from geoscope where geo_woeid=55959717
+18048
+select * from entity where ent_dbpedia_resource LIKE "Pacific%";
++--------+--------------------+----------------------------------+-------------------+
+| ent_id | ent_wikipedia_page | ent_dbpedia_resource             | ent_dbpedia_class |
++--------+--------------------+----------------------------------+-------------------+
+|  41066 | NULL               | Pacific                          | NULL              | 
+|  20063 | NULL               | Pacific_Fleet                    | NULL              | 
+|  36183 | NULL               | Pacific_Gas_and_Electric_Company | Company           | 
+|   3624 | NULL               | Pacific_Ocean                    | NULL              | 
+|   1066 | NULL               | Pacific_War                      | MilitaryConflict  | 
++--------+--------------------+----------------------------------+-------------------+
+
+select * from entity_has_geoscope where ehg_entity=41066 OR ehg_entity= 3624 OR ehg_geoscope=18048;
+empty
+
+http://where.yahooapis.com/v1/place/55959717/children;count=0?appid=4BRSnHPV34HYpwBrOfGATRwQnVKjocXU9ptBmEidG7UBOQF4LzCwdvHVipMZ_W8C8Fym
+(dá n resultados)
+
+update entity set ent_dbpedia_class="Sea" where ent_id=41066 ;
+update entity set ent_dbpedia_class="Sea" where ent_id=3624 ;
+insert into entity_has_geoscope values(3624,18048);
+insert into entity_has_geoscope values(41066,18048);
+
+// 29  adicionado
+Western Europe: woeid=28289418
+select geo_id from geoscope where geo_woeid=28289418;
+10479
+select * from entity where ent_dbpedia_resource="Western_Europe";
++--------+--------------------+----------------------+-------------------+
+| ent_id | ent_wikipedia_page | ent_dbpedia_resource | ent_dbpedia_class |
++--------+--------------------+----------------------+-------------------+
+|    165 | NULL               | Western_Europe       | Organisation      | 
++--------+--------------------+----------------------+-------------------+
+
+select * from entity_has_geoscope where ehg_entity=165 OR ehg_geoscope=10479;
+empty
+http://where.yahooapis.com/v1/place/28289418/children;count=0?appid=4BRSnHPV34HYpwBrOfGATRwQnVKjocXU9ptBmEidG7UBOQF4LzCwdvHVipMZ_W8C8Fym
+
+update geoscope set geo_woeid_children='200\t2010-05-28 17:54:54\t23424750;23424757;23424819;23424829;23424879;23424881;23424892;23424909;23424925;23424950;23424957;23424975' where geo_woeid=28289418;
+update entity set ent_dbpedia_class="Place" where ent_dbpedia_resource="Western_Europe";
+insert into entity_has_geoscope values(165,10479);
+
+// 30 adicionado
+Persian gulf: woeid 55959679
+mysql> select geo_id from geoscope where geo_woeid=55959679;
++--------+
+| geo_id |
++--------+
+|  18014 | 
++--------+
+select * from entity where ent_dbpedia_resource="Persian_Gulf";
++--------+--------------------+----------------------+-------------------+
+| ent_id | ent_wikipedia_page | ent_dbpedia_resource | ent_dbpedia_class |
++--------+--------------------+----------------------+-------------------+
+|   3040 | NULL               | Persian_Gulf         | NULL              | 
++--------+--------------------+----------------------+-------------------+
+update entity set ent_dbpedia_class="Sea" where ent_dbpedia_resource="Persian_Gulf";
+
+select * from entity_has_geoscope where ehg_entity=3040 OR ehg_geoscope=18014;
+
+insert into entity_has_geoscope values(3040, 18014);

@@ -1,0 +1,914 @@
+O que foi gerado:
+
+(pt)
+(Nosferatu,_Eine_Symphonie_des_Grauens) e 545134 (Nosferatu:_Phantom_der_Nacht)
+
+
+Estratégia: Obter obras literárias que estejam na página de Cárpatos.
+
+Não me parece que haja obras na página dos Cárpatos. 
+No entanto, as páginas 237273 (Nosferatu,_Eine_Symphonie_des_Grauens) e 545134 (Nosferatu:_Phantom_der_Nacht) é uma obra, e linka para Cárpatos
+
+mysql> select page_id, page_title from pt_page where page_title="Cárpatos";
++---------+------------+
+| page_id | page_title |
++---------+------------+
+|   40081 | Cárpatos   | 
++---------+------------+
+
+
+&lt;s&gt;XML Os Cárpatos ( checo, eslovaco, polonês e ucraniano Karpaty, romeno Carpaţi, húngaro Kárpátok ) formam a ala oriental do grande sistema de montanhas da <EM ID="x-4" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="772(Europa);15266(Europa)">Europa</EM>, percorrendo <EM ID="x-5" CATEG="VALOR" TIPO="QUANTIDADE">1500 km</EM> ao longo das fronteiras da <EM ID="x-6" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3844(República Checa);35438(República Checa)">República Checa</EM>, <EM ID="x-7" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="24034(Eslováquia);3858(Eslováquia)">Eslováquia</EM>, <EM ID="x-8" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="1583(Polónia);15652(Polónia)">Polônia</EM>, <EM ID="x-9" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3861(Roménia);18893(Roménia)">Romênia</EM> e <EM ID="x-10" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3857(Ucrânia);15250(Ucrânia)">Ucrânia</EM> .&lt;/s&gt;
+&lt;s&gt;Nome O nome é provavelmente derivado da tribo dácia Carp, que vivia no primeiro milênio a .C. nas elevações orientais dos <EM ID="x-12" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> .&lt;/s&gt;
+Outra fonte pode ter sido a palavra indo-européia ¬´ karpa ¬ª, que significa montanha ou rocha.
+Como Chrawat, foi primeiro usada aos habitantes da região, de onde passou pela forma Krapat ou Karpa como o nome da cadeia de montanhas.
+Em documentos oficiais húngaros <EM ID="x-16" CATEG="TEMPO" TIPO="TEMPO_CALEND" SUBTIPO="DATA">do século XIII</EM> e XIV os <EM ID="x-18" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> eram chamados Thorchal ou Tarczal, ou ainda <EM ID="x-21">Montes Nivium</EM>.
+A parte externa dos <EM ID="x-22" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> formava a fronteira do reino da <EM ID="x-23" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="18700(Hungria);3859(Hungria)">Hungria</EM><EM ID="x-24" CATEG="TEMPO" TIPO="TEMPO_CALEND" SUBTIPO="DATA">do século XIII</EM> até o início <EM ID="x-25" CATEG="TEMPO" TIPO="TEMPO_CALEND" SUBTIPO="DATA">do século XX</EM>.
+&lt;s&gt;Geografia Começam no <EM ID="x-27" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="AGUACURSO" COMENT="19261(Rio Danúbio)">Danúbio</EM> perto de <EM ID="x-28" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="46099(Bratislava)">Bratislava</EM>, contornam a <EM ID="x-29" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="18700(Hungria);3859(Hungria)">Hungria</EM> e a Transilvânia em <EM ID="x-31" CATEG="NUMERO" TIPO="TEXTUAL">um</EM> largo semicírculo cuja concavidade está dirigida ao sudoeste, e terminam-se no <EM ID="x-32" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="AGUACURSO" COMENT="19261(Rio Danúbio)">Danúbio</EM>, perto de Or&amp;amp;,351;ova, na <EM ID="x-33" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3861(Roménia);18893(Roménia)">Romênia</EM> .&lt;/s&gt;
+O comprimento total dos <EM ID="x-34" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> é de <EM ID="x-35" CATEG="VALOR" TIPO="QUANTIDADE">mais de 1500 km</EM> e sua largura varia <EM ID="x-36" CATEG="VALOR" TIPO="QUANTIDADE">entre 12 e 500 km</EM>.
+A maior largura dos <EM ID="x-37" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> coincide com sua maior altitude.
+Assim, a cadeia atinge sua largura máxima no planalto da <EM ID="x-38" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO">Transilvânia</EM> e no setor das montanhas <EM ID="x-39" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="850206(Montanhas Tatra)">Tatra</EM> ( maior altitude: monte <EM ID="x-40" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO">Gerlachovsky</EM> - <EM ID="x-41" CATEG="VALOR" TIPO="QUANTIDADE">2655 m acima</EM> do nível <EM ID="x-42" CATEG="TEMPO" TIPO="TEMPO_CALEND" SUBTIPO="DATA">do mar,</EM> em território eslovaco ).
+Os <EM ID="x-43" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> cobrem uma área de <EM ID="x-44" CATEG="NUMERO" TIPO="NUMERAL">190.000</EM> km², formando a mais longa cordilheira européia depois dos <EM ID="x-45" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="31972(Alpes);738250(Alpes)">Alpes</EM>.
+Os <EM ID="x-46" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> não formam uma cadeia ininterrupta de montanhas, mas são compostos de diversos grupos distintos tanto orograficamente como geologicamente; na verdade, apresentam tanta variedade quanto os <EM ID="x-47" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="31972(Alpes);738250(Alpes)">Alpes</EM>.
+Os <EM ID="x-48" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM>, que raramente atingem mais do que <EM ID="x-49" CATEG="VALOR" TIPO="QUANTIDADE">2500 m</EM>, não apresentam campos com neve, nem grandes geleiras, nem as cataratas e nem os vários lagos que podem-se encontrar nos <EM ID="x-50" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="31972(Alpes);738250(Alpes)">Alpes</EM>.
+Não possuem neves eternas em nenhum ponto, e não apresentam geleiras.
+Assim, mesmo em seus pontos mais elevados, lembram a região mediana dos <EM ID="x-51" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="31972(Alpes);738250(Alpes)">Alpes</EM>, com os quais, no entanto, têm diversos pontos em comum, como a aparência, estrutura e flora.
+O <EM ID="x-52" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="AGUACURSO" COMENT="19261(Rio Danúbio)">Danúbio</EM> separa os <EM ID="x-53" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> dos <EM ID="x-54" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="31972(Alpes);738250(Alpes)">Alpes</EM>, que eles encontram em apenas <EM ID="x-55" CATEG="NUMERO" TIPO="TEXTUAL">dois</EM> pontos, os <EM ID="x-56">Montes Leitha</EM> em <EM ID="x-57" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="46099(Bratislava)">Bratislava</EM>, e os <EM ID="x-58">Montes Bakony</EM>, enquanto que o mesmo rio os separa dos <EM ID="x-59" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="REGIAO" COMENT="39982(Bálcãs)">Bálcãs</EM> em <EM ID="x-60" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="1409323(Orsova)">Orsova</EM>, na <EM ID="x-61" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3861(Roménia);18893(Roménia)">Romênia</EM>.
+O vale do <EM ID="x-62" CATEG="PESSOA" TIPO="GRUPOMEMBRO" COMENT="540194(March Engineering)">March</EM> e Oder separa os <EM ID="x-64" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> das cadeias da <EM ID="x-65" CATEG="LOCAL|LOCAL|LOCAL" TIPO="FISICO|HUMANO|HUMANO" SUBTIPO="|REGIAO|PAIS" COMENT="49495(Silésia);1030055(Silésia)">Silésia</EM> e da <EM ID="x-66" CATEG="LOCAL" TIPO="FISICO" COMENT="46632(Morávia)">Morávia</EM>, que pertencem à ala central do grande sistema de montanhas europeu.
+Contrariamente às outras alas do sistema montanhoso europeu, os <EM ID="x-68" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM>, que são o ponto de divisão das águas entre os mares do norte e o <EM ID="x-69" CATEG="TEMPO" TIPO="TEMPO_CALEND" SUBTIPO="DATA">Mar</EM><EM ID="x-70" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="AGUAMASSA">Negro</EM>, são rodeados de planícies por todos os lados, principalmente a planície <EM ID="x-71" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO">Panoniana</EM> no sudoeste, a planície do <EM ID="x-72" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO">Baixo Danúbio</EM> ( <EM ID="x-73" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3861(Roménia);18893(Roménia)">Romênia</EM> ) no sul, e a planície da <EM ID="x-74" CATEG="LOCAL|LOCAL|ORGANIZACAO" TIPO="FISICO|HUMANO|INSTITUICAO" SUBTIPO="|REGIAO|" COMENT="45980(Galícia (Europa Central));7962(Galícia Esporte Clube)">Galícia</EM> no nordeste.
+&lt;s&gt;Montanhas principais Recursos naturais Muito bom para cultivar Clima Flora e fauna <EM ID="x-77" CATEG="LOCAL" TIPO="FISICO" COMENT="12280(Demografia);18725(Demografia)">Demografia</EM> - Tatra- Polónia [http://www.ga.com.pl/tatry21.htm] - Waldkarpaten- Polónia [http://www.ga.com.pl/carynska.htm] - Babia - <EM ID="x-81" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="1583(Polónia);15652(Polónia)">Polónia</EM> [http://www.ga.com.pl/babia2.htm] - Gorce - <EM ID="x-83" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="1583(Polónia);15652(Polónia)">Polónia</EM> [http://www.ga.com.pl/gorce2.htm] - Pieniny - <EM ID="x-85" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="1583(Polónia);15652(Polónia)">Polónia</EM> [http://www.ga.com.pl/dunajec.htm] Categoria:Cordilheiras da EuropaCategoria:Montanhas da <EM ID="x-86" CATEG="ABSTRACCAO" TIPO="DISCIPLINA" COMENT="1664(República)">República</EM> ChecaCategoria:Montanhas da EslováquiaCategoria:Montanhas da PolóniaCategoria:Montanhas da RoméniaCategoria:Montanhas da <EM ID="x-87" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3857(Ucrânia);15250(Ucrânia)">Ucrânia</EM> be:Карпаты bg:Карпати bn:কার্পেথীয় পর্বতমালা br:Karpatoù bs:Karpati ca:Carpats cs:Karpaty da:Karpaterne de:Karpaten el:Καρπάθια Όρη en:Carpathian Mountains eo:Karpatoj es:Montes <EM ID="x-89" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> et:Karpaadid eu:Karpatoak fi:Karpaatit fr:Carpates fy:Karpaten gl:Montes <EM ID="x-90" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> he:הרי הקרפטים hu:Kárpátok it:Carpazi ja:カルパティア山脈 ka:კარპატები ko:카르파티아 산맥 li:Karpate lt:Karpatai lv:Karpati mk:Карпати nl:Karpaten nn:Karpatane no:Karpatene pl:Karpaty ro:Munţii Carpaţi ru:Карпаты scn:Carpazzi simple:Carpathian Mountains sk:Karpaty sr:Карпати sv:Karpaterna tg:Кӯҳҳои Карпат tr:Karpatlar uk:Карпати vec:Carpazsi zh:喀尔巴阡山脉 .&lt;/s&gt;
+
+
+Plano 2: Ver as páginas que linkam para Cárpatos, ver se alguma delas é uma obra. 
+
+
+mysql> select p2.page_id, p2.page_title from pt_page as p2, pt_pagelinks, pt_page as p where p.page_title=pl_title and pl_namespace=0 and pl_from = p2.page_id and p.page_id=40081;
++---------+---------------------------------------+
+| page_id | page_title                            |
++---------+---------------------------------------+
+|     238 | Adriano                               | 
+|     772 | Europa                                | 
+|    1583 | Polónia                               | 
+|    1886 | União_Europeia                        | 
+|    3857 | Ucrânia                               | 
+|    3858 | Eslováquia                            | 
+|    3859 | Hungria                               | 
+|    3861 | Roménia                               | 
+|    9056 | Geografia_da_Ucrânia                  | 
+|    9764 | Varsóvia                              | 
+|   13589 | Geografia_da_Roménia                  | 
+|   13913 | História_da_Rússia                    | 
+|   17552 | História_da_Hungria                   | 
+|   19970 | Geografia_da_Polónia                  | 
+|   24033 | Geografia_da_Eslováquia               | 
+|   39979 | Bálcãs_(cordilheira)                  | 
+|   46099 | Bratislava                            | 
+|   49324 | Dácia                                 | 
+|   49545 | Romênia_na_Idade_Média                | 
+|   60111 | Romani                                | 
+|   60665 | Império_Mongol                        | 
+|   65191 | Geografia_da_República_Checa          | 
+|   68254 | Magiares                              | 
+|   68402 | Transilvânia                          | 
+|   68439 | Lista_de_cordilheiras                 | 
+|   83324 | Mschlindwein/Artigos                  | 
+|  120565 | Batalha_de_Berlim                     | 
+|  124098 | Hino_nacional_da_Hungria              | 
+|  125614 | Leste_Europeu                         | 
+|  128894 | Latvéria                              | 
+|  131503 | Eslavos                               | 
+|  132891 | Europa_central                        | 
+|  144081 | República_das_Duas_Nações             | 
+|  147638 | Trácios                               | 
+|  149406 | Pechenegues                           | 
+|  151247 | Rutenos                               | 
+|  152328 | Lemko                                 | 
+|  158299 | Boyko                                 | 
+|  158387 | Hutsuls                               | 
+|  160429 | Polanos                               | 
+|  173512 | Sérvios                               | 
+|  176317 | Montes_Carpatus                       | 
+|  179267 | Piatra_Neamţ                          | 
+|  179894 | Arabidopsis                           | 
+|  182554 | Lista_de_soberanos_da_Hungria         | 
+|  189566 | Castelo_de_Bran                       | 
+|  194691 | Árpád                                 | 
+|  203358 | Batalha_de_Lechfeld                   | 
+|  204726 | Ávaros                                | 
+|  224662 | Croatas                               | 
+|  235335 | Bayezid_I                             | 
+|  237273 | Nosferatu,_Eine_Symphonie_des_Grauens | 
+|  237304 | Valáquia                              | 
+|  238967 | Pinus_cembra                          | 
+|  254037 | Berke                                 | 
+|  284659 | Muntênia                              | 
+|  307426 | Pequena_Polônia                       | 
+|  308584 | Cão_Lobo_Checoslovaco                 | 
+|  310453 | Lariço-europeu                        | 
+|  373306 | Oltênia                               | 
+|  379281 | Bucovina                              | 
+|  381964 | Siret                                 | 
+|  381974 | Rio_Prut                              | 
+|  415262 | Romenos                               | 
+|  439608 | Rio_San                               | 
+|  442329 | Bastarnae                             | 
+|  514027 | Culinária_da_Polônia                  | 
+|  565451 | Wacław_Potocki                        | 
+|  576540 | 194.210.97.223                        | 
+|  583887 | Rugios                                | 
+|  623503 | Klezmer                               | 
+|  706269 | Telubuga                              | 
+|  828845 | Ion_Antonescu                         | 
+|  835724 | Rutênia                               | 
+|  850206 | Montanhas_Tatra                       | 
+|  928607 | Rio_Tisza                             | 
+| 1028586 | Monarquia_de_Habsburgo                | 
+| 1055995 | Bacău                                 | 
+| 1131664 | Khaganato_de_Rus                      | 
+| 1158592 | Leonardomio/Hungria                   | 
+| 1285759 | Língua_rutena                         | 
+| 1301442 | Geografia_da_União_Europeia           | 
+| 1301520 | Estados_membros_da_União_Europeia     | 
+| 1334373 | Urso-europeu                          | 
+| 1350600 | Homossexualidade_na_Espanha           | 
+| 1360703 | Cárpatos_(desambiguação)              | 
+| 1470808 | Montes_Cárpatos                       | 
+| 1506667 | Planície_da_Panónia                   | 
+| 1591666 | Zacarpátia                            | 
+| 1646443 | Olt                                   | 
+| 1664835 | Roman_Vishniac                        | 
+| 1680445 | Székely                               | 
+| 1688599 | Homossexualidade_em_Portugal          | 
+| 1774143 | Andrei_Yeremenko                      | 
++---------+---------------------------------------+
+
+
+<EM ID="x-0" CATEG="PESSOA" TIPO="INDIVIDUAL" COMENT="238(Adriano)">Adriano</EM>.
+ <EM ID="x-1" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="772(Europa);15266(Europa)">Europa</EM>.
+ <EM ID="x-2" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="1583(Polónia);15652(Polónia)">Polónia</EM>.
+ <EM ID="x-3" CATEG="ORGANIZACAO" TIPO="ADMINISTRACAO" COMENT="1886(União Europeia);16667(União Europeia)">União Europeia</EM>.
+ <EM ID="x-4" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3857(Ucrânia);15250(Ucrânia)">Ucrânia</EM>.
+ <EM ID="x-5" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="24034(Eslováquia);3858(Eslováquia)">Eslováquia</EM>.
+ <EM ID="x-6" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="18700(Hungria);3859(Hungria)">Hungria</EM>.
+ <EM ID="x-7" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3861(Roménia);18893(Roménia)">Roménia</EM>.
+ <ALT> <EM ID="x-8" CATEG="LOCAL" TIPO="FISICO" COMENT="97935(Geografia da Ucrânia);9056(Geografia da Ucrânia)">Geografia da Ucrânia</EM>| Geografia da <EM ID="x-9" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3857(Ucrânia);15250(Ucrânia)">Ucrânia</EM></ALT>.
+ <EM ID="x-10" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="9764(Varsóvia);1333957(Varsóvia)">Varsóvia</EM>.
+ <ALT> <EM ID="x-11" CATEG="LOCAL" TIPO="FISICO" COMENT="13589(Geografia da Roménia);97932(Geografia da Roménia)">Geografia da Roménia</EM>| Geografia da <EM ID="x-12" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3861(Roménia);18893(Roménia)">Roménia</EM></ALT>.
+ <EM ID="x-13" CATEG="ABSTRACCAO" TIPO="DISCIPLINA" COMENT="15104(História)">História</EM> da <EM ID="x-14" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="1669(Rússia);24091(Rússia)">Rússia</EM>.
+ <EM ID="x-15" CATEG="ABSTRACCAO" TIPO="DISCIPLINA" COMENT="15104(História)">História</EM> da <EM ID="x-16" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="18700(Hungria);3859(Hungria)">Hungria</EM>.
+ <ALT> <EM ID="x-17" CATEG="LOCAL" TIPO="FISICO" COMENT="128515(Geografia da Polónia)">Geografia da Polónia</EM>| Geografia da <EM ID="x-18" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="1583(Polónia);15652(Polónia)">Polónia</EM></ALT>.
+ <ALT> <EM ID="x-19" CATEG="LOCAL" TIPO="FISICO" COMENT="24033(Geografia da Eslováquia);97928(Geografia da Eslováquia)">Geografia da Eslováquia</EM>| Geografia da <EM ID="x-20" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="24034(Eslováquia);3858(Eslováquia)">Eslováquia</EM></ALT>.
+ <EM ID="x-21" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="REGIAO" COMENT="39982(Bálcãs)">Bálcãs</EM> ( cordilheira ).
+ <EM ID="x-22" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="46099(Bratislava)">Bratislava</EM>.
+ <EM ID="x-23" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="49324(Dácia)">Dácia</EM>.
+ <EM ID="x-24" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3861(Roménia);18893(Roménia)">Romênia</EM> na <EM ID="x-25" CATEG="TEMPO" TIPO="DURACAO" COMENT="75775(Idade Média)">Idade Média</EM>.
+Romani.
+Império Mongol.
+ <ALT> <EM ID="x-28" CATEG="LOCAL|LOCAL" TIPO="FISICO|HUMANO" SUBTIPO="|PAIS" COMENT="99567(Geografia da República Checa)">Geografia da República Checa</EM>| Geografia da <EM ID="x-29" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="3844(República Checa);35438(República Checa)">República Checa</EM></ALT>.
+ <EM ID="x-30" CATEG="PESSOA" TIPO="POVO" COMENT="68254(Magiares)">Magiares</EM>.
+Transilvânia.
+Lista de cordilheiras.
+Mschlindwein/Artigos.
+ <ALT> <EM ID="x-33">Batalha de Berlim</EM>| <EM ID="x-34" CATEG="LOCAL|ACONTECIMENTO|LOCAL|LOCAL" TIPO="HUMANO|EFEMERIDE|HUMANO|FISICO" SUBTIPO="DIVISAO||CONSTRUCAO|AGUACURSO" COMENT="35934(Batalha (Alagoas));36770(Batalha (Piauí));6476(Batalha (Portugal));6658(Batalha (freguesia));1339617(Batalha (freguesia));289427(Batalha (guerra));59885(Mosteiro da Batalha);73564(Rio Batalha);23343(Batalhas)">Batalha</EM> de <EM ID="x-35" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="127507(Berlim);488(Berlim)">Berlim</EM></ALT>.
+ <EM ID="x-36" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="95894(Hino (Tóquio));60129(Hino (canção))">Hino</EM> nacional da <EM ID="x-37" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="18700(Hungria);3859(Hungria)">Hungria</EM>.
+Leste Europeu.
+ <EM ID="x-39" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="128894(Latvéria)">Latvéria</EM>.
+ <EM ID="x-40" CATEG="PESSOA" TIPO="POVO" COMENT="131503(Eslavos)">Eslavos</EM>.
+ <EM ID="x-41" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="772(Europa);15266(Europa)">Europa</EM> central.
+ <EM ID="x-42" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="144081(República das Duas Nações)">República das Duas Nações</EM>.
+ <EM ID="x-43" CATEG="PESSOA" TIPO="POVO" COMENT="982744(Trácios)">Trácios</EM>.
+Pechenegues.
+ <EM ID="x-45" CATEG="PESSOA" TIPO="POVO" COMENT="151247(Rutenos)">Rutenos</EM>.
+Lemko.
+ <EM ID="x-47" CATEG="PESSOA" TIPO="POVO" COMENT="158299(Boyko)">Boyko</EM>.
+ <EM ID="x-48" CATEG="PESSOA" TIPO="POVO" COMENT="158387(Hutsuls)">Hutsuls</EM>.
+ <EM ID="x-49" CATEG="PESSOA" TIPO="POVO" COMENT="160429(Polanos)">Polanos</EM>.
+ <EM ID="x-50" CATEG="PESSOA" TIPO="POVO" COMENT="173512(Sérvios)">Sérvios</EM>.
+ <EM ID="x-51">Montes Carpatus</EM>.
+Piatra Neamţ.
+Arabidopsis.
+Lista de soberanos da <EM ID="x-55" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="18700(Hungria);3859(Hungria)">Hungria</EM>.
+ <EM ID="x-56" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="CONSTRUCAO" COMENT="189566(Castelo de Bran)">Castelo de Bran</EM>.
+ <EM ID="x-57" CATEG="PESSOA" TIPO="INDIVIDUAL" COMENT="194691(Árpád)">Árpád</EM>.
+ <EM ID="x-58">Batalha de Lechfeld</EM>.
+ <EM ID="x-59" CATEG="PESSOA" TIPO="POVO" COMENT="204726(Ávaros)">Ávaros</EM>.
+ <EM ID="x-60" CATEG="PESSOA" TIPO="POVO" COMENT="224662(Croatas)">Croatas</EM>.
+Bayezid I.
+ <EM ID="x-62" CATEG="OBRA" TIPO="REPRODUZIDA" COMENT="237273(Nosferatu, Eine Symphonie des Grauens);545134(Nosferatu: Phantom der Nacht)">Nosferatu</EM>, Eine Symphonie des Grauens.
+Valáquia.
+Pinus cembra.
+Berke.
+Muntênia.
+ <EM ID="x-68" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="REGIAO" COMENT="307426(Pequena Polônia)">Pequena Polônia</EM>.
+Cão Lobo Checoslovaco.
+Lariço-europeu.
+Oltênia.
+Bucovina.
+ <EM ID="x-73" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="AGUACURSO" COMENT="381964(Siret)">Siret</EM>.
+ <EM ID="x-74" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="AGUACURSO" COMENT="381974(Rio Prut)">Rio Prut</EM>.
+Romenos.
+ <EM ID="x-76" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="AGUACURSO" COMENT="439608(Rio San)">Rio San</EM>.
+ <EM ID="x-77" CATEG="PESSOA" TIPO="POVO" COMENT="442329(Bastarnae)">Bastarnae</EM>.
+Culinária da <EM ID="x-79" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="1583(Polónia);15652(Polónia)">Polônia</EM>.
+Wacław Potocki.
+ <EM ID="x-81" CATEG="NUMERO" TIPO="NUMERAL">194.210.97.223</EM>.
+ <EM ID="x-82" CATEG="PESSOA" TIPO="POVO" COMENT="583887(Rugios)">Rugios</EM>.
+ <EM ID="x-83" CATEG="ABSTRACCAO" TIPO="DISCIPLINA" COMENT="623503(Klezmer)">Klezmer</EM>.
+Telubuga.
+ <EM ID="x-85" CATEG="PESSOA" TIPO="INDIVIDUAL" COMENT="828845(Ion Antonescu)">Ion Antonescu</EM>.
+ <EM ID="x-86" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="REGIAO" COMENT="835724(Rutênia)">Rutênia</EM>.
+ <EM ID="x-87" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="850206(Montanhas Tatra)">Montanhas Tatra</EM>.
+ <EM ID="x-88" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="AGUACURSO" COMENT="928607(Rio Tisza)">Rio Tisza</EM>.
+ <EM ID="x-89" CATEG="ABSTRACCAO" TIPO="DISCIPLINA" COMENT="1232(Monarquia);23352(Monarquia)">Monarquia</EM> de <EM ID="x-90" CATEG="PESSOA" TIPO="INDIVIDUAL" COMENT="646835(Casa de Habsburgo)">Habsburgo</EM>.
+Bacău.
+Khaganato de <EM ID="x-92" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="139123(Rus)">Rus</EM>.
+Leonardomio/Hungria.
+Língua rutena.
+ <EM ID="x-94" CATEG="ORGANIZACAO" TIPO="ADMINISTRACAO" COMENT="1301903(Geografia da União Europeia)">Geografia da União Europeia</EM>.
+ <EM ID="x-95" CATEG="ABSTRACCAO" TIPO="DISCIPLINA" COMENT="24561(Estado)">Estados</EM> membros da <EM ID="x-96" CATEG="ORGANIZACAO" TIPO="ADMINISTRACAO" COMENT="1886(União Europeia);16667(União Europeia)">União Europeia</EM>.
+Urso-europeu.
+Homossexualidade na <EM ID="x-99" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="785(Espanha);15415(Espanha)">Espanha</EM>.
+ <EM ID="x-100" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Cárpatos</EM> ( desambiguação ).
+ <EM ID="x-101" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="40081(Cárpatos)">Montes Cárpatos</EM>.
+ <ALT> <EM ID="x-102" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="1506667(Planície da Panónia)">Planície da Panónia</EM>| <EM ID="x-103" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="RELEVO" COMENT="47533(Planície)">Planície</EM> da <EM ID="x-104" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="DIVISAO" COMENT="119384(Panónia)">Panónia</EM></ALT>.
+ <EM ID="x-105" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="REGIAO" COMENT="1591666(Zacarpátia)">Zacarpátia</EM>.
+ <EM ID="x-106" CATEG="LOCAL" TIPO="FISICO" SUBTIPO="AGUACURSO" COMENT="1646443(Olt)">Olt</EM>.
+ <EM ID="x-107" CATEG="PESSOA" TIPO="INDIVIDUAL" COMENT="1664835(Roman Vishniac)">Roman Vishniac</EM>.
+Székely.
+Homossexualidade em <EM ID="x-110" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="1480(Portugal);15049(Portugal)">Portugal</EM>.
+ <EM ID="x-111" CATEG="PESSOA" TIPO="INDIVIDUAL" COMENT="1774143(Andrei Yeremenko)">Andrei Yeremenko</EM>.
+
+
+Mesma coisa com inglês
+mysql> select page_id, page_title from en_page where page_title="Carpathian_Mountains" and page_namespace=0; 
++---------+----------------------+
+| page_id | page_title           |
++---------+----------------------+
+|   45746 | Carpathian_Mountains | 
++---------+----------------------+
+1 row in set (0.08 sec)
+
+
+mysql> select p2.page_id, p2.page_title from en_page as p2, en_pagelinks, en_page as p where p.page_title=pl_title and pl_namespace=0 and pl_from = p2.page_id and p.page_id=45746;
+
+| Austria                                                                | 
+| Alphorn                                                                | 
+| Bratislava                                                             | 
+| Geography_of_Bulgaria                                                  | 
+| Bastarnae                                                              | 
+| Boomerang                                                              | 
+| Balkans                                                                | 
+| Czech_Republic                                                         | 
+| Czechoslovakia                                                         | 
+| Constantin_Brâncuşi                                                    | 
+| Chicago                                                                | 
+| Dracula                                                                | 
+| Europe                                                                 | 
+| Francis_Bacon                                                          | 
+| Gheorghe_Hagi                                                          | 
+| Germanic_peoples                                                       | 
+| Geologic_time_scale                                                    | 
+| Hungary                                                                | 
+| Huns                                                                   | 
+| History_of_Poland                                                      | 
+| Kraków                                                                 | 
+| Latveria                                                               | 
+| Lesser_Poland                                                          | 
+| Geography_of_Moldova                                                   | 
+| Marcus_Aurelius                                                        | 
+| Moravia                                                                | 
+| Poland                                                                 | 
+| Polish_language                                                        | 
+| Romania                                                                | 
+| Geography_of_Romania                                                   | 
+| Economy_of_Romania                                                     | 
+| Geography_of_Russia                                                    | 
+| Roma_people                                                            | 
+| Slovakia                                                               | 
+| History_of_Slovakia                                                    | 
+| Geography_of_Slovakia                                                  | 
+| Silesia                                                                | 
+| Saki                                                                   | 
+| Slavic_peoples                                                         | 
+| Ukraine                                                                | 
+| Geography_of_Ukraine                                                   | 
+| Valens                                                                 | 
+| Vistula_River                                                          | 
+| Warsaw                                                                 | 
+| 150                                                                    | 
+| Ion_Antonescu                                                          | 
+| List_of_mountains                                                      | 
+| Winter_sport                                                           | 
+| Katowice                                                               | 
+| Zakopane                                                               | 
+| Manuel_I_Komnenos                                                      | 
+| Dacia                                                                  | 
+| Romania                                                                | 
+| Moldavia                                                               | 
+| Samuel_of_Bulgaria                                                     | 
+| Lviv                                                                   | 
+| Orogeny                                                                | 
+| Silk_Road                                                              | 
+| Syldavia                                                               | 
+| Tatra_Mountains                                                        | 
+| Music_of_Poland                                                        | 
+| Fred_Rosenstock                                                        | 
+| Bacău                                                                  | 
+| Geography_of_Poland                                                    | 
+| J._Michael_Straczynski                                                 | 
+| White_Russia                                                           | 
+| Croats                                                                 | 
+| Dryas_octopetala                                                       | 
+| Quadi                                                                  | 
+| Geology_of_the_Alps                                                    | 
+| Top_10_Google_hits,_A-K                                                | 
+| Spider_silk                                                            | 
+| Carpathian_Mountains                                                   | 
+| Bartholomeus_Anglicus                                                  | 
+| Golden_Eagle                                                           | 
+| Deşteaptă-te,_române!                                                  | 
+| Novi_Sad                                                               | 
+| Sarmatians                                                             | 
+| Sorbs                                                                  | 
+| Baal_Shem_Tov                                                          | 
+| Himnusz                                                                | 
+| Tourism_in_Poland                                                      | 
+| Tourism_in_Ukraine                                                     | 
+| Klezmer                                                                | 
+| Batu_Khan                                                              | 
+| Thracians                                                              | 
+| Gorlice                                                                | 
+| Invasion                                                               | 
+| List_of_mountain_ranges                                                | 
+| Ukrainian_historical_regions                                           | 
+| Culture_of_Romania                                                     | 
+| Bukovina                                                               | 
+| Bogdangiusca/Archive1                                                  | 
+| Tokaji                                                                 | 
+| Carpathians                                                            | 
+| List_of_etymologies_of_country_subdivision_names                       | 
+| Severians                                                              | 
+| Muntenia                                                               | 
+| Braşov_County                                                          | 
+| Sibiu_County                                                           | 
+| Bacău_County                                                           | 
+| Banat                                                                  | 
+| Eurasian_Lynx                                                          | 
+| Geography_of_the_Soviet_Union                                          | 
+| Dacite                                                                 | 
+| Great_Moravia                                                          | 
+| Romania_in_the_Middle_Ages                                             | 
+| Prut                                                                   | 
+| Music_of_Ukraine                                                       | 
+| Angst_(supermarket)                                                    | 
+| Carpathian_(disambiguation)                                            | 
+| Invasion_of_Poland_(1939)                                              | 
+| Uar                                                                    | 
+| Aromanians                                                             | 
+| Sea_Peoples                                                            | 
+| Carpathia                                                              | 
+| List_of_mountains_on_the_Moon                                          | 
+| Geography_of_Serbia                                                    | 
+| Krum_of_Bulgaria                                                       | 
+| Sucha_Beskidzka                                                        | 
+| Brusilov_Offensive                                                     | 
+| Historical_demography_of_Poland                                        | 
+| Polish–Lithuanian_Commonwealth                                         | 
+| Subcarpathian_Voivodeship                                              | 
+| Banská_Štiavnica                                                       | 
+| Foehn_wind                                                             | 
+| Eurasian_Three-toed_Woodpecker                                         | 
+| Chernivtsi_Oblast                                                      | 
+| Balkan_Mountains                                                       | 
+| Origin_of_the_Romanians                                                | 
+| Montes_Carpatus                                                        | 
+| Dniester                                                               | 
+| Hoverla                                                                | 
+| Herbs_in_Polish_mythology                                              | 
+| Pysanka_(Ukrainian)                                                    | 
+| Vinča_culture                                                          | 
+| Aurel_Vlaicu                                                           | 
+| Poiana                                                                 | 
+| Przemyśl                                                               | 
+| Nowy_Sącz                                                              | 
+| Wisłok                                                                 | 
+| San_River                                                              | 
+| Night_(book)                                                           | 
+| Cluj-Napoca_Botanical_Garden                                           | 
+| Buzău                                                                  | 
+| Curtea_de_Argeş                                                        | 
+| Târgu_Ocna                                                             | 
+| Râmnicu_Sărat                                                          | 
+| Székely                                                                | 
+| Peleş_Castle                                                           | 
+| Corneliu_Zelea_Codreanu                                                | 
+| Babia_Góra-Babia_Hora                                                  | 
+| II_Corps_(Poland)                                                      | 
+| History_of_the_world                                                   | 
+| Mountain_Pine                                                          | 
+| Carpathian_Ruthenia                                                    | 
+| Henryk_Sławik                                                          | 
+| Nebra_sky_disk                                                         | 
+| Norway_Spruce                                                          | 
+| Spotted_Nutcracker                                                     | 
+| List_of_euroregions                                                    | 
+| Operation_Bagration                                                    | 
+| Carpathian_mountains                                                   | 
+| Brassó_(county)                                                        | 
+| Kiev_Pechersk_Lavra                                                    | 
+| Lemkos                                                                 | 
+| Mureş_River                                                            | 
+| Ivano-Frankivsk_Oblast                                                 | 
+| Lviv_Oblast                                                            | 
+| Zakarpattia_Oblast                                                     | 
+| Ivano-Frankivsk                                                        | 
+| Stanisławów_Voivodeship                                                | 
+| Kalush,_Ukraine                                                        | 
+| Boykos                                                                 | 
+| Uzhhorod                                                               | 
+| Archduke_Joseph_August_of_Austria                                      | 
+| Hepatica                                                               | 
+| 1913_in_aviation                                                       | 
+| Bucegi_Mountains                                                       | 
+| Humenné                                                                | 
+| Arnica_montana                                                         | 
+| Houseleek                                                              | 
+| Rusyns                                                                 | 
+| Ruthenian_Catholic_Church                                              | 
+| Pechenegs                                                              | 
+| Iron_Gate_(Danube)                                                     | 
+| Abies_alba                                                             | 
+| Swiss_Pine                                                             | 
+| Drużno                                                                 | 
+| Take_Ionescu                                                           | 
+| Medieval_Croatian_state                                                | 
+| Saint_Sophia_Cathedral_in_Kiev                                         | 
+| Count_Orlok                                                            | 
+| Jan_Štursa                                                             | 
+| Stepan_Bandera                                                         | 
+| Tyczyn                                                                 | 
+| Polish_army_order_of_battle_in_1939                                    | 
+| Elmyr_de_Hory                                                          | 
+| Dhampir                                                                | 
+| First_Vienna_Award                                                     | 
+| Clouded_apollo                                                         | 
+| Hervarar_saga_ok_Heiðreks                                              | 
+| Ion_Creangă                                                            | 
+| Siret_River                                                            | 
+| Carpians                                                               | 
+| Bereg_(county)                                                         | 
+| Ung_county                                                             | 
+| Csík                                                                   | 
+| Fogaras                                                                | 
+| Háromszék                                                              | 
+| Udvarhely                                                              | 
+| Polans_(western)                                                       | 
+| Krivich                                                                | 
+| Ancient_warfare                                                        | 
+| Egon_Erwin_Kisch                                                       | 
+| Graustark                                                              | 
+| Carpathian_Mountain_range                                              | 
+| Eastern_Front_(World_War_I)                                            | 
+| Ukrainian_Canadian                                                     | 
+| Andrei_Yeremenko                                                       | 
+| Rock_formations_in_Ukraine                                             | 
+| Timiş_River                                                            | 
+| Phanariotes                                                            | 
+| Dracula_(1931_film)                                                    | 
+| History_of_Eurasia                                                     | 
+| Olt_River                                                              | 
+| East_European_Plain                                                    | 
+| Wienerwald                                                             | 
+| Tourism_in_Romania                                                     | 
+| Alnus_incana                                                           | 
+| Scirii                                                                 | 
+| Budjak                                                                 | 
+| Soldanella                                                             | 
+| Rădăuţi                                                                | 
+| 1st_Panzer_Division_(Germany)                                          | 
+| Geography_of_Europe                                                    | 
+| Dębica                                                                 | 
+| Battle_of_the_Dukla_Pass                                               | 
+| Transylvanian_Saxons                                                   | 
+| Sorbus_chamaemespilus                                                  | 
+| Treaty_of_Bucharest_(1918)                                             | 
+| Bicaz                                                                  | 
+| Northern_European_Lowlands                                             | 
+| Ialomiţa_River                                                         | 
+| Joseph_Szigeti                                                         | 
+| Southern_Carpathians                                                   | 
+| Prahova_Valley                                                         | 
+| Gerlachovský_štít                                                      | 
+| Hyborian_Age                                                           | 
+| Elder_Futhark                                                          | 
+| Academia_Caţavencu                                                     | 
+| Borşa                                                                  | 
+| Gheorgheni                                                             | 
+| Hungarian_minority_in_Romania                                          | 
+| Shepherd                                                               | 
+| Rhodiola_rosea                                                         | 
+| Gălăciuc                                                               | 
+| Machliniec                                                             | 
+| Whistled_language                                                      | 
+| Historical_names_of_Transylvania                                       | 
+| Bratislava_Castle                                                      | 
+| Polish-Ukrainian_War                                                   | 
+| Mud_volcano                                                            | 
+| Karpaty                                                                | 
+| Central_Industrial_Region_(Poland)                                     | 
+| Second_Battle_of_the_Masurian_Lakes                                    | 
+| Siege_of_Przemyśl                                                      | 
+| Roman_Vishniac                                                         | 
+| Podkarpacie                                                            | 
+| Baba_Dochia                                                            | 
+| Sânziană                                                               | 
+| Ozokerite                                                              | 
+| Ahtum                                                                  | 
+| Mongol_invasion_of_Europe                                              | 
+| European_Larch                                                         | 
+| OutRun_2                                                               | 
+| Burzenland                                                             | 
+| Austro-Hungarian_Army                                                  | 
+| Slovak_National_Uprising                                               | 
+| September_6_(Eastern_Orthodox_liturgics)                               | 
+| Hucul_pony                                                             | 
+| Czech_Silesia                                                          | 
+| Geography_of_the_European_Union                                        | 
+| Elder_Futhark                                                          | 
+| Battle_of_Lemberg_(1914)                                               | 
+| Pannonian_Basin                                                        | 
+| Rousse_TV_Tower                                                        | 
+| Dukla                                                                  | 
+| A3_(Romania)                                                           | 
+| Oium                                                                   | 
+| Vienna_Basin                                                           | 
+| Heidrek                                                                | 
+| Tyrfing_Cycle                                                          | 
+| Józef_Kasparek                                                         | 
+| Europe                                                                 | 
+| DN7                                                                    | 
+| Apuseni_Mountains                                                      | 
+| Raffelstetten_Customs_Regulations                                      | 
+| Molotov_Line                                                           | 
+| Székely_Land                                                           | 
+| LGBT_rights_in_Spain                                                   | 
+| Battle_of_Posada                                                       | 
+| Silingi                                                                | 
+| Stryi                                                                  | 
+| Bükk                                                                   | 
+| Sydir_Kovpak                                                           | 
+| Silene_acaulis                                                         | 
+| MPerel/Jguk's_era-related_edits_and_talk_comments                      | 
+| Alpine_Bistort                                                         | 
+| Saxifraga_hieracifolia                                                 | 
+| Žinčica                                                                | 
+| Dianthus_barbatus                                                      | 
+| Jtravise                                                               | 
+| Byzantine_Catholic_Metropolitan_Church_of_Pittsburgh                   | 
+| MPerel/Jguk's_era-related_edits                                        | 
+| Bardejov                                                               | 
+| Zemplín_(region)                                                       | 
+| Lvov-Sandomierz_Offensive                                              | 
+| Mountains_of_the_Carpathians                                           | 
+| Mountain_ranges_of_the_Carpathians                                     | 
+| White_Carpathians                                                      | 
+| Campanula_carpatica                                                    | 
+| Divisions_of_the_Carpathians                                           | 
+| 100th_Light_Infantry_Division_(Germany)                                | 
+| Great_Hungarian_Plain                                                  | 
+| Little_Hungarian_Plain                                                 | 
+| Basarabi_culture                                                       | 
+| Struve_Geodetic_Arc                                                    | 
+| Ursari                                                                 | 
+| Saiga_Antelope                                                         | 
+| Yablonitsky_Pass                                                       | 
+| Swiss_plateau                                                          | 
+| Muscovite_Manorialism                                                  | 
+| Bayan_I_(Avar_Khagan)                                                  | 
+| Vlkolínec                                                              | 
+| Western_Tatras                                                         | 
+| Bogdan_I_of_Moldavia                                                   | 
+| Japhetic                                                               | 
+| List_of_European_mammals                                               | 
+| Liburnians                                                             | 
+| Carpathian_Convention                                                  | 
+| Vác                                                                    | 
+| List_of_European_amphibians                                            | 
+| Hârtibaciu_River                                                       | 
+| Timiş-Cerna_Gap                                                        | 
+| Mioritic                                                               | 
+| Lusatian_Mountains                                                     | 
+| Javorníky                                                              | 
+| High_Tatras                                                            | 
+| Radagaisus                                                             | 
+| Slovak_Karst                                                           | 
+| Eurasian_Wolf                                                          | 
+| Bieszczady_Mountains                                                   | 
+| Moravian_Wallachia                                                     | 
+| Căluşari                                                               | 
+| Simon_Wiesenthal                                                       | 
+| Primula_auricula                                                       | 
+| Haviva_Reik                                                            | 
+| Transylvanian_School                                                   | 
+| Nový_Jičín                                                             | 
+| Buzău_River                                                            | 
+| Mountain_passes_of_the_Carpathians                                     | 
+| Dobšiná                                                                | 
+| Transylvanian_Mountains                                                | 
+| Geography_of_the_Alps                                                  | 
+| Biecz                                                                  | 
+| Alpide_belt                                                            | 
+| Mărginimea_Sibiului                                                    | 
+| Ranunculus_glacialis                                                   | 
+| Fanaa_(film)                                                           | 
+| Dimitrij_Andrusov                                                      | 
+| Lloydia_serotina                                                       | 
+| Battle_of_Lwów_(1918)                                                  | 
+| Roman_Dacia                                                            | 
+| Myroslav_Skoryk                                                        | 
+| Geology_of_Europe                                                      | 
+| Helix_pomatia                                                          | 
+| Oldest_Dryas                                                           | 
+| Eugen_Suchoň                                                           | 
+| Second_Vienna_Award                                                    | 
+| Erich_Loewenhardt                                                      | 
+| Caucasus_Mountains                                                     | 
+| Campanula_alpina                                                       | 
+| Cǎpleni,_Satu_Mare                                                     | 
+| Andrzej_Stasiuk                                                        | 
+| 71.134.5.3                                                             | 
+| Viktor_Dankl_von_Krasnik                                               | 
+| Gorals                                                                 | 
+| Ţara_Moţilor                                                           | 
+| Timeline_of_Slovene_history/Archive_1                                  | 
+| Ostsiedlung                                                            | 
+| Jonathan_Harker                                                        | 
+| 206.207.175.153                                                        | 
+| Baba_Vida                                                              | 
+| List_of_extinct_animals_of_Europe                                      | 
+| Schöpfl                                                                | 
+| Transylvanian_Plateau                                                  | 
+| Plast                                                                  | 
+| Rymanów                                                                | 
+| History_of_Moldavia                                                    | 
+| Primula_lutea                                                          | 
+| Pătârlagele                                                            | 
+| List_of_dominant_sovereign_states_and_their_servient_territories       | 
+| Aconitum_anthora                                                       | 
+| Volodymyr_Kubiyovych                                                   | 
+| Stalin's_Missed_Chance                                                 | 
+| Târnava_Mare_River                                                     | 
+| Târnava_Mică_River                                                     | 
+| Gentiana_clusii                                                        | 
+| Zoya_Smirnow                                                           | 
+| List_of_aviators_killed_in_aviation_accidents_or_incidents_before_1916 | 
+| Magura_National_Park                                                   | 
+| Arolla                                                                 | 
+| Slovak_Ore_Mountains                                                   | 
+| Muránska_planina                                                       | 
+| Administrative_division_of_Polish-Lithuanian_Commonwealth              | 
+| Eastern_Slovak_Hills                                                   | 
+| Lemkivshchyna                                                          | 
+| Tatra_National_Park,_Poland                                            | 
+| Ukrainian_dance                                                        | 
+| Tihuţa_Pass                                                            | 
+| Pădurea_Craiului_Mountains                                             | 
+| Kraków_Army                                                            | 
+| Mojmír_II                                                              | 
+| FC_Karpaty_Lviv                                                        | 
+| Linear_Pottery_culture                                                 | 
+| List_of_first_ascents                                                  | 
+| White_Croatia                                                          | 
+| The_Anome/The_three_thousand                                           | 
+| Vasile_Hutopilă                                                        | 
+| Gothic_runic_inscriptions                                              | 
+| Carpathian_Euroregion                                                  | 
+| Władysław_Filipkowski                                                  | 
+| Kozie_chrbty                                                           | 
+| Vysoké_Tatry_(town)                                                    | 
+| Dark-veined_white                                                      | 
+| DN10                                                                   | 
+| Kolomyjka_(song)                                                       | 
+| Principality_of_Nitra                                                  | 
+| Předměřice_nad_Jizerou                                                 | 
+| Geologic_time_scale                                                    | 
+| Carpathian_Wisent                                                      | 
+| World_Heritage_Sites_in_Ukraine                                        | 
+| Turnu_Roşu_Pass                                                        | 
+| Ukrainian_Insurgent_Army/_Sandbox                                      | 
+| Hungarian_Greek_Catholic_Church                                        | 
+| Retezat-Godeanu_Mountains_group                                        | 
+| Parâng_Mountains_group                                                 | 
+| Făgăraş_Mountains_group                                                | 
+| Portuguese_exonyms                                                     | 
+| Harold_Williams_(linguist)                                             | 
+| Andrey_Sheptytsky                                                      | 
+| Issedones                                                              | 
+| Nikolai_Ivanov                                                         | 
+| Germans_of_Hungary                                                     | 
+| 88.106.136.66                                                          | 
+| Carpates                                                               | 
+| Jasenička_River                                                        | 
+| Tourism_in_Slovakia                                                    | 
+| European_portals                                                       | 
+| Battle_of_Sarmisegetusa                                                | 
+| Yisroel_Friedman                                                       | 
+| Transalpina_(DN_67C)                                                   | 
+| Atypus                                                                 | 
+| Shadows_of_Forgotten_Ancestors                                         | 
+| A_Terrible_Vengeance                                                   | 
+| Bystrytsia_River                                                       | 
+| Cel_mai_iubit_dintre_pământeni                                         | 
+| Carl_Boberg                                                            | 
+| History_of_Goslar                                                      | 
+| Vrancea_Mountains                                                      | 
+| Outer_Carpathians                                                      | 
+| Halny                                                                  | 
+| Dmytro_Vitovsky                                                        | 
+| Kyjov                                                                  | 
+| Eastern_Carpathian                                                     | 
+| Cortusa_matthioli                                                      | 
+| Western_Carpathians                                                    | 
+| Weapon_dance                                                           | 
+| Nová_Lehota                                                            | 
+| Emile_Lahner                                                           | 
+| The_Lviv_Theatre_of_Opera_and_Ballet                                   | 
+| A_Book_of_Devils_and_Demons                                            | 
+| Yaremche                                                               | 
+| Zvi_Yair                                                               | 
+| Central_European_red_deer                                              | 
+| List_of_Manning-Sanders_tales_by_region                                | 
+| Scărişoara_Cave                                                        | 
+| The_Last_Dragon_(Docudrama/Fantasy)                                    | 
+| European_Union/Cities                                                  | 
+| René_Jeannel                                                           | 
+| Slovakia                                                               | 
+| Slovakia/Selected_article                                              | 
+| Northern_Medium_Mountains_(Hungary)                                    | 
+| Little_Carpathians                                                     | 
+| Theories_on_the_origin_of_Croats                                       | 
+| Northern_Maramuresh                                                    | 
+| Rus'_Khaganate                                                         | 
+| Ondava                                                                 | 
+| Northern_Maramuresh                                                    | 
+| Dc76                                                                   | 
+| List_of_biosphere_reserves_in_Ukraine                                  | 
+| Vorokhta                                                               | 
+| Verkhovyna                                                             | 
+| Roma_in_Central_and_Eastern_Europe                                     | 
+| Geography_of_Hajdu-Bihar                                               | 
+| European-Mediterranean_montane_mixed_forests                           | 
+| Zemplén_Mountains                                                      | 
+| Peştera_cu_Oase                                                        | 
+| Sopilka                                                                | 
+| Tyrawa_Wołoska                                                         | 
+| Kaçkar_Mountains                                                       | 
+| Ołpiny                                                                 | 
+| Timeline_of_Serbian_history                                            | 
+| Count_Dracula                                                          | 
+| Poland_Labelled_Map                                                    | 
+| Romanian_anti-communist_resistance_movement                            | 
+| Ovidiu_Pecican                                                         | 
+| Hostýnsko-vsetínská_hornatina                                          | 
+| Synevir                                                                | 
+| Kamienne                                                               | 
+| Płonna                                                                 | 
+| Wolica,_Sanok_County                                                   | 
+| Taeniopterygidae                                                       | 
+| Dudyńce                                                                | 
+| Skelivka                                                               | 
+| Nagórzany                                                              | 
+| Nadolany                                                               | 
+| Syringa_josikaea                                                       | 
+| Czaszyn                                                                | 
+| European_Union/Cities/27                                               | 
+| Porumbacu_de_Jos                                                       | 
+| History_of_the_Hungarian_language                                      | 
+| Lyuta                                                                  | 
+| Teodor_Axentowicz                                                      | 
+| Măgura,_Buzău                                                          | 
+| Battle_of_Mărăşti                                                      | 
+| Burdei                                                                 | 
+| Dunajec_River_Gorge                                                    | 
+| 70.108.8.220                                                           | 
+| Silesia                                                                | 
+| Silesia/Intro                                                          | 
+| Inner_North-Eastern_Carpathians                                        | 
+| Leaota_Mountains                                                       | 
+| Carpathian_Mountains                                                   | 
+| Bielzia_coerulans                                                      | 
+| History_of_Maramureş                                                   | 
+| Tatra_Pine_Vole                                                        | 
+| 75.178.70.144                                                          | 
+| Košava_(wind)                                                          | 
+| Old_Town_(Lviv)                                                        | 
+| Tâmpa,_Braşov                                                          | 
+| Battle_of_Jarosław                                                     | 
+| Parângu_Mare                                                           | 
+| Lemko-Rusyn_Republic                                                   | 
+| Siculeni                                                               | 
+| Vihorlat_Mountains                                                     | 
+| Chronicle_of_Huru                                                      | 
+| Dark_Desire                                                            | 
+| Zboiska                                                                | 
+| Wola_Piotrowa                                                          | 
+| Karlików                                                               | 
+| Antoni_Szylling                                                        | 
+| Constantin_Mille                                                       | 
+| České_Středohoří                                                       | 
+| Dark_Gold                                                              | 
+| Buda,_Buzău                                                            | 
+| Version_1.0_Editorial_Team/Ukraine_articles_by_quality/1               | 
+| Gabriel_Spiro                                                          | 
+| MarkBA/Sandbox                                                         | 
+| St._John_Chrysostom_Byzantine_Catholic_Church_(Pittsburgh)             | 
+| Four_Mile_Run_(Pittsburgh)                                             | 
+| Chiojdu                                                                | 
+| Dark_Celebration                                                       | 
+| St._John_the_Baptist_Byzantine_Catholic_Cathedral_(Pittsburgh)         | 
+| Dimitrie_Ghica-Comăneşti                                               | 
+| Job_of_Maniava                                                         | 
+| Tatra_National_Park,_Slovakia                                          | 
+| Otto_Heinze                                                            | 
+| Bukovel                                                                | 
+| History_of_the_Székely_people                                          | 
+| Slovak_Paradise_National_Park                                          | 
+| St._Joseph's_in_Chicago                                                | 
+| Fauna_of_Europe                                                        | 
+| Carpathian_Mountain                                                    | 
+| Carpathian_Ruthenia                                                    | 
+| Carpathian_Ruthenia/Intro                                              | 
+| Oleh_Lysheha                                                           | 
+| DDima/Sandbox/Ukraine                                                  | 
+| Geography_of_Bratislava                                                | 
+| Karpaty_Army                                                           | 
+| Little_Carpathians_Protected_Landscape_Area                            | 
+| Biele_Karpaty_Protected_Landscape_Area                                 | 
+| Belianske_Tatras                                                       | 
+| SaarLorLux                                                             | 
+| Ciobănesc_de_Bucovina                                                  | 
+| Trascău_Mountains                                                      | 
+| Union_of_Uzhhorod                                                      | 
+| Prunaru_Charge                                                         | 
+| Polish_Highlanders_Alliance_of_North_America                           | 
+| Lichtentanne                                                           | 
+| Freehiking                                                             | 
+| Lacul_Vulturilor                                                       | 
+| East_Carpathians_Protected_Landscape_Area                              | 
+| László_Mednyánszky                                                     | 
+| Roman_Catholicism_in_Romania                                           | 
+| Topography_of_Romania                                                  | 
+| Budapest_Offensive                                                     | 
+| Polish_Jura_Chain                                                      | 
+| Carpathian                                                             | 
+| Dubove,_Ukraine                                                        | 
+| 81.74.236.38                                                           | 
+| 128th_Mechanized_Brigade_(Ukraine)                                     | 
+| Ménie_Muriel_Dowie                                                     | 
+| Bega_River_(Tisza)                                                     | 
+| Felipeh/Things/Places                                                  | 
+| Ischyropsalididae                                                      | 
+| Northern_Colletes                                                      | 
+| List_of_local_winds                                                    | 
+| Łukasz_Ciepliński                                                      | 
+| Version_1.0_Editorial_Team/Mountain_articles_by_quality/1              | 
+| Transylvania_(album)                                                   | 
+| Stone_Age_Poland                                                       | 
+| Poland_in_Antiquity                                                    | 
+| Poland_in_the_Early_Middle_Ages                                        | 
+| WikiProject_Missing_encyclopedic_articles/es/1                         | 
+| Carpathian_mountians                                                   | 
+| Hugo_Zapalowicz                                                        | 
+| Geomorphological_division_of_Slovakia                                  | 
+| Baiu_Mountains                                                         | 
+| Ludwig_Greiner                                                         | 
+| Physiographic_regions_of_the_world                                     | 
+| List_of_geography_topics_(C)                                           | 
+| Douglas_Coldwell/Sandboxes/142                                         | 
+| Foundation_of_Wallachia                                                | 
+| Harland1/Workshop2                                                     | 
+| Euroregions                                                            | 
+| Esdrasbarnevelt/Operation_Bagration                                    | 
+| Biały_Słoń                                                             | 
+| Bessarabia_in_the_Russian_Empire                                       | 
+| Romanian_Carpathians                                                   | 
+| Kaarel/sandbox/Fauna_of_Europe                                         | 
+| Zwinin                                                                 | 
+| Felix_Graf_von_Bothmer                                                 | 
+| Rozsika_Edle_von_Wertheimstein                                         | 
+| Codru-Moma_Mountains                                                   | 
+| Gutâi_Mountains                                                        | 
+| Silesia_topics                                                         | 
+| Serbian_Carpathians                                                    | 
+| Dark_Possession                                                        | 
+| Costel_Busuioc                                                         | 
+| Pielnica                                                               | 
+| Ponor                                                                  | 
+| Version_1.0_Editorial_Team/Geography_articles_by_quality/1             | 
+| Hungarian_people                                                       | 
+| World_Heritage_Sites_in_Slovakia                                       | 
+| Yellow_Spotted_Ringlet                                                 | 
++------------------------------------------------------------------------+
+657 rows in set (0.02 sec)
+
+cat foo | perl -pe  "s/^\|\s*([^\s]*)\s*\|\s*$/\1.\n/g" | perl -pe "s/_/ /g" > foo2
+cat foo2 | java -Dglobal.lang=en rembrandt.bin.Rembrandt > foo3

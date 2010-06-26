@@ -1,0 +1,47 @@
+PT: Who:
+
+select ?x where {
+  {?x <http://dbpedia.org/ontology/hometown> <http://dbpedia.org/resource/Porto%2C_Portugal> }
+} gives Rui_Veloso
+
+select ?x where {
+ ?x skos:subject <http://dbpedia.org/resource/Category:Portuguese_musicians>
+ { ?x <http://dbpedia.org/ontology/hometown> <http://dbpedia.org/resource/Porto%2C_Portugal> } 
+} also. 
+
+select ?x where {
+  ?x skos:subject <http://dbpedia.org/resource/Category:Portuguese_musicians>  .
+ {?x <http://dbpedia.org/ontology/hometown> <http://dbpedia.org/resource/Porto%2C_Portugal>}
+  UNION 
+ {?x <http://dbpedia.org/ontology/hometown> <http://dbpedia.org/resource/Lisbon>} 
+ }
+ gives, in 3.4
+  http://dbpedia.org/resource/Sam_the_Kid
+  http://dbpedia.org/resource/Valete
+  http://dbpedia.org/resource/Rui_Veloso
+  (in 3.5, Sam_the_Kid now is "Chelas", Valete is "Benfica_(Lisbon)" 
+  
+select ?x where {
+ {?x skos:subject <http://dbpedia.org/resource/Category:Portuguese_musicians> }
+   UNION
+ {?x skos:subject <http://dbpedia.org/resource/Category:Portuguese_rock_music_groups> }
+    
+ {?x <http://dbpedia.org/ontology/hometown> <http://dbpedia.org/resource/Porto%2C_Portugal>}
+  UNION 
+ {?x <http://dbpedia.org/ontology/hometown> <http://dbpedia.org/resource/Lisbon>} 
+}
+adiciona http://dbpedia.org/resource/Blasted_Mechanism aos outros 3
+
+ Mais: usar category: broader
+select ?x where {
+  {?x skos:subject <http://dbpedia.org/resource/Category:Portuguese_musicians> }
+  UNION 
+  {?x skos:subject ?category .
+   ?category skos:broader <http://dbpedia.org/resource/Category:Portuguese_musicians> 
+  }
+ {?x <http://dbpedia.org/ontology/hometown> <http://dbpedia.org/resource/Porto%2C_Portugal>}
+  UNION 
+ {?x <http://dbpedia.org/ontology/hometown> <http://dbpedia.org/resource/Lisbon>} 
+ }		
+		
+So, we can use the EAT as first condition, then union the list of properties/objects 

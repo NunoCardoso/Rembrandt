@@ -1,0 +1,39 @@
+SELECT ?t WHERE {
+?s skos:subject <http://dbpedia.org/resource/Category:Waterfalls_of_Norway> .
+?s rdfs:label ?t .
+FILTER (lang(?t) = "en")
+} 
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Espelandsfossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Kjelfossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Langfossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Låtefossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Mardalsfossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Mongefossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Månafossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Ramnefjellsfossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Rjukanfossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Seven Sisters Waterfall, Norway","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Skrikjofossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Steinsdalsfossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Tyssestrengene","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Vettisfossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Vøringfossen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Rjukandefossen","en")
+
+"Espelandsfossen"@en
+"Kjelfossen"@en
+"Langfossen"@en
+"Låtefossen"@en
+"Mardalsfossen"@en
+"Mongefossen"@en
+"Månafossen"@en
+"Ramnefjellsfossen"@en
+"Rjukanfossen"@en
+"Seven Sisters Waterfall, Norway"@en
+"Skrikjofossen"@en
+"Steinsdalsfossen"@en
+"Tyssestrengene"@en
+"Vettisfossen"@en
+"Vøringfossen"@en
+"Rjukandefossen"@en

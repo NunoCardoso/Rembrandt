@@ -1,0 +1,76 @@
+GC-2009-09 pt/f/r/a/Frankfurt_am_Main_649e.html {pt/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html }
+GC-2009-09 bg/ф/р/а/Франкфурт_на_Майн_f23a.html {bg/й/о/х/Йохан_Волфганг_фон_Гьоте_9588.html}
+GC-2009-09 de/f/r/a/Frankfurt_am_Main_649e.html {de/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 en/f/r/a/Frankfurt.html {en/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 es/f/r/á/Fráncfort_del_Meno_e6f0.html {es/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 it/f/r/a/Francoforte_sul_Meno_6bad.html {it/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nl/f/r/a/Frankfurt_am_Main_649e.html {nl/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nn/f/r/a/Frankfurt_am_Main_649e.html {nn/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 no/f/r/a/Frankfurt_am_Main_649e.html {no/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 ro/f/r/a/Frankfurt_pe_Main_e2ac.html {ro/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 pt/l/e/i/Leipzig.html {pt/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html }
+GC-2009-09 bg/л/а/й/Лайпциг_6c56.html {bg/й/о/х/Йохан_Волфганг_фон_Гьоте_9588.html}
+GC-2009-09 de/l/e/i/Leipzig.html {de/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 en/l/e/i/Leipzig.html {en/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 es/l/e/i/Leipzig.html {es/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 it/l/i/p/Lipsia.html {it/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nl/l/e/i/Leipzig.html {nl/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nn/l/e/i/Leipzig.html {nn/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 no/l/e/i/Leipzig.html {no/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 ro/l/e/i/Leipzig.html {ro/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 pt/w/e/t/Wetzlar.html {pt/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html }
+GC-2009-09 bg/в/е/ц/Вецлар_5f69.html {bg/й/о/х/Йохан_Волфганг_фон_Гьоте_9588.html}
+GC-2009-09 de/w/e/t/Wetzlar.html {de/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 en/w/e/t/Wetzlar.html {en/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 es/w/e/t/Wetzlar.html {es/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 it/w/e/t/Wetzlar.html {it/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nl/w/e/t/Wetzlar.html {nl/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nn/w/e/t/Wetzlar.html {nn/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 no/w/e/t/Wetzlar.html {no/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 ro/w/e/t/Wetzlar.html {ro/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 pt/w/e/i/Weimar.html {pt/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html }
+GC-2009-09 bg/в/а/й/Ваймар_cbe3.html {bg/й/о/х/Йохан_Волфганг_фон_Гьоте_9588.html}
+GC-2009-09 de/w/e/i/Weimar.html {de/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 en/w/e/i/Weimar.html {en/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 es/w/e/i/Weimar.html {es/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 it/w/e/i/Weimar.html {it/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nl/w/e/i/Weimar.html {nl/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nn/w/e/i/Weimar.html {nn/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 no/w/e/i/Weimar.html {no/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 ro/w/e/i/Weimar.html {ro/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 pt/i/t/á/Itália.html {pt/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html }
+GC-2009-09 bg/и/т/а/Италия_6576.html {bg/й/о/х/Йохан_Волфганг_фон_Гьоте_9588.html}
+GC-2009-09 de/i/t/a/Italien.html {de/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 en/i/t/a/Italy.html {en/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 es/i/t/a/Italia.html {es/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 it/i/t/a/Italia.html {it/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nl/i/t/a/Italië.html {nl/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nn/i/t/a/Italia.html {nn/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 no/i/t/a/Italia.html {no/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 ro/i/t/a/Italia.html {ro/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 pt/f/r/a/França.html {pt/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html }
+GC-2009-09 bg/ф/р/а/Франция_7954.html {bg/й/о/х/Йохан_Волфганг_фон_Гьоте_9588.html}
+GC-2009-09 de/f/r/a/Frankreich.html {de/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 en/f/r/a/France.html {en/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 es/f/r/a/Francia.html {es/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 it/f/r/a/Francia.html {it/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nl/f/r/a/Frankrijk.html {nl/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nn/f/r/a/Frankrike.html {nn/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 no/f/r/a/Frankrike.html {no/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 ro/f/r/a/Franţa.html {ro/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 pt/m/o/r/Morre.html {pt/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html }
+GC-2009-09 de/m/o/r/Morre.html {de/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 en/m/o/r/Morre.html {en/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 it/m/o/r/Morre.html {it/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nl/m/o/r/Morre.html {nl/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 pt/d/a/r/Darwin_(Austrália)_25eb.html {pt/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html }
+GC-2009-09 de/d/a/r/Darwin_(Northern_Territory)_48b3.html {de/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 en/d/a/r/Darwin,_Northern_Territory_5a73.html {en/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 es/d/a/r/Darwin_(Australia)_bd49.html {es/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 it/d/a/r/Darwin_(Australia)_bd49.html {it/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nl/d/a/r/Darwin_(Australië)_6c0e.html {nl/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 no/d/a/r/Darwin_(Australia)_bd49.html {no/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 ro/d/a/r/Darwin_(Northern_Territory)_48b3.html {ro/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 pt/d/a/r/Darwin_(Minnesota)_cbdc.html {pt/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html }
+GC-2009-09 en/d/a/r/Darwin,_Minnesota_46fa.html {en/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}
+GC-2009-09 nl/d/a/r/Darwin_(Minnesota)_cbdc.html {nl/j/o/h/Johann_Wolfgang_von_Goethe_cb5b.html}

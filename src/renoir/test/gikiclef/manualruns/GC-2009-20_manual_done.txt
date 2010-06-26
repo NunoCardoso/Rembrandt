@@ -1,0 +1,70 @@
+GC-2009-20 en/a/d/d/Adda_River_f84e.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 bg/а/д/а/Ада_b7c3.html {bg/п/о/_/По_7a1a.html}
+GC-2009-20 de/a/d/d/Adda_(Fluss)_de43.html {de/p/o/_/Po_(Fluss)_4435.html}
+GC-2009-20 es/r/í/o/Río_Adda_6243.html {es/p/o/_/Po.html}
+GC-2009-20 it/a/d/d/Adda.html {it/p/o/_/Po.html}
+GC-2009-20 nl/a/d/d/Adda.html {nl/p/o/_/Po_(rivier).html}
+GC-2009-20 nn/a/d/d/Adda.html {nn/p/o/_/Po.html}
+GC-2009-20 no/a/d/d/Adda.html {no/p/o/_/Po.html}
+GC-2009-20 pt/r/i/o/Rio_Adda_d18d.html {pt/r/i/o/Rio_Pó_6e41.html}
+GC-2009-20 ro/a/d/d/Adda.html {ro/p/a/d/Pad.html}
+GC-2009-20 en/c/u/r/Curone.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 it/c/u/r/Curone.html {it/p/o/_/Po.html}
+GC-2009-20 nn/c/u/r/Curone.html {nn/p/o/_/Po.html}
+GC-2009-20 en/d/o/r/Dora_Baltea_7c85.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 de/d/o/r/Dora_Baltea_7c85.html {de/p/o/_/Po_(Fluss)_4435.html}
+GC-2009-20 it/d/o/r/Dora_Baltea_7c85.html {it/p/o/_/Po.html}
+GC-2009-20 nl/d/o/r/Dora_Baltea_7c85.html {nl/p/o/_/Po_(rivier).html}
+GC-2009-20 nn/d/o/r/Dora_Baltea_7c85.html {nn/p/o/_/Po.html}
+GC-2009-20 no/d/o/r/Dora_Baltea_7c85.html {no/p/o/_/Po.html}
+GC-2009-20 en/g/r/a/Grana_del_Monferrato_f83f.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 it/g/r/a/Grana_del_Monferrato_f83f.html {it/p/o/_/Po.html}
+GC-2009-20 nn/g/r/a/Grana_del_Monferrato_f83f.html {nn/p/o/_/Po.html}
+GC-2009-20 en/l/a/m/Lambro.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 de/l/a/m/Lambro.html {de/p/o/_/Po_(Fluss)_4435.html}
+GC-2009-20 it/l/a/m/Lambro.html {it/p/o/_/Po.html}
+GC-2009-20 nl/l/a/m/Lambro.html {nl/p/o/_/Po_(rivier).html}
+GC-2009-20 nn/l/a/m/Lambro.html {nn/p/o/_/Po.html}
+GC-2009-20 en/n/u/r/Nure.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 de/n/u/r/Nure.html {de/p/o/_/Po_(Fluss)_4435.html}
+GC-2009-20 it/n/u/r/Nure.html {it/p/o/_/Po.html}
+GC-2009-20 nn/n/u/r/Nure.html {nn/p/o/_/Po.html}
+GC-2009-20 en/o/r/c/Orco.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 de/o/r/c/Orco.html {de/p/o/_/Po_(Fluss)_4435.html}
+GC-2009-20 it/o/r/c/Orco_(torrente).html {it/p/o/_/Po.html}
+GC-2009-20 nl/o/r/c/Orco.html {nl/p/o/_/Po_(rivier).html}
+GC-2009-20 nn/o/r/c/Orco.html {nn/p/o/_/Po.html}
+GC-2009-20 en/r/o/t/Rotaldo.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 it/r/o/t/Rotaldo.html {it/p/o/_/Po.html}
+GC-2009-20 nn/r/o/t/Rotaldo.html {nn/p/o/_/Po.html}
+GC-2009-20 en/s/c/r/Scrivia.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 it/s/c/r/Scrivia.html {it/p/o/_/Po.html}
+GC-2009-20 nn/s/c/r/Scrivia.html {nn/p/o/_/Po.html}
+GC-2009-20 en/s/e/s/Sesia_River_ace0.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 de/s/e/s/Sesia.html {de/p/o/_/Po_(Fluss)_4435.html}
+GC-2009-20 es/r/í/o/Río_Sesia_b9e2.html {es/p/o/_/Po.html}
+GC-2009-20 it/s/e/s/Sesia.html {it/p/o/_/Po.html}
+GC-2009-20 nl/s/e/s/Sesia.html {nl/p/o/_/Po_(rivier).html}
+GC-2009-20 nn/s/e/s/Sesia.html {nn/p/o/_/Po.html}
+GC-2009-20 no/s/e/s/Sesia.html {no/p/o/_/Po.html}
+GC-2009-20 en/s/t/a/Staffora.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 it/s/t/a/staffora_be8d.html {it/p/o/_/Po.html}
+GC-2009-20 nn/s/t/a/staffora_be8d.html {nn/p/o/_/Po.html}
+GC-2009-20 en/t/e/r/Terdoppio.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 it/t/e/r/Terdoppio.html {it/p/o/_/Po.html}
+GC-2009-20 nn/t/e/r/Terdoppio.html {nn/p/o/_/Po.html}
+GC-2009-20 en/t/i/c/Ticino_River_8fca.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 bg/т/и/ч/Тичино_77aa.html {bg/п/о/_/По_7a1a.html}
+GC-2009-20 de/t/i/c/Ticino_(Fluss)_04f4.html {de/p/o/_/Po_(Fluss)_4435.html}
+GC-2009-20 es/r/í/o/Río_Tesino_30f2.html {es/p/o/_/Po.html}
+GC-2009-20 it/t/i/c/Ticino.html {it/p/o/_/Po.html}
+GC-2009-20 nl/t/i/c/Ticino_(rivier).html {nl/p/o/_/Po_(rivier).html}
+GC-2009-20 nn/e/l/v/Elva_Ticino_face.html {nn/p/o/_/Po.html}
+GC-2009-20 no/t/i/c/Ticino_(elv).html {no/p/o/_/Po.html}
+GC-2009-20 pt/r/i/o/Rio_Tessino_9620.html {pt/r/i/o/Rio_Pó_6e41.html}
+GC-2009-20 en/m/a/i/Maira.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 de/m/a/i/Maira.html {de/p/o/_/Po_(Fluss)_4435.html}
+GC-2009-20 it/m/a/i/Maira_(fiume).html {it/p/o/_/Po.html}
+GC-2009-20 it/s/t/u/Stura_del_Monferrato_910d.html {it/p/o/_/Po.html}
+GC-2009-20 en/v/a/r/Varaita.html {en/p/o/_/Po_River_4b7f.html }
+GC-2009-20 it/v/a/r/Varaita.html {it/p/o/_/Po.html}

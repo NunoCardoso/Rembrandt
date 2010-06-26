@@ -1,0 +1,40 @@
+select páginas que estão na categoria de "escritores da Alemanha" e que tenham um link para a página da Suíça.
+
+select page_id from pt_page where page_namespace=0 and page_title="Suíça";
++---------+
+| page_id |
++---------+
+|    3832 | 
++---------+
+1 row in set (0.06
+
+mysql> select p2.page_id, p2.page_title from pt_page as p2, pt_pagelinks, pt_categorylinks, pt_page as p1 where p2.page_id=cl_from and cl_to="Escritores_da_Alemanha" and p1.page_title=pl_title and pl_namespace=0 and pl_from = p2.page_id and p1.page_id=3832;
++---------+----------------------+
+| page_id | page_title           |
++---------+----------------------+
+|  446797 | Hugo_Ball            | 
+|   82682 | Bertolt_Brecht       | 
+|  229447 | Georg_Büchner        | 
+|  164712 | Stefan_George        | 
+|    8850 | Hermann_Hesse        | 
+|  861017 | Hermann_Kesten       | 
+|    1117 | Klabund              | 
+|   47703 | Klaus_Mann           | 
+|  717730 | Hieronymus_Münzer    | 
+|  213990 | Erich_Maria_Remarque | 
++---------+----------------------+
+10 rows in set (4.20 sec)
+
+mysql> 
+
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Hugo_Ball","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Bertolt_Brecht","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Georg_Büchner","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Stefan_George","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Hermann_Hesse","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Hermann_Kesten","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Klabund","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Klaus_Mann","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Hieronymus_Münzer","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Erich_Maria_Remarque","pt")

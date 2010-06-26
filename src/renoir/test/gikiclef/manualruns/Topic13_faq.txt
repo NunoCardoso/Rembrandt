@@ -1,0 +1,6 @@
+SELECT * WHERE {
+  ?s rdf:type <http://dbpedia.org/ontology/Writer> .
+    ?s dbpedia2:deathCause <http://dbpedia.org/resource/Tuberculosis>
+}
+
+nada. 

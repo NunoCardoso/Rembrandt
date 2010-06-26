@@ -1,0 +1,78 @@
+Categoria:Países_da_Europa
+
+select page_id, page_title from pt_page, pt_categorylinks where page_namespace=0 and page_id=cl_from and cl_to="Países_da_Europa";
+
++---------+--------------------------+
+| page_id | page_title               |
++---------+--------------------------+
+|     304 | Albânia                  | 
+|     306 | Andorra                  | 
+|     308 | Arménia                  | 
+|    1979 | Áustria                  | 
+|    3908 | Azerbaijão               | 
+|    3856 | Bielorrússia             | 
+|    3862 | Bulgária                 | 
+|     456 | Bélgica                  | 
+|    3907 | Cazaquistão              | 
+|    3880 | Chipre                   | 
+|    3847 | Croácia                  | 
+|    3843 | Dinamarca                | 
+|    3858 | Eslováquia               | 
+|    3846 | Eslovénia                | 
+|     785 | Espanha                  | 
+|    3951 | Estónia                  | 
+|    3873 | Finlândia                | 
+|     827 | França                   | 
+|    3802 | Geórgia                  | 
+|     919 | Grécia                   | 
+|    3859 | Hungria                  | 
+|    3852 | Islândia                 | 
+|    1039 | Itália                   | 
+|    3874 | Letónia                  | 
+|    3845 | Liechtenstein            | 
+|    3855 | Lituânia                 | 
+|    3831 | Luxemburgo               | 
+|    3849 | Malta                    | 
+|    3875 | Moldávia                 | 
+|   37382 | Montenegro               | 
+|    3833 | Mónaco                   | 
+|    1354 | Noruega                  | 
+|    3374 | Países_Baixos            | 
+|    1583 | Polónia                  | 
+|    1480 | Portugal                 | 
+|    1661 | Reino_Unido              | 
+|    3844 | República_Checa          | 
+|    1035 | República_da_Irlanda     | 
+|    3863 | República_da_Macedónia   | 
+|    3861 | Roménia                  | 
+|    1669 | Rússia                   | 
+|    3850 | San_Marino               | 
+|   12141 | Santa_Sé                 | 
+|    3853 | Suécia                   | 
+|    3832 | Suíça                    | 
+|   41435 | Sérvia                   | 
+|    3864 | Turquia                  | 
+|    3851 | Vaticano                 | 
++---------+--------------------------+
+
+Para cada um deles, deixa ver se há um bidé
+
+grep "bidé" 
+
+
+primeiros 15: 
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Albânia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Andorra","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Arménia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Áustria","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Azerbaijão","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Bielorrússia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Bulgária","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Bélgica","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Cazaquistão","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Chipre","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Croácia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Dinamarca","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Eslováquia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Eslovénia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Espanha","pt")

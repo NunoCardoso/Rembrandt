@@ -1,0 +1,33 @@
+elect  page_id, page_title from pt_page, pt_categorylinks where page_id=cl_from and cl_to="Escritores_da_Roménia";
+^[[3~+---------+----------------------------+
+| page_id | page_title                 |
++---------+----------------------------+
+|  124988 | Emil_Cioran                | 
+|  231034 | Mihai_Eminescu             | 
+| 1607821 | Ion_Luca_Caragiale         | 
+|  212773 | Isabel_de_Wied             | 
+|  833778 | Alexandru_Macedonski       | 
+| 1604815 | Titu_Maiorescu             | 
+|  611527 | Maria_de_Saxe-Coburgo-Gota | 
+|  248641 | Jacob_Levy_Moreno          | 
+| 1604755 | Vasile_Oltean              | 
+|  573258 | Oskar_Pastior              | 
+|  128593 | Poetas_da_Roménia          | 
+|   76045 | Florentin_Smarandache      | 
+|  373118 | Alexandru_Vlahuţă          | 
++---------+----------------------------+
+13 rows in set (0.00 sec)
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Emil_Cioran","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Mihai_Eminescu","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Ion_Luca_Caragiale","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Isabel_de_Wied","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Alexandru_Macedonski","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Titu_Maiorescu","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Maria_de_Saxe-Coburgo-Gota","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Jacob_Levy_Moreno","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Vasile_Oltean","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Oskar_Pastior","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Poetas_da_Roménia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Florentin_Smarandache","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Alexandru_Vlahu\u0163\u0103","pt")

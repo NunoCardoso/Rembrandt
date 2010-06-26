@@ -1,0 +1,21 @@
+mysql> Select page_id, page_title from en_page, en_categorylinks where page_id=cl_from and cl_to="Caves_in_Romania";
++----------+--------------------+
+| page_id  | page_title         |
++----------+--------------------+
+| 15459948 | Movile_Cave        | 
+| 17579092 | Peştera_Muierilor  | 
+|  3801830 | Peştera_Urşilor    | 
+|  8164415 | Peştera_Vântului   | 
+|  8239448 | Peştera_cu_Oase    | 
+|  6966942 | Scărişoara_Cave    | 
++----------+--------------------+
+6 rows in set (0.76 sec)
+
+mysql> 
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Movile Cave","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Pe\\u015ftera Muierilor","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Pe\\u015ftera Ur\\u015filor","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Pe\\u015ftera Vântului","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Pe\\u015ftera cu Oase","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Sc\\u0103ri\\u015foara Cave","en")

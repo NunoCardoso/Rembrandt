@@ -1,0 +1,388 @@
+package renoir.rules
+
+import org.apache.log4j.*
+import rembrandt.obj.*
+import rembrandt.gazetteers.*
+import rembrandt.gazetteers.pt.*
+import saskia.dbpedia.*
+import saskia.bin.*
+import renoir.obj.*
+import org.apache.log4j.*
+
+class QuestionRulesPT extends QuestionRules {
+/*	
+	static Logger log = Logger.getLogger("RuleMatcher")
+	//clausulas
+	static Clause quantoas1 =  Clause.newRegex1Clause("[Qq]uant[oa]s?")
+	static Clause qualis1 =  Clause.newRegex1Clause("[Qq]ua[li]s?")
+	static Clause que1 =  Clause.newRegex1Clause("[Qq]ue")
+	static Clause quem1 = Clause.newRegex1Clause("[Qq]uem")
+	static Clause onde1 = Clause.newRegex1Clause("A?[Oo]nde")
+	static Clause como1 = Clause.newRegex1Clause("[Cc]omo")
+	static Clause porque1 = Clause.newRegex1Clause("[Pp]orqu[eê]")
+	static Clause quando1 = Clause.newRegex1Clause("[Qq]uando")
+	static Clause chama1 = Clause.newPlain1Clause("chama")
+
+    // Term Property: Type
+	static Clause n_1 = new Clause(name:"n_1", pattern:"N",
+			 cardinality:Cardinality.One, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Type)
+	static Clause v_1 = new Clause(name:"v_1", pattern:"V",
+			 cardinality:Cardinality.One, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Type)
+	static Clause v_1p = new Clause(name:"v_1p", pattern:"V",
+			 cardinality:Cardinality.OneOrMore, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Type)
+	static Clause prop_1p = new Clause(name:"prop_1", pattern:"PROP",
+			 cardinality:Cardinality.OneOrMore, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Type)
+	static Clause prp_1 = new Clause(name:"prp_1", pattern:"PRP",
+			 cardinality:Cardinality.One, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Type)
+	static Clause prp_01 = new Clause(name:"prp_01", pattern:"PRP",
+			 cardinality:Cardinality.ZeroOrOne, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Type)
+	static Clause det_01 = new Clause(name:"det_01", pattern:"DET",
+			 cardinality:Cardinality.ZeroOrOne, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Type)
+	static Clause det_1 = new Clause(name:"det_1", pattern:"DET",
+			 cardinality:Cardinality.One, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Type)
+
+	// Term Property: Lemma
+	static Clause ser_01 = new Clause(name:"ser", pattern:"ser", 		
+			 cardinality:Cardinality.ZeroOrOne, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Lemma)
+	static Clause ser_1 = new Clause(name:"ser", pattern:"ser", 		
+			 cardinality:Cardinality.One, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Lemma)
+			
+	// Term property: Text
+	static Clause nome_1 = new Clause(name:"nome", pattern:"nome", 		
+			 cardinality:Cardinality.One, criteria:Criteria.PlainMatch, 
+			 termProperty:TermProperty.Text)
+	
+			
+/******* #1: RULE TYPES *********/
+
+/*	static rulesToDetectQuestionType = [
+	 
+	 // Quantos habitantes 
+	 new Rule(id:'quantos1', description:'Quant[oa]s', debug:false,
+		clauses:[quantoas1], action:[{q, o -> q.questionType = QuestionType.HowMuch}]
+	 ), 
+	
+	 new Rule(id:'qual1', description:'Qua[il]s', debug:false,
+		clauses:[qualis1], action:[{q, o -> q.questionType = QuestionType.Which}]
+	 ), 
+	
+	 new Rule(id:'quem1', description:'Quem', debug:false,
+		clauses:[quem1], action:[{q, o -> q.questionType = QuestionType.Who}]
+	 ), 
+	
+     new Rule(id:'onde1', description:'Onde', debug:false,
+		clauses:[onde1], action:[{q, o -> q.questionType = QuestionType.Where}]
+	 ), 
+	
+	 new Rule(id:'como1', description:'Como', debug:false,
+		clauses:[como1], action:[{q, o -> q.questionType = QuestionType.How}]
+	 ), 
+	
+	 new Rule(id:'como2', description:'Como se chama', debug:false,
+		clauses:[como1, ClausesPT.se1c, chama1], action:[{q, o -> q.questionType = QuestionType.Which}]
+	 ), 
+	
+	 new Rule(id:'que1', description:'Em? que', debug:false,
+		clauses:[ClausesPT.Eem01c, que1], action:[{q, o -> q.questionType = QuestionType.Which}]
+	 ), 
+	
+	 // overwrites previous "Que1" rule
+	 new Rule(id:'que2', description:'O que �', debug:false,
+		clauses:[ClausesPT.Oo1c, que1, ClausesPT.ee1nc], action:[{q, o -> q.questionType = QuestionType.What}]
+	 ), 	
+	
+	new Rule(id:'quando1', description:'Quando', debug:false,
+		clauses:[quando1], action:[{q, o -> q.questionType = QuestionType.When}]
+	 ), 
+	
+	new Rule(id:'porque1', description:'Porqu�', debug:false,
+		clauses:[porque1], action:[{q, o -> q.questionType = QuestionType.Why}]
+	 )	
+  ]
+
+/******* #2: RULE PROPERTIES AND OBJECTS *********/
+
+/*	static rulesToCaptureQuestionEntities = [
+	 
+	// encontrar N_!, V_+, [DET_*]?, [PRP]?, PROP_+
+	
+	// Ex: (Quantos) habitantes tem Lisboa (DET, N_Hnat, V_fmc, PROP_civ),
+	// Ex: (Quantos) anos tem Jos� Saramago? (DETm N_utit..., V_fmc, PROP_genre),
+	// Ex: (Em que) pa�s fica Lisboa? 
+	// Ex: (Em que) cidade fica a Torre Eiffel?
+	// Ex: (Em que) cidade fica situada a Torre Eiffel?
+	new Rule(id:'spo1', description:'N, V+, DET?, PRP?, PROP', debug:false,
+	clauses:[n_1, v_1p, det_01, prp_01, prop_1p], 
+	action:[{Question q, QuestionMatcherObject o ->
+		log.debug "Rule spo1 matched."
+		Condition c = new Condition() 
+		if (q.questionType == QuestionType.HowMuch) {
+			c.predicate = new Predicate(terms:o.getTermsMatchedByClause(n_1))
+			c.predicate.lookupPredicate()
+			c.operator = new Operator(terms:o.getTermsMatchedByClause(v_1p))
+			c.operator.lookupOperator()
+			c.object = new NEObject(ne:new NamedEntity(terms:o.getTermsMatchedByClause(prop_1p)))
+			c.object.classify()
+		}
+		
+		if (q.questionType == QuestionType.Which) {	
+			log.debug "terms:"+o.getTermsMatchedByClause(n_1)
+			q.subject = new Subject(terms:o.getTermsMatchedByClause(n_1))
+			q.subject.classifySubject()
+			// operadores como 'fica' v�o para predicado e operador(locatedIn)
+			c.predicate = new Predicate(terms:o.getTermsMatchedByClause(v_1p))
+			c.predicate.lookupPredicate()
+			c.operator = new Operator(terms:o.getTermsMatchedByClause(v_1p))
+			c.operator.lookupOperator()
+			c.object = new NEObject(ne:new NamedEntity(terms:o.getTermsMatchedByClause(prop_1p)))
+			c.object.classify()
+		}
+		q.conditions << c
+	}]), 
+			
+	// Ex: Quanto pesa um Ferrari F-40 (DET, V, DET_arti, PROP),			
+	 new Rule(id:'spo2', description:'DET, V, DET, PROP', debug:false,
+	clauses:[det_1, v_1, det_1, prop_1p], 
+	action:[{Question q, QuestionMatcherObject o ->
+		log.debug "Rule spo2 matched"
+			 Condition c = new Condition() 
+			 c.predicate = new Predicate(terms:o.getTermsMatchedByClause(v_1))
+		     c.predicate.lookupPredicate()
+			 // there's no operator
+			 c.object = new NEObject(ne:new NamedEntity(
+			 terms:o.getTermsMatchedByClause(prop_1p)))
+			 c.object.classify()
+			 q.conditions << c
+		}]), 
+	
+	// Ex: Qual (�) a popula��o de Portugal?
+	// qual � a altura de um Ferrari F40?
+	new Rule(id:'spo3', description:'Qual "ser"? "DET", N, PRP, DET?, PROP', debug:false,
+	clauses:[qualis1, ser_01, det_1, n_1, prp_1, det_01, prop_1p], 
+	action:[{Question q, QuestionMatcherObject o ->
+		log.debug "Rule spo3 matched"
+			 Condition c = new Condition() 
+			 c.predicate = new Predicate(terms:o.getTermsMatchedByClause(n_1))
+		     c.predicate.lookupPredicate()
+			 // there's no operator
+			 c.object = new NEObject(ne:new NamedEntity(
+				terms:o.getTermsMatchedByClause(prop_1p)))
+			 c.object.classify()
+			 q.conditions << c
+			
+		}]), 
+		
+	// Ex: Qual (�) o nome de/a/o XXX de YYY?
+	new Rule(id:'spo4', description:'Qual "ser"? "DET", "nome", PRP, N, PRP, PROP', debug:false,
+	clauses:[qualis1, ser_01, det_1, nome_1, prp_1, n_1, prp_1, prop_1p], 
+	action:[{Question q, QuestionMatcherObject o ->
+		log.debug "Rule spo4 matched"
+			 Condition c = new Condition() 
+			 c.predicate = new Predicate(terms:o.getTermsMatchedByClause(n_1))
+		     c.predicate.lookupPredicate()
+			 // there's no operator
+			 c.object = new NEObject(ne:new NamedEntity(
+				terms:o.getTermsMatchedByClause(prop_1p)))
+			 c.object.classify()
+			 q.conditions << c
+			
+		}]),
+	// O que � (um) XXX?
+	new Rule(id:'spo5', description:'O, que, "ser", DET?, PROP', debug:false,
+	clauses:[ClausesPT.Oo1c, que1, ser_1, det_01, prop_1p], 
+	action:[{Question q, QuestionMatcherObject o ->
+		log.debug "Rule spo5 matched"
+			 Condition c = new Condition() 
+			 c.object = new NEObject(ne:new NamedEntity(
+				terms:o.getTermsMatchedByClause(prop_1p)))
+			 c.object.classify()
+			 q.conditions << c
+		}]),
+		
+	// Quem � (um) XXX?
+	new Rule(id:'spo6', description:'Quem, "ser", DET?, PROP', debug:false,
+	clauses:[quem1, ser_1, det_01, prop_1p], 
+	action:[{Question q, QuestionMatcherObject o ->
+		log.debug "Rule spo6 matched"
+			 Condition c = new Condition() 
+			 c.object = new NEObject(ne:new NamedEntity(
+				terms:o.getTermsMatchedByClause(prop_1p)))
+			 c.object.classify()
+			 q.conditions << c
+		}]),
+		
+	// Onde [fica] [situado]? [det]? PROP+
+	new Rule(id:'spo7', description:'Onde!, fica!, situad?, PRP?, PROP+', debug:false,
+	clauses:[onde1, v_1p, prp_01, prop_1p], 
+	action:[{Question q, QuestionMatcherObject o ->
+		log.debug "Rule spo7 matched."
+			Condition c = new Condition() 
+			// no subject
+			c.predicate = new Predicate(terms:o.getTermsMatchedByClause(v_1p))
+			c.predicate.lookupPredicate()
+			c.operator = new Operator(terms:o.getTermsMatchedByClause(v_1p))
+			c.operator.lookupOperator()
+			c.object = new NEObject(ne:new NamedEntity(terms:o.getTermsMatchedByClause(prop_1p)))
+			c.object.classify()
+			q.conditions << c
+		}])	
+	]
+				
+/****** #3: get expectedAnswerType from questionTypes, predicates, sometimes objects ********/
+ 
+ /* static rulesToDetectEAT = [
+     
+		// Rule 1, for spo1, 2 & 3: 
+		// ********************
+		// QuestionType.HowMuch -> expect a NUMERO, TEMPO or VALOR and a property
+		// ********************
+		new Rule(id:'eat-howmuch1', description:'HowMuch, s=[], c=[p=1, o=1]', debug:false,
+		action:[{Question q, QuestionMatcherObject o ->
+			if (q.questionType == QuestionType.HowMuch) {
+				log.debug "Rule eat-howmuch1 matched."
+				if (!q.subject && q.conditions) {
+					if (q.conditions[0].predicate && q.conditions[0].object) {
+						// looking for a number/value, given by a property
+						q.expectedAnswerType.categoryHAREM = ['NUMERO', 'TEMPO', 'VALOR']
+						q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Type.Property // if there's no subject... it's an expected property
+					}
+				}
+			}
+		}]), 
+		
+		// ******************
+		// QuestionType.Which 
+		// ******************
+
+		new Rule(id:'eat-which1', description:'Which, s=[0,1], c=[p=1, o=1]', debug:false,
+		action:[{Question q, QuestionMatcherObject o ->
+		if (q.questionType == QuestionType.Which) {
+			log.debug "Rule eat-which1 matched."
+			// No subject...
+			if (!q.subject && q.conditions) {
+				if (q.conditions[0].predicate && q.conditions[0].object) {
+					 // search for EAT classification, based on ontology predicate
+						def haremClass = DBpediaPropertyDefinitionsPT.getHAREMclassificationsForEATfromPredicate(
+							q.conditions[0].predicate)
+					q.expectedAnswerType.categoryHAREM = haremClass?.category
+					q.expectedAnswerType.typeHAREM = haremClass?.type
+					q.expectedAnswerType.subtypeHAREM = haremClass?.subtype
+					q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Type.Property // if there's no subject... it's an expected property
+				}
+			// There is a subject... the EAT is the subject. 
+			// Subject should have HAREM classifications.
+			// if it has DBpediaOntologyClasses, let's resolve it to DBpediaOntology
+			// if it has wikipediaCategory, let's resolve it to Wikipedia Categories 
+			} else if (q.subject) {
+
+			    if (q.subject.categoryHAREM) {
+					q.expectedAnswerType.categoryHAREM = q.subject.categoryHAREM
+					q.expectedAnswerType.typeHAREM = q.subject.typeHAREM
+					q.expectedAnswerType.subtypeHAREM = q.subject.subtypeHAREM
+					q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Type.HAREMIICategory
+			    }
+				if (q.subject.ontologyDBpedia) {						
+					q.expectedAnswerType.ontologyClass = q.subject.ontologyDBpedia
+					q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Type.DBpediaOntologyClass
+				}
+				if (q.subject.categoryWikipedia) {
+					q.expectedAnswerType.categoryWikipedia = q.subject.categoryWikipedia
+					q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Type.WikipediaCategory
+				}
+				
+			}		
+			}// if QuestionType.Which
+		}]),
+
+		// *****************
+		// QuestionType.What 
+		// *****************
+		
+		new Rule(id:'eat-what1', description:'What, s=[], c=[p=0, o=1]', debug:false,
+		action:[{Question q, QuestionMatcherObject o ->
+			if (q.questionType == QuestionType.What) {
+				log.debug "Rule eat-what1 matched."
+				if (!q.subject && q.conditions) {
+					if (!q.conditions[0].predicate && q.conditions[0].object) {
+						// THERE IS no EAT classes -- just an explanation to be given.
+						// Leave the rest to question2SPARQL
+						q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Definition 
+					}
+				}
+			}
+		}]),
+		
+		// *****************
+		// QuestionType.Who 
+		// *****************
+
+		new Rule(id:'eat-who1', description:'Who, s=[], c=[p=0, o=1]', debug:false,
+		action:[{Question q, QuestionMatcherObject o ->
+			if (q.questionType == QuestionType.Who) {
+				log.debug "Rule eat-who1 matched."
+				if (!q.subject && q.conditions) {
+					if (!q.conditions[0].predicate && q.conditions[0].object) {
+						// just a definition on who is XXX
+						// Leave the rest to question2SPARQL
+						q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Definition 
+					}
+				}
+			}
+		}]), 
+		
+		// ******************
+		// QuestionType.Where 
+		// ******************
+
+		new Rule(id:'eat-where1', description:'Where, s=[], c=[p=1, o=1]', debug:false,
+		action:[{Question q, QuestionMatcherObject o ->
+			if (q.questionType == QuestionType.Where) {
+				log.debug "Rule eat-where1 matched."
+				if (!q.subject && q.conditions) {
+					// ok, clearly we're looking for LOCAL
+					if (q.conditions[0].predicate && q.conditions[0].object) {
+						q.expectedAnswerType.categoryHAREM = ["LOCAL"]
+						q.expectedAnswerType.ontologyClass = ["http://dbpedia.org/ontology/Place"]
+						q.expectedAnswerType.resolvesTo = ExpectedAnswerType.OntologyClass 
+					}
+				}
+			}
+		}]), 
+		
+		new Rule(id:'eat-none1', description:'None, s=1, c=[]', debug:false,
+			action:[{Question q, QuestionMatcherObject o ->
+				if (q.questionType == QuestionType.None) {
+					log.debug "Rule eat-none1 matched."
+
+					if (q.subject && !q.conditions) {
+						// ok, subject with nothing more... that's the EAT
+					    if (q.subject.categoryHAREM) {
+							q.expectedAnswerType.categoryHAREM = q.subject.categoryHAREM
+							q.expectedAnswerType.typeHAREM = q.subject.typeHAREM
+							q.expectedAnswerType.subtypeHAREM = q.subject.subtypeHAREM
+							q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Type.HAREMIICategory
+					    }
+						if (q.subject.ontologyDBpedia) {						
+							q.expectedAnswerType.ontologyClass = q.subject.ontologyDBpedia
+							q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Type.DBpediaOntologyClass
+						}
+						if (q.subject.categoryWikipedia) {
+							q.expectedAnswerType.categoryWikipedia = q.subject.categoryWikipedia
+							q.expectedAnswerType.resolvesTo = ExpectedAnswerType.Type.WikipediaCategory
+						}
+						
+					}		
+				}
+			}])
+  ]*/
+}

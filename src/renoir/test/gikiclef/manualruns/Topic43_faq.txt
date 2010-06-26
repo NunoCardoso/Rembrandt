@@ -1,0 +1,41 @@
+SELECT ?t WHERE {
+?s skos:subject <http://dbpedia.org/resource/Category:Ski_areas_and_resorts_in_Austria> .
+?s rdfs:label ?t .
+FILTER (lang(?t) = "en")
+} 
+
+"Bad Gastein"@en
+"Filzmoos"@en
+"Galtür"@en
+"Hochfilzen"@en
+"Kitzsteinhorn"@en
+"Kitzbühel"@en
+"Lech am Arlberg"@en
+"Mayrhofen"@en
+"Nassfeld"@en
+"Saalbach-Hinterglemm"@en
+"Sankt Anton am Arlberg"@en
+"Schladming"@en
+"Ski Amadé"@en
+"Sölden"@en
+"Vandans"@en
+"Zürs"@en
+"Kulm (venue)"@en
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Bad Gastein","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Filzmoos","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Galtür","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Hochfilzen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Kitzsteinhorn","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Kitzbühel","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Lech am Arlberg","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Mayrhofen","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Nassfeld","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Saalbach-Hinterglemm","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Sankt Anton am Arlberg","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Schladming","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Ski Amadé","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Sölden","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Vandans","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Zürs","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Kulm (venue)","en")

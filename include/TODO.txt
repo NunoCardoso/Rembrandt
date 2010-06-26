@@ -1,0 +1,10 @@
+
+rembrandt:
+
+Inferências de classes para expressões portuguesas (Place - local) (suporte vers√µes ontologia DBpedia?)
+Operadores greedy/non-greedy nas regras
+Reformular todo o mecanismo de ALTs, captura de NE candidatas
+metadados documentos no comment - language, taglanguage, etc.
+Cache nas NE, NEName
+
+rembrandtpool:

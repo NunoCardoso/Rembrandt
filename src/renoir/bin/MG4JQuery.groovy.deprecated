@@ -1,0 +1,156 @@
+/** Rembrandt 
+ * Copyright (C) 2008 Nuno Cardoso. ncardoso@xldb.di.fc.ul.pt
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+package renoir.bin
+
+import it.unimi.dsi.fastutil.io.BinIO
+import it.unimi.dsi.mg4j.document.DocumentCollection
+import it.unimi.dsi.mg4j.document.PropertyBasedDocumentFactory.MetadataKeys
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import pt.tumba.sidra.document.ResultEntry;
+import it.unimi.dsi.mg4j.search.score.DocumentScoreInfo;
+import it.unimi.dsi.mg4j.search.score.Scorer;
+import it.unimi.dsi.mg4j.index.Index;
+import it.unimi.dsi.mg4j.query.SelectedInterval;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
+import it.unimi.dsi.mg4j.query.parser.QueryParser;
+import it.unimi.dsi.mg4j.util.Fast;
+import org.apache.log4j.Logger
+import java.util.zip.*
+import org.apache.log4j.*
+
+/**
+ * this class interfaces the access to MG4J indexes of Wikipedia documents.
+ * @author Nuno Cardoso
+ */
+public class MG4JQuery {
+	
+	//private static final Logger LOGGER = Fast.getLogger( Querier.class )
+	
+	ZipEntry entry;
+	ZipFile zipfile
+	DocumentCollection documentCollection
+	Querier querier
+	static Logger log = Logger.getLogger("MG4JMain")
+	ObjectArrayList<DocumentScoreInfo<Reference2ObjectMap<Index, SelectedInterval[]>>> results
+	String srcfilepath = "index/"
+	/**
+	 * Constructor. Initializes the indexes and the dource zip file.
+	 */
+	public MG4JQuery(String [] myFields = null) {
+		/** The maximum number of items output to the console. */
+		//private final static int maxOutput = 1000
+		public final static int MAX_STEMMING = 1024
+	
+		/** The current query engine. */
+		private QueryParser parser
+		private Scorer[] scorer
+		
+		String[] defaultFields = ["title","text","anchor"]
+//		String[] defaultFields = ["text"]
+		String[] fields
+		if (!myFields) fields = defaultFields
+		else fields = myFields
+		
+	//	String srcfile = "index/wikipedia-pt-src-html.zip"
+		
+		String indexdir = "index/mg4j-wikipedia-pt-index"
+		String collection = "index/wikipedia-pt-collection.mg4j"
+		documentCollection = (DocumentCollection)BinIO.loadObject(collection)
+		querier = new Querier(collection, indexdir, "wikipedia-pt", fields)
+
+ 	//	zipfile = new ZipFile(srcfile)
+	   
+		results = new ObjectArrayList<DocumentScoreInfo<Reference2ObjectMap<Index, SelectedInterval[]>>>();
+	}
+	
+	/** 
+	 * Issue a query to MG4J 
+	 */
+	public List query(String query, int maxresults = 10) { 
+	    log.debug "Querying for $query"
+		querier.queryEngine.process(query, 0, maxresults, results)
+		ResultEntry[] resultSet = new ResultEntry[results.size()]
+	    log.debug "Got ${resultSet.size()} results."
+		DocumentScoreInfo<Reference2ObjectMap<Index,SelectedInterval[]>> dsi
+		def filesToExtract = []
+			
+		for (int i = 0; i < results.size(); i++) {
+			dsi = results.get(i);
+		//	println "dsi.document: "+dsi.document	
+		//	println "documentCollection.metadata: "+documentCollection.metadata(dsi.document)
+			def title = documentCollection.metadata(dsi.document).get(MetadataKeys.TITLE)	
+			log.debug "title: "+title
+			filesToExtract << title
+		}
+		return filesToExtract
+	}
+		
+	/** 
+	 * Fetches the Wikipedia documents, from the src zip file, given an array of URLs
+	 */
+	public List getContentsFromZip(List urls) {
+		Enumeration e = zipfile.entries()
+		List answers = new String[urls.size()]
+		
+		while (e.hasMoreElements()) {
+			entry = (ZipEntry) e.nextElement()
+			def entryName = entry.getName().toString()
+			if (urls.contains(entryName)) {
+			    int index = urls.indexOf(entryName)
+				log.debug "Extracting: " + entry
+				String text = ""
+				BufferedReader br = new BufferedReader( 
+					new InputStreamReader(zipfile.getInputStream(entry)))
+				String line
+ 				while ((line = br.readLine()) != null) {text += line}
+    			answers[index] = text	
+			}
+		}
+		
+		if (answers.find(it == null)) {
+		    log.error "Documents not returned for urls: "
+		    answers.eachWithIndex{a, i -> if (!a) log.error urls[i]}
+		}
+		zipfile.close()	
+	}
+	
+	public List getContents(List urls) {
+		List answers = new String[urls.size()]
+		urls.eachWithIndex{url, i ->
+			def text = "" 
+			new File("${srcfilepath}${url}").eachLine{l -> text += l}
+    		answers[i] = text	
+		}
+		return answers
+	}
+	
+	static main(args) {
+		MG4JQuery mg4j = new MG4JQuery()
+		if (!args) {println "Give args!"; System.exit(0)}
+		
+		println "Querying "+args[0]
+		def max = 10
+		if (args[1]) max = Integer.parseInt(args[1]) 
+		List results = mg4j.query(args[0], max)
+		def i = 1
+		results.each{r -> 
+			println "${i++}: $r"
+		}
+	}
+}

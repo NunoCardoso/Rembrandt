@@ -1,0 +1,43 @@
+REQUIRED:
+=========
+* groovy 1.7.o
+* mysql-connector 5.1.7
+* lucene 2.4.0
+* log4j 1.X
+* json-lib-2.3-jdk15 -JSON operations
+* commons-cli-1.2.jar
+* commons-logging-1.1.1.jar
+* jena
+* arq
+* sdb
+* lgte
+* org.restlets
+* xstream
+* lucene 2.4.0
+* lucene highlighter
+* jul-to-slf4j-1.5.8.jar
+* slf4j-api-1.5.8.jar
+* slf4j-log4j12-1.5.8.jar
+* junit (lgte?)
+* webstore (plus tumba-utils)
+
+SUBDEPENDENCIES: 
+================
+iri
+icu4j_3_4
+xercesImpl
+spring_framework(?)
+xpp3
+
+* json-lib-2.3-jdk15 requires:
+    * jakarta commons-lang 2.4
+    * jakarta commons-collections 3.2
+    * jakarta commons-logging 1.1.1
+    * ezmorph 1.0.6
+
+* lgte requires:
+    * jts-1.10.jar (com/vividsolutions/jts/geom/GeometryFactory)
+    * googleapi.jar
+hadoop
+ezmorph
+

@@ -1,0 +1,41 @@
+Rio Pó -> Po river
+
+http://dbpedia.org/page/Po River
+
+?s <dbpedia-owl:mouth> <http://dbpedia.org/resource/Po River>
+
+dbpedia:Adda River
+dbpedia:Curone
+dbpedia:Dora Baltea
+dbpedia:Grana del Monferrato
+dbpedia:Lambro
+dbpedia:Nure
+dbpedia:Orco
+dbpedia:Rotaldo
+dbpedia:Scrivia
+dbpedia:Sesia River
+dbpedia:Staffora
+dbpedia:Terdoppio
+dbpedia:Ticino River
+dbpedia:Maira
+dbpedia:Stura del Monferrato
+dbpedia:Varaita
+
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Adda River","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Curone","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Dora Baltea","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Grana del Monferrato","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Lambro","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Nure","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Orco","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Rotaldo","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Scrivia","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Sesia River","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Staffora","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Terdoppio","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Ticino River","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Maira","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Stura del Monferrato","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Varaita","en")
+q.answerJustification << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Po River","en")

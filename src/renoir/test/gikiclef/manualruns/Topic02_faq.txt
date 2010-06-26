@@ -1,0 +1,122 @@
+Como foi gerado:
+
+Gerado manualmente pelo generatedAnswers.
+
+resource << dbpedia.getDBpediaResourceFromWikipediaPageTitle("País de Gales", "pt")
+resource << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Países Baixos", "pt")
+
+Qual a estratégia: 
+
+Foi para o plano B 3 - como não apanhei objectos, foi MG4J puro
+
+Resultado:
+
+apanhei estes dois países, porque o MG4J dá peso a "país | países". 
+As respostas estão na página das bandeiras, mas não sei encadear a resposta.
+
+
+groovy src/renoir/bin/MG4JQuery.groovy " (país | países) |  verde | branco | vermelho | bandeira | nacional" 1000
+
+43: src-pt/articles/p/a/?/Pa?s_de_Gales_2477.html
+48: src-pt/articles/p/a/?/Pa?ses_Baixos_ad03.html
+
+1: src-pt/articles/b/r/a/Branco_(Cabo_Verde)_e3f5.html
+2: src-pt/articles/b/a/n/Bandeira_do_Pa?s_Basco_01de.html
+3: src-pt/articles/g/r/e/GRES_Vermelho_e_Branco_5408.html
+4: src-pt/articles/b/a/n/Bandeira_dos_Pa?ses_Baixos_b80f.html
+5: src-pt/articles/b/a/n/Bandeira_do_Diamante_Vermelho_520a.html
+6: src-pt/articles/b/a/n/Bandeira_nacional.html
+7: src-pt/articles/b/a/n/Bandeira_do_Pa?s_de_Gales_731b.html
+8: src-pt/articles/b/a/n/Bandeira_de_Pato_Branco_657c.html
+9: src-pt/articles/b/a/n/Bandeira_de_Cabo_Verde_4a9d.html
+10: src-pt/articles/b/a/n/Bandeira_Verde_Eco-Escola_345d.html
+11: src-pt/articles/a/c/s/ACSESM_Camisa_Verde_e_Branco_0b20.html
+12: src-pt/articles/p/r/o/Wikipedia_Discuss?o~Projectos_Pa?ses_Cabo_Verde_57e6.html
+13: src-pt/articles/v/e/r/Verde_por_Fora,_Vermelho_por_Dentro_008a.html
+14: src-pt/articles/h/i/n/Hino_nacional_dos_Pa?ses_Baixos_4633.html
+15: src-pt/articles/p/r/o/Wikipedia_Discuss?o~Projectos_Pa?ses_Cabo_Verde_Geografia_0600.html
+16: src-pt/articles/h/i/n/Hino_nacional_de_Cabo_Verde_d446.html
+17: src-pt/articles/p/a/r/Parque_Nacional_de_Mesa_Verde_13ec.html
+18: src-pt/articles/p/r/o/Wikipedia_Discuss?o~Projectos_Pa?ses_Cabo_Verde_Geografia_Lugares_22f1.html
+19: src-pt/articles/c/?/d/C?digo_Geogr?fico_Nacional_de_Cabo_Verde_3530.html
+20: src-pt/articles/b/a/n/Bandeira_da_Organiza??o_dos_Pa?ses_Exportadores_de_Petr?leo_17a7.html
+21: src-pt/articles/b/a/n/Bandeira_da_Comunidade_dos_Pa?ses_de_L?ngua_Portuguesa_6133.html
+22: src-pt/articles/p/a/?/Pa?s.html
+23: src-pt/articles/m/o/n/Monte_Verde_(Cabo_Verde)_f27e.html
+24: src-pt/articles/p/o/n/Ponta_Verde_(Cabo_Verde)_3b60.html
+25: src-pt/articles/r/i/s/Risco-pa?s.html
+26: src-pt/articles/b/a/c/Bact?ria_(pa?s).html
+27: src-pt/articles/e/l/_/El_Pa?s_0e3b.html
+28: src-pt/articles/p/a/?/Pa?s_Tropical_3c31.html
+29: src-pt/articles/p/a/?/Pa?s_continental.html
+30: src-pt/articles/p/a/?/Pa?s_Basco_9c2f.html
+31: src-pt/articles/p/a/?/Pa?s_insular.html
+32: src-pt/articles/p/a/?/Pa?s_emergente.html
+33: src-pt/articles/p/a/?/Pa?s_neutro.html
+34: src-pt/articles/p/a/?/Pa?s_subdesenvolvido.html
+35: src-pt/articles/p/a/?/Pa?s_desenvolvido.html
+36: src-pt/articles/p/a/?/Pa?ses@.html
+37: src-pt/articles/v/e/r/Vermelho.html
+38: src-pt/articles/e/l/_/El_Pa?s_(Espanha)_46e0.html
+39: src-pt/articles/p/a/?/Pa?s_Basco_(Espanha)_f3d6.html
+40: src-pt/articles/p/a/?/Pa?s_Basco_franc?s_5c7f.html
+41: src-pt/articles/p/a/?/Pa?s_Basco_(desambigua??o)_3eca.html
+42: src-pt/articles/p/a/?/Pa?s_de_Aslam_b79e.html
+43: src-pt/articles/p/a/?/Pa?s_de_Gales_2477.html
+44: src-pt/articles/p/a/?/Pa?ses_b?lticos.html
+45: src-pt/articles/p/a/?/Pa?ses_imagin?rios.html
+46: src-pt/articles/p/a/?/Pa?ses_subdesenvolvidos.html
+47: src-pt/articles/p/a/?/Pa?ses_ACP_737e.html
+48: src-pt/articles/p/a/?/Pa?ses_Baixos_ad03.html
+49: src-pt/articles/p/a/?/Pa?ses_n?rdicos.html
+50: src-pt/articles/p/a/?/Pa?ses_Catal?es_a523.html
+51: src-pt/articles/d/r/a/Drag?o_Vermelho_fdec.html
+52: src-pt/articles/d/i/?/Di?rio_Vermelho_3629.html
+53: src-pt/articles/o/c/r/Ocre_vermelho.html
+54: src-pt/articles/v/e/r/Vermelho_neutro.html
+55: src-pt/articles/v/e/r/Vermelho_(desambigua??o).html
+56: src-pt/articles/v/e/r/Ver?o_Vermelho_f9eb.html
+57: src-pt/articles/v/e/r/Vermelho_2G_78c9.html
+58: src-pt/articles/v/e/r/Vermelho_(?lbum).html
+59: src-pt/articles/v/e/r/Vermelho_Novo_c85d.html
+60: src-pt/articles/v/e/r/Vermelho_Congo_0d33.html
+61: src-pt/articles/v/e/a/Veado-vermelho.html
+62: src-pt/articles/l/o/b/Lobo-vermelho.html
+63: src-pt/articles/l/a/g/Lagostim-vermelho.html
+64: src-pt/articles/?/m/e/?mega_Vermelho_2712.html
+65: src-pt/articles/f/?/s/F?sforo_vermelho.html
+66: src-pt/articles/f/a/n/Fantasma_Vermelho_fa79.html
+67: src-pt/articles/r/i/o/Rio_Vermelho_6cb2.html
+68: src-pt/articles/r/i/b/Ribeir?o_Vermelho_5ebb.html
+69: src-pt/articles/n/o/_/No_Vermelho_218c.html
+70: src-pt/articles/s/o/c/Soco?-vermelho.html
+71: src-pt/articles/c/?/r/C?rrego_Vermelho_e916.html
+72: src-pt/articles/c/o/m/Comando_Vermelho_5619.html
+73: src-pt/articles/c/a/r/Carvalho-vermelho.html
+74: src-pt/articles/c/a/r/Cart?o_vermelho.html
+75: src-pt/articles/c/a/j/Cajua?u-vermelho.html
+76: src-pt/articles/c/a/p/Capuchinho_Vermelho_d618.html
+77: src-pt/articles/c/a/p/Capuz_Vermelho_c9cd.html
+78: src-pt/articles/c/h/a/Chap?u_vermelho.html
+79: src-pt/articles/c/u/r/Curdist?o_Vermelho_5589.html
+80: src-pt/articles/c/e/d/Cedro-vermelho.html
+81: src-pt/articles/t/o/r/Tornado_Vermelho_ec62.html
+82: src-pt/articles/t/o/p/Topetinho-vermelho.html
+83: src-pt/articles/t/e/l/Telefone_vermelho.html
+84: src-pt/articles/m/o/r/Morcego_Vermelho_d6e7.html
+85: src-pt/articles/m/i/r/Mirtilo-vermelho.html
+86: src-pt/articles/m/a/r/Mar_Vermelho_af66.html
+87: src-pt/articles/m/a/n/Mangue-vermelho.html
+88: src-pt/articles/b/o/t/Boto-vermelho.html
+89: src-pt/articles/b/a/r/Bar?o_Vermelho_901b.html
+90: src-pt/articles/b/a/r/Barro_Vermelho_61fc.html
+91: src-pt/articles/b/a/r/Barrete_vermelho.html
+92: src-pt/articles/e/s/q/Esquilo-vermelho.html
+93: src-pt/articles/e/x/?/Ex?rcito_Vermelho_9664.html
+94: src-pt/articles/p/i/n/Pintarroxo-vermelho.html
+95: src-pt/articles/p/a/n/Panda-vermelho.html
+96: src-pt/articles/p/e/i/Peixe-vermelho.html
+97: src-pt/articles/k/h/m/Khmer_Vermelho_29c9.html
+98: src-pt/articles/b/r/a/Branco.html
+99: src-pt/articles/o/_/p/O_Pa?s_do_Carnaval_438c.html
+100: src-pt/articles/o/_/p/O_Pa?s_dos_Tenentes_ed6d.html

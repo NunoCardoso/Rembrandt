@@ -1,0 +1,137 @@
+REMBRANDT's CONFIGURATION PARAMETERS
+====================================
+
+1. GLOBAL PARAMETERS
+====================
+
+	global.lang - Default language that Rembrandt will work on.
+	rembrandt.home.dir - REMBRANDT's base home directory. You should store test data, indexes here.
+
+2. REMBRANDT PARAMETERS
+=======================
+
+ 	2.1 Core parameters
+  
+	rembrandt.core.rules - Rules enforced by REMBRANDT. Default: 'HAREM'  
+	rembrandt.core.doALT - deprecated. Always true.
+	rembrandt.core.doEntityRelation - Perform entity relation detection. Default: false
+	rembrandt.core.removeRemainingUnknownNE - Remove unknown NEs, or keep them. Default: true (remove)
+	rembrandt.core.removetextualNumbers - remove NEs like 'one','two', etc. Default: false (keep)
+
+	2.2 Stream parameters
+
+	rembrandt.input.encoding - Character encoding of input stream. Default: System property file.encoding
+	rembrandt.input.reader - Reader class of input stream, one of rembrandt.io.*Reader. Default: rembrandt.io.HTMLDocumentReader 
+	rembrandt.input.styletag - Tag style for input NEs, one of rembrandt.io.*StyleTags. Default: rembrandt.io.RembrandtStyleTags
+	rembrandt.input.styletag.lang - Language of NE tags. Default: global.lang
+	rembrandt.input.styletag.verbose - Verbosity level for the tag. Default: 2
+	     0 - just classification 
+	     1 - plus id, sentence, term 
+	     2 - plus relation and grounding info for time/entity
+	     3 - plus rule / law history for each NE  
+	rembrandt.input.file - If defined, read from file instead of System.in. File can NOT be a directory (maybe in a future version).
+	                       Default: null (use System.in)
+
+	rembrandt.output.encoding - Character encoding of output stream. Default: System property file.encoding
+	rembrandt.output.writer - Writer class for output stream, one of rembrandt.io.*Writer. Default: rembrandt.io.RembrandtWriter
+	rembrandt.output.styletag - Tag style for NEs found, one of rembrandt.io.*StyleTags. Default: rembrandt.io.RembrandtStyleTags
+	rembrandt.output.styletag.lang - Language of NE tags. Default: global.lang
+	rembrandt.output.styletag.verbose - Verbosity level for the tag. Default: 2
+	     0 - just classification 
+	     1 - plus id, sentence, term 
+	     2 - plus relation info, wikipedia / dbpedia info
+	     3 - plus rule / law history
+	rembrandt.output.file - If defined, writes to this file instead of System.out. File can NOT be a directory (maybe in a future version).
+	                       Default: null (use System.out)
+
+	rembrandt.err.enabled - true or false. Default: true
+	rembrandt.err.encoding - Character encoding of stderr stream. Default: System property file.encoding
+	rembrandt.err.writer - Writer class for stderr stream, one of rembrandt.io.*Writer. Default: rembrandt.io.UnformattedWriter
+	rembrandt.err.styletag - Tag style for NEs found, one of rembrandt.io.*StyleTags. Default: rembrandt.io.RembrandtStyleTags
+	rembrandt.err.styletag.lang - Language of NE tags. Default: global.lang
+	rembrandt.err.styletag.verbose - Verbosity level for the tag. Default: 3
+	     0 - just classification 
+	     1 - plus id, sentence, term 
+	     2 - plus relation info, wikipedia / dbpedia info
+	rembrandt.err.file - If defined, writes to this file instead of System.err. File can NOT be a directory (maybe in a future version).
+	                       Default: rembrandt.err.log
+
+	2.3 Server parameters
+	
+	rembrandt.server.port - Port for REMBRANDT server daemon. Default: 33333
+
+	2.4 Cache parameters
+	
+	rembrandt.cache.usedocumentindex - use document-term index. Eats memory, speeds up tagging. Default: true.
+	rembrandt.cache.term_clause.enable - use term-clause match index. Eats memory, speeds up tagging. Default: true. 
+	rembrandt.cache.term_clause.number - limit term-clause match entries. Default set to 10000
+	
+3. RENOIR PARAMETERS
+====================
+
+	renoir.server.port - Port for RENOIR server daemon. Default: 33335
+
+4. SASKIA PARAMETERS
+====================
+
+	4.1 DBpedia parameters
+	
+	saskia.dbpedia.enabled - Use DBpedia to help tagging. Recommended, turn off if you don't have internet or you know what you're doing. Default: true 
+        saskia.dbpedia.version - Tell SASKIA which DBpediaOntology to use, for ontology reasoning.
+	saskia.dbpedia.mode - DBpedia access mode: local, sdb or webservice. Local is for local files, sdb is for SDB access. Default: webservice 
+	saskia.dbpedia.local.fileformat - Define file format if mode is local. N3, N-TRIPLE. RDF are fine.
+	saskia.dbpedia.local.files - Define filenames for mode local. Use complete pathname+filename, files separated by a comma.
+	saskia.dbpedia.sdb.ttl - define ttl file for SDB configuration in sdb mode. 
+	saskia.dbpedia.url - define DBpedia URL for webservice, in webservice mode. Default: dbpedia.org/sparql. 
+	saskia.dbpedia.proxy.enabled - Set a proxy. If false, it will reset configurations.
+	saskia.dbpedia.proxy.host - If proxy is enabled, sets the host. 
+	saskia.dbpedia.proxy.port - If proxy is enabled, sets the port.
+	
+	saskia.dbpedia.cache.wikititle - cache for Wikipedia title -> DBpedia resource mappings. Default: 1000
+	saskia.dbpedia.cache.wikipage - cache for Wikipedia URLs -> DBpedia resource mappings. Default: 1000
+	saskia.dbpedia.cache.class - cache for DBpedia resource -> DBpedia class mappings. Default: 1000
+        saskia.dbpedia.cache.everything - cache for DBpedia resource info. Default: 1000
+	saskia.dbpedia.cache.skos - cache for Wikipedia category -> DBpedia's SKOS category mapping. Default: 1000
+	saskia.dbpedia.cache.label - cache for DBpedia resource's label mapping.  Default: 1000
+
+	saskia.index.dir - Directory of several Lucene indexes for Saskia's searches. it's just the directory name under the rembrandt.home.dir 
+	
+	saskia.wikipedia.db.driver - Driver to access Saskia's DB. Default: com.mysql.jdbc.Driver
+	saskia.wikipedia.db.name - name of Saskia's DB. Default: saskia
+	saskia.wikipedia.db.param - Additional parameters. Default: useUnicode=yes&characterEncoding=UTF8&characterSetResults=UTF8&autoReconnect=true
+	saskia.wikipedia.db.password - Password for Saskia's DB. Default: saskia
+	saskia.wikipedia.db.url - URL for MySQL running Saskia's DB. Default: jdbc:mysql://127.0.0.1
+	saskia.wikipedia.db.user - Default username for Saskia's DB. Default: saskia
+
+	saskia.geonetpt02.mode - Ontology's access mode: local, sdb or webservice. Local is for local files, sdb is for SDB access. Default: webservice 
+	saskia.geonetpt02.local.fileformat - Define file format if mode is local. N3, N-TRIPLE. RDF are fine.
+	saskia.geonetpt02.local.files - Define filenames for mode local. Use complete pathname+filename, files separated by a comma.
+	saskia.geonetpt02.sdb.ttl - define ttl file for SDB configuration in sdb mode. 
+	saskia.geonetpt02.url - define Ontology's URL for webservice, in webservice mode. Default: xldb.di.fc.ul.pt/dbpedia/sparql
+    saskia.geonetpt02.proxy.enabled - Set a proxy. If false, it will reset configurations.
+	saskia.geonetpt02.proxy.host - If proxy is enabled, sets the host. 
+	saskia.geonetpt02.proxy.port - If proxy is enabled, sets the port.
+
+    saskia.geoplanet.apikey - GeoPlanet's API key for geographic place grounding
+    saskia.geoplanet.lastversiondate - When there's a WOEID entry on SaskiaDB and is fresher than this date,                                                                                      
+    use cache instead of GeoPlanet API to save API calls. default: Thu Jan 01 01:00:00 CET 1970 
+    (that is, use always cache when possible, never refresh the cache)
+    saskia.geoplanet.proxy.enabled - Set a proxy. If false, it will reset configurations.
+	saskia.geoplanet.proxy.host - If proxy is enabled, sets the host. 
+	saskia.geoplanet.proxy.port - If proxy is enabled, sets the port.
+	
+	saskia.necache.number - Number of cached NEs solved by AskSaskia. Default: 100. 	
+	saskia.geoscope.cache.number - Default: 1000
+	saskia.ne.cache.number - Default: 1000
+	saskia.nename.cache.number - Default: 1000
+	saskia.entity.cache.number - Default: 1000
+	saskia.subject.cache.number - Default: 1000
+		
+	saskia.db.driver - Driver to access RembrandtPool's DB. Default: com.mysql.jdbc.Driver
+	saskia.db.name - name of RembrandtPool's DB. Default: rembrandtpool
+	saskia.db.param - Additional parameters. Default: useUnicode=yes&characterEncoding=UTF8&characterSetResults=UTF8&autoReconnect=true
+	saskia.db.password - Password for RembrandtPool's DB. Default: rembrandtpool
+	saskia.db.url - URL for MySQL running RembrandtPool's DB. Default: jdbc:mysql://127.0.0.1
+	saskia.db.user - Default username for RembrandtPool's DB. Default: rembrandtpool
+	
+	saskia.webstore.volume - Name of the Webstore volume. Default: saskia

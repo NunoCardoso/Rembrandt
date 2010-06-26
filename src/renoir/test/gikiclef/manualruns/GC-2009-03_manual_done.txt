@@ -1,0 +1,14 @@
+GC-2009-03 en/u/s/a/USA_f75d.html {en/p/e/t/Peter_Deunov_57a6.html }
+GC-2009-03 en/f/r/a/France.html {en/p/e/t/Peter_Deunov_57a6.html }
+GC-2009-03 bg/ф/р/а/Франция_7954.html {bg/п/е/т/Петър_Дънов_c9bb.html}
+GC-2009-03 de/f/r/a/Frankreich.html {de/p/e/t/Peter_Konstantinow_Danow_3103.html}
+GC-2009-03 en/g/e/r/Germany.html {en/p/e/t/Peter_Deunov_57a6.html }
+GC-2009-03 bg/г/е/р/Германия_aeb9.html {bg/п/е/т/Петър_Дънов_c9bb.html}
+GC-2009-03 de/d/e/u/Deutschland.html {de/p/e/t/Peter_Konstantinow_Danow_3103.html}
+GC-2009-03 en/c/a/n/Canada.html {en/p/e/t/Peter_Deunov_57a6.html }
+GC-2009-03 bg/к/а/н/Канада_796f.html {bg/п/е/т/Петър_Дънов_c9bb.html}
+GC-2009-03 de/k/a/n/Kanada.html {de/p/e/t/Peter_Konstantinow_Danow_3103.html}
+GC-2009-03 en/c/o/n/Congo.html {en/p/e/t/Peter_Deunov_57a6.html }
+GC-2009-03 bg/к/о/н/Конго_a6e6.html {bg/п/е/т/Петър_Дънов_c9bb.html}
+GC-2009-03 de/k/o/n/Kongo.html {de/p/e/t/Peter_Konstantinow_Danow_3103.html}
+

@@ -1,0 +1,10 @@
+GC-2009-01 pt/i/t/á/Itália.html {pt/e/r/n/Ernest_Hemingway_f01d.html }
+GC-2009-01 bg/и/т/а/Италия_6576.html {bg/ъ/р/н/Ърнест_Хемингуей_5efd.html}
+GC-2009-01 de/i/t/a/Italien.html {de/e/r/n/Ernest_Hemingway_f01d.html}
+GC-2009-01 en/i/t/a/Italy.html {en/e/r/n/Ernest_Hemingway_f01d.html}
+GC-2009-01 es/i/t/a/Italia.html {es/e/r/n/Ernest_Hemingway_f01d.html}
+GC-2009-01 it/i/t/a/Italia.html {it/e/r/n/Ernest_Hemingway_f01d.html}
+GC-2009-01 nl/i/t/a/Italië.html {nl/e/r/n/Ernest_Hemingway_f01d.html}
+GC-2009-01 nn/i/t/a/Italia.html {nn/e/r/n/Ernest_Hemingway_f01d.html}
+GC-2009-01 no/i/t/a/Italia.html {no/e/r/n/Ernest_Hemingway_f01d.html}
+GC-2009-01 ro/i/t/a/Italia.html {ro/e/r/n/Ernest_Hemingway_f01d.html}

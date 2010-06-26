@@ -1,0 +1,1 @@
+cat GC-2009-*_manual_done.txt | grep -v "^\s*$"

@@ -1,0 +1,19 @@
+
+
+
+/*
+[indique 		[indicar] <fmc> V PR 3S SUBJ VFIN @FS-STA, membros 		[membro] N M P @<SUBJ, de 		[de] <sam-> PRP @N<, o 		[o] <-sam> DET M S @>N, círculo [círculo] N M S @P<, de 		[de] PRP @N<, Viena 		[Viena] PROP F S @P<, que 	[que] <rel> SPEC M S @SUBJ>, nasceram 		[nascer] V PS/MQP 3P IND VFIN @FS-N<, fora=de 	[fora=de] <sam-> PRP @<ADVL, o 		[o] <-sam> DET M S @>N, império 		[império] N M S @P<, austro-húngaro 		[austro-húngaro] ADJ M S @N<, ou 		[ou] <co-advl> KC @CO, de 		[de] <sam-> PRP @<ADVL, a 		[o] <-sam> DET F S @>N, Alemanha 		[Alemanha] PROP F S @P<, .]
+[rios 		[rio] N M P @NPHR, portugueses 		[português] ADJ M P @N<, que 		[que] <rel> SPEC M S @SUBJ>, passam 		[passar] V PR 3P IND VFIN @FS-N<, por 		[por] PRP @<PIV, cidades 		[cidade] N F P @P<, com 		[com] PRP @<ADVL, mais=de 		[mais=de] <quant> ADV @>A, [150] <card> NUM M/F P @>N, mil 		[mil] <card> NUM M/F P @>N, habitantes 		[habitante] N M/F P @P<, .]
+[cantões 		[cantão] N M P @NPHR, suíços 		[suíço] ADJ M P @N<, que 	[que] <rel> SPEC M S @SUBJ>, façam 		[fazer] V PR 3P SUBJ VFIN @FS-N<, fronteira 	[fronteira] N F S @<ACC, com 		[com] PRP @N<, a 		[o] DET F S @>N, Alemanha 		[Alemanha] PROP F S @P<, .]
+[que 		[que] <interr> DET F P @>N, guerras 		[guerra] N F P @SUBJ>, foram 	[ser] <fmc> V PS/MQP 3P IND VFIN @FS-QUE, travadas 		[travar] V PCP F P @ICL-AUX<, em[em] <sam-> PRP @<ADVL, a 		[o] <-sam> DET F S @>N, Grécia 		[Grécia] PROP F S @P<, ?]
+[Montanhas=da=Austrália 		[Montanhas=da=Austrália] PROP M/F S @NPHR, com 		[com] PRP @N<, mais=de 		[mais=de] <quant> ADV @>A, [2000] <card> NUM M P @>N, m 	[m] N M S @P<, de 		[de] PRP @N<, altitude 		[altitude] N F S @P<, .]
+[capitais 		[capital] N F P @NPHR, africanas 		[africano] ADJ F P @N<, com 		[com] PRP @N<, mais=de 		[mais=de] <quant> ADV @>A, [2] <card> NUM M P @>N, milhões 		[milhão] N M P @P<, de 		[de] PRP @N<, habitantes 		[habitante] N M/F P @P<, .]
+[pontes 		[ponte] N F P @NPHR, pênseis 		[pênsil] ADJ F P @N<, brasileiras 		[brasileira] N F P @N<, .]
+[compositores 		[compositor] N M P @NPHR, renascentistas 		[renascentista] ADJ M P @N<, nascidos 		[nascer] V PCP M P @ICL-N<, em 		[em] <sam-> PRP @<ADVL, a 		[o] <-sam> DET F S @>N, Alemanha 		[Alemanha] PROP F S @P<, .]
+[Ilhas=da=Polinésia 		[Ilhas=da=Polinésia] PROP M/F S @NPHR, com 		[com] PRP @N<, mais=de 		[mais=de] <quant> ADV @>A, [5000] <card> NUM M/F P @>N, habitantes 	[habitante] N M/F P @P<, .]
+[Peças=de=Shakespeare 		[Peças=de=Shakespeare] PROP M/F S @NPHR, passadas 		[passar] V PCP F P @ICL-N<, em 		[em] <sam-> PRP @<ADVL, a 		[o] <-sam> DET F S @>N, Itália 		[Itália] PROP F S @P<, .]
+[locais 		[local] N M P @NPHR, onde 		[onde] <rel> <rel> <ks> ADV @ADVL>, Goethe 		[Goethe] PROP M S @SUBJ>, viveu 		[viver] V PS 3S IND VFIN @FS-N<, .]
+[rios 		[rio] N M P @NPHR, navegáveis 		[navegável] ADJ M P @N<, em 		[em] <sam-> PRP @N<, o 		[o] <-sam> DET M S @>N, afeganistão 		[afeganistão] PROP M S @P<, com 		[com] PRP @N<, uma 		[um] <arti> DET F S @>N, extensão 	[extensão] N F S @P<, maior 		[grande] <KOMP> ADJ F S @N<, do=que 		[do=que] KS @AS-KOMP<, [1000] <card> NUM M P @>N, km. 		[km] <<< N M P @AS< <<<]
+[arquitectos 		[arquitecto] N M P @NPHR, brasileiros 		[brasileiro] ADJ M P @N<, com 		[com] PRP @N<, construções 		[construção] N F P @P<, em 		[em] <sam-> PRP @N<PRED, a 		[o] <-sam> DET F S @>N, Europa 		[Europa] PROP F S @P<, .]
+[que 		[que] <interr> DET F P @>N, pontes 		[ponte] N F P @SUBJ>, francesas [francês] ADJ F P @N<, foram 		[ser] <fmc> V PS/MQP 3P IND VFIN @FS-QUE, construídas 	[construir] V PCP F P @ICL-AUX<, em 		[em] <sam-> PRP @<ADVL, a 		[o] <-sam> DET F S @>N, década 		[década] N F S @P<, de 		[de] PRP @N<, -1990 		[1980-1990] <card> NUM M/F P @P<, ?]
+*/

@@ -1,0 +1,91 @@
+/** This file is part of REMBRANDT - Named Entity Recognition Software
+ *  (http://xldb.di.fc.ul.pt/Rembrandt)
+ *  Copyright (c) 2008-2009, Nuno Cardoso, University of Lisboa and Linguateca.
+ *
+ *  REMBRANDT is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  REMBRANDT is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
+ */
+package saskia.server
+
+import saskia.io.User
+import saskia.io.Collection
+import saskia.io.Cache
+import saskia.util.I18n
+import saskia.stats.SaskiaStats
+import org.apache.log4j.*
+
+public class AdminStatsMapping extends WebServiceRestletMapping {
+    
+    Closure JSONanswer
+    I18n i18n
+    static Logger log = Logger.getLogger("SaskiaServer") 
+    static Logger log2 = Logger.getLogger("SaskiaService") 
+ 
+/** Note: this mapping should be used only by superuser folks *managing user stuff*, so 
+ * it requires an api_key. For standard uses, the UserMapping is the one that has standard actions.
+ */
+    public AdminStatsMapping() {
+        
+        i18n = I18n.newInstance()
+        
+        JSONanswer = {req, par, bind ->
+            
+            long session = System.currentTimeMillis()
+            log2.debug "Session $session triggered with $par" 
+                  
+            Collection collection
+            
+            // core stuff
+            String action = par["POST"]["do"] //show, update, etc
+            String lang = par["POST"]["lg"] 
+            
+                                      
+            ServerMessage sm = new ServerMessage("AdminStatsMapping", lang, bind, session)  
+            
+            // user stuff
+            String api_key = par["POST"]["api_key"] 
+            if (!api_key) api_key = par["COOKIE"]["api_key"]   
+            if (!api_key) return sm.noAPIKeyMessage()
+            User user = User.getFromAPIKey(api_key)           
+            if (!user) return sm.userNotFound()
+            //if (!user.isSuperUser()) return sm.noSuperUser()
+            if (!user.isEnabled()) return sm.userNotEnabled()
+            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
+            sm.setAction(action)
+            
+            /***************************/
+            /** 1.1 show - STATS for collectionid **/
+            /***************************/
+            
+            if (action == "show") {
+        	 long col_id
+        	 try {
+        	     col_id = Long.parseLong(par["POST"]["ci"]) 
+        	 } catch(Exception e){}
+        	 
+        	 if (!col_id) return sm.notEnoughVars("ci=$col_id")   
+        	 collection = Collection.getFromID(col_id)
+        	 
+        	Map dates = Cache.getFrontPageCacheDates(collection)
+        	Map h = [:]
+        	h['cache_dates'] = dates
+        	SaskiaStats stats = new SaskiaStats()
+        	h['message'] = stats.renderFrontPage(collection.col_name, lang)	
+        	 
+                return sm.statusMessage(0,h)              
+            }
+
+            return sm.unknownAction(action)	
+        }
+    }
+}

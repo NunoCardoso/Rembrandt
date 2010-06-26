@@ -1,0 +1,20 @@
+8 
+:Canton of Bellinzona 
+:Canton of Lugano 
+:Canton of Raetia 
+:Italian Somalia 
+:Italy 
+:San Marino 
+:Vatican City 
+:Italian Cyrenaica 
+:Italian Trans-Juba 
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Canton of Bellinzona","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Canton of Lugano","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Canton of Raetia","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Italian Somalia","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Italy","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("San Marino","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Vatican City","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Italian Cyrenaica","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Italian Trans-Juba","en")

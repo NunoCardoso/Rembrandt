@@ -1,0 +1,42 @@
+
+mysql> Select page id, page_title from pt_page, pt_categorylinks where page_id=cl_from and cl_to="Montanhas_da_Roménia";
++---------+------------+
+| page_id | page_title |
++---------+------------+
+|   40081 | Cárpatos   | 
++---------+------------+
+
+mysql> Select page_id, page_title from en_page, en_categorylinks where page_id=cl_from and cl_to="Mountains_of_Romania";
++----------+------------------------------+
+| page_id  | page_title                   |
++----------+------------------------------+
+|  3784112 | List_of_mountains_in_Romania | 
+| 14331029 | Baiu_Mountains               | 
+|  8113488 | Caraiman_Peak                | 
+|  2184631 | Divisions_of_the_Carpathians | 
+| 15496929 | Ineu_Peak                    | 
+|  2115008 | Moldoveanu_Peak              | 
+|  6275433 | Negoiu_Peak                  | 
+| 10121969 | Parângu_Mare                 | 
+| 10121266 | Peleaga                      | 
+| 12946223 | Păpuşa                       | 
+| 15493881 | Romanian_Carpathians         | 
+| 10012416 | Tâmpa,_Braşov                | 
+|  2956255 | Transylvanian_Mountains      | 
+|  6275498 | Viştea_Mare                  | 
++----------+------------------------------+
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Cárpatos","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Baiu Mountains","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Caraiman Peak","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Divisions of the Carpathians","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Ineu Peak","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Moldoveanu Peak","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Negoiu Peak","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Parângu Mare","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Peleaga","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("P\\u0103pu\\u015fa","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Romanian Carpathians","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Tâmpa, Bra\\u015fov","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Transylvanian Mountains","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Vi\\u015ftea Mare","en")

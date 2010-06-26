@@ -1,0 +1,48 @@
+Categoria:Regiões_da_Itália
+
+
+select page_id, page_title from pt_page, pt_categorylinks where page_id=cl_from and cl_to="Regiões_da_Itália";
+
++---------+-----------------------+
+| page_id | page_title            |
++---------+-----------------------+
+| 1404371 | Abruzos               | 
+| 1404376 | Basilicata            | 
+| 1404381 | Calábria              | 
+| 1404383 | Campânia              | 
+| 1404388 | Emília-Romanha        | 
+| 1404393 | Friuli-Venezia_Giulia | 
+| 1404395 | Ligúria               | 
+| 1404398 | Lombardia             | 
+| 1309780 | Lácio                 | 
+| 1404403 | Marche                | 
+| 1404414 | Molise                | 
+| 1404418 | Piemonte              | 
+| 1404432 | Puglia                | 
+|   48684 | Regiões_da_Itália     | 
+| 1340083 | Sardenha              | 
+|  284693 | Sicília               | 
+| 1404443 | Toscana               | 
+| 1404446 | Trentino-Alto_Ádige   | 
+| 1404365 | Vale_de_Aosta         | 
+| 1404460 | Vêneto                | 
+| 1404458 | Úmbria                | 
++---------+-----------------------+
+
+vou usar 15
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Abruzos","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Basilicata","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Calábria","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Campânia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Emília-Romanha","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Friuli-Venezia Giulia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Ligúria","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Lombardia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Lácio","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Marche","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Molise","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Piemonte","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Puglia","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Sardenha","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Sicília","pt")

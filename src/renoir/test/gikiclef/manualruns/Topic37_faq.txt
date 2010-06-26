@@ -1,0 +1,50 @@
+mysql> Select page_id, page_title from pt_page, pt_categorylinks where page_id=cl_from and cl_to="M?sicos_da_Noruega";
++---------+-------------------------+
+| page_id | page_title              |
++---------+-------------------------+
+|   79507 | Cantores_da_Noruega     | 
+|   53880 | Guitarristas_da_Noruega | 
+|  192567 | Compositores_da_Noruega | 
+|  325066 | Tecladistas_da_Noruega  | 
+|  589124 | Mustis                  | 
+|  803493 | Maestros_da_Noruega     | 
+|  803497 | Violinistas_da_Noruega  | 
+|  817676 | Anita_Skorgan           | 
+|  859138 | Arne_Bendiksen          | 
+|  859157 | Karoline_Krüger         | 
+|  874275 | Jørn_Lande              | 
+|  869793 | Pianistas_da_Noruega    | 
+|  438401 | Sissel_Kyrkjebø         | 
+| 1335321 | Secthdamon              | 
+| 1359895 | Valfar                  | 
+|  984145 | Lene_Grawford_Nystrøm   | 
+| 1454483 | Tjodalv                 | 
+| 1454499 | Cyrus_(músico)          | 
+| 1454505 | Memnock                 | 
+| 1454509 | Elvorn                  | 
+|   78279 | Finn_Kalvik             | 
+| 1447698 | Eirik_T._Saltrø         | 
+| 1557507 | Baixistas_da_Noruega    | 
+| 1558562 | Nils_K._Rue             | 
+| 1577587 | Andreas_Hedlund         | 
+| 1579029 | Cornelius_Jakhelln      | 
+| 1581947 | Apollyon                | 
+| 1394655 | ICS_Vortex              | 
++---------+-------------------------+
+28 rows in set (2.35 sec)
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Mustis","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Anita Skorgan","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Arne Bendiksen","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Karoline Krüger","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Jørn Lande","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Sissel Kyrkjebø","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Secthdamon","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Valfar","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Lene Grawford Nystrøm","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Tjodalv","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Cyrus (músico)","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Memnock","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Elvorn","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Finn Kalvik","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Eirik T. Saltrø","pt")

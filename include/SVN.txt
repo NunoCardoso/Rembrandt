@@ -1,0 +1,5 @@
+Leave out: 
+build
+index
+resources
+sandbox

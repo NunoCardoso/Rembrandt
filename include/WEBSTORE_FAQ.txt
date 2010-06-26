@@ -1,0 +1,19 @@
+WEBSTORE HOW-TO
+
+- copy webstore contents to $WEBSTORE_HOME, add webstore.jar to CLASSPATH
+- Add WEBSTORE_HOME, WEBSTORE_DATA and WEBSTORE_CONFIG_FILE to /etc/profile 
+For MAC: Go to $WEBSTORE_HOME/bin/linux/webstore, change javaps to ps
+ - Add $WEBSTORE_HOME/bin/linux/webstore to PATH
+ 
+ 
+WEBSTORE_CONFIG_FILE is: 
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!-- Sample configuration file for a WebStore instance -->
+<webstore name="SampleWS">
+        <volume id="saskia" mode="writable" tree-depth="2" server="127.0.0.1" port="4444"/>
+</webstore>
+
+ - webstore -m saskia
+ - webstore -l saskia
+ 
+ 

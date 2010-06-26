@@ -1,0 +1,577 @@
+
+<s tipo=GC-2009-05>
+
+<s tipo=GC-2009-06>
+Que	que	DET_interr	0	P	M	>N	0
+violinistas	violinista	N	0	P	M	SUBJ>	0
+holandeses	holandês	ADJ	0	P	M	N<	0
+foram	ser	V_fmc	PS/MQP_IND	3P	0	FMV	0
+primeiros	primeiro	ADJ_NUMord	0	P	M	>N	0
+violinos	violino	N	0	P	M	<SC	0
+na	em+o	PRP+DET_artd	0	S	F	N<+>N	0
+Orquestra	Orquestra=Real=do=Concertgebouw	PROP	0	S	F	P<	0
+Real	Orquestra=Real=do=Concertgebouw	PROP	0	S	F	P<	0
+do	Orquestra=Real=do=Concertgebouw	PROP	0	S	F	P<	0
+Concertgebouw	Orquestra=Real=do=Concertgebouw	PROP	0	S	F	P<	0
+no	em+o	PRP+DET_artd	0	S	M	<ADVL+>N	0
+século	século	N	0	S	M	P<	0
+XX	XX	ADJ_NUMord_prop	0	S	M	N<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-07>
+Que	que	DET_interr	0	P	F	>N	0
+capitais	capital	N	0	P	F	SUBJ>	0
+de	de	PRP	0	0	0	N<	0
+província	província	N	0	S	F	P<	0
+holandesas	holandês	ADJ	0	P	F	N<	0
+receberam	receber	V_fmc	PS/MQP_IND	3P	0	FMV	0
+o	o	DET_artd	0	S	M	>N	0
+foral	foral	N	0	S	M	<ACC	0
+antes	antes	ADV	0	0	0	<ADVL	0
+do	de+o	PRP+DET_artd	0	S	M	A<+>N	0
+século	século	N	0	S	M	P<	0
+catorze	catorze	NUM_card	0	P	M/F	N<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-08>
+Que	que	DET_interr	0	P	M	>N	0
+autores	autor	N	0	P	M	SUBJ>	0
+nasceram	nascer	V_fmc	PS/MQP_IND	3P	0	FMV	0
+na	em+o	PRP+DET_artd	0	S	F	<ADVL+>N	0
+Floresta	Floresta=da=Boémia	PROP	0	S	F	P<	0
+da	Floresta=da=Boémia	PROP	0	S	F	P<	0
+Boémia	Floresta=da=Boémia	PROP	0	S	F	P<	0
+e	e	KC_co-fmc_co-vfin	0	0	0	CO	0
+escrevem	escrever	V_fmc	PR_IND	3P	0	FMV	0
+sobre	sobre	PRP	0	0	0	<ADVL	0
+ela	ela	PERS	NOM/PIV	3S	F	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-09>
+Onde	onde	ADV_interr	0	0	0	>A	0
+é	é=que	ADV_foc	0	0	0	<FOC	0
+que	é=que	ADV_foc	0	0	0	<FOC	0
+se	se	PERS_refl	ACC	3S	M	ACC>	0
+apaixonou	apaixonar	V_fmc	PS_IND	3S	0	FMV	0
+Goethe	Goethe	PROP	0	S	M	<SUBJ	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-10>
+Que	que	DET_interr	0	P	F	>N	0
+cidades	cidade	N	0	P	F	SUBJ>	0
+flamengas	flamengo	ADJ	0	P	F	N<	0
+se	se	PERS	ACC	3P	M/F	ACC>-PASS	0
+podem	poder	V_fmc	PR_IND	3P	0	FAUX	0
+gabar	gabar	V	INF	3	0	IMV_#ICL-AUX<	0
+de	de	PRP	0	0	0	<PIV	0
+um	um	DET_arti	0	S	M	>N	0
+restaurante	restaurante	N	0	S	M	P<	0
+com	com	PRP	0	0	0	<ADVL	0
+duas	dois	NUM_card	0	P	F	>N	0
+ou	ou	KC_co-prenom	0	0	0	CO	0
+três	três	NUM_card	0	P	F	>N	0
+estrelas	estrela	N	0	P	F	P<	0
+no	em+o	PRP+DET_artd	0	S	M	<ADVL+>N	0
+guia	guia	N	0	S	F	P<	0
+Michelin	Michelin	PROP	0	S	F	N<	0
+de	de	PRP	0	0	0	N<	0
+2008	2008	NUM_card	0	P	M/F	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-11>
+Que	que	DET_interr	0	P	M/F	>N	0
+belgas	belga	N	0	P	M/F	SUBJ>	0
+venceram	vencer	V_fmc	PS/MQP_IND	3P	0	FMV	0
+a	o	DET_artd	0	S	F	>N	0
+Volta	voltar	V_n_prop	PCP	S	F	<ACC	0
+à	a+o	PRP+DET_artd	0	S	F	<ADVL+>N	0
+Flandres	Flandres	PROP	0	S	F	P<	0
+exactamente	exactamente	ADV	0	0	0	<ADVL	0
+duas	dois	NUM_card	0	P	F	>N	0
+vezes	vez	N	0	P	F	<ADVL	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-12>
+Monarquias	monarquia	N	0	P	F	NPHR	0
+europeias	europeu	ADJ	0	P	F	N<	0
+com	com	PRP	0	0	0	N<	0
+uma	um	DET_arti	0	S	F	>N	0
+mulher	mulher	N	0	S	F	P<	0
+como	como	ADV_prp_rel	0	0	0	PRD_#AS-N<PRED	0
+chefe	chefe	N	0	S	M/F	AS<	0
+de	de	PRP	0	0	0	N<	0
+estado	estado	N	0	S	M	P<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-13>
+Romancistas	romancista	N	0	P	M/F	SUBJ>	0
+europeus	europeu	ADJ	0	P	M	N<	0
+do	de+o	PRP+DET_artd	0	S	M	N<+>N	0
+século	século	N	0	S	M	P<	0
+XIX	XIX	ADJ_NUMord_prop	0	S	M	N<	0
+(	(	PU	0	0	0	PONT	0
+românticos	romântico	N	0	P	M	N<PRED	0
+ou	ou	KC_co-subj	0	0	0	CO	0
+realistas	realista	N	0	P	M/F	SUBJ>	0
+)	)	PU	0	0	0	PONT	0
+que	que	ADV_foc	0	0	0	<FOC	0
+morreram	morrer	V_fmc	PS/MQP_IND	3P	0	FMV	0
+de	de	PRP	0	0	0	<PIV	0
+tuberculose	tuberculose	N	0	S	F	P<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-14>
+Que	que	DET_interr	0	P	F	>N	0
+doenças	doença	N	0	P	F	SUBJ>	0
+raras	raro	ADJ	0	P	F	N<	0
+têm	ter	V_fmc	PR_IND	3P	0	FMV	0
+centros	centro	N	0	P	M	<ACC	0
+a	a	PRP	0	0	0	ADVL>	0
+elas	elas	PERS	NOM/PIV	3P	F	P<	0
+dedicados	dedicar	V	PCP	P	M	IMV_#ICL-N<	0
+na	em+o	PRP+DET_artd	0	S	F	<ADVL+>N	0
+Europa	Europa	PROP	0	S	F	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-15>
+Quais	qual	DET_interr	0	P	M/F	SC>	0
+são	ser	V_fmc	PR_IND	3P	0	FMV	0
+os	o	DET_artd	0	P	M	>N	0
+ingredientes	ingrediente	N	0	P	M	<SUBJ	0
+principais	principal	ADJ	0	P	M	N<	0
+da	de+o	PRP+DET_artd	0	S	F	N<+>N	0
+cassata	cassata	N	0	S	F	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-16>
+Em	em	PRP	0	0	0	ADVL>	0
+que	que	DET_interr	0	P	M	>N	0
+países	país	N	0	P	M	P<	0
+da	de+o	PRP+DET_artd	0	S	F	N<+>N	0
+Europa	Europa	PROP	0	S	F	P<	0
+é	ser	V_fmc	PR_IND	3S	0	FMV	0
+o	o	DET_artd	0	S	M	>N	0
+bidé	bidé	N	0	S	M	<SC	0
+comum	comum	ADJ	0	S	M	N<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-17>
+Quais	qual	DET_interr	0	P	M/F	SC>	0
+as	o	DET_artd	0	P	F	>N	0
+cinco	cinco	NUM_card	0	P	F	>N	0
+regiões	região	N	0	P	F	SUBJ>	0
+italianas	italiano	ADJ	0	P	F	N<	0
+com	com	PRP	0	0	0	N<	0
+estatuto	estatuto	N	0	S	M	P<	0
+especial	especial	ADJ	0	S	M	N<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-18>
+Que	que	DET_interr	0	P	F	>N	0
+províncias	província	N	0	P	F	SUBJ>	0
+toscanas	toscano	ADJ	0	P	F	N<	0
+produzem	produzir	V_fmc	PR_IND	3P	0	FMV	0
+Chianti	Chianti	PROP	0	S	M/F	<ACC	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-19>
+Montanhas	montanha	N	0	P	F	NPHR	0
+chilenas	chileno	ADJ	0	P	F	N<	0
+com	com	PRP	0	0	0	N<	0
+neves	neve	N	0	P	F	P<	0
+eternas	eterno	ADJ	0	P	F	N<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-20>
+Os	o	DET_artd	0	P	M	>N	0
+Alpes	Alpes	PROP	0	P	M	SUBJ>	0
+do	de+o	PRP+DET_artd	0	S	M	N<+>N	0
+noroeste	noroeste	N	0	S	M	P<	0
+são	ser	V_fmc	PR_IND	3P	0	FMV	0
+quais	qual	DET_interr	0	P	M/F	ACC>_#FS-<SC	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-21>
+Afluentes	afluente	ADJ_n	0	P	M/F	NPHR	0
+do	de+o	PRP+DET_artd	0	S	M	N<+>N	0
+rio	rio	N	0	S	M	P<	0
+Pó	pó	N_prop	0	S	M	N<	0
+do	de+o	PRP+DET_artd	0	S	M	N<+>N	0
+lado	lado	N	0	S	M	P<	0
+esquerdo	esquerdo	ADJ	0	S	M	N<	0
+<s tipo=GC-2009-22>
+Que	que	SPEC_rel	0	S	M	ACC>_#FS-N<	0
+selecções	selecção	N	0	P	F	SUBJ>	0
+de	de	PRP	0	0	0	N<	0
+futebol	futebol	N	0	S	M	P<	0
+da	de+o	PRP+DET_artd	0	S	F	N<+>N	0
+América	América=do=Sul	PROP	0	S	F	P<	0
+do	América=do=Sul	PROP	0	S	F	P<	0
+Sul	América=do=Sul	PROP	0	S	F	P<	0
+têm	ter	V	PR_IND	3P	0	FMV	0
+a	o	DET_artd	0	S	F	>N	0
+cor	cor	N	0	S	F	<ACC	0
+amarela	amarelo	ADJ	0	S	F	N<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-23>
+Que	que	DET_interr	0	P	M	>N	0
+museus	museu	N	0	P	M	SUBJ>	0
+americanos	americano	ADJ	0	P	M	N<	0
+têm	ter	V_fmc	PR_IND	3P	0	FMV	0
+pinturas	pintura	N	0	P	F	<ACC	0
+de	de	PRP	0	0	0	N<	0
+Picasso	Picasso	PROP	0	S	M	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-24>
+Que	que	DET_interr	0	P	M	>N	0
+países	país	N	0	P	M	SUBJ>	0
+foram	ser	V_fmc	PS/MQP_IND	3P	0	FMV	0
+campeões	campeão	N	0	P	M	<SC	0
+europeus	europeu	ADJ	0	P	M	N<	0
+de	de	PRP	0	0	0	N<	0
+futebol	futebol	N	0	S	M	P<	0
+<mwe pos=ADJ>
+de	de	PRP	0	0	0	N<	0
+salão	salão	N	0	S	M	P<	0
+</mwe>
+quando	quando	ADV_ks_rel	0	0	0	ADVL>_#FS-<ADVL	0
+o	o	DET_artd	0	S	M	>N	0
+campeonato	campeonato	N	0	S	M	SUBJ>	0
+decorreu	decorrer	V	PS_IND	3S	0	FMV	0
+em	em	PRP	0	0	0	<ADVL	0
+Espanha	Espanha	PROP	0	S	F	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-25>
+Indique	indicar	V_fmc	PR_SUBJ	3S	0	FMV	0
+pilotos	piloto	N	0	P	M	<SUBJ	0
+espanhóis	espanhol	ADJ	0	P	M	N<	0
+que	que	SPEC_rel	0	S	M	SUBJ>_#FS-N<	0
+tenham	ter	V	PR_SUBJ	3P	0	FAUX	0
+corrido	correr	V	PCP	3	0	IMV_#ICL-AUX<	0
+em	em	PRP	0	0	0	<ADVL	0
+Minardi	Minardi	PROP	0	S	M	P<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-26>
+Que	que	DET_interr	0	P	M	>N	0
+lutadores	lutador	N	0	P	M	SUBJ>	0
+búlgaros	búlgaro	ADJ	0	P	M	N<	0
+receberam	receber	V_fmc	PS/MQP_IND	3P	0	FMV	0
+o	o	DET_artd	0	S	M	>N	0
+cinto	cinto	N	0	S	M	<ACC	0
+de	de	PRP	0	0	0	N<	0
+diamantes	diamante	N	0	P	M	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-27>
+Bandas	banda	N	0	P	F	NPHR	0
+holandesas	holandês	ADJ	0	P	F	N<	0
+cujo	cujo	DET_rel	0	S	M	>N_#FS-N<	0
+nome	nome	N	0	S	M	SUBJ>	0
+venha	vir	V	PR_SUBJ	3S	0	FMV	0
+de	de	PRP	0	0	0	<ADVL	0
+um	um	DET_arti	0	S	M	>N	0
+futebolista	futebolista	N	0	S	M	P<	0
+búlgaro	búlgaro	ADJ	0	S	M	N<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-28>
+Estados	estado	N	0	P	M	NPHR	0
+na	em+o	PRP+DET_artd	0	S	F	N<+>N	0
+costa	costa	N	0	S	F	P<	0
+com	com	PRP	0	0	0	N<	0
+refinarias	refinaria	N	0	P	F	P<	0
+da	de+o	PRP+DET_artd	0	S	F	N<+>N	0
+Petrobrás	Petrobrás	PROP	0	S	M	P<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-29>
+Povoações	povoação	N	0	P	F	NPHR	0
+com	com	PRP	0	0	0	N<	0
+<mwe pos=ADV>
+mais	mais	ADV_quant	0	0	0	>A	0
+de	de	PRP	0	0	0	KOMP<	0
+</mwe>
+cem	cem	NUM_card	0	P	M/F	>N	0
+mil	mil	NUM_card	0	P	M/F	>N	0
+habitantes	habitante	N	0	P	M/F	P<	0
+<mwe pos=PRP>
+acima	acima	ADV	0	0	0	ADVL>	0
+</mwe>
+do	de+o	PRP+DET_artd	0	S	M	A<+>N	0
+Cículo	Cículo=Polar=Árctico	PROP	0	S	M	P<	0
+Polar	Cículo=Polar=Árctico	PROP	0	S	M	P<	0
+Árctico	Cículo=Polar=Árctico	PROP	0	S	M	P<	0
+<s tipo=GC-2009-30>
+Que	que	SPEC_rel	0	S	M	ACC>_#FS-N<	0
+companhias	companhia	N	0	P	F	SUBJ>	0
+japonesas	japonês	ADJ	0	P	F	N<	0
+fabricantes	fabricante	N	0	P	M/F	N<	0
+de	de	PRP	0	0	0	N<	0
+automóveis	automóvel	N	0	P	M	P<	0
+têm	ter	V	PR_IND	3P	0	FMV	0
+fábricas	fábrica	N	0	P	F	<ACC	0
+ou	ou	KC	0	0	0	CO	0
+<mwe pos=N>
+linhas	linha	N	0	S	F	PRED>	0
+de	de	PRP	0	0	0	N<	0
+montagem	montagem	N	0	S	F	P<	0
+</mwe>
+em	em	PRP	0	0	0	N<	0
+países	país	N	0	P	M	P<	0
+europeus	europeu	ADJ	0	P	M	N<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-31>
+Em	em	PRP	0	0	0	ADVL>	0
+que	que	DET_interr	0	P	M	>N	0
+países	país	N	0	P	M	P<	0
+o	o	DET_artd	0	S	M	>N	0
+italiano	italiano	N	0	S	M	SUBJ>	0
+é	ser	V_fmc	PR_IND	3S	0	FMV	0
+língua	língua	N	0	S	F	<SC	0
+oficial	oficial	ADJ	0	S	F	N<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-32>
+Escritores	escritor	N	0	P	M	NPHR	0
+romenos	romeno	ADJ	0	P	M	N<	0
+que	que	SPEC_rel	0	S	M	SUBJ>_#FS-N<	0
+estivessem	estar	V	IMPF_SUBJ	3P	0	FAUX	0
+a	a	PRP	0	0	0	PRT-AUX<	0
+viver	viver	V	INF	3	0	IMV_#ICL-AUX<	0
+nos	em+o	PRP+DET_artd	0	P	M	<ADVS+>N	0
+Eua	Eua	PROP	0	P	M	P<	0
+em	em	PRP	0	0	0	<ADVL	0
+2003	2003	NUM_card	0	S	M/F	P<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-33>
+Que	que	DET_interr	0	P	M	>N	0
+países	país	N	0	P	M	SUBJ>	0
+da	de+o	PRP+DET_artd	0	S	F	N<+>N	0
+União	União=Europeia	PROP	0	S	F	P<	0
+Europeia	União=Europeia	PROP	0	S	F	P<	0
+têm	ter	V_fmc	PR_IND	3P	0	FMV	0
+<mwe pos=N>
+parques	parque	N	0	S	M	<ACC	0
+nacionais	nacional	ADJ	0	S	M/F	N<	0
+</mwe>
+nos	em+o	PRP+DET_artd	0	P	M	<ADVL+>N	0
+Alpes	Alpes	PROP	0	P	M	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-34>
+Que	que	DET_interr	0	P	M	>N	0
+picos	pico	N	0	P	M	SUBJ>	0
+<mwe pos=PRP>
+acima	acima	ADV	0	0	0	N<	0
+</mwe>
+dos	de+o	PRP+DET_artd	0	P	M	A<+>N	0
+8	8	NUM_card	0	P	M	>N	0
+mil	mil	NUM_card	0	P	M	>N	0
+metros	metro	N	0	P	M	P<	0
+pertencem	pertencer	V_fmc	PR_IND	3P	0	FMV	0
+<mwe pos=ADV>
+pelo	por+o	PRP+DET_artd	0	S	M	>A+>N	0
+menos	pouco	DET_quant	0	S/P	M/F	P<	0
+</mwe>
+parcialmente	parcialmente	ADV_quant	0	0	0	<ADVL	0
+ao	a+o	PRP+DET_artd	0	S	M	<PIV+>N	0
+Nepal	Nepal	PROP	0	S	M	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-35>
+Que	que	DET_interr	0	P	F	>N	0
+montanhas	montanha	N	0	P	F	SUBJ>	0
+romenas	romeno	ADJ	0	P	F	N<	0
+foram	ser	V_fmc	PS/MQP_IND	3P	0	FAUX	0
+declaradas	declarar	V	PCP	P	F	IMV_#ICL-AUX<	0
+reservas	reserva	N	0	P	F	<OC	0
+de	de	PRP	0	0	0	N<	0
+bioesfera	bioesfera	N	0	S	F	P<	DERP
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-36>
+Em	em	PRP	0	0	0	ADVL>	0
+que	que	DET_interr	0	P	F	>N	0
+grutas	gruta	N	0	P	F	P<	0
+da	de+o	PRP+DET_artd	0	S	F	N<+>N	0
+Roménia	Roménia	PROP	0	S	F	P<	0
+foram	ser	V_fmc	PS/MQP_IND	3P	0	FAUX	0
+encontrados	encontrar	V	PCP	P	M	IMV_#ICL-AUX<	0
+restos	resto	N	0	P	M	<SC	0
+fósseis	fóssil	ADJ	0	P	M	N<	0
+de	de	PRP	0	0	0	N<	0
+<mwe pos=N>
+seres	ser	N	0	S	M	P<	0
+humanos	humano	ADJ	0	S	M	N<	0
+</mwe>
+da	de+o	PRP+DET_artd	0	S	F	N<+>N	0
+era	era	N	0	S	F	P<	0
+paleolítica	paleolítico	ADJ	0	S	F	N<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-37>
+Músicos	músico	N	0	P	M	NPHR	0
+noruegueses	norueguês	ADJ	0	P	M	N<	0
+castigados	castigar	V	PCP	P	M	IMV_#ICL-N<	0
+em	em	PRP	0	0	0	<ADVL	0
+tribunal	tribunal	N	0	S	M	P<	0
+por	por	PRP	0	0	0	ADVL>	0
+incêndio	incêndio	N	0	S	M	P<	0
+de	de	PRP	0	0	0	N<	0
+igrejas	igreja	N	0	P	F	P<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-38>
+Que	que	DET_interr	0	P	F	>N	0
+<mwe pos=N>
+quedas	queda	N	0	S	F	SUBJ>	0
+de	de	PRP	0	0	0	N<	0
+água	água	N	0	S	F	P<	0
+</mwe>
+norueguesas	norueguês	ADJ	0	P	F	N<	0
+têm	ter	V_fmc	PR_IND	3P	0	FMV	0
+uma	um	DET_arti	0	S	F	>N	0
+altura	altura	N	0	S	F	<ACC	0
+superior	alto	ADJ	0	S	F	N<	0
+a	a	PRP	0	0	0	A<	0
+200	200	NUM_card	0	P	M	>N	0
+metros	metro	N	0	P	M	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-39>
+Jogadores	jogador	N	0	P	M	NPHR	0
+de	de	PRP	0	0	0	N<	0
+futebol	futebol	N	0	S	M	P<	0
+na	em+o	PRP+DET_artd	0	S	F	N<+>N	0
+selecção	selecção	N	0	S	F	P<	0
+de	de	PRP	0	0	0	N<	0
+um	um	DET_arti	0	S	M	>N	0
+país	país	N	0	S	M	P<	0
+escandinavo	escandinavo	ADJ	0	S	M	N<	0
+com	com	PRP	0	0	0	N<	0
+filhos	filho	N	0	P	M	P<	0
+que	que	SPEC_rel	0	S	M	ACC>_#FS-N<	0
+jogaram	jogar	V	PS/MQP_IND	3P	0	FMV	0
+num	em+um	PRP+DET_arti	0	S	M	<ADVL+>N	0
+clube	clube	N	0	S	M	P<	0
+de	de	PRP	0	0	0	N<	0
+futebol	futebol	N	0	S	M	P<	0
+inglês	inglês	ADJ	0	S	M	N<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-40>
+Rios	rio	N	0	P	M	NPHR	0
+alemães	alemão	ADJ	0	P	M	N<	0
+<mwe pos=ADJ>
+de	de	PRP	0	0	0	N<	0
+comprimento	comprimento	N	0	S	M	P<	0
+</mwe>
+inferior	inferior	ADJ	0	S	M/F	NPHR	0
+a	a	PRP	0	0	0	A<	0
+15	15	NUM_card	0	P	M	>N	0
+quilómetros	quilómetro	N	0	P	M	P<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-41>
+Cozinheiros	cozinheiro	N	0	P	M	NPHR_SC>	0
+e	e	KC	0	0	0	CO	0
+cozinheiras	cozinheira	N	0	P	F	NPHR	0
+nascidos	nascer	V	PCP	P	M	IMV_#ICL-N<	0
+na	em+o	PRP+DET_artd	0	S	F	<ADVL+>N	0
+Áustria	Áustria	PROP	0	S	F	P<	0
+e	e	KC	0	0	0	CO	0
+condecorados	condecorar	V	PCP	P	M	IMV_#ICL-<PRED	0
+com	com	PRP	0	0	0	<ADVL	0
+uma	um	DET_arti	0	S	F	>N	0
+estrela	estrela	N	0	S	F	P<	0
+Michelin	Michelin	PROP	0	S	F	N<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-42>
+Partidos	partido	N	0	P	M	NPHR	0
+com	com	PRP	0	0	0	N<	0
+assento	assento	N	0	S	M	P<	0
+no	em+o	PRP+DET_artd	0	S	M	ADVL>+>N	0
+Conselho	Conselho=Nacional=Austríaco	PROP	0	S	M	P<	0
+Nacional	Conselho=Nacional=Austríaco	PROP	0	S	M	P<	0
+Austríaco	Conselho=Nacional=Austríaco	PROP	0	S	M	P<	0
+que	que	SPEC_rel	0	S	M	SUBJ>_#FS-N<	0
+tenham	ter	V	PR_SUBJ	3P	0	FAUX	0
+sido	ser	V	PCP	3	0	IMV_#ICL-AUX<	0
+criados	criado	N	0	P	M	<SC	0
+após	após	PRP	0	0	0	<ADVL	0
+a	o	DET_artd	0	S	F	>N	0
+segunda	segundo	ADJ_NUMord	0	S	F	>N	0
+guerra	guerra	N	0	S	F	P<	0
+mundial	mundial	ADJ	0	S	F	N<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-43>
+Estâncias	estância	N	0	P	F	SUBJ>	0
+de	de	PRP	0	0	0	N<	0
+esqui	esqui	N	0	S	M	P<	0
+na	em+o	PRP+DET_artd	0	S	F	N<+>N	0
+Áustria	Áustria	PROP	0	S	F	P<	0
+com	com	PRP	0	0	0	N<	0
+um	um	DET_arti	0	S	M	>N	0
+comprimento	comprimento	N	0	S	M	SUBJ>	0
+de	de	PRP	0	0	0	N<	0
+pista	pista	N	0	S	F	P<	0
+totalizando	totalizar	V	GER	3	0	IMV	0
+<mwe pos=ADV>
+mais	mais	ADV_quant	0	0	0	>A	0
+de	de	PRP	0	0	0	KOMP<	0
+</mwe>
+100	100	NUM_card	0	P	M	>N	0
+km	km	N	0	P	M	<ACC	0
+<s tipo=GC-2009-44>
+Castas	casto	ADJ_prop	0	P	F	N<	0
+vinícolas	vinícola	ADJ	0	P	F	>N	0
+austríacas	austríaca	N	0	P	F	PRED>	0
+com	com	PRP	0	0	0	N<	0
+uma	um	DET_arti	0	S	F	>N	0
+área	área	N	0	S	F	P<	0
+inferior	inferior	ADJ	0	S	F	N<	0
+a	a	PRP	0	0	0	A<	0
+100	100	NUM_card	0	P	M	>N	0
+hectares	hectare	N	0	P	M	P<	0
+<s tipo=GC-2009-45>
+Quem	quem	SPEC_interr	0	S	M/F	SUBJ>	0
+venceu	vencer	V	PS_IND	3S	0	FMV	0
+espectáculos	espectáculo	N	0	P	M	<ACC	0
+de	de	PRP	0	0	0	N<	0
+casting	casting	N	0	S	M	P<	0
+na	em+o	PRP+DET_artd	0	S	F	<ADVL+>N	0
+Suíça	Suíça	PROP	0	S	F	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-46>
+Que	que	DET_interr	0	P	M	>N	0
+escritores	escritor	N	0	P	M	SUBJ>	0
+alemães	alemão	ADJ	0	P	M	N<	0
+são	ser	V_fmc	PR_IND	3P	0	FMV	0
+cidadãos	cidadão	N	0	P	M	<SC	0
+honorários	honorário	ADJ	0	P	M	N<	0
+da	de+o	PRP+DET_artd	0	S	F	N<+>N	0
+Suíça	Suíça	PROP	0	S	F	P<	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-47>
+Que	que	DET_interr	0	P	F	>N	0
+cidades	cidade	N	0	P	F	SUBJ>	0
+alemãs	alemã	ADJ_n	0	P	F	N<	0
+têm	ter	V_fmc	PR_IND	3P	0	FMV	0
+<mwe pos=ADV>
+mais	mais	ADV_quant	0	0	0	<ADVL	0
+de	de	PRP	0	0	0	KOMP<	0
+</mwe>
+uma	uma	NUM_card	0	S	F	>N	0
+universidade	universidade	N	0	S	F	<ACC	0
+?	?	PU	0	0	0	PONT	0
+<s tipo=GC-2009-48>
+Filmes	filme	N	0	P	M	NPHR	0
+de	de	PRP	0	0	0	N<	0
+língua	língua	N	0	S	F	P<	0
+alemã	alemã	ADJ_n	0	S	F	N<	0
+nomeados	nomear	V	PCP	P	M	NPHR	0
+para	para	PRP	0	0	0	<PIV	0
+um	um	DET_arti	0	S	M	>N	0
+Òscar	Òscar	N	0	S	M	P<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-49>
+Pilotos	piloto	N	0	P	M	NPHR	0
+de	de	PRP	0	0	0	N<	0
+fórmula	fórmula	N	0	S	F	P<	0
+1	1	NUM_card	0	S	M/F	P<	0
+que	que	SPEC_rel	0	S	M	SUBJ>_#FS-N<	0
+se	se	PERS	ACC	3P	M/F	ACC>-PASS	0
+fixaram	fixar	V	PS/MQP_IND	3P	0	FMV	0
+na	em+o	PRP+DET_artd	0	S	F	<PIV+>N	0
+Suiça	Suíça	PROP	0	S	F	P<	0
+.	.	PU	0	0	0	PONT	0
+<s tipo=GC-2009-50>
+Que	que	DET_interr	0	P	M	>N	0
+suíços	suíço	N	0	P	M	SUBJ>	0
+receberam	receber	V_fmc	PS/MQP_IND	3P	0	FMV	0
+medalhas	medalha	N	0	P	F	<ACC	0
+nos	em+o	PRP+DET_artd	0	P	M	<ADVL+>N	0
+<mwe pos=PROP>
+Jogos	jogo	N	0	P	M	P<	0
+Olímpicos	olímpico	ADJ	0	P	M	N<	0
+</mwe>
+de	de	PRP	0	0	0	N<	0
+Inverno	Inverno	PROP	0	S	M/F	P<	0
+de	de	PRP	0	0	0	N<	0
+2006	2006	NUM_card	0	P	M/F	P<	0
+em	em	PRP	0	0	0	<ADVL	0
+snowboard	snowboard	N	0	S	M	P<	0
+?	?	PU	0	0	0	PONT	0

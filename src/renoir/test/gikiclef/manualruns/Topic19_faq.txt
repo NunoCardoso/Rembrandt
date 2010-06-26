@@ -1,0 +1,56 @@
+SELECT DISTINCT * WHERE {
+   ?s rdf:type dbpedia-owl:Mountain .
+  ?s skos:subject ?t . 
+ FILTER regex(?t, "chile", "i") 
+}  
+
+nops. 
+http://pt.wikipedia.org/wiki/Categoria:Montanhas do_Chile
+select  page_title from pt_page, pt_categorylinks where page_id=cl_from and cl_to="Montanhas_do_Chile";
++---------------------------------+
+| page_title                      |
++---------------------------------+
+| Licancabur                      | 
+| Cordón_del_Azufre               | 
+| Cerro_Torre                     | 
+| Cerro_Fitzroy                   | 
+| Tupungato                       | 
+| Cerro_Bayo                      | 
+| Cerro_Escorial                  | 
+| Falso_Azufre                    | 
+| Lastarria                       | 
+| Llullaillaco                    | 
+| Sierra_Nevada_de_Lagunas_Bravas | 
+| Socompa                         | 
+| Vulcão_Parinacota               | 
+| Pomerape                        | 
+| Paruma                          | 
+| Irruputuncu                     | 
+| Acotango                        | 
+| Cerro_Minchincha                | 
+| Monte_San_Valentin              | 
+| Cerro_Macá                      | 
+| Cerro_Paine_Grande              | 
+| Guallatiri                      | 
+| Monte_Darwin                    | 
+| Ojos_del_Salado                 | 
+| Nevado_Tres_Cruces              | 
+| Olca                            | 
++---------------------------------+
+26 rows in set (0.45 sec)
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Licancabur","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Cordón del Azufre","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Cerro Torre","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Cerro Fitzroy","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Tupungato","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Cerro Bayo","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Cerro Escorial","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Falso Azufre","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Lastarria","pt")   
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Llullaillaco","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Sierra Nevada de Lagunas Bravas","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Socompa","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Vulcão Parinacota","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Pomerape","pt")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Paruma","pt")

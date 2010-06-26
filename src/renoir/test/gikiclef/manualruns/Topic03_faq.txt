@@ -1,0 +1,37 @@
+Qual a estratégia: 
+
+Foi para o plano B 1 - procurar por países na página de Peter Deunov
+
+Resultado:
+
+Não há página dele na Wikipédia portuguesa, só na búlgara, inglesa e francesa.
+Vamos ver a página inglesa de Peter Deunov, e rembrandteá-la em inglês!!!
+
+Obtive http://static.wikipedia.org/new/wikipedia/en/articles/p/e/t/Peter_Deunov_57a6.html
+
+Fui a www.tumba.pt, fiz links -dump 1 Peter_Deunov_57a6.html -> Peter_Deunov_57a6.txt
+
+cat Peter_Deunov_57a6.txt | java -Dglobal.lang=en rembrandt.bin.Rembrandt > Peter_Deunov_rembrandted.txt
+
+( o Rembrnadt em inglês estourava, fiz em Português)
+cat Peter_Deunov_rembrandted | perl -n -e 'print "$1\n" if /(<EM[^>]*SUBTIPO="[^"]*PAIS[^"]*"[^>]*>[^>]*<\/EM>)/'
+
+<EM ID="x-168" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="15376(Estados Unidos da América);790(Estados Unidos da América)">USA</EM>
+<EM ID="x-201" CATEG="LOCAL|LOCAL" TIPO="HUMANO|FISICO" SUBTIPO="PAIS|ILHA" COMENT="100833(Ilha de Man);3842(Ilha de Man)">Man</EM>
+<EM ID="x-298" CATEG="LOCAL|LOCAL" TIPO="HUMANO|FISICO" SUBTIPO="PAIS|ILHA" COMENT="100833(Ilha de Man);3842(Ilha de Man)">Man</EM>
+<EM ID="x-786" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="15290(França);827(França)">France</EM>
+<EM ID="x-800" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="305(Alemanha);15359(Alemanha)">Germany</EM>
+<EM ID="x-889" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="15290(França);827(França)">France</EM>
+<EM ID="x-957" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="15376(Estados Unidos da América);790(Estados Unidos da América)">USA</EM>
+<EM ID="x-966" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="497(Canadá);20222(Canadá)">Canada</EM>
+<EM ID="x-987" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="15290(França);827(França)">France</EM>
+<EM ID="x-1851" CATEG="LOCAL|LOCAL" TIPO="HUMANO|FISICO" SUBTIPO="PAIS|ILHA" COMENT="3836(Jersey)">Jersey</EM>
+<EM ID="x-2017" CATEG="LOCAL" TIPO="HUMANO" SUBTIPO="PAIS" COMENT="4508(Congo)">Congo</EM>
+
+
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("USA","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("France","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Germany","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Canada","en")
+q.answer << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Congo","en")
+q.answerJustification << dbpedia.getDBpediaResourceFromWikipediaPageTitle("Peter Deunov","en")

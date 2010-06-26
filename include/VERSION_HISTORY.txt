@@ -1,0 +1,157 @@
+VERSION HISTORY of REMBRANDT
+============================
+
+v1.1 
+   Documents ported to WebStore - lighter DB
+   Added Polyline info, new interface with maps 
+   Improved the Saskia DB manaqement
+   New improved API access control and logging
+   Several bugs on TimeGrounding 
+   
+v1.0-beta2 (or 1.0)
+   concurrence lock DB now handled with 5 retries
+   lots of improvements on DB sync issues, workers are much stable now
+   Support of geographic grounding by GeoPlanet's WOEIDs
+   TimeGroundong finished.
+   Some bugs found and solved.
+   Proxies can now be dynamically selected for each web service 
+  
+v.1.0beta1
+  Core agora em UTF-8, capaz de processar agora todos os caracteres UTF-8
+  Índices nos documentos e nas listas de EM, para acelerar as regras
+  Pré-optimização de pares regras/frases consoante as primeiras cláusulas das regras
+  Pré-compilação de padrões, gazetteeer agora está estático e final
+  Especialização de Detectores para várias funções, com acções pré-determinadas
+  Melhorias na sincronização à DB
+  Separação completa das classificações semânticas internas do REMBRANDT com as do HAREM
+  Reorganização dos almanaques e dos padrões
+  Amostragem de gestão de memória
+  Detector e MatcherObject re-escritos, agora podem executar acções vindas das regras, e permitem acções a mais de uma NE
+  As referências Wikipédia e DBpedia das EM estão agora associadas às classificações semânticas da EM
+  Agora, as regras externas podem desambiguam EM já existentes, filtrando as ligações Wikipédia e DBpedia
+  As divisões das EM são feitas agora depois das evidências externas, e em regras organizadas
+  Vários melhoramentos nos Reader e Writer, possibilidade de ler documentos já anotados previamente, e com estilos de documento/etiqueta diferentes
+  Motor de comparação de classificações de NE redesenhado, mais simples e versátil
+  Detecção de relações entre entidades revisto, bem mais rápido
+  Sistema de rastreio do historial das entidades mencionadas revisto, escreve quando NamedEntity logger é trace 
+  Courthouse agora só dá veredictos (e não lista de acções), ListOFNE executa os veredictos de forma mais inteligente agora.
+  Contagem de termos revista, agora não conta com termos escondidos
+  Uso de categorias para classificação agora só usa evidências em plural (ex: Partidos de Portugal sim, Partido Socialista não)
+  Resolvido problema de leis, onde as leis específicas estavam a ser preteridas pelas leis genéricas
+  
+v0.8.8
+  Remoção de bugs
+  Corrigir regras de atomização
+  Mais código para o RembrandtPool
+
+v0.8.7
+  Remoção de bugs
+  
+v0.8.6
+  Remoção de bugs nos módulos cliente/servidor
+  Melhor suporte de várias línguas 
+  Integração renoir/saskia
+  Cache na DBpedia, AskSaskia usa DBpedia preferencialmente
+  Renoir mais capaz, regras beginSentence e endSentence
+  Removi bug de execucação de cardinalidade OneOrMore. 
+
+v0.8.5
+  Arquitectura cliente/servidor XML-RPC
+  Reformulação do configurador - valores por omissão
+  Tokenizador interno
+  Deixa mudar a língua dinamicamente
+  
+v0.8.3:
+  Selector DB / index para retirar dependência do Lucene.
+  WikipediaAPI muito reformulado por causa disso.
+  Muitas mexidas para etiquetar TUDO de PT. 
+  Brutais mudanças a nível de um WikipediaDocument inteligente.
+  Grandes melhorias no locality, suporta mais que 1 agora
+  Treino para EN.
+  
+v0.8.2 congelada cedo para correr na CHAVE PT. OK 
+  Usar configuração -D para override de variáveis do ficheiro conf. OK
+  Bem melhorado o HTMLOutputWriter para a experiência OK
+  Resolvido bug de ordenação de tags finais OK
+  Remendado bug de meaningMatch ser devolvido como Array. Melhorar. OK  
+
+v0.8.1:
+	Retirar geograficidade a partir das categorias Wikipedia OK
+	Bugs: pouco consistente na cache com as localities. OK
+	Streams já estão mais flexíveis com DocumentPrinter e NEPrinter OK
+	Retirar non-locals. OK
+	Reorganizar log4j, OK
+	implementar Readers para lidar com HTML/XML/texto a entrar. OK.
+	REcompilar par Hadoop 0.16.4 OK
+ 
+v0.8RC1: 
+	   traduzir para Inglês OK
+	   Reagrupar gazetteers OK
+	   reformular TODOS os gazetteers, novas regras de nomenclatura OK
+	   Code-cleaning para o groovydoc. OK.
+       Compatibilizar para ter mais línguas. OK.
+       Fazer cache à Saskia. OK
+       Já não depende da ProgressBar shell script OK
+       Walkthrough ao código, GPL licence, etc. OK
+       Limpar variáveis, etc. OK
+       Converti wikipediaPageId para Hash OK
+       Actualizei o DocAndNEReader OK
+ 
+v0.7.3 Reduzir EM com daeos? que não são lidadas, ao reduzir a pedaços. (ALT 1.8) OK
+       Bug de escrita de ALTs. OK.
+       Bug de criação de EM sem nenhuma categoria. OK
+       Muitas melhorias de regras. OK
+       as relações precisam de propagar mais. OK
+	   ExternalEvidence para Acontecimento e Ano. OK
+	   
+v0.7.2 Aumentar mais a profundidade de category, para um category == query OK
+	   Ver o que se passsa com o GenerateALT (retirar PESSOA INDIV) OK
+	   Quebrar os X e Y not written. Mandar outra vez para trás. Cuidado com pessoas individuais com 'e' OK
+	   Corrigi problema de ORGANIZACAO OUTRO ficar com TIPOs inválidos ??
+	   Erro com ACONTECIMENTO ORGANIZACAO -> ORGANIZADO no meaningDefinitions OK
+ 	   Vou evitar um <TEMPO>de hoje</TEMPO> ser dividido. OK
+ 	   As entityRelations já transportam classificações. OK.
+ 	   Meti a segunda camada de External Evidence, para filmes "X Y"
+ 	   Já consegue desambiguar acrónimos no WikipediaAPI OK
+ 	   Já consegue desembaraçar-se muito melhor. OK
+ 	   Limitei o nº de entradas no Comment para 10. OK
+ 	   
+v0.7.1: Corrigir o problema de uma EM poder estar a ser perturbada por um número no fim.
+        Hack no AskWikipedia para tentar páginas de desambiguação, caso o needle 
+        venha com sucesso, mas com nada.
+        Meti GenerateALT em certas regras. 
+        Alterei o timeout para 1000 seg. (RembrandtHadoop)
+        Meti o log AskWikipedia mais verboso.
+        Meti um detector de relações órfãs.     
+v0.7.0: Versão para o HAREM, mas ainda com problemas em relações órfãs.
+  
+v0.6.10: Tuning ds regras com as colecções de teste.	
+	     relações de sobras bem melhor.	
+	 	 Já trabalho com cardinalidade 3+. Já não perco info da Wikipedia nos ALT.
+ v0.6.9: RembrandtCore totalmente re-escrito. Já dá para todo o tipo de EM.
+		 Regras de ALT bem definidas e simples.
+ v0.6.8: Diversos melhoramentos ao nível de Alts. 
+		 Já tem detector de EM overlapped ou nested. Remove as EM que ficam "trilhadas".
+ v0.6.7: Fiz o fillCommentWithWikipediaInfo. As relações já servem para sincronizar EMs
+	 	 idênticas mas com categorias diferentes. Já "repesco" EMs assim. Ainda repesco as pessoas.
+ v0.6.6: Meti addpolicy na NamedEntity e nas regras, para bypass ao Tribunal.
+         Acabei todas as evidências externas de LOCAL.
+         Já tem suporte print ALT. NamedEntity tem alt e subalt.
+ v0.6.5: Meti algumas evidências externas de LOCAL. Vários bugs já corrigidos. 
+ 		 melhor suporte para COISAS e ABSTRACCOES.
+ v0.6.4: Mais regras/leis de contexto interno/externo / TEMPO.
+	   	 Muito melhor o TEMPO, VALOR, NUMERO. Metarules mudadas, por omissão collectable = true
+ v0.6.3: actualização dos scripts de indexação.
+	  	 tentativa de resolver o problema do entityRelation, que demora muito tempo na BD
+	  	 Alterei formato de outlinks. Mas o problema estava no códio, está bem melhor agora o ReRelEM.
+ v0.6.1: Com motor de relações. 
+	  	 ConceptMatch, EntityRelationRules e melhoria no Detector para suportar relações.
+ v0.6.0: com input output bem melhorado e configurável, mais o Configurator em singletons.
+	     Mais gazetteers.
+  v0.5:  Só suporte para Hadoop
+  v0.4:  Motor de detecção uniformizado. Sintaxe acabada.
+  v0.3:  Com leis e regras. WikipediaAPI adicionada.
+	
+	
+
+	

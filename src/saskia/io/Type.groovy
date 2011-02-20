@@ -30,12 +30,19 @@ class Type {
 	static SaskiaDB db = SaskiaDB.newInstance()
 	static Logger log = Logger.getLogger("SaskiaDB")
 
+	static Map<Long,Type> cache = [:]
+
 	static List<Type> queryDB(String query, ArrayList params = []) {
 		List<Type> t = []
 		db.getDB().eachRow(query, params, {row  -> 
 			t << new Type(typ_id:row['typ_id'], typ_name:row['typ_name'] )
 		})
 		return t
+	}
+	
+	static void refreshCache() {
+	    List<Tag> l = queryDB("SELECT * FROM ${typ_table}".toString(), [])
+	    l.each{cache[it.typ_id] = it}
 	}
 	
 	/** Get all NE categories. It's easier to have them in memory, than hammering the DB 

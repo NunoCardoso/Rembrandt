@@ -90,48 +90,48 @@ import rembrandt.gazetteers.CommonClassifications as SC
 		String reformulated_x = """
 label:003 contents:"Amnesty International" contents:human contents:rights contents:reports 
 contents:"Latin America" entity:Amnesty_International 
-woeid-index:24865716 woeid-index:23424747 woeid-index:23424760 woeid-index:23424762 
-woeid-index:23424768 woeid-index:23424782 woeid-index:23424787 woeid-index:23424791 
-woeid-index:23424793 woeid-index:23424798 woeid-index:23424800 woeid-index:23424801 
-woeid-index:23424807 woeid-index:23424811 woeid-index:23424831 woeid-index:23424834 
-woeid-index:23424836 woeid-index:23424839 woeid-index:23424841 woeid-index:23424884 
-woeid-index:23424900 woeid-index:23424915 woeid-index:23424917 woeid-index:23424919 
-woeid-index:23424924 woeid-index:23424935 woeid-index:23424951 woeid-index:23424979 
-woeid-index:23424982'
+woeid:24865716 woeid:23424747 woeid:23424760 woeid:23424762 
+woeid:23424768 woeid:23424782 woeid:23424787 woeid:23424791 
+woeid:23424793 woeid:23424798 woeid:23424800 woeid:23424801 
+woeid:23424807 woeid:23424811 woeid:23424831 woeid:23424834 
+woeid:23424836 woeid:23424839 woeid:23424841 woeid:23424884 
+woeid:23424900 woeid:23424915 woeid:23424917 woeid:23424919 
+woeid:23424924 woeid:23424935 woeid:23424951 woeid:23424979 
+woeid:23424982'
 """	
 		assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 
 }
 
 /*
-woeid-index:24865716 Latin America
-woeid-index:23424747 Argentina
-woeid-index:23424760 Belize
-woeid-index:23424762 Bolivia
-woeid-index:23424768 Brazil
-woeid-index:23424782 Chile
-woeid-index:23424787 Colombia
-woeid-index:23424791 Costa Rica
-woeid-index:23424793 Cuba
-woeid-index:23424798 Dominica
-woeid-index:23424800 Dominican Republic
-woeid-index:23424801 Ecuador
-woeid-index:23424807 El Salvador
-woeid-index:23424811 French Guiana
-woeid-index:23424831 Guadeloupe
-woeid-index:23424834 Guatemala
-woeid-index:23424836 Guyana
-woeid-index:23424839 Haiti
-woeid-index:23424841 Honduras
-woeid-index:23424884 Martinique
-woeid-index:23424900 Mexico
-woeid-index:23424915 Nicaragua
-woeid-index:23424917 Paraguay
-woeid-index:23424919 Peru
-woeid-index:23424924 Panama
-woeid-index:23424935 Puerto Rico
-woeid-index:23424951 St. Lucia
-woeid-index:23424979 Uruguay
-woeid-index:23424982 Venezuela
+woeid:24865716 Latin America
+woeid:23424747 Argentina
+woeid:23424760 Belize
+woeid:23424762 Bolivia
+woeid:23424768 Brazil
+woeid:23424782 Chile
+woeid:23424787 Colombia
+woeid:23424791 Costa Rica
+woeid:23424793 Cuba
+woeid:23424798 Dominica
+woeid:23424800 Dominican Republic
+woeid:23424801 Ecuador
+woeid:23424807 El Salvador
+woeid:23424811 French Guiana
+woeid:23424831 Guadeloupe
+woeid:23424834 Guatemala
+woeid:23424836 Guyana
+woeid:23424839 Haiti
+woeid:23424841 Honduras
+woeid:23424884 Martinique
+woeid:23424900 Mexico
+woeid:23424915 Nicaragua
+woeid:23424917 Paraguay
+woeid:23424919 Peru
+woeid:23424924 Panama
+woeid:23424935 Puerto Rico
+woeid:23424951 St. Lucia
+woeid:23424979 Uruguay
+woeid:23424982 Venezuela
 */
 	

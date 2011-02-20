@@ -104,7 +104,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:086 contents:Monumentos contents:visitados contents:região contents:capital contents:"França" woeid-index:23424819
+label:086 contents:Monumentos contents:visitados contents:região contents:capital contents:"França" woeid:23424819
 
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 

@@ -58,8 +58,9 @@ class SplitNERulesEN extends SplitNEDetector {
         capture_NE_o_NE, 
         {SplitNEMatcherObject o, ListOfNE NEs -> 
             
-           // println "XXX NEs: $NEs"
-		//	println "XXX o.saskia_nes: ${o.saskia_nes}"
+  			log.debug("Rule Split NE rule 1 matched. NEs splitted: ${o.saskia_nes}")
+
+
             /** 1.1 The Main NE has a known classification, and the rightmost subNE is a Place
      * ACTION: Add the rightmost NE as an ALT
      * Exceptions: Main NE is a PESSOA, otherwise <PESSOA>Faria de Guimarães</PESSOA> gives <LOCAL>Guimarães</LOCAL>
@@ -73,18 +74,28 @@ class SplitNERulesEN extends SplitNEDetector {
             o.saskia_nes[1]?.matchesClassification([SC.place], 
             [AllOfThese, AllOfThem, rembrandt.obj.ClassificationCriteria.Category])) {
                 // there's a ListOfNE called NEs where I can add the split. 
-                NEs.generateALT(o.original_ne, [o.saskia_nes[1]], "RULE: SplitNERulesEN 1.1 ACTION: Generate ALT, include NE ${o.saskia_nes[1]}")		
-            }
+           
+			// there's a ListOfNE called NEs where I can add the split. 
+			log.debug("Rule SplitNERulesEN 1.1 with action Generate ALT performed. \
+				include NE ${o.saskia_nes[1]}")
+			//	println "Rule 1.1 in action"
+			
+     		NEs.generateALT(o.original_ne, [o.saskia_nes[1]], "RULE: SplitNERulesEN 1.1 ACTION: Generate ALT, include NE ${o.saskia_nes[1]}")		
+        }
             
             /** 1.2 The Main NE has an unknown classification, splitter is 'e' and the subNEs have classifications
-     * EXAMPLE: <EM>Portugal e Espanha</EM> -> <LOCAL>Portugal</L> e <LOCAL>Espanha</L>
-     *          <EM>PIS e Cofins</EM> -> <PLANO>PIS</L> e <PLANO>Cofins</L>    	
+     * EXAMPLE: <EM>Portugal and Espanha</EM> -> <LOCAL>Portugal</L> and <LOCAL>Espanha</L>
+     *          <EM>PIS and Cofins</EM> -> <PLANO>PIS</L> and <PLANO>Cofins</L>    	
      * ACTION: Remove original NE, add subNEs
      */	 
             else if (o.original_ne.hasUnknownClassification() &&      
             !o.saskia_nes[0]?.hasUnknownClassification() &&  
             !o.saskia_nes[1]?.hasUnknownClassification() && 
-            o.getMatchByClause(CC.gluer1_1c['en']).terms?.text.equals(["and"]) ) {	     
+            o.getMatchByClause(CC.gluer1_1c['en']).terms?.text.equals(["and"]) ) {	
+	
+				log.debug("Rule SplitNERulesEN 1.2 with action Replaced ${o.original_ne} \
+				with ${o.saskia_nes}")
+     
                 NEs.removeNEs(o.original_ne)
                 NEs.addNEs(o.saskia_nes, ConflictPolicy.JustAdd, "RULE: SplitNERulesEN 1.2 ACTION: added from splitted NE ${o.original_ne}")	 
             }
@@ -95,12 +106,16 @@ class SplitNERulesEN extends SplitNEDetector {
      */
             else if (o.original_ne.matchesClassification([SC.person_position], [ExistsAtLeastOneOfThese, AllOfThem, Type]) && 
             o.saskia_nes[1]?.matchesClassification([SC.place, SC.organization], 
-            [ExistsAtLeastOneOfThese, ExistsAtLeastOneOfThem,  rembrandt.obj.ClassificationCriteria.Category]) ) {			   
+            [ExistsAtLeastOneOfThese, ExistsAtLeastOneOfThem,  rembrandt.obj.ClassificationCriteria.Category]) ) {
+
+				log.debug("Rule SplitNERulesEN 1.3 with action Gerenate ALT, include \
+				NE ${o.saskia_nes[1]}")
+ 
                 NEs.generateALT(o.original_ne, [o.saskia_nes[1]],  "RULE: SplitNERulesEN 1.3 ACTION: Generate ALT, include NE ${o.saskia_nes[1]}")	    
             }    
             
             /** 1.4 Check for Persons glued by "and" 
-     *  EXAMPLE: <EM>George Bush e Boris Ieltsin</EM> 
+     *  EXAMPLE: <EM>George Bush and Boris Ieltsin</EM> 
      *  ACTION: simple split, remove main NE, add two subNEs
      *  EXCEPTIONS: Note names like  'José Ribeiro e Costa'. Split only for subNEs that are grounded.
      */
@@ -108,7 +123,8 @@ class SplitNERulesEN extends SplitNEDetector {
             o.saskia_nes[0]?.matchesClassification([SC.person_individual], [AllOfThese, AllOfThem, Type]) && 
             o.saskia_nes[1]?.matchesClassification([SC.person_individual], [AllOfThese, AllOfThem, Type]) && 
             o.getMatchByClause(CC.gluer1_1c['en']).terms?.text.equals(["and"]) ) { // && 
-                //o.saskia_nes[0].dbpediaPage && o.saskia_nes[1].dbpediaPage) {  
+					log.debug("Rule SplitNERulesPT 1.4 with action Replace NE \
+					${o.original_ne} with ${o.saskia_nes}")
                 NEs.removeNEs(o.original_ne)
                 NEs.addNEs(o.saskia_nes, ConflictPolicy.JustAdd, "RULE: SplitNERulesEN 1.4 ACTION: added from splitted NE ${o.original_ne}")		 
             }   	
@@ -127,18 +143,23 @@ class SplitNERulesEN extends SplitNEDetector {
         action:[{SplitNEMatcherObject o, ListOfNE NEs  -> o.lang=lang}, 
         capture_NE_o_NEoNE, 
         {SplitNEMatcherObject o, ListOfNE NEs -> 
-            
-            /** 2.1 - get a place from a organization. 
+  
+			log.debug("Rule Split NE rule 2A matched. NEs splitted: ${o.saskia_nes}")
+          
+            /** 2A.1 - get a place from a organization. 
      * EXAMPLE: Câmara Municipal de Ribeira de Pena
      * ACTION: Generate ALT
      */
             if (o.original_ne.matchesClassification([SC.organization],  [AllOfThese, AllOfThem,  rembrandt.obj.ClassificationCriteria.Category]) &&
             o.saskia_nes[1]?.matchesClassification([SC.place],  [AllOfThese, AllOfThem,  rembrandt.obj.ClassificationCriteria.Category]) ) {
                 // there's a ListOfNE called NEs where I can add the split. 
-                NEs.generateALT(o.original_ne, [o.saskia_nes[1]], "RULE: SplitNERulesEN 2A.1 ACTION: Generate ALT, include NE ${o.saskia_nes[1]}")		
+ 					log.debug("Rule SplitNERulesEN 2A.1 with action Generate ALT performed. \
+				include NE ${o.saskia_nes[1]}")
+
+               NEs.generateALT(o.original_ne, [o.saskia_nes[1]], "RULE: SplitNERulesEN 2A.1 ACTION: Generate ALT, include NE ${o.saskia_nes[1]}")		
             }
             
-            /** 2.2 - get a place from a building. 
+            /** 2A.2 - get a place from a building. 
      * EXAMPLE: Museu de Ribeira de Pena
      * ACTION: Generate ALT
      */
@@ -147,6 +168,19 @@ class SplitNERulesEN extends SplitNEDetector {
                 // there's a ListOfNE called NEs where I can add the split. 
                 NEs.generateALT(o.original_ne, [o.saskia_nes[1]], "RULE: SplitNERulesEN 2A.2 ACTION: Generate ALT, include NE ${o.saskia_nes[1]}")			
             }
+
+		  /** 2A.3 - persons 
+	     * EXAMPLE: Bill Clinton and Duke of Windsor
+	     * ACTION: replace EM para PESSOA
+	     */
+		    if (o.original_ne.hasUnknownClassification() &&
+		o.saskia_nes[0]?.matchesClassification([SC.person], [AllOfThese, AllOfThem,  rembrandt.obj.ClassificationCriteria.Category]) && 
+		o.saskia_nes[1]?.matchesClassification([SC.person], [AllOfThese, AllOfThem,  rembrandt.obj.ClassificationCriteria.Category])
+		  ) {
+		// there's a ListOfNE called NEs where I can add the split. 
+	        NEs.removeNEs(o.original_ne)
+	        NEs.addNEs(o.saskia_nes, ConflictPolicy.JustAdd, "RULE: SplitNERulesPT 2A.3 ACTION: added from splitted NE ${o.original_ne}")		
+	    }
             return true
         } ] ) ,
         
@@ -162,7 +196,7 @@ class SplitNERulesEN extends SplitNEDetector {
         capture_NEoNE_o_NE, 
         {SplitNEMatcherObject o, ListOfNE NEs  -> 
             
-            /** 2A.1 - get a place from a organization. 
+            /** 2B.1 - get a place from a organization. 
      * EXAMPLE: Academia de Belas-Artes de Viena
      * ACTION: Generate ALT
      */
@@ -181,6 +215,19 @@ class SplitNERulesEN extends SplitNEDetector {
                 // there's a ListOfNE called NEs where I can add the split. 
                 NEs.generateALT(o.original_ne, [o.saskia_nes[1]], "RULE: SplitNERulesEN 2B.2 ACTION: Generate ALT, include NE ${o.saskia_nes[1]}")		
             }
+
+		  /** 2B.3 - persons 
+	     * EXAMPLE: Duke of Windsor and Bill Clinton
+	     * ACTION: replace EM para PESSOA
+	     */
+		    if (o.original_ne.hasUnknownClassification() &&
+		o.saskia_nes[0]?.matchesClassification([SC.person], [AllOfThese, AllOfThem,  rembrandt.obj.ClassificationCriteria.Category]) && 
+		o.saskia_nes[1]?.matchesClassification([SC.person], [AllOfThese, AllOfThem,  rembrandt.obj.ClassificationCriteria.Category])
+		  ) {
+		// there's a ListOfNE called NEs where I can add the split. 
+	        NEs.removeNEs(o.original_ne)
+	        NEs.addNEs(o.saskia_nes, ConflictPolicy.JustAdd, "RULE: SplitNERulesPT 2A.3 ACTION: added from splitted NE ${o.original_ne}")		
+	    }
             return true
         } ] ) , 
         
@@ -209,6 +256,20 @@ class SplitNERulesEN extends SplitNEDetector {
                 // there's a ListOfNE called NEs where I can add the split. 
                 NEs.generateALT(o.original_ne, [o.saskia_nes[1]], "RULE: SplitNERulesEN 3B.1 ACTION: Generate ALT, include NE ${o.saskia_nes[1]}")				   
             }	
+
+		/** 3B.2 - persons 
+	     * EXAMPLE: Duke of Widsor and Duchess of Wellington
+	     * ACTION: replace EM para PESSOA
+	     */
+		    if (o.original_ne.hasUnknownClassification() &&
+		o.saskia_nes[0]?.matchesClassification([SC.person], [AllOfThese, AllOfThem,  rembrandt.obj.ClassificationCriteria.Category]) && 
+		o.saskia_nes[1]?.matchesClassification([SC.person], [AllOfThese, AllOfThem,  rembrandt.obj.ClassificationCriteria.Category])
+		  ) {
+		// there's a ListOfNE called NEs where I can add the split. 
+	        NEs.removeNEs(o.original_ne)
+	        NEs.addNEs(o.saskia_nes, ConflictPolicy.JustAdd, "RULE: SplitNERulesPT 3B.3 ACTION: added from splitted NE ${o.original_ne}")		
+	    }
+
             return true
         } ] )  
         ]

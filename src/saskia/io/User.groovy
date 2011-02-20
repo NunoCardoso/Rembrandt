@@ -28,11 +28,11 @@ import org.apache.log4j.*
 class User {
 
 	static String usr_table = "user"
-	static String uoc_table = "user_on_collection"
 	    
 	Long usr_id
 	String usr_login
 	Boolean usr_enabled
+	String usr_groups
 	Boolean usr_superuser
 	String usr_firstname
 	String usr_lastname
@@ -41,20 +41,26 @@ class User {
 	String usr_tmp_password 
 	String usr_api_key
 	String usr_tmp_api_key
+	String usr_pub_key
 	Integer usr_max_number_collections
+	Integer usr_max_number_tasks
 	Integer usr_max_docs_per_collection
 	Integer usr_max_daily_api_calls
 	Integer usr_current_daily_api_calls
-        Long usr_total_api_calls
-        Date usr_date_last_api_call
+   Long usr_total_api_calls
+   Date usr_date_last_api_call
         
-        static Map type = ['usr_id':'Long', 'usr_login':'String', 'usr_enabled':'Boolean',
-          'usr_superuser':'Boolean', 'usr_superuser':'String', 'usr_firstname':'String',
-          'usr_lastname':'String', 'usr_email':'String', 'usr_password':'String',
-          'usr_tmp_password':'String', 'usr_api_key':'String', 'usr_tmp_api_key':'String',
-          'usr_max_number_collections':'String','usr_max_docs_per_collection':'Integer',
-          'usr_max_daily_api_calls':'Integer', 'usr_current_daily_api_calls':'Integer',
-          'usr_total_api_calls':'Long','usr_date_last_api_call':'Date'] 
+   static Map type = ['usr_id':'Long', 
+	  'usr_login':'String', 'usr_enabled':'Boolean',
+     'usr_groups':'String','usr_superuser':'Boolean', 
+     'usr_superuser':'String', 'usr_firstname':'String',
+     'usr_lastname':'String', 'usr_email':'String', 
+	  'usr_password':'String', 'usr_tmp_password':'String', 
+	  'usr_api_key':'String', 'usr_tmp_api_key':'String','usr_pub_key':'String',
+     'usr_max_number_collections':'String','usr_max_number_collections':'String', 
+     'usr_max_docs_per_collection':'Integer',
+     'usr_max_daily_api_calls':'Integer', 'usr_current_daily_api_calls':'Integer',
+     'usr_total_api_calls':'Long','usr_date_last_api_call':'Date'] 
         
 	static HashMap guests = ["en":"Guest","pt":"Convidado"]
 	static String guest = "guest" 
@@ -64,22 +70,17 @@ class User {
 
 	// cache for user info
 	static Map <Long,User> cacheIDUser = [:]
- 	
-	// cache on user-colllection itens
-	static Map<Long,Map> cacheIDuoc = [:] // first ID is the usr_id, second ID is the col_id
-	// values: 
-	// uoc_can_read : true or false
-	// uoc_can_write : true or false
-	// uoc_can_admin : true or false
+	static Map <String,User> cacheAPIKeyUser = [:]
 	                                                                        
 	static List<User> queryDB(String query, ArrayList params = []) {
-	    List l = []
-	    User u = new User()
-	    db.getDB().eachRow(query, params, {row  -> 
+		List l = []
+		User u = new User()
+		db.getDB().eachRow(query, params, {row  -> 
 		u = new User()
 		u.usr_id = row['usr_id']
 		u.usr_login = row['usr_login']
 		u.usr_enabled = row['usr_enabled'] 
+		u.usr_groups = row['usr_groups']
 		u.usr_superuser = row['usr_superuser']
 		u.usr_firstname = row['usr_firstname']
 		u.usr_lastname = row['usr_lastname']
@@ -88,56 +89,79 @@ class User {
 		u.usr_api_key = row['usr_api_key']				
 		u.usr_tmp_password = row['usr_tmp_password']
 		u.usr_tmp_api_key = row['usr_tmp_api_key']
+		u.usr_pub_key = row['usr_pub_key']
 		u.usr_max_number_collections = row['usr_max_number_collections']
+		u.usr_max_number_tasks = row['usr_max_number_tasks']
 		u.usr_max_docs_per_collection = row['usr_max_docs_per_collection']
-                if (row['usr_max_daily_api_calls']) 
-                     u.usr_max_daily_api_calls = row['usr_max_daily_api_calls']
-                if (row['usr_current_daily_api_calls']) 
-                     u.usr_current_daily_api_calls = row['usr_current_daily_api_calls']
-                if (row['usr_current_daily_api_calls']) 
-                     u.usr_current_daily_api_calls = row['usr_current_daily_api_calls']
-                if (row['usr_total_api_calls']) 
-                     u.usr_total_api_calls = row['usr_total_api_calls']
-                if (row['usr_date_last_api_call']) 
-                     u.usr_date_last_api_call = (Date)(row['usr_date_last_api_call'])
+		if (row['usr_max_daily_api_calls']) 
+        u.usr_max_daily_api_calls = row['usr_max_daily_api_calls']
+
+      if (row['usr_current_daily_api_calls']) 
+        u.usr_current_daily_api_calls = row['usr_current_daily_api_calls']
+
+		if (u.usr_current_daily_api_calls == null)
+			u.usr_current_daily_api_calls = 0
+      
+		if (row['usr_total_api_calls']) 
+        u.usr_total_api_calls = row['usr_total_api_calls']
+      if (row['usr_date_last_api_call']) 
+         u.usr_date_last_api_call = (Date)(row['usr_date_last_api_call'])
  		l << u
 	   })
    	   return (l ? l : null)
 	}
     
-        /**
-         * Load the internal cache for users
-         */
+	public Map toMap() {
+	    return ['usr_id':usr_id, 'usr_login':usr_login, 
+		  'usr_enabled':usr_enabled, 
+	     'usr_groups':usr_groups, 
+	     'usr_firstname':usr_firstname, 'usr_lastname':usr_lastname,
+	     'usr_email':usr_email, 'usr_api_key':usr_api_key, 
+	     'usr_max_number_collections':usr_max_number_collections,
+	     'usr_max_number_tasks':usr_max_number_tasks,
+		  'usr_max_docs_per_collection':usr_max_docs_per_collection,
+		  'usr_max_daily_api_calls':usr_max_daily_api_calls, 
+		  'usr_current_daily_api_calls':usr_current_daily_api_calls,
+		  'usr_total_api_calls':usr_total_api_calls, 
+		  'usr_date_last_api_call':usr_date_last_api_call
+		]
+	}
+
+	public Map toSimpleMap() {
+	    return ['usr_id':usr_id, 'usr_login':usr_login]
+	}	
+   /**
+    * Load the internal cache for users
+    */
         static void refreshUserCache() {
             List l = queryDB("SELECT * FROM ${usr_table}")
-            l.each{  cacheIDUser[it.usr_id] = it }
+            l.each{ 
+					cacheIDUser[it.usr_id] = it 
+					cacheAPIKeyUser[it.usr_api_key] = it
+				}
         }
         
         public void enableUser() {
-	    usr_enabled=true
-	    cacheIDUser[usr_id].usr_enabled=true
-	    db.getDB().executeUpdate("UPDATE ${usr_table} set usr_enabled=1 where usr_id=?", [usr_id])
-	}
+	    	usr_enabled=true
+	    	cacheIDUser[usr_id].usr_enabled=true
+	    	db.getDB().executeUpdate("UPDATE ${usr_table} set usr_enabled=1 where usr_id=?", [usr_id])
+		}
 	
-	/**
-         * Load the internal cache for users
-         */
-        static Map getUserOnCollectionInfoForUser(long usr_id) {
-            //println "getUserOnCollectionInfoForUser called for $usr_id"
-            if (cacheIDuoc.containsKey(usr_id)) return cacheIDuoc[usr_id]
-            cacheIDuoc[usr_id] = [:]
-            db.getDB().eachRow("SELECT * FROM ${uoc_table} WHERE uoc_user=?",[usr_id], {row -> 
-                long col_id = row['uoc_collection']
-                if (!cacheIDuoc[usr_id].containsKey(col_id)) cacheIDuoc[usr_id][col_id] = [:]
-                cacheIDuoc[usr_id][col_id].uoc_own = row['uoc_own'] 
-                cacheIDuoc[usr_id][col_id].uoc_can_read = row['uoc_can_read'] 
-                cacheIDuoc[usr_id][col_id].uoc_can_write = row['uoc_can_write'] 
-                cacheIDuoc[usr_id][col_id].uoc_can_admin = row['uoc_can_admin']                
-         }) 
-         return cacheIDuoc[usr_id]
-        }
+	   public void generatePubKey() {
+			
+	    	String s = renoir.util.MD5Hex.digest(usr_login+System.currentTimeMillis())
+	    	cacheIDUser[usr_id].usr_pub_key=s
+	    	db.getDB().executeUpdate("UPDATE ${usr_table} set usr_pub_key=? where usr_id=?", [s, usr_id])
+		}
+		
+		/** get my groups in a nice way */
+		 
+			List getGroups() {
+			 if (!usr_groups) return null
+			 return usr_groups.split(";").findAll{it != ""} 
+			}
         
-        static HashMap getUsers( limit = 0,  offset = 0, column = null, needle = null) {
+        static HashMap listUsersForAdminUser(limit = 0,  offset = 0, column = null, needle = null) {
 	    // limit & offset can come as null... they ARE initialized...
     
             if (!cacheIDUser) refreshUserCache()
@@ -176,8 +200,7 @@ class User {
  	
 	static boolean isSuperUserByAPIKey(String api_key) {
 	    if (!cacheIDUser) refreshUserCache()
-	    User u = cacheIDUser.values().toList().find{it.usr_api_key == api_key}
-	    return u.usr_superuser
+	    return getFromAPIKey(api_key).isSuperUser()
 	}
 	
 	public static boolean isGuestUser(String user, String lang) {
@@ -191,16 +214,7 @@ class User {
 	
 	public boolean isEnabled() {
 	    return usr_enabled
-	}
-		
-	static setUserCollectionPermissions(long usr_id, long col_id, String column, newvalue) {
-	    def res = db.getDB().executeUpdate("UPDATE ${uoc_table} SET ${column}=? WHERE uoc_user=? and uoc_collection=?",
-		    [newvalue, usr_id, col_id])
-            if (!cacheIDuoc[usr_id]) cacheIDuoc[usr_id] = [:]
-            if (!cacheIDuoc[usr_id][col_id])  cacheIDuoc[usr_id][col_id] = [:]
-            cacheIDuoc[usr_id][col_id].'$column' = newvalue
-	    return res
-	}
+	}		
 	
 	static User getFromLogin(String login) {
 		if (!login) return null
@@ -210,36 +224,28 @@ class User {
     
 	static User getFromID(long id) {
 		if (!id) return null
-                if (!cacheIDUser) refreshUserCache()
+      if (!cacheIDUser) refreshUserCache()
 		return cacheIDUser[id]
-        }
+   }
     
 	static User getFromEmail(String email) {
-            if (!email) return null
-            if (!cacheIDUser) refreshUserCache()
-            return cacheIDUser.values().find{it.usr_email == email}
+		if (!email) return null
+		if (!cacheIDUser) refreshUserCache()
+		return cacheIDUser.values().find{it.usr_email == email}
 	}
 	
 	static User getFromAPIKey(String api_key) {
-            if (!api_key) return null
-            if (!cacheIDUser) refreshUserCache()
-            return cacheIDUser.values().find{it.usr_api_key == api_key}
+		if (!api_key) return null
+		if (!cacheIDUser) refreshUserCache()
+		return cacheAPIKeyUser[api_key]
 	}
     	
 	static User getFromTempAPIKey(String tmp_api_key) {
 	    if (!tmp_api_key) return null
 	    if (!cacheIDUser) refreshUserCache()
 	    return cacheIDUser.values().find{it.usr_tmp_api_key == tmp_api_key}
-       }
-    
-        int collectionsOwned() {
-            if (!usr_id) return null
-            int i = 0
-            db.getDB().eachRow("SELECT count(*) from user_on_collection WHERE "+
-		    "uoc_user=? and uoc_own = 1",[usr_id], {row -> i = row[i]})
-            return i
-        }
-        
+   }
+         
 	boolean canExecuteAPICall() {
 	    GregorianCalendar now = new GregorianCalendar()
             GregorianCalendar lastAPIcall = new GregorianCalendar()
@@ -266,6 +272,7 @@ class User {
         }
         
         int addAPIcount() {
+			//	println toMap()
             usr_current_daily_api_calls++
             usr_total_api_calls++
             cacheIDUser[usr_id].usr_current_daily_api_calls++
@@ -276,87 +283,8 @@ class User {
             return usr_current_daily_api_calls
         }
         
-        boolean canReadCollection(Collection collection) {
-            if (!collection) return null
-            Map res = getUserOnCollectionInfoForUser(usr_id)
-            //println "res: $res"
-            //Note: if there is nothing on user_on_collection, it's because user CAN'T DO ANYTHING.
-            // so, return false if not found.
-             return (res[collection.col_id]? res[collection.col_id]?.uoc_can_read : false)
-        }
-        
-	boolean canWriteCollection(Collection collection) {
-            if (!collection) return null
-            Map res = getUserOnCollectionInfoForUser(usr_id)
-            return (res[collection.col_id]? res[collection.col_id]?.uoc_can_write : false)	    
-	}
-	
-	boolean canAdminCollection(Collection collection) {
-            if (!collection) return null
-            Map res = getUserOnCollectionInfoForUser(usr_id)
-            return (res[collection.col_id]? res[collection.col_id]?.uoc_can_admin : false) 
-        }
-	
-	boolean canCreateCollection() {           
-            return usr_max_number_collections > collectionsOwned()       	
-        }
-	
-	/* if null, uses all collections */
-	public List<HashMap> getUserCollectionPermissionsOn(Collection collection = null) {
-	    def res = []
-      	    Map map = getUserOnCollectionInfoForUser(usr_id)
-	    if (!collection) {
-		map.each{col_id, perms-> 
-		  Collection col = Collection.getFromID(col_id)
-		  res << [id:col_id, col_name:col.col_name, own:perms.uoc_own, can_read:perms.uoc_can_read, 
-			can_write:perms.uoc_can_write, can_admin:perms.uoc_can_admin]
-		}  
-	    } else {
-		res << [id:collection.col_id, col_name:col.col_name, own:perms.uoc_own, can_read:map[col_id].uoc_can_read, 
-		        can_write:map[col_id].uoc_can_write, can_admin:map[col_id].uoc_can_admin]
-	    }
-	    return (res ? res: null)
-	}
-	
-	/* if null, uses all collections */
-	public List<HashMap> getReadableCollections() {
-	    List res = []
-	    Map map = getUserOnCollectionInfoForUser(usr_id)
-            map.findAll{col_id, perms -> perms.uoc_can_read}.each{col_id, perms -> 
-               Collection collection = Collection.getFromID(col_id)
-               res << ["col_id":collection.col_id,"col_lang":collection.col_lang,
-                       "col_name":collection.col_name, "col_comment":collection.col_comment]
-           }
-	   return res 
-	}
-	
-	public List<HashMap> getAllCollectionsForSuperUser() {
-	    List res = []
-	    if (!Collection.cacheIDCollection) Collection.refreshCache()
-	    Collection.cacheIDCollection.each{col_id, collection -> 
-               res << ["col_id":collection.col_id,"col_lang":collection.col_lang,
-                       "col_name":collection.col_name, "col_comment":collection.col_comment]
-           }
-	   return res 
-	}
-	
-	public List setNewPermissionsOnCollection() {
-	    if (!usr_id) return null
-	    List res = []
-	    Map map = getUserOnCollectionInfoForUser(usr_id) // force it to have parm info on user 
-	    db.getDB().executeInsert("INSERT INTO user_on_collection(uoc_user, uoc_collection, uoc_can_read) "+
-		    "SELECT ${usr_id}, col_id, col_new_user_can_read from collection where col_new_user_can_read=1")
-		db.getDB().eachRow("SELECT col_name, col_id FROM user_on_collection, collection WHERE "+
-		    "col_id=uoc_collection and uoc_user=? and uoc_can_read=1", [usr_id], {row -> 
-		    res << row[0] // col_name
-		    long col_id = row[1]
-                    if (!cacheIDuoc[usr_id]) cacheIDuoc[usr_id] = [:]
-                    if (!cacheIDuoc[usr_id][col_id])  cacheIDuoc[usr_id][col_id] = [:]
-                    cacheIDuoc[usr_id][col_id].uoc_can_read = 1
-		})
-		return res
-	}
-	
+ 
+		
 	public void insertTempPassword(String password) {
 	    db.getDB().executeUpdate("UPDATE ${usr_table} set usr_tmp_password=? where usr_id=?",
 		   [password, usr_id])
@@ -371,9 +299,12 @@ class User {
 	
 	public void updatePasswordAndAPIKeyFromTemp() {
 	    db.getDB().executeUpdate("UPDATE ${usr_table} set usr_password=usr_tmp_password, "+
-		"usr_api_key=usr_tmp_api_key  where usr_id=?", [usr_id])
+		"usr_api_key=usr_tmp_api_key where usr_id=?", [usr_id])
             cacheIDUser[usr_id].usr_password = cacheIDUser[usr_id].usr_tmp_password
-            cacheIDUser[usr_id].usr_api_key = cacheIDUser[usr_id].usr_tmp_api_key           
+            cacheAPIKeyUser[usr_tmp_api_key] = cacheAPIKeyUser[usr_api_key]
+				cacheAPIKeyUser.remove(usr_api_key)
+            cacheIDUser[usr_id].usr_api_key = cacheIDUser[usr_id].usr_tmp_api_key  
+
 	}
 	
 	public void updatePassword(String password) {
@@ -384,10 +315,14 @@ class User {
     
 	static int deleteUser(long usr_id) {
 	    if (!usr_id) return null
-	    def res = db.getDB().executeUpdate("DELETE FROM ${usr_table} WHERE usr_id=?", [usr_id])
+		 User u = User.getFromID(usr_id)
+		 return u?.removeThisFromDB()
+	}
+	
+	public removeThisFromDB() {
+		 def res = db.getDB().executeUpdate("DELETE FROM ${usr_table} WHERE usr_id=?", [usr_id])
 	    cacheIDUser.remove(usr_id)
-	    cacheIDuoc.remove(usr_id)	  
-	    println cacheIDUser
+	    Collection.cacheIDuoc.remove(usr_id)	  
 	    return res	    
 	}
 	
@@ -402,13 +337,18 @@ class User {
             
 	    def res = db.getDB().executeUpdate("UPDATE ${usr_table} SET ${column}=? WHERE usr_id=?",[newval, usr_id])
 	    cacheIDUser[usr_id][column] = newval
+		 if (column == "usr_api_key") {
+			 cacheAPIKeyUser.remove(usr.usr_api_key)
+			 usr.usr_api_key = newval
+			 cacheAPIKeyUser[newval] = usr
+		 }
 	    return res
 	}
 	
 	public long addThisToDB() {		
-	    def res = db.getDB().executeInsert("INSERT INTO ${usr_table} VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
-		    [usr_login, usr_enabled, usr_superuser, usr_firstname, usr_lastname, usr_email, usr_password, 
-		     usr_tmp_password, usr_api_key, usr_tmp_api_key, usr_max_number_collections,
+	    def res = db.getDB().executeInsert("INSERT INTO ${usr_table} VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+		    [usr_login, usr_enabled, usr_groups, usr_superuser, usr_firstname, usr_lastname, usr_email, usr_password, 
+		     usr_tmp_password, usr_api_key, usr_tmp_api_key, usr_pub_key, usr_max_number_collections,
 		     usr_max_docs_per_collection, usr_max_daily_api_calls, usr_current_daily_api_calls,
 		     usr_total_api_calls, usr_date_last_api_call] )
             usr_id = (long)res[0][0]     
@@ -416,6 +356,10 @@ class User {
 	    // returns an auto_increment value
 	    return usr_id
 	}	
+	
+	public boolean equals(User user) {
+		return this.usr_id == user.usr_id
+	}
 	
 	public String toString() {
 		return "${usr_id}:${usr_login}"

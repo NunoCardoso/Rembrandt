@@ -38,9 +38,9 @@ import renoir.obj.*
     void testParse() {
         String x = "qe:BRF search:true presidente "+
         "presidente^0.5 \"Aníbal\" \"Cavaco Silva\" "+
-        "ne-PESSOA-index:\"Cavaco Silva\"^2 ne-PESSOA-index:Aníbal^0.1 "+
-        "woeid-index:l352526 "+
-        "model:BM25 ne-PESSOA-weight:2 term-weight:1" 
+        "ne-PESSOA:\"Cavaco Silva\"^2 ne-PESSOA:Aníbal^0.1 "+
+        "woeid:l352526 "+
+        "model:BM25 ne-PESSOA-weight:2 contents-weight:1" 
         
         // creates a query out of a string 
         RenoirQuery rq = RenoirQueryParser.parse(x) 

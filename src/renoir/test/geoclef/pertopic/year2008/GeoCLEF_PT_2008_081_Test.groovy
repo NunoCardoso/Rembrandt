@@ -108,8 +108,8 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:081 contents:Cimeiras contents:G7 contents:países contents:"Mar Mediterrâneo" woeid-index:55959718   woeid-index:23424742 woeid-index:23424740 woeid-index:23424761 woeid-index:23424843 woeid-index:26812346 woeid-index:23424802 woeid-index:23424819 woeid-index:23424825 woeid-index:23424833 woeid-index:23424852 woeid-index:23424853 woeid-index:23424873 woeid-index:23424882 woeid-index:23424897 woeid-index:23424892
-woeid-index:20069817 woeid-index:23424893 woeid-index:23424945 woeid-index:23424950 woeid-index:23424956 woeid-index:23424967 woeid-index:23424969 
+label:081 contents:Cimeiras contents:G7 contents:países contents:"Mar Mediterrâneo" woeid:55959718   woeid:23424742 woeid:23424740 woeid:23424761 woeid:23424843 woeid:26812346 woeid:23424802 woeid:23424819 woeid:23424825 woeid:23424833 woeid:23424852 woeid:23424853 woeid:23424873 woeid:23424882 woeid:23424897 woeid:23424892
+woeid:20069817 woeid:23424893 woeid:23424945 woeid:23424950 woeid:23424956 woeid:23424967 woeid:23424969 
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

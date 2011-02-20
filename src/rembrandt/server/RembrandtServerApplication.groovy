@@ -34,7 +34,7 @@ import org.restlet.data.Status
  */
 public class RembrandtServerApplication extends Application {
 
-	Logger log = Logger.getLogger("RembrandtServer")
+	Logger log = Logger.getLogger("RembrandtServerMain")
 	Configuration conf
 	
 	public RembrandtServerApplication(Configuration conf) {

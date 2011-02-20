@@ -108,7 +108,7 @@ label:100 Natural disasters in the western USA
 
 		println refq.toString()
 		String reformulated_x = """
-label:083 contents:Demonstrations contents:against contents:terrorism contents:"Northern Africa" woeid-index:24865722 woeid-index:23424740 woeid-index:23424802 woeid-index:23424882 woeid-index:23424893 woeid-index:23424952 woeid-index:23424967 woeid-index:23424990
+label:083 contents:Demonstrations contents:against contents:terrorism contents:"Northern Africa" woeid:24865722 woeid:23424740 woeid:23424802 woeid:23424882 woeid:23424893 woeid:23424952 woeid:23424967 woeid:23424990
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

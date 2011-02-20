@@ -106,7 +106,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:082 contents:"Agricultura" contents:Península contents:Ibérica entity:Agriculture woeid-index:24865713 woeid-index:23424744 woeid-index:23424825 woeid-index:23424925 woeid-index:23424950
+label:082 contents:"Agricultura" contents:Península contents:Ibérica entity:Agriculture woeid:24865713 woeid:23424744 woeid:23424825 woeid:23424925 woeid:23424950
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

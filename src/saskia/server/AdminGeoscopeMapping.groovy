@@ -25,8 +25,9 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
     I18n i18n
-    static Logger log = Logger.getLogger("SaskiaServer") 
-    static Logger log2 = Logger.getLogger("SaskiaService") 
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
  
     public AdminGeoscopeMapping() {
         
@@ -34,20 +35,23 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
         
         JSONanswer = {req, par, bind ->
             long session = System.currentTimeMillis()
-            log2.debug "Session $session triggered with $par" 
+            processlog.debug "Session $session triggered with $par" 
             
-            int limit, offset
+            int limit
+				long offset
             def column, value
             
             // core stuff
             String action = par["POST"]["do"] //show, update, etc
             String lang = par["POST"]["lg"] 
             
-            ServerMessage sm = new ServerMessage("AdminGeoscopeMapping", lang, bind, session)  
+            ServerMessage sm = new ServerMessage("AdminGeoscopeMapping", lang, bind, session, processlog)  
             
             // pager stuff
             if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
-            if (par["POST"]["o"]) offset = Integer.parseInt(par["POST"]["o"])
+				if (!limit) limit = 0
+            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
             
@@ -58,118 +62,114 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
                                                       
             User user = User.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
-            if (!user.isSuperUser()) return sm.noSuperUser()
             if (!user.isEnabled()) return sm.userNotEnabled()
-            
-            if (!action || !lang) return sm.notEnoughVars(lang, "do=$action, lg=$lang")      
-        	
+				// all Admin*Mappings must have this
+				if (!user.isSuperUser()) return sm.noSuperUser()
+            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
             sm.setAction(action)
            
-            /***************************/
-            /** 1.1 show - PAGE geoscopes **/
-            /***************************/
+            /******************************/
+            /** 1.1 show - PAGE geoscopes */
+            /******************************/
 
-            if (action == "show") {
-        	Map h
-                try {
-                    log.debug "Querying Geoscopes: limit $limit offset $offset column $column value $value"
-                    h = Geoscope.getGeoscopes(limit, offset, column, value)
-                } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_geoscope_list"][lang]+": "+e.getMessage())
+            if (action == "list") {
+        			Map h
+               try {
+                   h = Geoscope.listGeoscopes(limit, offset, column, value)
+               } catch(Exception e) {
+                  errorlog.error i18n.servermessage['error_getting_geoscope_list'][lang]+": "+e.printStackTrace() 
+						return sm.statusMessage(-1, i18n.servermessage["error_getting_geoscope_list"][lang]+": "+e.getMessage())
                 }
                 
                 // you have to "JSONize" the NEs
                 h.result.eachWithIndex{geo, i -> h.result[i] = geo.toMap() }
-
-                return sm.statusMessage(0,h)
+                return sm.statusMessageWithPubKey(0,h,user.usr_pub_key)
             }
             
-            /***************************/
+            /*********************************/
             /** 1.2 update a Geoscope value **/
-            /***************************/
+            /*********************************/
             
             if (action == "update") {
         	
-        	Long id
-                if (par["POST"]["id"]) id = Long.parseLong(par["POST"]["id"])
-                if (!id) return sm.notEnoughVars("id=$id")
+        			Long id
+               if (par["POST"]["id"]) 
+					try {id = Long.parseLong(par["POST"]["id"])}
+					catch(Exception e) {}
+               if (!id) return sm.notEnoughVars("id=$id")
+               if (!column || !value) return sm.notEnoughVars("c=$column v=$value")
                 
-                if (!column || !value) return sm.notEnoughVars("c=$column v=$value")
-                
-                Geoscope geo
-                try {
-                    log.debug "Querying Geoscope with id $id"
+               Geoscope geo
+               try {
                     geo = Geoscope.getFromID(id)
-                } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_geoscope_list"][lang]+": "+e.getMessage())                 
-                }
-                
-                def res
-                try {
+               } catch(Exception e) {
+                    errorlog.error i18n.servermessage['error_getting_geoscope'][lang]+": "+e.printStackTrace() 
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_geoscope"][lang]+": "+e.getMessage())                 
+               }
+					int res = 0
+               try {
                     res = geo.updateValue(c, v)
-                }  catch(Exception e) {
+               } catch(Exception e) {
+                    errorlog.error i18n.servermessage['error_updating_geoscope'][lang]+": "+e.printStackTrace() 
                     return sm.statusMessage(-1, i18n.servermessage["error_updating_geoscope"][lang]+": "+e.getMessage())                 
-                }
-                return sm.statusMessage(0, geo.toMap())
-
+               }
+                return sm.statusMessageWithPubKey(res, geo.toMap(), user.usr_pub_key)
             } 
                 
-            /***************************************/
-            /** 1.3 delete - DELETE Geoscope (admin only) **/
-            /***************************************/
+            /**********************************/
+            /** 1.3 delete - DELETE Geoscope **/
+            /**********************************/
            
             if (action == "delete") {
                 Long id 
-                try {
-                    id = Long.parseLong(par["POST"]["id"])                      
-                }catch(Exception e) {}
-                               
+                try {id = Long.parseLong(par["POST"]["id"])                      
+                }catch(Exception e) {}                               
                 if (!id)  return sm.notEnoughVars("id=$id")      
-                Geoscope geo 
+                
+					 Geoscope geo 
                 try {
-                    log.debug "Querying Geoscope with id $id"
                     geo = Geoscope.getFromID(id)
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_geoscope_list"][lang]+": "+e.getMessage())                 
+                    errorlog.error i18n.servermessage['error_getting_geoscope'][lang]+": "+e.printStackTrace() 
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_geoscope"][lang]+": "+e.getMessage())                 
                 }
-                          
+                def res          
                 try {
-                    log.debug "deleting geoscope $id"
-                    answer = geo.deleteGeoscope() 
-                } catch(Exception e) {return sm.statusMessage(-1, i18n.servermessage["error_deleting_geoscope"][lang]+": "+e.getMessage())}
-                  
+                    res = geo.deleteGeoscope() 
+                } catch(Exception e) {
+                   errorlog.error i18n.servermessage['error_deleting_geoscope'][lang]+": "+e.printStackTrace() 
+ 						return sm.statusMessage(-1, i18n.servermessage["error_deleting_geoscope"][lang]+": "+e.getMessage())
+					 }                 
                 //RETURNS 1 IF UPDATED
-                return sm.statusMessage(answer, i18n.servermessage['ok'][lang])		   	
+                return sm.statusMessageWithPubKey(res, i18n.servermessage['ok'][lang],user.usr_pub_key)		   	
             }    
             
-            /***************************************/
-            /** 1.4 create **/
-            /***************************************/
+            /*************************/
+            /** 1.4 create geoscope **/
+            /*************************/
            
             if (action == "create") {
                   
                String geo_name = par["POST"]["geo_name"]
                Long geo_woeid
-               try {
-        	   geo_woeid = Long.parseLong(par["POST"]["geo_woeid"])
+               try {geo_woeid = Long.parseLong(par["POST"]["geo_woeid"])
                } catch(Exception e) {}
                Integer geo_woeid_type 
-               try {
-        	   geo_woeid_type = Integer.parseInt(par["POST"]["geo_woeid_type"])
+               try {geo_woeid_type = Integer.parseInt(par["POST"]["geo_woeid_type"])
                } catch(Exception e) {}
               
-               Geoscope geo = new Geoscope(geo_name:geo_name, 
-        	       geo_woeid:geo_woeid,
-        	       geo_woeid_type:geo_woeid_type)
+					if (!geo_name || !geo_woeid || !geo_woeid_type) return sm.notEnoughVars("$geo_name, $geo_woeid, $geo_woeid_type")      
+
+               Geoscope geo 
                try {
-                    log.debug "Adding Geoscope"
-                    geo.addThisToDB()
+                    geo = new Geoscope(geo_name:geo_name, geo_woeid:geo_woeid, geo_woeid_type:geo_woeid_type)
+                    geo.geo_id = geo.addThisToDB()
                 } catch(Exception e) {
+                    errorlog.error i18n.servermessage['error_creating_geoscope'][lang]+": "+e.printStackTrace() 
                     return sm.statusMessage(-1, i18n.servermessage["error_creating_geoscope"][lang]+": "+e.getMessage())                 
                 }
                
-                //RETURNS 1 IF UPDATED
-                return sm.statusMessage(0, geo.toMap())		   	
+                return sm.statusMessageWithPubKey(0, geo.toMap(),user.usr_pub_key)	   	
             }    
             
             return sm.unknownAction()

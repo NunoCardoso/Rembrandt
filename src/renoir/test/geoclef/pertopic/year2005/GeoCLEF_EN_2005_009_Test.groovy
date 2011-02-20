@@ -84,18 +84,18 @@ import rembrandt.gazetteers.CommonClassifications as SC
 		println refq.toString()
 		String reformulated_x = """
 label:009 contents:child contents:labor contents:"Asia" 
-woeid-index:24865671 woeid-index:20070017 woeid-index:23424738 woeid-index:23424739 woeid-index:23424741 
-woeid-index:23424743 woeid-index:23424753 woeid-index:23424759 woeid-index:23424763 woeid-index:23424770 
-woeid-index:23424773 woeid-index:23424776 woeid-index:23424778 woeid-index:23424781 woeid-index:23424784 
-woeid-index:23424823 woeid-index:23424846 woeid-index:23424848 woeid-index:23424849 woeid-index:23424851 
-woeid-index:23424852 woeid-index:23424855 woeid-index:23424856 woeid-index:23424860 woeid-index:23424864 
-woeid-index:23424865 woeid-index:23424868 woeid-index:23424869 woeid-index:23424870 woeid-index:23424871 
-woeid-index:23424872 woeid-index:23424873 woeid-index:23424887 woeid-index:23424898 woeid-index:23424899 
-woeid-index:23424901 woeid-index:23424911 woeid-index:23424921 woeid-index:23424922 woeid-index:23424928 
-woeid-index:23424930 woeid-index:23424934 woeid-index:23424936 woeid-index:23424938 woeid-index:23424948 
-woeid-index:23424956 woeid-index:23424960 woeid-index:23424961 woeid-index:23424968 woeid-index:23424969 
-woeid-index:23424971 woeid-index:23424972 woeid-index:23424980 woeid-index:23424984 woeid-index:23424997 
-woeid-index:23424998 woeid-index:23425002 woeid-index:24865698 woeid-index:28289408
+woeid:24865671 woeid:20070017 woeid:23424738 woeid:23424739 woeid:23424741 
+woeid:23424743 woeid:23424753 woeid:23424759 woeid:23424763 woeid:23424770 
+woeid:23424773 woeid:23424776 woeid:23424778 woeid:23424781 woeid:23424784 
+woeid:23424823 woeid:23424846 woeid:23424848 woeid:23424849 woeid:23424851 
+woeid:23424852 woeid:23424855 woeid:23424856 woeid:23424860 woeid:23424864 
+woeid:23424865 woeid:23424868 woeid:23424869 woeid:23424870 woeid:23424871 
+woeid:23424872 woeid:23424873 woeid:23424887 woeid:23424898 woeid:23424899 
+woeid:23424901 woeid:23424911 woeid:23424921 woeid:23424922 woeid:23424928 
+woeid:23424930 woeid:23424934 woeid:23424936 woeid:23424938 woeid:23424948 
+woeid:23424956 woeid:23424960 woeid:23424961 woeid:23424968 woeid:23424969 
+woeid:23424971 woeid:23424972 woeid:23424980 woeid:23424984 woeid:23424997 
+woeid:23424998 woeid:23425002 woeid:24865698 woeid:28289408
 """		
 
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 

@@ -1,6 +1,6 @@
 REQUIRED:
 =========
-* groovy 1.7.o
+* groovy 1.7.X
 * mysql-connector 5.1.7
 * lucene 2.4.0
 * log4j 1.X
@@ -18,7 +18,7 @@ REQUIRED:
 * jul-to-slf4j-1.5.8.jar
 * slf4j-api-1.5.8.jar
 * slf4j-log4j12-1.5.8.jar
-* junit (lgte?)
+* junit
 * webstore (plus tumba-utils)
 
 SUBDEPENDENCIES: 

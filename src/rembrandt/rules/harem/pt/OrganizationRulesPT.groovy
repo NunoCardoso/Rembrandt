@@ -28,6 +28,8 @@ import rembrandt.gazetteers.pt.OrganizationGazetteerPT
 import rembrandt.gazetteers.NEGazetteer
 import rembrandt.gazetteers.SemanticClassificationDefinitions as Classes
 import rembrandt.rules.NamedEntityDetector
+import rembrandt.gazetteers.pt.ClausesPT
+
 /**
  * @author Nuno Cardoso
  * Rules for capturing ORGANIZACAO categories 
@@ -49,6 +51,14 @@ class OrganizationRulesPT extends NamedEntityDetector {
     	rules.add(new Rule(id:"ExternalEvidence EMPRESA 1", description:"empresa! {<EM>!}",
     	sc:SC.organization_company, policy:RulePolicy.Clause, clauses:[ 
     	        OrganizationGazetteerPT.empresaClause1nc, 
-	        NEGazetteer.NE_Anything_Except_NUMERO_TEMPO_VALOR_1c] ))				
+	        NEGazetteer.NE_Anything_Except_NUMERO_TEMPO_VALOR_1c] ))
+	
+	 	// 1. ministro dos! {<EM>!}
+    	rules.add(new Rule(id:"ExternalEvidence ADMINISTRACAO 1", description:"ministro! d[aeo]s! {<EM>!}",
+    	sc:SC.organization_administration, policy:RulePolicy.Clause, clauses:[ 
+    	        OrganizationGazetteerPT.ministroClause1nc, 
+	        	ClausesPT.daeos1nc,
+				NEGazetteer.NE_Anything_Except_NUMERO_TEMPO_VALOR_1c] ))				
+					
 	}
 }

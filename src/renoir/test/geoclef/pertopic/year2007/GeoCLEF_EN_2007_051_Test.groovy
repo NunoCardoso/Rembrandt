@@ -110,7 +110,7 @@ label:075 Violation of human rights in Burma
 
 		println refq.toString()
 		String reformulated_x = """
-label:050 contents:"Cities" contents:along contents:"Danube" contents:"Rhine" woeid-index:26354151 woeid-index:2635412
+label:050 contents:"Cities" contents:along contents:"Danube" contents:"Rhine" woeid:26354151 woeid:2635412
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

@@ -5,19 +5,7 @@ NOTE: for more updated info and details / troubleshoot, please visit http://xldb
 
 1. Software requirements
 
-1.1 Main jars: 
-   - rembrandt-0.8.X.jar
-
-1.2 Additional mandatory jars: 
-   - groovy-all-1.6.X.jar (get it at http://groovy.codehaus.org)
-   - log4j-1.2.X.jar (get it at http://logging.apache.org/log4j)
-   - lucene-core-2.4-X.jar (get it at http://lucene.apache.org)
-   - mysql-connector-5.1.X-bin.jar (if using MySQL - get it at http://www.mysql.com/products/connector-j)
-
-1.3 Additional optional jars (not required for simple NE tagging)
-   - hadoop-0.1X.X.jar (for map-reduce process, get it at http://hadoop.apache.org)
-   - xstream-1.3.X.jar (for server-client processes)
-   - groovy-xmlrpc-0.4.jar (for server-client processes)
+1.1 Main jars: see DEPENDENCIES.txt
 
 1.4 Database server
 
@@ -76,16 +64,24 @@ On a command line, type:
 echo "Rembrandt" | java rembrandt.bin.Rembrandt
 
 The output should be:
-<EM ID="UnknownID-0" CATEG="PESSOA" TIPO="INDIVIDUAL" COMENT="1465985(Rembrandt)">Rembrandt</EM>
+
+<!-- Rembrandted by v.1.2 -->
+<DOC DOCID="stdin-1" LANG="pt">
+<TITLE>
+</TITLE>
+<BODY>
+{<EM ID="0" S="0" T="0" C1="PESSOA" C2="INDIVIDUAL" DB="Rembrandt">[Rembrandt]</EM>}
+</BODY>
+</DOC>
 
 The number on the COMENT reports to the page_id on the pt_page table; see it as an identifier for the resource pt.wikipedia.org/wiki/Rembrandt.
 
 4.1 Encodings may ruin everything. You can configure the parameter: 
       - rembrandt.input.encoding
-	  - rembrandt.output.encoding
-	  - rembrandt.err.encoding
-  to ensure that the right encodings are used, either in the stdin/stdout/stderr 
-streams, or in the files read/written.
+      - rembrandt.output.encoding
+      - rembrandt.err.encoding
+to ensure that the right encodings are used, either in the stdin/stdout/stderr 
+streams, or in the files read/written. 
 
 4.2 To load text from a file, set up the rembrandt.input.type and rembrandt.input.value.
 To write to a file, set up the rembrandt.output.type and rembrandt.output.value parameters.
@@ -97,36 +93,7 @@ java -Drembrandt.input.type=File -Drembrandt.input.value=file1.txt
 
 will read from a file named file1.txt, and write to a file2.txt. Check the encodings!
 
-4.3. The stderr stream can be used to output a NE summary. By default, it is associated 
-to a NullWriter, which outputs nothing. If we associate to a NEWriter, for instance, and 
-to a file, like this:
-
-echo "Rembrandt" | java -Drembrandt.err.type=File -Drembrandt.err.value=file3.txt 
--Drembrandt.err.writer=rembrandt.io.NEWriter rembrandt.bin.Rembrandt
-
-file3.txt will have detailed information about NEs in a XML format of Second HAREM:
-
-<?xml version="1.0" encoding="UTF-8" ?>
-<colHAREM versao="Rembrandted by v.0.8.8">
-<DOC DOCID="UnknownID">
-<NE id="UnknownID-0" sentenceNumber="0" firstTokenNumber="0">
-<TERMS>Rembrandt</TERMS>
-<CATEG>PESSOA</CATEG>
-<TYPE>INDIVIDUAL</TYPE>
-<SUBTYPE>null</SUBTYPE>
-<WIKIPEDIAPAGEID>1465985</WIKIPEDIAPAGEID>
-<WIKIPEDIAPAGETITLE>Rembrandt</WIKIPEDIAPAGETITLE>
-<COMMENT>1465985(Rembrandt)</COMMENT>
-<HISTORY>
-replace classification from NE:NE:0:0:cat(PESSOA):typ(INDIVIDUAL):sub(null):[Rembrandt]
-added NE:0:0:cat(EM):[Rembrandt]
-NE found by rule EM1, with terms [Rembrandt]
-</HISTORY>
-</NE>
-</DOC>
-</colHAREM>
-
-4.4. For batch process of several files, one can bundle them either in Second HAREM's XML format, or in a HTML/XML-ish file (with a root tag <htmlset> containing one or more <html> tags) to separate documents. The HTML/XML-ish format strips HTML tags and only tags the body. The writing format can also be configured in a similar way. 
+4.3. For batch process of several files, one can bundle them either in Second HAREM's XML format, or in a HTML/XML-ish file (with a root tag <htmlset> containing one or more <html> tags) to separate documents. The HTML/XML-ish format strips HTML tags and only tags the body. The writing format can also be configured in a similar way. 
 
 Suppose that we have a file, file1.html, as follows (text extracted from Wikipedia): 
 
@@ -177,3 +144,4 @@ recover NEs with unknown classification by looking into its surrounding NEs.
    Advantages on being on: It is more precise, restricts to well-defined NEs.
    Disadvantages: Damages recall.
 
+for more information about configuration parameters, see CONFIGURATION.txt, or the online documentation.

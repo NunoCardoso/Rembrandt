@@ -103,7 +103,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:032 contents:"Movimento" contents:independência contents:"Quebec" entity:Motion_%28physics%29 woeid-index:2344924
+label:032 contents:"Movimento" contents:independência contents:"Quebec" entity:Motion_%28physics%29 woeid:2344924
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

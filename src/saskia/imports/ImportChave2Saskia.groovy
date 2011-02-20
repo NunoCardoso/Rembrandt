@@ -133,7 +133,8 @@ class ImportChave2Saskia {
 		    }
 		    
 		    if ((ynae == "y") || (ynae == "a")) {
-				RembrandtedDoc newrdoc = new RembrandtedDoc(doc_id:rdoc.doc_id, doc_original_id:id,
+				RembrandtedDoc newrdoc = new RembrandtedDoc(doc_id:rdoc.doc_id, 
+					doc_collection:collection, doc_original_id:id,
 			    doc_lang:lang, doc_date_created:date_created.time, doc_content:text)
 				newrdoc.replaceThisToDB()				
 				newrdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
@@ -147,11 +148,11 @@ class ImportChave2Saskia {
 		} 
 	   // I need:
 	   else {
-     		rdoc = new RembrandtedDoc(doc_original_id:id, doc_lang:lang,
+     		rdoc = new RembrandtedDoc(doc_original_id:id, doc_collection:collection, doc_lang:lang,
 		    doc_date_created:date_created.time, doc_content:text)
 			
 		    rdoc.doc_id = rdoc.addThisToDB()
-		    rdoc.associateWithCollection(collection)
+		    
 
 			rdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
 			rdoc.changeProcStatusInDBto(DocStatus.READY) // mark it so next time we'll not use it

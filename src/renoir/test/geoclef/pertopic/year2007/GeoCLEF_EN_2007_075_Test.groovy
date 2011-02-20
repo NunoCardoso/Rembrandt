@@ -86,7 +86,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 // É melhor que não tenha woeid, ele aponta para uma cidade nos EUA!"
 		println refq.toString()
 		String reformulated_x = """
-label:075 contents:Violation contents:human contents:rights contents:"Burma" woeid-index:23424763
+label:075 contents:Violation contents:human contents:rights contents:"Burma" woeid:23424763
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

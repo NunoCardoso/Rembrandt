@@ -37,4 +37,6 @@ class OrganizationGazetteerPT {
    
    static final Clause empresaClause1nc = Clause.newPlain1Clause("empresa", "empresa",false)
 
+   static final Clause ministroClause1nc = Clause.newRegex1Clause(~/ministr[oa]s?/, "ministr[oa]s?",false)
+
  }

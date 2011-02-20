@@ -21,6 +21,7 @@ import rembrandt.bin.*
 import rembrandt.obj.Document
 import saskia.bin.Configuration
 import saskia.io.User
+import saskia.server.ServerMessage
 import saskia.util.I18n
 import org.apache.log4j.*
 import rembrandt.io.*
@@ -34,96 +35,85 @@ public class RembrandtMapping extends WebServiceRestletMapping {
 	Closure JSONanswer
 	Configuration conf
 	List cores
-        I18n i18n
-        Logger log = Logger.getLogger("RembrandtServer")  
-        Logger slog = Logger.getLogger("RembrandtTaggingServer")  
+   I18n i18n
+   static Logger mainlog = Logger.getLogger("RembrandtServerMain")  
+   static Logger errorlog = Logger.getLogger("RembrandtServerErrors")  
+   static Logger processlog = Logger.getLogger("RembrandtServerProcessing")  
         
 	public RembrandtMapping(Configuration conf) {
 		    
 	    this.conf=conf
-		//log.info "Rembrandt version ${Rembrandt.getVersion()}, no cores loaded yet"    
-	    cores = []
+	    List cores = []
 		
 	    JSONanswer = {req, par, bind ->
-	    // note that there's the 'log' for transaction reports. the 'slog' is for logging taggings.
+
 	      long session = System.currentTimeMillis()
-	      RembrandtCore core
-        
+	 		RembrandtCore core
+	
 	      String lang, submissionlang, rules, doctitle, docbody, api_key, format
+	
+	    	/******************************/
+  			/* desanitation of input vars */
+       	/******************************/
+
+			// POST
 	      if (par["POST"]["lg"]) lang = par["POST"]["lg"]
+			if (!lang) lang = "pt"
 	      if (par["POST"]["slg"]) submissionlang = par["POST"]["slg"]
+			if (!submissionlang) submissionlang="pt"
 	      rules = "harem"
 	      if (par["POST"]["dt"]) doctitle = par["POST"]["dt"]
 	      if (par["POST"]["db"]) docbody = par["POST"]["db"]
 	      if (par["POST"]["api_key"]) api_key = par["POST"]["api_key"]
+			if (!api_key) api_key = par["COOKIE"]["api_key"]  
+			 
 	      if (par["POST"]["f"]) format = par["POST"]["f"] else format = "rembrandt"
         
-	      if (!api_key) {
-                     bind["status"] = -1
-                     bind["message"] = i18n.servermessage['no_api_key'][lang]
-                     log.info "${session} RembrandtMapping: $bind"
-                     return JSONHelper.toJSON(bind)	
-               }   
+			ServerMessage sm = new ServerMessage("RembrandtMapping", lang, bind, session, processlog)
+	  
+			// verification of api_key
+         if (!api_key) return sm.noAPIKeyMessage()
             
-	       User user = User.getFromAPIKey(api_key)
-	       if (!user) {
-		    bind["status"] = -1
-		    bind["message"] = i18n.servermessage['user_not_found'][lang]
-		    log.info "${session} RembrandtMapping: $bind"
-		    return JSONHelper.toJSON(bind)	
-	       }   
+			// verification of user
+	      User user = User.getFromAPIKey(api_key)
+	      if (!user) return sm.userNotFound()
+	      if (! user.canExecuteAPICall()) return sm.dailyAPILimitExceeded()      
         
-	       if (! user.canExecuteAPICall()) {
-                    bind["status"] = -1
-                    bind["message"] = i18n.servermessage['api_key_limit_exceeded'][lang]
-                    log.info "${session} RembrandtMapping: ${bind} - user $user, API key $api_key"
-                    return JSONHelper.toJSON(bind)	
-               }              
-        
-		/****** LOAD CORE *****/
- 		String targetClassName = "rembrandt.bin.RembrandtCore"+(lang.toUpperCase())+
-                    "for"+rules.toUpperCase()
-		
-		cores.each{ if (it.class.name.equals(targetClassName)) {core = it}  }
-		if (!core) {
-                     // slog.info "Creating core "+targetClassName
-		   try {
-		  //	coreToReturn = Thread.currentThread().getContextClassLoader().loadClass(targetClassName).newInstance()
-		      if (lang == "pt") core = new RembrandtCorePTforHAREM()
-		      if (lang == "en") core = new RembrandtCoreENforHAREM()
+			/****** LOAD CORE *****/
+			try {
+				core = Rembrandt.getCore(lang, rules)
+			} catch(Exception e) {
+				errorlog.error (session ? session+" ": "")+(signature ? signature+": ":"")+ 
+				"Can't load Rembrandt core: "+e.printStackTrace()
+				return sm.statusMessage(-1, "Can't load Rembrandt core", e.getMessage()) 
+		   }
+			processlog.debug "Got Rembrandt core: $core"
 			 
-		    } catch(Exception e) {
-		         log.fatal "${session} RembrandtMapping: Can't load Rembrandt core: "+e.printStackTrace()
-			  e.printStackTrace()
-		    }
-		    cores.add(core)
-		     // slog.info "Initialized new core "+targetClassName+"."
-		 } 
-             
-		 slog.info "$session Got a request to tag the following doc:\n===========\nlang=${lang} slang=${submissionlang}\ndt=${doctitle}\ndb=${docbody}\n==========\n"
+			processlog.info "$session Got a request to tag the following doc:\n===========\nlang=${lang} slang=${submissionlang}\ndt=${doctitle}\ndb=${docbody}\n==========\n"
             
-		 Document doc= new Document(title:doctitle, body:docbody)
+			Document doc= new Document(title:doctitle, body:docbody)
 			
-		 doc = core.releaseRembrandtOnDocument(doc)	
-		    // the lang is the lang for the output tags. Right now, let's use the lang
+			doc = core.releaseRembrandtOnDocument(doc)	
 
-		 Writer rw	 
-		 if (format == "rembrandt") {
+		 	Writer rw	 
+		 	if (format == "rembrandt") {
 		     rw = new RembrandtWriter(new RembrandtStyleTag(lang))
-		 } else if (format == "dsb") {
+			// formato dsbatista
+		 	} else if (format == "dsb") {
 		     rw = new UnformattedWriter(new JustCategoryStyleTag(lang))
-		 }
+		 	}
         
-		 if (doc.title) bind["dt"]= rw.printDocumentTitleContent(doc)
-		 if (doc.body) bind["db"]= rw.printDocumentBodyContent(doc)
-		 bind["db"] = bind["db"].replaceAll(/\n/, " ")
+			Map res = [:]
+			
+		 	if (doc.title || doc.body) res["document"] = [:]
+			if (doc.title) res["document"]["title"] = rw.printDocumentTitleContent(doc)?.replaceAll(/\n/, " ")
+		 	if (doc.body) res["document"]["body"] = rw.printDocumentBodyContent(doc)?.replaceAll(/\n/, " ")
 		
-		 slog.info "$session Returning tagged doc:\n==========\ndt=${bind['dt']}\ndb=${bind['db']}\n==============\n"
+		 	processlog.info "$session Returning tagged doc:\n==========\ndt=${res['document']['title']}\ndb=${res['document']['body']}\n==============\n"
             
-		 int calls = user.addAPIcount()
-		 slog.info "$session User $user made a Rembrandt tagging request, now has $calls API daily calls\n"
-		 log.info "${session} RembrandtMapping: OK"
-		 return JSONHelper.toJSON(bind)		
+		 	int calls = user.addAPIcount()
+		 	processlog.info "$session User $user made a Rembrandt tagging request, now has $calls API daily calls\n"
+			return sm.statusMessage(0,res)
 	   }
 	} 
 }

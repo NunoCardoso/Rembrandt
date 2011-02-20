@@ -108,7 +108,7 @@ label:100 Natural disasters in the western USA
 		println refq.toString()
 		String reformulated_x = """
 label:085 contents:Nuclear contents:tests contents:"Pacific" entity:Pacific_Ocean
- woeid-index:55959717
+ woeid:55959717
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

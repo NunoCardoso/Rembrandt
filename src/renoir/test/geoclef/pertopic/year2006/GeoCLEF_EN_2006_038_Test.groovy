@@ -100,7 +100,7 @@ label:050 Cities along the Danube and the Rhine
 	
 		println refq.toString()
 		String reformulated_x = """
-label:038 contents:Solar contents:lunar contents:eclipse contents:"Southeast Asia" woeid-index:28289414 woeid-index:23424763 woeid-index:23424773 woeid-index:23424776 woeid-index:23424784 woeid-index:23424846 woeid-index:23424869 woeid-index:23424872 woeid-index:23424901 woeid-index:23424921 woeid-index:23424934 woeid-index:23424948 woeid-index:23424960 woeid-index:23424968 woeid-index:23424984 woeid-index:23424763 woeid-index:23424773 woeid-index:23424776 woeid-index:23424784 woeid-index:23424846 woeid-index:23424869 woeid-index:23424872 woeid-index:23424901 woeid-index:23424921 woeid-index:23424934 woeid-index:23424948 woeid-index:23424960 woeid-index:23424968 woeid-index:23424984
+label:038 contents:Solar contents:lunar contents:eclipse contents:"Southeast Asia" woeid:28289414 woeid:23424763 woeid:23424773 woeid:23424776 woeid:23424784 woeid:23424846 woeid:23424869 woeid:23424872 woeid:23424901 woeid:23424921 woeid:23424934 woeid:23424948 woeid:23424960 woeid:23424968 woeid:23424984 woeid:23424763 woeid:23424773 woeid:23424776 woeid:23424784 woeid:23424846 woeid:23424869 woeid:23424872 woeid:23424901 woeid:23424921 woeid:23424934 woeid:23424948 woeid:23424960 woeid:23424968 woeid:23424984
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

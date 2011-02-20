@@ -19,6 +19,7 @@ package saskia.index
 
 import org.apache.log4j.Logger
 
+import saskia.dbpedia.DBpediaResource
 import pt.utl.ist.lucene.LgteDocumentWrapper
 import pt.utl.ist.lucene.utils.LgteAnalyzerManager
 import pt.utl.ist.lucene.LgteIndexWriter
@@ -52,7 +53,8 @@ class GenerateEntityIndexForCollection {
     static Logger log = Logger.getLogger("IndexGeneration")
     static String EntityIndexDirLabel = "entity-index" 
     static String collectionLabel = "col" 
-    static final int DOC_POOL_SIZE=1000
+    int doc_pool_size=conf.getInt("saskia.index.entity.doc_pool_size",1000)
+	 String entity_label = conf.get("saskia.index.entity_label","entity")
     static LgteIndexWriter entwriter // Hash of indexes
 
    // static List<SemanticClassification> allowedClasses = [ ]
@@ -64,15 +66,13 @@ class GenerateEntityIndexForCollection {
     String sync
     File filestats 
     Map stats
-    String lang
     RembrandtReader reader
     String fileseparator = System.getProperty("file.separator")
 
     // indexdir goes to ${rembrandt.home.dir}/index/col-X/
-    public GenerateEntityIndexForCollection(Collection collection, String lang, String indexdir, String sync) {
+    public GenerateEntityIndexForCollection(Collection collection, String indexdir, String sync) {
         
 		this.collection=collection
-    	this.lang=lang
         this.indexdir=indexdir
         this.sync = sync
         
@@ -82,11 +82,12 @@ class GenerateEntityIndexForCollection {
                     conf.get("global.lang"))))
 	
     analyzerMap = [:]
-    analyzerMap.put(Globals.DOCUMENT_ID_FIELD, new LgteNothingAnalyzer()) 
-    analyzerMap.put(EntityIndexDirLabel, new LgteNothingAnalyzer())
+    analyzerMap.put(conf.get("saskia.index.id_label","id"), new LgteNothingAnalyzer())
+    analyzerMap.put(conf.get("saskia.index.docid_label","docid"), new LgteNothingAnalyzer())
+    analyzerMap.put(entity_label, new LgteNothingAnalyzer())
 
     analyzer = new LgteBrokerStemAnalyzer(analyzerMap)
-    entwriter = new LgteIndexWriter(indexdir ,analyzer, true, Model.OkapiBM25Model)
+    entwriter = new LgteIndexWriter(indexdir, analyzer, true, Model.OkapiBM25Model)
     
        // entwriter = new LgteIndexWriter(indexdir, new LgteNothingAnalyzer(), true, Model.OkapiBM25Model)
     
@@ -113,9 +114,9 @@ class GenerateEntityIndexForCollection {
         docstats.totalDocs = stats['total']
         
         /** ITERATOR **/
-        for (int i=stats['total']; i > 0; i -= DOC_POOL_SIZE) {
+        for (int i=stats['total']; i > 0; i -= doc_pool_size) {
             
-            int limit = (i > DOC_POOL_SIZE ? DOC_POOL_SIZE : i)
+            int limit = (i > doc_pool_size ? doc_pool_size : i)
             log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
             
             /** IF SYNC = RDOC **/
@@ -136,20 +137,35 @@ class GenerateEntityIndexForCollection {
                     doc.tokenize()
                    
                     LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
-                    ldoc.storeUtokenized(Globals.DOCUMENT_ID_FIELD, rdoc.doc_original_id)
+                		ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
+                		ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id.toString())
                     
                     /*****  NEs in body ******/
                     
+						  doc.titleNEs?.each{ne -> 
+                        ne.dbpediaPage?.values().toList().flatten()?.each{it -> 
+									if (it != null) {
+										// indexString indexes but does not tokenize it
+										ldoc.indexString(entity_label, DBpediaResource.getShortName(it)) 
+
+                           	if (!stats.containsKey(entity_label)) stats[entity_label] = 0
+                           	stats[entity_label]++
+									}
+                        }
+                    }
                     doc.bodyNEs?.each{ne -> 
                         ne.dbpediaPage?.values().toList().flatten()?.each{it -> 
-                           ldoc.indexString(EntityIndexDirLabel, it) // indexString indexes but does not tokenize it
-                           if (!stats.containsKey(EntityIndexDirLabel)) stats[EntityIndexDirLabel] = 0
-                           stats[EntityIndexDirLabel]++
+									if (it != null) {
+										// indexString indexes but does not tokenize it
+										ldoc.indexString(entity_label, DBpediaResource.getShortName(it)) 
+
+                           	if (!stats.containsKey(entity_label)) stats[entity_label] = 0
+                           	stats[entity_label]++
+									}
                         }
                     }
                     if (doc.bodyNEs.size() == 0) {
-                	log.warn "Doc ${rdoc.doc_original_id} has NO NEs on its body. Inserting an empty NE"
-          	
+                		log.warn "Doc ${rdoc.doc_original_id} has NO NEs on its body. Inserting an empty NE"
                     }
                     entwriter.addDocument(ldoc)                                   
                 }
@@ -172,16 +188,17 @@ class GenerateEntityIndexForCollection {
                 
                 rdocs.each {rdoc_id, rdoc ->
                     LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
-                    ldoc.storeUtokenized(Globals.DOCUMENT_ID_FIELD, rdoc.doc_original_id)
+                		ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
+                		ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id)
                     log.trace "Wrote doc id ${rdoc.doc_original_id}."
 
                     /*****  NEs in body ******/
                     rdoc.nes.each{ne -> 
                         if (ne.entity && ne.entity.ent_dbpedia_resource) {
-                           ldoc.indexString(EntityIndexDirLabel, 
+                           ldoc.indexString(entity_label, 
 										ne.entity.ent_dbpedia_resource.replaceAll(/-/,"\\-")) // indexString indexes but does not tokenize it
-                           if (!stats.containsKey(EntityIndexDirLabel)) stats[EntityIndexDirLabel] = 0
-                           stats[EntityIndexDirLabel]++  
+                           if (!stats.containsKey(entity_label)) stats[entity_label] = 0
+                           stats[entity_label]++  
 						}                    
                     }
                     entwriter.addDocument(ldoc)  
@@ -229,7 +246,6 @@ class GenerateEntityIndexForCollection {
         String fileseparator = System.getProperty("file.separator")
         
         o.addOption("col", true, "Collection name or ID")
-        o.addOption("lang", true, "Collection language")
         o.addOption("sync", true, "Where will we get the NEs - rdoc or pool. rdoc parses the RembrandtedDoc to get NEs, pool will get NEs from DB")
         o.addOption("help", false, "Gives this help information")
         o.addOption("indexdir", false, "directory of the index")
@@ -248,11 +264,7 @@ class GenerateEntityIndexForCollection {
             System.exit(0)
         }
         
-        if (!cmd.hasOption("lang")) {
-            println "No --lang arg. Please specify the language. Exiting."
-            System.exit(0)
-        }
-        
+     
         if (!cmd.hasOption("sync")) {
             println "No --sync arg. Please specify the sync mode [rdoc or pool]. Exiting."
             System.exit(0)
@@ -300,7 +312,7 @@ class GenerateEntityIndexForCollection {
             System.exit(0)    
         }
         GenerateEntityIndexForCollection indexer = new GenerateEntityIndexForCollection(
-               collection, cmd.getOptionValue("lang"), indexdir, sync)
+               collection, indexdir, sync)
         
         indexer.doit()
         

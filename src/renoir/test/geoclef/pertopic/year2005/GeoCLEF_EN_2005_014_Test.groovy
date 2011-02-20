@@ -83,11 +83,11 @@ import rembrandt.gazetteers.CommonClassifications as SC
 /** North Sea, na DBpedia3.5.1, não tem rdf:type dbpedia-owl. 
 Martelei para ter BodyOfWater e um geoscope. 
 Sem isto, a query final era label:014 contents:Environmentally contents:hazardous contents:incidents 
-contents:"North Sea" ne-LOCAL-FISICO-AGUAMASSA-index:"North Sea*/
+contents:"North Sea" ne-LOCAL-FISICO-AGUAMASSA:"North Sea*/
 		println refq.toString()
 		String reformulated_x = """
 label:014 contents:Environmentally contents:hazardous contents:incidents 
-contents:"North Sea" woeid-index:55959673
+contents:"North Sea" woeid:55959673
 """		
 
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 

@@ -81,7 +81,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 	
 		println refq.toString()
 		String reformulated_x = """
-label:032 contents:"Independence" contents:movement contents:"Quebec" ne-ACONTECIMENTO-EFEMERIDE-index:"Independence" woeid-index:2344924
+label:032 contents:"Independence" contents:movement contents:"Quebec" ne-ACONTECIMENTO-EFEMERIDE:"Independence" woeid:2344924
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

@@ -26,7 +26,7 @@ import saskia.util.I18n
  */
 class ServerMessage {
     
-    static Logger log2 = Logger.getLogger("SaskiaService") 	
+    static Logger log
     static I18n i18n = I18n.newInstance()
     String signature 
     String lang = "en"
@@ -34,70 +34,82 @@ class ServerMessage {
     long session
     String action
     
-    public ServerMessage(String signature, String lang, Map bind, long session) {
-	this.signature = signature
-	if (lang) this.lang = lang // keep 'en' if it is not defined
-	this.bind = bind 
-	this.session = session
+    public ServerMessage(String signature, String lang, Map bind, long session, Logger processinglog) {
+		this.signature = signature
+		if (lang) this.lang = lang // keep 'en' if it is not defined
+		this.bind = bind 
+		this.session = session
+		log = processinglog
+   }
+
+   public setAction(String action) {this.action = action}
+    
+   public String noAPIKeyMessage(message = null) {
+		return statusMessage(-1, i18n.servermessage['no_api_key'][lang], message)
+   } 
+
+   public String dailyAPILimitExceeded(message = null) {
+		return statusMessage(-1, i18n.servermessage['api_key_limit_exceeded'][lang], message)
+   } 
+
+   public String notEnoughVars(message = null) {
+		return statusMessage(-1, i18n.servermessage['not_enough_vars'][lang], message)
+    }
+    
+   public String notEnabled() {
+		return statusMessage(-1, i18n.servermessage['user_not_enabled'][lang], message)
+   }
+
+	public String unknownAction(String message = this.action) {
+		return statusMessage(-1, i18n.servermessage['action_unknown'][lang], message)
+   }
+    
+	public String noSuperUser(String message = this.action) {
+		return statusMessage(-1, i18n.servermessage['no_super_user'][lang])
+   }
+    public String userNotFound(String message = null) {
+		return statusMessage(-1, i18n.servermessage['no_user_found'][lang], message)
     }
 
-    public setAction(String action) {this.action = action}
-    
-    public String noAPIKeyMessage() {
-        Map bind = [:]
-	bind["status"] = -1
-        bind["message"] = i18n.servermessage['no_api_key'][lang]
-        log2.debug "$bind"
-        return JSONHelper.toJSON(bind)	
-    } 
-    
-    public String notEnoughVars(message = null) {
-	Map bind = [:]     
-	bind["status"] = -1
-	bind["message"] = i18n.servermessage['not_enough_vars'][lang]	                                                        
-	log2.debug ""+(session ? session+" ": "")+(signature ? signature+": ":"")+ 
-	(action ? action+": " : " ") + bind + (message ? " - $message" : "")
-        return JSONHelper.toJSON(bind)	
+   public String collectionNotFound(String message = null) {
+		return statusMessage(-1, i18n.servermessage['collection_not_found'][lang], message)
     }
-    
-    public String notEnabled() {
-	Map bind = [:]     
-	bind["status"] = -1
-	bind["message"] = i18n.servermessage['user_not_enabled'][lang]	                                                        
-	log2.debug ""+(session ? session+" ": "")+(signature ? signature+": ":"")+ 
-	(action ? action+": " : " ") + bind
-        return JSONHelper.toJSON(bind)	
+
+	public String invalidID(String message = null) {
+		return statusMessage(-1, i18n.servermessage['invalid_id'][lang], message)
     }
-    
-    public String unknownAction(String action = this.action) {
-	Map bind = [:]     
-	bind["status"] = -1
-	bind["message"] =i18n.servermessage['action_unknown'][lang]
-	log2.debug "$session $signature:$action: $bind - action $action unknown"
-        return JSONHelper.toJSON(bind)	
+	
+	public String insufficientPermissions(String message = null) {
+		return statusMessage(-1, i18n.servermessage['insufficient_permissions'][lang], message)
     }
-    
-    public String userNotFound(String message = null) {
-	Map bind = [:]     
-	bind["status"] = -1
-	bind["message"] = i18n.servermessage['no_user_found'][lang]	                                                        
-	log2.debug ""+(session ? session+" ": "")+(signature ? signature+":":"")+ 
-	(action ? action+": " : " ") + bind +  (message ? " - $message" : "")
-        return JSONHelper.toJSON(bind)	
-    }
-    
-    public String noSuperUser() {
-       return statusMessage(-1, i18n.servermessage['no_superuser'][lang])
-    }
-   
-    public String statusMessage(int status, message) {
-	Map bind = [:]     
-	bind["status"] = status
-	bind["message"] = message
-	String desc
-	if (status == -1) desc = bind else desc = "[status:$status, message:OK]"
-	log2.debug "$session $signature: $desc"// - user_login ${user}"
-	return JSONHelper.toJSON(bind)	
-   }
-   
+  
+
+	public String logProcessDebug(message) {
+		log.debug ""+(session ? session+" ": "")+(signature ? signature+": ":"")+ 
+		(action ? action+": " : " ") + message
+	}
+	
+   public String statusMessage(int status, statusmessage, String message = null) {
+		Map bind = [:]     
+		bind["status"] = status
+		bind["message"] = statusmessage
+		String desc
+		if (status == -1) desc = bind else desc = "[status:$status, message:OK]"
+		log.debug ""+(session ? session+" ": "")+(signature ? signature+": ":"")+ 
+		(action ? action+": " : " ") + desc + (message ? " - $message" : "")
+		return JSONHelper.toJSON(bind)	
+	}
+	
+	// use this only to send stuff that an admin requests
+	 public String statusMessageWithPubKey(int status, statusmessage, String usr_pub_key) {
+		Map bind = [:]     
+		bind["status"] = status
+		bind["message"] = statusmessage
+		bind["usr_pub_key"] = usr_pub_key
+		String desc
+		if (status == -1) desc = bind else desc = "[status:$status, message:OK]"
+		log.debug ""+(session ? session+" ": "")+(signature ? signature+": ":"")+ 
+		(action ? action+": " : " ") + desc
+		return JSONHelper.toJSON(bind)	
+	}
 }

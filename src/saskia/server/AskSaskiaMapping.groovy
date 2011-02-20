@@ -31,8 +31,9 @@ public class AskSaskiaMapping extends WebServiceRestletMapping {
    Closure JSONanswer 
    Closure HTMLanswer 
    I18n i18n
-   static Logger log = Logger.getLogger("SaskiaServer") 
-   static Logger log2 = Logger.getLogger("SaskiaService") 
+   static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+   static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+   static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
 
    public AskSaskiaMapping() {
     
@@ -42,37 +43,35 @@ public class AskSaskiaMapping extends WebServiceRestletMapping {
       JSONanswer = {req, par, bind ->
         
         long session = System.currentTimeMillis()
-        log2.debug "Session $session triggered with $par" 
+        processlog.debug "Session $session triggered with $par" 
         
         /** GET **/
         String ne_text, lang, api_key
         if (par["GET"]["ne"]) ne_text =  par["GET"]["ne"]
         if (par["GET"]["lg"]) lang = par["GET"]["lg"]   
+
         if (par["GET"]["api_key"]) api_key = par["GET"]["api_key"]
+ 		  if (!api_key) api_key = par["POST"]["api_key"] 
+        if (!api_key) api_key = par["COOKIE"]["api_key"]   
+        if (!api_key) return sm.noAPIKeyMessage()
+       
+		  ServerMessage sm = new ServerMessage("AskSaskiaMapping", lang, bind, session, processlog)  
+
+        if (!ne_text || !lang || !api_key) return sm.notEnoughVars()
         
-        if (!ne_text || !lang || !api_key) {
-             bind["status"] = -1
-             bind["message"] = i18n.servermessage['not_enough_vars'][lang]
-             log2.debug "$session AskSaskiaMapping: $bind" 
-             return JSONHelper.toJSON(bind)	
-        }
-        
-        User user 
-        
-        /** CHECK API KEY / USER. IF NO API_KEY, use Guest instead **/      
-        if (api_key) {
-            user = User.getFromAPIKey(api_key)
-        } else {
-            bind["status"] = -1
-            bind["message"] = i18n.servermessage['invalid_api_key'][lang]
-            log2.debug "$session AskSaskiaMapping: $bind" 
-            return JSONHelper.toJSON(bind)	
-        }
-        
+
+
+        User user = User.getFromAPIKey(api_key)           
+        if (!user) return sm.userNotFound()
+        if (!user.isEnabled()) return sm.userNotEnabled()
+            
+		  // 1.1 Action: tag
+		
         saskia = AskSaskia.newInstance(lang)
         NamedEntity ne = new NamedEntity(terms:Sentence.simpleTokenize(ne_text))
         ne = saskia.answerMe(ne)
-        SemanticClassificationDefinitions scd = Class.forName("rembrandt.gazetteers."+lang+".SecondHAREMClassificationLabels"+(
+        SemanticClassificationDefinitions scd = Class.forName(
+			"rembrandt.gazetteers."+lang+".SecondHAREMClassificationLabels"+(
         lang.toUpperCase())).newInstance()
 
         bind['terms'] = ne.terms
@@ -87,9 +86,8 @@ public class AskSaskiaMapping extends WebServiceRestletMapping {
         bind['classification'] = cl
         bind['wikipediaPage'] = ne.wikipediaPage
         bind['dbpediaPage'] = ne.dbpediaPage
-        log2.debug "$session AskSaskiaMapping: $bind" 
+        sm.logProcessDebug("finished.") 
         return JSONHelper.toJSON(bind)	
-    }
-         
-    }
+		}
+   }
 }

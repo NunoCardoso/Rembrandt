@@ -39,7 +39,7 @@ public class WebServiceRestletMapping extends Restlet {
 	private def mappings = [:]
 	private def binding = [:]
 	private Status status = Status.SUCCESS_OK
-	//static Logger log = Logger.getLogger("RembrandtServer")
+	static Logger log = Logger.getLogger("RembrandtServerAccess")
 	
 	public WebServiceRestletMapping() {
 		super()		
@@ -56,19 +56,12 @@ public class WebServiceRestletMapping extends Restlet {
 	}
 	
 	public Map getAllParams(Request request) {
-          // log.trace ("beginning getAllParams")
 	    Map res = [:] 
 	    res["GET"] = request.getResourceRef().getQueryAsForm().getValuesMap()
-          // log.trace ("GET resuts")
-
 	    if (request.isEntityAvailable()) {
-		res["POST"] = request.getEntityAsForm().getValuesMap()
-	    }
-          // log.trace ("POST resuts")
-        
-           res["COOKIE"] = request.getCookies().getValuesMap()
-          // log.trace ("COOKIE resuts")
-	  // log.trace ("ending getAllParams with $res")
+			res["POST"] = request.getEntityAsForm().getValuesMap()
+		}
+       res["COOKIE"] = request.getCookies().getValuesMap()
 	    return res
 	}
 	
@@ -84,24 +77,15 @@ public class WebServiceRestletMapping extends Restlet {
 				break
 			}
 		}
-	       // log.trace ("mime="+mime.toString())
-	        def params = getAllParams(request) 
-	       // log.trace ("params="+params)
+		def params = getAllParams(request) 
 		String body = this.mappings[mime.toString()].call(request, params, this.binding)
-	    	//log.trace("got body")
 	    	StringRepresentation xml 
 		try {
 		 xml= new StringRepresentation(body, mime)
-			 // issue http://restlet.tigris.org/issues/show_bug.cgi?id=367
-				// it loops when I set a charset, by updating the size
-		//	 xml = new StringRepresentation(body, mime, Language.ALL, CharacterSet.UTF_8)		
 		}catch(Exception e) {e.printStackTrace()}
-		// AQUI FUNCIONA!
 		xml.setCharacterSet(CharacterSet.UTF_8) 
-		//println "Middle/3 Body body = $body mime=$mime"
 
 		response.setEntity(xml)
-		//println "After Body"
 		response.setStatus(this.status)
 	}
 	

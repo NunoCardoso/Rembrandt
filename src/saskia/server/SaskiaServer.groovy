@@ -33,7 +33,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler
 
 class SaskiaServer {
 
-	def static Logger log = Logger.getLogger("SaskiaServer")  
+	def static Logger log = Logger.getLogger("SaskiaServerMain")  
 	Component component
 		
 	public SaskiaServer(int port) {

@@ -25,145 +25,151 @@ public class AdminSubjectMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
     I18n i18n
-    static Logger log = Logger.getLogger("SaskiaServer") 
-    static Logger log2 = Logger.getLogger("SaskiaService") 
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
  
     public AdminSubjectMapping() {
         
         i18n = I18n.newInstance()
         
         JSONanswer = {req, par, bind ->
-            long session = System.currentTimeMillis()
-            log2.debug "Session $session triggered with $par" 
+           
+ 				long session = System.currentTimeMillis()
+            processlog.debug "Session $session triggered with $par" 
             
-            int limit, offset
+            int limit
+				long offset
             def column, value
             
             // core stuff
             String action = par["POST"]["do"] //show, update, etc
             String lang = par["POST"]["lg"] 
             
-            ServerMessage sm = new ServerMessage("AdminSubjectMapping", lang, bind, session)  
+            ServerMessage sm = new ServerMessage("AdminSubjectMapping", lang, bind, session, processlog)  
             
             // pager stuff
             if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
-            if (par["POST"]["o"]) offset = Integer.parseInt(par["POST"]["o"])
+				if (!limit) limit = 0
+            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
             
-            // auth stuff
             String api_key = par["POST"]["api_key"] 
-            if (!api_key) api_key = par["COOKIE"]["api_key"] 
+            if (!api_key) api_key = par["COOKIE"]["api_key"]   
             if (!api_key) return sm.noAPIKeyMessage()
-                                                      
+
             User user = User.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
-            if (!user.isSuperUser()) return sm.noSuperUser()
             if (!user.isEnabled()) return sm.userNotEnabled()
-            
-            if (!action || !lang) return sm.notEnoughVars(lang, "do=$action, lg=$lang")      
-        	
+				// all Admin*Mappings must have this
+				if (!user.isSuperUser()) return sm.noSuperUser()
+            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
             sm.setAction(action)
            
-            /***************************/
-            /** 1.1 show - PAGE subjects **/
-            /***************************/
-
-            if (action == "show") {
-        	Map h
-                try {
-                    log.debug "Querying Subjects: limit $limit offset $offset column $column value $value"
-                    h = Subject.getSubjects(limit, offset, column, value)
-                } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_subject_list"][lang]+": "+e.getMessage())
-                }
-                
-                // you have to "JSONize" the NEs
-                h.result.eachWithIndex{sbj, i -> h.result[i] = sbj.toMap() }
-
-                return sm.statusMessage(0,h)
-            }
+            /*************/
+            /** 1.1 show */
+            /*************/
             
-            /***************************/
-            /** 1.2 update a Subject value **/
-            /***************************/
+            if (action == "list") {
+					Map h 
+               try {
+                  h = Subject.listSubjects(limit, offset, column, value)
+               } catch(Exception e) {
+               	errorlog.error i18n.servermessage['error_getting_subject_list'][lang]+": "+e.printStackTrace()
+     					return sm.statusMessage(-1, i18n.servermessage['error_getting_subject_list'][lang]+": "+e.getMessage(), action)
+               }
+                List res = []
+                h.result.eachWithIndex{sbj, i ->  h.result[i] = sbj.toMap()}              
+                return sm.statusMessageWithPubKey(0, h, user.usr_pub_key)	        
+            }
+   
+            /***************/
+            /** 1.2 update */
+            /***************/
             
             if (action == "update") {
         	
-        	Long id
-                if (par["POST"]["id"]) id = Long.parseLong(par["POST"]["id"])
-                if (!id) return sm.notEnoughVars("id=$id")
+        		//requires the column and value parameter
+        		// the id is from a collection
+            	long id 
+					if (par["POST"]["id"]) 
+					try {id = Long.parseLong(par["POST"]["id"] )}
+					catch(Exception e) {}
+					if (!id) return sm.notEnoughVars("id=$id")
                 
-                if (!column || !value) return sm.notEnoughVars("c=$column v=$value")
-                
-                Subject sbj
-                try {
-                    log.debug "Querying Subject with id $id"
-                    sbj = Subject.getFromID(id)
+                // let's check permissions
+               Subject sbj = Subject.getFromID(id)
+					if (!sbj) return sm.statusMessage(-1, i18n.servermessage['subject_not_found'][lang])
+					if (value == null || !column) return sm.notEnoughVars("v=$value, c=$column")
+               
+					int res = 0         
+               try {
+                    res = sbj.updateValue(column, value)                     
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_subject_list"][lang]+": "+e.getMessage())                 
+                  errorlog.error (i18n.servermessage['error_updating_subject'][lang]+": "+e.printStackTrace())
+  						return sm.statusMessage(-1, i18n.servermessage['error_updating_subject'][lang]+": " +e.getMessage())
                 }
                 
-                def res
-                try {
-                    res = sbj.updateValue(c, v)
-                }  catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_updating_subject"][lang]+": "+e.getMessage())                 
-                }
-                return sm.statusMessage(0, sbj.toMap())
+                //RETURNS 1 IF UPDATED
+                return sm.statusMessageWithPubKey(res, sbj.toMap(), user.usr_pub_key)	
+            }            
+            
+            /***************/
+            /** 1.3 create */ 
+            /***************/
+            
+            if (action == "create") {
 
-            } 
-                
-            /***************************************/
-            /** 1.3 delete - DELETE Subject (admin only) **/
-            /***************************************/
+                String sbj_subject = par["POST"]["sbj_subject"] 
+                if (!sbj_subject) return sm.notEnoughVars("sbj_subject=$sbj_subject")              
+ 
+					 List<Subject> sbjs = Subject.getFromSubject(sgr_subject) 
+					 if (sbjs) return sm.statusMessage(-1, i18n.servermessage['subject_already_exists'][lang])
+               
+                Subject sbj
+ 					 try {
+                     sbj = new Subject(sbj_subject:sbj_subject)
+							sbj.subject = Subject.parseSubject(sbj.sbj_subject)
+                     sbj.sbj_id = sbj.addThisToDB()
+                } catch(Exception e) {
+                    errorlog.error i18n.servermessage['error_creating_subject'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage['error_creating_subject'][lang]+": "+e.getMessage())
+                }
+                        
+                // leave like that, to include an id field
+                return sm.statusMessageWithPubKey(0, sbj.toMap(), user.usr_pub_key)		
+            }
+
+				/****************/
+            /** 1.4 delete **/
+            /****************/
            
             if (action == "delete") {
-                Long id 
-                try {
-                    id = Long.parseLong(par["POST"]["id"])                      
-                }catch(Exception e) {}
-                               
-                if (!id)  return sm.notEnoughVars("id=$id")      
-                Subject sbj 
-                try {
-                    log.debug "Querying Subject with id $id"
-                    sbj = Subject.getFromID(id)
+                	long id 
+					if (par["POST"]["id"]) 
+					try {id = Long.parseLong(par["POST"]["id"] )}
+					catch(Exception e) {}
+					if (!id) return sm.notEnoughVars("id=$id")
+                
+                // let's check permissions
+                Subject sbj = Subject.getFromID(id)
+					if (!sbj) return sm.statusMessage(-1, i18n.servermessage['subject_not_found'][lang])
+                 
+					def res
+					try {
+                    res = sbj.removeThisFromDB() 
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_subject_list"][lang]+": "+e.getMessage())                 
-                }
-                          
-                try {
-                    log.debug "deleting subject $id"
-                    answer = sbj.deleteSubject() 
-                } catch(Exception e) {return sm.statusMessage(-1, i18n.servermessage["error_deleting_subject"][lang]+": "+e.getMessage())}
-                  
+	              	  errorlog.error i18n.servermessage['error_deleting_subject'][lang]+": "+e.printStackTrace()
+						  return sm.statusMessage(-1, i18n.servermessage["error_deleting_subject"][lang]+": "+e.getMessage())
+				    }                
                 //RETURNS 1 IF UPDATED
-                return sm.statusMessage(answer, i18n.servermessage['ok'][lang])		   	
+                return sm.statusMessageWithPubKey(res, i18n.servermessage['ok'][lang], user.usr_pub_key)			   	
             }    
+                       
+            return sm.unknownAction(action)	
             
-            /***************************************/
-            /** 1.4 create **/
-            /***************************************/
-           
-            if (action == "create") {
-                  
-               String sbj_subject = par["POST"]["sbj_subject"]
-               Subject s  = new Subject(sbj_subject:sbj_subject)
-               s.subject = Subject.parseSubject(s.sbj_subject) 
-               
-               try {
-                    log.debug "Adding Subject"
-                    s.addThisToDB()
-                } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_creating_subject"][lang]+": "+e.getMessage())                 
-                }
-               
-                //RETURNS 1 IF UPDATED
-                return sm.statusMessage(0, s.toMap())		   	
-            }    
-            
-            return sm.unknownAction()
         }
     }
 }

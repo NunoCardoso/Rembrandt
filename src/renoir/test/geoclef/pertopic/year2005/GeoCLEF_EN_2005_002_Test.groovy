@@ -88,73 +88,73 @@ import rembrandt.gazetteers.CommonClassifications as SC
 		println refq.toString()
 		String reformulated_x = """
 label:002 contents:vegetable contents:exporters contents:"Europe" 
-woeid-index:24865675 woeid-index:12577865 woeid-index:20069817 woeid-index:20069818 
-woeid-index:23424742 woeid-index:23424744 woeid-index:23424750 woeid-index:23424757 
-woeid-index:23424761 woeid-index:23424765 woeid-index:23424771 woeid-index:23424796 
-woeid-index:23424803 woeid-index:23424805 woeid-index:23424810 woeid-index:23424812 
-woeid-index:23424816 woeid-index:23424819 woeid-index:23424825 woeid-index:23424829 
-woeid-index:23424833 woeid-index:23424843 woeid-index:23424844 woeid-index:23424845 
-woeid-index:23424853 woeid-index:23424874 woeid-index:23424875 woeid-index:23424877 
-woeid-index:23424879 woeid-index:23424881 woeid-index:23424885 woeid-index:23424890 
-woeid-index:23424892 woeid-index:23424897 woeid-index:23424909 woeid-index:23424910 
-woeid-index:23424923 woeid-index:23424925 woeid-index:23424933 woeid-index:23424945 
-woeid-index:23424947 woeid-index:23424950 woeid-index:23424954 woeid-index:23424957 
-woeid-index:23424975 woeid-index:23424976 woeid-index:23424986 woeid-index:26812346 
-woeid-index:28289413
+woeid:24865675 woeid:12577865 woeid:20069817 woeid:20069818 
+woeid:23424742 woeid:23424744 woeid:23424750 woeid:23424757 
+woeid:23424761 woeid:23424765 woeid:23424771 woeid:23424796 
+woeid:23424803 woeid:23424805 woeid:23424810 woeid:23424812 
+woeid:23424816 woeid:23424819 woeid:23424825 woeid:23424829 
+woeid:23424833 woeid:23424843 woeid:23424844 woeid:23424845 
+woeid:23424853 woeid:23424874 woeid:23424875 woeid:23424877 
+woeid:23424879 woeid:23424881 woeid:23424885 woeid:23424890 
+woeid:23424892 woeid:23424897 woeid:23424909 woeid:23424910 
+woeid:23424923 woeid:23424925 woeid:23424933 woeid:23424945 
+woeid:23424947 woeid:23424950 woeid:23424954 woeid:23424957 
+woeid:23424975 woeid:23424976 woeid:23424986 woeid:26812346 
+woeid:28289413
 """
 		assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   }
 }
 
 /*
-woeid-index:24865675 Europe
-woeid-index:12577865 Aland Islands
-woeid-index:20069817 Montenegro
-woeid-index:20069818 Serbia
-woeid-index:23424742 Albania
-woeid-index:23424744 Andorra
-woeid-index:23424750 Austria
-woeid-index:23424757 Belgium
-woeid-index:23424761 Bosnia and Herzegovina
-woeid-index:23424765 Belarus
-woeid-index:23424771 Bulgaria
-woeid-index:23424796 Denmark
-woeid-index:23424803 Ireland
-woeid-index:23424805 Estonia
-woeid-index:23424810 Czech
-woeid-index:23424812 Finland
-woeid-index:23424816 Faroe
-woeid-index:23424819 France
-woeid-index:23424825 Gibraltar
-woeid-index:23424829 Germany
-woeid-index:23424833 Greece
-woeid-index:23424843 Croatia
-woeid-index:23424844 Hungary
-woeid-index:23424845 Iceland
-woeid-index:23424853 Italy
-woeid-index:23424874 Latvia 
-woeid-index:23424875 Lithuania
-woeid-index:23424877 Slovakia
-woeid-index:23424879 Liechenstein
-woeid-index:23424881 Luxembourg
-woeid-index:23424885 Moldava
-woeid-index:23424890 Macedonia
-woeid-index:23424892 Monaco
-woeid-index:23424897 Malta
-woeid-index:23424909 Netherlands
-woeid-index:23424910 Norway
-woeid-index:23424923 Poland
-woeid-index:23424925 Portugal
-woeid-index:23424933 Romania
-woeid-index:23424945 Slovenia
-woeid-index:23424947 San Marino
-woeid-index:23424950 Spain
-woeid-index:23424954 Sweden
-woeid-index:23424957 Switzerland
-woeid-index:23424975 UK
-woeid-index:23424976 Ukraine
-woeid-index:23424986 Vatican
-woeid-index:26812346 Cyprus
-woeid-index:28289413 Svalbard and Jan Mayen
+woeid:24865675 Europe
+woeid:12577865 Aland Islands
+woeid:20069817 Montenegro
+woeid:20069818 Serbia
+woeid:23424742 Albania
+woeid:23424744 Andorra
+woeid:23424750 Austria
+woeid:23424757 Belgium
+woeid:23424761 Bosnia and Herzegovina
+woeid:23424765 Belarus
+woeid:23424771 Bulgaria
+woeid:23424796 Denmark
+woeid:23424803 Ireland
+woeid:23424805 Estonia
+woeid:23424810 Czech
+woeid:23424812 Finland
+woeid:23424816 Faroe
+woeid:23424819 France
+woeid:23424825 Gibraltar
+woeid:23424829 Germany
+woeid:23424833 Greece
+woeid:23424843 Croatia
+woeid:23424844 Hungary
+woeid:23424845 Iceland
+woeid:23424853 Italy
+woeid:23424874 Latvia 
+woeid:23424875 Lithuania
+woeid:23424877 Slovakia
+woeid:23424879 Liechenstein
+woeid:23424881 Luxembourg
+woeid:23424885 Moldava
+woeid:23424890 Macedonia
+woeid:23424892 Monaco
+woeid:23424897 Malta
+woeid:23424909 Netherlands
+woeid:23424910 Norway
+woeid:23424923 Poland
+woeid:23424925 Portugal
+woeid:23424933 Romania
+woeid:23424945 Slovenia
+woeid:23424947 San Marino
+woeid:23424950 Spain
+woeid:23424954 Sweden
+woeid:23424957 Switzerland
+woeid:23424975 UK
+woeid:23424976 Ukraine
+woeid:23424986 Vatican
+woeid:26812346 Cyprus
+woeid:28289413 Svalbard and Jan Mayen
 */
 

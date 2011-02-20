@@ -87,7 +87,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:048 contents:Pescas contents:"Terra Nova" contents:"Gronelândia" woeid-index:2344919 woeid-index:23424828
+label:048 contents:Pescas contents:"Terra Nova" contents:"Gronelândia" woeid:2344919 woeid:23424828
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

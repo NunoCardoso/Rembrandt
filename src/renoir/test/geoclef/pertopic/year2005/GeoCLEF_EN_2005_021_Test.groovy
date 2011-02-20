@@ -80,7 +80,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 	
 		println refq.toString()
 		String reformulated_x = """
-label:021 contents:"Sea" contents:rescue contents:"North Sea" entity:Sea woeid-index:55959673
+label:021 contents:"Sea" contents:rescue contents:"North Sea" entity:Sea woeid:55959673
 """		
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

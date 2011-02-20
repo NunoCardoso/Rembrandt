@@ -99,7 +99,7 @@ label:075 Violation of human rights in Burma
 // É melhor que não tenha woeid, ele aponta para uma cidade nos EUA!"
 		println refq.toString()
 		String reformulated_x = """
-label:070 contents:Tourist" contents:attractions contents:northern contents:"Italy" woeid-index:23424853
+label:070 contents:Tourist" contents:attractions contents:northern contents:"Italy" woeid:23424853
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

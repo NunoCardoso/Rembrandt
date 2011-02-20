@@ -16,6 +16,8 @@
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
 package renoir.obj
+
+import saskia.bin.Configuration
 import java.util.regex.Matcher
 import org.apache.log4j.Logger
 import pt.utl.ist.lucene.Globals
@@ -28,8 +30,13 @@ import rembrandt.obj.Sentence
 class RenoirQueryParser {
     // col is NOT a variable
     // label can be used, for example, on TREC runs 
-    static List RenoirVars = [/label/,/qe/,/search/,/explain/,/output/,/limit/,/offset/,/stem/]
-    static List IndexVars = [/.*?-index/,/contents/,/entity/] // contents is the Globals.LUCENE_DEFAULT_FIELD
+
+	// note: /woeid/ will match woeid, but doen't match woeid-weight 
+	// note2: query strings will have 'time' as index, but I will use 'tg' internally, because
+	// LGTE already used it. So I'll just convert all 'time' to 'tg' 
+	
+    static List RenoirVars = [/label/,/qe/,/search/,/explain/,/output/,/limit/,/offset/,/stem/,/.*?-filter/]
+    static List IndexVars = [/woeid/,/title/,/contents/,/entity/,/ne-.*/,/time/,/tg/] 
     static List LGTEVars = [/model/]
     static List LGTEParameters = [/(?i)bm25\..*/,/(?i)QE\..*/,/.*?-weight/]
 
@@ -39,35 +46,37 @@ class RenoirQueryParser {
 
     static List integerVars = [/limit/,/offset/]
                                
-    static String defaultTermField = Globals.LUCENE_DEFAULT_FIELD
+	static Configuration conf = Configuration.newInstance()
+    static String defaultTermField = conf.get("saskia.index.contents_label","contents")
                             
+
     static Logger log = Logger.getLogger("RenoirQuestionSolver")      
     static TokenizerPT tok = TokenizerPT.newInstance()
     
     
     static RenoirQuery parse(String text) {
 	
-	RenoirQuery q = new RenoirQuery()
-	q.queryString = text
-	q.sentence = new Sentence(0)
+		RenoirQuery q = new RenoirQuery()
+		q.queryString = text
+		q.sentence = new Sentence(0)
 	
-	// hide the .:., replace them to § symbols
-	String text2 = text.replaceAll(/(?<=.):(?=.)/, "§")
-	// Now, if there is a field (given by §), replace in the field all '.' in the left with '±'
-	text2 = text2.replaceAll(/(\S*)(?=§)/) {all, g1 -> return g1.replaceAll(/\./, "±")}
+		// hide the .:., replace them to § symbols
+		String text2 = text.replaceAll(/(?<=.):(?=.)/, "§")
+		// Now, if there is a field (given by §), replace in the field all '.' in the left with '±'
+		text2 = text2.replaceAll(/(\S*)(?=§)/) {all, g1 -> return g1.replaceAll(/\./, "±")}
 	
-        List sentences = TokenizerPT.newInstance().parse(text2)
+      List sentences = TokenizerPT.newInstance().parse(text2)
         
         // restore ± to ., restore § to :
-        sentences.each{s -> 
-           s.each{t -> 
-           	t.text = t.text.replaceAll(/±/,".").replaceAll(/§/,":") 
-           }
-        }
+      sentences.each{s -> 
+         s.each{t -> 
+           t.text = t.text.replaceAll(/±/,".").replaceAll(/§/,":") 
+         }
+      }
         
       //  println sentences
         // we're intrested in the first sentence.
-        if (!sentences) 
+      if (!sentences) 
             log.warn "Got text $text, but no sentences!"
         
         boolean phraseBegin = false
@@ -138,7 +147,9 @@ class RenoirQueryParser {
         	       if (integerVars.find{term.field ==~ it}) {
         		   q.paramsForRenoir[term.field] = Integer.parseInt(item)   
         	       } else {
-        		   q.paramsForRenoir[term.field] = item        
+						// let's make here the time -> tg conversion
+						if (term.field == "time-filter") {term.field =  conf.get("saskia.index.time_label","tg")+"-filter"}
+        		   	q.paramsForRenoir[term.field] = item        
         	       }
       	    	       //currentField = term.field
        	    	       //currentBIOstate = "O"
@@ -147,7 +158,14 @@ class RenoirQueryParser {
 
 					def mx = term.field =~ /^(.*)-weight/
 					if (mx.matches()) {
-						q.paramsForQueryConfiguration["model.field.boost."+mx.group(1)+"-index"]=""+item+"f"
+						
+						String thefield = mx.group(1)
+						if (thefield == "time") {
+							thefield = conf.get("saskia.index.time_label","tg")
+						}
+					
+					
+						q.paramsForQueryConfiguration["model.field.boost."+thefield]=""+item+"f"
 						
 //						queryConfiguration.setProperty("model.field.boost.contents","0.3f");
 					} else {
@@ -162,6 +180,12 @@ class RenoirQueryParser {
         	   
         	   else if (IndexVars.find{term.field ==~ it}) {
         	      currentField = term.field
+
+					// all 'time' indexes will be represented as 'tg'
+					if (currentField == "time") {
+						currentField = conf.get("saskia.index.time_label","tg")
+						term.field = currentField
+					}
         	      if (phraseBegin) {
         		  term.phraseBIO = "B"
         		  currentBIOstate = "B" // for OB + term added
@@ -365,6 +389,46 @@ class RenoirQueryParser {
                } // if term.field      
     	    }              
     
-	return q  
+
+			// now, let's see if there is some filtering to do 
+			// I have to scroll through RenoirVars *.-filter, if something is true, 
+			// move it from the sentence to the filter list
+			
+			q.paramsForRenoir.each{k, v-> 
+//				println "396; k: $k v:$v"
+				
+				if (k =~ /^.*-filter/ && (v == "yes" || v == "true")) {
+					println "Wow, field $k will be used as filter!"
+					
+					def m = k =~ /^(.*)-filter/
+										
+					if (m.matches()) {
+						String thefield = m.group(1)
+						
+						Sentence newsentence = new Sentence(q.sentence.index)
+						q.sentence.eachWithIndex{t, i -> 
+							
+							// ok, found one, let's move it to the filter
+							if (t.field == thefield) {
+								if (!q.filters) {q.filters = []; q.hasFilters = true}
+								q.filters << t
+								
+							// no, that's not it. let's put it back on the sentence	
+							} else {
+								newsentence << t
+							}
+						}
+						q.sentence = newsentence 
+					}
+				}
+			} 
+			
+			// redo the term indexes
+			if (q.hasFilters) {
+				q.sentence.eachWithIndex{t, i -> 
+					t.index = i
+				}
+			}	
+			return q  
     }
 }

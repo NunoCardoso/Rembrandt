@@ -54,7 +54,7 @@ class RembrandtDocStats {
      
      int getTotalNumberOfSourceDocs() {
 	    int total
-	    db.getDB().eachRow("SELECT COUNT(*) FROM "+SourceDoc.sdoc_table+" WHERE "+
+	    db.getDB().eachRow("SELECT COUNT(*) FROM "+SourceDoc.tablename+" WHERE "+
 		    "sdoc_collection=?", [collection.col_id], {row -> 
 	    	total = row[0]
 	    })
@@ -63,8 +63,8 @@ class RembrandtDocStats {
      
      int getTotalNumberOfRembrantedOKDocs() {
 	    int total
-	    db.getDB().eachRow("SELECT COUNT(*) FROM "+RembrandtedDoc.doc_table+", "+
-		    RembrandtedDoc.chd_table+" WHERE chd_collection=? and chd_document=doc_id AND "+
+	    db.getDB().eachRow("SELECT COUNT(*) FROM "+RembrandtedDoc.tablename+
+		   " WHERE doc_collection=? AND "+
 		   "doc_proc IN "+DocStatus.whereConditionGoodToProcess(), [collection.col_id],  
 		   {row -> total = row[0]})
 	    return total
@@ -72,8 +72,8 @@ class RembrandtDocStats {
      
      int getTotalNumberOfSyncedDocs() {
 	    int total
-	    db.getDB().eachRow("SELECT COUNT(*) FROM "+RembrandtedDoc.doc_table+", "+
-		    RembrandtedDoc.chd_table+" WHERE chd_collection=? and chd_document=doc_id AND "+
+	    db.getDB().eachRow("SELECT COUNT(*) FROM "+RembrandtedDoc.tablename+
+		    " WHERE doc_collection=? AND "+
 		   "doc_sync IN "+DocStatus.whereConditionSynced(), [collection.col_id],  
 		   {row -> total = row[0] })
 	    return total
@@ -82,8 +82,8 @@ class RembrandtDocStats {
      /* well, it's NE classifications, not NEs... */
      int getTotalNumberOfNEsInDocs() {
 	    int total
-	    db.getDB().eachRow("SELECT COUNT(*) FROM "+RembrandtedDoc.dhn_table+", "+
-		 RembrandtedDoc.chd_table+" WHERE chd_collection=? AND chd_document=dhn_doc",
+	    db.getDB().eachRow("SELECT COUNT(*) FROM "+RembrandtedDoc.dhn_table+
+		 " WHERE doc_collection=? AND doc_id=dhn_doc",
 		[collection.col_id],  {row -> total = row[0] })
 	    return total
 	}
@@ -91,23 +91,23 @@ class RembrandtDocStats {
      int getTotalNumberOfDistinctNEsInDocs() {
 	    int total
 	    db.getDB().eachRow("SELECT COUNT(DISTINCT(dhn_ne)) FROM "+RembrandtedDoc.dhn_table+", "+
-			 RembrandtedDoc.chd_table+" WHERE chd_collection=? AND chd_document=dhn_doc",
+			 RembrandtedDoc.tablename+" WHERE doc_collection=? AND doc_id=dhn_doc",
 			[collection.col_id],  {row -> total = row[0] })
 		    return total
 	}
      
      String getOldestDoc() {
 		Date d
-		db.getDB().eachRow("SELECT MIN(doc_date_created) FROM "+RembrandtedDoc.doc_table+", "+
-		RembrandtedDoc.chd_table+" WHERE chd_collection=? and chd_document=doc_id", 
+		db.getDB().eachRow("SELECT MIN(doc_date_created) FROM "+RembrandtedDoc.tablename+
+		" WHERE doc_collection=? ", 
 			[collection.col_id], {row -> d = row[0]})
 		return dateFormat.format(d)
     }
      
     String getNewestDoc() {
 		Date d
-		db.getDB().eachRow("SELECT MAX(doc_date_created) FROM "+RembrandtedDoc.doc_table+", "+
-		RembrandtedDoc.chd_table+" WHERE chd_collection=? and chd_document=doc_id", 
+		db.getDB().eachRow("SELECT MAX(doc_date_created) FROM "+RembrandtedDoc.tablename+
+		" WHERE doc_collection=? ", 
 			[collection.col_id], {row -> d = row[0]})
 		return dateFormat.format(d)
     }
@@ -115,7 +115,7 @@ class RembrandtDocStats {
     String topDocsForNE(long ne_id, int num_docs) {
 		StringBuffer res = new StringBuffer()
 		db.getDB().eachRow("select doc_id, doc_webstore, count(doc_id) as c from doc, "+
-		" collection_has_doc, doc_has_ne WHERE chd_collection=? AND chd_document=doc_id "+
+		" doc_has_ne WHERE doc_collection=? "+
 		"AND doc_id=dhn_doc and dhn_ne=? group by doc_id order by c desc limit ${num_docs}", 
 			[collection.col_id, ne_id], {row -> 
 			   String content = webstore.retrieve(r.doc_webstore)
@@ -152,8 +152,8 @@ class RembrandtDocStats {
 		HashMap res =[:]
 		HashMap pool= [:]
 		
-		db.getDB().eachRow("select doc_id, count(dhn_doc) as c from collection_has_doc, doc, doc_has_ne "+
-		"where chd_collection=? and chd_document=doc_id and doc_id=dhn_doc group by dhn_doc order by c desc",
+		db.getDB().eachRow("select doc_id, count(dhn_doc) as c from  doc, doc_has_ne "+
+		"where doc_collection=? and doc_id=dhn_doc group by dhn_doc order by c desc",
 		[collection.col_id], {row -> 
 		
 			if (!max) {max = row['c']}

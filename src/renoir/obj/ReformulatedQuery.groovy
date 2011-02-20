@@ -17,7 +17,7 @@
  */
 package renoir.obj
 
-
+import saskia.bin.Configuration
 import pt.utl.ist.lucene.LgteIndexSearcherWrapper;
 import pt.utl.ist.lucene.LgteQuery
 import pt.utl.ist.lucene.QueryConfiguration
@@ -35,19 +35,21 @@ import saskia.gazetteers.Stopwords
  */
 class ReformulatedQuery extends RenoirQuery {
  
-    Sentence newterms = null // container for RenoirQueryTerms
+   Sentence newterms = null // container for RenoirQueryTerms
 	String reformulator // label of the reformulator
+	Configuration conf = Configuration.newInstance()
+	String contents_label = conf.get("saskia.index.contents_label","contents")
 
-    public ReformulatedQuery(RenoirQuery rq) {	
-	super.paramsForRenoir = rq.paramsForRenoir
-	super.paramsForLGTE = rq.paramsForLGTE
-	super.paramsForQueryConfiguration = rq.paramsForQueryConfiguration
-	super.queryString = rq.queryString
-	super.sentence = rq.sentence	    
-    }
+   public ReformulatedQuery(RenoirQuery rq) {	
+		super.paramsForRenoir = rq.paramsForRenoir
+		super.paramsForLGTE = rq.paramsForLGTE
+		super.paramsForQueryConfiguration = rq.paramsForQueryConfiguration
+		super.queryString = rq.queryString
+		super.sentence = rq.sentence	    
+   }
     
     public ReformulatedQuery() {
-	super()
+		super()
     }
     /** useful to debug */
     public String toString() {
@@ -69,7 +71,7 @@ class ReformulatedQuery extends RenoirQuery {
         Sentence newsentence = new Sentence(sentence.index)
         sentence?.each{t -> 
       // println "A verificar lang $lang t.index = ${t.index} t.text ${t.text}" 
-            if (t.field == Globals.LUCENE_DEFAULT_FIELD && t.phraseBIO == "O" &&  
+            if (t.field == contents_label && t.phraseBIO == "O" &&  
         	    (Stopwords.stopwords[lang].contains(t.text) ||
         	    (t.text ==~ /[\Q.,:;-!?(){}[]\E]/ )) ) {} else {
         			newsentence << t
@@ -81,7 +83,7 @@ class ReformulatedQuery extends RenoirQuery {
         Sentence newnewterms = new Sentence(newterms.index)
         newterms?.each{t -> 
       // println "A verificar lang $lang t.index = ${t.index} t.text ${t.text}" 
-        if (t.field == Globals.LUCENE_DEFAULT_FIELD && t.phraseBIO == "O" &&  
+        if (t.field == contents_label && t.phraseBIO == "O" &&  
         	    (Stopwords.stopwords[lang].contains(t.text) ||
         	    (t.text ==~ /[\Q.,:;-!?(){}[]\E]/ )) ) {} else {
         			newnewterms << t

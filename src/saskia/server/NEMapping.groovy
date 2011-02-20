@@ -28,99 +28,74 @@ public class NEMapping extends WebServiceRestletMapping {
 
     Closure JSONanswer 
     SaskiaStats stats
-    static Logger log = Logger.getLogger("SaskiaServer") 
-    static Logger log2 = Logger.getLogger("SaskiaService") 
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
     
     public NEMapping() {
         
        JSONanswer = {req, par, bind ->
         
            long session = System.currentTimeMillis()
-           log2.debug "Session $session triggered with $par" 
+           processlog.debug "Session $session triggered with $par" 
         
-       	   I18n i18n = I18n.newInstance()
-       	   long id
-       	   String action, collection_name, lang, nename, c1, c2, c3
-       	   int s, t
+       	  I18n i18n = I18n.newInstance()
+       	  Long id
+       	  String action, collection_id, lang, nename, c1, c2, c3
+       	  int s, t
         
-       	   if(par["GET"]["id"] && par["GET"]["id"] != "undefined") id =  Long.parseLong(par["GET"]["id"])
-       	   action =  par["GET"]["do"]
-       	   collection_name = par["GET"]["c"] 
-       	   lang = par["GET"]["lg"]
-	   if (par["GET"]["ne"] && par["GET"]["ne"] != "undefined" && par["GET"]["ne"] != "null") 
-	   nename = par["GET"]["ne"] 
-	   if (par["GET"]["s"] && par["GET"]["s"] != "undefined" && par["GET"]["s"] != "null") 
-	   s = Integer.parseInt(par["GET"]["s"])
-	   if (par["GET"]["t"] && par["GET"]["t"] != "undefined" && par["GET"]["t"] != "null") 
-	   t = Integer.parseInt(par["GET"]["t"])
-	   if (par["GET"]["c1"] && par["GET"]["c1"] != "undefined" && par["GET"]["c1"] != "null") 
-	   c1 = par["GET"]["c1"]
-	   if (par["GET"]["c2"] && par["GET"]["c2"] != "undefined" && par["GET"]["c2"] != "null") 
-	   c2 = par["GET"]["c2"]
-	   if (par["GET"]["c3"] && par["GET"]["c3"] != "undefined" && par["GET"]["c3"] != "null") 
-	   c3 = par["GET"]["c2"]
-        
-	 ServerMessage sm = new ServerMessage("AdminRembrandtedDocMapping", lang, bind, session)  
-                    
-        /** CHECK COLLECTION **/
-        Collection collection = Collection.getFromName(collection_name)
-        if (!collection) {
-            bind["status"] = -1
-            bind["message"] = i18n.servermessage['collection_not_found'][lang]
-            log2.debug "$session NEMapping: $bind - collectionname $collection_name"
-            return  JSONHelper.toJSON(bind)
-        }
-        
-        User user 
-        /** CHECK API KEY / USER **/      
-        if (api_key) {
-            user = User.getFromAPIKey(api_key)
-        } else {
-            if (user_login) { 
-                if (user_login == User.guests[lang]) user_login=User.guest
-                user = User.getFromLogin(user_login)
-            } else {
-                user_login == User.guests[lang]
-                user = User.getFromLogin(user_login)
-            }            
-        }
-        
-        /** CHECK USER PERMS **/      
-        if (!user.canReadCollection(collection) && !user.isSuperUser()) 
-            return sm.statusMessage(-1, i18n.servermessage['user_cant_read_collection'][lang])
-       
-        
-        /*** 1. DETAIL DOC ***/
-	    if (action == "detail") {
-		bind["id"] = id
-		bind["do"] = "detailne"		     
-				
-		// if we have a NE id, let's go for it. We may not have.
-	        NE ne
-		if (id) {ne = NE.getFromID(id) }
-		else {ne = NE.getFromNameAndDocSentenceTermAndClassification(
-		    collection, nename, s, t, c1, c2, c3)}
-			    
-		if (!ne) {
-		    bind["status"] = -1
-		    bind["message"] = i18n.servermessage['nenotfound'][lang]
-		    log2.debug "$session NEMapping:$action: $bind" 
-		    return JSONHelper.toJSON(bind)						
-		}
+       	  if (par["POST"]["id"] && par["POST"]["id"] != "undefined") 
+			  try {id =  Long.parseLong(par["POST"]["id"])}
+			  catch(Exception e) {}
+       	  action =  par["POST"]["do"]
+       	  if (par["POST"]["ci"]) 
+		     try {collection_id = par["POST"]["ci"]}
+		     catch(Exception e) {}
+								
+       	   lang = par["POST"]["lg"]
 
-		stats = new SaskiaStats()
-		def answer = stats.renderNEPage(ne.ne_id, collection, lang)
-		bind["status"] = 0		
-		bind["content"] = answer 
-		log2.debug "$session NEMapping:$action: status 0 OK" 
-		return JSONHelper.toJSON(bind)		
-				    
-	    }
-            bind['status']=-1
-            bind['message'] = i18n.servermessage['action_unknown'][lang]
-            log2.debug "$session NEMapping: $bind  action $action unknown"
-            return JSONHelper.toJSON(bind)	
-	    
-	}
+       		String api_key = par["POST"]["api_key"] 
+            if (!api_key) api_key = par["COOKIE"]["api_key"]   
+            if (!api_key) return sm.noAPIKeyMessage()
+
+            User user = User.getFromAPIKey(api_key)           
+            if (!user) return sm.userNotFound()
+            if (!user.isEnabled()) return sm.userNotEnabled()
+            if (!action || !lang) return sm.notEnoughVars(lang, "do=$action, lg=$lang")        	
+            sm.setAction(action)
+ 
+	   		if (par["POST"]["ne"] && par["POST"]["ne"] != "undefined" && par["POST"]["ne"] != "null") 
+	   			nename = par["POST"]["ne"] 
+	   		if (par["POST"]["s"] && par["POST"]["s"] != "undefined" && par["POST"]["s"] != "null") 
+	   			s = Integer.parseInt(par["POST"]["s"])
+	   		if (par["POST"]["t"] && par["POST"]["t"] != "undefined" && par["POST"]["t"] != "null") 
+	   			t = Integer.parseInt(par["POST"]["t"])
+	   		if (par["POST"]["c1"] && par["POST"]["c1"] != "undefined" && par["POST"]["c1"] != "null") 
+	   			c1 = par["POST"]["c1"]
+		   	if (par["POST"]["c2"] && par["POST"]["c2"] != "undefined" && par["POST"]["c2"] != "null") 
+	   			c2 = par["POST"]["c2"]
+	   		if (par["POST"]["c3"] && par["POST"]["c3"] != "undefined" && par["POST"]["c3"] != "null") 
+	   			c3 = par["POST"]["c2"]
+  
+	 			ServerMessage sm = new ServerMessage("AdminRembrandtedDocMapping", lang, bind, session, processlog)  
+       
+            /******************/
+            /** 1.5 metadata **/
+            /******************/
+ 	    		if (action == "metadata") {
+						     
+				// if we have a NE id, let's go for it. We may not have.
+	        		NE ne
+					if (id) {ne = NE.getFromID(id) }
+					else {ne = NE.getFromNameAndDocSentenceTermAndClassification(
+		    			collection, nename, s, t, c1, c2, c3)}
+			    	if (!ne) return sm.statusMessage(-1,i18n.servermessage['ne_not_found'][lang])
+
+					stats = new SaskiaStats()
+					def answer = stats.renderNEPage(ne.ne_id, collection, lang)
+					return sm.statusMessage(0, answer)
+				}	
+            return sm.unknownAction(action)			    
+			}
     }
 }

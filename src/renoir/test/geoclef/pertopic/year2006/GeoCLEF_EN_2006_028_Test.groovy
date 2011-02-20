@@ -85,7 +85,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 	
 		println refq.toString()
 		String reformulated_x = """
-label:028 contents:snowstorms contents:"North America" woeid-index:24865672 woeid-index:23424736 woeid-index:23424737 woeid-index:23424751 woeid-index:23424754 woeid-index:23424756 woeid-index:23424758 woeid-index:23424760 woeid-index:23424775 woeid-index:23424783 woeid-index:23424791 woeid-index:23424793 woeid-index:23424798 woeid-index:23424800 woeid-index:23424807 woeid-index:23424826 woeid-index:23424828 woeid-index:23424831 woeid-index:23424834 woeid-index:23424839 woeid-index:23424841 woeid-index:23424858 woeid-index:23424884 woeid-index:23424888 woeid-index:23424900 woeid-index:23424914 woeid-index:23424915 woeid-index:23424924 woeid-index:23424935 woeid-index:23424939 woeid-index:23424940 woeid-index:23424951 woeid-index:23424958 woeid-index:23424962 woeid-index:23424977 woeid-index:23424981 woeid-index:23424983 woeid-index:23424985
+label:028 contents:snowstorms contents:"North America" woeid:24865672 woeid:23424736 woeid:23424737 woeid:23424751 woeid:23424754 woeid:23424756 woeid:23424758 woeid:23424760 woeid:23424775 woeid:23424783 woeid:23424791 woeid:23424793 woeid:23424798 woeid:23424800 woeid:23424807 woeid:23424826 woeid:23424828 woeid:23424831 woeid:23424834 woeid:23424839 woeid:23424841 woeid:23424858 woeid:23424884 woeid:23424888 woeid:23424900 woeid:23424914 woeid:23424915 woeid:23424924 woeid:23424935 woeid:23424939 woeid:23424940 woeid:23424951 woeid:23424958 woeid:23424962 woeid:23424977 woeid:23424981 woeid:23424983 woeid:23424985
 """		
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

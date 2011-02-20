@@ -31,6 +31,9 @@ import rembrandt.io.DocStats
 import rembrandt.io.HTMLDocumentReader
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtWriter
+import saskia.io.Task
+import saskia.io.User
+import saskia.io.Job
 import saskia.io.Collection
 import saskia.io.RembrandtedDoc
 import saskia.io.Tag
@@ -44,15 +47,15 @@ import rembrandt.obj.Document
  */
 class ImportSourceDocument2RembrandtedDocument {
 
-    	static Logger log = Logger.getLogger("SaskiaImports")
-    	HTMLDocumentReader readerHTML
-    	RembrandtReader readerRembrandt
-        RembrandtWriter writer
-        RembrandtStyleTag styletag
+	static Logger log = Logger.getLogger("SaskiaImports")
+	HTMLDocumentReader readerHTML
+	RembrandtReader readerRembrandt
+	RembrandtWriter writer
+	RembrandtStyleTag styletag
         
 	String lang
-        String taglang
-        def db // usado só para verificar a comunicação
+	String taglang
+	def db // usado só para verificar a comunicação
 	Configuration conf
 	RembrandtedDoc current_rdoc
 	SourceDoc current_sdoc
@@ -61,20 +64,24 @@ class ImportSourceDocument2RembrandtedDocument {
 	
 	RembrandtCore core 
 	     
+	/** don't handle big docs */
+	Long max_allowed_html_size
 	
 	/* internal pool size of SourceDocs. 
 	 * I can ask to process 100000 documents, but I'll get small sets at a time, for the sake of concurrency
 	 */
-	static final int MAX_ALLOWED_HTML_SIZE=100000
-	static final int SOURCE_DOC_POOL_SIZE=10
+	Integer source_doc_pool_size
+	
 	String ynae
 	BufferedReader input
 	
 	public ImportSourceDocument2RembrandtedDocument(String lang) {
-	    conf = Configuration.newInstance()
-	    conf.set("global.lang",lang)
-            this.lang =lang
-	    taglang = conf.get("rembrandt.output.styletag.lang", lang)
+		conf = Configuration.newInstance()
+		conf.set("global.lang",lang)
+		max_allowed_html_size = conf.getLong("saskia.imports.max_allowed_html_size",100000)
+		source_doc_pool_size = conf.getInt("saskia.imports.source_doc_pool_size",10)
+		this.lang =lang
+		taglang = conf.get("rembrandt.output.styletag.lang", lang)
 	    db = SaskiaDB.newInstance()
 	    styletag = new RembrandtStyleTag(taglang)
 	    readerHTML = new HTMLDocumentReader()
@@ -93,22 +100,11 @@ class ImportSourceDocument2RembrandtedDocument {
 	 * @param tag_version the tag
 	 * @return HashMap with count statistics   
 	 */
-	public HashMap parseBatch(int batchSize = 100, collection_, String sdoc_lang, 
-		String tag_version) {
+	public HashMap parseBatch(int batchSize = 100, Collection collection, User user, 
+		String process_signature, String tag_version) {
 
-	    HashMap status = [inserted:0, updated:0, skipped:0, failed:0]
-	    
-	    // check collection
-		try {
-			collection = Collection.getFromID(Long.parseLong(collection_))		
-		} catch(Exception e) {
-			collection = Collection.getFromName(collection_)
-		}
-		if (!collection) {
-			log.error "Don't know collection $collection_ to parse documents on. Exiting."
-			return status
-		}
-		
+		HashMap status = [inserted:0, updated:0, skipped:0, failed:0]
+
 		// Get tag
 		Tag tag = Tag.getFromVersion(tag_version)
 		if (!tag) {
@@ -118,20 +114,37 @@ class ImportSourceDocument2RembrandtedDocument {
 	    	    
  		def stats = new DocStats(batchSize)
  		stats.begin()
- 		
-		for(int i=batchSize; i > 0; i -= SOURCE_DOC_POOL_SIZE) {
+
+		String taskname = "task_S2R_"+System.currentTimeMillis()
+		Task task = new Task(tsk_user:user, tsk_task:taskname,
+			tsk_collection:collection, tsk_type:"S2R",
+		   tsk_priority:0, tsk_limit:batchSize, tsk_offset:0, tsk_done:0,
+			tsk_scope:"BAT", tsk_persistence:"TMP", tsk_status:"PRO", tsk_comment:"");
+			
+			task.tsk_id = task.addThisToDB()
+				
+			for(int i=batchSize; i > 0; i -= source_doc_pool_size) {
 		    
-		    int limit = (i > SOURCE_DOC_POOL_SIZE ? SOURCE_DOC_POOL_SIZE : i)
-		    log.debug "Initial batchSize: $batchSize Remaining: $i Next pool size: $limit"
-		    List<SourceDoc> sdocs = SourceDoc.getNextProcessableAndUnlockedDoc(sdoc_lang, collection.col_id, limit)
+		    	int limit = (i > source_doc_pool_size ? source_doc_pool_size : i)
+		    	log.debug "Initial batchSize: $batchSize Remaining: $i Next pool size: $limit"
+		    	List<SourceDoc> sdocs = SourceDoc.getNextProcessableAndUnlockedDoc(task, process_signature, 
+			 		collection, limit)
 		    log.debug "Got ${sdocs?.size()} SourceDoc(s)."
-		    sdocs?.each {sdoc ->
-			stats.beginDoc(sdoc.sdoc_id)
+		    
+			 if (sdocs?.size() == 0) {
+			   log.info "No more source docs to process, exiting early."	
+				break
+			 }
+			 	
+			 sdocs?.each {sdoc ->
+			 	stats.beginDoc(sdoc.sdoc_id)
 		    // failcheck is done at the parse method. If REMBRANDT fails, it should release the lock and return 
 		    // a failed status, and move to the next one. 
-		    	HashMap status_ = parse(sdoc, collection, tag)
-		    	stats.endDoc()					   			  
-  			stats.printMemUsage()
+		    	HashMap status_ = parse(sdoc, collection, task, process_signature, tag)
+
+				task.incrementDone()
+ 				stats.endDoc()
+  				stats.printMemUsage()
   			
 		    	if (status_) {
 		    	    status.inserted += status_.inserted
@@ -139,59 +152,18 @@ class ImportSourceDocument2RembrandtedDocument {
 		    	    status.skipped += status_.skipped	
 		    	    status.failed += status_.failed
 		    	}
-	            } 
+			} 
 		}
- 		stats.end()
-	    return status
+ 		stats.end()	
+		// signal that the task is done
+		Task.updateValue(task.tsk_id, 'tsk_status', 'FIN')
+		return status
 	}
-	
-	public HashMap parseDoc(String sdoc_original_id, String sdoc_lang, collection_, String tag_version) {
-
-	    HashMap status = [inserted:0, updated:0, skipped:0,  failed:0]
-	    
-		try {
-			collection = Collection.getFromID(Long.parseLong(collection_))		
-		} catch(Exception e) {
-			collection = Collection.getFromName(collection_)
-		}
-		if (!collection) {
-			log.error "Don't know collection $collection_ to parse documents on. Exiting."
-			return status
-		}
-	    log.debug "Going to convert Source doc ${sdoc_original_id}, lang ${sdoc_lang} to a Rembrandted doc."
-	
-		// Get tag
-		Tag tag = Tag.getFromVersion(tag_version)
-		if (!tag) {
-			tag = new Tag(tag_version:tag_version, tag_comment:null)
-			tag.tag_id = tag.addThisToDB()
-		}
-	    
-	    // NOT THREAD-SAFE!!!
-	    SourceDoc sdoc = SourceDoc.getFromOriginalIDandCollectionIDandLang(sdoc_original_id, collection.col_id, sdoc_lang)
-		
-		if (sdoc) {
-		    if (sdoc.sdoc_proc.isGoodToProcess() && sdoc.sdoc_edit.isUnlocked()) {
-				HashMap status_ = parse(sdoc, collection, tag)
-				if (status_) {
-				    status.inserted += status_.inserted
-				    status.updated += status_.updated
-				    status.skipped += status_.skipped	
-			        status.failed += status_.failed
-				}	
-		    } else {
-				status.skipped++
-		    }
-		}
-	    log.info "Converted status: "+status
-	    return status
-	}
-		   	
+	 	
 	/** 
 	 * This method processes a SourceDoc and inserts into RembrandtedDoc/Doc tables 
 	 */
-   public HashMap parse(SourceDoc sdoc, Collection collection,
-	   Tag tag) {
+   public HashMap parse(SourceDoc sdoc, Collection collection, Task task, String process_signature, Tag tag) {
 	
 	// first: fetch document from table page
 		if (!sdoc || !tag) return null
@@ -205,14 +177,13 @@ class ImportSourceDocument2RembrandtedDocument {
 		log.trace "Going to convert SourceDoc $sdoc to a RembrandtedDocument"
 		log.trace "Tag used: ${tag}"
 		
-		sdoc.changeEditStatusInDBto(DocStatus.LOCKED)
-		sdoc.addEditDate() // timedate associated to the lock
-		
+		sdoc.sdoc_job.changeEditStatusInDBto(DocStatus.LOCKED)
 		current_sdoc = sdoc
+		
 		// But first, let's see if there's one already, and if it allows an overwrite
-		RembrandtedDoc rdoc = RembrandtedDoc.getFromOriginalDocIDandCollectionAndLang(
-			sdoc.sdoc_original_id, sdoc.sdoc_collection, sdoc.sdoc_lang)
-			
+		RembrandtedDoc rdoc = RembrandtedDoc.getFromOriginalDocIDandCollection(
+			sdoc.sdoc_original_id, sdoc.sdoc_collection)
+		
 		if (rdoc) {	    
 			//log.warn "There is a RembrandtedDoc ${doc} on the DB."
 			if (rdoc.doc_proc.isMarkedAsBad()) {
@@ -237,7 +208,17 @@ class ImportSourceDocument2RembrandtedDocument {
 			    }
 			}
 			
-		    if (rdoc.doc_edit.isLocked()) {
+			//println "Searching for jobs for "+rdoc.doc_id+", "+RembrandtedDoc.job_doc_type_label
+			// let's check if there is a rdoc associated to this rdoc, to see if it's locked or not.
+			Job rdocjob = Job.getFromDocIDAndDocType(rdoc.doc_id, RembrandtedDoc.job_doc_type_label)
+
+			//println "Got $rdocjob"
+			
+			// if there is an associated job, let's test it
+			if (rdocjob) rdoc.doc_job = rdocjob
+
+			// don't forget to test if there is a job.
+			if (rdoc.doc_job?.job_doc_edit?.isLocked()) {
 			    
 				if ((!ynae) || (ynae == "y") || (yane == "n")) {
 				    ynae = null
@@ -259,52 +240,58 @@ class ImportSourceDocument2RembrandtedDocument {
 				    status.skipped++
 				    return status
 				}
-		    }
-		    
-		    // not returned - let's lock the target!
-		    rdoc.changeEditStatusInDBto(DocStatus.LOCKED)
-		    rdoc.addEditDate()
-		    current_rdoc = rdoc
+		   }
+		
+		   // not returned - means that rdoc is not locked (== there is no rdocjob), 
+			// or we are forcing an overwrite (== there is a rdocjob). 
+		   // let's lock the target and complete the 'job' object
+
+			// note that, since this is a batch job, there is no task. 
+			if (rdoc.doc_job == null) {
+				rdoc.doc_job = new Job(job_task:task, job_worker:process_signature, //  
+				job_doc_type:RembrandtedDoc.job_doc_type_label,
+				job_doc_id:rdoc.doc_id, job_doc_edit:DocStatus.LOCKED, job_doc_edit_date:new Date())
+				rdoc.doc_job.job_id = rdoc.doc_job.addThisToDB()
+			} else {
+				rdoc.doc_job.job_doc_id = rdoc.doc_id
+				rdoc.doc_job.job_doc_edit = DocStatus.LOCKED
+			}
+		   current_rdoc = rdoc
 		}
 		
 		if (sdoc.sdoc_content) log.debug "HTML content of SourceDoc ${sdoc} has ${sdoc.sdoc_content.size()} bytes." 
+
 		else {
 			log.warn "HTML content of SourceDoc ${sdoc} is empty. Skipping." 
 			status.skipped++
-			if (rdoc) {
-                            rdoc.removeEditDate()
-                            rdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
-			}		
+			rdoc?.doc_job?.removeThisFromDB() // check first if rdoc is not null					
 			sdoc.changeProcStatusInDBto(DocStatus.FAILED) // mark it so next time we'll not use it			
-                        sdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
-                        current_sdoc = null
-                        return status
+			sdoc.sdoc_job.removeThisFromDB() // release him
+			current_sdoc = null
+			return status
 		}
 		// go form HTML to REMBRANDT and tokenized versions.
 		log.trace "Creating a REMBRANDT document with HTML text of ${sdoc.sdoc_content.size()} bytes." 
 		
-		if (sdoc.sdoc_content.size() > MAX_ALLOWED_HTML_SIZE) {
-			log.warn "HTML content of SourceDoc ${sdoc} is too big (${sdoc.sdoc_content.size()} bytes), over max allowed size ${MAX_ALLOWED_HTML_SIZE}. Skipping." 
+		if (sdoc.sdoc_content.size() > max_allowed_html_size) {
+			log.warn "HTML content of SourceDoc ${sdoc} is too big (${sdoc.sdoc_content.size()} bytes), over max allowed size ${max_allowed_html_size}. Skipping." 
 			status.skipped++
-                        if (rdoc) {
-                            rdoc.removeEditDate()
-                            rdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
-                        }			
+			rdoc?.doc_job?.removeThisFromDB()
 			sdoc.changeProcStatusInDBto(DocStatus.TOO_BIG) // mark it so next time we'll not use it
-                        sdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
+			sdoc.sdoc_job.removeThisFromDB() // release him
 			current_sdoc = null
 			return status 	    
 		}
 		
 		Document d 
 	
-		if (sdoc.sdoc_content.startsWith("<HTML>") || sdoc.sdoc_content.startsWith("<html>"))
+		if (sdoc.sdoc_content.startsWith("<HTML") || sdoc.sdoc_content.startsWith("<html"))
 		 d = readerHTML.createDocument(sdoc.sdoc_content)
 		else if (sdoc.sdoc_content.startsWith("<DOC")) 
 		 d = readerRembrandt.createDocument(sdoc.sdoc_content)
 		
-		log.trace "Document's number of sentences in title: ${d.title_sentences.size()}"		
-		log.trace "Document's number of sentences in body: ${d.body_sentences.size()}"		
+		log.trace "Document's number of sentences in title: ${d?.title_sentences?.size()}"		
+		log.trace "Document's number of sentences in body: ${d?.body_sentences?.size()}"		
 		d.docid = sdoc.sdoc_id
 		d.lang = sdoc.sdoc_lang
 		d.taglang = taglang
@@ -312,23 +299,23 @@ class ImportSourceDocument2RembrandtedDocument {
 		try {
 		    d = core.releaseRembrandtOnDocument(d)
 		    rdocText = writer.printDocument(d)
-                } catch(Exception e) {
+		} catch(Exception e) {
 		    e.printStackTrace()
 		    abort()
 		    status.failed++
 		    return status
 		}
+		
 		if (!rdocText) {
 			log.error "Did NOT get a valid REMBRANDTed text. Skipping."
-                        status.skipped++
-                        if (rdoc) {
-                            rdoc.removeEditDate()
-                            rdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
-                        }		
-                        sdoc.changeProcStatusInDBto(DocStatus.FAILED) // mark it so next time we'll not use it			
-                        sdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
-                        current_sdoc = null
-                        return status
+			status.skipped++
+         if (rdoc) {
+				rdoc.doc_job.removeThisFromDB()
+			}
+			sdoc.changeProcStatusInDBto(DocStatus.FAILED) // mark it so next time we'll not use it			
+			sdoc.sdoc_job.removeThisFromDB() // release him
+         current_sdoc = null
+			return status
 		}
 		
 		// it may be a long time before we visited the DB, and I don't  trust the autoReconnect 
@@ -341,53 +328,49 @@ class ImportSourceDocument2RembrandtedDocument {
         
 		// new doc with the info	
 		if (rdoc) {
-		RembrandtedDoc newrdoc = new RembrandtedDoc(doc_id:rdoc.doc_id, doc_original_id:sdoc.sdoc_original_id,
-			doc_lang:sdoc.sdoc_lang, doc_content:rdocText,  doc_date_created:sdoc.sdoc_date)
+			
+			RembrandtedDoc newrdoc = new RembrandtedDoc(doc_id:rdoc.doc_id,
+			doc_collection:collection, doc_original_id:sdoc.sdoc_original_id,
+			doc_lang:sdoc.sdoc_lang, doc_content:rdocText, doc_date_created:sdoc.sdoc_date, 
+			doc_job:rdoc.doc_job)
 
 			newrdoc.replaceThisToDB()				
 			newrdoc.associateWithTag(tag)
 			
 			status.updated++
-			newrdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
-			newrdoc.removeEditDate()
+			newrdoc.doc_job.removeThisFromDB()
 			
 			current_rdoc = null
-			sdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
+			sdoc.sdoc_job.removeThisFromDB()
 			sdoc.addDocID(rdoc.doc_id)
-			sdoc.removeEditDate()
 			
 			newrdoc.changeProcStatusInDBto(DocStatus.READY) // mark it so next time we'll not use it
 			sdoc.changeProcStatusInDBto(DocStatus.READY) // mark it so next time we'll not use it
 
 			newrdoc.changeSyncStatusInDBto(DocStatus.NOT_SYNCED_DOC_CHANGED) 
-			
-			// let's add associates entities
-			//newrdoc.checkDocHasEntity()
 		} 
 				
 		else if (!rdoc)  {
-		    rdoc = new RembrandtedDoc(doc_original_id:sdoc.sdoc_original_id, doc_lang:sdoc.sdoc_lang,
-			    doc_date_created:sdoc.sdoc_date, doc_content:rdocText )
+		    rdoc = new RembrandtedDoc(doc_original_id:sdoc.sdoc_original_id, 
+				doc_collection:collection, doc_lang:sdoc.sdoc_lang,
+			   doc_date_created:sdoc.sdoc_date, doc_content:rdocText )
 			
 		    rdoc.addThisToDB()
 		    if (!rdoc.doc_id) 
 			throw new IllegalStateException("Document $rdoc was added to DB, but hasn't ID! Check it!")
 		    
-		    rdoc.associateWithCollection(collection)
 		    rdoc.associateWithTag(tag)
 			
 		    status.inserted++
 
 		    rdoc.changeProcStatusInDBto(DocStatus.READY) // mark it so next time we'll not use it
 		    rdoc.changeSyncStatusInDBto(DocStatus.NOT_SYNCED_DOC_CHANGED) 
-		    rdoc.removeEditDate()
-		    rdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
-            
+		    // no need to check jobs on this rdoc - it's brand new, so no job
+			 
 		    sdoc.addDocID(rdoc.doc_id)
 		    sdoc.changeProcStatusInDBto(DocStatus.READY) // mark it so next time we'll not use it
 		    rdoc.changeSyncStatusInDBto(DocStatus.NOT_SYNCED_DOC_CHANGED) 
-		    sdoc.removeEditDate()
-		    sdoc.changeEditStatusInDBto(DocStatus.UNLOCKED) // release him
+		    sdoc.sdoc_job.removeThisFromDB()
 
 		    current_rdoc = null
 		    current_sdoc = null
@@ -400,20 +383,17 @@ class ImportSourceDocument2RembrandtedDocument {
    public abort() {
 	    log.warn "\nAborting... backtracking"
 	    if (current_rdoc) {
-			current_rdoc.changeEditStatusInDBto(DocStatus.UNLOCKED)
-			log.warn "RembrandtedDoc edit status changed to UNLOCKED."
-			current_rdoc.removeEditDate()
+			current_rdoc.doc_job?.removeThisFromDB()
+			log.warn "RembrandtedDoc job removed."
 			current_rdoc.changeProcStatusInDBto(DocStatus.NOT_READY)
 			log.warn "RembrandtedDoc proc status changed to NOT_READY."            
-            }  
+       }  
 	    if (current_sdoc) {
 			current_sdoc.changeProcStatusInDBto(DocStatus.FAILED)
 			log.warn "SourceDoc proc status changed to FAILED."
-			current_sdoc.changeEditStatusInDBto(DocStatus.UNLOCKED)
-			log.warn "SourceDoc edit status changed to UNLOCKED."
-			current_sdoc.removeEditDate()
-
-	    }
+			current_sdoc.sdoc_job?.removeThisFromDB()
+			log.warn "SourceDoc job removed."
+	 	}
 	    log.info "Exiting."
 	}
    
@@ -421,7 +401,7 @@ class ImportSourceDocument2RembrandtedDocument {
        
 	    Options o = new Options()
 	    o.addOption("from", true, "[DB] - one particular document from DB, [batch] - a number of unseen documents")
-	    o.addOption("lang", true, "language of documents / collections")
+	    o.addOption("user", true, "User or user_id")
 	    o.addOption("col", true, "target collection. Can be id or name")
 	    o.addOption("ndocs", true, "number of docs in batch process")
 	    o.addOption("docid", true, "id of docs in DB process")
@@ -431,6 +411,9 @@ class ImportSourceDocument2RembrandtedDocument {
 	    CommandLineParser parser = new GnuParser()
 	    CommandLine cmd = parser.parse(o, args)
 
+		Collection collection
+		User user
+		
 	    if (cmd.hasOption("help")) {
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp( "java saskia.imports.ImportSourceDocument2RembrandtedDocument", o )
@@ -443,8 +426,8 @@ class ImportSourceDocument2RembrandtedDocument {
 			System.exit(0)
 	    }
 	    
-	    if (!cmd.hasOption("lang")) {
-			println "No --lang arg. Please specify the language (2 lowercase letters). Exiting."
+	    if (!cmd.hasOption("user")) {
+			println "No --user arg. Please specify the user. Exiting."
 			System.exit(0)
 	    }
 
@@ -452,11 +435,34 @@ class ImportSourceDocument2RembrandtedDocument {
 			println "No --col arg. Please specify the target collection (id or name). Exiting."
 			System.exit(0)
 	    }
+	
+	 // check collection
+		try {
+			collection = Collection.getFromID(Long.parseLong(cmd.getOptionValue("col")))		
+		} catch(Exception e) {
+			collection = Collection.getFromName(cmd.getOptionValue("col"))
+		}
+		if (!collection) {
+			log.error "Don't know collection "+cmd.getOptionValue("col")+" to parse documents on. Exiting."
+			System.exit(0)
+		}
 
+	 // check user
+		try {
+			user = User.getFromID(Long.parseLong(cmd.getOptionValue("user")))		
+		} catch(Exception e) {
+			user = User.getFromLogin(cmd.getOptionValue("user"))
+		}
+		if (!user) {
+			log.error "Don't know user "+cmd.getOptionValue("user")+" to parse documents on. Exiting."
+			System.exit(0)
+		}
+		
 	    ImportSourceDocument2RembrandtedDocument s2r = new ImportSourceDocument2RembrandtedDocument(
-		     cmd.getOptionValue("lang"))
+		     collection.col_lang)
 	    
-	    s2r.cmd = cmd // give options so that we can check the answer arg.
+	   s2r.cmd = cmd // give options so that we can check the answer arg.
+		String process_signature = s2r.toString()
 			
 	 	HashMap status = [inserted:0, updated:0, skipped:0]
 	    
@@ -464,24 +470,23 @@ class ImportSourceDocument2RembrandtedDocument {
 		String rembrandtversion = Rembrandt.getVersion().substring(0, Rembrandt.getVersion().indexOf("-"))
 		
 		if (cmd.getOptionValue("from")== "DB") {
-		    List docs = cmd.getOptionValues("docid")
+		   /* List docs = cmd.getOptionValues("docid")
 		    if (!docs) {
 				println "Set to DB, but no doc_id found. Please set --docid args. Exiting."
 				System.exit(0)
 		    }
 		    docs.each{doc -> 
-		    	HashMap status_ = s2r.parseDoc(doc, 
-		    		cmd.getOptionValue("col"), cmd.getOptionValue("lang"), Rembrandt.version)			 
+		    	HashMap status_ = s2r.parseDoc(doc, collection, Rembrandt.version)			 
 		    	if (status_) {
 		    	    status.imported_ready += status_.imported_ready
 		    	    status.imported_notready += status_.imported_notready
 		 	 		status.skipped += status_.skipped
 		    	}
-		    }
-		} else if (cmd.getOptionValue("from")== "batch") {
+		    }*/
+			println "Not avaliable, sorry."
+		} else if (cmd.getOptionValue("from") == "batch") {
 		    status = s2r.parseBatch( Integer.parseInt(
-			    cmd.getOptionValue("ndocs")), cmd.getOptionValue("col"), 
-			    cmd.getOptionValue("lang"), Rembrandt.version)			
+			    cmd.getOptionValue("ndocs")), collection, user, process_signature, Rembrandt.version)			
 		} else {
 			println "Unknown value for --from. Exiting."
 			System.exit(0)		    

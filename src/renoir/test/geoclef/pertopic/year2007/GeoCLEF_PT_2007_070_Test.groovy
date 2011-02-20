@@ -97,7 +97,7 @@ label:075 Violações dos direitos humanos na antiga Birmânia
 
 		println refq.toString()
 		String reformulated_x = """
-label:070 contents:"Turismo" contents:norte contents:"Itália" entity:Tourism woeid-index:23424853
+label:070 contents:"Turismo" contents:norte contents:"Itália" entity:Tourism woeid:23424853
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

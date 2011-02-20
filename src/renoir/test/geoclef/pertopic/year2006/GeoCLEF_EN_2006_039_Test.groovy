@@ -99,7 +99,7 @@ label:050 Cities along the Danube and the Rhine
 	
 		println refq.toString()
 		String reformulated_x = """
-label:039 contents:Russian contents:troops contents:southern contents:"Caucasus" woeid-index:55949072 woeid-index:23424741 woeid-index:23424743 woeid-index:23424823
+label:039 contents:Russian contents:troops contents:southern contents:"Caucasus" woeid:55949072 woeid:23424741 woeid:23424743 woeid:23424823
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

@@ -18,8 +18,6 @@
  
 package rembrandt.rules
 
-import groovy.lang.Closure;
-
 import org.apache.log4j.Logger
 import rembrandt.obj.Sentence
 import rembrandt.obj.Criteria
@@ -123,11 +121,8 @@ public class SplitNEDetector extends Detector {
 		sentenceIndex:o.sentence.index, termIndex:terms2[0].index)    
 
 	o.split_nes = [ne1, ne2]
-	//println "ne1.termIndex:"+o.split_nes[0].termIndex+" ne1.term[0],index = "+o.split_nes[0].terms[0].index
 	o.saskia_nes = [saskia.answerMe(ne1), saskia.answerMe(ne2)]             
-	//println "ne1.termIndex:"+o.saskia_nes[0].termIndex+" ne1.term[0],index = "+o.saskia_nes[0].terms[0].index
 	o.ie_nes = [ierules.processInternalEvidenceOnNE(ne1), ierules.processInternalEvidenceOnNE(ne2)]             
- 	//println "ne1.termIndex:"+o.ie_nes[0]?.termIndex+" ne1.term[0],index = "+o.ie_nes[0]?.terms[0]?.index
-
+ 
   }
 }

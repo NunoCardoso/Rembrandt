@@ -383,16 +383,22 @@ class ListOfNE extends ArrayList {
 	    String altid = ""+System.currentTimeMillis()	    	    	
 	    int indexOfBigOne = this.indexOf(BigOne)
 	    if (indexOfBigOne <= 0) {
-		add(BigOne)//throw new IllegalStateException("Can't find the Big One ${BigOne}!")
-		indexOfBigOne = this.indexOf(BigOne)
+		 	add(BigOne)//throw new IllegalStateException("Can't find the Big One ${BigOne}!")
+		 	indexOfBigOne = this.indexOf(BigOne)
 	    }
-	    if (this[indexOfBigOne].alt) throw new IllegalStateException("Big One $BigOne already has an ALT!")
+	    if (this[indexOfBigOne].alt) {
+			log.warn "Big One $BigOne already has an ALT! I'll skip it"
+			return
+		 }
 
 	    this[indexOfBigOne].alt = altid
 	    this[indexOfBigOne].subalt = 1
 	    this[indexOfBigOne].reportToHistory(toHistory)
 	    SmallOnes.each{ne -> 
-	       if (ne.alt) throw new IllegalStateException("Smaller One $ne already has an ALT!")
+	       if (ne.alt) {
+				log.warn "Smaller One $ne already has an ALT! I'll skip it"
+				return
+		 	}
 	       ne.alt = altid
 	       ne.subalt = 2
 	       ne.reportToHistory(toHistory)

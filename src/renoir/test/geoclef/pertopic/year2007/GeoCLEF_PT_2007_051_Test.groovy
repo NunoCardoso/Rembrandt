@@ -107,7 +107,7 @@ label:075 Violações dos direitos humanos na antiga Birmânia
 	
 		println refq.toString()
 		String reformulated_x = """
-label:051 contents:Extracção contents:petróleo contents:gás contents:"Reino Unido" contents:continente contents:europeu woeid-index:23424975
+label:051 contents:Extracção contents:petróleo contents:gás contents:"Reino Unido" contents:continente contents:europeu woeid:23424975
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

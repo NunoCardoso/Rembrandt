@@ -147,7 +147,7 @@ class AskSaskia {
 	 if (conf.getBoolean("saskia.dbpedia.enabled",true)) {
 	     log.trace "Saskia's DBpedia enabled."
 	     resource = dbpedia.getDBpediaResourceFromWikipediaPageTitle(ne_text, lang)
-	     if (resource)  classifyWithDBpedia(ne, resource)
+	     if (resource) classifyWithDBpedia(ne, resource)
 	     else log.trace "DBpedia failed! Will rely on Wikipedia alone"	
 	} else {
 	    log.info "Saskia's DBpedia disabled. If you enable, results will be more accurate."
@@ -186,8 +186,9 @@ class AskSaskia {
     		}
 	   }
 	} else {
-	    log.trace "X.99 No doc. Nothing. Returning null"
-	    return null
+	    log.trace "X.99 No doc. Nothing. Returning original ne"
+		if (ne.classification.isEmpty()) ne.classification << SC.unknown
+	    return ne
     	}		
     }
   

@@ -96,7 +96,7 @@ label:100 Natural disasters in the western USA
 
 		println refq.toString()
 		String reformulated_x = """
-label:094 contents:Demonstrations contents:German contents:"cities" woeid-index:23424829
+label:094 contents:Demonstrations contents:German contents:"cities" woeid:23424829
 """
 
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 

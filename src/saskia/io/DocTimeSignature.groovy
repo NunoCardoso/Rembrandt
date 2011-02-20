@@ -31,13 +31,18 @@ import saskia.bin.Configuration;
  */
 class DocTimeSignature {
     
-    static String dts_table = "doc_time_signature"
-    long dts_id
-    long dts_document
-    String dts_document_original_id
+    static String tablename = "doc_time_signature"
+    Long dts_id
+    Long dts_document
     String dts_signature
     Tag dts_tag
     Date dts_date_created
+
+// meta
+
+    Long dts_document_id
+    String dts_document_original_id
+
     
     static Configuration conf = Configuration.newInstance()
     static SaskiaDB db = SaskiaDB.newInstance()
@@ -55,6 +60,12 @@ class DocTimeSignature {
             if (row['dts_signature']) g.dts_signature = row['dts_signature']            
             if (row['dts_tag']) g.dts_tag = Tag.getFromID(row['dts_tag'])
             if (row['dts_date_created']) g.dts_date_created = (Date)row['dts_date_created']
+
+//meta
+            try {g.dts_document_id = row['doc_id']}
+				catch(Exception e) {}
+            try {g.dts_document_original_id = row['doc_original_id']}
+				catch(Exception e) {}
             if (g.dts_id) res << g
         })
         return res
@@ -64,7 +75,7 @@ class DocTimeSignature {
     static DocTimeSignature getFromID(long dts_id) {
         if (!dts_id) return null
         if (idCache.containsKey(dts_id)) return idCache[dts_id]
-        List<DocTimeSignature> dts = queryDB("SELECT * FROM ${dts_table} WHERE dts_id=?", [dts_id])
+        List<DocTimeSignature> dts = queryDB("SELECT * FROM ${tablename} WHERE dts_id=?", [dts_id])
         log.debug "Querying for dts_id $dts_id got DocTimeSignature $dts." 
         if (dts) {
             idCache[dts_id] = dts[0]
@@ -80,17 +91,17 @@ class DocTimeSignature {
         
         // ORDER BY doc_id ASC ensures that the TimeSignatures are batched just like in other indexes, 
         // to ensure Lucene gets identical indexes for identical documents
-        return queryDB("SELECT ${dts_table}.*, ${RembrandtedDoc.doc_table}.doc_original_id "+
-        "FROM ${dts_table},  ${RembrandtedDoc.doc_table}, ${RembrandtedDoc.chd_table} "+
-        "WHERE chd_collection=? AND chd_document=dts_document AND chd_document=doc_id "+
-        "ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id])    
-        
+         return queryDB("SELECT ${tablename}.*, ${RembrandtedDoc.tablename}.doc_original_id, "+
+			"${RembrandtedDoc.tablename}.doc_id "+
+        "FROM ${tablename}, ${RembrandtedDoc.tablename} "+
+        "WHERE doc_collection=? AND doc_id=dts_document "+
+        "ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id])      
         
     }
     
     public long addThisToDB() {	
         
-        def res = db.getDB().executeInsert("INSERT INTO ${dts_table}(dts_document, " +
+        def res = db.getDB().executeInsert("INSERT INTO ${tablename}(dts_document, " +
             "dts_signature, dts_tag, dts_date_created) VALUES(?,?,?, NOW())", 
         [dts_document, dts_signature, dts_tag.tag_id])
         long new_dts_id = (long)res[0][0]

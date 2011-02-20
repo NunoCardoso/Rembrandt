@@ -90,7 +90,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:041 contents:"Naufrágios" contents:"Oceano Atlântico" woeid-index:55959709
+label:041 contents:"Naufrágios" contents:"Oceano Atlântico" woeid:55959709
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

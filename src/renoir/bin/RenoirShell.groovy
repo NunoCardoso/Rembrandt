@@ -49,7 +49,7 @@ class RenoirShell {
         Options o = new Options()
         o.addOption("conf", true, "Configuration file")
         o.addOption("col", true, "Collection to be queried")
-        o.addOption("stem", false, "stem or not (true / false)")
+        o.addOption("stem", true, "stem or not (true / false)") // se for false, não funciona
         o.addOption("help", false, "Gives this help information")
         
         CommandLineParser parser = new GnuParser()
@@ -89,11 +89,13 @@ class RenoirShell {
              System.exit(0) 
         } 
 
-		  Boolean stem
-		   def read_stem 
+			Boolean stem
+			
 			if (cmd.hasOption("stem")) {
-				read_stem = cmd.getOptionValue("stem")
-            
+				String read_stem = cmd.getOptionValue("stem")
+            log.info(cmd.hasOption("stem"))
+            log.info(cmd.getOptionValue("stem"))
+           log.info("Stem:$read_stem")
             if (read_stem.equalsIgnoreCase("true")) {
 					log.info "Stem is true."
 					stem = true
@@ -102,7 +104,7 @@ class RenoirShell {
 					stem = false
 				}
         } else {
-            log.info "No stem info is givel. Stem is false by default."
+            log.info "No stem info is given. Stem is false by default."
 				stem = false
         }
 		

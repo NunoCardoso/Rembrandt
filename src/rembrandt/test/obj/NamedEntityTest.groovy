@@ -359,9 +359,9 @@ public class TestNE extends GroovyTestCase {
       	ne_confused.dbpediaPage[SC.place_human_country]= ["http://dbpedia.org/resource/Netherlands_(country)"]     	 
         ne_confused.wikipediaPage[SC.place_human_division] = ["http://pt.wikipedia.org/wiki/Países_Baixos_(division)"]
       	ne_confused.dbpediaPage[SC.place_human_division]= ["http://dbpedia.org/resource/Netherlands_(division)"]     	 
-      	ne_confused.wikipediaPage[SC.place_human_division] = ["http://pt.wikipedia.org/wiki/Países_Baixos_(person)"]
-      	ne_confused.dbpediaPage[SC.place_human_division]= ["http://dbpedia.org/resource/Netherlands_(person)"]     	 
-      	                                                                                            	                                             	                                                	                                                	                                                              
+      	ne_confused.wikipediaPage[SC.person_individual] = ["http://pt.wikipedia.org/wiki/Países_Baixos_(person)"]
+      	ne_confused.dbpediaPage[SC.person_individual]= ["http://dbpedia.org/resource/Netherlands_(person)"]     	 
+      	                                                                                            	                                             	                                                	                                                	                                                                    	                                                                                            	                                             	                                                	                                                	                                                              
        	// disambiguate ne_place_human_country with place, place_human or place_human_country will keep it untouched.   
       	 ne_place_human_country.disambiguateClassificationFrom(SC.place)
       	 assert ne_place_human_country.classification == [SC.place_human_country]
@@ -394,6 +394,74 @@ public class TestNE extends GroovyTestCase {
  	 
       	 ne_place.disambiguateClassificationFrom(SC.place_human_country)
       	 assert ne_place.classification == [SC.place_human_country]
+      	 assert ne_place.wikipediaPage.size() == 1
+      	 assert ne_place.wikipediaPage.keySet().toList().getAt(0).equals(SC.place), \
+      	 	"Got "+ne_place.wikipediaPage+" instead."
+    }
+
+
+   /**
+     * test for removeClassification(SemanticClassification)
+    */
+     void testRemoveClassification() {
+	 	
+			 NE ne
+			
+      	 NE ne_place_human_country = new NE(id:"2", terms:[new Term("Países",3),new Term("Baixos",4)], 
+     		 sentenceIndex:1, termIndex:3, classification:[SC.place_human_country])
+      	 ne_place_human_country.wikipediaPage[SC.place_human_country] = ["http://pt.wikipedia.org/wiki/Países_Baixos"]
+      	 ne_place_human_country.dbpediaPage[SC.place_human_country]= ["http://dbpedia.org/resource/Netherlands"]     	 
+  
+      	NE ne_confused = new NE(id:"2", terms:[new Term("Países",3),new Term("Baixos",4)], 
+      	sentenceIndex:1, termIndex:3, classification:[SC.place_human_country, SC.place_human_division, SC.person_individual])
+      	ne_confused.wikipediaPage[SC.place_human_country] = ["http://pt.wikipedia.org/wiki/Países_Baixos_(country)"]
+      	ne_confused.dbpediaPage[SC.place_human_country]= ["http://dbpedia.org/resource/Netherlands_(country)"]     	 
+			ne_confused.wikipediaPage[SC.place_human_division] = ["http://pt.wikipedia.org/wiki/Países_Baixos_(division)"]
+      	ne_confused.dbpediaPage[SC.place_human_division]= ["http://dbpedia.org/resource/Netherlands_(division)"]     	 
+      	ne_confused.wikipediaPage[SC.person_individual] = ["http://pt.wikipedia.org/wiki/Países_Baixos_(person)"]
+      	ne_confused.dbpediaPage[SC.person_individual]= ["http://dbpedia.org/resource/Netherlands_(person)"]     	 
+      	                                                                                            	                                             	                                                	                                                	                                                              
+ 			// I have to clone it, because I'm deleting classifications, I want to keep an original 
+      	 ne = ne_place_human_country.clone()
+			 ne.removeClassification(SC.place)
+      	 assert ne.classification == []
+      	 ne = ne_place_human_country.clone()
+			 ne.removeClassification(SC.place_human)
+      	 assert ne.classification == []
+      	 ne = ne_place_human_country.clone()
+			 ne.removeClassification(SC.place_human_country)
+      	 assert ne.classification == []
+      	                                                  
+      	 ne = ne_place_human_country.clone()   
+      	 assert ne.classification == [SC.place_human_country]
+      	 ne.removeClassification(SC.organization)       
+     	 	 assert ne.classification == [SC.place_human_country] 
+      	 
+      	 // Now, for some NEs that have multiple classifications
+     	 ne = ne_confused.clone()
+     	 ne.removeClassification(SC.place)
+    	 assert ne.classification == [SC.person_individual]    
+    	 assert ne.wikipediaPage.size() == 1                               
+   	 
+		 
+		 ne = ne_confused.clone()
+		 println ne
+		 ne.removeClassification(SC.place_human)
+    	 println ne
+		 assert ne.classification == [SC.person_individual]    
+    	 assert ne.wikipediaPage.size() == 1
+                              
+  	 	 ne = ne_confused.clone()
+		 ne.removeClassification(SC.place_human_country)
+    	 assert ne.classification == [SC.place_human_division, SC.person_individual]    
+    	 assert ne.wikipediaPage.size() == 2      
+    	 
+    	 NE ne_place = new NE(id:"2", terms:[new Term("Países",3),new Term("Baixos",4)], 
+     		 sentenceIndex:1, termIndex:3, classification:[SC.place])
+      	 ne_place.wikipediaPage[SC.place] = ["http://pt.wikipedia.org/wiki/Países_Baixos"]
+ 	 
+      	 ne_place.removeClassification(SC.place_human_country)
+      	 assert ne_place.classification == [SC.place]
       	 assert ne_place.wikipediaPage.size() == 1
       	 assert ne_place.wikipediaPage.keySet().toList().getAt(0).equals(SC.place), \
       	 	"Got "+ne_place.wikipediaPage+" instead."

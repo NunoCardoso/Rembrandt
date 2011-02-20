@@ -83,7 +83,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 
 		println refq.toString()
 		String reformulated_x = """
-label:075 contents:Violações contents:direitos contents:humanos contents:"Birmânia" ne-LOCAL-HUMANO-PAIS-index:"Birmânia"
+label:075 contents:Violações contents:direitos contents:humanos contents:"Birmânia" ne-LOCAL-HUMANO-PAIS:"Birmânia"
 """
 
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 

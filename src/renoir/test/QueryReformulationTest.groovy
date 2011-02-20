@@ -148,8 +148,8 @@ import rembrandt.gazetteers.CommonClassifications as CC
 	/* reformulated Query -> string */     
 	
 	String reformulated_x = "contents:Quem contents:músicos contents:portugueses "+
-	"contents:vivem contents:Leiria ne-PESSOA-INDIVIDUAL-index:\"David Fonseca\" "+
-	"ne-LOCAL-HUMANO-DIVISAO-index:\"Leiria\" woeid-index:742627"
+	"contents:vivem contents:Leiria ne-PESSOA-INDIVIDUAL:\"David Fonseca\" "+
+	"ne-LOCAL-HUMANO-DIVISAO:\"Leiria\" woeid:742627"
 	assert reformulated_x == refq.toString()
   }
    

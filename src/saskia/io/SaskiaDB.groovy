@@ -35,7 +35,7 @@ class SaskiaDB {
     static conf = Configuration.newInstance()
     String defaultDriver = 'com.mysql.jdbc.Driver'
     String defaultUrl = 'jdbc:mysql://127.0.0.1'
-    String defaultName = 'rembrandtpool'
+    String defaultName = 'saskia'
     String defaultUser = 'saskia'
     String defaultPassword = 'saskia'
     String defaultParam = 'useUnicode=yes&characterEncoding=UTF8&characterSetResults=UTF8&autoReconnect=true' 
@@ -103,7 +103,7 @@ class SaskiaDB {
             lastCall = System.currentTimeMillis()
             log.trace "SaskiaDB: lastCall initialized with "+new Date(lastCall)
         }  catch (Exception e) {	   
-            log.fatal "Can't open db: ", e
+            log.fatal "Can't open db: ", e.getMessage()
         }
         if (db) {
             log.info "Database initialized."

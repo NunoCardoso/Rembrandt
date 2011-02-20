@@ -30,7 +30,7 @@ import renoir.obj.RenoirQueryParser
  * @author Nuno Cardoso
  * Check stemming differences
 
-Segundo o stem-index:
+Segundo o stem:
 
 1. portugu há em 29 docs:
 3,9,10,19,21,23,24,34,36,38,53,54,57,58,
@@ -48,7 +48,7 @@ Segundo o stem-index:
 13,14,15,16,18,19,23,24,34,40,45,53,59,61,62,63,69,71,74,76,
 78,83,84,87,88,90,93,94,104
 
-Segundo o nostem-index:
+Segundo o nostem:
 
 portugais em 1 doc: 48
 portugal em 44 docs:3,4,8,11,17,19,22,24,25,26,33,34,35,38,39,40,41,42,48,51,

@@ -25,8 +25,9 @@ public class AdminUserMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
     I18n i18n
-    static Logger log = Logger.getLogger("SaskiaServer") 
-    static Logger log2 = Logger.getLogger("SaskiaService") 
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
  
 /** Note: this mapping should be used only by superuser folks *managing user stuff*, so 
  * it requires an api_key. For standard uses, the UserMapping is the one that has standard actions.
@@ -38,148 +39,209 @@ public class AdminUserMapping extends WebServiceRestletMapping {
         JSONanswer = {req, par, bind ->
             
             long session = System.currentTimeMillis()
-            log2.debug "Session $session triggered with $par" 
+            processlog.debug "Session $session triggered with $par" 
                   
-            int limit, offset
+            int limit
+				long offset
             def column, value
             
             // core stuff
             String action = par["POST"]["do"] //show, update, etc
             String lang = par["POST"]["lg"] 
             
-            ServerMessage sm = new ServerMessage("AdminUserMapping", lang, bind, session)  
+            ServerMessage sm = new ServerMessage("AdminUserMapping", lang, bind, session, processlog)  
             
             // pager stuff
             if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
-            if (par["POST"]["o"]) offset = Integer.parseInt(par["POST"]["o"])
+				if (!limit) limit = 0
+            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
             
-            // user stuff
-            String api_key = par["POST"]["api_key"] 
+           	String api_key = par["POST"]["api_key"] 
             if (!api_key) api_key = par["COOKIE"]["api_key"]   
             if (!api_key) return sm.noAPIKeyMessage()
+
             User user = User.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
-            if (!user.isSuperUser()) return sm.noSuperUser()
             if (!user.isEnabled()) return sm.userNotEnabled()
-            if (!action || !lang) return sm.notEnoughVars(lang, "do=$action, lg=$lang")        	
+				// all Admin*Mappings must have this
+				if (!user.isSuperUser()) return sm.noSuperUser()
+            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
             sm.setAction(action)
-           
-            
+             
+			/*****************/
+			/** AUTH */
+			/******************/	
+			if (action == 'auth') {
+			    
+	    	    String password = par["POST"]["p"]
+				 api_key = par["POST"]["api_key"] 
+             if (!api_key) api_key = par["COOKIE"]["api_key"]   
+             if (!api_key) return sm.noAPIKeyMessage()
+
+            user_db = User.getFromAPIKey(api_key)           
+            if (!user_db) return sm.userNotFound()
+            if (!user_db.isEnabled()) return sm.userNotEnabled()
+
+	    	   if (user_db.usr_password != password) 
+					return sm.statusMessage(-1, i18n.servermessage['wrong_password'][lang])
+	    				   	 
+	    	   return sm.statusMessage(0, 'OK')
+	    	} 
+	
+	          
             /***************************/
-            /** 1.1 show - PAGE USERS - for SU users only **/
+            /** 1.1 show - PAGE USERS **/
             /***************************/
             
-            if (action == "show") {
+            if (action == "list") {
                 Map h 
-                try {
-                    log.debug "Querying users: limit $limit offset $offset column $column value $value"
-                    h = User.getUsers(limit, offset, column, value)
+                try {                
+                    h = User.listUsersForAdminUser(limit, offset, column, value)
                 } catch(Exception e) {
-                    e.printStackTrace()
+                    errorlog.error i18n.servermessage['error_getting_user_list'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_user_list"][lang]+": "+e.getMessage())
                 }
                 
-                // hashmap has total, offset, limit, result as a List<Users>. We need to convert User objects 
-                // in a HashMap friendly JSON format
-                h.result.eachWithIndex{u, i -> 
-                    h.result[i] = ["usr_id":u.usr_id, "usr_login":u.usr_login, "usr_enabled":u.usr_enabled, 
-                    "usr_superuser":u.usr_superuser, "usr_firstname":u.usr_firstname, "usr_lastname":u.usr_lastname, 
-                    "usr_email":u.usr_email, "usr_api_key":u.usr_api_key, "usr_max_number_collections":u.usr_max_number_collections, 
-                    "usr_max_docs_per_collection":u.usr_max_docs_per_collection, "usr_max_daily_api_calls":u.usr_max_daily_api_calls,
-                    "usr_current_daily_api_calls":u.usr_current_daily_api_calls, "usr_total_api_calls":u.usr_total_api_calls]
-                }
-                return sm.statusMessage(0,h)
+                h.result.eachWithIndex{u, i -> h.result[i] = u.toMap()}                
+                return sm.statusMessageWithPubKey(0,h, user.usr_pub_key)		   
             }
             
             /******************************/
-            /** 1.2 update - MODIFY USER - for SU users only **/
+            /** 1.2 update - MODIFY USER **/
             /******************************/
             
             if (action == "update") {
                 //requires the column and value parameters
-        	long id 
-                if (par["POST"]["id"]) id = Long.parseLong(par["POST"]["id"] )
-                if (!id) return sm.notEnoughVars("id=$id")     
-                if (value == null || !column)  return sm.notEnoughVars("v=$value, c=$column")
-                
-                def answer 
-                try {
-                    log.debug "Updating user column $column, val $value, id $id"
-                    answer = User.updateValue(id, column, value)
-                } catch(Exception e) {    
-                    e.printStackTrace()             
-                    return sm.statusMessage(-1, i18n.servermessage['error_updating_user'][lang]+": " +e.getMessage())
-                    
-                }
-                
+        			long id 
+               try {id = Long.parseLong(par["POST"]["id"])}
+					catch(Exception e) {}
+               if (!id) return sm.notEnoughVars("id=$id")     
+               if (value == null || !column)  return sm.notEnoughVars("v=$value, c=$column")
+               
+					User user_db = User.getFromID(id)
+					if (!user_db) return sm.userNotFound()
+				
+					int res = 0
+               try {
+             		res = user_db.updateValue(id, column, value)
+               } catch(Exception e) {    
+                    errorlog.error i18n.servermessage['error_updating_user'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage['error_updating_user'][lang]+": " +e.getMessage())                  
+               }                
                 //RETURNS 1 IF UPDATED
-                return sm.statusMessage(answer, value)
-              
+                return sm.statusMessageWithPubKey(res, user_db.toMap(), user.usr_pub_key)		               
             }
             
-            /***************************************/
-            /** 1.2 getcolperm - GET USER PERMISSIONS for user **/
-            /***************************************/
-            
-            if (action == "getcolperm") {
-                long usr_id 
-                try {usr_id =  Long.parseLong(par["POST"]["ui"])}
-                catch(Exception e) {}
-                
-                if (!usr_id)  return sm.notEnoughVars("ui=$usr_id")                   
-                User user_db = User.getFromID(usr_id)
-                if (!user_db) return sm.userNotFound()
-                
-                List<HashMap> perms = user_db.getUserCollectionPermissionsOn() // blank means all
-                if (!perms) return sm.statusMessage(-1, i18n.servermessage['no_permissions_found'][lang])
-                else return sm.statusMessage(0, perms)            
-            }
-                        
-            /***************************************/
-            /** 1.3 setperm - SET USER PERMISSIONS for (user, col) **/
-            /***************************************/
+	
+			/***************/
+	    	/** 1.25 show **/
+			/***************/	
+	    	if (action == 'show') {
+			    
+	    	    // requires api_key now
+				Long ui 
+				try {ui = Long.parseLong(par["POST"]["ui"]) }
+				catch(Exception e) {}
+            if (!ui) return sm.notEnoughVars("ui=$ui")
            
-            if (action == "setperm") {
-                long usr_id, col_id 
-                try {
-                    usr_id=  Long.parseLong(par["POST"]["ui"]) 
-                    col_id =  Long.parseLong(par["POST"]["ci"])                                  
-                }catch(Exception e) {}
-                               
-                if (!usr_id || !col_id)  return sm.notEnoughVars("ci=$col_id, ui=$usr_id")      
-                
-                def answer 
-                try {
-                    log.debug "Updating user_on_collection column $column, val $value, usr_id $usr_id, col_id $col_id"
-                    answer = User.setUserCollectionPermissions(usr_id, col_id, column, value) 
-                } catch(Exception e) {return sm.statusMessage(-1, i18n.servermessage["error_updating_permission"][lang]+": "+e.getMessage())}
-                  
-                //RETURNS 1 IF UPDATED
-                return sm.statusMessage(answer, value)             	
+            User user_db = User.getFromID(ui)           
+            if (!user_db) return sm.userNotFound()
+            
+				Map m = user_db.toMap()
+				m.current_number_collections_owned = Collection.collectionsOwnedBy(user_db)
+	    	   return sm.statusMessageWithPubKey(0,m, user.usr_pub_key)		   
+	    	} 
+	    	
+           
+				/***************/
+            /** 1.3 create */ 
+            /***************/
+            
+            if (action == "create") {
+           		String usr_login = par["POST"]["usr_login"] 
+					Boolean usr_enabled
+					try {usr_enabled = Boolean.parseBoolean(par["POST"]["usr_enabled"])}
+					catch(Exception e) {}
+					String usr_groups = par["POST"]["usr_groups"] 
+					Boolean usr_superuser 
+					try {usr_superuser = Boolean.parseBoolean(par["POST"]["usr_superuser"])}
+					catch(Exception e) {}
+					String usr_firstname = par["POST"]["usr_firstname"] 
+					String usr_lastname = par["POST"]["usr_lastname"] 
+					String usr_email = par["POST"]["usr_email"] 
+					String usr_password = par["POST"]["usr_password"] 
+					String usr_tmp_password  = par["POST"]["usr_tmp_password"] 
+					String usr_api_key = par["POST"]["usr_api_key"] 
+					String usr_tmp_api_key = par["POST"]["usr_tmp_api_key"] 
+					Integer usr_max_number_collections
+					try {usr_max_number_collections = Integer.parseInt(par["POST"]["usr_max_number_collections"])}
+					catch(Exception e) {}
+					Integer usr_max_docs_per_collection
+					try {usr_max_docs_per_collection = Integer.parseInt(par["POST"]["usr_max_docs_per_collection"])}
+					catch(Exception e) {}
+					Integer usr_max_daily_api_calls
+					try {usr_max_daily_api_calls = Integer.parseInt(par["POST"]["usr_max_daily_api_calls"])}
+					catch(Exception e) {}
+					Integer usr_current_daily_api_calls
+					try {usr_current_daily_api_calls = Integer.parseInt(par["POST"]["usr_current_daily_api_calls"])}
+					catch(Exception e) {}
+   				Long usr_total_api_calls
+					try {usr_total_api_calls = Long.parseLong(par["POST"]["usr_total_api_calls"])}
+					catch(Exception e) {}
+   				Date usr_date_last_api_call = new Date()
+					
+					User user_db = User.getFromLogin(usr_login) 
+					if (user_db) return sm.statusMessage(-1, i18n.servermessage['user_already_exists'][lang])
+ 					
+					try {
+                     user_db = new User(usr_login:usr_login, usr_enabled:usr_enabled, usr_groups:usr_groups,
+							usr_superuser:usr_superuser, usr_firstname:usr_firstname, usr_lastname:usr_lastname, 
+							usr_email:usr_email, usr_password:usr_password, usr_tmp_password:usr_tmp_password, 
+							usr_api_key:usr_api_key, usr_tmp_api_key:usr_tmp_api_key,
+							usr_max_number_collections:usr_max_number_collections,
+							usr_max_docs_per_collection:usr_max_docs_per_collection, 
+							usr_max_daily_api_calls:usr_max_daily_api_calls,
+							usr_current_daily_api_calls:usr_current_daily_api_calls, 
+							usr_total_api_calls:usr_total_api_calls, usr_date_last_api_call:usr_date_last_api_call)
+							
+							
+                     user_db.usr_id = user_db.addThisToDB()
+                } catch(Exception e) {
+                    errorlog.error i18n.servermessage['error_creating_user'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage['error_creating_user'][lang]+": "+e.getMessage())
+                }
+                        
+                // leave like that, to include an id field
+                return sm.statusMessageWithPubKey(0, user_db.toMap(), user.usr_pub_key)		   	
             }
+
          
-            /***************************************/
-            /** 1.3 delete - DELETE USER for (user) **/
-            /***************************************/
+            /*****************************************/
+            /** 1.4 delete - DELETE USER for (user) **/
+            /*****************************************/
            
             if (action == "delete") {
                 long usr_id 
-                try {
-                    usr_id=  Long.parseLong(par["POST"]["ui"])                      
-                }catch(Exception e) {}
-                               
+                try {usr_id=  Long.parseLong(par["POST"]["ui"]) }                     
+                catch(Exception e) {}                              
                 if (!usr_id)  return sm.notEnoughVars("ui=$usr_id")      
                 
-                def answer 
+					 User user_db = User.getFromID(id)
+					 if (!user_db) return sm.userNotFound()
+                
+					 int res = 0 
                 try {
-                    log.debug "deleting user $usr_id"
-                    answer = User.deleteUser(usr_id) 
-                } catch(Exception e) {return sm.statusMessage(-1, i18n.servermessage["error_deleting_user"][lang]+": "+e.getMessage())}
+                    res = user_db.removeThisFromDB() 
+                } catch(Exception e) {
+                  errorlog.error i18n.servermessage['error_deleting_user'][lang]+": "+e.printStackTrace()
+						return sm.statusMessage(-1, i18n.servermessage["error_deleting_user"][lang]+": "+e.getMessage())
+					}
                   
                 //RETURNS 1 IF UPDATED
-                return sm.statusMessage(answer, i18n.servermessage['ok'][lang])		   	
+                return sm.statusMessageWithPubKey(res, i18n.servermessage['ok'][lang], user.usr_pub_key)		   		   	
             }
             return sm.unknownAction(action)	
         }

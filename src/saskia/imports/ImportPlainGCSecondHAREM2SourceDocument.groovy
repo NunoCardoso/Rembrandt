@@ -52,14 +52,16 @@ class ImportPlainGCSecondHAREM2SourceDocument {
             int total = 0
             while ((line = br.readLine()) != null) {  
                 
-                if (line.startsWith("<!-- DOC ")) {
+                if (line.startsWith("<DOC ")) {
                     line.find(/ID="(.*?)"/) {all, g1 -> docid = g1}
                     
-                } else if (line.matches(/(?i)<\/HTML>/)) {
-                    total++
-                    buffer.append(line)
-                    String html = buffer.toString()
-                    println "Creating source doc with id ${docid}. HTML is ${html.size()} bytes size."
+                } else if (line.matches(/(?i)<\/DOC>/)) {
+						total++
+						buffer.append(line)
+						String html = "<HTML lang=\"pt\">\n<HEAD>\n"
+						html += "</HEAD>\n<BODY>\n"
+						html += body.toString().trim()+"\n</BODY>\n</HTML>"
+	               println "Creating source doc with id ${docid}. HTML is ${html.size()} bytes size."
                     SourceDoc s = new SourceDoc(sdoc_id:docid,
                             sdoc_collection:collection.col_id, 
                             sdoc_lang:lang, 
@@ -71,7 +73,7 @@ class ImportPlainGCSecondHAREM2SourceDocument {
                             sdoc_edit:DocStatus.UNLOCKED)
                     try {
                         s.addThisToDB()
-                  //      log.debug "Inserted $s into Saskia DB."
+                        log.debug "Inserted $s into Saskia DB."
                     } catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
                         // VARCHAR primary keys are case insensitive. Sometimes there's redirects that are not redirects, 
                         // and so there's attempts to insert documents with a id with case changes. 
@@ -89,7 +91,7 @@ class ImportPlainGCSecondHAREM2SourceDocument {
 	static void main(args) {
 	    
 	    Options o = new Options()
-	    o.addOption("file", true, "NYT collection file to load")
+	    o.addOption("file", true, "collection file to load")
 	    o.addOption("help", false, "Gives this help information")
 	    
 	    CommandLineParser parser = new GnuParser()
@@ -97,8 +99,8 @@ class ImportPlainGCSecondHAREM2SourceDocument {
 
 	    if (cmd.hasOption("help")) {
 		HelpFormatter formatter = new HelpFormatter()
-		formatter.printHelp( "java saskia.imports.ImportPlainGCNYTFile2SourceDocument", o )
-		println "Make sure that the collection 'New York Times 2002-2005' is on Saskia"
+		formatter.printHelp( "java saskia.imports.ImportPlainGCSecondHAREM2SourceDocument", o )
+		println "Make sure that the collection 'CD2 do Segundo HAREM' is on Saskia"
 		System.exit(0)
 	    }
 
@@ -110,8 +112,8 @@ class ImportPlainGCSecondHAREM2SourceDocument {
 	    ImportPlainGCSecondHAREM2SourceDocument w2s = new ImportPlainGCSecondHAREM2SourceDocument(
 		    cmd.getOptionValue("file"))
 			
-	   // HashMap status = w2s.importDocs()
+	    HashMap status = w2s.importDocs()
 	                      
-	  //  log.info "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."
+	    log.info "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."
 	}
 }

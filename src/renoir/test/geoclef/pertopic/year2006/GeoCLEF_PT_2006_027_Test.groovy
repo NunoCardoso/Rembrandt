@@ -90,7 +90,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 	
 		println refq.toString()
 		String reformulated_x = """
-label:027 contents:"cidades" contents:"menos de 100 quilómetros" contents:"Frankfurt" ne-VALOR-QUANTIDADE-index:"menos de 100 quilómetros" woeid-index:650272
+label:027 contents:"cidades" contents:"menos de 100 quilómetros" contents:"Frankfurt" ne-VALOR-QUANTIDADE:"menos de 100 quilómetros" woeid:650272
 """		
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

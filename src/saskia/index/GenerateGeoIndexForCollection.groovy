@@ -50,8 +50,8 @@ class GenerateGeoIndexForCollection {
     static Logger log = Logger.getLogger("IndexGeneration")
     static String geoIndexDirLabel = "geo-index" 
     static String collectionLabel = "col" 
-    static String luceneIndexFieldLabel = "woeid-index" 
-    static final int DOC_POOL_SIZE=10000
+    static String woeid_label = conf.get("saskia.index.woeid_label","woeid") 
+    int doc_pool_size = conf.getInt("saskia.index.woeid.doc_pool_size",10000)
     static LgteIndexWriter geowriter // Hash of indexes
 
    // static List<SemanticClassification> allowedClasses = [ ]
@@ -62,21 +62,19 @@ class GenerateGeoIndexForCollection {
     String indexdir
     File filestats 
     Map stats
-    String lang
     String fileseparator = System.getProperty("file.separator")
     
     // indexdir goes to ${rembrandt.home.dir}/index/col-X/
-    public GenerateGeoIndexForCollection(Collection collection, String lang, String indexdir) {
+    public GenerateGeoIndexForCollection(Collection collection, String indexdir) {
         
-	this.collection=collection
-        this.lang=lang
-        this.indexdir=indexdir
+		this.collection=collection
+      this.indexdir=indexdir
 
-        geowriter = new LgteIndexWriter(indexdir, new LgteNothingAnalyzer(), true, Model.OkapiBM25Model)
+      geowriter = new LgteIndexWriter(indexdir, new LgteNothingAnalyzer(), true, Model.OkapiBM25Model)
     
-	log.debug "Opening a new Geo writer, $geowriter"
-	filestats = new File(indexdir, "../${geoIndexDirLabel}-collection-stats.txt")
-	stats = [:]      
+		log.debug "Opening a new Geo writer, $geowriter"
+		filestats = new File(indexdir, "../${geoIndexDirLabel}-collection-stats.txt")
+		stats = [:]      
     }
 
     public doit() {
@@ -95,9 +93,9 @@ class GenerateGeoIndexForCollection {
         log.debug "Total number of docs in the collection: "+stats['total']
         docstats.totalDocs = stats['total']
         
-        for (int i=stats['total']; i > 0; i -= DOC_POOL_SIZE) {
+        for (int i=stats['total']; i > 0; i -= doc_pool_size) {
             
-            int limit = (i > DOC_POOL_SIZE ? DOC_POOL_SIZE : i)
+            int limit = (i > doc_pool_size ? doc_pool_size : i)
             log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
             
             List geos = DocGeoSignature.getBatchOfGeoSignatures(collection, limit, stats["processed"])
@@ -111,21 +109,22 @@ class GenerateGeoIndexForCollection {
             docstats.beginBatchOfDocs(limit)
                             
             geos.each {geo ->
-                log.debug "I'm with geo $geo"
+               // log.debug "I'm with geo $geo"
                 GeoSignature geosig = new GeoSignature(geo)
-                
-                LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
-                ldoc.storeUtokenized(Globals.DOCUMENT_ID_FIELD, geosig.doc_original_id)
 
-                log.trace "ldoc with doc_original_id $geosig.doc_original_id"
+                LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
+                ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), geosig.doc_original_id)
+                ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), geosig.doc_id.toString())
+                
+                log.trace "ldoc with doc_original_id ${geosig.doc_original_id}"
                 
                 /*****  NEs in body ******/
                 geosig.places.each{place -> 
                     log.trace "Adding "+place.woeid.toString()
-                    ldoc.indexString(luceneIndexFieldLabel, place.woeid.toString())  
+                    ldoc.indexString(woeid_label, place.woeid.toString())  
                     place.ancestors*.woeid.each{w -> 
                         log.trace "Adding "+w.toString()
-                        ldoc.indexString(luceneIndexFieldLabel, w.toString())                              
+                        ldoc.indexString(woeid_label, w.toString())                              
                     }
                 }
                 geowriter.addDocument(ldoc)                                   
@@ -172,7 +171,6 @@ class GenerateGeoIndexForCollection {
         String fileseparator = System.getProperty("file.separator")
         
         o.addOption("col", true, "Collection name or ID")
-        o.addOption("lang", true, "Collection language")
         o.addOption("help", false, "Gives this help information")
         o.addOption("indexdir", false, "directory of the index")
         
@@ -187,11 +185,6 @@ class GenerateGeoIndexForCollection {
         
         if (!cmd.hasOption("col")) {
             println "No --col arg. Please specify the collection. Exiting."
-            System.exit(0)
-        }
-        
-        if (!cmd.hasOption("lang")) {
-            println "No --lang arg. Please specify the collection language. Exiting."
             System.exit(0)
         }
         
@@ -227,7 +220,7 @@ class GenerateGeoIndexForCollection {
         }
         
         GenerateGeoIndexForCollection indexer = new GenerateGeoIndexForCollection(
-               collection, cmd.getOptionValue("lang"), indexdir)
+               collection, indexdir)
         
         indexer.doit()
         

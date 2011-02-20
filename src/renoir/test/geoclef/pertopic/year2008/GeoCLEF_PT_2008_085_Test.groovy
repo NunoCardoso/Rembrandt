@@ -104,7 +104,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 		println refq.toString()
 		String reformulated_x = """
 label:085 contents:Realização contents:testes contents:nucleares contents:"Pacífico" entity:Pacific_Ocean
- woeid-index:55959717
+ woeid:55959717
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

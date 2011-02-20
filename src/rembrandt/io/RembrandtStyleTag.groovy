@@ -225,7 +225,8 @@ class RembrandtStyleTag extends StyleTag {
              ne.dbpediaPage[sc] = hash_params.DB.split(/;/).collect{"${DBpediaResource.resourcePrefix}${it}"}
 
         if (sc && hash_params.WK) 
-            ne.wikipediaPage[sc] = hash_params.WK.split(/;/).collect{ "http://${lang}.wikipedia.org/wiki/${it}"}
+            ne.wikipediaPage[sc] = hash_params.WK.split(/;/).collect{
+	 				if (it.startsWith("http://")) return it else "http://${lang}.wikipedia.org/wiki/${it}"}
             
         if (hash_params.RI) {
                 List rt = hash_params.RT.split(/;/)

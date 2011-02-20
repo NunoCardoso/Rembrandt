@@ -181,7 +181,7 @@ class TimeGroundingRulesPT extends TimeRulesPT {
                 if (it ==~ /[Oo]itocentos/) i += 800    
                 if (it ==~ /[Nn]ovecentos/) i += 900    
                 if (it ==~ /[Mm]il(?:har)?(?:es)?/) i += 1000      
-                if (it ==~ /[Mm]ilh(?:ão|ões)/) i = s * 1000000 
+                if (it ==~ /[Mm]ilh(?:ão|ões)/) i = i * 1000000 
               //  println "XX end: it: $it i = $i"
             }
         }
@@ -850,6 +850,7 @@ class TimeGroundingRulesPT extends TimeRulesPT {
             return newNE         
         }
 
+  
         /***************************/
         rule = "DATE-day-holiday"
         /****************************/
@@ -866,6 +867,7 @@ class TimeGroundingRulesPT extends TimeRulesPT {
             log.debug "rule $thisrule returning tg $tg for NE ${newNE}"
             return newNE
         }
+
 
         /***************************/
         rule = "DATE-middles-X"
@@ -1042,7 +1044,22 @@ class TimeGroundingRulesPT extends TimeRulesPT {
             log.debug "rule $thisrule returning tg $tg for NE ${newNE}"
             return newNE                  
         }
-           
+         
+       /***************************/
+        rule = "DATE-holidays-1"
+        /****************************/
+
+        ruleindex = rules.findIndexOf{it.id == rule}
+        if (ruleindex < 0) throw new IllegalStateException("Can't find rule $rule on TimeRulesPT!")        
+        rules[ruleindex].action = {MatcherObject o, NamedEntity newNE -> 
+            
+            TG tg = new TG()
+            String thisrule = o.rule.id            
+            if (!newNE.tg) newNE.tg = tg
+            log.debug "rule $thisrule returning tg $tg for NE ${newNE}"
+            return newNE
+        }
+
         /***************************/
         rule = "DATE-relative-6"
         /****************************/
@@ -1548,13 +1565,16 @@ class TimeGroundingRulesPT extends TimeRulesPT {
             NamedEntity tempo1 = o.pastMatches[NEGazetteer.NE_TEMPO_1c].nes[0]
             NamedEntity tempo2 = o.pastMatches[NEGazetteer.NE_TEMPO_1c_duplicate].nes[0]
                         
-            tg = tempo1.tg
-            tg.datetype = TimeGroundingType.INTERVAL
+            if (tempo1.tg && tempo2.tg) {
+					tg = tempo1.tg
+            	tg.datetype = TimeGroundingType.INTERVAL
            
-            tg.era2 = tempo2.tg.era1;  tg.year2 = tempo2.tg.year1;  tg.month2 = tempo2.tg.month1; tg.day2 = tempo2.tg.day1; 
-            tg.hour2 = tempo2.tg.hour1;  tg.minute2 = tempo2.tg.minute1; tg.second2 = tempo2.tg.second1; 
-            newNE.tg = tg
-            log.debug "rule $thisrule returning tg $tg for NE ${newNE}"
+            	if (tempo2.tg.era1) tg.era2 = tempo2.tg.era1;  
+					tg.year2 = tempo2.tg.year1;  tg.month2 = tempo2.tg.month1; tg.day2 = tempo2.tg.day1; 
+            	tg.hour2 = tempo2.tg.hour1;  tg.minute2 = tempo2.tg.minute1; tg.second2 = tempo2.tg.second1; 
+            	newNE.tg = tg
+            }
+				log.debug "rule $thisrule returning tg $tg for NE ${newNE}"
             return newNE                  
         }     
         

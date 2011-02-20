@@ -104,7 +104,7 @@ label:075 Violações dos direitos humanos na antiga Birmânia
 
 		println refq.toString()
 		String reformulated_x = """
-label:062 contents:"OSCE" contents:reuniões contents:"Europa do Leste" entity:Organization_for_Security_and_Co-operation_in_Europe woeid-index:28289419 woeid-index:23424771 woeid-index:23424923 woeid-index:23424810 woeid-index:23424877 woeid-index:23424844 woeid-index:23424933 woeid-index:23424976 woeid-index:23424765 woeid-index:23424875 woeid-index:23424805 woeid-index:23424874 woeid-index:23424936
+label:062 contents:"OSCE" contents:reuniões contents:"Europa do Leste" entity:Organization_for_Security_and_Co-operation_in_Europe woeid:28289419 woeid:23424771 woeid:23424923 woeid:23424810 woeid:23424877 woeid:23424844 woeid:23424933 woeid:23424976 woeid:23424765 woeid:23424875 woeid:23424805 woeid:23424874 woeid:23424936
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

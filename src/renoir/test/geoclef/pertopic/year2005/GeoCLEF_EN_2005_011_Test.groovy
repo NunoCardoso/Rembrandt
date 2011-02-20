@@ -89,7 +89,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 usando o dbprop:redirect, e é graças a isso que temos o WOEID de United_Kingdom (23424975) */	
 		println refq.toString()
 		String reformulated_x = """
-label:011 contents:Roman contents:"cities" contents:"UK" contents:"Germany" woeid-index:23424975 woeid-index:23424829
+label:011 contents:Roman contents:"cities" contents:"UK" contents:"Germany" woeid:23424975 woeid:23424829
 """		
 
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 

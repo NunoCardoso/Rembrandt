@@ -22,6 +22,7 @@ import saskia.io.User
 import saskia.io.RembrandtedDoc
 import saskia.io.Tag
 import saskia.io.Entity
+import saskia.stats.SaskiaStats
 import saskia.util.I18n
 import org.apache.log4j.*
 
@@ -34,9 +35,12 @@ import org.apache.log4j.*
 public class AdminRembrandtedDocMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
-    I18n i18n
-    static Logger log = Logger.getLogger("SaskiaServer") 
-    static Logger log2 = Logger.getLogger("SaskiaService") 
+    I18n i18n   
+	 SaskiaStats stats
+
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
  
     public AdminRembrandtedDocMapping() {
         
@@ -44,150 +48,254 @@ public class AdminRembrandtedDocMapping extends WebServiceRestletMapping {
         
         JSONanswer = {req, par, bind ->
             long session = System.currentTimeMillis()
-            log2.debug "Session $session triggered with $par" 
+            processlog.debug "Session $session triggered with $par" 
             
-            int limit, offset
+            int limit
+ 				long offset
             def column, value
-            Collection collection
             
             // core stuff
-            String action = par["POST"]["do"] //show, update, etc
+            String action = par["POST"]["do"]
             String lang = par["POST"]["lg"] 
-            long collection_id 
-            try {
-        	if (par["POST"]["ci"]) collection_id = Long.parseLong(par["POST"]["ci"])
-            } catch(Exception e) {e.printStackTrace()}
-            
-            ServerMessage sm = new ServerMessage("AdminRembrandtedDocMapping", lang, bind, session)  
+       
+            ServerMessage sm = new ServerMessage("AdminRembrandtedDocMapping", lang, bind, session, processlog)  
             
             // pager stuff
             if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
-            if (par["POST"]["o"]) offset = Integer.parseInt(par["POST"]["o"])
+            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
             
-            // auth stuff
             String api_key = par["POST"]["api_key"] 
-            if (!api_key) api_key = par["COOKIE"]["api_key"] 
+            if (!api_key) api_key = par["COOKIE"]["api_key"]   
             if (!api_key) return sm.noAPIKeyMessage()
-                                                      
+
             User user = User.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
-            
             if (!user.isEnabled()) return sm.userNotEnabled()
-            
-            if (!action || !lang) 
-        	return sm.notEnoughVars("do=$action, lg=$lang")      
-        	
+				// all Admin*Mappings must have this
+				if (!user.isSuperUser()) return sm.noSuperUser()
+            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
             sm.setAction(action)
-            
-            collection = Collection.getFromID(collection_id)
-            if (!collection) return sm.statusMessage(-1, i18n.servermessage['no_collection_found'][lang])                                     
-  
-            /***************************/
-            /** 1.1 show - PAGE RDOCS **/
-            /***************************/
+             
+            /*********************/
+            /** 1.1  List RDOCS **/
+            /*********************/
                      
-            Map h
-            
-            if (action == "show") {
-        	
-             	if (!(user.isSuperUser() || user.canReadCollection(collection)) )  
-             	    return sm.statusMessage(-1, i18n.servermessage['no_collection_admin'][lang])
-               	
-                try {
-                    log.debug "Querying rembrandt docs: limit $limit offset $offset column $column value $value"
-                    h = RembrandtedDoc.getRembrandtedDocs(collection, limit, offset, column, value)
+            if (action == "list") {
+	
+            	Map h
+            	Long collection_id 
+            	Collection collection 
+					try {
+        				collection_id = Long.parseLong(par["POST"]["ci"])
+            	} catch(Exception e) {e.printStackTrace()}
+           			if (!collection_id) return sm.notEnoughVars("ci=$ci")                                  
+					collection = Collection.getFromID(collection_id)
+            	if (!collection) return sm.noCollectionFound()
+
+        			try {
+                    h = RembrandtedDoc.listRembrandtedDocs(collection, limit, offset, column, value)
                 } catch(Exception e) {
+               	  errorlog.error i18n.servermessage['error_getting_rdoc_list'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc_list"][lang]+": "+e.getMessage())
                 }
                 
-                h['collection_id'] = collection.col_id
-                
-                // hashmap has total, offset, limit, result as a List<Users>. We need to convert User objects 
-                // in a HashMap friendly JSON format
-                h.result.eachWithIndex{rdoc, i -> 
-                    // "doc_entity":rdoc.doc_entity?.ent_dbpedia_resource, 
-                    //  "doc_tag":rdoc.doc_tag.tag_version, 
-                    h.result[i] = rdoc.toMap()
-                 }
-                 return sm.statusMessage(0, h)                  
+                h.col_id=collection_id
+                h.result.eachWithIndex{rdoc, i -> h.result[i] = rdoc.toMap() }
+                return sm.statusMessageWithPubKey(0, h, user.usr_pub_key)                  
             }
                
             /***************************/
-            /** 1.2 show a single RDOC content **/
+            /** 1.2 show RDOC content **/
             /***************************/
             
-            if (action == "showrdoc") {
-        	if (!(user.isSuperUser() || user.canReadCollection(collection)) ) 
-        	    return sm.statusMessage(-1, i18n.servermessage['no_collection_admin'][lang])
-        	    
-                long doc_id
+            if (action == "show") {
+        	
+                Long doc_id
                 String format
-                if (par["POST"]["doc_id"]) doc_id = Long.parseLong(par["POST"]["doc_id"])
+                if (par["POST"]["doc_id"]) 
+					   try {doc_id = Long.parseLong(par["POST"]["doc_id"])}
+						catch(Exception e) {}
                 if (par["POST"]["format"]) format = par["POST"]["format"]
                 if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")
                 
                 RembrandtedDoc doc 
                 try {
-                    log.debug "Querying Rembrandted doc with id $doc_id"
                     doc = RembrandtedDoc.getFromID(doc_id)
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc_list"][lang]+": "+e.getMessage())                 
-                }
-                
-                String title, body
-                try {
-                   
-                    //RembrandtReader reader = new RembrandtReader(new RembrandtStyleTag(lang))
-                    //rembrandt.obj.Document doc = reader.createDocument(doc.doc_content)
-                    
-                    title = doc.getTitleFromContent()
-                    body = doc.getBodyFromContent()
-                    title = title?.replaceAll(/\n/, " ")
-                    body = body?.replaceAll(/\n/, " ")
-                } catch(Exception e) {return sm.statusMessage(-1, e.getMessage())}
-               
-                return sm.statusMessage(0, [dt:title, db:body])
+               	  errorlog.error i18n.servermessage['error_getting_rdoc'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc"][lang]+": "+e.getMessage())                 
+                }  
+                return sm.statusMessageWithPubKey(0, doc.toMap(), user.usr_pub_key) 
             }
+
+
+            /***********************/
+            /** 1.3 metadata RDOC **/
+            /***********************/
+					
+        		if (action == "metadata") {
+					Long doc_id
+               if (par["POST"]["doc_id"]) 
+					   try {doc_id = Long.parseLong(par["POST"]["doc_id"])}
+						catch(Exception e) {}
+               if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")
+               if (!lang) return sm.notEnoughVars("lg=$lang")
+      			
+					RembrandtedDoc doc 
+               try {
+                    doc = RembrandtedDoc.getFromID(doc_id)
+                } catch(Exception e) {
+               	  errorlog.error i18n.servermessage['error_getting_rdoc'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc"][lang]+": "+e.getMessage())                 
+                }
+
+           		stats = new SaskiaStats()
+            	def answer 
+            	try {
+        				answer = stats.renderDocPage(doc, collection, lang)
+            	} catch(Exception e) {
+                	  errorlog.error i18n.servermessage['error_getting_rdoc_metadata'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc_metadata"][lang]+": "+e.getMessage()) 	
+            	}
             
-            /***************************/
-            /** 1.3 update a value **/
-            /***************************/
+					return sm.statusMessageWithPubKey(0, ['doc_id':doc.doc_id,
+					'doc_original_id':doc.doc_original_id, 'doc_content':answer], user.usr_pub_key) 
+				}     
+				
+            /*********************/
+            /** 1.5 create RDOC **/
+            /*********************/
+            				      
+				  if (action == "create") {
+						// required: doc_original_id, doc_collection, doc_lang, doc_content
+						// doc_content will then be converted to doc_webstore
+						// generated: doc_webstore, doc_version, doc_date_created, doc_date_tagged, doc_proc, doc_sync
+
+                String doc_original_id =  par["POST"]["doc_original_id"] 
+                Long doc_collection
+ 					 try {doc_collection = Long.parseLong(par["POST"]["doc_collection"])}
+					 catch(Exception e) {}
+					
+                String doc_lang =  par["POST"]["doc_lang"] 
+ 					 String doc_content =  par["POST"]["doc_content"]
+ 
+                if (!doc_original_id) return sm.notEnoughVars("doc_original_id=$doc_original_id") 
+                Collection collection = Collection.getFromID(doc_collection)
+					 if (!collection) return sm.collectionNotFound()
+                if (!doc_lang) return sm.notEnoughVars("doc_lang=$doc_lang") 
+                if (!doc_content) return sm.notEnoughVars("doc_content=$doc_content") 
+                                              
+					 int number_rdocs = collection.getNumberOfRembrandtedDocuments()
+					 if (user.usr_max_docs_per_collection < number_rdocs) 
+					    return sm.statusMessage(-1, i18n.servermessage['max_number_documents_per_collection_reached'][lang])
+					  	
+ 				  	  try {
+                    RembrandtedDoc doc = new RembrandtedDoc(
+							 doc_original_id:doc_original_id, doc_collection:collection, 
+							 doc_content:doc_content, doc_lang:doc_lang, doc_date_created:new Date(),
+						    doc_version:1, doc_date_tagged:new Date())
+						   
+						    //rdoc.associateWithTag(tag)
+							
+							doc.doc_id = doc.addThisToDB()
+		    				doc.changeProcStatusInDBto(DocStatus.READY) // mark it so next time we'll not use it
+		    				doc.changeSyncStatusInDBto(DocStatus.NOT_SYNCED_DOC_CHANGED) 
+						} catch(Exception e) {
+                    errorlog.error i18n.servermessage['error_creating_rdoc'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage['error_creating_rdoc'][lang]+": "+e.getMessage())
+                }
+                        
+                // leave like that, to include an id field
+                return sm.statusMessageWithPubKey(0, doc.toMap(), user.usr_pub_key) 	
+            }
+ 
+            /*********************/
+            /** 1.5 update RDOC **/
+            /*********************/
             
             if (action == "update") {
-        	if (!(user.isSuperUser() || user.canWriteCollection(collection)) ) 
-        	    return sm.statusMessage(-1, i18n.servermessage['no_collection_admin'][lang])
-                Long doc_id
-                // column is already here, as well as value
-                
-                String format
-                if (par["POST"]["id"]) doc_id = Long.parseLong(par["POST"]["id"])
-                if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")
-                
-                RembrandtedDoc doc 
-                try {
-                    log.debug "Querying Rembrandted doc with id $doc_id"
+        	
+					Long doc_id
+               String format
+               if (par["POST"]["doc_id"]) 
+					   try {doc_id = Long.parseLong(par["POST"]["doc_id"])}
+						catch(Exception e) {}
+               if (par["POST"]["format"]) format = par["POST"]["format"]
+               if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")
+      
+               RembrandtedDoc doc 
+               try {
                     doc = RembrandtedDoc.getFromID(doc_id)
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc_list"][lang]+": "+e.getMessage())                 
+               	  errorlog.error i18n.servermessage['error_getting_rdoc'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc"][lang]+": "+e.getMessage())                 
                 }
                 
                 switch(column) {
-                    case "doc_tag": 
+	
+                  // let's handle this alone, because it's a shared table
+						case "doc_tag": 
                 	Tag tag
-                        try {
-                           tag = Tag.getFromID(Long.parseLong(value))
-                           doc.associateWithTag(tag) 
-                        }catch(Exception e)  {
+                  try {
+							tag = Tag.getFromID(Long.parseLong(value))
+                     doc.associateWithTag(tag) 
+                  } catch(Exception e)  {
+               	   errorlog.error i18n.servermessage['error_updating_rdoc'][lang]+": "+e.printStackTrace()
                     	return sm.statusMessage(-1, i18n.servermessage["error_updating_rdoc"][lang]+": "+e.getMessage())                 
-                        }
-                        return sm.statusMessage(0, tag.toMap())
-                    break                     
-                }
+                  }
+                  return sm.statusMessage(0, tag.toMap())
+                  break  
+						
+						case "doc_collection": 
+						return sm.statusMessage(-1, "Change collection for doc is not allowed")   
+						break
+						
+                  default:
+						
+						int res = 0
+						try {
+                    res = doc.updateValue(c, v)
+               	} catch(Exception e) {
+                    errorlog.error i18n.servermessage['error_updating_rdoc'][lang]+": "+e.printStackTrace() 
+                    return sm.statusMessage(-1, i18n.servermessage["error_updating_rdoc"][lang]+": "+e.getMessage())                 
+               	}
+                	return sm.statusMessageWithPubKey(res, doc.toMap(), user.usr_pub_key) 
+            	} 
             }
-            
-            return sm.unknownAction()
+
+				
+				/*********************/
+            /** 1.6 delete RDOC **/
+            /*********************/
+           
+            if (action == "delete") {
+                Long doc_id
+               if (par["POST"]["doc_id"]) 
+					   try {doc_id = Long.parseLong(par["POST"]["doc_id"])}
+						catch(Exception e) {}
+               if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")  
+                
+					RembrandtedDoc doc 
+               try {
+                    doc = RembrandtedDoc.getFromID(doc_id)
+                } catch(Exception e) {
+               	  errorlog.error i18n.servermessage['error_getting_rdoc'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc"][lang]+": "+e.getMessage())                 
+                }
+                def res          
+                try {
+                    res = doc.deleteThisFromDB() 
+                } catch(Exception e) {
+	              	  errorlog.error i18n.servermessage['error_deleting_entity'][lang]+": "+e.printStackTrace()
+						  return sm.statusMessage(-1, i18n.servermessage["error_deleting_entity"][lang]+": "+e.getMessage())
+				    }
+                  
+                //RETURNS 1 IF UPDATED
+                return sm.statusMessageWithPubKey(res, i18n.servermessage['ok'][lang], user.usr_pub_key) 		   	
+            }   
+				return sm.unknownAction()
         }
     }
 }

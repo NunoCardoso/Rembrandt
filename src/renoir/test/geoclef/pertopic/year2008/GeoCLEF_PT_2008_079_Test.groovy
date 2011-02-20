@@ -107,7 +107,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:079 contents:Ocupação contents:capital contents:"Timor Leste" contents:"Indonésia" woeid-index:23424968 woeid-index:23424846
+label:079 contents:Ocupação contents:capital contents:"Timor Leste" contents:"Indonésia" woeid:23424968 woeid:23424846
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

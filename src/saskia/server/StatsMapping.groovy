@@ -18,20 +18,34 @@
 package saskia.server
 
 import saskia.stats.SaskiaStats
+import org.apache.log4j.Logger
+import saskia.util.I18n
 
 public class StatsMapping extends WebServiceRestletMapping {
 
     Closure HTMLanswer
-    SaskiaStats stats 
-    
+    Closure JSONanswer
+    I18n i18n
+	 SaskiaStats stats 
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
+
 	public StatsMapping() {
-	stats = new SaskiaStats()
-    
-	    HTMLanswer = { req, par, bind ->
+		stats = new SaskiaStats()
+      i18n = I18n.newInstance()
+	   
+		HTMLanswer = { req, par, bind ->
 	    	String lang = par["GET"]["lg"] 
-	    	String collection_name = par["GET"]["c"]
-	    	
-		return stats.renderFrontPage(collection_name, lang)	
-	     }
+	    	Long collection_id 
+	    	try {
+        			collection_id = Long.parseLong(par["GET"]["ci"])
+          } catch(Exception e) {e.printStackTrace()}
+          if (!collection_id) return sm.notEnoughVars("ci=$ci")                                  
+			 collection = Collection.getFromID(collection_id)
+          if (!collection) return sm.noCollectionFound()
+
+			return stats.renderFrontPage(collection, lang)	
+	   }
 	}
 }

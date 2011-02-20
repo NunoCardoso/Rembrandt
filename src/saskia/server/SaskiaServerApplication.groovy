@@ -32,7 +32,6 @@ import org.restlet.routing.Router
 import org.restlet.data.MediaType
 import org.restlet.data.Status
 
-
 /**
  * @author ncardoso, extended from rlopes's code
  *
@@ -40,7 +39,7 @@ import org.restlet.data.Status
 public class SaskiaServerApplication extends Application {
 
 	//RembrandtedDocument2PlainTextConverter r2t
-	Logger log = Logger.getLogger("SaskiaServer")
+	Logger log = Logger.getLogger("SaskiaServerMain")
 	List<User> superusers
 	
 	public synchronized Restlet createRoot() {
@@ -48,21 +47,27 @@ public class SaskiaServerApplication extends Application {
 	    Router router = new Router(this.context) 
 	  //  r2t = new RembrandtedDocument2PlainTextConverter()	    
         
-            AskSaskiaMapping askSaskiaMapping = new AskSaskiaMapping()
-           // askSaskiaMapping.attach(MediaType.TEXT_HTML, askSaskiaMapping.HTMLanswer)        
-            askSaskiaMapping.attach(MediaType.APPLICATION_JSON, askSaskiaMapping.JSONanswer)
-
-       	    SearchMapping searchMapping = new SearchMapping()    
-	    searchMapping.attach(MediaType.APPLICATION_JSON, searchMapping.JSONanswer)
+		AskSaskiaMapping askSaskiaMapping = new AskSaskiaMapping()
+		// askSaskiaMapping.attach(MediaType.TEXT_HTML, askSaskiaMapping.HTMLanswer)        
+		askSaskiaMapping.attach(MediaType.APPLICATION_JSON, askSaskiaMapping.JSONanswer)
+	
+	    SourceDocMapping sdocMapping = new SourceDocMapping()
+	    sdocMapping.attach(MediaType.APPLICATION_JSON, sdocMapping.JSONanswer)
     
-	    DocMapping docMapping = new DocMapping()
-	    docMapping.attach(MediaType.APPLICATION_JSON, docMapping.JSONanswer)
+	    RembrandtedDocMapping rdocMapping = new RembrandtedDocMapping()
+	    rdocMapping.attach(MediaType.APPLICATION_JSON, rdocMapping.JSONanswer)
 	    
 	    NEMapping neMapping = new NEMapping()
 	    neMapping.attach(MediaType.APPLICATION_JSON, neMapping.JSONanswer)
 
+	    TaskMapping taskMapping = new TaskMapping()
+	    taskMapping.attach(MediaType.APPLICATION_JSON, taskMapping.JSONanswer)
+
 	    StatsMapping statsMapping = new StatsMapping()
 	    statsMapping.attach(MediaType.TEXT_HTML, statsMapping.HTMLanswer)
+
+	    CollectionMapping collectionMapping = new CollectionMapping()
+	    collectionMapping.attach(MediaType.APPLICATION_JSON, collectionMapping.JSONanswer)
 
 	    UserMapping userMapping = new UserMapping()
 	    userMapping.attach(MediaType.TEXT_HTML, userMapping.HTMLanswer)
@@ -73,6 +78,9 @@ public class SaskiaServerApplication extends Application {
 	     
 	    AdminUserMapping adminUserMapping = new AdminUserMapping()
 	    adminUserMapping.attach(MediaType.APPLICATION_JSON, adminUserMapping.JSONanswer)
+
+	    AdminTaskMapping adminTaskMapping = new AdminTaskMapping()
+	    adminTaskMapping.attach(MediaType.APPLICATION_JSON, adminTaskMapping.JSONanswer)
 
 	    AdminStatsMapping adminStatsMapping = new AdminStatsMapping()
 	    adminStatsMapping.attach(MediaType.APPLICATION_JSON, adminStatsMapping.JSONanswer)
@@ -99,12 +107,17 @@ public class SaskiaServerApplication extends Application {
 	    adminSubjectGroundMapping.attach(MediaType.APPLICATION_JSON, adminSubjectGroundMapping.JSONanswer)
 
 	    router.attach("/Saskia/ask", askSaskiaMapping)
-	    router.attach("/Saskia/search", searchMapping)
-	    router.attach("/Saskia/doc", docMapping)
-	    router.attach("/Saskia/ne", neMapping)
+	
+	    router.attach("/Saskia/rdoc", rdocMapping)
+		 router.attach("/Saskia/sdoc", sdocMapping)
+		 router.attach("/Saskia/collection", collectionMapping)
+		 router.attach("/Saskia/task", taskMapping)
+		 router.attach("/Saskia/ne", neMapping)
 	    router.attach("/Saskia/stats", statsMapping)
 	    router.attach("/Saskia/user", userMapping)	
+	
 	    router.attach("/Saskia/admin/collection", adminCollectionMapping)	
+	    router.attach("/Saskia/admin/task", adminTaskMapping)	
 	    router.attach("/Saskia/admin/user", adminUserMapping)	
 	    router.attach("/Saskia/admin/stats", adminStatsMapping)	
 	    router.attach("/Saskia/admin/sdoc", adminSourceDocMapping)	

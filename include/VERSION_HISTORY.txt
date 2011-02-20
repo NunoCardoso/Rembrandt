@@ -1,5 +1,13 @@
 VERSION HISTORY of REMBRANDT
 ============================
+v1.2
+  Added term filters.
+  Added saskia.import.* and saskia.index.* configuration values, to be fore flexible
+  Indexes now have the docid from DB, for fast search
+  Revamped server log system
+  DB 6.0 - Introduction of tasks and jobs, introducing doc versions, renamed DBs.
+  Revised user/col permission engine
+  Several bug fixes, rule tunings, gazetteer improvements.
 
 v1.1 
    Documents ported to WebStore - lighter DB

@@ -29,8 +29,9 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
     Closure JSONanswer
     I18n i18n
     SaskiaStats stats
-    static Logger log = Logger.getLogger("SaskiaServer") 
-    static Logger log2 = Logger.getLogger("SaskiaService") 
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
 
     public AdminCollectionMapping() {
         
@@ -39,163 +40,176 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
         JSONanswer = {req, par, bind ->
         
             long session = System.currentTimeMillis()
-            log2.debug "Session $session triggered with $par" 
+            processlog.debug "Session $session triggered with $par" 
             
-            int limit, offset
+            int limit
+ 				long offset
             def column, value
                      
             String action = par["POST"]["do"] //show, update, etc
             String lang = par["POST"]["lg"] 
                                       
-            ServerMessage sm = new ServerMessage("AdminCollectionMapping", lang, bind, session)                          
+            ServerMessage sm = new ServerMessage("AdminCollectionMapping", lang, bind, session, processlog)                          
             
             if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
-            if (par["POST"]["o"]) offset = Integer.parseInt(par["POST"]["o"])
+				if (!limit) limit = 0
+            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
-         
-            
-            String api_key = par["POST"]["api_key"] 
+ 
+           	String api_key = par["POST"]["api_key"] 
             if (!api_key) api_key = par["COOKIE"]["api_key"]   
             if (!api_key) return sm.noAPIKeyMessage()
+
             User user = User.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
             if (!user.isEnabled()) return sm.userNotEnabled()
-            if (!action || !lang) return sm.notEnoughVars(lang, "do=$action, lg=$lang")        	
+				// all Admin*Mappings must have this
+				if (!user.isSuperUser()) return sm.noSuperUser()
+            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
             sm.setAction(action)
             
-            /*****************************************************/
-            /** 1.1 show - PAGE COLLECTIONS - only for SHOW users **/
-            /*****************************************************/
+            /***************************************************/
+            /** 1.1 show - PAGE COLLECTIONS - for ADMIN users **/
+            /***************************************************/
             
-            if (action == "show") {
-        	
-                //log.debug("I'm on show ")
-                    	
-                Map h 
-               
-                try {
-                    // here is log, not log2. 
-                    log.debug ("$session ${user.usr_login} AdminCollectionMapping:show: Requesting collections: limit $limit, offset $offset column $column value $value")
-                    if (user.isSuperUser())
-                	h = Collection.getCollections(limit, offset, column, value)
-                    else 
-                	h = Collection.getShowableCollectionsForUser(user, limit, offset, column, value)
-                    
-                } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage['error_getting_col_list'][lang]+": "+e.getMessage(), action)
+            if (action == "list") {
+					Map h 
+               try {
+                  h = Collection.listCollectionForAdminUser(limit, offset, column, value)
+               } catch(Exception e) {
+               	errorlog.error i18n.servermessage['error_getting_col_list'][lang]+": "+e.printStackTrace()
+     					return sm.statusMessage(-1, i18n.servermessage['error_getting_col_list'][lang]+": "+e.getMessage(), action)
                 }
        
                 //log.debug "Collections: $collections"
-                List res = []
-                h.result.eachWithIndex{col, i -> 
-                   
-                    h.result[i] = ['col_id':col.col_id, 'col_name':col.col_name, 'col_lang':col.col_lang, 
-                            'col_comment':col.col_comment, 'col_new_user_can_read':col.col_new_user_can_read]
-                            
-                }              
-                return sm.statusMessage(0, h)        
+                h.result.eachWithIndex{col, i ->  h.result[i] = col.toMap()}              
+                return sm.statusMessageWithPubKey(0, h, user.usr_pub_key)        
             }
    
             /***************************************************/
-            /** 1.2 update - MODIFY A VALUE - only for ADMIN users */
+            /** 1.2 update - MODIFY A VALUE - for ADMIN users */
             /***************************************************/
             
             if (action == "update") {
         	
-        	//requires the column and value parameter
-        	// the id is from a collection
-                long id 
-                if (par["POST"]["id"]) id = Long.parseLong(par["POST"]["id"] )
-                if (!id) return sm.notEnoughVars("id=$id")
+        		//requires the column and value parameter
+        		// the id is from a collection
+            	long id 
+					if (par["POST"]["id"]) 
+					try {id = Long.parseLong(par["POST"]["id"] )}
+					catch(Exception e) {}
+					if (!id) return sm.notEnoughVars("id=$id")
                 
                 // let's check permissions
-                Collection collection = Collection.getFromID(id)
-                
-                if (!(user.isSuperUser() || user.canAdminCollection(collection)) )                   
-                    return sm.statusMessage(-1, i18n.servermessage['no_collection_admin'][lang])
-                          
-            
-                if (value == null || !column) return sm.notEnoughVars("v=$value, c=$column")
+               Collection collection = Collection.getFromID(id)
+					if (!collection) return sm.collectionNotFound()
+					if (value == null || !column) return sm.notEnoughVars("v=$value, c=$column")
                         
-                def answer 
-                
-                try {
-                    // here is log, not log2
-                    log.debug "${user.usr_login}: Updating collection column $column, val $value,id $id"
-                    answer = Collection.updateValue(id, column, value)                     
+               int res = 0
+               try {
+                    res = collection.updateValue(column, value)                     
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage['error_updating_collection'][lang]+": " +e.getMessage())
+                  errorlog.error (i18n.servermessage['error_updating_collection'][lang]+": "+e.printStackTrace())
+  						return sm.statusMessage(-1, i18n.servermessage['error_updating_collection'][lang]+": " +e.getMessage())
                 }
                 
                 //RETURNS 1 IF UPDATED
-                return sm.statusMessage(answer, value)	// the value will be used on the UI	
+                return sm.statusMessageWithPubKey(res, collection.toMap(), user.usr_pub_key) 
             }
             
-            /*************************************************/
-            /**  1.3 refreshcache - REFRESH STATS COLLECTION - only for ADMIN users */
-            /*************************************************/
+            /************************************************************************/
+            /**  1.3 refreshstats - REFRESH STATS COLLECTION - only for ADMIN users */
+            /************************************************************************/
             
-            if (action == "refreshcache") {
+            if (action == "refreshstats") {
         	
-        	long id 
-        	if (par["POST"]["id"]) id = Long.parseLong(par["POST"]["id"] )
-                if (!id) return sm.notEnoughVars("id=$id")
+            	long id 
+					if (par["POST"]["id"]) 
+					try {id = Long.parseLong(par["POST"]["id"] )}
+					catch(Exception e) {}
+					if (!id) return sm.notEnoughVars("id=$id")
                 
-                Collection collection = Collection.getFromID(id)
-                if (!(user.isSuperUser() || user.canAdminCollection(collection)) )
-                    return sm.statusMessage(-1, i18n.servermessage['no_collection_admin'][lang])
-               
-                stats = new SaskiaStats()
-                try {
-                    log.debug "refreshing cache for $id $lang"                  
+                // let's check permissions
+               Collection collection = Collection.getFromID(id)
+					if (!collection) return sm.collectionNotFound()
+					stats = new SaskiaStats()
+               try {
                     stats.forceRefreshCacheOnFrontPage(collection, lang)
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage['error_creating_cache_for_collection'][lang]+": " +e.getMessage())
+                   errorlog.error i18n.servermessage['error_creating_cache_for_collection'][lang]+": "+e.printStackTrace()
+						return sm.statusMessage(-1, i18n.servermessage['error_creating_cache_for_collection'][lang]+": " +e.getMessage())
                 }              
                 sm.statusMessage(0, i18n.servermessage['ok'][lang])		
             }
             
             
-            /****************************************/
-            /** 1.4 create - CREATE NEW COLLECTION - for ADMIN users or user with credits for**/
-            /****************************************/
+            /************************************************************/
+            /** 1.4 create - CREATE NEW COLLECTION - for ADMIN users    */
+				/** I can create collections for others, so let's add stuff */ 
+            /************************************************************/
             
             if (action == "create") {
         	
                 String col_name =  par["POST"]["col_name"] 
+                String col_lang =  par["POST"]["col_lang"] 
                 String col_comment =  par["POST"]["col_comment"] 
-                Boolean col_new_user_can_read 
-                 try {col_new_user_can_read = Boolean.parseBoolean(par["POST"]["col_new_user_can_read"]) 
-                 } catch(Exception e) {}
+                String col_permission =  par["POST"]["col_permission"] 
+                Long col_owner 
+  					 try {col_owner = Long.parseLong(par["POST"]["col_owner"])} 
+                catch(Exception e) {}
+					 User owner = User.getFromID(col_owner)
+
+                if (!col_name) return sm.notEnoughVars("col_name=$col_name") 
+                if (!col_permission) return sm.notEnoughVars("col_permission=$col_permission") 
+                if (!owner) return sm.userNotFound("col_owner=$col_owner") 
                 
-                if (!col_name || col_new_user_can_read == null) 
-                    return sm.notEnoughVars("col_name=$col_name col_new_user_can_read=$col_new_user_can_read") 
-                
-                 if (!(user.isSuperUser() || user.canCreateCollection()) )
-                    return sm.statusMessage(-1, i18n.servermessage['collection_number_limit_reached'][lang])
-                                    
-                Collection collection = Collection.getFromName(col_name)
+                Collection collection = Collection.getFromNameAndOwner(col_name, col_owner)
                 if (collection) return sm.statusMessage(-1, i18n.servermessage['collection_already_exists'][lang])
                 
-                log.debug "Creating new collection... name=$col_name, new_user_can_read class="+col_new_user_can_read?.class
-                  
-                try {
+                if (!Collection.canHaveANewCollection(col_owner)) {
+						return sm.statusMessage(-1, i18n.servermessage['user_not_allowed_to_create_more_collection'][lang], 
+						 "Max: "+owner.usr_max_number_collections+ "Now: "+owner.collectionsOwned())
+					}       	
+ 					try {
                     collection = new Collection(col_name:col_name, col_comment:col_comment, 
-                	    col_new_user_can_read:col_new_user_can_read)
-                    collection.addThisToDB()
+						  col_owner:owner, col_lang:col_lang, col_permission:col_permission)
+                    collection.col_id = collection.addThisToDB()
                 } catch(Exception e) {
+                    errorlog.error i18n.servermessage['error_creating_collection'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage['error_creating_collection'][lang]+": "+e.getMessage())
                 }
                         
                 // leave like that, to include an id field
-                bind['status'] = 0
-                bind['message'] =  i18n.servermessage['ok'][lang]
-                bind['id'] = collection.col_id
-                log2.debug "$session AdminCollectionMapping:$action: $bind status 0 OK - collection $col_name created"
-                return JSONHelper.toJSON(bind)		
+                return sm.statusMessageWithPubKey(0, collection.toMap(), user.usr_pub_key) 
             }
-                       
+
+				/************************************/
+            /** 1.5 delete - DELETE collection **/
+            /************************************/
+           
+            if (action == "delete") {
+                	long id 
+					if (par["POST"]["id"]) 
+					try {id = Long.parseLong(par["POST"]["id"] )}
+					catch(Exception e) {}
+					if (!id) return sm.notEnoughVars("id=$id")
+                
+                // let's check permissions
+               Collection collection = Collection.getFromID(id)
+					if (!collection) return sm.collectionNotFound()
+					
+					def res
+					try {
+                    res = collection.removeThisFromDB() 
+                } catch(Exception e) {
+	              	  errorlog.error i18n.servermessage['error_deleting_collection'][lang]+": "+e.printStackTrace()
+						  return sm.statusMessage(-1, i18n.servermessage["error_deleting_collection"][lang]+": "+e.getMessage())
+				    }                
+                //RETURNS 1 IF UPDATED
+                return sm.statusMessageWithPubKey(res, i18n.servermessage['ok'][lang], user.usr_pub_key)    	
+            }                           
             return sm.unknownAction(action)	
         }       
     }

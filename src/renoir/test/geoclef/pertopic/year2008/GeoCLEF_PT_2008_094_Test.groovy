@@ -96,7 +96,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:094 contents:Manifestações contents:cidades contents:alemãs woeid-index:23424829
+label:094 contents:Manifestações contents:cidades contents:alemãs woeid:23424829
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

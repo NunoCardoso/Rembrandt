@@ -95,13 +95,26 @@ REMBRANDT's CONFIGURATION PARAMETERS
 	saskia.dbpedia.cache.label - cache for DBpedia resource's label mapping.  Default: 1000
 
 	saskia.index.dir - Directory of several Lucene indexes for Saskia's searches. it's just the directory name under the rembrandt.home.dir 
+	saskia.index.term.doc_pool_size - Pool of docs used when indexing terms. Default: 1000
+	saskia.index.ne.doc_pool_size - Pool of docs used when indexing NEs. Default: 1000
+	saskia.index.entity.doc_pool_size - Pool of docs used when indexing entities. Default: 1000
+	saskia.index.woeid.doc_pool_size - Pool of docs used when indexing WOEIDs. Default: 10000
+	saskia.index.time.doc_pool_size - Pool of docs used when indexing time. Default: 10000
+	
+	saskia.index.id_label - default to 'id' - the doc original id 
+	saskia.index.docid_label - default to 'docid' - the doc id used on the DB
+	saskia.index.contents_label - default to 'contents' - the text id
+	saskia.index.title_label - default to 'title' - the title label
+	saskia.index.entity_label - default to 'entity' - the entity label
+	saskia.index.woeid_label - default to 'woeid' - the WOEID label
+	saskia.index.time_label - default to 'tg' - the time label. It can't be 'time', because LGTE already uses it.
 	
 	saskia.wikipedia.db.driver - Driver to access Saskia's DB. Default: com.mysql.jdbc.Driver
 	saskia.wikipedia.db.name - name of Saskia's DB. Default: saskia
 	saskia.wikipedia.db.param - Additional parameters. Default: useUnicode=yes&characterEncoding=UTF8&characterSetResults=UTF8&autoReconnect=true
 	saskia.wikipedia.db.password - Password for Saskia's DB. Default: saskia
 	saskia.wikipedia.db.url - URL for MySQL running Saskia's DB. Default: jdbc:mysql://127.0.0.1
-	saskia.wikipedia.db.user - Default username for Saskia's DB. Default: saskia
+	saskia.wikipedia.db.user - Default username for Saskia's DB. Default: wikipedia (was saskia before v1.2)
 
 	saskia.geonetpt02.mode - Ontology's access mode: local, sdb or webservice. Local is for local files, sdb is for SDB access. Default: webservice 
 	saskia.geonetpt02.local.fileformat - Define file format if mode is local. N3, N-TRIPLE. RDF are fine.
@@ -128,10 +141,14 @@ REMBRANDT's CONFIGURATION PARAMETERS
 	saskia.subject.cache.number - Default: 1000
 		
 	saskia.db.driver - Driver to access RembrandtPool's DB. Default: com.mysql.jdbc.Driver
-	saskia.db.name - name of RembrandtPool's DB. Default: rembrandtpool
+	saskia.db.name - name of RembrandtPool's DB. Default: saskia (was rembrandtpool before v1.2)
 	saskia.db.param - Additional parameters. Default: useUnicode=yes&characterEncoding=UTF8&characterSetResults=UTF8&autoReconnect=true
-	saskia.db.password - Password for RembrandtPool's DB. Default: rembrandtpool
+	saskia.db.password - Password for RembrandtPool's DB. Default: saskia
 	saskia.db.url - URL for MySQL running RembrandtPool's DB. Default: jdbc:mysql://127.0.0.1
-	saskia.db.user - Default username for RembrandtPool's DB. Default: rembrandtpool
+	saskia.db.user - Default username for RembrandtPool's DB. Default: saskia 
 	
 	saskia.webstore.volume - Name of the Webstore volume. Default: saskia
+
+   saskia.imports.max_allowed_html_size - Max value of source docs to be tagged. Default:; 100000 (bytes)
+	saskia.imports.source_doc_pool_size - pool of source docs to be tagged. Default: 10
+	saskia.imports.rembrandted_doc_pool_size- pool of rembrandted docs to be synchronized to pool, and to generate signatures. Default: 30

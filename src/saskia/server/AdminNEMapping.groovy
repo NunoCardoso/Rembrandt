@@ -33,8 +33,9 @@ public class AdminNEMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
     I18n i18n
-    static Logger log = Logger.getLogger("SaskiaServer") 
-    static Logger log2 = Logger.getLogger("SaskiaService") 
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
  
     public AdminNEMapping() {
         
@@ -42,20 +43,23 @@ public class AdminNEMapping extends WebServiceRestletMapping {
         
         JSONanswer = {req, par, bind ->
             long session = System.currentTimeMillis()
-            log2.debug "Session $session triggered with $par" 
+            processlog.debug "Session $session triggered with $par" 
             
-            int limit, offset
+            int limit
+ 				long offset
             def column, value
             
             // core stuff
             String action = par["POST"]["do"] //show, update, etc
             String lang = par["POST"]["lg"] 
             
-            ServerMessage sm = new ServerMessage("AdminNEMapping", lang, bind, session)  
+            ServerMessage sm = new ServerMessage("AdminNEMapping", lang, bind, session, processlog)  
             
             // pager stuff
             if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
-            if (par["POST"]["o"]) offset = Integer.parseInt(par["POST"]["o"])
+				if (!limit) limit = 0
+            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
             
@@ -66,30 +70,28 @@ public class AdminNEMapping extends WebServiceRestletMapping {
                                                       
             User user = User.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
-            if (!user.isSuperUser()) return sm.noSuperUser()
             if (!user.isEnabled()) return sm.userNotEnabled()
-            
-            if (!action || !lang) return sm.notEnoughVars(lang, "do=$action, lg=$lang")      
-        	
+				// all Admin*Mappings must have this
+				if (!user.isSuperUser()) return sm.noSuperUser()
+            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
             sm.setAction(action)
            
-            /***************************/
+            /*************************/
             /** 1.1 show - PAGE NEs **/
-            /***************************/
+            /*************************/
 
-            if (action == "show") {
-        	Map h
-                try {
-                    log.debug "Querying NEs: limit $limit offset $offset column $column value $value"
+            if (action == "list") {
+        			Map h
+               try {
                     h = NE.getNEs(limit, offset, column, value)
                 } catch(Exception e) {
+               	  errorlog.error i18n.servermessage['error_getting_ne_list'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_ne_list"][lang]+": "+e.getMessage())
                 }
                 
                 // you have to "JSONize" the NEs
                 h.result.eachWithIndex{ne, i -> h.result[i] = ne.toMap() }
-
-                return sm.statusMessage(0,h)
+                return sm.statusMessageWithPubKey(0,h,user.usr_pub_key)
             }
             
             /***************************/
@@ -98,110 +100,114 @@ public class AdminNEMapping extends WebServiceRestletMapping {
             
             if (action == "update") {
         	
-        	Long ne_id
-                if (par["POST"]["id"]) ne_id = Long.parseLong(par["POST"]["id"])
-                if (!ne_id) return sm.notEnoughVars("id=$ne_id")
+        			Long ne_id
+               if (par["POST"]["id"]) 
+					try {ne_id = Long.parseLong(par["POST"]["id"])}
+					catch(Exception e) {}
+               if (!ne_id) return sm.notEnoughVars("id=$ne_id")
                 
-                NE ne 
-                try {
-                    log.debug "Querying NE ne with id $ne_id"
+               NE ne 
+               try {
                     ne = NE.getFromID(ne_id)
-                } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_ne_list"][lang]+": "+e.getMessage())                 
-                }
+               } catch(Exception e) {
+               	  errorlog.error i18n.servermessage['error_getting_ne'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_ne"][lang]+": "+e.getMessage())                 
+               }
                 
-                switch(column) {
-                    case "ne_name": 
+               switch(column) {
+                  case "ne_name": 
                 	NEName ne_name
-                	def res 
-                        try {
-                           ne_name = NEName.getFromID(Long.parseLong(value))
-                           res = ne.updateNEName(ne_name)
-                        }catch(Exception e)  {
+                  try {
+							ne_name = NEName.getFromID(Long.parseLong(value))
+                     ne.updateNEName(ne_name)
+                  } catch(Exception e)  {
+               	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
                     	return sm.statusMessage(-1, i18n.servermessage["error_updating_ne"][lang]+": "+e.getMessage())                 
-                        }
-                        return sm.statusMessage(0, ne_name.toMap())
-                    break      
-                    case "ne_category": 
+						}
+						return sm.statusMessageWithPubKey(0, ne_name.toMap(),user.usr_pub_key)
+						break      
+                  
+  						case "ne_category": 
                 	NECategory ne_category
-                	def res 
-                        try {
-                           ne_category = NECategory.getFromID(Long.parseLong(value))
-                           res = ne.updateNECategory(ne_category)
-                        }catch(Exception e)  {
+                	try {	
+							ne_category = NECategory.getFromID(Long.parseLong(value))
+                     ne.updateNECategory(ne_category)
+						} catch(Exception e)  {
+               	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
                     	return sm.statusMessage(-1, i18n.servermessage["error_updating_ne"][lang]+": "+e.getMessage())                 
-                        }
-                        return sm.statusMessage(0, ne_category.toMap())
-                    break   
-                    case "ne_type": 
+						}
+                 	return sm.statusMessageWithPubKey(0, ne_category.toMap(),user.usr_pub_key)
+                  break   
+                  
+  						case "ne_type": 
                 	NEType ne_type
-                	def res 
-                        try {
-                           ne_type = NEType.getFromID(Long.parseLong(value))
-                           res = ne.updateNEType(ne_type)
-                        }catch(Exception e)  {
+                	try {
+                  	ne_type = NEType.getFromID(Long.parseLong(value))
+                     ne.updateNEType(ne_type)
+                  } catch(Exception e)  {
+               	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
                     	return sm.statusMessage(-1, i18n.servermessage["error_updating_ne"][lang]+": "+e.getMessage())                 
-                        }
-                        return sm.statusMessage(0, ne_type.toMap())
-                    break   
-                    case "ne_category": 
+                  }
+                  return sm.statusMessageWithPubKey(0, ne_type.toMap(),user.usr_pub_key)
+                  break   
+                  
+  						case "ne_subtype": 
                 	NESubtype ne_subtype
-                	def res 
-                        try {
-                           ne_subtype = NESubtype.getFromID(Long.parseLong(value))
-                           res = ne.updateNESubtype(ne_subtype)
-                        }catch(Exception e)  {
+                	try {
+                  	ne_subtype = NESubtype.getFromID(Long.parseLong(value))
+                    	ne.updateNESubtype(ne_subtype)
+						} catch(Exception e)  {
+               	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
                     	return sm.statusMessage(-1, i18n.servermessage["error_updating_ne"][lang]+": "+e.getMessage())                 
-                        }
-                        return sm.statusMessage(0, ne_subtype.toMap())
-                    break   
-                    case "ne_entity": 
+						}
+						return sm.statusMessageWithPubKey(0, ne_subtype.toMap(),user.usr_pub_key)
+                  break   
+                  
+  						case "ne_entity": 
                 	Entity ne_entity
-                	def res 
-                        try {
-                           ne_entity = Entity.getFromID(Long.parseLong(value))
-                           res = ne.updateEntity(ne_entity)
-                        }catch(Exception e)  {
+                	try {
+                     ne_entity = Entity.getFromID(Long.parseLong(value))
+                     res = ne.updateEntity(ne_entity)
+                  } catch(Exception e)  {
+               	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
                     	return sm.statusMessage(-1, i18n.servermessage["error_updating_ne"][lang]+": "+e.getMessage())                 
-                        }
-                        return sm.statusMessage(0, ne_entity.toMap())
-                    break   
-                }
+                  }
+                  return sm.statusMessageWithPubKey(0, ne_entity.toMap(),user.usr_pub_key)
+                  break   
+                }// switch 
+            }//action
                 
-                
-            } 
-                
-            /***************************************/
+            /*****************************************/
             /** 1.3 delete - DELETE NE (admin only) **/
-            /***************************************/
+            /*****************************************/
            
             if (action == "delete") {
                 long ne_id 
-                try {
-                    ne_id = Long.parseLong(par["POST"]["id"])                      
-                }catch(Exception e) {}
-                               
-                if (!ne_id)  return sm.notEnoughVars("id=$ne_id")      
+                try {ne_id = Long.parseLong(par["POST"]["id"])                      
+                }catch(Exception e) {}                              
+                if (!ne_id) return sm.notEnoughVars("id=$ne_id")      
+
                 NE ne 
                 try {
-                    log.debug "Querying NE ne with id $ne_id"
                     ne = NE.getFromID(ne_id)
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_ne_list"][lang]+": "+e.getMessage())                 
+               	  errorlog.error i18n.servermessage['error_getting_ne'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_ne"][lang]+": "+e.getMessage())                 
                 }
-                          
+                def res          
                 try {
-                    log.debug "deleting ne $ne_id"
-                    answer = NE.deleteNE(ne_id) 
-                } catch(Exception e) {return sm.statusMessage(-1, i18n.servermessage["error_deleting_ne"][lang]+": "+e.getMessage())}
-                  
+                    res = NE.deleteNE(ne_id) 
+                } catch(Exception e) {
+               	  errorlog.error i18n.servermessage['error_deleting_ne'][lang]+": "+e.printStackTrace()
+						  return sm.statusMessage(-1, i18n.servermessage["error_deleting_ne"][lang]+": "+e.getMessage())
+					 }                  
                 //RETURNS 1 IF UPDATED
-                return sm.statusMessage(answer, i18n.servermessage['ok'][lang])		   	
+                return sm.statusMessageWithPubKey(res, i18n.servermessage['ok'][lang],user.usr_pub_key)   	
             }    
             
-            /***************************************/
-            /** 1.4 create **/
-            /***************************************/
+            /*******************/
+            /** 1.4 create NE **/
+            /*******************/
            
             if (action == "create") {
                   
@@ -217,15 +223,17 @@ public class AdminNEMapping extends WebServiceRestletMapping {
                 if (par["POST"]["ent"]) ent = par["POST"]["ent"]
                                                                                                 
                 // let's decontaminate the vars.
-               NEName db_ne_name 
-               try {db_ne_name = NEName.getFromName(ne_name)
-               if (!db_ne_name) {
-        	   Sentence s = Sentence.simpleTokenize(ne_name) 
-        	   db_ne_name = new NEName(nen_name:ne_name, nen_nr_terms:s.size())
-        	   db_ne_name.addThisToDB()
-               }
-               }catch(Exception e) {
-        	   return sm.statusMessage(-1, i18n.servermessage["error_creating_ne"][lang]+": "+e.getMessage())                 
+                NEName db_ne_name 
+                try {
+						   db_ne_name = NEName.getFromName(ne_name)
+               		if (!db_ne_name) {
+        	   				Sentence s = Sentence.simpleTokenize(ne_name) 
+        	   				db_ne_name = new NEName(nen_name:ne_name, nen_nr_terms:s.size())
+        	   				db_ne_name.nen_id = db_ne_name.addThisToDB()
+                 	 	}
+                } catch(Exception e) {
+               	errorlog.error i18n.servermessage['error_creating_ne'][lang]+": "+e.printStackTrace()
+        	   		return sm.statusMessage(-1, i18n.servermessage["error_creating_ne"][lang]+": "+e.getMessage())                 
                }
                
                assert ["en","pt"].contains(ne_lang)
@@ -245,18 +253,20 @@ public class AdminNEMapping extends WebServiceRestletMapping {
                
                NE ne2 = NE.getFromNameAndLangAndClassificationAndEntity(db_ne_name, ne_lang, c1v, c2v, c3v, entity) 
         	   
-               if (ne2) return sm.statusMessage(-1, i18n.serverMessage['ne_already_exists'][lang])
-               
+               if (ne2) {
+						return sm.statusMessage(-1, i18n.serverMessage['ne_already_exists'][lang])
+               }
+
                NE ne = new NE(ne_name:db_ne_name, ne_category:c1v, ne_type:c2v, ne_subtype:c3v, ne_entity:entity)
-               try {
-                    log.debug "Adding NE"
-                    ne = NE.addThisToDB()
+               try {               
+                    ne.ne_id = ne.addThisToDB()
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_creating_ne"][lang]+": "+e.getMessage())                 
+                	errorlog.error i18n.servermessage['error_creating_ne'][lang]+": "+e.printStackTrace()
+                  return sm.statusMessage(-1, i18n.servermessage["error_creating_ne"][lang]+": "+e.getMessage())                 
                 }
                
                 //RETURNS 1 IF UPDATED
-                return sm.statusMessage(0, ne.toMap())		   	
+                return sm.statusMessageWithPubKey(0, ne.toMap(),user.usr_pub_key)	   	
             }    
             return sm.unknownAction()
         }

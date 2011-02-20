@@ -19,7 +19,7 @@
  package rembrandt.server
 
  import org.apache.log4j.*
-import org.slf4j.bridge.SLF4JBridgeHandler
+ import org.slf4j.bridge.SLF4JBridgeHandler
  import saskia.bin.Configuration
  import org.restlet.Component
  import org.restlet.data.Protocol
@@ -28,12 +28,12 @@ import org.slf4j.bridge.SLF4JBridgeHandler
   * @author Nuno Cardoso
   * 
   * This is the main class. Reads in args[0] a configuration file that sets up 
-  * the Renoir, such as server port. proxy settings, etc. 
+  * the RembrandtServer, such as server port. proxy settings, etc. 
   */
 
 class RembrandtServer {
 
-	def static Logger log = Logger.getLogger("RembrandtServer")  
+	static Logger log = Logger.getLogger("RembrandtServerMain")  
 	Component component
 		
 	public RembrandtServer(Configuration conf, int port) {

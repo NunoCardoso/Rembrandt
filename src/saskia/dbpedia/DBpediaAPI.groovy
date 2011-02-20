@@ -306,14 +306,16 @@ class DBpediaAPI {
 		} 	
 		
 	   	String query = "SELECT ?s WHERE { ?s $wikipediaLinkProperty <http://${lang}.wikipedia.org/wiki/${newTitle}> } "
-		println "getDBpediaResourceFromWikipediaURL query: "+query
+		log.debug "getDBpediaResourceFromWikipediaURL query: "+query
 		answers = sparql(query)
 
 		if (answers) {
 		    answers = answers[0]?.s?.toString()
 			cacheWikiPage2DBpediaResource.put(newTitle+"-"+lang, answers)
-			log.trace "DBpedia resource for Wiki URL $newTitle, lang $lang found: $answers"
+			log.debug "DBpedia resource for Wiki URL $newTitle, lang $lang found: $answers"
 			return answers
+		} else {
+			log.debug "DBpedia resource for Wiki URL $newTitle, lang $lang found no answers"
 		}
 		return null
 	}
@@ -340,12 +342,12 @@ class DBpediaAPI {
 		
 		answers = sparql(query)
 		
-		println "getDBpediaResourceFromWikipediaPageTitle query: "+query
+		log.debug "getDBpediaResourceFromWikipediaPageTitle query: "+query
 		if (!answers) {
 			// let's try for English
 			query = "SELECT ?s WHERE { ?s rdfs:label \"${title}\"@en }"
 		   answers = sparql(query)
-				println "getDBpediaResourceFromWikipediaPageTitle query: "+query
+				log.debug "2nd try in en: getDBpediaResourceFromWikipediaPageTitle query: "+query
 
 		}
 		answers = answers.findAll{it.s.toString() =~ /^${DBpediaResource.resourcePrefix}[^:]*$/}	
@@ -354,8 +356,10 @@ class DBpediaAPI {
 		if (answers) {
 		    answers = answers[0]?.s?.toString()
 			cacheWikiTitle2DBpediaResource.put(title+"-"+lang, answers)
-			log.trace "DBpedia resource for Wiki title $title, lang $lang found: $answers"
+			log.debug "DBpedia resource for Wiki page title $title, lang $lang found: $answers"
 			return answers
+		} else {
+			log.debug "DBpedia resource for Wiki page title $title, lang $lang found no answers"
 		}
 		return null
 	}

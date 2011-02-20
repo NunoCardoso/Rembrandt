@@ -17,6 +17,7 @@
  */
 package renoir.obj
 
+import saskia.bin.Configuration
 import rembrandt.bin.Rembrandt
 import rembrandt.bin.RembrandtCore
 import rembrandt.obj.Sentence
@@ -39,6 +40,7 @@ class QueryReformulator1 extends QueryReformulator {
     static Logger log = Logger.getLogger("RenoirQuestionSolver")
     static DBpediaAPI dbpedia = DBpediaAPI.newInstance()
     static String reformulator = "Reformulator 1"
+	 static Configuration conf = Configuration.newInstance()
 
     static public ReformulatedQuery reformulate(RenoirQuery initial_query, Question question) {
 		
@@ -199,7 +201,7 @@ class QueryReformulator1 extends QueryReformulator {
 						log.info "The entity $ent has geoscope $geo"
 		   				if (geo) {
 		       				RenoirQueryTerm woeid_term = new RenoirQueryTerm(""+geo.geo_woeid)
-	       					woeid_term.field= saskia.index.GenerateGeoIndexForCollection.luceneIndexFieldLabel
+	       					woeid_term.field= conf.get('saskia.index.woeid_label','woeid')
 						//	println "ref_query.newterms="+ref_query.newterms
 						//	println "woeid_term = "+woeid_term
 						//	println "find = "+(ref_query.newterms.find{it.text == woeid_term.text && it.field == woeid_term.field}) 
@@ -212,7 +214,7 @@ class QueryReformulator1 extends QueryReformulator {
 								List<Geoscope> country_childrens = geo.getCountryDescendents()
 								country_childrens?.each{children -> 
 									RenoirQueryTerm children_woeid_term = new RenoirQueryTerm(""+children.geo_woeid)
-									children_woeid_term.field= saskia.index.GenerateGeoIndexForCollection.luceneIndexFieldLabel
+									children_woeid_term.field=	conf.get('saskia.index.woeid_label','woeid') 
 								//	println "ref_query.newterms="+ref_query.newterms
 								//	println "children_woeid_term = "+children_woeid_term
 							//		prnitln "find = "+(ref_query.newterms.find{it.text == children_woeid_term}) 
@@ -233,7 +235,7 @@ class QueryReformulator1 extends QueryReformulator {
 		   			List<String> indexes = ne.tg.getTimeIndex()
 		   			indexes?.each{index -> 
 		   				RenoirQueryTerm tg_term = new RenoirQueryTerm(""+index)
-		   				tg_term.field= saskia.index.GenerateTimeIndexForCollection.luceneIndexFieldLabel
+		   				tg_term.field= conf.get('saskia.index.time_label','time')
 		   				if (!ref_query.newterms.contains(tg_term)) 
 		   	    			ref_query.newterms << tg_term
 		   			}

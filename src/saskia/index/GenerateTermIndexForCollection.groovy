@@ -43,17 +43,17 @@ import rembrandt.io.RembrandtStyleTag
  * @author Nuno Cardoso
  * 
  * This class generates term index for a given collection. 
-
  *
  */
 class GenerateTermIndexForCollection {
     
     static Configuration conf = Configuration.newInstance()
+
     static Logger log = Logger.getLogger("IndexGeneration")
     static String termWithoutStemIndexDir = "term-nostem-index" 
     static String termWithStemIndexDir = "term-stem-index" 
     static String collectionLabel = "col" 
-    static final int DOC_POOL_SIZE=1000
+    int doc_pool_size=conf.getInt("saskia.index.term.doc_pool_size",1000)
 
     Collection collection
     Map<String, Analyzer> analyzerMap 
@@ -62,37 +62,41 @@ class GenerateTermIndexForCollection {
     LgteIndexWriter termwriter 
     File filestats 
     Map stats
-    String lang
     RembrandtReader reader
-    
-    public GenerateTermIndexForCollection(Collection collection, String lang, String indexdir,
+ 
+    public GenerateTermIndexForCollection(Collection collection, String indexdir,
 	    boolean dostem) {
+		
 			this.collection=collection
-        this.lang=lang
-        this.indexdir=indexdir
-        reader = new RembrandtReader(
-        	new RembrandtStyleTag(
+         this.indexdir=indexdir
+         reader = new RembrandtReader(
+        	    new RembrandtStyleTag(
                 conf.get("rembrandt.input.styletag.lang", conf.get("global.lang"))))
        
         analyzerMap = [:]
-        analyzerMap.put(Globals.DOCUMENT_ID_FIELD, new LgteNothingAnalyzer())
+        analyzerMap.put(conf.get("saskia.index.id_label","id"), new LgteNothingAnalyzer())
+        analyzerMap.put(conf.get("saskia.index.docid_label","docid"), new LgteNothingAnalyzer())
 		
 		if (dostem) {
-        if (lang == "pt") 
-            analyzerMap.put(Globals.LUCENE_DEFAULT_FIELD,LgteAnalyzerManager.getInstance().getLanguagePackage(
+        if (collection.col_lang == "pt") 
+            analyzerMap.put(conf.get("saskia.index.contents_label","contents"),
+ 				LgteAnalyzerManager.getInstance().getLanguagePackage(
                     "Portuguese", "stopwords_por.txt").getAnalyzerWithStemming() )
 
-        if (lang == "en")
-            analyzerMap.put(Globals.LUCENE_DEFAULT_FIELD, LgteAnalyzerManager.getInstance().getLanguagePackage(
+        if (collection.col_lang == "en")
+            analyzerMap.put(conf.get("saskia.index.contents_label","contents"),
+				LgteAnalyzerManager.getInstance().getLanguagePackage(
                     "English", "snowball-english.list").getAnalyzerWithStemming() )
 		} else {
 
-        if (lang == "pt") 
-            analyzerMap.put(Globals.LUCENE_DEFAULT_FIELD,LgteAnalyzerManager.getInstance().getLanguagePackage(
+        if (collection.col_lang == "pt") 
+            analyzerMap.put(conf.get("saskia.index.contents_label","contents"),
+				LgteAnalyzerManager.getInstance().getLanguagePackage(
                     "Portuguese", "stopwords_por.txt").getAnalyzerNoStemming() )
 
-        if (lang == "en")
-            analyzerMap.put(Globals.LUCENE_DEFAULT_FIELD, LgteAnalyzerManager.getInstance().getLanguagePackage(
+        if (collection.col_lang == "en")
+            analyzerMap.put(conf.get("saskia.index.contents_label","contents"),
+ 				LgteAnalyzerManager.getInstance().getLanguagePackage(
                     "English", "snowball-english.list").getAnalyzerNoStemming() )
 		}
         
@@ -125,9 +129,9 @@ class GenerateTermIndexForCollection {
         
         docstats.totalDocs = stats['total']
         
-        for (int i=stats['total']; i > 0; i -= DOC_POOL_SIZE) {
+        for (int i=stats['total']; i > 0; i -= doc_pool_size) {
             
-            int limit = (i > DOC_POOL_SIZE ? DOC_POOL_SIZE : i)
+            int limit = (i > doc_pool_size ? doc_pool_size : i)
             log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
             
             List rdocs = RembrandtedDoc.getBatchOfRembrandtedDocs(collection, limit, stats["processed"])
@@ -139,32 +143,62 @@ class GenerateTermIndexForCollection {
                 return 
             }
             docstats.beginBatchOfDocs(limit)
-                            
+            int doc_title_sentences, doc_body_sentences, doc_title_terms, doc_body_terms
             rdocs.each {rdoc ->
+
                 //TODO
                 Document doc = reader.createDocument(rdoc.doc_content)
                
                 doc.tokenize()
-                
+                doc_title_sentences = 0
+					 doc_body_sentences = 0
+					 doc_title_terms = 0
+					 doc_body_terms = 0
                 /*****  String representation of the doc body ******/
-                String bodytext = doc.body_sentences.collect{it.toStringLine()}.join("\n")
-                String titletext = doc.title_sentences?.collect{it.toStringLine()}.join("\n")
-
+                String bodytext = doc.body_sentences?.collect{it.toStringLine()}.join("\n").trim()
+                String titletext = doc.title_sentences?.collect{it.toStringLine()}.join("\n").trim()
+					 
+					 doc.title_sentences?.each{it -> 
+						if (!it.isEmpty()) {
+							doc_title_sentences++
+							doc_title_terms += it.size()
+						}	
+					 }
+					 doc.body_sentences?.each{it -> 
+						if (!it.isEmpty()) {
+							doc_body_sentences++
+							doc_body_terms += it.size()
+						}	
+					 }
                 log.trace "bodytext: $bodytext"
-                if (!bodytext) log.warn "Doc $doc does NOT have bodytext."
+                if (!bodytext && !titletext) log.warn "Doc ${rdoc.doc_original_id} does NOT have titletext and bodytext."
                 LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
                 
-                ldoc.storeUtokenized(Globals.DOCUMENT_ID_FIELD,rdoc.doc_original_id)
-                ldoc.indexText("title",titletext)
-                ldoc.indexText(Globals.LUCENE_DEFAULT_FIELD,bodytext)
-             
+                ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
+                ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id.toString())
+                
+					 if (doc_body_sentences > 0 && doc_body_terms > 0) {
+						if (doc_title_sentences > 0 && doc_title_terms > 0) {
+							ldoc.indexText(conf.get("saskia.index.title_label","title"),titletext)
+							ldoc.indexText(conf.get("saskia.index.contents_label","contents"),titletext+"\n"+bodytext)
+						} else {
+					 		ldoc.indexText(conf.get("saskia.index.contents_label","contents"),bodytext)
+						}
+					} else {
+						if (doc_title_sentences > 0 && doc_title_terms > 0) {
+							ldoc.indexText(conf.get("saskia.index.title_label","title"),titletext)
+							ldoc.indexText(conf.get("saskia.index.contents_label","contents"),titletext)
+						} else {
+							log.warn "Doc ${rdoc.doc_original_id} does NOT have titletext and bodytext."
+						}
+					 } 
+ 
+					 log.debug "Doc "+rdoc.doc_id.toString()+":"+rdoc.doc_original_id+" - Title:"+doc_title_sentences+":"+doc_title_terms+" Body:"+doc_body_sentences+":"+doc_body_terms+" titletext:"+titletext.size()+" bodytext:"+bodytext.size()
                 termwriter.addDocument(ldoc)
             }
             docstats.endBatchOfDocs(limit)	
             stats['processed'] += limit
             docstats.printMemUsage()	
-            
-            
         }
         log.debug "Optimizing index..."
         termwriter.optimize()
@@ -202,7 +236,6 @@ class GenerateTermIndexForCollection {
         
         o.addOption("col", true, "Collection name or ID")
         o.addOption("stem", true, "stem while indexing")
-        o.addOption("lang", true, "Collection language")
         o.addOption("help", false, "Gives this help information")
         o.addOption("indexdir", false, "directory of the index")
         
@@ -222,11 +255,6 @@ class GenerateTermIndexForCollection {
 
        if (!cmd.hasOption("stem")) {
             println "No --stem arg. Please specify the stemming. Exiting."
-            System.exit(0)
-        }
-        
-        if (!cmd.hasOption("lang")) {
-            println "No --lang arg. Please specify the collection language. Exiting."
             System.exit(0)
         }
         
@@ -271,7 +299,7 @@ class GenerateTermIndexForCollection {
         }
         
         GenerateTermIndexForCollection indexer = new GenerateTermIndexForCollection(
-               collection, cmd.getOptionValue("lang"), indexdir, stem)
+               collection, indexdir, stem)
         
         indexer.doit()
         

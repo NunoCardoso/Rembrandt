@@ -294,7 +294,7 @@ class InternalEvidenceDefinitionsPT {
        ~/[Aa]ssembl[ée]ias?/, [~/[Aa]dministração/,~/[Rr]egional/], ~/[Cc]âmara/, [~/[Cc]omissariado/,~/[Rr]egional/], 
        [~/[Cc]onselho/,'de',~/[Mm]inistros?/], [~/[Dd]irec?ção/,~/[Rr]egional/], ~/[Ee]stado/, [~/[Ee]stado/,~/[Mm]aior/], 
        [~/[Ff]orças?/,~/[Aa]rmadas?/], ~/[Gg]overno/, [~/[Jj]unta/,'de',~/[Ff]reguesia/], ~/[Mm]inistério/, 
-       ~/[Pp]arlamento/, ~/[Pp]refeitura/, [~/[Ss]ecretaria/,'de',~/[Ee]stado/] ] ],
+       ~/[Pp]arlamento/, ~/[Pp]refeitura/, ~/[Tt]ribunal/, [~/[Ss]ecretaria/,'de',~/[Ee]stado/] ] ],
        
        [answer:SemanticClassification.create(Classes.category.organization, Classes.type.other), needle:[
        ~/[Aa]cessoria/, ~/[Cc]entro/, ~/[Cc]oordenadoria/, ~/[Cc]onselho/, ~/[Cc]omissão/, ~/[Dd]irec?ção-[Gg]eral/, 

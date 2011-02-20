@@ -22,6 +22,9 @@ import saskia.io.DocStatus
 import saskia.io.RembrandtedDoc
 import saskia.io.Collection
 import rembrandt.io.DocStats
+import saskia.io.Task
+import saskia.io.User
+import saskia.io.Job
 import rembrandt.obj.Document
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
@@ -40,36 +43,41 @@ class ImportRembrandtedDocument2NEPool {
 	Collection collection
 	String ynae
 	BufferedReader input
-	static final int REMBRANDTED_DOC_POOL_SIZE=30
 	RembrandtReader reader
 	Configuration conf = Configuration.newInstance()
+	Integer rembrandted_doc_pool_size = conf.getInt("saskia.imports.rembrandted_doc_pool_size",30)
 	
 	public ImportRembrandtedDocument2NEPool() {
 	    reader = new RembrandtReader(new RembrandtStyleTag(conf.get("rembrandt.input.styletag.lang", conf.get("global.lang"))))
-        }
+	}
 	
-	public HashMap syncBatchOfDocsToPool( collection_, int batchSize = 100) {
+	public HashMap syncBatchOfDocsToPool(Collection collection, User user, 
+		String process_signature, int batchSize = 100) {
+			
 		int rows = 0 
 		HashMap status = [sync:0, notsync:0]
-		try {
-			collection = Collection.getFromID(Long.parseLong(collection_))		
-		} catch(Exception e) {
-			collection = Collection.getFromName(collection_)
-		}
-		if (!collection) {
-			log.error "Don't know collection $collection_ to parse documents on. Exiting."
-			return status
-		}
-        
+		
+		String taskname = "task_R2P_"+System.currentTimeMillis()
+
+		Task task = new Task(tsk_user:user, tsk_task:taskname, 
+			tsk_collection:collection, tsk_type:"R2P",
+		   tsk_priority:0, tsk_limit:batchSize, tsk_offset:0, tsk_done:0,
+			tsk_scope:"BAT", tsk_persistence:"TMP", tsk_status:"PRO", tsk_comment:"");
+			
+		task.tsk_id = task.addThisToDB()
+		
 		def stats = new DocStats(batchSize)
 		stats.begin()
 
-		for (int i=batchSize; i > 0; i -= REMBRANDTED_DOC_POOL_SIZE) {
+		for (int i=batchSize; i > 0; i -= rembrandted_doc_pool_size) {
 		    
-		    int limit = (i > REMBRANDTED_DOC_POOL_SIZE ? REMBRANDTED_DOC_POOL_SIZE : i)
+		    int limit = (i > rembrandted_doc_pool_size ? rembrandted_doc_pool_size : i)
 		    log.debug "Initial batchSize: $batchSize Remaining: $i Next pool size: $limit"
-		    List<RembrandtedDoc> rdocs = RembrandtedDoc.getBatchDocsToSyncNEPool(collection, limit)
+		    List<RembrandtedDoc> rdocs = RembrandtedDoc.getBatchDocsToSyncNEPool(
+				task, process_signature, collection, limit)
+				
 		    log.debug "Got ${rdocs?.size()} RembrandtedDoc(s)."
+			 // note: these RembrandtDocs come with Jobs on it
 		    
 		    // if it's null, then there's no more docs to process. Leave the loop.
 		    if (!rdocs) return status
@@ -92,6 +100,8 @@ class ImportRembrandtedDocument2NEPool {
 		    	    status.sync += status_.sync
 		    	    status.notsync += status_.notsync	
 		    	}
+				
+				task.incrementDone()
 		    	stats.endDoc()					   			  
 		    	stats.printMemUsage()	
 		    }
@@ -100,20 +110,11 @@ class ImportRembrandtedDocument2NEPool {
 		return status
 	}
 
-	public HashMap syncDocToPool( collection_, long doc_id) {
+	public HashMap syncDocToPool(Collection collection, long doc_id) {
 		 log.trace "Requesting doc -> NE pool sync for doc_id ${doc_id}."
 		 int rows = 0 
 		 HashMap status = [sync:0, notsync:0]
-		 try {
-			collection = Collection.getFromID(Long.parseLong(collection_))		
-		 } catch(Exception e) {
-			collection = Collection.getFromName(collection_)
-		 }
-		 if (!collection) {
-			log.error "Don't know collection $collection_ to parse documents on. Exiting."
-			return status
-		 }		
-		 
+		 	
 		 // NOT THREAD SAFE!!
 		 RembrandtedDoc rdoc = RembrandtedDoc.getFromID(doc_id)
 		 
@@ -187,8 +188,8 @@ class ImportRembrandtedDocument2NEPool {
 	 */
 	private HashMap syncNEPoolFromDoc(RembrandtedDoc rdoc) {	
 		
-	    HashMap status = [sync:0, notsync:0]
-		rdoc.changeEditStatusInDBto(DocStatus.LOCKED)	
+		HashMap status = [sync:0, notsync:0]
+		rdoc.doc_job.changeEditStatusInDBto(DocStatus.LOCKED)	
 		current_rdoc = rdoc // mark it, for abort if SIGINT is called
 		log.info "Syncing RembrandtedDoc ${rdoc.doc_id} to NE pool..."
 		
@@ -208,7 +209,8 @@ class ImportRembrandtedDocument2NEPool {
 		rdoc.addNEsToSaskia(doc.bodyNEs, "B", rdoc.doc_lang)
 		
 		rdoc.changeSyncStatusInDBto(DocStatus.SYNCED)	
-		rdoc.changeEditStatusInDBto(DocStatus.UNLOCKED)	
+		// let's remove it from job list
+		rdoc?.doc_job?.removeThisFromDB()
 		log.debug "Done. Doc status is now ${DocStatus.SYNCED}."
 		current_rdoc = null // mark it, for abort if CTRL-C is pressed
 
@@ -221,8 +223,8 @@ class ImportRembrandtedDocument2NEPool {
 	public abort() {
 	    log.warn "\nAborting... backtracking with ${current_rdoc?.doc_id}"
 	    if (current_rdoc) {
-			current_rdoc.changeEditStatusInDBto(DocStatus.UNLOCKED)
-			log.warn "Doc edit status changed to UNLOCKED."
+				current_rdoc?.doc_job?.removeThisFromDB()
+			log.warn "Removing job ${current_rdoc?.doc_job}"
 			current_rdoc.changeProcStatusInDBto(DocStatus.NOT_READY)
 			log.warn "Doc proc status changed to NOT_READY."
 	    }
@@ -231,9 +233,9 @@ class ImportRembrandtedDocument2NEPool {
 	
 	static void main(args) {    
         
-        
         Options o = new Options()
         o.addOption("from", true, "[DB] - one particular document from DB, [batch] - a number of unseen documents")
+        o.addOption("user", true, "User. Can be id or name")
         o.addOption("col", true, "target collection. Can be id or name")
         o.addOption("ndocs", true, "number of docs in batch process")
         o.addOption("docid", true, "id of docs in DB process")
@@ -242,6 +244,9 @@ class ImportRembrandtedDocument2NEPool {
         CommandLineParser parser = new GnuParser()
         CommandLine cmd = parser.parse(o, args)
         
+		  Collection collection
+		  User user 
+		
         if (cmd.hasOption("help")) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp( "java saskia.imports.ImportRembrandtedDocument2NEPool", o )
@@ -259,9 +264,36 @@ class ImportRembrandtedDocument2NEPool {
             System.exit(0)
         }
         
+			try {
+				collection = Collection.getFromID(Long.parseLong(cmd.getOptionValue("col")))		
+		  } catch(Exception e) {
+				collection = Collection.getFromName(cmd.getOptionValue("col"))
+			}
+			if (!collection) {
+				log.error "Don't know collection "+cmd.getOptionValue("col")+" to parse documents on. Exiting."
+			   System.exit(0)
+			}
+        
+      	if (!cmd.hasOption("user")) {
+            println "No --user arg. Please specify the user (id or name). Exiting."
+            System.exit(0)
+        }
+
+			try {
+				user = User.getFromID(Long.parseLong(cmd.getOptionValue("user")))		
+			} catch(Exception e) {
+				user = User.getFromLogin(cmd.getOptionValue("user"))
+			}
+			if (!user) {
+				log.error "Don't know user $user to authenticate. Exiting."
+			   System.exit(0)
+			}
+        
         ImportRembrandtedDocument2NEPool rdoc2nepool = new ImportRembrandtedDocument2NEPool()
         HashMap status = [sync:0, notsync:0]
          
+		  String process_signature = rdoc2nepool.toString()
+		  println "Process signature: "+process_signature
         int rows
         
         if (cmd.getOptionValue("from")== "DB") {
@@ -280,7 +312,9 @@ class ImportRembrandtedDocument2NEPool {
         
         } else if (cmd.getOptionValue("from")== "batch") {
             status = rdoc2nepool.syncBatchOfDocsToPool( 
-                    cmd.getOptionValue("col"), Integer.parseInt(cmd.getOptionValue("ndocs")))
+                    collection, user, 
+						  process_signature, 
+						  Integer.parseInt(cmd.getOptionValue("ndocs")))
          			
         } else {
             println "Unknown value for --from. Exiting."

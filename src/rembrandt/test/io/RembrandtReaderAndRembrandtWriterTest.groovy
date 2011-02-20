@@ -43,76 +43,56 @@ public class RembrandtReaderAndRembrandtWriterTest extends GroovyTestCase {
 
      RembrandtReader reader
      RembrandtWriter writer
-     RembrandtCorePTforHAREM core
-     List<Document> source_docs, solution_docs
+
+     List<Document> docs
+	  List<String> solution_lines = []
+
      String text
      Configuration conf = Configuration.newInstance()
-     List solution
-     Logger log = Logger.getLogger("RembrandtTest")
+     
+	  Logger log = Logger.getLogger("RembrandtTest")
      
      public RembrandtReaderAndRembrandtWriterTest() {
-	reader = new RembrandtReader(new RembrandtStyleTag("pt"))
-	writer = new RembrandtWriter(new RembrandtStyleTag("pt"))
-	core = new RembrandtCorePTforHAREM(conf)
-	File f = new File(conf.get("rembrandt.home.dir",".")+"/resources/test/Rembrandt_PT_sample.txt")
-	File f2 = new File(conf.get("rembrandt.home.dir",".")+"/resources/test/Rembrandt_PT_sample_Rembrandt_output.txt")
-    
-	InputStreamReader is = new InputStreamReader(new FileInputStream(f))
-	reader.processInputStream(is)
-	source_docs = reader.docs
+	  reader = new RembrandtReader(new RembrandtStyleTag("pt"))
+	  writer = new RembrandtWriter(new RembrandtStyleTag("pt"))
 
-	reader.docs = []
-        is = new InputStreamReader(new FileInputStream(f2))
-        reader.processInputStream(is)
-        solution_docs = reader.docs
+	  File f = new File(conf.get("rembrandt.home.dir",".")+"/resources/test/Rembrandt_PT_sample.txt")
+	
+	  // read as string lines
+	  f.eachLine{l -> solution_lines << l}
+	  
+	  // read as docs
+	  InputStreamReader is = new InputStreamReader(new FileInputStream(f))
+	  reader.processInputStream(is)
+	  docs = reader.docs
+
      }
      
      void testReader() {
 	 
         int fails = 0 
-        
-        source_docs.eachWithIndex{source_doc, i ->
-	 // this document will be retagged
-	    Document re_tagged_doc = source_doc
-        // this document will be used to compare outputs
-	    Document solution_doc = solution_docs[i]
-    
-    // não basta re_tagged_doc.titleNEs.clear(), isso polui os índices  
-	    re_tagged_doc.titleNEs = new ListOfNE()
-	    re_tagged_doc.bodyNEs = new ListOfNE()
-	   
-	 //println "re_tagged_doc.title_sentences = "+re_tagged_doc.title_sentences 
-	 //println "re_tagged_doc.body_sentences = "+re_tagged_doc.body_sentences 
-	    core.releaseRembrandtOnDocument(re_tagged_doc)
-
-
-	    log.debug("Testing title NEs")
-	    source_doc.titleNEs.eachWithIndex{ne, i2->
-	     if (ne != re_tagged_doc.titleNEs[i2]) {
-		 log.debug "NE $i: Got ${re_tagged_doc.titleNEs[i2]}, should be $ne "
-		 fails++
-	     }
-	    }
-	    log.debug("Testing body NEs")
-	    source_doc.bodyNEs.eachWithIndex{ne, i2->
-	     if (ne != re_tagged_doc.bodyNEs[i2]) {
-		 log.debug "NE $i: Got ${re_tagged_doc.bodyNEs[i2]}, should be $ne "
-		 fails++
-	     }
-	    }
-            
-            List source_doc_print = writer.printDocument(source_doc)
-            List solution_doc_print = writer.printDocument(solution_doc)
-            source_doc_print.eachWithIndex{line, j -> 
-            	if (line != solution_doc_print[j]) {
-                    log.debug "Line $i: Source doc line is $line, should be ${solution_doc_print[i]} instead."
-                    fail++
-                 }
-            }
-            
-         }
-	 
-	 assert fails == 0
+        List<String> written_lines = []
+        docs.eachWithIndex{doc, i ->
+	
+				doc.body_sentences.eachWithIndex{s, x -> 
+					println "$x: $s"
+				}
+				
+				doc.bodyNEs.eachWithIndex{ne, x -> 
+					println "$x: "+ne.toStringTraceLevel()
+				}
+				
+	 		   String doc_print = writer.printDocument(doc)
+				doc_print.split("\n").each{written_lines << it}
+		  }
+        written_lines.eachWithIndex{line, j -> 
+            if (line != solution_lines[j]) {
+             log.debug "=== Line $j ===\nGenerated doc:\n$line\nshould be:\n${solution_lines[j]}\n\n"
+            fails++
+             }
+        }
+ 
+	 	assert fails == 0
 	 // now, let's clear the NEs and as  
 	 }
 	

@@ -109,7 +109,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:076 contents:Motins contents:presídios contents:prisões contents:"América do Sul" woeid-index:24865673 woeid-index:23424747 woeid-index:23424762 woeid-index:23424768 woeid-index:23424782 woeid-index:23424787 woeid-index:23424801 woeid-index:23424811 woeid-index:23424814 woeid-index:23424836 woeid-index:23424913 woeid-index:23424917 woeid-index:23424919 woeid-index:23424955 woeid-index:23424979 woeid-index:23424982
+label:076 contents:Motins contents:presídios contents:prisões contents:"América do Sul" woeid:24865673 woeid:23424747 woeid:23424762 woeid:23424768 woeid:23424782 woeid:23424787 woeid:23424801 woeid:23424811 woeid:23424814 woeid:23424836 woeid:23424913 woeid:23424917 woeid:23424919 woeid:23424955 woeid:23424979 woeid:23424982
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

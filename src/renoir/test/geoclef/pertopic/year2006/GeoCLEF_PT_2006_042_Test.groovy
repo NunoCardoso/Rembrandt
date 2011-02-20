@@ -89,7 +89,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:042 contents:Eleições contents:regionais contents:norte contents:"Alemanha" woeid-index:23424829
+label:042 contents:Eleições contents:regionais contents:norte contents:"Alemanha" woeid:23424829
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

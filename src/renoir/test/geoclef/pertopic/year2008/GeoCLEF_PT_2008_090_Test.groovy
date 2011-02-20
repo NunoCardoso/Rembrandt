@@ -100,7 +100,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:089 contents:"feiras" contents:"Baixa Saxônia" woeid-index:2345486
+label:089 contents:"feiras" contents:"Baixa Saxônia" woeid:2345486
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

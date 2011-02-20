@@ -202,9 +202,11 @@ class WikipediaCategoryDefinitionsPT {
        /* ORGANIZACAO ADMINISTRACAO */
         [answer:SemanticClassification.create(Classes.category.organization, Classes.type.administration), needle:[
         [~/[Aa]dministração/, ~/[Pp]ública/], [~/[Aa]dministração/, ~/[Mm]ilitar/], 
-        [~/[Aa]gências/, ~/[Ee]spaciails/], ~/[Cc]âmaras/, [~/[Ff]orças/, ~/[Aa]rmadas/], 
-        [~/[Nn]ações/, ~/[Uu]nidas/], [~/[Oo]rganizações/, ~/[Ii]nternacionais/], 
-        [~/[Oo]rganismos/, ~/[Ee]speciais/], ~/[Pp]arlamentos/, [~/[Uu]nião/, ~/[Ee]uropeia/] ] ], 
+        [~/[Aa]gências/, ~/[Ee]spacia(?:l|is)/], ~/[Cc]âmaras/, [~/[Ff]orças/, ~/[Aa]rmadas/], 
+        [~/[Nn]ações/, ~/[Uu]nidas/], [~/[Oo]rganizações/, ~/[Ii]nternacionais/],
+ 		  [~/[Óó]rgãos/, ~/[Ll]egislativos/],
+        [~/[Oo]rganismos/, ~/[Ee]speciais/], ~/[Pp]arlamentos/, ~/[Tt]ribuna(?:l|is)/, 
+	     [~/[Uu]nião/, ~/[Ee]uropeia/] ] ], 
     
        /**************
        /* 4 - TEMPO  *   

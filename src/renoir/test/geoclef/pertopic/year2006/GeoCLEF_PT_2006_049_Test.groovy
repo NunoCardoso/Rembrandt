@@ -84,7 +84,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:049 contents:ETA contents:"França" entity:Euskadi_Ta_Askatasuna woeid-index:23424819
+label:049 contents:ETA contents:"França" entity:Euskadi_Ta_Askatasuna woeid:23424819
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

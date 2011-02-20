@@ -26,8 +26,9 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
     I18n i18n
-    static Logger log = Logger.getLogger("SaskiaServer") 
-    static Logger log2 = Logger.getLogger("SaskiaService") 
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
  
     public AdminEntityMapping() {
         
@@ -35,20 +36,23 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
         
         JSONanswer = {req, par, bind ->
             long session = System.currentTimeMillis()
-            log2.debug "Session $session triggered with $par" 
+            processlog.debug "Session $session triggered with $par" 
             
-            int limit, offset
+            int limit
+ 				long offset
             def column, value
             
             // core stuff
             String action = par["POST"]["do"] //show, update, etc
             String lang = par["POST"]["lg"] 
             
-            ServerMessage sm = new ServerMessage("AdminEntityMapping", lang, bind, session)  
+            ServerMessage sm = new ServerMessage("AdminEntityMapping", lang, bind, session, processlog)  
             
             // pager stuff
             if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
-            if (par["POST"]["o"]) offset = Integer.parseInt(par["POST"]["o"])
+				if (!limit) limit = 0
+            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
             
@@ -59,30 +63,29 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
                                                       
             User user = User.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
-            if (!user.isSuperUser()) return sm.noSuperUser()
             if (!user.isEnabled()) return sm.userNotEnabled()
-            
-            if (!action || !lang) return sm.notEnoughVars(lang, "do=$action, lg=$lang")      
-        	
+				// all Admin*Mappings must have this
+				if (!user.isSuperUser()) return sm.noSuperUser()
+            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
             sm.setAction(action)
-           
-            /***************************/
+          
+            /******************************/
             /** 1.1 show - PAGE Entities **/
-            /***************************/
+            /******************************/
 
-            if (action == "show") {
-        	Map h
-                try {
-                    log.debug "Querying Entities: limit $limit offset $offset column $column value $value"
-                    h = Entity.getEntities(limit, offset, column, value)
+            if (action == "list") {
+        			Map h
+               try {
+                  sm.logProcessDebug "Querying Entities: limit $limit offset $offset column $column value $value"
+                  h = Entity.listEntities(limit, offset, column, value)
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_entity_list"][lang]+": "+e.getMessage())
+	              		errorlog.error i18n.servermessage['error_getting_entity_list'][lang]+": "+e.printStackTrace()
+                    	return sm.statusMessage(-1, i18n.servermessage["error_getting_entity_list"][lang]+": "+e.getMessage())
                 }
                 
                 // you have to "JSONize" the NEs
                 h.result.eachWithIndex{entity, i -> h.result[i] = entity.toMap() }
-
-                return sm.statusMessage(0,h)
+                return sm.statusMessageWithPubKey(0,h, user.usr_pub_key)
             }
             
             /***************************/
@@ -91,56 +94,59 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
             
             if (action == "update") {
         	
-        	Long ent_id
-                if (par["POST"]["id"]) ent_id = Long.parseLong(par["POST"]["id"])
-                if (!ent_id) return sm.notEnoughVars("id=$ent_id")
+        			Long ent_id
+               if (par["POST"]["id"]) 
+					try {ent_id = Long.parseLong(par["POST"]["id"])}
+					catch(Exception e) {}
+               if (!ent_id) return sm.notEnoughVars("id=$ent_id") 
+               if (!column || !value) return sm.notEnoughVars("c=$column v=$value")
                 
-                if (!column || !value) return sm.notEnoughVars("c=$column v=$value")
-                
-                Entity entity
-                try {
+               Entity entity
+               try {
                     log.debug "Querying Entity with id $ent_id"
                     entity = Entity.getFromID(ent_id)
-                } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_entity_list"][lang]+": "+e.getMessage())                 
+               } catch(Exception e) {
+	              		errorlog.error i18n.servermessage['error_getting_entity'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_entity"][lang]+": "+e.getMessage())                 
                 }
                 
-                def res
+					 int res = 0
                 try {
                     res = entity.updateValue(c, v)
-                }  catch(Exception e) {
+                } catch(Exception e) {
+	              	  errorlog.error i18n.servermessage['error_updating_entity'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_updating_entity"][lang]+": "+e.getMessage())                 
                 }
-                return sm.statusMessage(0, entity.toMap())
-
+                return sm.statusMessageWithPubKey(res, entity.toMap(), user.usr_pub_key)
             } 
                 
-            /***************************************/
+            /*********************************************/
             /** 1.3 delete - DELETE Entity (admin only) **/
-            /***************************************/
+            /*********************************************/
            
             if (action == "delete") {
                 Long id 
-                try {
-                    id = Long.parseLong(par["POST"]["id"])                      
-                }catch(Exception e) {}
-                               
+                try {id = Long.parseLong(par["POST"]["id"])                      
+                }catch(Exception e) {}              
                 if (!id)  return sm.notEnoughVars("id=$id")      
-                Entity entity 
-                try {
-                    log.debug "Querying Entity with id $id"
+                
+					Entity entity 
+               try {
                     entity = Entity.getFromID(id)
                 } catch(Exception e) {
-                    return sm.statusMessage(-1, i18n.servermessage["error_getting_entity_list"][lang]+": "+e.getMessage())                 
+	              	  errorlog.error i18n.servermessage['error_getting_entity'][lang]+": "+e.printStackTrace()
+                    return sm.statusMessage(-1, i18n.servermessage["error_getting_entity"][lang]+": "+e.getMessage())                 
                 }
-                          
+                def res          
                 try {
-                    log.debug "deleting entity $id"
-                    answer = entity.deleteEntity() 
-                } catch(Exception e) {return sm.statusMessage(-1, i18n.servermessage["error_deleting_entity"][lang]+": "+e.getMessage())}
+                    res = entity.removeThisFromDB() 
+                } catch(Exception e) {
+	              	  errorlog.error i18n.servermessage['error_deleting_entity'][lang]+": "+e.printStackTrace()
+						  return sm.statusMessage(-1, i18n.servermessage["error_deleting_entity"][lang]+": "+e.getMessage())
+				    }
                   
                 //RETURNS 1 IF UPDATED
-                return sm.statusMessage(answer, i18n.servermessage['ok'][lang])		   	
+                return sm.statusMessageWithPubKey(res, i18n.servermessage['ok'][lang], user.usr_pub_key)		   	
             }    
             
             /***************************************/
@@ -149,21 +155,24 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
            
             if (action == "create") {
                   
-               String ent_wikipedia_url = par["POST"]["ent_wikipedia_url"]
+               String ent_name = par["POST"]["ent_name"]
                String ent_dbpedia_resource = par["POST"]["ent_dbpedia_resource"]
                String ent_dbpedia_class = par["POST"]["ent_dbpedia_class"]
+               if (!ent_name || !ent_dbpedia_resource || !ent_dbpedia_class) 
+						return sm.notEnoughVars("$ent_name $ent_dbpedia_resource $ent_dbpedia_class") 
 
-               Entity ent = new Entity(ent_wikipedia_url:ent_wikipedia_url, ent_dbpedia_resource:ent_dbpedia_resource,
+               Entity ent = new Entity(ent_name:ent_name, ent_dbpedia_resource:ent_dbpedia_resource,
         	       ent_dbpedia_class:ent_dbpedia_class)
                try {
                     log.debug "Adding Entity"
-                    ent.addThisToDB()
+                    ent.ent_id = ent.addThisToDB()
                 } catch(Exception e) {
+	              	  errorlog.error i18n.servermessage['error_creating_entity'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_creating_entity"][lang]+": "+e.getMessage())                 
                 }
                
                 //RETURNS 1 IF UPDATED
-                return sm.statusMessage(0, ent.toMap())		   	
+                return sm.statusMessageWithPubKey(0, ent.toMap(), user.usr_pub_key)		   	
             }    
             return sm.unknownAction()
         }

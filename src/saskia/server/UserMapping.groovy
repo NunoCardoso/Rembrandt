@@ -18,6 +18,7 @@
 package saskia.server
 
 import saskia.io.User
+import saskia.io.Collection
 import org.apache.log4j.*
 import renoir.util.SHA1 //SHA1.convert(passwd)
 import renoir.util.MD5Hex 
@@ -28,8 +29,9 @@ public class UserMapping extends WebServiceRestletMapping {
 	Closure JSONanswer
 	Closure HTMLanswer
 	I18n i18n
-	static Logger log = Logger.getLogger("SaskiaServer") 
-	static Logger log2 = Logger.getLogger("SaskiaService") 
+   static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+   static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+   static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
 	    
 	public UserMapping() {
 	
@@ -37,192 +39,128 @@ public class UserMapping extends WebServiceRestletMapping {
 	    i18n = I18n.newInstance()
         
 	    JSONanswer = {req, par, bind ->
-                long session = System.currentTimeMillis()
-                log2.debug "Session $session triggered with $par" 
+
+			long session = System.currentTimeMillis()
+			processlog.debug "Session $session triggered with $par" 
  
-	    // actions: login, register, getcolperm. forgotpassword, changepassword, confirmpassword, confirmregister
-	    
-	    	def action = par["POST"]["do"]
+	    	def action 
+			if (par["POST"]["do"]) action = par["POST"]["do"]
+			if (!action && par["GET"]["do"]) action = par["GET"]["do"]
 	    	def lang = par["POST"]["lg"]
+
+         ServerMessage sm = new ServerMessage("UserMapping-JSONanswer", lang, bind, session, processlog)                          
 	    	
-	    	/******** LOGIN *********/
-	
+			// as this may come from requests of new users, no point on check apikeys now...
+			
+			/***************/
+	    	/** 1.1 LOGIN **/
+			/***************/	
 	    	if (action == 'login') {
 			    
 	    	    String user = par["POST"]["u"]
 	    	    String password = par["POST"]["p"]
-	    	    user_db = User.getFromLogin(user)
-	    	    log.info "User: $user_db"
+	    	    try {
+						user_db = User.getFromLogin(user)
+	    	    } catch(Exception e) {
+					  errorlog.error i18n.servermessage['error'][lang]+": "+e.printStackTrace()
+					  returm sm.statusMessage(-1, i18n.servermessage['error'][lang], e.getMessage())
+				 }
 		    // no user found
-	    	    if (!user_db) {
-	    		bind['status'] = -1
-	    		bind['message'] = i18n.servermessage['user_not_found'][lang]
-	    		log2.info "$session $session UserMapping:$action: $bind for user $user_db"
-	    		return JSONHelper.toJSON(bind)
-		    } 
+	    	    if (!user_db) return sm.userNotFound()
+	    	    if (user_db.usr_password != password) 
+					return sm.statusMessage(-1, i18n.servermessage['wrong_password'][lang])
+	    				
+	    	    if (!user_db.usr_enabled) 
+	    			return sm.statusMessage(-1, i18n.servermessage['user_not_confirmed'][lang])
 				
-	    	    if (user_db.usr_password != password) {
-	    		bind['status'] = -1
-	    		bind['message'] = i18n.servermessage['wrong_password'][lang]
-	    		log2.info "$session UserMapping:$action: $bind for user $user_db"
-	    		return JSONHelper.toJSON(bind)
-	    	    }
+				 Map m = user_db.toMap()
 				
-	    	    if (!user_db.usr_enabled) {
-	    		bind['status'] = -1
-	    		bind['message'] = i18n.servermessage['user_not_confirmed'][lang]
-	    		log2.info "UserMapping:$action: Returning $bind for user $user_db"
-	    		return JSONHelper.toJSON(bind)
-	    	    }
-				
-	    	    bind['status'] = 0
-	    	    bind['su'] = user_db.usr_superuser
-                    bind['user_id'] = user_db.usr_id
-                    bind['firstname'] = user_db.usr_firstname
-	    	    bind['lastname'] = user_db.usr_lastname
-	    	    bind['api_key'] = user_db.usr_api_key
-                
-	    	    Map message = [:]
-                    List<HashMap> perms = user_db.getUserCollectionPermissionsOn() // blank means all
-                    int collections_owned = user_db.collectionsOwned()
-                    if (!perms) {
-                         bind['message'] = i18n.servermessage['no_permissions_found'][lang]
-                    } else {
-                        message["max_number_collections_owned"] = user_db.usr_max_number_collections
-                        message["collections_owned"] = collections_owned
-                        message["perms"] = perms                           
-                    } 
-                    
-                    bind['message'] = message
-	    	    log2.info "$session UserMapping:$action: Returning $bind for user $user_db"
-	    	    return JSONHelper.toJSON(bind)
+					// add something to the cookie, so that we can authenticate later at client-side
+					if (user_db.isSuperUser()) {
+						m['usr_pub_key'] = user_db.usr_pub_key
+						m['usr_pub_key_decoder'] = renoir.util.MD5Hex.digest(user_db.usr_pub_key)
+					}
+	    	    return sm.statusMessage(0, m)
 	    	} 
-			
-	    	/*********** REGISTER **************/
+				
+				
+			/*****************/
+			/** AUTH */
+			/******************/	
+			if (action == 'auth') {
+			    
+	    	    String password = par["POST"]["p"]
+				 String api_key = par["POST"]["api_key"] 
+             if (!api_key) api_key = par["COOKIE"]["api_key"]   
+             if (!api_key) return sm.noAPIKeyMessage()
 
-	    	if (action == "register") {
+            user_db = User.getFromAPIKey(api_key)           
+            if (!user_db) return sm.userNotFound()
+            if (!user_db.isEnabled()) return sm.userNotEnabled()
+
+	    	   if (user_db.usr_password != password) 
+					return sm.statusMessage(-1, i18n.servermessage['wrong_password'][lang])
+	    				   	 
+	    	   return sm.statusMessage(0, 'OK')
+	    	} 
+	
+			
+					
+			/******************/
+	    	/** 1.2 REGISTER **/
+			/******************/	
+	    	if (action == "register") { // or 'create'
 	    	    
-	    	    def user = par["POST"]["u"]
-	    	    def password = par["POST"]["p"]
-	    	    def firstname = par["POST"]["fn"]
-	    	    def lastname = par["POST"]["ln"]
-		    def email = par["POST"]["em"]	
-		    user_db = User.getFromLogin(user)
+	    	   def user = par["POST"]["u"]
+	    	   def password = par["POST"]["p"]
+	    	   def firstname = par["POST"]["fn"]
+	    	   def lastname = par["POST"]["ln"]
+		    	def email = par["POST"]["em"]	
+		    	user_db = User.getFromLogin(user)
 				
-		   if (user_db) {
-			bind['status'] = -1
-			bind['message'] = i18n.servermessage['user_login_already_taken'][lang]
-			log2.info "$session UserMapping:$action: Returning $bind for user $user_db"
-			return JSONHelper.toJSON(bind)					
-		    } 
-				
-	    	    User newuser = new User(usr_login:user, usr_password:password, 
+		   	if (user_db) return sm.statusMessage(-1, i18n.servermessage['user_login_already_taken'][lang])
+		
+	    	   User newuser = new User(usr_login:user, usr_password:password, 
 	    		    usr_firstname:firstname, usr_lastname:lastname, usr_email:email,
-	    		    usr_api_key:SHA1.convert(user+firstname), usr_enabled:0,
-                            usr_max_number_collections:1, usr_max_docs_per_collection:100) // user is NOT enabled... that's for the confirmation
-			    newuser.usr_id = newuser.addThisToDB()
-				    
-			// add new user_on_collections permissions.
-	            List collectionsAllowed = newuser.setNewPermissionsOnCollection()
-	            if (newuser.usr_id) {
-	        //	def message = "User added. New collections you can see: <BR><UL>";
-	        //	collectionsAllowed.each{col -> message += "<LI>${col}</LI>"}
-	        //	message += "</UL>"
-	        	bind['status'] = 0
-	        	bind['api_key'] = newuser.usr_api_key
-	        	log2.info "$session UserMapping:$action: Returning $bind for user $user_db"    
-	        	return JSONHelper.toJSON(bind)			
-	            }
+	    		    usr_api_key:SHA1.convert(user+firstname), usr_enabled:0,// user is NOT enabled... that's for the confirmation
+                usr_max_number_collections:1, usr_max_docs_per_collection:100) 
+			   try {
+					newuser.usr_id = newuser.addThisToDB()
+				} catch(Exception e) {
+					  errorlog.error i18n.servermessage['error'][lang]+": "+e.printStackTrace()
+					  returm sm.statusMessage(-1, i18n.servermessage['error'][lang], e.getMessage())
+				}
+	        	return sm.statusMessage(0, newuser.toMap())
 	    	}
 			
-	    	/********** GET COLLECTION PERMISSIONS ***********/
+			/***************/
+	    	/** 1.25 show **/
+			/***************/	
+	    	if (action == 'show') {
+			    
+	    	    // requires api_key now
+				String api_key = par["POST"]["api_key"] 
+            if (!api_key) api_key = par["COOKIE"]["api_key"]   
+            if (!api_key) return sm.noAPIKeyMessage()
 
-	    	if (action == "getcolperm") {
-                
-	    	    String user = par["POST"]["u"]             
-	    	    if (User.isGuestUser(user, lang)) {
- 	    		user_db = User.getFromLogin(User.guest)
-	    	    } else {
-	    		String api_key = par["POST"]["api_key"]
-	    		if (api_key){ 
-	    		     user_db = User.getFromAPIKey(api_key)
-	    		}
-	    	    }
-	    	    if (!user_db) {
-	    		bind['status'] = -1
-	    		bind['message'] = i18n.servermessage['invalid_api_key'][lang]
-	    		log2.info "$session UserMapping:$action: Returning $bind for user $user_db"               
-	    		return JSONHelper.toJSON(bind)
-	    	    }
-	    		
-	    	    if (!user_db.usr_enabled) {
-	    		bind['status'] = -1
-	    		bind['message'] = i18n.servermessage['user_not_confirmed'][lang]
-	    		log2.info "$session UserMapping:$action: Returning $bind for user $user_db"    
-	    		return JSONHelper.toJSON(bind)
-	    	    }
-                
-                // now, if we're a guest, we do a different thing. 
-                if (User.isGuestUser(user, lang)) {
-                                 
-                     List<HashMap> collections = user_db.getReadableCollections() 
-                    // println "collections: $collections" 
-                     if (collections) {
-                	 bind['status'] = 1
-                	 bind['message'] = collections
-                     } else {
-                	 bind['status'] = -1
-                	 bind['message'] = i18n.servermessage['user_not_allowed_to_query_perms'][lang]
-                     } 
-                     log2.info "$session UserMapping:$action: Returning $bind for user $user_db"    
-                     return JSONHelper.toJSON(bind)
-                    
-                } else if (user_db.isSuperUser()) {
-                    
-                    List<HashMap> collections = user_db.getAllCollectionsForSuperUser() 
-                   // println "collections: $collections" 
-                    if (collections) {
-               	 	bind['status'] = 1
-               	 	bind['message'] = collections
-                    } else {
-               	 	bind['status'] = -1
-               	 	bind['message'] = i18n.servermessage['no_collections_found'][lang]
-                    } 
-                    log2.info "$session UserMapping:$action: Returning $bind for user $user_db"    
-                    return JSONHelper.toJSON(bind)
-                   
-               } else {
-                    Map message = [:]
-	    	    List<HashMap> perms = user_db.getUserCollectionPermissionsOn() // blank means all
-	    	    int collections_owned = user_db.collectionsOwned()
-	    	    if (!perms) {
-	    		bind['status'] = -1
-	    		bind['message'] = i18n.servermessage['no_permissions_found'][lang]
- 	    	    } else {
- 	    		message["max_number_collections_owned"] = user_db.usr_max_number_collections
- 	    		message["collections_owned"] = collections_owned
- 	    		message["perms"] = perms
-              		bind['status'] = 0
-	    		bind['message'] = message
-                          
-	    	    } 
-	    	    log2.info "$session UserMapping:$action: Returning $bind for user $user_db"  
-	    	    return JSONHelper.toJSON(bind)
-
-                }
-                }
+            User user = User.getFromAPIKey(api_key)           
+            if (!user) return sm.userNotFound()
+            if (!user.isEnabled()) return sm.userNotEnabled()
             
-	    	/*********** RECOVER PASSWORD *********/
+				Map m = user.toMap()
+				m.current_number_collections_owned = Collection.collectionsOwnedBy(user)
+	    	   return sm.statusMessage(0,m)
+	    	} 
+	    	
+			/**************************/
+	    	/** 1.3 RECOVER PASSWORD **/
+			/**************************/	
 			
 	    	if (action == "recoverpassword") {
 	    	    def email = par["POST"]["em"]
 	    	    user_db = User.getFromEmail(email)
-	    	    if (!user_db) {
-	    		bind['status'] = -1
-	    		bind['message'] = i18n.servermessage['email_not_found'][lang]
-	    		log2.info "$session UserMapping:$action: Returning $bind for user $user_db"  
-	    		return JSONHelper.toJSON(bind)						    
-	    	    } 
+	    	    if (!user_db) return sm.statusMessage(-1,i18n.servermessage['email_not_found'][lang])
+	    		
 	    	    // to randomly generate it, use SHA1
 	    	    def tmp_password = (SHA1.convert(""+new Date().getTime())).substring(0,8)
 	    	    def tmp_api_key = SHA1.convert(tmp_password+email)
@@ -237,78 +175,73 @@ public class UserMapping extends WebServiceRestletMapping {
 	    	    return JSONHelper.toJSON(bind)					     
 	    	}
 		
-	    	/*********** CHANGE PASSWORD *********/
+			/*************************/
+	    	/** 1.4 CHANGE PASSWORD **/
+			/*************************/	
 	    	
 	    	if (action == "changepassword") {
 	    	    def user_login  = par["POST"]["u"]
 	    	    def oldpassword  = par["POST"]["op"]
 	    	    def newpassword  = par["POST"]["np"]
-		   user_db = User.getFromLogin(user_login)
-		   if (!user_db) {
-		       bind['status'] = -1
-		       bind['message'] = i18n.servermessage['user_not_found'][lang]
-		       log2.info "$session UserMapping:$action: Returning $bind for user_login $user_login"  
-		       return JSONHelper.toJSON(bind)					     				    
-		   } 
-	    	    if (user_db.usr_password != oldpassword) {
-	    		bind['status'] = -1
-	    		bind['message'] = i18n.servermessage['old_password_dont_match'][lang]
-                        log2.info "$session UserMapping:$action: Returning $bind for user_login $user_login"  
-	    	    } else {
+		   	user_db = User.getFromLogin(user_login)
+		   	if (!user_db) return sm.userNotFound()
+	    	   if (user_db.usr_password != oldpassword) 
+					returm sm.statusMessage(-1,i18n.servermessage['old_password_dont_match'][lang])
+           
 	    		user_db.updatePassword(newpassword)
-	    		bind['status'] = 0
-	    		bind['message'] =i18n.servermessage['password_changed'][lang]	 
-	    		log2.info "$session UserMapping:$action: Returning $bind for user_login $user_login"  
-	    	    }    
-	    	    return JSONHelper.toJSON(bind)					     
-		}
-                bind['status']=-1
-                bind['message'] = i18n.servermessage['action_unknown'][lang]
-                log2.debug "$session UserMapping: $bind  action $action unknown"
-                return JSONHelper.toJSON(bind)	
+	    		return sm.statusMessage(0, i18n.servermessage['password_changed'][lang])				     
+			}
+         return sm.unknownAction()
 	    }
-			
-	  
+			  
 	    HTMLanswer = {req, par, bind ->
-              long session = System.currentTimeMillis()
-              log2.debug "Session $session triggered with $par" 
+          long session = System.currentTimeMillis()
+          processlog.debug "Session $session triggered with $par" 
             
-	      def action, tmp_api_key, api_key, message 
-	      def lang = "en" 
+	       def action, tmp_api_key, api_key, message 
+	       def lang = "en" 
 	      
-	      action = par["GET"]["do"]
-	      if (par["GET"]["lg"]) lang = par["GET"]["lg"]
+	       action = par["GET"]["do"]
+	       if (par["GET"]["lg"]) lang = par["GET"]["lg"]
+	        
+	       ServerMessage sm = new ServerMessage("UserMapping-HTMLanswer", lang, bind, session, processlog)                          
+
+			/*************************/
+	    	/** 2.1 CONFIRM PASSWORD **/
+			/*************************/	
+			
+	    	if (action == "confirmpassword") {
+		 		tmp_api_key  = par["GET"]["tmp_api_key"]
+		 		user_db = User.getFromTempAPIKey(tmp_api_key)
+			     
+		  		if (!user_db) return i18n['user_not_found'][lang]
+		  		user_db.updatePasswordAndAPIKeyFromTemp()			 
+		  		message = i18n.servermessage['password_and_api_key_changed'][lang]	 
+		  		sm.logProcessDebug "Updated password"  
+		  		return message 
+			}
 	
-	    /*********** CONFIRM PASSWORD *********/
-	     if (action == "confirmpassword") {
-		 tmp_api_key  = par["GET"]["tmp_api_key"]
-		 user_db = User.getFromTempAPIKey(tmp_api_key)
+			/*************************/
+	    	/** 2.2 CONFIRM REGISTRATION **/
+			/*************************/	
+	
+			if (action == "confirmregister") {
+		 		api_key  = par["GET"]["a"]
+		 		user_db = User.getFromAPIKey(api_key)
 			     
-		 if (!user_db) {
-		     message = i18n.servermessage['user_not_found'][lang]
-		     log2.info "$session UserMapping:$action: Returning $message"  
-		 } else {
-		     user_db.updatePasswordAndAPIKeyFromTemp()				 
-		     message = i18n.servermessage['password_and_api_key_changed'][lang]	 
-		     log2.info "$session UserMapping:$action: Returning $message"  
-		 }
-		 return message
-	     }  else if (action == "confirmregister") {
-		 api_key  = par["GET"]["a"]
-		 user_db = User.getFromAPIKey(api_key)
-			     
-		 if (!user_db) {
-		     message = i18n.servermessage['user_not_found'][lang]
-		 } else {
-		     user_db.enableUser()				 
-		     message = i18n.servermessage['user_enabled'][lang]
-		 }
-                 log2.info "$session UserMapping:$action: Returning $message for user $user_db" 
-		 return message
+		 		if (!user_db) {
+		     		message = i18n.servermessage['user_not_found'][lang]
+		 		} else {
+		     		user_db.enableUser()				 
+					user_db.generatePubKey()
+		     		message = i18n.servermessage['user_enabled'][lang]+". "
+		 		}
+            sm.logProcessDebug "Confirmed registration" 
+		 		return message
 	     }
 	      
-	        // for HTML requests that I do not want to handle: 
-	        return "No HTML, please!"
+	      // for HTML requests that I do not want to handle: 
+	      return "Action unknown"
 	    }
 	}
 }

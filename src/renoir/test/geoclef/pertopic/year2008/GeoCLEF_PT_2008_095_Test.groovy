@@ -96,7 +96,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:095 contents:Tropas contents:americanas contents:"Golfo Pérsico" woeid-index:55959679
+label:095 contents:Tropas contents:americanas contents:"Golfo Pérsico" woeid:55959679
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

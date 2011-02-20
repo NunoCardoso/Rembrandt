@@ -86,7 +86,7 @@ label:050 Cities along the Danube and the Rhine
 	
 		println refq.toString()
 		String reformulated_x = """
-label:048 contents:Fishing contents:"Newfoundland" contents:"Greenland" woeid-index:2344919 woeid-index:23424828
+label:048 contents:Fishing contents:"Newfoundland" contents:"Greenland" woeid:2344919 woeid:23424828
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

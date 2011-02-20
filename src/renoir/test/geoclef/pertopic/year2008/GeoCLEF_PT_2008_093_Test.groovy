@@ -96,7 +96,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:093 contents:Atentados contents:metropolitanos contents:"Japão" woeid-index:23424856
+label:093 contents:Atentados contents:metropolitanos contents:"Japão" woeid:23424856
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

@@ -82,7 +82,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 	
 		println refq.toString()
 		String reformulated_x = """
-label:018 contents:Walking contents:"holidays" contents:"Scotland" woeid-index:12578048"""		
+label:018 contents:Walking contents:"holidays" contents:"Scotland" woeid:12578048"""		
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 
 }

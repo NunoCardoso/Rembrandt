@@ -32,7 +32,7 @@ class Entity {
     static String ent_has_geo_table = "entity_has_geoscope"    
     
     Long ent_id
-    String ent_wikipedia_page
+    String ent_name
     String ent_dbpedia_resource
     String ent_dbpedia_class
     
@@ -46,37 +46,51 @@ class Entity {
     static SaskiaDB db = SaskiaDB.newInstance()
     static Logger log = Logger.getLogger("SaskiaDB")
 	
-    static Map type = ['ent_id':'Long', 'ent_wikipedia_page':'String', 
+    static Map type = ['ent_id':'Long', 'ent_name':'String', 
             'ent_dbpedia_resource':'String', 'ent_dbpedia_class':'String'] 
            
     static List<Entity> queryDB(String query, List params = []) {
-	List<Entity> res = []
-	Entity e
-	db.getDB().eachRow(query, params, {row -> 
-	    e = new Entity()
-	    e.ent_id=row['ent_id']
-	    e.ent_wikipedia_page = row['ent_wikipedia_page']
-	    e.ent_dbpedia_resource = row['ent_dbpedia_resource']
-	    e.ent_dbpedia_class=row['ent_dbpedia_class']
-	    res << e
-	})
-	return (res ? res : null)
+		List<Entity> res = []
+		Entity e
+		db.getDB().eachRow(query, params, {row -> 
+	    	e = new Entity()
+	    	e.ent_id=row['ent_id']
+	    	e.ent_name = row['ent_name']
+	    	e.ent_dbpedia_resource = row['ent_dbpedia_resource']
+	    	e.ent_dbpedia_class=row['ent_dbpedia_class']
+	    	res << e
+		})
+		return (res ? res : null)
     }
 	
-    static int deleteEntity(Long id) {
-	Entity e = Entity.getFromID(id)
-	return e.deleteEntity()
-    }
+	public Map toMap() {
+	    return ["ent_id":ent_id, "ent_name":ent_name, "ent_dbpedia_resource":ent_dbpedia_resource, 
+	      "ent_dbpedia_class":ent_dbpedia_class]
+	}
+	public Map getName() {
+			if (!ent_name) return null
+			Map m = [:]
+			ent_name.split(/;/).each{it -> 
+				List l = it.split(/:/)
+				m[l[0]]=l[1]
+			}
+			return m
+	}
 	
-    public int deleteEntity() {
-	if (!ent_id) return null
-	def res = db.getDB().executeUpdate("DELETE FROM ${ent_table} WHERE ent_id=?", [ent_id])
-	entityDBPediaResourceCache.remove(ent_dbpedia_resource)
-	entityIDCache.remove(ent_id)
-	return res	    
-    }
+   static int removeEntity(Long id) {
+		Entity e = Entity.getFromID(id)
+		return e?.removeThisFromDB()
+   }
 	
-    static Map getEntities(limit = 10, offset = 0, column = null, needle = null) {
+   public int removeThisFromDB() {
+		if (!ent_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${ent_table} WHERE ent_id=?", [ent_id])
+		entityDBPediaResourceCache.remove(ent_dbpedia_resource)
+		entityIDCache.remove(ent_id)
+		return res	    
+   }
+	
+    static Map listEntities(limit = 10, offset = 0, column = null, needle = null) {
 	// limit & offset can come as null... they ARE initialized...
 	if (!limit) limit = 10
 	if (!offset) offset = 0
@@ -144,18 +158,15 @@ class Entity {
 	 * @param ent_wikipedia_page The full wikipedia URL.
 	 * return the Entity associated to that URL
 	 */
-	static Entity getFromWikipediaPage(String ent_wikipedia_page) {
-		// wikipeida_url can be null
-		List<Entity> e
-		if (!ent_wikipedia_page) 
-		    e = queryDB("SELECT * FROM ${ent_table} WHERE ent_wikipedia_page IS NULL")
-		else 
-		   e = queryDB("SELECT * FROM ${ent_table} WHERE ent_wikipedia_page = ?", [ent_wikipedia_page])
-        
-		log.trace "Querying for ent_wikipedia_page $ent_wikipedia_page got Entity $e." 
-		if (e) return e[0] else return null
+	
+	static List<Entity> getFromName(String ent_name, String lang) {
+		if (!ent_name || !lang) return null 
+		String needle = "${lang}:${ent_name}"
+		List<Entity> ents = queryDB("SELECT * FROM ${ent_table} WHERE ent_name REGEXP '^(.*;)?${needle}(;.*)?\$'",[])
+		log.debug "Querying for ent_name $needle got Entity $ents." 
+		return ents
 	}	
-
+		
 	/** Get from DBpedia resource. 
 	 * This USES cache
 	 * @param ent_dbpedia_resource The DBpedia resource.
@@ -217,33 +228,14 @@ class Entity {
 	 */	
 	public long addThisToDB() {
 	    def res = db.getDB().executeInsert("INSERT INTO ${ent_table} VALUES(0,?,?,?)", 
-	    [ent_wikipedia_page, ent_dbpedia_resource, ent_dbpedia_class] )
+	    [ent_name, ent_dbpedia_resource, ent_dbpedia_class] )
 		// returns an auto_increment value
 	    ent_id = (long)res[0][0]
 	    entityDBPediaResourceCache[ent_dbpedia_resource] = this
 	    entityIDCache[ent_id] = this
 	    return ent_id
 	}	
-	
 
-	
-	/** Change a Wikipedia URL. By default, use this Wikipedia URL.
-	 * @param ent_id The ID to be changed.
-	 * @param ent_wikipedia_page the Wikipedia URL to insert. By default, use the URL for this object.
-	 * return number of rows updated.
-	 */	
-	public int changeWikipediaURLonDBForId(long ent_id, String ent_wikipedia_page) {
-		if (!id) return null
-		def res = db.getDB().executeUpdate("UPDATE ${ent_table} SET ent_wikipedia_page=? WHERE ent_id=?", 
-		[ent_wikipedia_page, ent_id]) 
-		log.trace "Wrote new Wikipedia page ${ent_wikipedia_page} to id ${ent_id}, got answer ${res}"
-		return res
-	}
-	
-	public Map toMap() {
-	    return ["ent_id":ent_id, "ent_dbpedia_resource":ent_dbpedia_resource, 
-	            "ent_dbpedia_class":ent_dbpedia_class]
-	}
 	
 	boolean equals(Entity e) {
 		return this.toMap().equals(e.toMap())

@@ -87,7 +87,7 @@ label:050 Cities along the Danube and the Rhine
 	
 		println refq.toString()
 		String reformulated_x = """
-label:045 contents:tourism contents:northeast contents:"Brazil" woeid-index:23424768
+label:045 contents:tourism contents:northeast contents:"Brazil" woeid:23424768
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

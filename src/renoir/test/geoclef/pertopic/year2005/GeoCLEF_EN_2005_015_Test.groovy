@@ -83,7 +83,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 	
 		println refq.toString()
 		String reformulated_x = """
-label:015 contents:"Consequences" contents:genocide contents:"Rwanda" entity:Consequences woeid-index:23424937
+label:015 contents:"Consequences" contents:genocide contents:"Rwanda" entity:Consequences woeid:23424937
 """		
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

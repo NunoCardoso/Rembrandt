@@ -265,14 +265,15 @@ class WikipediaCategoryDefinitionsEN {
   [answer:SemanticClassification.create(Classes.category.organization, 
 		Classes.type.administration), needle:[
    ~/[Aa]ssemblies/, ~/[Aa]rmies/, [~/[Aa]ir/,~/[Ff]orces/], ~/[Aa]dministrations/, 
-   [~/[Cc]ity/, ~/[Hh]alls/].reverse(), ~/[Cc]omissariates/, ~/[Cc]ouncils/, ~/[Gg]overnments/, 
+   [~/[Cc]ity/, ~/[Hh]alls/].reverse(), ~/[Cc]omissariates/, ~/[Cc]ouncils/, 
+	~/[Cc]ourthouses/, ~/[Gg]overnments/, 
    ~/[Nn]avys/, ~/[Mm]inisteries/, ~/[Pp]arliaments/, [~/[Ss]ecretaries/,'of',~/[Ss]tate/].reverse() 
    ], reverse:true],
   
   [answer:SemanticClassification.create(Classes.category.organization, 
 		Classes.type.administration), needle:[
     ~/[Aa]ssemblies/, ~/[Aa]rmies/, [~/[Aa]ir/,~/[Ff]orces/], ~/[Aa]dministrations/, 
-    [~/[Cc]ity/, ~/[Hh]alls/], ~/[Cc]omissariates/, ~/[Cc]ouncils/, ~/[Gg]overnments/, 
+    [~/[Cc]ity/, ~/[Hh]alls/], ~/[Cc]omissariates/, ~/[Cc]ouncils/, ~/[Cc]ourthouses/, ~/[Gg]overnments/, 
     ~/[Nn]avys/, ~/[Mm]inisteries/, ~/[Pp]arliaments/, [~/[Ss]ecretaries/,'of', ~/[Ss]tate/]
     ] ],
 

@@ -72,7 +72,14 @@ class SaskiaWebstore {
         return key.toString()
     }
     
-    
+    public void delete(String key, String volume) {       
+        if (!volume) throw IllegalStateException("Please give a volume.")
+        if (!volumes.containsKey(volume)) throw IllegalStateException("Don't have volume $volume in Webstore.")
+		  Key key_ = Key.toKey(key)
+        if (!key) throw IllegalStateException("Illegal key $key")
+	     webstore.delete(key)
+	}
+        
     public String retrieve(String key) {
         Key key_ = Key.toKey(key)
         Content cont = webstore.retrieve(key_)

@@ -28,13 +28,16 @@ import saskia.bin.Configuration
  */
 class DocGeoSignature {
     
-    static String dgs_table = "doc_geo_signature"
-    long dgs_id
-    long dgs_document
-    String dgs_document_original_id
+    static String tablename = "doc_geo_signature"
+    Long dgs_id
+    Long dgs_document
     String dgs_signature
     Tag dgs_tag
     Date dgs_date_created
+
+// meta information
+    String dgs_document_original_id
+    Long dgs_document_id
     
     static Configuration conf = Configuration.newInstance()
     static SaskiaDB db = SaskiaDB.newInstance()
@@ -52,6 +55,12 @@ class DocGeoSignature {
             if (row['dgs_signature']) g.dgs_signature = row['dgs_signature']            
             if (row['dgs_tag']) g.dgs_tag = Tag.getFromID(row['dgs_tag'])
             if (row['dgs_date_created']) g.dgs_date_created = (Date)row['dgs_date_created']
+
+// meta
+            try {g.dgs_document_original_id = row['doc_original_id']}            
+				catch(Exception e) {}
+			 	try {g.dgs_document_id = row['doc_id']}            
+				catch(Exception e) {}
             if (g.dgs_id) res << g
         })
         return res
@@ -61,10 +70,10 @@ class DocGeoSignature {
      * @param id The id as needle.
      * return the Geoscope result object, or null
      */
-    static DocGeoSignature getFromID(long dgs_id) {
+    static DocGeoSignature getFromID(Long dgs_id) {
         if (!dgs_id) return null
         if (idCache.containsKey(dgs_id)) return idCache[dgs_id]
-        List<DocGeoSignature> dgs = queryDB("SELECT * FROM ${dgs_table} WHERE dgs_id=?", [dgs_id])
+        List<DocGeoSignature> dgs = queryDB("SELECT * FROM ${tablename} WHERE dgs_id=?", [dgs_id])
         log.debug "Querying for dgs_id $dgs_id got DocGeoSignature $dgs." 
         if (dgs) {
            idCache[dgs_id] = dgs[0]
@@ -83,15 +92,16 @@ class DocGeoSignature {
        
        // ORDER BY doc_id ASC ensures that the GeoSignatures are batched just like in other indexes, 
         // to ensure Lucene gets identical indexes for identical documents
-         return queryDB("SELECT ${dgs_table}.*, ${RembrandtedDoc.doc_table}.doc_original_id "+
-        "FROM ${dgs_table},  ${RembrandtedDoc.doc_table}, ${RembrandtedDoc.chd_table} "+
-        "WHERE chd_collection=? AND chd_document=dgs_document AND chd_document=doc_id "+
+         return queryDB("SELECT ${tablename}.*, ${RembrandtedDoc.tablename}.doc_id, "+
+			"${RembrandtedDoc.tablename}.doc_original_id "+
+        "FROM ${tablename}, ${RembrandtedDoc.tablename} "+
+        "WHERE doc_collection=? AND doc_id=dgs_document "+
         "ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id])      
     }
     
     public long addThisToDB() {	
         
-        def res = db.getDB().executeInsert("INSERT INTO ${dgs_table}(dgs_document, " +
+        def res = db.getDB().executeInsert("INSERT INTO ${tablename}(dgs_document, " +
             "dgs_signature, dgs_tag, dgs_date_created) VALUES(?,?,?, NOW())", 
         [dgs_document, dgs_signature, dgs_tag.tag_id])
         long new_dgs_id = (long)res[0][0]

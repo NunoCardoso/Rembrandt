@@ -131,6 +131,8 @@ class Sentence extends ArrayList {
     boolean thereAreVisibleTermsAhead() {
    	// return early false if pointer is beyond the sentence size.
 	if (this.pointer >= this.size()) return false
+	// HACK, ver se não estraga
+	if (this.size() == 0) return false
 	return this[this.pointer..<this.size()].find{!it.hidden && it.index >= 0}
     }  
 	

@@ -33,6 +33,10 @@ class SubjectGround {
 	String sgr_wikipedia_category
 	String sgr_comment
 	
+	static Map type = ['sgr_id':'Long', 'sgr_subject':'Subject', 'sgr_geoscope':'Geoscope',
+	'sgr_dbpedia_resource':'String','sgr_dbpedia_class':'String', 'sgr_wikipedia_category':'String',
+	'sgr_comment':'String']
+	
 	static Configuration conf = Configuration.newInstance()
 	
 	static SaskiaDB db = SaskiaDB.newInstance()
@@ -43,7 +47,7 @@ class SubjectGround {
 	    db.getDB().eachRow(query, params, {row  -> 
 	        SubjectGround sg = new SubjectGround()
 	        sg.sgr_id = row['sgr_id']
-	        sg.sgr_subject = Subject.getFromID(row['sgr_subject'] )
+	        if (row['sgr_subject']) sg.sgr_subject = Subject.getFromID(row['sgr_subject'] )
 	        if (row['sgr_geoscope']) sg.sgr_geoscope = Geoscope.getFromID(row['sgr_geoscope'] )
 	        sg.sgr_dbpedia_resource = row['sgr_dbpedia_resource'] 
 	        sg.sgr_dbpedia_class = row['sgr_dbpedia_class'] 
@@ -54,6 +58,63 @@ class SubjectGround {
 	    return t
 	}
 
+	Map toMap() {
+		return ['sgr_id':sgr_id, 'sgr_subject':sgr_subject.toMap(), 'sgr_geoscope':sgr_geoscope.toSimpleMap(),
+		'sgr_dbpedia_resource':sgr_dbpedia_resource, 'sgr_dbpedia_class':sgr_dbpedia_class, 
+		'sgr_wikipedia_category':sgr_wikipedia_category, 'sgr_comment':sgr_comment]
+	}
+	
+
+    static Map listSubjectGrounds(limit = 10, offset = 0, column = null, needle = null) {
+		// limit & offset can come as null... they ARE initialized...
+		if (!limit) limit = 10
+		if (!offset) offset = 0
+		
+		String where = ""
+		String from = " FROM ${tablename}"	
+		List params = []	
+		if (column && needle) {
+	      switch (type[column]) {
+	        	case 'String': where += " WHERE $column LIKE '%${needle}%'"; break
+	        	case 'Long': where += " WHERE $column=? "; params << Long.parseLong(needle); break
+	        	case 'Subject': where += " WHERE $column=?"; params <<  Long.parseLong(needle); break
+	        	case 'Geoscope': where += " WHERE $column=?"; params <<  Long.parseLong(needle); break
+	    	}
+		}
+	    
+		String query = "SELECT SQL_CALC_FOUND_ROWS ${tablename}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
+		"UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL, NULL, NULL, NULL"
+		//log.debug "query = $query params = $params class = "+params*.class
+		List<Entity> u = queryDB(query, params) 
+	
+		// last "item" it's the count.
+		int total = (int)(u.pop().sgr_id)
+		log.debug "Returning "+u.size()+" results."
+		return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,
+	        "column":column, "value":needle]
+    }
+	
+
+	static SubjectGround getFromID(Long sgr_id) {
+	    if (!sgr_id) return null	    
+	    List<SubjectGround> sg = queryDB("SELECT * FROM ${tablename} WHERE sgr_id=?", [sgr_id])
+	    log.trace "Querying for sgr_id $sgr_id got SubjectGround $sg." 
+	    if (sg) return sg[0] 
+	    return null
+	    
+	}	 
+
+	public updateValue(column, value) {
+	    def newvalue	    
+	    switch (type[column]) {
+	        case 'String': newvalue = value; break
+	        case 'Long': newvalue = Long.parseLong(value); break
+	        case 'Subject': newvalue = Long.parseLong(value); break
+	        case 'Geoscope': newvalue = Long.parseLong(value); break
+	    }
+	    def res = db.getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE sgr_id=?",[newvalue, sgr_id])
+	    return res
+	}
 	
 	/** Get a Subject from id.
 	 * @param id The id as needle.
@@ -85,6 +146,13 @@ class SubjectGround {
 	    this.sgr_id = (long)res[0][0]
 	   return this.sgr_id
 	}	
+	
+	public int removeThisFromDB() {
+		if (!sgr_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE sgr_id=?", [sgr_id])
+		return res	    
+   }
+	
 	
 	public String toString() {
 	    return "${sgr_id}:${sgr_subject}:${sgr_geoscope}"

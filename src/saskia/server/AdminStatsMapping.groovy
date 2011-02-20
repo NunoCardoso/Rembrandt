@@ -28,8 +28,9 @@ public class AdminStatsMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
     I18n i18n
-    static Logger log = Logger.getLogger("SaskiaServer") 
-    static Logger log2 = Logger.getLogger("SaskiaService") 
+    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
+    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
+    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
  
 /** Note: this mapping should be used only by superuser folks *managing user stuff*, so 
  * it requires an api_key. For standard uses, the UserMapping is the one that has standard actions.
@@ -41,48 +42,47 @@ public class AdminStatsMapping extends WebServiceRestletMapping {
         JSONanswer = {req, par, bind ->
             
             long session = System.currentTimeMillis()
-            log2.debug "Session $session triggered with $par" 
+            processlog.debug "Session $session triggered with $par" 
                   
             Collection collection
             
             // core stuff
             String action = par["POST"]["do"] //show, update, etc
             String lang = par["POST"]["lg"] 
+                                                  
+            ServerMessage sm = new ServerMessage("AdminStatsMapping", lang, bind, session, processlog)  
             
-                                      
-            ServerMessage sm = new ServerMessage("AdminStatsMapping", lang, bind, session)  
-            
-            // user stuff
-            String api_key = par["POST"]["api_key"] 
+        		String api_key = par["POST"]["api_key"] 
             if (!api_key) api_key = par["COOKIE"]["api_key"]   
             if (!api_key) return sm.noAPIKeyMessage()
+
             User user = User.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
-            //if (!user.isSuperUser()) return sm.noSuperUser()
             if (!user.isEnabled()) return sm.userNotEnabled()
+				// all Admin*Mappings must have this
+				if (!user.isSuperUser()) return sm.noSuperUser()
             if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
             sm.setAction(action)
             
-            /***************************/
+            /***************************************/
             /** 1.1 show - STATS for collectionid **/
-            /***************************/
+            /**************************************/
             
             if (action == "show") {
-        	 long col_id
-        	 try {
-        	     col_id = Long.parseLong(par["POST"]["ci"]) 
-        	 } catch(Exception e){}
+        	 		long col_id
+        	 		try {
+        	     		col_id = Long.parseLong(par["POST"]["ci"]) 
+        	 		} catch(Exception e){}
         	 
-        	 if (!col_id) return sm.notEnoughVars("ci=$col_id")   
-        	 collection = Collection.getFromID(col_id)
+        	 		if (!col_id) return sm.notEnoughVars("ci=$col_id")   
+        	 		collection = Collection.getFromID(col_id)
         	 
-        	Map dates = Cache.getFrontPageCacheDates(collection)
-        	Map h = [:]
-        	h['cache_dates'] = dates
-        	SaskiaStats stats = new SaskiaStats()
-        	h['message'] = stats.renderFrontPage(collection.col_name, lang)	
-        	 
-                return sm.statusMessage(0,h)              
+        			Map dates = Cache.getFrontPageCacheDates(collection)
+        			Map h = [:]
+        			h['cache_dates'] = dates
+        			SaskiaStats stats = new SaskiaStats()
+        			h['message'] = stats.renderFrontPage(collection.col_name, lang)	
+        	 		return sm.statusMessageWithPubKey(0,h, user.usr_pub_key)              
             }
 
             return sm.unknownAction(action)	

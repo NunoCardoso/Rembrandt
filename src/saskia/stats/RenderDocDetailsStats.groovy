@@ -83,14 +83,17 @@ class RenderDocDetailsStats {
             s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-geo-signature-div' class='stats-box'>\n"
             s.append "<P><B>${i18n.statstitle['doc_geo_signature'][lang]}</B></P>"
             DocGeoSignature dgs = rdoc.getGeographicSignature()
-            String ss = dgs?.dgs_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
+            String ss = "" 
+				if (dgs?.dgs_signature) 
+					dgs.dgs_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
             s.append ss
             s.append "</DIV>\n" 
             
             s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-time-signature-div' class='stats-box'>\n"
             s.append "<P><B>${i18n.statstitle['doc_time_signature'][lang]}</B></P>"
             DocTimeSignature dts = rdoc.getTimeSignature()
-            ss = dts?.dts_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
+				if (dts?.dts_signature)
+            	ss = dts.dts_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
             s.append ss
             s.append "</DIV>\n" 
             

@@ -94,7 +94,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 		println refq.toString()
 		String reformulated_x = """
 label:001 contents:shark contents:attacks contents:"Australia" contents:"California" 
-woeid-index:23424748 woeid-index:2347563
+woeid:23424748 woeid:2347563
 """
 		assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   	} 

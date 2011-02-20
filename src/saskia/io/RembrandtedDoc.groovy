@@ -40,38 +40,38 @@ import saskia.bin.Configuration
 
 class RembrandtedDoc {
 
-    static String chd_table = "collection_has_doc"
-    static String doc_table = "doc"
-    static String ne_table = "ne"
-    static String ne_name_table = "ne_name" 
+    static String tablename = "doc"
     static String die_table = "doc_is_entity"
     static String dhn_table = "doc_has_ne"
     static String dtg_table = "doc_has_tag"
+	 static String job_doc_type_label = "RDOC"
 	
     /* doc table fields */
     Long doc_id
     String doc_original_id
+    Collection doc_collection
     String doc_webstore 
+    Integer doc_version = 1
     String doc_lang
     Date doc_date_created
     Date doc_date_tagged
     DocStatus doc_proc
     DocStatus doc_sync
-    DocStatus doc_edit
-    Date doc_edit_date
     Long doc_latest_geo_signature
     Long doc_latest_time_signature
 	
-    static Map type = ['doc_id':'Long', 'doc_original_id':'String', 'doc_webstore':'String',
-             	  'doc_lang':'String', 'doc_date_created':'Date', 'doc_date_created':'Date',
-             	  'doc_proc':'DocStatus', 'doc_sync':'DocStatus', 'doc_edit':'DocStatus',
-             	  'doc_edit_date':'Date', 'doc_latest_geo_signature':'Long', 'doc_latest_time_signature':'Long'] 
+    static Map type = ['doc_id':'Long', 'doc_original_id':'String', 'doc_collection':'Collection', 
+		'doc_webstore':'String', 'doc_version':'Integer',
+		'doc_lang':'String', 'doc_date_created':'Date', 'doc_date_created':'Date',
+		'doc_proc':'DocStatus', 'doc_sync':'DocStatus', 
+		'doc_latest_geo_signature':'Long', 'doc_latest_time_signature':'Long'] 
     
     //This is obtained from the webstore 
     String doc_content
     boolean retrieved_doc_content = false
-   // String rdoc_comment
- 
+
+ 	 Job doc_job // if this RembrandtDoc is associated to a job, typically: R2P, GEO, TIM
+
     /* other fields gathered from other table data */
     ListOfNE NEs
     List<Tag> tags
@@ -79,68 +79,75 @@ class RembrandtedDoc {
     List<Entity> entities
     
     // Document is already post_processed.
-	static Configuration conf = Configuration.newInstance()
+	 static Configuration conf = Configuration.newInstance()
     static SaskiaDB db = SaskiaDB.newInstance()
     static SaskiaWebstore webstore = SaskiaWebstore.newInstance()
     static Logger log = Logger.getLogger("SaskiaDB")
     String lang = Configuration.newInstance().get("global.lang")
     DBpediaAPI dbpedia = DBpediaAPI.newInstance()
-	DBpediaOntology dbpediaontology = DBpediaOntology.getInstance()
+	 DBpediaOntology dbpediaontology = DBpediaOntology.getInstance()
     static Date nulldate = new Date(0)
     static RembrandtReader reader = new RembrandtReader( new RembrandtStyleTag(
         conf.get("rembrandt.input.styletag.lang", conf.get("global.lang"))))
 
     static List<RembrandtedDoc> queryDB(String query, List params) {
-	List<RembrandtedDoc> l = []
-	RembrandtedDoc r 
+		List<RembrandtedDoc> l = []
+		RembrandtedDoc r 
 
-	db.getDB().eachRow(query, params, {row  -> 
+		db.getDB().eachRow(query, params, {row  -> 
     	    r = new RembrandtedDoc()
     	    r.doc_id = row['doc_id']
     	    r.doc_original_id = row['doc_original_id']
-            r.doc_webstore = row['doc_webstore']
+    	    if (row['doc_collection']) r.doc_collection = Collection.getFromID(row['doc_collection'])
+          r.doc_webstore = row['doc_webstore']
+    	    r.doc_version = row['doc_version']
     	    if (row['doc_lang']) r.doc_lang = row['doc_lang']
     	    if (row['doc_date_created'] && (Date)row['doc_date_tagged'] != nulldate) 
-    		r.doc_date_created = (Date)row['doc_date_created'] // it's a java.sql.Timestamp, a subclass of Date
+    			r.doc_date_created = (Date)row['doc_date_created'] // it's a java.sql.Timestamp, a subclass of Date
     	    if (row['doc_date_tagged'] && (Date)row['doc_date_tagged'] != nulldate) 
-    		r.doc_date_tagged = (Date)row['doc_date_tagged'] // it's a java.sql.Timestamp, a subclass of Date
+    			r.doc_date_tagged = (Date)row['doc_date_tagged'] // it's a java.sql.Timestamp, a subclass of Date
     	    r.doc_proc = DocStatus.getFromValue(row['doc_proc'])			
     	    r.doc_sync = DocStatus.getFromValue(row['doc_sync'])			
-    	    r.doc_edit = DocStatus.getFromValue(row['doc_edit'])	
-    	    if (row.getAt('doc_edit_date') && 
-    		    (Date)row['doc_edit_date'] != nulldate)  
-    	    	r.doc_edit_date = (Date)row['doc_edit_date'] // it's a java.sql.Timestamp, a subclass of Date
+    	    
     	    if (row['doc_latest_geo_signature']) r.doc_latest_geo_signature = row['doc_latest_geo_signature']
     	    if (row['doc_latest_time_signature']) r.doc_latest_time_signature = row['doc_latest_time_signature']	 
             if (r.doc_webstore) {  try {
-        	r.doc_content = webstore.retrieve(r.doc_webstore)
-        	r.retrieved_doc_content = true
+        			r.doc_content = webstore.retrieve(r.doc_webstore)
+        			r.retrieved_doc_content = true
             }catch(Exception e) { log.warn e.getMessage() }
-            }
+          }
     	    l << r
 		})
 		return (l ? l : null)
 	}
 	
     public Map toMap() {
-	List tags = getTags()?.collect{it.toMap()}
-        List entities = getEntities()?.collect{it.toMap()}
-        
-	return ["doc_id":doc_id, "doc_original_id":doc_original_id,
+	
+      return ["doc_id":doc_id, "doc_collection":doc_collection.toSimpleMap(), 
+			 "doc_original_id":doc_original_id, "doc_version":doc_version,
           "doc_lang":doc_lang, "doc_date_created":doc_date_created,
-          "doc_entity":entities, "doc_tag":tags, "doc_webstore":doc_webstore,
-          "doc_date_tagged":doc_date_tagged, "doc_proc":doc_proc, 
-          "doc_sync":doc_sync, "doc_edit":doc_edit]
+          "doc_entity":getEntities()?.collect{it.toMap()}, 
+			 "doc_tag":getTags()?.collect{it.toMap()}, 
+			 "doc_webstore":doc_webstore,
+          "doc_date_tagged":doc_date_tagged, 
+			 "doc_proc":doc_proc, 
+          "doc_sync":doc_sync, 
+ 			 "doc_content":[
+				"title": getTitleFromContent()?.replaceAll(/\n/, " "),
+            "body": getBodyFromContent()?.replaceAll(/\n/, " ") 
+				]
+			]
     }
     
-    static Map getRembrandtedDocs(Collection collection, limit = 10,  offset = 0, column = null, needle = null) {
+    static Map listRembrandtedDocs(Collection collection, limit = 10,  offset = 0, column = null, needle = null) {
+
 	// limit & offset can come as null... they ARE initialized...
-	if (!limit) limit = 10
-	if (!offset) offset = 0
+		if (!limit) limit = 10
+		if (!offset) offset = 0
 	
-	 String where = "WHERE chd_collection=? AND chd_document=doc_id "
-	 List params = [collection.col_id]
-	 if (column && needle) {
+	 	String where = "WHERE doc_collection=? "
+	 	List params = [collection.col_id]
+	 	if (column && needle) {
 	     switch (type[column]) {
 		  case 'String': where += " AND $column LIKE '%${needle}%'"; break
 		  case 'Long': where += " AND $column=? "; params << Long.parseLong(needle); break
@@ -149,60 +156,84 @@ class RembrandtedDoc {
 	     }
 	 }
 	
-	String query = "SELECT SQL_CALC_FOUND_ROWS ${doc_table}.* FROM ${chd_table}, ${doc_table} "+
-	"$where LIMIT ${limit} OFFSET ${offset} UNION SELECT 0, FOUND_ROWS(), '', '', "+
-        "now(), now(),'','','', now(), 0, 0"
+	String query = "SELECT SQL_CALC_FOUND_ROWS * FROM ${tablename} "+
+		"$where LIMIT ${limit} OFFSET ${offset} UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), "+
+		"NULL, NULL, NULL, NULL, NULL, NULL,NULL,NULL,NULL,NULL,NULL"
 	log.debug "query = $query params = $params class = "+params*.class
 	List u 
 	try {u = queryDB(query, params) }
 	catch(Exception e) {log.error "Error getting rembrandted doc list: ", e}
 	// last "user" is not the user... it's the count.
 	RembrandtedDoc fake_rdoc = u.pop()
-	int total = Integer.parseInt(fake_rdoc.doc_original_id)
+	long total = fake_rdoc.doc_id
 	log.debug "Returning "+u.size()+" results."
 	return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,
 	        "column":column, "value":needle, "col_id":collection.col_id]
     }
     
+   /** Handle with care! */
+	public updateValue(column, value) {
+	    def newvalue	    
+	    switch (type[column]) {
+	        case 'String': newvalue = value; break
+	        case 'Long': newvalue = Long.parseLong(value); break
+	    }
+	    def res = db.getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE doc_id=?",[newvalue, doc_id])
+	    return res
+	}
+	
+
     static List<RembrandtedDoc> getBatchOfRembrandtedDocs(Collection collection, limit = 10,  offset = 0) {
         // limit & offset can come as null... they ARE initialized...
         if (!limit) limit = 10
         if (!offset) offset = 0
                
-        return queryDB("SELECT SQL_CALC_FOUND_ROWS ${doc_table}.* "+
-        " FROM ${chd_table}, ${doc_table} "+
-        "WHERE chd_collection=? AND chd_document=doc_id "+
+        return queryDB("SELECT SQL_CALC_FOUND_ROWS * "+
+        " FROM  ${RembrandtedDoc.tablename}  WHERE doc_collection=? "+
         "ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id])      
         // ORDER BY doc_id ASC assures that these batches are ordered 
     }
-    
-    static RembrandtedDoc getFromOriginalDocIDandCollection(String doc_original_id, Collection collection) {
-	return getFromOriginalDocIDandCollectionAndLang(doc_original_id, collection.col_id, collection.col_lang) 
+
+   static List<RembrandtedDoc> getBatchOfRembrandtedDocsOrderedByOriginalDocId(Collection collection, limit = 10,  offset = 0) {
+        // limit & offset can come as null... they ARE initialized...
+        if (!limit) limit = 10
+        if (!offset) offset = 0
+               
+        return queryDB("SELECT SQL_CALC_FOUND_ROWS * "+
+        " FROM  ${RembrandtedDoc.tablename}  WHERE doc_collection=? "+
+        "ORDER BY doc_original_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id])      
+        // ORDER BY doc_original_id ASC assures that these batches are ordered 
     }
     
-    /** Get a RembrandtedDoc from a original document id and a tag version.
-     * @param doc_original_id The id of the original Wikipedia doc.
-     * @param tag_version The tag version
-     * return the RembrandtedDoc
-     */		 
-    static RembrandtedDoc getFromOriginalDocIDandCollectionAndLang(String doc_original_id, long collection_id, String lang) {
-			if (!doc_original_id || !collection_id ||  !lang ) return null 
-			List<RembrandtedDoc> l = queryDB("SELECT * FROM ${doc_table}, ${chd_table} "+
-			"WHERE doc_original_id=? AND doc_id=chd_document AND "+
-			"chd_collection=? AND doc_lang=?", [doc_original_id, collection_id, lang])
-			log.trace "Querying Saskia for doc_original_id:$doc_original_id, collection $collection_id, lang:$lang, got ${l}" 
+    static RembrandtedDoc getFromOriginalDocIDandCollection(String doc_original_id, Collection collection) {
+			if (!doc_original_id || !collection) return null 
+			List<RembrandtedDoc> l = queryDB("SELECT * FROM ${RembrandtedDoc.tablename} "+
+			"WHERE doc_original_id=? AND doc_collection=?", 
+			[doc_original_id, collection.col_id, ])
+			log.trace "Querying Saskia for doc_original_id:$doc_original_id, collection $collection, got ${l}" 
 			return (l ? l[0] : null) 
-	}
-	
+    }
+    	
     /** Get a RembrandtedDoc from an id of the Doc table.
      * @param doc_id The id of the document. 
      * return the RembrandtedDoc
      */ 
     static RembrandtedDoc getFromID(long doc_id) {
-	if (!doc_id) return null 
-	List<RembrandtedDoc> l = queryDB("SELECT * FROM ${doc_table} WHERE doc_id=?", [doc_id])
-	log.debug "Querying for doc_id $doc_id, got RembrandtedDoc ${l}" 
-	return (l ? l[0] : null) 
+		if (!doc_id) return null 
+		List<RembrandtedDoc> l = queryDB("SELECT * FROM ${RembrandtedDoc.tablename} WHERE doc_id=?", [doc_id])
+		log.debug "Querying for doc_id $doc_id, got RembrandtedDoc ${l}" 
+		return (l ? l[0] : null) 
+    }
+
+  /** Get a RembrandtedDoc from an id of the Doc table.
+     * @param doc_id The id of the document. 
+     * return the RembrandtedDoc
+     */ 
+    static RembrandtedDoc getFromOriginalID(String doc_original_id) {
+		if (!doc_original_id) return null 
+		List<RembrandtedDoc> l = queryDB("SELECT * FROM ${RembrandtedDoc.tablename} WHERE doc_original_id=?", [doc_original_id])
+		log.debug "Querying for doc_original_id $doc_original_id, got RembrandtedDoc ${l}" 
+		return (l ? l[0] : null) 
     }
 
     /**
@@ -211,8 +242,8 @@ class RembrandtedDoc {
     static List<RembrandtedDoc> getFromOriginalIDs(List<Long> doc_ids, Collection collection) {
 	if (!doc_ids || !collection) return null
 	String where = "("+doc_ids.join(",")+")"
-	List<RembrandtedDoc> l = queryDB("SELECT * FROM ${doc_table}, ${chd_table} WHERE "+
-	"chd_collection=? and chd_document=doc_id AND doc_original_id IN "+where, [collection.col_id])
+	List<RembrandtedDoc> l = queryDB("SELECT * FROM ${RembrandtedDoc.tablename} WHERE "+
+	"doc_collection=? AND doc_original_id IN "+where, [collection.col_id])
 	return (l ? l : null) 
     }
 	
@@ -221,44 +252,46 @@ class RembrandtedDoc {
      * This method is now treadsafe
      * return A list of RembrandtedDocs
      */ 
-    static List<RembrandtedDoc> getBatchDocsToSyncNEPool(Collection collection, int limit = 30) {
-	List<RembrandtedDoc> l = []
-	RembrandtedDoc r
-	    
-	db.getDB().withTransaction{
+	static List<RembrandtedDoc> getBatchDocsToSyncNEPool(Task task, String process_signature,
+		Collection collection, int limit = 30) {
+		
+		List<RembrandtedDoc> l = []
+		RembrandtedDoc r
+		 
+		db.getDB().withTransaction{
 	    log.info "Getting a set of $limit processable rembrandtedDocs to sync to NE pool"  
 		
-	    def query = "SELECT * FROM ${doc_table}, ${chd_table} WHERE "+
-	    "chd_collection=? and chd_document=doc_id AND doc_proc IN "+
-	    DocStatus.whereConditionGoodToProcess()+" AND "+
-	    "doc_sync in "+DocStatus.whereConditionGoodToSyncNEPool()+" AND doc_edit in "+
-	    DocStatus.whereConditionUnlocked()+" LIMIT ${limit} FOR UPDATE" // VERY IMPORTANT, the FOR UPDATE, it locks the table until the transaction is complete
+		def query = "SELECT * FROM ${RembrandtedDoc.tablename} WHERE doc_collection=? AND doc_proc IN "+
+		DocStatus.whereConditionGoodToProcess()+" AND doc_sync in "+DocStatus.whereConditionGoodToSyncNEPool()+
+		" AND doc_id NOT IN (select job_doc_id from "+Job.tablename+" where job_doc_type='"+
+		 job_doc_type_label+"' AND job_doc_edit NOT IN "+DocStatus.whereConditionUnlocked()+
+		 ") LIMIT ${limit} FOR UPDATE"  
+		// VERY IMPORTANT, the FOR UPDATE, it locks the table until the transaction is complete
  
-	    def params = [collection.col_id]	                  
-	    log.trace query
-	    log.trace params
+		def params = [collection.col_id]	                  
+		log.trace query
+		log.trace params
 			
-	    db.getDB().eachRow(query, params, {row ->  
-	        r = new RembrandtedDoc()
-	        r.doc_id = row['doc_id']
-	        r.doc_original_id = row['doc_original_id']
-                r.doc_webstore = row['doc_webstore']
-	        if (row['doc_lang']) r.doc_lang = row['doc_lang']
-		if (row['doc_date_created']) r.doc_date_created = row['doc_date_created'] // it's a java.sql.Timestamp, a subclass of Date
-		if (row['doc_date_tagged']) r.doc_date_tagged = row['doc_date_tagged'] // it's a java.sql.Timestamp, a subclass of Date
-		r.doc_proc = DocStatus.getFromValue(row['doc_proc'])			
-		r.doc_sync = DocStatus.getFromValue(row['doc_sync'])			
-		r.doc_edit = DocStatus.getFromValue(row['doc_edit'])			
-		//if (row['rdoc_id']) r.rdoc_id = row['rdoc_id']
-            //TODO
-            //	try { r.rdoc_content = row['rdoc_content'] } catch(Exception e){}
-           // try { r.rdoc_title = row['rdoc_title'] } catch(Exception e){}
-           // try { r.rdoc_body = row['rdoc_body'] } catch(Exception e){}
-            //		if (row['rdoc_comment']) r.rdoc_comment = row['rdoc_comment']	
-		if (r.doc_webstore) r.doc_content = webstore.retrieve(r.doc_webstore)
-		l << r
-		// LET's mark it as QUEUED
-		db.getDB().executeUpdate("UPDATE ${doc_table} SET doc_edit=? WHERE doc_id=? ", [DocStatus.QUEUED.text(), r.doc_id])
+		db.getDB().eachRow(query, params, {row ->  
+			r = new RembrandtedDoc()
+			r.doc_id = row['doc_id']
+			r.doc_original_id = row['doc_original_id']
+			r.doc_webstore = row['doc_webstore']
+			if (row['doc_lang']) r.doc_lang = row['doc_lang']
+			if (row['doc_date_created']) r.doc_date_created = row['doc_date_created'] // it's a java.sql.Timestamp, a subclass of Date
+			if (row['doc_date_tagged']) r.doc_date_tagged = row['doc_date_tagged'] // it's a java.sql.Timestamp, a subclass of Date
+			r.doc_proc = DocStatus.getFromValue(row['doc_proc'])			
+			r.doc_sync = DocStatus.getFromValue(row['doc_sync'])			
+	
+			if (r.doc_webstore) r.doc_content = webstore.retrieve(r.doc_webstore)
+			
+			l << r
+			
+		// LET's create JOBS to mark the queue
+			Job job = new Job(job_task:task, job_worker:process_signature, job_doc_type:job_doc_type_label,
+			job_doc_id:r.doc_id, job_doc_edit:DocStatus.QUEUED, job_doc_edit_date:new Date())
+			job.job_id = job.addThisToDB()
+			r.doc_job = job
 	    })
 	}// with transaction	
         return (l ? l : null) 
@@ -286,11 +319,12 @@ class RembrandtedDoc {
          db.getDB().withTransaction{
             
             log.info "Getting a set of $limit RembrandtedDocs to generate GeoSignatures"  
-            db.getDB().eachRow("SELECT doc_id, doc_original_id, doc_lang from doc, collection_has_doc where "+
-			"doc_latest_geo_signature IS NULL "+
+            db.getDB().eachRow("SELECT doc_id, doc_original_id, doc_lang from doc where "+
+				"doc_collection=? AND doc_latest_geo_signature IS NULL "+
             "AND doc_proc IN "+DocStatus.whereConditionGoodToProcess()+" AND "+ "doc_sync in "+
-            DocStatus.whereConditionSynced()+" AND doc_edit IN "+DocStatus.whereConditionUnlocked()+" AND "+
-            "doc_id=chd_document AND chd_collection=? LIMIT ${limit}", [collection.col_id], {row -> 
+            DocStatus.whereConditionSynced()+" AND doc_id NOT IN (select job_doc_id from job where "+
+ 				"job_doc_type='"+job_doc_type_label+"' and job_doc_edit NOT IN "+
+				DocStatus.whereConditionUnlocked()+") LIMIT ${limit}", [collection.col_id], {row -> 
                 String lang = row['doc_lang']
                 long doc_id = (long) row['doc_id']
                 docs[doc_id] = ['lang':lang, 'doc_original_id':row['doc_original_id'], nes:[]]
@@ -330,14 +364,15 @@ class RembrandtedDoc {
         NESubtype.createCache() 
 
 		List docs_list = 
-		
-		db.getDB().eachRow("SELECT doc_id, doc_original_id, doc_webstore, doc_lang from doc, collection_has_doc where "+
-			"doc_latest_geo_signature IS NULL "+
-            "AND doc_proc IN "+DocStatus.whereConditionGoodToProcess()+" AND "+ //"doc_sync in "+
-            //DocStatus.whereConditionSynced()+" AND 
-			"doc_edit IN "+DocStatus.whereConditionUnlocked()+" AND "+
-            "doc_id=chd_document AND chd_collection=? LIMIT ${limit}", [collection.col_id], {row -> 
-	  			String lang = row['doc_lang']
+
+		db.getDB().eachRow("SELECT doc_id, doc_original_id, doc_webstore, doc_lang from doc where "+
+			"doc_collection=? AND doc_latest_geo_signature IS NULL "+
+            "AND doc_proc IN "+DocStatus.whereConditionGoodToProcess()+" AND "+ 
+//"doc_sync in "+DocStatus.whereConditionSynced()+" AND 
+			"doc_id NOT IN (select job_doc_id from job where "+
+ 				"job_doc_type='"+job_doc_type_label+"' and job_doc_edit NOT IN "+DocStatus.whereConditionUnlocked()+") "+
+            " LIMIT ${limit}", [collection.col_id], {row -> 
+					String lang = row['doc_lang']
                 long doc_id = (long) row['doc_id']
                 docs[doc_id] = ['lang':lang, 'doc_original_id':row['doc_original_id'], nes:[]]
                 String content
@@ -355,9 +390,9 @@ class RembrandtedDoc {
 				 
             	ne.classification?.each{cl -> 
 	
-					NECategory category = (cl.c? NECategory.getFromCategory(cl.c) : null)
-                    NEType type = (cl.t? NEType.getFromType(cl.t) : null)
-                    NESubtype subtype = (cl.s? NESubtype.getFromSubtype(cl.s) : null)
+						NECategory category = (cl.c? NECategory.getFromCategory(cl.c) : null)
+						NEType type = (cl.t? NEType.getFromType(cl.t) : null)
+						NESubtype subtype = (cl.s? NESubtype.getFromSubtype(cl.s) : null)
 					
 					// use only those who are LOCAL
 					
@@ -431,10 +466,13 @@ class RembrandtedDoc {
         db.getDB().withTransaction{
             
             log.info "Getting a set of $limit RembrandtedDocs to generate TimeSignatures"  
-            db.getDB().eachRow("SELECT doc_id, doc_original_id, doc_webstore, doc_date_created, doc_lang from ${doc_table}, " +
-              "${chd_table} where doc_latest_time_signature IS NULL AND doc_proc IN "+DocStatus.whereConditionGoodToProcess()+
-              " AND doc_sync in "+DocStatus.whereConditionSynced()+" AND doc_edit IN "+DocStatus.whereConditionUnlocked()+" AND "+
-              "doc_id=chd_document AND chd_collection=? LIMIT ${limit}", [collection.col_id], {row -> 
+            db.getDB().eachRow("SELECT doc_id, doc_original_id, doc_webstore, doc_date_created, doc_lang from ${RembrandtedDoc.tablename} " +
+              " where doc_collection=? AND doc_latest_time_signature IS NULL AND "+
+				  " doc_proc IN "+DocStatus.whereConditionGoodToProcess()+" AND "+
+              " doc_sync IN "+DocStatus.whereConditionSynced()+" AND "+
+					"doc_id NOT IN (select job_doc_id from job where "+
+ 				"job_doc_type='"+job_doc_type_label+"' and job_doc_edit NOT IN "+DocStatus.whereConditionUnlocked()+") "+
+              "LIMIT ${limit}", [collection.col_id], {row -> 
                 
                   
                   String doc_content = webstore.retrieve(row['doc_webstore'])
@@ -455,10 +493,12 @@ class RembrandtedDoc {
         db.getDB().withTransaction{
             
             log.info "Getting a set of $limit RembrandtedDocs to generate TimeSignatures"  
-            db.getDB().eachRow("SELECT doc_id, doc_original_id, doc_webstore, doc_date_created, doc_lang from ${doc_table}, " +
-              "${chd_table} where doc_latest_time_signature IS NULL AND doc_proc IN "+DocStatus.whereConditionGoodToProcess()+
-              " AND doc_edit IN "+DocStatus.whereConditionUnlocked()+" AND "+
-              "doc_id=chd_document AND chd_collection=? LIMIT ${limit}", [collection.col_id], {row -> 
+            db.getDB().eachRow("SELECT doc_id, doc_original_id, doc_webstore, doc_date_created, doc_lang from ${RembrandtedDoc.tablename} " +
+              " where doc_collection=? AND doc_latest_time_signature IS NULL AND "+
+				  " doc_proc IN "+DocStatus.whereConditionGoodToProcess()+
+              " AND doc_id NOT IN (select job_doc_id from job where "+
+ 				"job_doc_type='"+job_doc_type_label+"' and job_doc_edit NOT IN "+DocStatus.whereConditionUnlocked()+") "+
+              "LIMIT ${limit}", [collection.col_id], {row -> 
 
                   String doc_content = webstore.retrieve(row['doc_webstore'])
                  
@@ -481,13 +521,9 @@ class RembrandtedDoc {
              
            // log.info "Getting a set of $limit RembrandtedDocs to generate GeoSignatures"  
             db.getDB().eachRow(
-        	    //"SELECT doc_id, doc_original_id, doc_lang from doc, collection_has_doc where  "+
-                   // " doc_proc IN "+DocStatus.whereConditionGoodToProcess()+" AND doc_sync in "+
-                   // DocStatus.whereConditionSynced()+" AND doc_edit IN "+DocStatus.whereConditionUnlocked()+" AND "+
-                   // "doc_id=chd_document AND chd_collection=? LIMIT ${limit} OFFSET ${offset}", 
             
-            "SELECT ${doc_table}.* FROM ${chd_table}, ${doc_table} "+
-                    "WHERE chd_collection=? AND chd_document=doc_id "+
+            "SELECT * FROM ${RembrandtedDoc.tablename} "+
+                    "WHERE doc_collection=? "+
                     "ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",
             [collection.col_id], {row -> 
                         String lang = row['doc_lang']
@@ -599,18 +635,21 @@ class RembrandtedDoc {
      * @param batchsize The batchsize, default to 100
      * return A list of RembrandtedDocs
      */ 
-	static List<RembrandtedDoc> getBatchDocsToSyncFromNEPool(Collection collection, int batchSize = 30) {
+	static List<RembrandtedDoc> getBatchDocsToSyncFromNEPool(Task task, Collection collection, 
+		String process_signature, int batchSize = 30) {
 	    List<RembrandtedDoc> l = []
 		RembrandtedDoc r
 	    
 	    db.getDB().withTransaction{
 		    log.info "Getting a set of $limit processable rembrandtedDocs to sync from NE pool"  
 
-		    def query = "SELECT HIGH_PRIORITY * FROM ${doc_table}, ${chd_table} WHERE "+
-		"chd_collection=? and chd_document=doc_id AND doc_proc IN "+
-		DocStatus.whereConditionGoodToProcess()+" AND "+
-		"doc_sync in "+DocStatus.whereConditionGoodToSyncFromNEPool()+" AND doc_edit in "+
-		DocStatus.whereConditionUnlocked()+" LIMIT ${batchSize} FOR UPDATE" // VERY IMPORTANT, the FOR UPDATE, it locks the table until the transaction is complete
+			def query = "SELECT HIGH_PRIORITY * FROM ${RembrandtedDoc.tablename} WHERE "+
+			"doc_collection=? AND doc_proc IN "+
+			DocStatus.whereConditionGoodToProcess()+" AND "+
+			"doc_sync in "+DocStatus.whereConditionGoodToSyncFromNEPool()+
+			" AND doc_id NOT IN (select job_doc_id from job where job_doc_type='"+job_doc_type_label+"' and "+
+			"job_doc_edit NOT IN "+DocStatus.whereConditionUnlocked()+") LIMIT ${limit} FOR UPDATE"  // VERY IMPORTANT, the FOR UPDATE, it locks the table until the transaction is complete
+		
 			def params = [collection.col_id]
 			log.trace query
 			log.trace params
@@ -625,19 +664,16 @@ class RembrandtedDoc {
 				if (row['doc_date_tagged']) r.doc_date_tagged = row['doc_date_tagged'] // it's a java.sql.Timestamp, a subclass of Date
 				r.doc_proc = DocStatus.getFromValue(row['doc_proc'])			
 				r.doc_sync = DocStatus.getFromValue(row['doc_sync'])			
-				r.doc_edit = DocStatus.getFromValue(row['doc_edit'])			
-				//if (row['rdoc_id']) r.rdoc_id = row['rdoc_id']
-                //TODO
-                // try { r.rdoc_content = row['rdoc_content'] } catch(Exception e){}
-               // try { r.rdoc_title = row['rdoc_title'] } catch(Exception e){}
-               // try { r.rdoc_body = row['rdoc_body'] } catch(Exception e){}
-                
-                	// 	if (row['rdoc_comment']) r.rdoc_comment = row['rdoc_comment']
+
 				if (r.doc_webstore) r.doc_content = webstore.retrieve(r.doc_webstore)
 			 	l << r
 				
-				// LET's mark it as QUEUED
-				db.getDB().executeUpdate("UPDATE ${doc_table} SET doc_edit=?, doc_edit_date=NOW() WHERE doc_id=? ", [DocStatus.QUEUED.text(), r.doc_id])
+			// LET's create JOBS to mark the queue
+			Job job = new Job(job_task:task, job_worker:process_signature, job_doc_type:job_doc_type_label,
+			job_doc_id:r.doc_id, job_doc_edit:DocStatus.QUEUED, job_doc_edit_date:new Date())
+			job.job_id = job.addThisToDB()
+			r.doc_job = job
+			
 			})		
 		}// with transaction	    
 		return (l ? l : null) 		
@@ -685,9 +721,9 @@ class RembrandtedDoc {
 	   
 	    if (doc_content) {
 		    String key = webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
-		    def res = db.getDB().executeInsert("INSERT INTO ${doc_table}(doc_original_id, "+
-		"doc_webstore, doc_lang, doc_date_created, doc_date_tagged) VALUES(?,?,?,?,NOW())", 
-		[doc_original_id, key, doc_lang, doc_date_created]) 
+		    def res = db.getDB().executeInsert("INSERT INTO ${RembrandtedDoc.tablename}(doc_original_id, doc_collection, "+
+		"doc_webstore, doc_version, doc_lang, doc_date_created, doc_date_tagged) VALUES(?,?,?,?,?,?,NOW())", 
+		[doc_original_id, doc_collection.col_id, key, doc_version, doc_lang, doc_date_created]) 
 		doc_id = (long) res[0][0]
 		doc_webstore = key     
 	    } else {
@@ -699,59 +735,41 @@ class RembrandtedDoc {
 	
 	public void replaceThisToDB() {	
 	    def res
-	    if (!doc_content) {
-		 String key = webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
+	    if (doc_content) {
+		 	String key = webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
 	    
 	    //println "replaceThisToDB: doc_id="+doc_id
-	        String query1 = ("UPDATE ${doc_table} SET doc_original_id=?, doc_webstore=?, "+
-		    " doc_lang=?, doc_date_tagged=NOW() WHERE doc_id=? ").toString()
-	        res = db.getDB().executeUpdate(query1, [doc_original_id, key, doc_lang, doc_id]) 		
-
+	        String query1 = ("UPDATE ${RembrandtedDoc.tablename} SET doc_original_id=?, doc_collection=?, doc_webstore=?, "+
+		    " doc_lang=?, doc_date_tagged=NOW(), doc_version=doc_version+1 WHERE doc_id=? ").toString()
+	        res = db.getDB().executeUpdate(query1, [doc_original_id, doc_collection.col_id, key, doc_lang, doc_id]) 		
+			  doc_version++
 	    } else {
-		log.warn "I'm not replacing a document that has no content!"
-		return null
+			log.warn "I'm not replacing a document that has no content!"
+			return null
 	    }  
 	    log.debug "Updated RembrandtedDoc with doc_original_id:${doc_original_id}, doc_lang:${doc_lang}, got ${res}"		
 	}
 	
+	public removeThisFromDB() {	
+	    def res = db.getDB().executeUpdate("DELETE FROM ${RembrandtedDoc.tablename} where doc_id=?",[doc_id]) 
+	    return res
+	}
+	
 	public int changeProcStatusInDBto(DocStatus status) {	
-		def res = db.getDB().executeUpdate("UPDATE ${doc_table} SET doc_proc=? WHERE doc_id=?", 
+		def res = db.getDB().executeUpdate("UPDATE ${RembrandtedDoc.tablename} SET doc_proc=? WHERE doc_id=?", 
 			[status.text(), doc_id]) 
 		log.debug "Wrote proc status ${status}(${status.text()}) to doc_id ${doc_id}, ${res} rows were changed."
 		return res
 	}
 
 	public int changeSyncStatusInDBto(DocStatus status) {	
-		def res = db.getDB().executeUpdate("UPDATE ${doc_table} SET doc_sync=? WHERE doc_id=?", 
+		def res = db.getDB().executeUpdate("UPDATE ${RembrandtedDoc.tablename} SET doc_sync=? WHERE doc_id=?", 
 			[status.text(), doc_id]) 
 		log.debug "Wrote sync status ${status}(${status.text()}) to doc_id ${doc_id}, ${res} rows were changed."
 		return res
 	}
 	
-	public int removeEditDate() {	
-		def res = db.getDB().executeUpdate("UPDATE ${doc_table} SET doc_edit_date=NULL WHERE doc_id=?", [doc_id]) 
-		log.trace "Removed doc_edit_date to doc_id ${doc_id}, ${res} rows changed."
-		return res
-	}
-	
-	public int addEditDate() {	
-		def res = db.getDB().executeUpdate("UPDATE ${doc_table} SET doc_edit_date=NOW() WHERE doc_id=?", [doc_id]) 
-		log.trace "Added doc_edit_date to doc_id ${doc_id}."
-		return res
-	}
-	
-	public int changeEditStatusInDBto(DocStatus status) {	
-		def res = db.getDB().executeUpdate("UPDATE ${doc_table} SET doc_edit=? WHERE doc_id=?", 
-			[status.text(), doc_id]) 
-		log.debug "Wrote edit status ${status}(${status.text()}) to doc_id ${doc_id}, ${res} rows were changed."
-		return res
-	}
-	
-	public associateWithCollection(Collection collection) { 
-	   db.getDB().executeInsert("INSERT INTO ${chd_table} VALUES(?,?)",
-		    [collection.col_id,doc_id])
-	}
-    
+
 	/**
 	 * The IGNORE does not generate error for duplicate keys 
 	 */
@@ -773,7 +791,7 @@ class RembrandtedDoc {
      */
 	static int addGeoSignatureIDtoDocID(long dgs_id, long doc_id) {
 	    if (!dgs_id || !doc_id) return null
-	    int res = db.getDB().executeUpdate("UPDATE ${doc_table} SET doc_latest_geo_signature =? WHERE doc_id=?",
+	    int res = db.getDB().executeUpdate("UPDATE ${RembrandtedDoc.tablename} SET doc_latest_geo_signature =? WHERE doc_id=?",
             [dgs_id, doc_id])
             return res
 	}
@@ -783,7 +801,7 @@ class RembrandtedDoc {
      */
     static int addTimeSignatureIDtoDocID(long dts_id, long doc_id) {
         if (!dts_id || !doc_id) return null
-        int res = db.getDB().executeUpdate("UPDATE ${doc_table} SET doc_latest_time_signature =? WHERE doc_id=?",
+        int res = db.getDB().executeUpdate("UPDATE ${RembrandtedDoc.tablename} SET doc_latest_time_signature =? WHERE doc_id=?",
                 [dts_id, doc_id])
         return res
     }

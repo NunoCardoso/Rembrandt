@@ -91,7 +91,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:044 contents:Venda contents:"armas" contents:"Jugoslávia" woeid-index:26793662 woeid-index:20069817 woeid-index:20069818 woeid-index:23424761 woeid-index:23424843 woeid-index:23424890 woeid-index:23424945 woeid-index:20069817 woeid-index:20069818 woeid-index:23424761 woeid-index:23424843 woeid-index:23424890 woeid-index:23424945
+label:044 contents:Venda contents:"armas" contents:"Jugoslávia" woeid:26793662 woeid:20069817 woeid:20069818 woeid:23424761 woeid:23424843 woeid:23424890 woeid:23424945 woeid:20069817 woeid:20069818 woeid:23424761 woeid:23424843 woeid:23424890 woeid:23424945
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

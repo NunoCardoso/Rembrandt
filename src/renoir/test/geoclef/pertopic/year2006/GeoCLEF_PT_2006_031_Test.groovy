@@ -101,7 +101,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:031 contents:Combates contents:embargo contents:norte contents:"Iraque" woeid-index:23424855
+label:031 contents:Combates contents:embargo contents:norte contents:"Iraque" woeid:23424855
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

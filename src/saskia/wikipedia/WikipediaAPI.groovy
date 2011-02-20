@@ -114,8 +114,11 @@ class WikipediaAPI {
 	    return text.replaceAll(" ","_")
 	}
 	
+	// para modelos recentes 
 	static String withoutUnderscore(String text) {
+		//if ( text instanceof String )
 	    return text.replaceAll("_"," ")
+		//else ""
 	}
 	
 	private void updateTimeStatistics(difference, field) {
@@ -143,7 +146,7 @@ class WikipediaAPI {
 	    db.eachRow (WikipediaDB.getSelectIDandTitleFromRedirectionTitle(this.lang), 
 		 [withUnderscore(title)]) {row -> 
 	         newid = row[0]
-	         newtitle = withoutUnderscore(row[1])
+	         newtitle = withoutUnderscore(new String(row[1], "UTF-8"))
 		}
 		if (!newid) return null 
 		return new WikipediaDocument(newid, newtitle, this.lang)     	    
@@ -158,7 +161,7 @@ class WikipediaAPI {
 	    db.eachRow (WikipediaDB.getSelectIDandTitleFromRedirectionID(this.lang), 
 		 [id]) {row -> 
 	         newid = row[0]
-	         newtitle = withoutUnderscore(row[1])
+	         newtitle = withoutUnderscore(new String(row[1], "UTF-8"))
 		}
 		if (!newid) return null 
 		return new WikipediaDocument(newid, newtitle, this.lang)     	    
@@ -175,11 +178,18 @@ class WikipediaAPI {
 	    // was made. null means that was not made, [] means it was made but with no results	    
 	    def cats = []
 	  //   println "tou aqui com id $id."
-		db.eachRow (WikipediaDB.getSelectCategoriesFromPageDocumentFromID(this.lang), [id])  {row-> 
+		db.eachRow (WikipediaDB.getSelectCategoriesFromPageDocumentFromID(this.lang), [id])  {row->
+		//db.eachRow ( "select cl_to from pt_categorylinks where cl_from = 4508") {//row->
 		//	println "cats: ${row[0]}"
 		//	println "cats forced to UTF-8: "+new String(row[0].getBytes(), "UTF-8")
 		//	println "cats forced to ISO: "+new String(row[0].getBytes(), "ISO-8859-1")
-			cats += withoutUnderscore(row[0])
+		//	println id
+		//	println row.cl_to
+
+			//if ( row[0] instanceof String){
+				cats += withoutUnderscore(new String(row[0], "UTF-8"))				
+			//}
+			///println row.class
 		}   
 
 	    return cats
@@ -196,7 +206,7 @@ class WikipediaAPI {
 	     if (!title) return null
 	     def cats = []    
 		 db.eachRow (WikipediaDB.getSelectCategoriesFromPageDocumentFromTitle(this.lang), [withUnderscore(title) ]) {row-> 
-		    cats += withoutUnderscore(row[0])    
+		    cats += withoutUnderscore(new String(row[0],"UTF-8"))    
 	     }
 	    return cats
 	}	
@@ -208,7 +218,7 @@ class WikipediaAPI {
 	     def answer = []    
 	//println "Performing "+WikipediaDB.getSelectCategoriesFromRegex(regex, this.lang)
 		 db.eachRow (WikipediaDB.getSelectCategoriesFromRegex(regex, this.lang)) {row-> 
-			 answer << new WikipediaDocument(row[0], withoutUnderscore(row[1]), this.lang)
+			 answer << new WikipediaDocument(row[0], withoutUnderscore(new String(row[1],"UTF-8")), this.lang)
 	     }
 	    return answer
 	}	
@@ -223,7 +233,7 @@ class WikipediaAPI {
 	  // this select seems too slow.	
 	    db.eachRow (WikipediaDB.getSelectCategoryDocumentIDandTitleFromPageDocumentID(this.lang), [id])  {row -> 
 	        newid = row[0]
-	        newtitle = row[1]
+	        newtitle = new String(row[1],"UTF-8" )
 	    }
 		if (newid == null) return null 
 		return new WikipediaDocument(newid, newtitle, this.lang)
@@ -242,7 +252,7 @@ class WikipediaAPI {
 		db.eachRow (WikipediaDB.getSelectCategoryDocumentIDandTitleFromPageDocumentTitle(this.lang), 
 			[withUnderscore(title)]) {row -> 
 		    newid = row[0]
-		    newtitle = row[1]
+		    newtitle = new String(row[1], "UTF-8")
 		}
 		if (!newid) return null 
 		//println "id: $newid title=$newtitle"
@@ -270,7 +280,7 @@ class WikipediaAPI {
 	   // get the title, the categories, the links. 
 	   def res = []
 	   db.eachRow(WikipediaDB.getSelectPageIdTitleWithCategory(this.lang), [withUnderscore(title) ]) {row -> 
-	      res += new WikipediaDocument(row[0], row[1], this.lang)} 
+	      res += new WikipediaDocument(row[0], new String(row[1], "UTF-8"), this.lang)} 
 	   return res
 	}
 
@@ -284,7 +294,7 @@ class WikipediaAPI {
 	   // get the title, the categories, the links. 
 	   def title = null
 	   db.eachRow(WikipediaDB.getSelectTitleFromPageID(this.lang), [id])
-	      {row -> title = row[0]}
+	      {row -> title = new String(row[0], "UTF-8")}
 	     // {row -> title = ISO88591toUTF8.convertBadISO88591(row[0])}
 	   if (!title) return null
 	   return new WikipediaDocument(id, title, this.lang) 
@@ -350,7 +360,7 @@ class WikipediaAPI {
 	     def inlinksFromDB = [] 
 	     db.eachRow (WikipediaDB.getSelectInlinkIDandTitleFromPageID(this.lang), [id]) {row -> 
 	          inlinksFromDB += [source_id:row[0], 
-	           source_title:withoutUnderscore(row[1]) ] 
+	           source_title:withoutUnderscore(new String(row[1], "UTF-8")) ] 
 	          // source_title:ISO88591toUTF8.convertBadISO88591(withoutUnderscore(row[1])) ] 
 	      }
 	     return inlinksFromDB 
@@ -369,7 +379,7 @@ class WikipediaAPI {
 	     db.eachRow (WikipediaDB.getSelectOutlinkIDandTitlePagesFromPageID(this.lang), [id]) {row -> 
 	          def nrow = 
 	          outlinksFromDB += [target_id:row[0],
-	           target_title:withoutUnderscore(row[1]) ] 
+	           target_title:withoutUnderscore(new String(row[1], "UTF-8")) ] 
 //	          target_title:ISO88591toUTF8.convertBadISO88591(withoutUnderscore(row[1])) ] 
 	      }
 	     return outlinksFromDB 

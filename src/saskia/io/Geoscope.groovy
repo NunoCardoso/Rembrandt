@@ -108,16 +108,23 @@ class Geoscope {
 
 	public Map toMap() {
 	    return ['geo_id':geo_id, 'geo_name':geo_name, 'geo_woeid':geo_woeid,
-	    'geo_woeid_place':geo_woeid_place, 'geo_woeid_parent':geo_woeid_parent, 'geo_woeid_ancestors':geo_woeid_ancestors,
-	   'geo_woeid_belongsto':geo_woeid_belongsto, 'geo_woeid_neighbors':geo_woeid_neighbors, 'geo_woeid_siblings':geo_woeid_siblings,
-	   'geo_woeid_children':geo_woeid_children, 'geo_geonetpt02':geo_geonetpt02] 
+	    'geo_woeid_place':geo_woeid_place, 'geo_woeid_parent':geo_woeid_parent, 
+		 'geo_woeid_ancestors':geo_woeid_ancestors,
+	    'geo_woeid_belongsto':geo_woeid_belongsto, 'geo_woeid_neighbors':geo_woeid_neighbors, 
+		 'geo_woeid_siblings':geo_woeid_siblings,
+	    'geo_woeid_children':geo_woeid_children, 'geo_geonetpt02':geo_geonetpt02] 
 	}
+	
+	public Map toSimpleMap() {
+	    return ['geo_id':geo_id, 'geo_name':geo_name, 'geo_woeid':geo_woeid]
+	}
+	
 	
 	boolean equals(Entity e) {
 		return this.toMap().equals(e.toMap())
 	}
 	                
-	 static Map getGeoscopes(limit = 10, offset = 0, column = null, needle = null) {
+	 static Map listGeoscopes(limit = 10, offset = 0, column = null, needle = null) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10
 		if (!offset) offset = 0

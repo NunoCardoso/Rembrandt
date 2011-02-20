@@ -33,6 +33,8 @@ import rembrandt.util.XMLUtil
  */
 class SecondHAREMDocumentWriter extends Writer {
     
+    String afterSentenceEnd = "\n" // little space
+
     public SecondHAREMDocumentWriter(StyleTag style) {
 	super(style)
     }

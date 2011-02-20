@@ -1,0 +1,97 @@
+<configuration>
+  <!-- global configuration -->
+  <property>
+    <name>global.lang</name>
+    <value>pt</value>
+  </property>
+
+  <property>
+    <name>rembrandt.home.dir</name>
+    <value>/Users/ncardoso/Rembrandt</value>
+    <description>Homebase of REMBRANDT stuff</description>
+  </property>   
+
+   <property>
+    <name>rembrandt.output.styletag.lang</name> <value>pt</value>
+    <description>Language of NE tags</description>
+   </property>
+
+   <property>
+    <name>renoir.collection.index.default</name> <value>col-7</value>
+    <description>the default index within ${rembrandt.home.dir}/index/ to be used in queries</description>
+   </property>
+
+ <property>
+    <name>saskia.wikipedia.db.url</name> <value>jdbc:mysql://127.0.0.1</value>
+    <description>URL for MySQL running Saskia DB. Default: jdbc:mysql://127.0.0.1</description>
+   </property>
+
+  <property>
+    <name>saskia.dbpedia.enabled</name> <value>true</value>
+   </property>
+
+ <property>
+    <name>saskia.dbpedia.version</name> <value>3.5.1</value>
+    <description>This is for internal load of the ontology and reasoning stuff.</description>
+   </property>
+
+ <property>
+    <name>saskia.dbpedia.mode</name> <value>webservice</value>
+   </property>
+
+  <property>
+<!--    <name>saskia.dbpedia.url</name> <value>http://xldb.di.fc.ul.pt/dbpedia/sparql</value> -->
+    <name>saskia.dbpedia.url</name> <value>http://dbpedia.org/sparql</value>                
+    <description>use http:</description> 
+   </property>
+
+  <property>
+    <name>saskia.dbpedia.proxy.enabled</name> <value>false</value>
+  </property>
+
+  <property>
+    <name>rembrandt.core.doEntityRelation</name> <value>true</value>
+  </property>
+
+   <property>
+    <name>saskia.db.name</name> <value>saskia</value>
+  </property>
+
+  <property>
+    <name>saskia.wikipedia.db.name</name> <value>wikipedia</value>
+  </property>
+
+  <property>
+    <name>saskia.geoplanet.apikey</name> 
+    <value>4BRSnHPV34HYpwBrOfGATRwQnVKjocXU9ptBmEidG7UBOQF4LzCwdvHVipMZ_W8C8Fym</value>
+    <description>Yahoo! GeoPlanet API key</description>
+  </property>
+
+  <property>
+    <name>saskia.geoplanet.proxy.enabled</name><value>false</value>
+  </property>
+
+  <property>
+    <name>saskia.geoplanet.proxy.host</name><value>proxy.di.fc.ul.pt</value>
+  </property>
+
+  <property>
+    <name>saskia.geoplanet.proxy.port</name><value>3128</value>
+  </property>
+
+   <property>
+    <name>saskia.geoplanet.lastversiondate</name>
+    <value>Thu Jan 01 01:00:00 CET 1970</value>
+    <description>When there is a WOEID entry on SaskiaDB and is fresher than this date, 
+    use cache instead of GeoPlanet API to save API calls.
+    default: Thu Jan 01 01:00:00 CET 1970 (that is, use always cache when possible)</description>
+  </property>
+
+  <property>
+   <name>saskia.import.max_allowed_html_size</name>
+   <value>1000000</value>
+   <description>Value, in bytes, of max	doc size</description>
+  </property>
+
+ </configuration>
+   

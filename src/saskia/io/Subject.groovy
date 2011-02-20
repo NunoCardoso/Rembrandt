@@ -24,7 +24,7 @@ import rembrandt.obj.Sentence
 
 class Subject {
 
-	static String sbj_table = "subject"
+	static String tablename = "subject"
 	Long sbj_id
 	String sbj_subject
 	Map<String,String> subject
@@ -57,12 +57,12 @@ class Subject {
 	
 	static int deleteSubject(Long id) {
 	    Subject s = Subject.getFromID(id)
-	    return s.deleteSubject()
+	    return s?.removeThisFromDB()
 	}
 		
-	public int deleteSubject() {
+	public int removeThisFromDB() {
 	    if (!sbj_id) return null
-	    def res = db.getDB().executeUpdate("DELETE FROM ${sbj_table} WHERE sbj_id=?", [sbj_id])
+	    def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE sbj_id=?", [sbj_id])
 	    cacheSubject.each{key, valuelist -> 
 	         if (valuelist.contains(this)) cacheSubject[key].remove(this)
 	    }
@@ -74,13 +74,13 @@ class Subject {
 	    return ['sbj_id':sbj_id, 'sbj_subject':sbj_subject, 'subject':subject]
 	}
 
-	static Map getSubjects(limit = 10, offset = 0, column = null, needle = null) {
+	static Map listSubjects(limit = 10, offset = 0, column = null, needle = null) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10
 		if (!offset) offset = 0
 			
 		String where = ""
-		String from = " FROM ${sbj_table}"	
+		String from = " FROM ${tablename}"	
 		List params = []	
 		if (column && needle) {
 		    switch (type[column]) {
@@ -111,7 +111,7 @@ class Subject {
 	static List makeConceptList(String lang) {
 	    List res = []
 	      
-	    db.getDB().eachRow("select * from ${sbj_table}", [],  {row ->
+	    db.getDB().eachRow("select * from ${tablename}", [],  {row ->
 	    	// Make Subject object
 		Subject s = new Subject(sbj_id:row['sbj_id'], sbj_subject:row['sbj_subject'])
 		s.subject = Subject.parseSubject(s.sbj_subject) 
@@ -163,12 +163,21 @@ class Subject {
 	   if (!sbj_id) return null
 	   if (cacheID.containsKey(sbj_id)) return cacheID[sbj_id]
 	   
-	   Subject sbj = queryDB("SELECT * FROM ${sbj_table} WHERE sbj_id=?", [sbj_id])?.getAt(0)
+	   Subject sbj = queryDB("SELECT * FROM ${tablename} WHERE sbj_id=?", [sbj_id])?.getAt(0)
 	   log.debug "Querying for sbj_id $sbj_id got Subject $sbj." 
 	   cacheID[sbj_id] = sbj
 	   Subject.addToSubjectCache(sbj)
 	  
 	   if (sbj.sbj_id) return sbj else return null
+	}	
+	
+   static List<Subject> getFromSubject(String subject) {
+	   if (!subject) return null
+	   
+	   List<Subject> sbj = queryDB("SELECT * FROM ${tablename} WHERE sbj_subject=?", [subject])
+	   log.debug "Querying for sbj_subject $subject got Subject $sbj." 
+	   
+	   return sbj
 	}	
 	
 	/** Get a Subject from subject.
@@ -200,7 +209,7 @@ class Subject {
 	   }
 	   
 	   String needle = "%${lang}:${subject_terms}%"
-	   List<Subject> sbjs = queryDB("SELECT * FROM ${sbj_table} WHERE sbj_subject LIKE ?", [needle])
+	   List<Subject> sbjs = queryDB("SELECT * FROM ${tablename} WHERE sbj_subject LIKE ?", [needle])
 	   log.debug "Querying for $subject_terms in lang $lang got Subjects $sbjs." 
 	   if (sbjs) {
 	       sbjs.each{sbj -> 
@@ -244,7 +253,7 @@ class Subject {
 	        case 'String': newvalue = value; break
 	        case 'Long': newvalue = Long.parseLong(value); break
 	    }
-	    def res = db.getDB().executeUpdate("UPDATE ${sbj_table} SET ${column}=? WHERE sbj_id=?",[newvalue, sbj_id])
+	    def res = db.getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE sbj_id=?",[newvalue, sbj_id])
 	    cacheSubject.each{key, valuelist -> 
 	    	int index = valuelist.indexOf(this)
 	        if (index) cacheSubject[key][index][column] = newvalue
@@ -257,8 +266,8 @@ class Subject {
 	 * return 1 if successfully inserted.
 	 */	
 	public long addThisToDB() {
-	    	if (!subject) throw new IllegalStateException ("I have to parse subject before putting in the DB!")
-		def res = db.getDB().executeInsert("INSERT INTO ${sbj_table} VALUES(0,?)", [sbj_subject])
+	   if (!subject) throw new IllegalStateException ("I have to parse subject before putting in the DB!")
+		def res = db.getDB().executeInsert("INSERT INTO ${tablename} VALUES(0,?)", [sbj_subject])
 		
 		// add to the cache. Check both en and pt strings, add to cache
 		this.sbj_id = (long)res[0][0]

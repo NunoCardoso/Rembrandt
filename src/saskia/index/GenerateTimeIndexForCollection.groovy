@@ -50,8 +50,8 @@ class GenerateTimeIndexForCollection {
     static Logger log = Logger.getLogger("IndexGeneration")
     static String timeIndexDirLabel = "time-index" 
     static String collectionLabel = "col" 
-    static String luceneIndexFieldLabel = "tg-index" 
-    static final int DOC_POOL_SIZE=10000
+    static String time_label = conf.get("saskia.index.time_label","tg") 
+    int doc_pool_size = conf.getInt("saskia.index.time.doc_pool_size",10000)
     static LgteIndexWriter timewriter // Hash of indexes
 
    // static List<SemanticClassification> allowedClasses = [ ]
@@ -68,14 +68,14 @@ class GenerateTimeIndexForCollection {
     // indexdir goes to ${rembrandt.home.dir}/index/col-X/
     public GenerateTimeIndexForCollection(Collection collection, String lang, String indexdir) {
         
-	this.collection=collection
+		this.collection=collection
         this.lang=lang
         this.indexdir=indexdir
         
         analyzerMap = [:]
-        analyzerMap.put(Globals.DOCUMENT_ID_FIELD, new LgteNothingAnalyzer())
-        //analyzerMap.put("time-index", new LgteNothingAnalyzer())
-        analyzerMap.put("tg-index", LgteAnalyzerManager.getInstance().getLanguagePackage(
+    	analyzerMap.put(conf.get("saskia.index.id_label","id"), new LgteNothingAnalyzer())
+    	analyzerMap.put(conf.get("saskia.index.docid_label","docid"), new LgteNothingAnalyzer())
+    	analyzerMap.put(time_label, LgteAnalyzerManager.getInstance().getLanguagePackage(
         "English", "snowball-english.list").getAnalyzerNoStemming())
 
         analyzer = new LgteBrokerStemAnalyzer(analyzerMap)
@@ -103,9 +103,9 @@ class GenerateTimeIndexForCollection {
         log.debug "Total number of docs in the collection: "+stats['total']
         docstats.totalDocs = stats['total']
         
-        for (int i=stats['total']; i > 0; i -= DOC_POOL_SIZE) {
+        for (int i=stats['total']; i > 0; i -= doc_pool_size) {
             
-            int limit = (i > DOC_POOL_SIZE ? DOC_POOL_SIZE : i)
+            int limit = (i > doc_pool_size ? doc_pool_size : i)
             log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
             
             List ts = DocTimeSignature.getBatchOfTimeSignatures(collection, limit, stats["processed"])
@@ -123,14 +123,15 @@ class GenerateTimeIndexForCollection {
                 TimeSignature timesig = new TimeSignature(t)
                 
                 LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
-                ldoc.storeUtokenized(Globals.DOCUMENT_ID_FIELD, timesig.doc_original_id)
+                ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), timesig.doc_original_id)
+                ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), timesig.doc_id.toString())
 
                 log.trace "ldoc with doc_original_id $timesig.doc_original_id"
                 
                 /*****  NEs in body ******/
                 timesig.timelist.each{time -> 
                     log.trace "Adding "+time.idx.toString()
-                    ldoc.indexString(luceneIndexFieldLabel, time.idx.toString())                    
+                    ldoc.indexString(time_label, time.idx.toString())                    
                 }
                 
                 timewriter.addDocument(ldoc)                                   

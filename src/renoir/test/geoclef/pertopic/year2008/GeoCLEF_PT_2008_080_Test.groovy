@@ -105,7 +105,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:080 contents:"políticos" contents:exilados contents:"Alemanha" woeid-index:23424829
+label:080 contents:"políticos" contents:exilados contents:"Alemanha" woeid:23424829
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

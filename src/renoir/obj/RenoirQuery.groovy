@@ -16,6 +16,7 @@
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
 package renoir.obj
+import saskia.bin.Configuration
 import pt.utl.ist.lucene.analyzer.LgteBrokerStemAnalyzer
 import pt.utl.ist.lucene.LgteIndexSearcherWrapper
 import pt.utl.ist.lucene.QueryConfiguration
@@ -36,13 +37,24 @@ class RenoirQuery {
     public Map paramsForLGTE = [:] // gets index weights
     public Map paramsForQueryConfiguration = [:]
     public String queryString = null
+	
+	// if some field is used as filters, acknowledge here. 
+	// RenoirQueryParser is the one responsible for filling this if there is filtering to do.
+	
+	 public boolean hasFilters = false
+	 public List filters = null
+	
     // used to contain all terms used for indexes: term, NE, signatures!
     public Sentence sentence // List<RenoirQueryTerm>, a specialization of List<Term>
-    
+    Configuration conf = Configuration.newInstance()
+	 String contents_label = conf.get("saskia.index.contents_label","contents")
+
+
+	// note that filtering fields will NOT show here
     String printQueryTermString(Sentence sentence) {
-	 if (!sentence) return ""
-	 StringBuffer s = new StringBuffer()
-	 sentence.eachWithIndex{t, i -> 
+	 	if (!sentence) return ""
+	 	StringBuffer s = new StringBuffer()
+	 	sentence.eachWithIndex{t, i -> 
 	     // if it's the end sentence or not, let's look ahead 
 	     boolean lastSentenceTerm = (i == (sentence.size() -1) ? true : 
  		 sentence[i+1].phraseBIO != "I" ? true : false)
@@ -67,23 +79,44 @@ class RenoirQuery {
     
     /** useful to debug */
     public String toString() {
-	StringBuffer s = new StringBuffer()
-        if (paramsForRenoir) paramsForRenoir.each{k, v -> s.append("$k:$v ")}
-        if (paramsForLGTE) paramsForLGTE.each{k, v -> 
-	      
-					s.append("$k:$v ")
-				
-			}
-        if (paramsForQueryConfiguration) paramsForQueryConfiguration.each{k, v -> 
+		StringBuffer s = new StringBuffer()
+      if (paramsForRenoir) paramsForRenoir.each{k, v -> s.append("$k:$v ")}
+      if (paramsForLGTE) paramsForLGTE.each{k, v ->    
+			s.append("$k:$v ")	
+		}
+      if (paramsForQueryConfiguration) paramsForQueryConfiguration.each{k, v -> 
 
-				// let's just make an hack for model.field.boost stuff
-				def mx = k =~ /^model.field.boost.(.*)$/
-				if (mx.matches()) {
-					s.append(""+mx.group(1)+"-weight:$v ")
-				} else { 		
-					 s.append("$k:$v ")
-				}
-        }     
+			// let's just make an hack for model.field.boost stuff
+			def mx = k =~ /^model.field.boost.(.*)$/
+			if (mx.matches()) {
+				s.append(""+mx.group(1)+"-weight:$v ")
+			} else { 		
+				 s.append("$k:$v ")
+			}
+       }
+
+       if (hasFilters) {
+			filters.eachWithIndex{t, i -> 
+				 // if it's the end sentence or not, let's look ahead 
+	     		boolean lastFilterTerm = (i == (filters.size() -1) ? true : 
+ 		 		  filters[i+1].phraseBIO != "I" ? true : false)
+ 	      
+ 	     		switch (t.phraseBIO) {
+ 	     			case "O": 
+ 		 			s.append ("{filter}${t.field}:${t.text}"+(t.weight ? "^"+t.weight : "")+" ")
+             break
+ 	     		case "B": 
+ 		 		s.append "{filter}${t.field}:\"${t.text}"+(lastFilterTerm ? "\""+
+ 			 (t.weight ? "^"+t.weight : "") : "")+" " 
+             break
+ 	     case "I": 
+ 		 s.append "${t.text}"+(lastFilterTerm ? "\""+
+        	     (t.weight ? "^"+t.weight : "") : "")+" "
+             break
+ 	     }
+			}
+		 }
+
         s.append printQueryTermString(sentence)
         return s.toString().trim()
     }
@@ -95,9 +128,7 @@ class RenoirQuery {
     public String toLgteTermString() {
         StringBuffer s = new StringBuffer()  
         if (paramsForLGTE) paramsForLGTE.each{k, v -> 
-			
 					s.append("$k:$v ")
-				
 			}
 			s.append printQueryTermString(sentence)
         return s.toString()
@@ -108,17 +139,29 @@ class RenoirQuery {
         Sentence newsentence = new Sentence(sentence.index)
         sentence?.each{t -> 
       // println "A verificar lang $lang t.index = ${t.index} t.text ${t.text}" 
-            if (t.field == Globals.LUCENE_DEFAULT_FIELD && t.phraseBIO == "O" &&  
+            if (t.field == contents_label && t.phraseBIO == "O" &&  
         	    (Stopwords.stopwords[lang].contains(t.text) ||
         	    (t.text ==~ /[\Q.,:;-!?(){}[]\E]/ )) ) {} else {
         			newsentence << t
             }
         }
         sentence = newsentence
+
+		  List<RenoirQueryTerm> newfilters = []
+		  filters?.each{t ->
+				if (t.field == contents_label && t.phraseBIO == "O" &&  
+        	    (Stopwords.stopwords[lang].contains(t.text) ||
+        	    (t.text ==~ /[\Q.,:;-!?(){}[]\E]/ )) ) {} else {
+        			newfilters << t
+            }
+			}
+			filters = newfilters
+			if (filters == []) filters = null 
+		
     }
      
     public Question convertToQuestion(String lang) {	
-	return new Question(sentence, lang)
+		return new Question(sentence, lang)
     }
     
     /**

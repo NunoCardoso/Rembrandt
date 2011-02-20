@@ -67,7 +67,7 @@ class NE {
 	   return (res ? res : null)
 	}
 		
-	static Map getNEs(limit = 10, offset = 0, column = null, needle = null) {
+	static Map listNEs(limit = 10, offset = 0, column = null, needle = null) {
 	    // limit & offset can come as null... they ARE initialized...
 	    if (!limit) limit = 10
 	    if (!offset) offset = 0
@@ -256,27 +256,30 @@ class NE {
 	   	    return null
         }
        
-       static NE addThisToDB(Long nen_id, String lang, 
-	       Long nec_id, Long net_id, Long nes_id, Long ent_id) {
+       static NE addThisToDB(Long nen_id, String lang, Long nec_id, Long net_id, Long nes_id, Long ent_id) {
         
-	   NE ne = new NE()
+	   		NE ne = new NE()
 
-	   ne.ne_name = NEName.getFromID(nen_id)
-	   ne.ne_lang = lang
-	   ne.ne_category = (nec_id ? NECategory.getFromID(nec_id) : null)
-	   ne.ne_type = (net_id ? NEType.getFromID(net_id) : null)
-	   ne.ne_subtype = (nes_id ? NESubtype.getFromID(nes_id) : null)
-	   ne.ne_entity = (ent_id ? Entity.getFromID(ent_id) : null)
-    
-	   def res = db.getDB().executeInsert(
+	   		ne.ne_name = NEName.getFromID(nen_id)
+	   		ne.ne_lang = lang
+	   		ne.ne_category = (nec_id ? NECategory.getFromID(nec_id) : null)
+	   		ne.ne_type = (net_id ? NEType.getFromID(net_id) : null)
+	   		ne.ne_subtype = (nes_id ? NESubtype.getFromID(nes_id) : null)
+	   		ne.ne_entity = (ent_id ? Entity.getFromID(ent_id) : null)
+    			ne.ne_id = ne.addThisToDB()
+				return ne
+			}
+			
+			public Long addThisToDB() {
+	   		def res = db.getDB().executeInsert(
             "INSERT INTO ${ne_table}(ne_id, ne_name, ne_lang, ne_category, "+
             "ne_type, ne_subtype, ne_entity) VALUES(0,?,?,?,?,?,?)", 
-            [nen_id, lang, nec_id, net_id, nes_id, ent_id])	
+            [ne_name.nen_id, ne_lang, ne_category.nec_id, ne_type?.net_id, ne_subtype?.nes_id, ne_entity?.ent_id])	
 
-            ne.ne_id = (long)res[0][0]
-            neKeyCache[ne.getKey()] = ne
-            return ne
-    }
+            ne_id = (long)res[0][0]
+            neKeyCache[getKey()] = this
+            return ne_id
+    		}
        
        public updateNEName(NEName new_ne_name) {
 	   println "updateNEName: replacing $ne_name into $new_ne_name for ne_id $ne_id" 
@@ -359,7 +362,7 @@ class NE {
 		if (!c3 || c3 == "undefined" || c3 == "null") {c3 = null; c3q=" IS NULL"} else {args << c3; c3q="=?"}
 		
 		String query = "SELECT * FROM ne, ne_name, ne_category, ne_type, ne_subtype, "+
-		"doc_has_ne, collection_has_doc WHERE chd_collection=? and chd_document=dhn_doc and "+
+		"doc_has_ne, doc WHERE doc_collection=? and doc_id=dhn_doc and "+
 		"dhn_sentence=? AND dhn_term=? AND dhn_ne=ne_id AND ne_name=nen_id AND "+
 		"nen_name=? and ne_category=nec_id and ne_type=net_id and ne_subtype=nes_id AND "+
 		"nec_category$c1q and net_type$c2q and nes_subtype$c3q"

@@ -44,16 +44,9 @@ class SaskiaStats {
 	 	i18n =  I18n.newInstance()	 	
   }
      
-     public String renderFrontPage(collection, String lang) {
+     public String renderFrontPage(Collection collection, String lang) {
 	 	StringBuffer s = new StringBuffer()
-	 	Collection collection_
-	 	if (collection instanceof String) collection_ = Collection.getFromName(collection)
-	 	if (collection instanceof Collection) collection_ = collection
-	 	if (collection instanceof Long) collection_ = Collection.getFromID(collection)
- 	 	if (!collection_) {
-	 	    log.error "Collection $collection unknown. Exiting."
-	 	    return null
-	 	}
+	 	
 	 	dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
 	 	log.debug "Asking cache for ${SaskiaStats.statsFrontPage}, ${collection_}, ${lang}"
 	 	Cache c = Cache.getFromIDAndCollectionAndLang(SaskiaStats.statsFrontPage, collection_, lang)

@@ -142,6 +142,55 @@ class NamedEntity {
 	  field:(field ? field.clone() : null) // can't clone null objects...
       )
   }
+
+  /** removes classification from this */ 
+  void removeClassification(SemanticClassification that_cl) {
+      //println "that_cl: $that_cl"
+
+      List<SemanticClassification> classificationsToRemove = []
+      // let's check the hierarchy level of disambiguation
+      CC level = that_cl.s ? CC.Subtype : (that_cl.t ? CC.Type : CC.Category ) 
+ 
+      classification.eachWithIndex{this_cl, i ->
+      
+	 		String veredict = this_cl.compareTo(that_cl)
+	 		//println "veredict: $veredict, level: $level"
+	 		switch(level) {
+
+	 case CC.Category: 
+		 // eliminate everything that's not CATEGORY DIFFERENT 
+	     if (!(veredict.equals("CATEGORY DIFFERENT"))) classificationsToRemove << this_cl
+	 break
+	 
+	 case CC.Type:		 
+			 // eliminate everything that's not TYPE DIFFERENT
+	     if ( ! (veredict.equals("TYPE DIFFERENT") || veredict.equals("CATEGORY DIFFERENT") || 
+				 veredict.equals("CATEGORY BROADER") || veredict.equals("TYPE BROADER") )  )	
+				classificationsToRemove << this_cl
+	break
+	 
+	 case CC.Subtype:
+			 // eliminate everything that's not SUBTYPE DIFFERENT
+	     if ( ! ( veredict.equals("TYPE DIFFERENT") || veredict.equals("CATEGORY DIFFERENT") 
+				|| veredict.equals("SUBTYPE DIFFERENT") ||  veredict.equals("CATEGORY BROADER") || 
+				veredict.equals("TYPE BROADER") || veredict.equals("SUBTYPE BROADER") ) )  	
+				classificationsToRemove << this_cl
+	 
+	 break 
+	 }//end switch                                                              
+      }// each classification
+      
+     //println "classificationsToRemove $classificationsToRemove"
+     //println "classification1: $classification"
+     classificationsToRemove.each{cl -> 
+         this.classification = this.classification - cl
+         //println "classification2: $classification"
+	 if (wikipediaPage.containsKey(cl)) wikipediaPage.remove(cl)
+	 if (dbpediaPage.containsKey(cl)) dbpediaPage.remove(cl)		 
+      }
+    //println "classification3: $classification"
+
+  }
   
   /** filters own classifications  */ 
   void disambiguateClassificationFrom(SemanticClassification that_cl) {
@@ -754,15 +803,12 @@ class NamedEntity {
       switch(level) {
      
       case Level.DEBUG:  
-        return "NE:"+(id ? "$id:" : "" )+terms.toString()+"$sentenceIndex:$termIndex:"+
-        classification
-        
+        return toStringDebugLevel()   
       break
      
       case Level.TRACE:
-      return "NE:"+(id ? "$id:" : "" )+terms.toString()+"$field:$sentenceIndex:$termIndex:"+
-        classification  + ( (alt == null) ? "" : "alt(${alt}):")+( (subalt ==-1) ? "" : "subalt($subalt):")+
-        "history:\n"+this.printHistory()
+			return  toStringTraceLevel()  
+      
       break 
       
       default:  
@@ -770,4 +816,15 @@ class NamedEntity {
       break
       }
   }
+
+  public String toStringDebugLevel() {
+	 return "NE:"+(id ? "$id:" : "" )+terms.toString()+"$sentenceIndex:$termIndex:"+
+        classification
+	}
+	
+	public String toStringTraceLevel() {
+		 return "NE:"+(id ? "$id:" : "" )+terms.toString()+"$field:$sentenceIndex:$termIndex:"+
+        classification  + ( (alt == null) ? "" : "alt(${alt}):")+( (subalt ==-1) ? "" : "subalt($subalt):")+
+        "history:\n"+this.printHistory()
+}
 }

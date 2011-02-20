@@ -103,7 +103,7 @@ label:075 Violações dos direitos humanos na antiga Birmânia
 
 		println refq.toString()
 		String reformulated_x = """
-label:061 contents:Acidentes contents:avião contents:perto contents:cidades contents:"Rússia" woeid-index:23424936
+label:061 contents:Acidentes contents:avião contents:perto contents:cidades contents:"Rússia" woeid:23424936
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

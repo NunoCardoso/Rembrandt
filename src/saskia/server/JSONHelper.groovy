@@ -36,7 +36,13 @@ public class JSONHelper {
 			ret = "null"
 		}
 		else if (obj instanceof String) {
-			def escaped = obj.replace("\"", "\\\"")
+//			def escaped = obj.replace("\"", "\\\"")
+// diferença entre replace e replaceAll, é que o primeiro não interpreta regex			
+//			ret = "\"${escaped}\""
+			def escaped = obj.replace("\"", "\\\"") 
+			// importante para manter o escape do formato REMBRANDT
+			escaped = escaped.replace("\\[", "\\\\[")
+			escaped = escaped.replace("\\]", "\\\\]")
 			ret = "\"${escaped}\""
 		}
 		else if (obj instanceof Date || obj instanceof DocStatus) {

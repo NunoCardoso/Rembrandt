@@ -104,7 +104,7 @@ label:100 Desastres naturais no Oeste dos Estados Unidos
 	
 		println refq.toString()
 		String reformulated_x = """
-label:084 contents:Atentados contents:bomba contents:"Irlanda do Norte" woeid-index:20070563
+label:084 contents:Atentados contents:bomba contents:"Irlanda do Norte" woeid:20070563
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

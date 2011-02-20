@@ -108,7 +108,7 @@ label:100 Natural disasters in the western USA
 
 		println refq.toString()
 		String reformulated_x = """
-label:086 contents:most contents:visited contents:sights contents:capital contents:"France" contents:its contents:vicinity woeid-index:23424819
+label:086 contents:most contents:visited contents:sights contents:capital contents:"France" contents:its contents:vicinity woeid:23424819
 
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 

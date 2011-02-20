@@ -34,6 +34,9 @@ class RembrandtWriter extends Writer {
     String openTermSymbol = "["
     String closeTermSymbol = "]"
     
+    String beforeSentenceBegin = ""
+    String afterSentenceEnd = "" 
+
     public RembrandtWriter(StyleTag style) {
 	super(style)
     }

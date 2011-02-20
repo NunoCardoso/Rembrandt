@@ -85,7 +85,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:045 contents:turismo contents:nordeste contents:"Brasil" woeid-index:23424768
+label:045 contents:turismo contents:nordeste contents:"Brasil" woeid:23424768
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

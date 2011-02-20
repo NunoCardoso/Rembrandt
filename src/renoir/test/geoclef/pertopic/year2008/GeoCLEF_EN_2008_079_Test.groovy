@@ -109,7 +109,7 @@ label:100 Natural disasters in the western USA
 // can't find Sahara in GeoPlanet, its' better that way...
 		println refq.toString()
 		String reformulated_x = """
-label:079 contents:invasion contents:"East Timor" contents:capital contents:"Indonesia" woeid-index:23424968 woeid-index:23424846"""
+label:079 contents:invasion contents:"East Timor" contents:capital contents:"Indonesia" woeid:23424968 woeid:23424846"""
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 
 }

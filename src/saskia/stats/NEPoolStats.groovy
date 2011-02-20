@@ -46,8 +46,8 @@ class NEPoolStats {
     List getRandomNE(int amount = 1) {
 		List res=[]
 		db.getDB().eachRow("SELECT ne_id, nen_name, nec_category, net_type, nes_subtype "+
-		"FROM collection_has_doc, doc_has_ne, ne_name, ne, ne_category, ne_type, ne_subtype "+
-		"WHERE chd_collection=? and chd_document=dhn_doc and dhn_ne =ne_id AND "+
+		"FROM doc, doc_has_ne, ne_name, ne, ne_category, ne_type, ne_subtype "+
+		"WHERE doc_collection=? and doc_id=dhn_doc and dhn_ne =ne_id AND "+
 		"ne_name=nen_id and ne_category=nec_id and "+
 		"ne_type=net_id and ne_subtype=nes_id order by RAND() LIMIT ${amount}", [collection.col_id], {row -> 
 			res << ["id":row['ne_id'], "name":row['nen_name'], "category":row['nec_category'],
@@ -60,8 +60,8 @@ class NEPoolStats {
 
 		StringBuffer res = new StringBuffer()
 		db.getDB().eachRow("SELECT ne_id, nen_name, nec_category, net_type, nes_subtype, count(dhn_ne) as c "+
-		"FROM collection_has_doc, doc_has_ne, ne_name, ne, ne_category, ne_type, ne_subtype WHERE "+
-		"chd_collection=? AND chd_document=dhn_doc AND dhn_ne = ne_id AND ne_name=nen_id AND ne_category=nec_id "+
+		"FROM doc, doc_has_ne, ne_name, ne, ne_category, ne_type, ne_subtype WHERE "+
+		"doc_collection=? AND doc_id=dhn_doc AND dhn_ne = ne_id AND ne_name=nen_id AND ne_category=nec_id "+
 		"AND ne_type=net_id AND ne_subtype=nes_id group by dhn_ne order by c desc LIMIT ${limit}",
 		[collection.col_id], {row -> 
 			res.append "<P><B>${row['c']}</B> - <B><A HREF='#' NEID='${row['ne_id']}' CLASS='DETAILNE'>${row['nen_name']}</A></B>";
@@ -100,7 +100,7 @@ class NEPoolStats {
 		StringBuffer res = new StringBuffer()
 		
 		db.getDB().eachRow("SELECT nec_category, count(nec_category) as c FROM doc_has_ne, "+
-		"ne, ne_category, collection_has_doc WHERE chd_collection=? and chd_document=dhn_doc and "+
+		"ne, ne_category, doc WHERE doc_collection=? and doc_id=dhn_doc and "+
 		"dhn_ne = ne_id and ne_category=nec_id GROUP BY "+
 		"nec_category order by c desc", [collection.col_id],  {row -> 
 			res.append "<TR>\n\t<TH>${row['nec_category']}</TH>\n\t<TD>${row['c']}</TD>\n</TR>\n"
@@ -136,8 +136,8 @@ class NEPoolStats {
     String getNEnamesForEntity(long entity_id) {
 		StringBuffer res = new StringBuffer()
 		db.getDB().eachRow("SELECT ne_id, nen_name, nec_category, net_type, nes_subtype, count(dhn_ne) as c "+
-		"FROM collection_has_doc, doc_has_ne, ne_name, ne, ne_category, ne_type, ne_subtype WHERE "+
-		"chd_collection=? and chd_document=dhn_doc and dhn_ne = ne_id and ne_name=nen_id and "+
+		"FROM doc, doc_has_ne, ne_name, ne, ne_category, ne_type, ne_subtype WHERE "+
+		"doc_collection=? doc_id=dhn_doc and dhn_ne = ne_id and ne_name=nen_id and "+
 		"ne_category=nec_id and ne_type=net_id "+
 		"and ne_subtype=nes_id and ne_entity=? group by dhn_ne order by c desc", [collection.col_id, entity_id], 
 		{row ->
@@ -159,7 +159,7 @@ class NEPoolStats {
 	    List l = []
 		db.getDB().eachRow("SELECT ne2.ne_id, nen_name, nec_category, net_type, nes_subtype, count(n2.dhn_ne) as c "+
 		"FROM ne_name, ne_category, ne_type, ne_subtype, doc_has_ne as n1, doc_has_ne n2, ne as ne1, ne as ne2, "+
-		"collection_has_doc WHERE chd_collection=? AND chd_document=n1.dhn_doc AND n1.dhn_doc = n2.dhn_doc AND "+
+		"doc WHERE doc_collection=? AND doc_id=n1.dhn_doc AND n1.dhn_doc = n2.dhn_doc AND "+
 		"n1.dhn_sentence= n2.dhn_sentence AND n1.dhn_term != n2.dhn_term AND n1.dhn_ne=? AND n2.dhn_ne=ne2.ne_id "+
 		"AND ne2.ne_id!=ne1.ne_id AND ne2.ne_name=nen_id and ne2.ne_category=nec_id AND ne2.ne_type=net_id AND "+
 		"ne2.ne_subtype=nes_id GROUP BY n2.dhn_ne order by c desc LIMIT ${limit}", [collection.col_id, ne_id], {row -> 
@@ -188,8 +188,8 @@ class NEPoolStats {
 		StringBuffer s = new StringBuffer()
 		//println ne_id
 		ne_ids.each{ne_id -> 
-			db.getDB().eachRow("SELECT dhn_doc, count(dhn_doc) as c, doc_date_created FROM collection_has_doc, "+
-			"doc, doc_has_ne WHERE chd_collection=? and chd_document=doc_id AND doc_id=dhn_doc "+
+			db.getDB().eachRow("SELECT dhn_doc, count(dhn_doc) as c, doc_date_created FROM "+
+			"doc, doc_has_ne WHERE doc_collection=? AND doc_id=dhn_doc "+
 			"AND dhn_ne=? group by dhn_doc order by doc_date_created asc", 
 			[collection.col_id, ne_id], {row -> 
 				//println "Row:"+row 
@@ -246,8 +246,8 @@ class NEPoolStats {
 		//select 
 		StringBuffer res = new StringBuffer()
 		db.getDB().eachRow("SELECT dhn_doc, nen_name, nen_nr_terms, dhn_sentence, dhn_term "+
-		"FROM collection_has_doc, doc_has_ne, doc, ne, ne_name WHERE "+
-		"chd_collection=? AND chd_document=doc_id AND doc_id=dhn_doc "+
+		"FROM  doc_has_ne, doc, ne, ne_name WHERE "+
+		"doc_collection=? AND doc_id=dhn_doc "+
 		"and dhn_ne=ne_id and ne_name=nen_id and ne_id=? "+
 		"and dhn_section=? order by doc_date_created desc LIMIT ${limit_docs}", 
 			[collection.col_id, ne_id, "B"], {row -> 

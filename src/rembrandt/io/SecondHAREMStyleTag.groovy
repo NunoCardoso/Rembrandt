@@ -21,6 +21,7 @@ package rembrandt.io
 import rembrandt.obj.NamedEntity
 import rembrandt.obj.SemanticClassification
 import rembrandt.gazetteers.SemanticClassificationDefinitions
+import rembrandt.gazetteers.CommonClassifications
 /**
  * @author Nuno Cardoso
  * StyleTags for the HAREM I evaluation contest
@@ -68,6 +69,9 @@ class SecondHAREMStyleTag extends StyleTag {
         
         String res = "<${NETag} ID=\"${ne.id}\""
         
+		  // primeiro, vamos retirar os NUMERO, pois não fazem parte do HAREM II
+		 ne.removeClassification(CommonClassifications.number)
+
         if (ne.classification*.c.findAll{it != null}) 
             res +=" ${categoryAttr}=\""+ne.classification*.c.collect{scd.label[it]}.join("|")+"\""
         
@@ -79,12 +83,13 @@ class SecondHAREMStyleTag extends StyleTag {
         
         if (ne.corel)  {
             res += " ${relationAttr}=\""+ne.corel.keySet().join(" ")+"\""
-            res += " ${relationTypeAttr}=\""+ne.corel.values().join(" ")+"\""
+            res += " ${relationTypeAttr}=\""+ne.corel.values().join(" ").replaceAll("sameAs","ident")+"\""
         }
         
-        if (!ne.comment) 
-            res += " ${commentAttr}=\""+ne.comment.join(";").replaceAll("null","")+"\""
-        
+        if (!ne.comment) {
+         def comm = ne.comment.join(";").replaceAll("null","")
+			if (comm) res += " ${commentAttr}=\"${comm}\""
+        }
         return res+=">"
     }
     
@@ -187,12 +192,13 @@ class SecondHAREMStyleTag extends StyleTag {
 	return "</ALT>"
     } 
   
+	// precisa depois de um pós-processamento para apagar os | em excesso
     public String printOpenSubALTTag(int index) {
-	return "|"
+		return "|"
     } 
     
     public String printCloseSubALTTag(int index) {
-	return "|"
+		return ""
     } 
     
     public boolean isOpenALTTag(String tag) {

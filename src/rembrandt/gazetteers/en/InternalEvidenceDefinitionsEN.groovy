@@ -322,13 +322,14 @@ class InternalEvidenceDefinitionsEN {
         /* ORGANIZACAO ADMINISTRACAO */
         [answer:SemanticClassification.create(Classes.category.organization, Classes.type.administration), needle:[
                 ~/[Aa]ssembly/, ~/[Aa]rmy/, [~/[Aa]ir/, ~/[Ff]orce/], ~/[Aa]dministration/, ~/[Bb]ureau/,
-                [~/[Cc]ity/, ~/[Hh]all/].reverse(), ~/[Cc]omissariate/, ~/[Cc]ouncil/, ~/[Gg]overnment/, 
+                [~/[Cc]ity/, ~/[Hh]all/].reverse(), ~/[Cc]omissariate/, ~/[Cc]ouncil/, 
+					~/[Cc]ourthouse/, ~/[Gg]overnment/, 
                 ~/[Nn]avy/, ~/[Mm]inistery/, ~/[Pp]arliament/,  [~/[Ss]ecretary/,'of', ~/[Ss]tate/].reverse() 
                 ], reverse:true],
         
         [answer:SemanticClassification.create(Classes.category.organization, Classes.type.administration), needle:[
                 ~/[Aa]ssembly/, ~/[Aa]rmy/, [~/[Aa]ir/,~/[Ff]orce/], ~/[Aa]dministration/, 
-                ~/[Bb]ureau/, [~/[Cc]ity/, ~/[Hh]all/], ~/[Cc]omissariate/, ~/[Cc]ouncil/, ~/[Gg]overnment/, 
+                ~/[Bb]ureau/, [~/[Cc]ity/, ~/[Cc]ourthouse/, ~/[Hh]all/], ~/[Cc]omissariate/, ~/[Cc]ouncil/, ~/[Gg]overnment/, 
                 ~/[Nn]avy/, ~/[Mm]inistery/, ~/[Pp]arliament/, [~/[Ss]ecretary/, 'of', ~/[Ss]tate/]
                 ] ] ,     
         

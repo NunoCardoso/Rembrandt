@@ -101,7 +101,7 @@ label:050 Cities along the Danube and the Rhine
 	
 		println refq.toString()
 		String reformulated_x = """
-label:031 contents:Combats contents:embargo contents:northern contents:part contents:"Iraq" woeid-index:23424855
+label:031 contents:Combats contents:embargo contents:northern contents:part contents:"Iraq" woeid:23424855
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

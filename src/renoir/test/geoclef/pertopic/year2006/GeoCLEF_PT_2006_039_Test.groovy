@@ -93,7 +93,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:039 contents:Tropas contents:russas contents:sul contents:"Cáucaso" woeid-index:55949072 woeid-index:23424741 woeid-index:23424743 woeid-index:23424823
+label:039 contents:Tropas contents:russas contents:sul contents:"Cáucaso" woeid:55949072 woeid:23424741 woeid:23424743 woeid:23424823
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

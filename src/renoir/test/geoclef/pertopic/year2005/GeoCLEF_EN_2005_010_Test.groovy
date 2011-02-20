@@ -86,7 +86,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 		println refq.toString()
 		String reformulated_x = """
 label:010 contents:flooding contents:"Holland" contents:"Germany" 
-woeid-index:23424977 woeid-index:23424829
+woeid:23424977 woeid:23424829
 """		
 
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 

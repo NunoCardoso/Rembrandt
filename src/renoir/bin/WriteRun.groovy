@@ -142,8 +142,8 @@ class WriteRun {
 	static main(args) {	
 		def Question q = new Question(new Sentence([],0))
 		q.id="test1"
-		q.answer=["Jos� Saramago"]
-		q.answerJustification=["Jos� Saramago"]
+		q.answer=["José Saramago"]
+		q.answerJustification=["José Saramago"]
 		WriteRun wr = new WriteRun()
 		def answer = wr.format(q)
 		answer.each{println it}	

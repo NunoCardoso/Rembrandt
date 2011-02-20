@@ -16,6 +16,7 @@
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
 package saskia.io
+import org.apache.log4j.Logger
 
 /**
  * @author Nuno Cardoso
@@ -53,21 +54,28 @@ class TimeSignature {
     
     String version
     int totalcount
-    long doc_id
+    Long doc_id
     String doc_original_id
     String doc_lang
     String date_created
     List timelist = []
-    
+    static Logger log = Logger.getLogger("TimeSignature")
+
     public TimeSignature() {}
     
     public TimeSignature(DocTimeSignature doctimesig) {
-	parse(doctimesig.dts_signature)
+		parse(doctimesig.dts_signature)
     }
     
     void parse(String string) {
         
-    	Node ts = new XmlParser().parseText(string)
+    	Node ts 
+		try {
+			ts = new XmlParser().parseText(string)
+		} catch(Exception e) {
+			log.error("Can't parse this: \n"+string)
+			System.exit(0)
+		}
     	version = ts.attribute("version")
     	totalcount = Integer.parseInt(ts.attribute("totalcount"))
 

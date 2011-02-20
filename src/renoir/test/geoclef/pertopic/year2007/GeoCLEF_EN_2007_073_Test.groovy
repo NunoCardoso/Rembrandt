@@ -94,7 +94,7 @@ label:075 Violation of human rights in Burma
 // É melhor que não tenha woeid, ele aponta para uma cidade nos EUA!"
 		println refq.toString()
 		String reformulated_x = """
-label:073 contents:Events contents:"St. Paul's Cathedral" ne-LOCAL-HUMANO-CONSTRUCAO-index:"St. Paul's Cathedral" entity:Cathedral
+label:073 contents:Events contents:"St. Paul's Cathedral" ne-LOCAL-HUMANO-CONSTRUCAO:"St. Paul's Cathedral" entity:Cathedral
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

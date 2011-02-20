@@ -40,6 +40,8 @@ import pt.utl.ist.lucene.Model
 import org.apache.lucene.queryParser.ParseException
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.Query
+import org.apache.lucene.search.TermsFilter
+import org.apache.lucene.index.Term
 import org.apache.lucene.index.IndexReader
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.index.LgteIsolatedIndexReader
@@ -70,14 +72,17 @@ import renoir.rules.*
  *    model:[BM25]
  *    contents-weight
  *    ne-X-weight:
+ *    entity-weight:
  *    woeid-weight:
- *    tg-weight:
+ *    time-weight:
  *    
  *  3. For Indexes: 
+ *    title:
  *    contents: or nothing (default)
- *    ne-X-index:
- *    woeid-index:
- *    tg-index:
+ *    ne-X:
+ *    entity;
+ *    woeid:
+ *    time/tg:
  */
 class Renoir {
     
@@ -128,20 +133,21 @@ class Renoir {
         
          Map readers = [:]
         
-        if (readerContents) readers["contents"] = readerContents
-        if (readerContents) readers["id"] = readerContents
-        if (readerContents) readers["title"] = readerContents
-        if (readerGeo) readers["woeid-index"] = readerGeo
-        if (readerTime) readers["tg-index"] = readerTime
-        if (readerEntity) readers["entity"] = readerEntity
-        if (readerNEs) readers["regexpr(ne-.*-index)"] = readerNEs
+        if (readerContents) readers[conf.get("saskia.index.contents_label","contents")] = readerContents
+        if (readerContents) readers[conf.get("saskia.index.id_label","id")] = readerContents
+        if (readerContents) readers[conf.get("saskia.index.title_label","title")] = readerContents
+        if (readerGeo) readers[conf.get("saskia.index.woeid_label","woeid")] = readerGeo
+        if (readerTime) readers[conf.get("saskia.index.time_label","tg")] = readerTime
+        if (readerEntity) readers[conf.get("saskia.index.entity_label","entity")] = readerEntity
+        if (readerNEs) readers["regexpr(ne-.*)"] = readerNEs
         
         searcher = new LgteIndexSearcherWrapper( Model.OkapiBM25Model,
                     new LgteIsolatedIndexReader(readers) )    
         
         // now let's reconstruct the analyzers used for indexation, to regenerate the explanations
         Map analyzerMap = [:]
-        analyzerMap.put(Globals.DOCUMENT_ID_FIELD, new LgteNothingAnalyzer())
+        analyzerMap.put(conf.get("saskia.index.id_label","id"), new LgteNothingAnalyzer())
+        analyzerMap.put(conf.get("saskia.index.docid_label","docid"), new LgteNothingAnalyzer())
 
         def analyzerTermsWithStem 
 		  def analyzerTermsWithoutStem
@@ -164,121 +170,130 @@ class Renoir {
 			
 			if (stem) analyzerTerms = analyzerTermsWithStem
 			else  analyzerTerms = analyzerTermsWithoutStem
-			
-        analyzerMap.put(Globals.LUCENE_DEFAULT_FIELD, analyzerTerms)
-      
-analyzerMap.put("ne-PESSOA-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-PESSOA-INDIVIDUAL-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-PESSOA-GRUPOIND-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-PESSOA-CARGO-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-PESSOA-GRUPOCARGO-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-PESSOA-MEMBRO-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-PESSOA-GRUPOMEMBRO-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-PESSOA-POVO-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-LOCAL-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-LOCAL-HUMANO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-HUMANO-RUA-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-LOCAL-HUMANO-PAIS-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-HUMANO-DIVISAO-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-LOCAL-HUMANO-HUMANOREGIAO-index", analyzerTermsWithoutStem)  
-analyzerMap.put("ne-LOCAL-HUMANO-CONSTRUCAO-index", analyzerTermsWithoutStem)
-analyzerMap.put("ne-LOCAL-FISICO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-FISICO-ILHA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-FISICO-AGUACURSO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-FISICO-AGUAMASSA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-FISICO-RELEVO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-FISICO-PLANETA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-FISICO-FISICOREGIAO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-VIRTUAL-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-VIRTUAL-COMSOCIAL-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-LOCAL-VIRTUAL-SITIO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ORGANIZACAO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ORGANIZACAO-ADMINISTRACAO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ORGANIZACAO-INSTITUICAO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ORGANIZACAO-EMPRESA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ACONTECIMENTO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ACONTECIMENTO-ORGANIZADO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ACONTECIMENTO-EVENTO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ACONTECIMENTO-EFEMERIDE-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-OBRA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-OBRA-PLANO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-OBRA-REPRODUZIDA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-OBRA-ARTE-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ABSTRACCAO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ABSTRACCAO-NOME-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ABSTRACCAO-DISCIPLINA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ABSTRACCAO-ESTADO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-ABSTRACCAO-IDEIA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-COISA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-COISA-CLASSE-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-COISA-MEMBROCLASSE-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-COISA-OBJECTO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-COISA-SUBSTANCIA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-TEMPO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-TEMPO-TEMPO_CALEND-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-TEMPO-TEMPO_CALEND-DATA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-TEMPO-TEMPO_CALEND-HORA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-TEMPO-TEMPO_CALEND-INTERVALO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-TEMPO-GENERICO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-TEMPO-DURACAO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-TEMPO-FREQUENCIA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-NUMERO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-NUMERO-CARDINAL-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-NUMERO-ORDINAL-index", analyzerTermsWithoutStem)  
-analyzerMap.put("ne-NUMERO-TEXTUAL-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-NUMERO-NUMERAL-index", analyzerTermsWithoutStem)  
-analyzerMap.put("ne-VALOR-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-VALOR-MOEDA-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-VALOR-QUANTIDADE-index", analyzerTermsWithoutStem)  
-analyzerMap.put("ne-VALOR-CLASSIFICACAO-index", analyzerTermsWithoutStem) 
-analyzerMap.put("ne-EM-index", analyzerTermsWithoutStem) 
-    
-        analyzerMap.put("woeid-index", new LgteNothingAnalyzer())
-        analyzerMap.put("tg-index", analyzerTermsWithoutStem)
-        analyzerMap.put("entity",  new LgteNothingAnalyzer())
 
+        analyzerMap.put(conf.get("saskia.index.title_label","title"), analyzerTerms)			
+        analyzerMap.put(conf.get("saskia.index.contents_label","contents"), analyzerTerms)
+        analyzerMap.put(conf.get("saskia.index.woeid_label","woeid"), new LgteNothingAnalyzer())
+        analyzerMap.put(conf.get("saskia.index.time_label","tg"), analyzerTermsWithoutStem)
+        analyzerMap.put(conf.get("saskia.index.entity_label","entity"),  new LgteNothingAnalyzer())
+    
+analyzerMap.put("ne-PESSOA", analyzerTermsWithoutStem)
+analyzerMap.put("ne-PESSOA-INDIVIDUAL", analyzerTermsWithoutStem)
+analyzerMap.put("ne-PESSOA-GRUPOIND", analyzerTermsWithoutStem)
+analyzerMap.put("ne-PESSOA-CARGO", analyzerTermsWithoutStem)
+analyzerMap.put("ne-PESSOA-GRUPOCARGO", analyzerTermsWithoutStem)
+analyzerMap.put("ne-PESSOA-MEMBRO", analyzerTermsWithoutStem)
+analyzerMap.put("ne-PESSOA-GRUPOMEMBRO", analyzerTermsWithoutStem)
+analyzerMap.put("ne-PESSOA-POVO", analyzerTermsWithoutStem)
+analyzerMap.put("ne-LOCAL", analyzerTermsWithoutStem)
+analyzerMap.put("ne-LOCAL-HUMANO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-HUMANO-RUA", analyzerTermsWithoutStem)
+analyzerMap.put("ne-LOCAL-HUMANO-PAIS", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-HUMANO-DIVISAO", analyzerTermsWithoutStem)
+analyzerMap.put("ne-LOCAL-HUMANO-HUMANOREGIAO", analyzerTermsWithoutStem)  
+analyzerMap.put("ne-LOCAL-HUMANO-CONSTRUCAO", analyzerTermsWithoutStem)
+analyzerMap.put("ne-LOCAL-FISICO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-FISICO-ILHA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-FISICO-AGUACURSO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-FISICO-AGUAMASSA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-FISICO-RELEVO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-FISICO-PLANETA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-FISICO-FISICOREGIAO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-VIRTUAL", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-VIRTUAL-COMSOCIAL", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-LOCAL-VIRTUAL-SITIO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ORGANIZACAO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ORGANIZACAO-ADMINISTRACAO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ORGANIZACAO-INSTITUICAO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ORGANIZACAO-EMPRESA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ACONTECIMENTO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ACONTECIMENTO-ORGANIZADO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ACONTECIMENTO-EVENTO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ACONTECIMENTO-EFEMERIDE", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-OBRA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-OBRA-PLANO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-OBRA-REPRODUZIDA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-OBRA-ARTE", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ABSTRACCAO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ABSTRACCAO-NOME", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ABSTRACCAO-DISCIPLINA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ABSTRACCAO-ESTADO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-ABSTRACCAO-IDEIA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-COISA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-COISA-CLASSE", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-COISA-MEMBROCLASSE", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-COISA-OBJECTO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-COISA-SUBSTANCIA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-TEMPO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-TEMPO-TEMPO_CALEND", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-TEMPO-TEMPO_CALEND-DATA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-TEMPO-TEMPO_CALEND-HORA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-TEMPO-TEMPO_CALEND-INTERVALO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-TEMPO-GENERICO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-TEMPO-DURACAO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-TEMPO-FREQUENCIA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-NUMERO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-NUMERO-CARDINAL", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-NUMERO-ORDINAL", analyzerTermsWithoutStem)  
+analyzerMap.put("ne-NUMERO-TEXTUAL", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-NUMERO-NUMERAL", analyzerTermsWithoutStem)  
+analyzerMap.put("ne-VALOR", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-VALOR-MOEDA", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-VALOR-QUANTIDADE", analyzerTermsWithoutStem)  
+analyzerMap.put("ne-VALOR-CLASSIFICACAO", analyzerTermsWithoutStem) 
+analyzerMap.put("ne-EM", analyzerTermsWithoutStem) 
+    
         lgteBrokerStemAnalyzer = new LgteBrokerStemAnalyzer(analyzerMap) 
-    }
+		}
     
-    public Map search(String input) {
-		RenoirQuery q = RenoirQueryParser.parse(input)
-		return search(q)
-    }
+		public Map search(String input) {
+			RenoirQuery q = RenoirQueryParser.parse(input)
+			return search(q)
+		}
     
-    public Map search(RenoirQuery q) {
+		public Map search(RenoirQuery q) {
         
-        // DEFAULT VALUES FOR SEARCH //
-        boolean search = true // default value
-		boolean explain = false // default value
-        String qe = "no" // default value 
-        int topkterm = 8
-        int topkdoc = 10
+		// DEFAULT VALUES FOR SEARCH //
+			boolean search = true // default value
+			boolean explain = false // default value
+			String qe = "no" // default value 
+		   String model = "BM25Normalized" 
+			int topkterm = 8
+			int topkdoc = 10
+
+		    /*** CHECK MODEL ***/
+			if (!q.paramsForLGTE.containsKey('model')) {
+				log.debug "No model parameter, model is $model by default."
+				q.paramsForLGTE['model'] = model
+			} else {
+				log.debug "RENOIR will use model "+q.paramsForLGTE['model']          
+			}
         
         /*** CHECK SEARCH ***/
-        if (!q.paramsForRenoir.containsKey('search')) {
-	    	log.debug "No search parameter, search is $search by default."
-		} else {
-	    	if (q.paramsForRenoir['search'] == "false") {
-				search = false
-				log.debug "RENOIR will NOT perform a search, got a search = false."            
-	    	} else if (q.paramsForRenoir['search'] == "true") {
-				search = true
-				log.debug "RENOIR will perform a search, got a search = true."            
-	    	}
-		}
+			if (!q.paramsForRenoir.containsKey('search')) {
+	    		log.debug "No search parameter, search is $search by default."
+			} else {
+	    		if (q.paramsForRenoir['search'] == "false") {
+					search = false
+					log.debug "RENOIR will NOT perform a search, got a search = false."            
+	    		} else if (q.paramsForRenoir['search'] == "true") {
+					search = true
+					log.debug "RENOIR will perform a search, got a search = true."            
+	    		}
+			}
 		
-	 	/*** CHECK EXPLAIN ***/
-        if (!q.paramsForRenoir.containsKey('explain')) {
-	    	log.debug "No explain parameter, explain is $explain by default."
-		} else {
-	    	if (q.paramsForRenoir['explain'] == "false") {
-				explain = false
-				log.debug "RENOIR will NOT explain a search, got a explain = false."            
-	    	} else if (q.paramsForRenoir['explain'] == "true") {
-				explain = true
-				log.debug "RENOIR will perform an explain, got explain = true."            
-	    	}
-		}
+	 		/*** CHECK EXPLAIN ***/
+        	if (!q.paramsForRenoir.containsKey('explain')) {
+	    		log.debug "No explain parameter, explain is $explain by default."
+			} else {
+	    		if (q.paramsForRenoir['explain'] == "false") {
+					explain = false
+					log.debug "RENOIR will NOT explain a search, got a explain = false."            
+	    		} else if (q.paramsForRenoir['explain'] == "true") {
+					explain = true
+					log.debug "RENOIR will perform an explain, got explain = true."            
+	    		}
+			}
 	 
 		/*** CHECK QE ***/
 		if (q.paramsForRenoir.containsKey('qe'))  qe = q.paramsForRenoir['qe']
@@ -366,7 +381,23 @@ analyzerMap.put("ne-EM-index", analyzerTermsWithoutStem)
 		if (search) {
 	    	log.info "Querying to LGTE: ${lgteQuery.getQuery().toString()}" 
 	    	long start = System.currentTimeMillis()
-	    	LgteHits hits = searcher.search(lgteQuery)
+
+			LgteHits hits
+			// let's see if we have filters
+			if (q.hasFilters) {
+				TermsFilter termfilter = new TermsFilter();
+            q.filters.each{term -> 
+					termfilter.addTerm(new Term(term.field,term.text));
+				}
+	    		log.info "Query filters: ${termfilter}" 
+				hits = searcher.search(lgteQuery, termfilter)	
+			} else {
+				try {
+	    	 		hits = searcher.search(lgteQuery)
+				} catch(IOException e) {
+					log.warn "Problem during search: "+e.getMessage()
+				}
+			}
 	    	long end = System.currentTimeMillis()
 
 	    	res["time"] = end - start
@@ -392,8 +423,10 @@ analyzerMap.put("ne-EM-index", analyzerTermsWithoutStem)
         		Map result = [:]
         		result["i"] = i
 				result["doc_id"] = hits.id(i)
-        		result["doc_original_id"] = hits.doc(i).get("id") 
-        		result["score"] = hits.score(i)
+        		try {
+					result["doc_original_id"] = hits.doc(i).get("id") 
+        		} catch(Exception e) {log.warn "No doc_original_id for doc: "+e.getMessage()}
+				result["score"] = hits.score(i)
                     
         		if (explain) {
 					String explanation 

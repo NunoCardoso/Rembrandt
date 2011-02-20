@@ -48,9 +48,8 @@ public class SplitNERulesTest extends GroovyTestCase {
 		split_pt = new SplitNERulesPT(ierules_pt, saskia_pt)
 	}
 	
-	void testEN() {
-		
-	 	ListOfNE list_ne = new ListOfNE()
+	// Califórnia e Austrália 
+	void testEN1() {
 	
 	 	NamedEntity ne1 = new NamedEntity(
 		terms:[new Term("California",2),new Term("and",3),new Term("Australia",4)],
@@ -68,20 +67,18 @@ public class SplitNERulesTest extends GroovyTestCase {
 		sentenceIndex:0, termIndex:4
 		)
 		
-	 	list_ne << ne1
-		
-		List cloneNE = list_ne.clone()
-		cloneNE.each{ne -> split_en.processNE(ne, list_ne)}
-		
-	
-		assert list_ne == new ListOfNE([ne2, ne3])
+		// nes is the ListOfNE that will suffer splitted NEs
+		// nes_ is the cloned list to feed one NE at a time. 
+		// this is important to avoid ConcurrentModification exceptions
+		ListOfNE nes = new ListOfNE([ne1])
+		ListOfNE nes_ = nes.clone()
+		nes_.each{ne -> split_en.processNE(ne, nes)}
+		assert nes == new ListOfNE([ne2, ne3])
 	}
 	
 	// Austrália e Califórnia
 	void testPT1() {
-		
-	 	ListOfNE list_ne = new ListOfNE()
-	
+			
 	 	NamedEntity ne1 = new NamedEntity(
 		terms:[new Term("Califórnia",2),new Term("e",3),new Term("Austrália",4)],
 		classification:[SC.unknown],
@@ -94,32 +91,85 @@ public class SplitNERulesTest extends GroovyTestCase {
 		)	
 	 	NamedEntity ne3 = new NamedEntity(
 		terms:[new Term("Austrália",4)],
-		classification:[SC.place_human_country, SC.place_human_country],
+		classification:[SC.place_human_country],
 		sentenceIndex:0,termIndex:4
 		)
 		
-	 	list_ne << ne1
-		
-		List cloneNE = list_ne.clone()
-		cloneNE.each{ne -> split_pt.processNE(ne, list_ne)}
-		assert list_ne == new ListOfNE([ne2, ne3])
+		ListOfNE nes = new ListOfNE([ne1])
+		ListOfNE nes_ = nes.clone()
+		nes_.each{ne -> split_pt.processNE(ne, nes)}
+		assert nes == new ListOfNE([ne2, ne3])
 	}
 	
 	// Mar do Japão -> don't split!
 	void testPT2() {
 		
-	 	ListOfNE list_ne = new ListOfNE()
-	
 	 	NamedEntity ne1 = new NamedEntity(
-		terms:[new Term("Mar",2),new Term("do",3),new Term("Japão",4)],
+		terms:[new Term("Mar",2),new Term("do",3),
+			new Term("Japão",4)],
 		classification:[SC.place_physical_watermass], sentenceIndex:0,termIndex:2 )
 	 
-	 	list_ne << ne1
-		
-		List cloneNE = list_ne.clone()
-		cloneNE.each{ne -> split_pt.processNE(ne, list_ne)}
-
-		assert list_ne == new ListOfNE([ne1])
+		ListOfNE nes = new ListOfNE([ne1])
+		ListOfNE nes_ = nes.clone()
+		nes_.each{ne -> split_pt.processNE(ne, nes)}
+		assert nes == nes
 	}
 	
+		// Francisco Lopes e Jerónimo de Sousa - 2 conhecidos
+		// Francisco de Lopes e Jerónimo de Sousa - 1 desconhecido e 1 conhecido
+		// André Freire e Diogo Moreira - 2 desconhecidos
+
+	void testPT3() {
+		
+		NamedEntity ne1 = new NamedEntity(
+			terms:[new Term("Francisco",2),new Term("Lopes",3),
+			new Term("e",4),new Term("Jerónimo",5),new Term("de",5),new Term("Sousa",6)],
+			classification:[SC.unknown], sentenceIndex:0,termIndex:2 )
+	 	NamedEntity ne2 = new NamedEntity(
+			terms:[new Term("Francisco",2),new Term("Lopes",3)],
+			classification:[SC.person_individual], sentenceIndex:0,termIndex:2 )
+	 	NamedEntity ne3 = new NamedEntity(
+			terms:[new Term("Jerónimo",5),new Term("de",5),new Term("Sousa",6)],
+			classification:[SC.person_individual], sentenceIndex:0,termIndex:5 )
+		
+		ListOfNE nes = new ListOfNE([ne1])
+		ListOfNE nes_ = nes.clone()
+		nes_.each{ne -> split_pt.processNE(ne, nes)}
+		assert nes == new ListOfNE([ne2, ne3])
+		
+		/////////
+		ne1 = new NamedEntity(
+			terms:[new Term("Francisco",2),new Term("de",3),new Term("Lopes",4),
+			new Term("e",5),new Term("Jerónimo",6),new Term("de",7),new Term("Sousa",8)],
+			classification:[SC.unknown], sentenceIndex:0,termIndex:2 )
+	 	ne2 = new NamedEntity(
+			terms:[new Term("Francisco",2),new Term("de",3),new Term("Lopes",4)],
+			classification:[SC.person_individual], sentenceIndex:0,termIndex:2 )
+	 	ne3 = new NamedEntity(
+			terms:[new Term("Jerónimo",6),new Term("de",7),new Term("Sousa",8)],
+			classification:[SC.person_individual], sentenceIndex:0,termIndex:6 )
+		
+		nes = new ListOfNE([ne1])
+		nes_ = nes.clone()
+		nes_.each{ne -> split_pt.processNE(ne, nes)}
+		assert nes == new ListOfNE([ne2, ne3])
+		
+		/////////
+		ne1 = new NamedEntity(
+			terms:[new Term("André",2),new Term("Freire",3),
+			new Term("e",4),new Term("Diogo",5),new Term("Moreira",6)],
+			classification:[SC.unknown], sentenceIndex:0,termIndex:2 )
+	 	ne2 = new NamedEntity(
+			terms:[new Term("André",2),new Term("Freire",3)],
+			classification:[SC.person_individual], sentenceIndex:0,termIndex:2 )
+	 	ne3 = new NamedEntity(
+			terms:[new Term("Diogo",5),new Term("Moreira",6)],
+			classification:[SC.person_individual], sentenceIndex:0,termIndex:5 )
+		
+		nes = new ListOfNE([ne1])
+		nes_ = nes.clone()
+		nes_.each{ne -> split_pt.processNE(ne, nes)}
+		assert nes == new ListOfNE([ne2, ne3])
+
+	}
 }

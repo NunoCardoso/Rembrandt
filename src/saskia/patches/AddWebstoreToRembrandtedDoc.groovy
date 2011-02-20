@@ -88,7 +88,7 @@ class AddWebstoreToRembrandtedDoc {
             
             // DON'T USE OFFSET. By issuing webstore=null, I'm already offseting it
             String select = "SELECT SQL_CALC_FOUND_ROWS doc_id, doc_original_id, doc_lang, doc_webstore FROM "+
-                    " doc, collection_has_doc WHERE chd_collection=? AND chd_document=doc_id AND doc_webstore IS NULL "+
+                    " doc WHERE doc_collection=? AND doc_webstore IS NULL "+
                     "LIMIT $limit UNION SELECT FOUND_ROWS(), '%%%TOTAL%%%', '', ''"
             db.getDB().eachRow(select, [collection.col_id], {row -> 
                 

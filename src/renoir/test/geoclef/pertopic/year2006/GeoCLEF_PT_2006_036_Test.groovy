@@ -94,7 +94,7 @@ label:050 Cidades no Danúbio e Reno
 	
 		println refq.toString()
 		String reformulated_x = """
-label:036 contents:indústria contents:automóvel contents:"Mar do Japão" woeid-index:55959693
+label:036 contents:indústria contents:automóvel contents:"Mar do Japão" woeid:55959693
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

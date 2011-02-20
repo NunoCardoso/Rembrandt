@@ -39,7 +39,6 @@ public class WebServiceRestletMapping extends Restlet {
 	private def mappings = [:]
 	private def binding = [:]
 	private Status status = Status.SUCCESS_OK
-	static Logger log = Logger.getLogger("SaskiaServer")
 	
 	public WebServiceRestletMapping() {
 		super()
@@ -62,8 +61,7 @@ public class WebServiceRestletMapping extends Restlet {
 	    if (request.isEntityAvailable()) {
 			res["POST"] = request.getEntityAsForm().getValuesMap()
 	    }
-	    res["COOKIE"] = request.getCookies().getValuesMap()
-	    println "res: "+res
+	    res["COOKIE"] = request.getCookies().getValuesMap()	    
 	    return res
 	}
 	
@@ -95,17 +93,4 @@ public class WebServiceRestletMapping extends Restlet {
 		response.setStatus(this.status)
 	}
 	
-	
-	/*
-	 * para servir ficheiros estáticos:
-	 * 
-	 * component.clients.add(Protocol.FILE);
-depois no WebServiceApplication, um metodo novo
-private static String UriFromAnywhere(String location) {
-               File f = new File(new File("."), location)
-               return f.exists() ? f.toURI().toString() : this.getClass().getResource(location).toURI().toString()
-       }
-depois adiciona-se isto ao router
-router.attach("/static/", new Directory(this.context, new Reference(UriFromAnywhere("static"))))
-*/
 }

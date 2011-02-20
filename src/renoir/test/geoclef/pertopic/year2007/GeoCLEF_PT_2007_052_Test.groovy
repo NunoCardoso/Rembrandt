@@ -105,7 +105,7 @@ label:075 Violações dos direitos humanos na antiga Birmânia
 	
 		println refq.toString()
 		String reformulated_x = """
-label:052 contents:Crime contents:perto contents:"St Andrews" woeid-index:35567
+label:052 contents:Crime contents:perto contents:"St Andrews" woeid:35567
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

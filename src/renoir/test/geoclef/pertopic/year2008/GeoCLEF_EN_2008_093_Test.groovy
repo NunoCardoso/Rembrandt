@@ -99,7 +99,7 @@ label:100 Natural disasters in the western USA
 
 		println refq.toString()
 		String reformulated_x = """
-label:093 contents:attacks contents:subways contents:"Japan" woeid-index:23424856"""
+label:093 contents:attacks contents:subways contents:"Japan" woeid:23424856"""
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 
 }

@@ -101,7 +101,7 @@ label:075 Violation of human rights in Burma
 
 		println refq.toString()
 		String reformulated_x = """
-label:067 contents:F1 contents:circuits contents:"Ayrton Senna" contents:competed contents:"1994" entity:Ayrton_Senna  tg-index:1994*
+label:067 contents:F1 contents:circuits contents:"Ayrton Senna" contents:competed contents:"1994" entity:Ayrton_Senna  time:1994*
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

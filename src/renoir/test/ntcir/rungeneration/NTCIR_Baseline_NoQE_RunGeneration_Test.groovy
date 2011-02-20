@@ -86,9 +86,9 @@ class NTCIR_Baseline_NoQE_RunGeneration_Test extends NTCIR_RunGeneration_Test {
             query.paramsForQueryConfiguration["bm25.k1"] =2.0d
             query.paramsForQueryConfiguration["bm25.b"] = 0.75d
             
-            query.paramsForQueryConfiguration["model.field.boost.entity-index"] = entityweight
-            query.paramsForQueryConfiguration["model.field.boost.woeid-index"] = woeidweight
-            query.paramsForQueryConfiguration["model.field.boost.tg-index"] = tgweight
+            query.paramsForQueryConfiguration["model.field.boost.entity"] = entityweight
+            query.paramsForQueryConfiguration["model.field.boost.woeid"] = woeidweight
+            query.paramsForQueryConfiguration["model.field.boost.time"] = tgweight
 
             logf.append "Parameters for Renoir: ${query.paramsForRenoir}\n"
             logf.append "Parameters for LGTE: ${query.paramsForLGTE}\n"

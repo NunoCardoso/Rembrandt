@@ -35,11 +35,11 @@ class GenerateGeoSignatures {
 
     Tag tag
     Collection collection
-    static DOC_POOL_SIZE= 30
     static Logger log = Logger.getLogger("GeoSignature")
     int ndocs 
     GeoSignatureFactory gsf
     Configuration conf = Configuration.newInstance()
+	 int rembrandted_doc_pool_size = conf.getInt("saskia.imports.rembrandted_doc_pool_size",30)
     String sync
 
     public GenerateGeoSignatures(Collection collection, String sync, int ndocs) {
@@ -63,9 +63,9 @@ class GenerateGeoSignatures {
         def stats = new DocStats(ndocs)
         stats.begin()
         
-        for (int i=ndocs; i > 0; i -= DOC_POOL_SIZE) {
+        for (int i=ndocs; i > 0; i -= rembrandted_doc_pool_size) {
              
-            int limit = (i > DOC_POOL_SIZE ? DOC_POOL_SIZE : i)
+            int limit = (i > rembrandted_doc_pool_size ? rembrandted_doc_pool_size : i)
             log.debug "Initial batch size: $ndocs Remaining: $i Next pool size: $limit"
             
             // NOT THREAD-SAFE!

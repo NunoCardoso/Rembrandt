@@ -42,14 +42,14 @@ public class RenoirServerApplication extends Application {
 	    suggestMapping.attach(MediaType.TEXT_HTML, suggestMapping.HTMLanswer)
 	    suggestMapping.attach(MediaType.APPLICATION_JSON, suggestMapping.JSONanswer)
 	
-	    SuggestMapping2 suggestMapping2 = new SuggestMapping2()
-	    suggestMapping2.attach(MediaType.APPLICATION_JSON, suggestMapping2.JSONanswer)
+	    DBObjectSuggestMapping dboMapping = new DBObjectSuggestMapping()
+	    dboMapping.attach(MediaType.APPLICATION_JSON, dboMapping.JSONanswer)
 
 	    SearchMapping searchMapping = new SearchMapping()
 	    searchMapping.attach(MediaType.APPLICATION_JSON, searchMapping.JSONanswer)
 
 	    router.attach("/Renoir/suggest", suggestMapping)
-	    router.attach("/Renoir/suggest2", suggestMapping2)
+	    router.attach("/Renoir/dbosuggest", dboMapping)
 	    router.attach("/Renoir/search", searchMapping)
 				
 	    return router

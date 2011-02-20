@@ -201,7 +201,6 @@ abstract class Writer {
        
        sentence.pointer = 0
        
-       
        while (sentence.pointer < sentence.size()) { // note that we want to walk all visible and hidden terms!
            Term term = sentence[sentence.pointer]
            //println "XXX sentence.pointer = ${sentence.pointer} term = $term term.index = ${term.index} term.hidden = ${term.hidden}"
@@ -211,12 +210,12 @@ abstract class Writer {
                
                // if there's no lastNE open, print it
                if (!lastNEs) {
-        	   printTerm(term, "", sb)
+        	   		printTerm(term, "", sb)
         	   //"\nXXX hidden term: $term\n"
                } else {
         	// if there is, wait. Let's hand the term.hidden to a buffer, then we'll call it after closing the tag 
-        	   haltedTerms << term
-        	   //"\nXXX hidden termgone to haltedTerms\n"
+        	   		haltedTerms << term
+        	   //"\n hidden termgone to haltedTerms\n"
                }
     	       sentence.pointer++    	    
            } else {

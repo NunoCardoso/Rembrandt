@@ -85,7 +85,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 	
 		println refq.toString()
 		String reformulated_x = """
-label:037 contents:Descobertas contents:arqueológicas contents:"Médio Oriente" woeid-index:24865721 woeid-index:23424738 woeid-index:23424753 woeid-index:23424802 woeid-index:23424851 woeid-index:23424852 woeid-index:23424855 woeid-index:23424860 woeid-index:23424870 woeid-index:23424873 woeid-index:23424898 woeid-index:23424930 woeid-index:23424938 woeid-index:23424956 woeid-index:23425002 woeid-index:28289408
+label:037 contents:Descobertas contents:arqueológicas contents:"Médio Oriente" woeid:24865721 woeid:23424738 woeid:23424753 woeid:23424802 woeid:23424851 woeid:23424852 woeid:23424855 woeid:23424860 woeid:23424870 woeid:23424873 woeid:23424898 woeid:23424930 woeid:23424938 woeid:23424956 woeid:23425002 woeid:28289408
 		"""
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

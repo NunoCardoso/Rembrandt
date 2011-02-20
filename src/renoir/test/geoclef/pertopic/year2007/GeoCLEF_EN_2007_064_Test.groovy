@@ -100,7 +100,7 @@ label:075 Violation of human rights in Burma
 
 		println refq.toString()
 		String reformulated_x = """
-label:064 contents:sport contents:events contents:"Switzerland" woeid-index:23424957
+label:064 contents:sport contents:events contents:"Switzerland" woeid:23424957
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

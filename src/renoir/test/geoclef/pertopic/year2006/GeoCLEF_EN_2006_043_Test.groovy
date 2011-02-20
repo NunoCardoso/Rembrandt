@@ -89,7 +89,7 @@ label:050 Cities along the Danube and the Rhine
 	
 		println refq.toString()
 		String reformulated_x = """
-label:043 contents:Scientific contents:research contents:universities contents:"New England" woeid-index:23509507
+label:043 contents:Scientific contents:research contents:universities contents:"New England" woeid:23509507
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

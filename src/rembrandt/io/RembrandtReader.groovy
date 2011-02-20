@@ -35,7 +35,7 @@ import org.apache.log4j.Logger
 class RembrandtReader extends Reader {
        
     public RembrandtReader(StyleTag style) {
-	super(style)
+		super(style)
     }
     
     /**
@@ -58,8 +58,7 @@ class RembrandtReader extends Reader {
             docs << createDocument(buffer.toString())
         }
     }
-    
-    
+        
     public Document createDocument(String text) {
 	  
     // 0: outside a sentence, not in a tag
@@ -99,8 +98,8 @@ class RembrandtReader extends Reader {
             case 0:
               if (c == "{") {
                 s = new Sentence(sindex)
-		tindex = 0
-		state = 10
+					 tindex = 0
+					 state = 10
               }
               if (c == "<") {
         	tag = c
@@ -172,55 +171,63 @@ class RembrandtReader extends Reader {
   	      tag += c
   	      if (c == ">") {
   		  state = 10
+
          	  // do whatever there is for the tag
          	  if (style.isOpenTag(tag)) {
          	      // if there's no NE, let's create. 
          	      // there is, let's add a SemanticClassification         	      
          	      if (!ne) {
-         		  ne = style.parseOpenTag(tag) 
-         		  if (inalt) {
-         		      ne.alt = ""+altid
-         		      ne.subalt = subaltid
-         		  }
+         		  		ne = style.parseOpenTag(tag) 
+         		  		if (inalt) {
+         		      	ne.alt = ""+altid
+         		      	ne.subalt = subaltid
+         		  		}
          	      } else {
-         		  NamedEntity otherne = style.parseOpenTag(tag) 
-         		  otherne.classification.each{cl -> 
-         		  	ne.classification << cl
-         		  	ne.wikipediaPage[cl] = otherne.wikipediaPage[cl]
-         		  	ne.dbpediaPage[cl] = otherne.dbpediaPage[cl]
-         		  }  		  
+         		  		NamedEntity otherne = style.parseOpenTag(tag) 
+         		  		otherne.classification.each{cl -> 
+         		  			ne.classification << cl
+         		  			ne.wikipediaPage[cl] = otherne.wikipediaPage[cl]
+         		  			ne.dbpediaPage[cl] = otherne.dbpediaPage[cl]
+         		  		}  		  
          	      }         	      
          	  } else if (style.isCloseTag(tag)) {
          	      if (ne) {
-         		  if (intitle) doc.titleNEs.add(ne)
-        		  if (inbody) doc.bodyNEs.add(ne)
-        		  if (!intitle && !inbody) doc.bodyNEs.add(ne)	
-        		  ne = null
+         		  		if (intitle) doc.titleNEs.add(ne)
+        		  			if (inbody) doc.bodyNEs.add(ne)
+        		  			if (!intitle && !inbody) doc.bodyNEs.add(ne)	
+        		  			ne = null
          	      } else {
          		 // don't worry... continue 
          	      }         
-         	  } else if (style.isOpenALTTag()) {
+         	  } else if (style.isOpenALTTag(tag)) {
          	      inalt = true    
          	      altid = System.currentTimeMillis()
          	      subaltid = 0
-         	  }  else if (style.isCloseALTTag()) {
+         	  } else if (style.isCloseALTTag(tag)) {
          	      inalt = false
          	      altid = -1
          	      subaltid = -1
-         	  }  else if (style.isOpenSubALTTag()) {
+         	  } else if (style.isOpenSubALTTag(tag)) {
          	      subaltid++
          	      insubalt = true
-         	  } else if (style.isCloseSubALTTag()) {
-         	      subaltid--
+         	  } else if (style.isCloseSubALTTag(tag)) {
          	      insubalt = false
-         	  }
+         	  // is a HTML tag! add it as a hidden term. 
+				  // don't add valid term.index, that's for visible terms only.
+					} else {
+						s << new Term(tag, -1, true)
+					}
   	      }	
          	
   	     break 
  
            case 20:
                if (c == "]") {
-        	   s << t
+						// atenção, que os subalts repetem o texto! 
+						// ler só se não houver subalts (-1 / 0) ou se for o primeiro (1)
+						if (subaltid <= 1) { 
+        	   			s << t
+						} 
         	   // add to NEs, if there is a NE
         	   if (ne) ne.terms << t
         	   state=10

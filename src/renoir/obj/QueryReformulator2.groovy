@@ -17,6 +17,7 @@
  */
 package renoir.obj
 
+import saskia.bin.Configuration
 import rembrandt.bin.Rembrandt
 import rembrandt.bin.RembrandtCore
 import rembrandt.obj.Sentence
@@ -40,6 +41,7 @@ class QueryReformulator2 extends QueryReformulator {
     static DBpediaAPI dbpedia = DBpediaAPI.newInstance()
     static String reformulator = "Reformulator 2"
 	static DBpediaOntology dbpediaontology = DBpediaOntology.getInstance()
+	static Configuration conf = Configuration.newInstance()
 	
     static public ReformulatedQuery reformulate(RenoirQuery initial_query, Question question) {
 		
@@ -50,10 +52,10 @@ class QueryReformulator2 extends QueryReformulator {
 		
 	/* Strategy: 
 	 contents: will only contain original contents
-	 ne-*-index: will only contain answers / others / geoscopes that cannot be grounded to entities 
+	 ne-*: will only contain answers / others / geoscopes that cannot be grounded to entities 
 	 entity: will contain answers / others / geoscopes grounded to entities, but not to woeids
-	 woeid-index: will contain answers / others / geoscopes grounded to woeids
-	 tg-index: will contain time expresions
+	 woeid: will contain answers / others / geoscopes grounded to woeids
+	 time: will contain time expresions
 	 
 	 2 - Remove stopwords and punctuation	 
 	*/
@@ -178,7 +180,7 @@ class QueryReformulator2 extends QueryReformulator {
 	   		}
 	       	  
 	   // add 'em all, if it's not repeated
-			log.debug "NE not grounded, added to ne-index: $neterms"
+			log.debug "NE not grounded, added to ne index: $neterms"
 	   		neterms.each{nt -> ref_query.newterms << nt}
 	
 		/** if this NE is grounded, let's see **/
@@ -190,9 +192,9 @@ class QueryReformulator2 extends QueryReformulator {
 		   		List<String> indexes = ne.tg.getTimeIndex()
 		   		indexes?.each{index -> 
 		   			RenoirQueryTerm tg_term = new RenoirQueryTerm(""+index)
-		   			tg_term.field= saskia.index.GenerateTimeIndexForCollection.luceneIndexFieldLabel
+		   			tg_term.field= conf.get('saskia.index.time_label','time')
 		   			if (!ref_query.newterms.contains(tg_term)) {
-						log.debug "NE grounded with TG, added to tg-index: $tg_term"
+						log.debug "NE grounded with TG, added to time index: $tg_term"
 		   	   			ref_query.newterms << tg_term
 					}
 		   		}
@@ -227,9 +229,9 @@ class QueryReformulator2 extends QueryReformulator {
 				// if geo, let's add woeid
 					if (geo) {
 						RenoirQueryTerm woeid_term = new RenoirQueryTerm(""+geo.geo_woeid)
-						woeid_term.field= saskia.index.GenerateGeoIndexForCollection.luceneIndexFieldLabel
+						woeid_term.field= conf.get('saskia.index.woeid_label','woeid')
 						if (!ref_query.newterms.find{it.text == woeid_term.text && it.field == woeid_term.field}) {
-							log.debug "NE grounded as geoscope, added to woeid-index: $woeid_term"
+							log.debug "NE grounded as geoscope, added to woeid index: $woeid_term"
 							ref_query.newterms << woeid_term
 						}
 						// now, if we are above COuntry, let's expand it
@@ -238,9 +240,9 @@ class QueryReformulator2 extends QueryReformulator {
 							List<Geoscope> country_childrens = geo.getCountryDescendents()
 							country_childrens?.each{children -> 
 								RenoirQueryTerm children_woeid_term = new RenoirQueryTerm(""+children.geo_woeid)
-								children_woeid_term.field= saskia.index.GenerateGeoIndexForCollection.luceneIndexFieldLabel
+								children_woeid_term.field= conf.get('saskia.index.woeid_label','woeid')
 								if (!ref_query.newterms.find{it.text == children_woeid_term}) {
-									log.debug "NE expaned, added to woeid-index: $children_woeid_term"
+									log.debug "NE expaned, added to woeid index: $children_woeid_term"
 
 			   						ref_query.newterms << children_woeid_term
 								}
@@ -276,9 +278,9 @@ class QueryReformulator2 extends QueryReformulator {
 		// if geo, let's add woeid
 		if (geo) {
 			RenoirQueryTerm woeid_term = new RenoirQueryTerm(""+geo.geo_woeid)
-			woeid_term.field= saskia.index.GenerateGeoIndexForCollection.luceneIndexFieldLabel
+			woeid_term.field= conf.get('saskia.index.woeid_label','woeid')
 			if (!ref_query.newterms.find{it.text == woeid_term.text && it.field == woeid_term.field}) {
-				log.debug "NE grounded as geoscope, added to woeid-index: $woeid_term"
+				log.debug "NE grounded as geoscope, added to woeid index: $woeid_term"
 				ref_query.newterms << woeid_term
 			}
 			// now, if we are above COuntry, let's expand it
@@ -287,9 +289,9 @@ class QueryReformulator2 extends QueryReformulator {
 				List<Geoscope> country_childrens = geo.getCountryDescendents()
 				country_childrens?.each{children -> 
 					RenoirQueryTerm children_woeid_term = new RenoirQueryTerm(""+children.geo_woeid)
-					children_woeid_term.field= saskia.index.GenerateGeoIndexForCollection.luceneIndexFieldLabel
+					children_woeid_term.field= conf.get('saskia.index.woeid_label','woeid')
 					if (!ref_query.newterms.find{it.text == children_woeid_term}) {
-						log.debug "NE expaned, added to woeid-index: $children_woeid_term"
+						log.debug "NE expaned, added to woeid index: $children_woeid_term"
 
 						ref_query.newterms << children_woeid_term
 					}

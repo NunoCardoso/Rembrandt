@@ -63,7 +63,7 @@ class ImportPTNews2Saskia {
 	    log.trace "Requesting import of a batch of ${batchSize} documents."
 		boolean found = false
 		
-	    String query = "Select * FROM ${snewsDB}.news WHERE ${snewsDB}.news.id NOT IN (SELECT sdoc_id FROM ${saskiaDB}.${SourceDoc.sdoc_table} "+
+	    String query = "Select * FROM ${snewsDB}.news WHERE ${snewsDB}.news.id NOT IN (SELECT sdoc_id FROM ${saskiaDB}.${SourceDoc.tablename} "+
 		    "WHERE sdoc_collection =?) LIMIT ${batchSize}"
 		
 		saskia_db.getDB().eachRow(query, [collection.col_id], {row ->

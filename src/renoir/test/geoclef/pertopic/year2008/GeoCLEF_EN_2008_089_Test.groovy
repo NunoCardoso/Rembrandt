@@ -104,7 +104,7 @@ label:100 Natural disasters in the western USA
 
 		println refq.toString()
 		String reformulated_x = """
-label:089 contents:trade contents:"fairs" contents:"Lower Saxony" woeid-index:2345486
+label:089 contents:trade contents:"fairs" contents:"Lower Saxony" woeid:2345486
 """
 	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
   } 

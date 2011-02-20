@@ -54,7 +54,7 @@ class GenerateNEIndexForCollection {
     static String NEIndexDirLabel = "ne-index" 
     static String collectionLabel = "col" 
     static String luceneIndexFieldLabel = "ne" 
-    static final int DOC_POOL_SIZE=1000
+    int doc_pool_size = conf.getInt("saskia.index.ne.doc_pool_size",1000)
     static LgteIndexWriter newriter // Hash of indexes
 
    // static List<SemanticClassification> allowedClasses = [ ]
@@ -66,7 +66,7 @@ class GenerateNEIndexForCollection {
     String sync
     File filestats 
     Map stats
-    String lang
+    
     String fileseparator = System.getProperty("file.separator")
     
 	static List indexes = [ 
@@ -138,31 +138,31 @@ class GenerateNEIndexForCollection {
 ]  
 
     // indexdir goes to ${rembrandt.home.dir}/index/col-X/
-    public GenerateNEIndexForCollection(Collection collection, String lang, String indexdir, String sync) {
+    public GenerateNEIndexForCollection(Collection collection, String indexdir, String sync) {
         
 		this.collection=collection
-        this.lang=lang
         this.indexdir=indexdir
         this.sync = sync
 
     	analyzerMap = [:]
-    	analyzerMap.put(Globals.DOCUMENT_ID_FIELD, new LgteNothingAnalyzer())
-    
-    	if (lang == "pt") {
+   	analyzerMap.put(conf.get("saskia.index.id_label","id"), new LgteNothingAnalyzer())
+    	analyzerMap.put(conf.get("saskia.index.docid_label","docid"), new LgteNothingAnalyzer())
+     
+    	if (collection.col_lang == "pt") {
         	indexes.each{index -> 
 				analyzerMap.put(index, LgteAnalyzerManager.getInstance().getLanguagePackage(
                 "Portuguese", "stopwords_por.txt").getAnalyzerNoStemming() )
 			}
 		}	
-    	if (lang == "en") {
+    	if (collection.col_lang == "en") {
 	   		indexes.each{index -> 
-        		analyzerMap.put("ne-LOCAL-HUMANO-PAIS-index", LgteAnalyzerManager.getInstance().getLanguagePackage(
+        		analyzerMap.put(index, LgteAnalyzerManager.getInstance().getLanguagePackage(
                 "English", "snowball-english.list").getAnalyzerNoStemming() )
 			}
 		}
     
     	analyzer = new LgteBrokerStemAnalyzer(analyzerMap)
-    	newriter = new LgteIndexWriter(indexdir ,analyzer, true, Model.OkapiBM25Model)
+    	newriter = new LgteIndexWriter(indexdir, analyzer, true, Model.OkapiBM25Model)
     
        // newriter = new LgteIndexWriter(indexdir, new LgteNothingAnalyzer(), true, Model.OkapiBM25Model)
     
@@ -190,9 +190,9 @@ class GenerateNEIndexForCollection {
         docstats.totalDocs = stats['total']
         
         /** ITERATOR **/
-        for (int i=stats['total']; i > 0; i -= DOC_POOL_SIZE) {
+        for (int i=stats['total']; i > 0; i -= doc_pool_size) {
             
-            int limit = (i > DOC_POOL_SIZE ? DOC_POOL_SIZE : i)
+            int limit = (i > doc_pool_size ? doc_pool_size : i)
             log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"  
 
 			Map rdocs = [:]
@@ -214,8 +214,9 @@ class GenerateNEIndexForCollection {
             // ADDING STUFF TO INDEX                       
             rdocs.each {rdoc_id, rdoc ->
               	LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
-                ldoc.storeUtokenized(Globals.DOCUMENT_ID_FIELD, rdoc.doc_original_id)
-                log.trace "Wrote doc id ${rdoc.doc_original_id}."
+               	ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
+                	ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id.toString())
+                 log.trace "Wrote doc id ${rdoc.doc_original_id}."
 
                 /*****  NEs in body ******/
                 rdoc.nes.each{ne -> 
@@ -269,7 +270,7 @@ class GenerateNEIndexForCollection {
     }
     
     static String generateField(SemanticClassification cl) {
-		return luceneIndexFieldLabel+"-"+cl.toString().replaceAll("@","")+"-index"
+		return luceneIndexFieldLabel+"-"+cl.toString().replaceAll("@","")
     }
     
 	
@@ -279,7 +280,6 @@ class GenerateNEIndexForCollection {
         String fileseparator = System.getProperty("file.separator")
         
         o.addOption("col", true, "Collection name or ID")
-        o.addOption("lang", true, "Collection language")
         o.addOption("sync", true, "Where will we get the NEs - rdoc or pool. rdoc parses the RembrandtedDoc to get NEs, pool will get NEs from DB")
         o.addOption("help", false, "Gives this help information")
         o.addOption("indexdir", false, "directory of the index")
@@ -295,11 +295,6 @@ class GenerateNEIndexForCollection {
         
         if (!cmd.hasOption("col")) {
             println "No --col arg. Please specify the collection. Exiting."
-            System.exit(0)
-        }
-        
-        if (!cmd.hasOption("lang")) {
-            println "No --lang arg. Please specify the language. Exiting."
             System.exit(0)
         }
         
@@ -350,7 +345,7 @@ class GenerateNEIndexForCollection {
             System.exit(0)    
         }
         GenerateNEIndexForCollection indexer = new GenerateNEIndexForCollection(
-               collection, cmd.getOptionValue("lang"), indexdir, sync)
+               collection, indexdir, sync)
         
         indexer.doit()
         

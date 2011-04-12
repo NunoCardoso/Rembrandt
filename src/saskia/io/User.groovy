@@ -27,7 +27,7 @@ import org.apache.log4j.*
   */
 class User {
 
-	static String usr_table = "user"
+	static String tablename = "user"
 	    
 	Long usr_id
 	String usr_login
@@ -66,7 +66,7 @@ class User {
 	static String guest = "guest" 
 	
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("User")
 
 	// cache for user info
 	static Map <Long,User> cacheIDUser = [:]
@@ -134,24 +134,24 @@ class User {
     * Load the internal cache for users
     */
         static void refreshUserCache() {
-            List l = queryDB("SELECT * FROM ${usr_table}")
+            List l = queryDB("SELECT * FROM ${tablename}")
             l.each{ 
 					cacheIDUser[it.usr_id] = it 
 					cacheAPIKeyUser[it.usr_api_key] = it
 				}
         }
         
-        public void enableUser() {
+		public void enableUser() {
 	    	usr_enabled=true
 	    	cacheIDUser[usr_id].usr_enabled=true
-	    	db.getDB().executeUpdate("UPDATE ${usr_table} set usr_enabled=1 where usr_id=?", [usr_id])
+	    	db.getDB().executeUpdate("UPDATE ${tablename} set usr_enabled=1 where usr_id=?", [usr_id])
 		}
 	
 	   public void generatePubKey() {
 			
 	    	String s = renoir.util.MD5Hex.digest(usr_login+System.currentTimeMillis())
 	    	cacheIDUser[usr_id].usr_pub_key=s
-	    	db.getDB().executeUpdate("UPDATE ${usr_table} set usr_pub_key=? where usr_id=?", [s, usr_id])
+	    	db.getDB().executeUpdate("UPDATE ${tablename} set usr_pub_key=? where usr_id=?", [s, usr_id])
 		}
 		
 		/** get my groups in a nice way */
@@ -267,7 +267,7 @@ class User {
             usr_date_last_api_call = d
             cacheIDUser[usr_id].usr_current_daily_api_calls = 0
             cacheIDUser[usr_id].usr_date_last_api_call = d
-            db.getDB().executeUpdate("UPDATE ${usr_table} set usr_date_last_api_call=NOW(), "+
+            db.getDB().executeUpdate("UPDATE ${tablename} set usr_date_last_api_call=NOW(), "+
             "usr_current_daily_api_calls=0 where usr_id=?", [usr_id])        
         }
         
@@ -277,7 +277,7 @@ class User {
             usr_total_api_calls++
             cacheIDUser[usr_id].usr_current_daily_api_calls++
             cacheIDUser[usr_id].usr_total_api_calls++
-            db.getDB().executeUpdate("UPDATE ${usr_table} set usr_current_daily_api_calls="+
+            db.getDB().executeUpdate("UPDATE ${tablename} set usr_current_daily_api_calls="+
             "usr_current_daily_api_calls + 1, usr_total_api_calls = usr_total_api_calls + 1, "+
             "usr_date_last_api_call=NOW() where usr_id=?", [usr_id])
             return usr_current_daily_api_calls
@@ -286,19 +286,19 @@ class User {
  
 		
 	public void insertTempPassword(String password) {
-	    db.getDB().executeUpdate("UPDATE ${usr_table} set usr_tmp_password=? where usr_id=?",
+	    db.getDB().executeUpdate("UPDATE ${tablename} set usr_tmp_password=? where usr_id=?",
 		   [password, usr_id])
             cacheIDUser[usr_id].usr_tmp_password=password
 	}
 	
 	public void insertTempAPIKey(String tmp_api_key) {
-	    db.getDB().executeUpdate("UPDATE ${usr_table} set usr_tmp_api_key=? where usr_id=?",
+	    db.getDB().executeUpdate("UPDATE ${tablename} set usr_tmp_api_key=? where usr_id=?",
 		[tmp_api_key, usr_id])
             cacheIDUser[usr_id].usr_tmp_api_key = tmp_api_key
 	}
 	
 	public void updatePasswordAndAPIKeyFromTemp() {
-	    db.getDB().executeUpdate("UPDATE ${usr_table} set usr_password=usr_tmp_password, "+
+	    db.getDB().executeUpdate("UPDATE ${tablename} set usr_password=usr_tmp_password, "+
 		"usr_api_key=usr_tmp_api_key where usr_id=?", [usr_id])
             cacheIDUser[usr_id].usr_password = cacheIDUser[usr_id].usr_tmp_password
             cacheAPIKeyUser[usr_tmp_api_key] = cacheAPIKeyUser[usr_api_key]
@@ -308,7 +308,7 @@ class User {
 	}
 	
 	public void updatePassword(String password) {
-	    db.getDB().executeUpdate("UPDATE ${usr_table} set usr_password=? "+
+	    db.getDB().executeUpdate("UPDATE ${tablename} set usr_password=? "+
 		" where usr_id=?", [password, usr_id])
             cacheIDUser[usr_id].usr_password = password
 	}
@@ -317,13 +317,6 @@ class User {
 	    if (!usr_id) return null
 		 User u = User.getFromID(usr_id)
 		 return u?.removeThisFromDB()
-	}
-	
-	public removeThisFromDB() {
-		 def res = db.getDB().executeUpdate("DELETE FROM ${usr_table} WHERE usr_id=?", [usr_id])
-	    cacheIDUser.remove(usr_id)
-	    Collection.cacheIDuoc.remove(usr_id)	  
-	    return res	    
 	}
 	
 	static updateValue(long usr_id, String column, newvalue) {
@@ -335,7 +328,7 @@ class User {
             else if (el instanceof Integer) newval = Integer.parseInt(newvalue)
             else if (el instanceof Long) newval = Long.parseLong(newvalue)
             
-	    def res = db.getDB().executeUpdate("UPDATE ${usr_table} SET ${column}=? WHERE usr_id=?",[newval, usr_id])
+	    def res = db.getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE usr_id=?",[newval, usr_id])
 	    cacheIDUser[usr_id][column] = newval
 		 if (column == "usr_api_key") {
 			 cacheAPIKeyUser.remove(usr.usr_api_key)
@@ -345,18 +338,28 @@ class User {
 	    return res
 	}
 	
-	public long addThisToDB() {		
-	    def res = db.getDB().executeInsert("INSERT INTO ${usr_table} VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
-		    [usr_login, usr_enabled, usr_groups, usr_superuser, usr_firstname, usr_lastname, usr_email, usr_password, 
-		     usr_tmp_password, usr_api_key, usr_tmp_api_key, usr_pub_key, usr_max_number_collections,
-		     usr_max_docs_per_collection, usr_max_daily_api_calls, usr_current_daily_api_calls,
-		     usr_total_api_calls, usr_date_last_api_call] )
-            usr_id = (long)res[0][0]     
-	    cacheIDUser[usr_id] = this
-	    // returns an auto_increment value
-	    return usr_id
+	public Long addThisToDB() {		
+		def res = db.getDB().executeInsert("INSERT INTO ${tablename} "+
+			"VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+			[usr_login, usr_enabled, usr_groups, usr_superuser, usr_firstname, 
+			usr_lastname, usr_email, usr_password, usr_tmp_password, usr_api_key, 
+			usr_tmp_api_key, usr_pub_key, usr_max_number_collections, usr_max_docs_per_collection,
+			usr_max_daily_api_calls, usr_current_daily_api_calls, usr_total_api_calls, 
+			usr_date_last_api_call] )
+		usr_id = (long)res[0][0]     
+		cacheIDUser[usr_id] = this
+		log.info "Inserted User into DB: ${this}"
+		return usr_id
 	}	
-	
+
+	public int removeThisFromDB() {
+		 def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE usr_id=?", [usr_id])
+	    cacheIDUser.remove(usr_id)
+	    Collection.cacheIDuoc.remove(usr_id)	  
+		 log.info "Removed User ${this} into DB, got res $res"
+	    return res	    
+	}
+		
 	public boolean equals(User user) {
 		return this.usr_id == user.usr_id
 	}

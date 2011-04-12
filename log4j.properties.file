@@ -1,0 +1,142 @@
+# Main logs
+log4j.logger.RembrandtMain = info, myFile
+log4j.logger.RenoirMain = debug, myFile
+log4j.logger.SaskiaMain = info, myFile
+log4j.logger.EntityRelationMain = info, myFile
+
+log4j.logger.org.restlet.Component.Server  = error, myFile
+log4j.logger.org.restlet.Component.LogService = debug, myFile
+
+# Rembrandt logs
+log4j.logger.NamedEntity = debug, myFile
+log4j.logger.RuleMatcher = info, myFile
+log4j.logger.Detector = info, myFile
+log4j.logger.TimeGroundingDetector = info, myFile
+log4j.logger.SplitNEDetector = debug, myFile
+log4j.logger.Document = info, myFile
+log4j.logger.Courthouse = info, myFile
+log4j.logger.Reader = info, myFile
+log4j.logger.Writer = info, myFile
+log4j.logger.Tokenizer = info, myFile
+
+# Rembrandt server logs 
+log4j.logger.RembrandtServerMain = info, myRembrandtServerV
+log4j.logger.RembrandtServerErrors = debug, myRembrandtServerV
+log4j.logger.RembrandtServerAccess = debug, myRembrandtServerV
+log4j.logger.RembrandtServerProcessing = debug, myRembrandtServerV
+
+# Renoir logs
+log4j.logger.SuggestionDB = info, myFile
+log4j.logger.RenoirQuestionSolver = debug, myFile
+log4j.logger.SubjectParser = debug, myFile
+
+# Renoir server logs
+log4j.logger.RenoirServerMain = info, myRenoirServerV
+log4j.logger.RenoirServerErrors = debug, myRenoirServerV
+log4j.logger.RenoirServerAccess = debug, myRenoirServerV
+log4j.logger.RenoirServerProcessing = debug, myRenoirServerV
+
+# Saskia logs
+
+## APIs
+log4j.logger.WikipediaAPI = warn, myFile
+log4j.logger.DBpediaAPI = info, myFile
+log4j.logger.GeoPlanetAPI = info, myFile
+log4j.logger.WGO_API = info, myFile
+log4j.logger.AskSaskia = debug, myFile
+## Wikis
+log4j.logger.WikipediaSearch = info, myFile
+log4j.logger.WikipediaTools = info, myFile
+## DBs
+log4j.logger.DB = info, myFile
+## Imports
+log4j.logger.DocumentConverter = debug, myFile
+log4j.logger.SaskiaImports = debug, myFile
+log4j.logger.SaskiaExports = debug, myFile
+log4j.logger.GeoSignature = debug, myFile
+log4j.logger.TimeSignature = debug, myFile
+## Indexes
+log4j.logger.IndexGeneration = debug, myFile
+
+# Saskia server logs
+log4j.logger.SaskiaServerMain = info, mySaskiaServerV
+log4j.logger.SaskiaServerErrors = debug, mySaskiaServerV
+log4j.logger.SaskiaServerAccess = debug, mySaskiaServerV
+log4j.logger.SaskiaServerProcessing = debug, mySaskiaServerV
+
+# Other logs
+log4j.logger.Configuration = error, myFile
+log4j.logger.RembrandtTest = debug, junitTest
+log4j.logger.RenoirTest = debug, junitTest
+log4j.logger.SaskiaTest = debug, junitTest
+log4j.logger.Patches = debug, myFile
+log4j.logger.JUnitTest = debug, myFile
+
+#3rd party logs
+log4j.logger.pt.utl.ist.lucene.config.ConfigProperties = error, myFile
+log4j.logger.pt.utl.ist.lucene.LgteIndexWriter = error, myFile
+log4j.logger.pt.utl.ist.lucene.FilterOrchestrator = error, myFile
+log4j.logger.pt.utl.ist.lucene.utils.DataCacher = error, myFile
+
+# myConsoleV
+log4j.appender.myConsoleV = org.apache.log4j.ConsoleAppender
+log4j.appender.myConsoleV.layout = org.apache.log4j.PatternLayout
+log4j.appender.myConsoleV.layout.ConversionPattern = %m%n
+
+# myConsoleVV
+log4j.appender.myConsoleVV = org.apache.log4j.ConsoleAppender
+log4j.appender.myConsoleVV.layout = org.apache.log4j.PatternLayout
+log4j.appender.myConsoleVV.layout.ConversionPattern = %-5p %d:[%t] %m%n
+
+# myConsoleVVV
+# note: %F is slow! $L is also slow!
+log4j.appender.myConsoleVVV = org.apache.log4j.ConsoleAppender
+log4j.appender.myConsoleVVV.layout = org.apache.log4j.PatternLayout
+log4j.appender.myConsoleVVV.layout.ConversionPattern = %-5p %d:[%t]:[%F:%L] %m%n
+
+# myFile
+log4j.appender.myFile = org.apache.log4j.RollingFileAppender
+log4j.appender.myFile.File=file.log
+log4j.appender.myFile.layout = org.apache.log4j.PatternLayout
+log4j.appender.myFile.Append=false
+log4j.appender.myFile.layout.ConversionPattern = %-5p [%t][%F %L]: %m%n
+
+# myRembrandtServerV
+log4j.appender.myRembrandtServerV = org.apache.log4j.RollingFileAppender
+log4j.appender.myRembrandtServerV.File=rembrandtServer.log
+log4j.appender.myRembrandtServerV.layout = org.apache.log4j.PatternLayout
+log4j.appender.myRembrandtServerV.Append=true
+log4j.appender.myRembrandtServerV.layout.ConversionPattern = %-5p [%t][%F %L]: %m%n
+
+# myRenoirServerV
+log4j.appender.myRenoirServerV = org.apache.log4j.RollingFileAppender
+log4j.appender.myRenoirServerV.File=renoirServer.log
+log4j.appender.myRenoirServerV.layout = org.apache.log4j.PatternLayout
+log4j.appender.myRenoirServerV.Append=true
+log4j.appender.myRenoirServerV.layout.ConversionPattern = %-5p [%t][%F %L]: %m%n
+
+# mySaskiaServerV
+log4j.appender.mySaskiaServerV = org.apache.log4j.RollingFileAppender
+log4j.appender.mySaskiaServerV.File=saskiaServer.log
+log4j.appender.mySaskiaServerV.layout = org.apache.log4j.PatternLayout
+log4j.appender.mySaskiaServerV.Append=true
+log4j.appender.mySaskiaServerV.layout.ConversionPattern = %-5p [%t][%F %L]: %m%n
+
+#WikipediaImportFile 
+log4j.appender.WikipediaImportFile = org.apache.log4j.RollingFileAppender
+log4j.appender.WikipediaImportFile.File=wikipedia_import.log
+log4j.appender.WikipediaImportFile.layout = org.apache.log4j.PatternLayout
+log4j.appender.WikipediaImportFile.Append=false
+log4j.appender.WikipediaImportFile.layout.ConversionPattern = %m%n
+
+#myError
+log4j.appender.myError = org.apache.log4j.ConsoleAppender
+log4j.appender.myError.layout = org.apache.log4j.PatternLayout
+log4j.appender.myError.layout.ConversionPattern = %5p [%c.%t] - %m%n
+
+log4j.appender.junitTest = org.apache.log4j.ConsoleAppender
+#log4j.appender.junitTest.threshold = debug
+#log4j.appender.junitTest.Encoding=UTF-8
+log4j.appender.junitTest.layout = org.apache.log4j.PatternLayout
+log4j.appender.junitTest.layout.ConversionPattern =%m%n
+

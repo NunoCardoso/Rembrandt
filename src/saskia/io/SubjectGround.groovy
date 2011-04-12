@@ -22,7 +22,7 @@ import org.apache.log4j.*
 import saskia.bin.Configuration
 import rembrandt.obj.Sentence
 
-class SubjectGround {
+class SubjectGround extends DBObject implements JSONable {
 
 	static String tablename = "subject_ground"
 	long sgr_id
@@ -40,7 +40,7 @@ class SubjectGround {
 	static Configuration conf = Configuration.newInstance()
 	
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("SubjectGround")
 	
 	static List<SubjectGround> queryDB(String query, ArrayList params = []) {
 	    List<SubjectGround> t = []
@@ -65,7 +65,11 @@ class SubjectGround {
 	}
 	
 
-    static Map listSubjectGrounds(limit = 10, offset = 0, column = null, needle = null) {
+	public Map toSimpleMap() {
+	    return toMap()
+	}
+	
+   static Map listSubjectGrounds(limit = 10, offset = 0, column = null, needle = null) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10
 		if (!offset) offset = 0
@@ -138,21 +142,22 @@ class SubjectGround {
 	/** Add this NECategory o the database. Note that a null is a valid insertion...
 	 * return 1 if successfully inserted.
 	 */	
-	public long addThisToDB() {
+	public Long addThisToDB() {
 	    def res = db.getDB().executeInsert("INSERT INTO ${tablename}(sgr_subject, sgr_geoscope, sgr_dbpedia_resource, "+
 		"sgr_dbpedia_class, sgr_wikipedia_category, sgr_comment) VALUES(?,?,?,?,?,?)", 
 		[sgr_subject.sbj_id, sgr_geoscope?.geo_id, sgr_dbpedia_resource, sgr_dbpedia_class, 
 			sgr_wikipedia_category, sgr_comment])
-	    this.sgr_id = (long)res[0][0]
-	   return this.sgr_id
+	   sgr_id = (long)res[0][0]
+		log.info "Adding subject_ground to DB: ${this}"
+	   return sgr_id
 	}	
 	
 	public int removeThisFromDB() {
 		if (!sgr_id) return null
 		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE sgr_id=?", [sgr_id])
+		log.info "Removing subject_ground to DB: ${this}, got res $res"
 		return res	    
    }
-	
 	
 	public String toString() {
 	    return "${sgr_id}:${sgr_subject}:${sgr_geoscope}"

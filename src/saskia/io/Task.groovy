@@ -37,7 +37,7 @@ CREATE TABLE `task` (
 );
 
   */
-class Task {
+class Task extends DBObject implements JSONable {
 
 	static String tablename = "task"
 	Long tsk_id
@@ -204,6 +204,10 @@ class Task {
 	  'tsk_comment':tsk_comment]
 	}
 	
+	Map toSimpleMap() {
+	    return toMap()
+	}
+	
 	void incrementDone() {
 		def res = db.getDB().executeUpdate("UPDATE ${tablename} SET tsk_done=tsk_done+1 where tsk_id=?",[tsk_id])
 		cache[tsk_id].tsk_done++
@@ -223,18 +227,16 @@ class Task {
 		// returns an auto_increment value
 	    tsk_id = (long)res[0][0]
 	    cache[tsk_id] = this
+		 log.info "Adding Task to DB: ${this}"
 	    return tsk_id                           
 	}	
 	
-	public removeThisFromDB() {
+	public int removeThisFromDB() {
 		if (!tsk_id) throw new IllegalStateException("Can't remove myself from DB if I don't have a tsk_id")
 	   def res = db.getDB().executeUpdate("DELETE FROM ${tablename} where tsk_id=?",[tsk_id]) 
 		cache.remove(tsk_id)		
+		log.info "Removing Task to DB: ${this}, got res $res"
 		return res
-	}
-	
-	boolean equals(Entity e) {
-		return this.toMap().equals(e.toMap())
 	}
 	
 	public String toString() {

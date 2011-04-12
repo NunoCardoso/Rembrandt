@@ -18,8 +18,7 @@
 
 package saskia.io
 
-import java.util.Map;
-
+import java.util.Map
 import org.apache.log4j.Logger
 
 /** This class is an interface for the RembrandtTag table in the WikiRembrandt database. 
@@ -27,9 +26,9 @@ import org.apache.log4j.Logger
   * Static methods are used to return results from DB, using where clauses.
   * Class methods are used to insert results to DB.  
   */
-class Collection  {
+class Collection extends DBObject implements JSONable {
 
-	static String col_table = "collection"
+	static String tablename = "collection"
 	Long col_id
 	String col_name
 	User col_owner
@@ -38,10 +37,11 @@ class Collection  {
 	String col_comment
 	
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Collection")
+
 	static Map<Long,Collection> cacheIDCollection = [:]
 
-   static Map type = ['col_id':'Long', 'col_name':'String', 'col_owner':'User',
+	static Map type = ['col_id':'Long', 'col_name':'String', 'col_owner':'User',
      'col_lang':'String', 'col_permission':'String', 'col_comment':'String'] 
 
 	// cache on user-colllection itens
@@ -78,15 +78,15 @@ class Collection  {
 	}
 	
    static Map<Long,Collection> getAllCollections() {
-	    if (!cacheIDCollection) refreshCache()
-		 return cacheIDCollection
+		if (!cacheIDCollection) refreshCache()
+		return cacheIDCollection
 	}
 
 	/**
 	 * Load the internal cache for collections
 	 */
 	static void refreshCache() {
-	    List l = queryDB("SELECT * FROM ${col_table}".toString(), [])
+	    List l = queryDB("SELECT * FROM ${tablename}".toString(), [])
 	    l.each{cacheIDCollection[it.col_id] = it}
 	}
 	
@@ -294,7 +294,7 @@ class Collection  {
 		if (!name) return null   
 		if (!cacheIDCollection) refreshCache()
 		List c = cacheIDCollection.values().toList().findAll{it.col_name==name}
-		log.debug "Querying for collection $name got Collection $c." 
+		log.info "Querying for collection name $name got Collection(s) $c." 
 		if (c) return c[0] else return null
 	}
 	
@@ -302,7 +302,7 @@ class Collection  {
 		if (!name) return null   
 		if (!cacheIDCollection) refreshCache()
 		List c = cacheIDCollection.values().toList().findAll{it.col_name==name && it.col_owner.equals(user)}
-		log.debug "Querying for collection $name got Collection $c." 
+		log.info "Querying for collection name $name and owner $user got Collection(s) $c." 
 		if (c) return c[0] else return null
 	}
 	
@@ -312,7 +312,7 @@ class Collection  {
 		if (!id) return null
 		if (!cacheIDCollection) refreshCache()
 		Collection c = cacheIDCollection[id]
-		log.debug "Querying for collection $id got Collection $c." 
+		log.info "Querying for collection id $id got Collection $c." 
 		if (c) return c else return null
 	}
 	 
@@ -324,10 +324,11 @@ class Collection  {
 	        case 'Long': newvalue = Long.parseLong(value); break
 	        case 'User': newvalue = Long.parseLong(value); object = User.getFromID(newvalue); break // value is usr_id
 	    }        
-	    def res = db.getDB().executeUpdate("UPDATE ${col_table} SET ${column}=? WHERE col_id=?",[newvalue, col_id])
+	    def res = db.getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE col_id=?",[newvalue, col_id])
 	    // if we have a User (object), add it to cache
 		 cacheIDCollection[col_id][column] = (object ? object : newvalue)
-	    return res
+		 log.info "Updating value $column to $value for collection ${this}"
+		 return res
 	}
     
     static int collectionsOwnedBy(User user) {
@@ -355,20 +356,22 @@ class Collection  {
 	}
 	
 	// used to add new collections.
-	public long addThisToDB() {	
-	   def res = db.getDB().executeInsert("INSERT INTO ${col_table} VALUES(0,?,?,?,?,?)", 
-	      [col_name, col_owner.usr_id, col_lang, col_permission, col_comment])
-		// returns an auto_increment value
-	       col_id = (long)res[0][0]
-	       cacheIDCollection[col_id] = this                      
+	public Long addThisToDB() {	
+		def res = db.getDB().executeInsert(
+			"INSERT INTO ${tablename} VALUES(0,?,?,?,?,?)", 
+			[col_name, col_owner.usr_id, col_lang, col_permission, col_comment])
+		col_id = (long)res[0][0]
+		cacheIDCollection[col_id] = this                      
+		log.info "Adding collection to DB: ${this}"
 		return col_id
-	}	
-    
+	}
 	
-	public removeThisFromDB() {	
-	    def res = db.getDB().executeUpdate("DELETE FROM ${col_table} where col_id=?",[col_id]) 
-	    cacheIDCollection.remove(col_id)
-	    return res
+	public int removeThisFromDB() {	
+		def res = db.getDB().executeUpdate(
+			"DELETE FROM ${tablename} where col_id=?",[col_id]) 
+		cacheIDCollection.remove(col_id)
+		log.info "Removing collection ${this} from DB, got $res"
+		return res
 	}
     
 	public String toString() {

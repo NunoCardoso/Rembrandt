@@ -25,9 +25,9 @@ import org.apache.log4j.*
   * Static methods are used to return results from DB, using where clauses.
   * Class methods are used to insert results to DB.  
   */
-class NEType {
+class NEType extends DBObject implements JSONable {
 
-	static String net_table = "ne_type"
+	static String tablename = "ne_type"
 	static Map<Long,String> all_id_type = [:]
 	static Map<String,Long> all_type_id = [:]
 		                                   	                                           
@@ -35,7 +35,7 @@ class NEType {
 	String net_type
     
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("NEType")
 
 	static List<NEType> queryDB(String query, List params = []) {
 	    List<NEType> t = []
@@ -45,12 +45,19 @@ class NEType {
 	    return t
 	}
 	
+	public Map toMap() {
+	    return ["net_id":net_id, "net_type":net_type]
+	}
+	
+	public Map toSimpleMap() {
+	    return toMap()
+	}	
 	/** Get all NE categories. It's easier to have them in memory, than hammering the DB 
 	 * return List<NECategory> A list of NECategory objects
 	 */
 	static void createCache() {
 	    if (all_id_type.isEmpty()) {
-               def net = queryDB("SELECT * FROM ${net_table}")
+               def net = queryDB("SELECT * FROM ${tablename}")
 		log.debug "Searched for all types, got ${net.size()} entries."
 		net.each{updateCacheElement(it.net_id, it.net_type)}
 	    }
@@ -71,7 +78,7 @@ class NEType {
 		if (!net_id) return null
                 createCache()
                 return all_id_type[net_id]
-		//NEType net = queryDB("SELECT * FROM ${net_table} WHERE net_id=?", [net_id])?.getAt(0)
+		//NEType net = queryDB("SELECT * FROM ${tablename} WHERE net_id=?", [net_id])?.getAt(0)
 		//log.debug "Querying for net_id $net_id got NEType $net." 
 		//if (net.net_id) return net else return null
 	}	
@@ -89,15 +96,25 @@ class NEType {
 	/** Add this NEType o the database. Note that a null is a valid insertion...
 	 * return 1 if successfully inserted.
 	 */	
-	public int addThisToDB() {
-	    def res = db.getDB().executeInsert("INSERT IGNORE INTO ${net_table} VALUES(0,?)", [net_type])
-	    // returns an auto_increment value
-	    updateCacheElement(net_id, net_type)
-	    return (res ? (int)res[0][0] : 0)
-	}
-	
-	public Map toMap() {
-	    return ["net_id":net_id, "net_type":net_type]
+
+	public Long addThisToDB() {
+	    def res = db.getDB().executeInsert("INSERT IGNORE INTO ${tablename} VALUES(0,?)", [net_type])
+		// returns an auto_increment value	
+		if (res) {
+			net_id = (long)res[0][0]
+			updateCacheElement(net_id, net_type)
+			log.info "Inserted new NEType in DB: ${this}"
+		}
+		return net_id
+	}	
+		
+	public int removeThisFromDB() {
+		if (!nes_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE net_id=?", [net_id])	
+		all_type_id.remove(net_type)
+		all_id_type.remove(net_id)
+		log.info "Removed NEType ${this} from DB, got $res"
+		return res	    
 	}
 	
 	boolean equals(Entity e) {

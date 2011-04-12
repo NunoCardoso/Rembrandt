@@ -25,9 +25,9 @@ import java.util.Map;
 
 /** 
  * @author Nuno Cardoso
- * Interface dor source document table
+ * Interface for source document table
  */
-class SourceDoc {
+class SourceDoc extends DBObject implements JSONable {
 
 	static String tablename = "source_doc"
    static String job_doc_type_label = "SDOC"
@@ -74,11 +74,7 @@ class SourceDoc {
 			if (row['sdoc_doc']) sd.sdoc_doc = row['sdoc_doc']	
 			sd.sdoc_comment = row['sdoc_comment']
 		 	
-		/*java.sql.Blob blob = row.getBlob('sdoc_content')
-		byte[] bdata = blob.getBytes(1, (int) blob.length())
-		// you have to say explicitly that mediawiki's mediumblob is in UTF-8
-		sd.sdoc_content = new String(bdata, "UTF-8")
-		*/
+	
 		sd.sdoc_webstore = row['sdoc_webstore']
 		if (sd.sdoc_webstore) {try {
 		    sd.sdoc_content = sd.getContent()
@@ -90,6 +86,14 @@ class SourceDoc {
 	    return (l ? l : null)
 	}	
 	
+	public Map toMap() {
+      return toShowMap()
+   }
+
+   public Map toSimpleMap() {
+      return toListMap()
+	}
+		
 	Map toListMap() {
 		 return ["sdoc_id":sdoc_id, "sdoc_original_id":sdoc_original_id,
         	"sdoc_collection":sdoc_collection.toSimpleMap(), "sdoc_webstore":sdoc_webstore, 
@@ -108,7 +112,6 @@ class SourceDoc {
 				]
 			]
 	}
-
 
 	static HashMap listSourceDocs(Collection collection, limit = 10,  offset = 0, column = null, needle = null) {
 	    // limit & offset can come as null... they ARE initialized...
@@ -282,62 +285,6 @@ class SourceDoc {
 	    return null
 	}
 	
-	/** Add the fields in this object to the DB 
-	 * @return The new id for the doc table, from the DB
-	 */
-	public addThisToDB() {	
-	    try {
-			 if (sdoc_content) {
-		    	String key = webstore.store(sdoc_content, SaskiaWebstore.VOLUME_SDOC)
-		    	log.trace "Got new key $key"
-		    	def res = db.getDB().executeInsert("INSERT INTO ${SourceDoc.tablename}(sdoc_original_id, sdoc_webstore, sdoc_collection, sdoc_lang, "+
-		" sdoc_comment, sdoc_date, sdoc_doc, sdoc_proc) VALUES(?,?,?,?,?,?,?,?)", 
-		[sdoc_original_id, key, sdoc_collection.col_id, sdoc_lang, sdoc_comment, sdoc_date, sdoc_doc, sdoc_proc.text()]) 		
-		   	sdoc_id = (long) res[0][0]
-		   	sdoc_webstore = key                        
-				log.trace "Inserted new SourceDoc, got id $sdoc_id"
-          } else {
-        	 	log.error "Did NOT added source_doc, sdoc_content is empty!"
-           }
-	    } catch (Exception e) {
-        	 	log.error "Did NOT added source_doc to the DB: ${e.getMessage()}"
-	    }
-		 // important, to know if it was written to the DB (that is, has an assigned id)
-	    return this.sdoc_id
-	}
-	
-	/** Add the fields in this object to the DB 
-	 * @return The new id for the doc table, from the DB
-	 */
-	public replaceThisToDB() {	
-	    try {
-			if (sdoc_content) {
-			 // apagar o conteúdo anterior
-			 	if (sdoc_webstore) {
-			 		try {
-						webstore.delete(sdoc_webstore, SaskiaWebstore.VOLUME_SDOC)
-					} catch(Exception e) {}
-		    		String key = webstore.store(sdoc_content, SaskiaWebstore.VOLUME_SDOC)
-		    		log.trace "Got new key $key"
-			
-			// add sdoc_id so it can make the replacement
-		    def res = db.getDB().executeInsert("REPLACE INTO ${SourceDoc.tablename}(sdoc_id, sdoc_original_id, sdoc_webstore, sdoc_collection, sdoc_lang, "+
-		" sdoc_comment, sdoc_date, sdoc_doc, sdoc_proc) VALUES(?,?,?,?,?,?,?,?,?)", 
-		[sdoc_id, sdoc_original_id, key, sdoc_collection.col_id, sdoc_lang, sdoc_comment, sdoc_date, sdoc_doc, sdoc_proc.text()]) 		
-		   sdoc_id = (long) res[0][0]
-		   sdoc_webstore = key                        
-			log.trace "Replaced new SourceDoc, got id $sdoc_id"
-				}
-          } else {
-        	 	log.error "Did NOT added source_doc, sdoc_content is empty!"
-          }
-	    } catch (Exception e) {
-			e.printStackTrace()
-	    }
-	    return this.sdoc_id
-	}
-	
-	
 	 String getTitleFromContent() {
         String s = null
         sdoc_content?.find(/(?si)<TITLE>(.*?)<\/TITLE>/) {match, g1 -> s = g1.trim()}
@@ -351,16 +298,12 @@ class SourceDoc {
         return s           
     }
 
-	public removeThisFromDB() {	
-	    def res = db.getDB().executeUpdate("DELETE FROM ${SourceDoc.tablename} where sdoc_id=?",[sdoc_id]) 
-	    return res
-	}
-	
+
 	public int changeProcStatusInDBto(DocStatus status) {	
 		def res = db.getDB().executeUpdate("UPDATE ${SourceDoc.tablename} SET sdoc_proc=? WHERE sdoc_id=? and "+
 		"sdoc_collection=? and sdoc_lang=?",
 			[status.text(), sdoc_id, sdoc_collection.col_id, sdoc_lang]) 
-		log.trace "Wrote proc status ${status}(${status.text()}) to sdoc_id ${sdoc_id}, ${res} rows were changed."
+		if (res) log.info "SourceDoc ${this} got status changed to $status (${status.text()})"
 		return res
 	}
 	
@@ -368,9 +311,79 @@ class SourceDoc {
 	    if (!doc_id) return null
 		def res = db.getDB().executeUpdate("UPDATE ${SourceDoc.tablename} SET sdoc_doc=? WHERE sdoc_id=? and "+
 		"sdoc_collection=? and sdoc_lang=?", [doc_id, sdoc_id, sdoc_collection.col_id, sdoc_lang]) 
+		if (res) log.info "SourceDoc ${this} got associated to RembrandtedDoc ${doc_id}"
 		return res
 	}
+
+	/** Add the fields in this object to the DB 
+	 * @return The new id for the doc table, from the DB
+	 */
+	public Long addThisToDB() {	
+		try {
+			 if (sdoc_content) {
+				String key = webstore.store(sdoc_content, SaskiaWebstore.VOLUME_SDOC)
+				log.info "Got content (${sdoc_content.size()} bytes), wrote to Webstore SDOC, got key $key"
+				def res = db.getDB().executeInsert("INSERT INTO ${SourceDoc.tablename}"+
+				"(sdoc_original_id, sdoc_webstore, sdoc_collection, sdoc_lang, "+
+				" sdoc_comment, sdoc_date, sdoc_doc, sdoc_proc) VALUES(?,?,?,?,?,?,?,?)", 
+				[sdoc_original_id, key, sdoc_collection.col_id, sdoc_lang, 
+				sdoc_comment, sdoc_date, sdoc_doc, sdoc_proc.text()]) 		
+		   	sdoc_id = (long) res[0][0]
+		   	sdoc_webstore = key                        
+				log.info "Inserted SourceDoc into DB: ${this}"
+			} else {
+				log.error "Did NOT inserted SourceDoc into DB: sdoc_content for {$this} is empty!"
+			}
+		} catch (Exception e) {
+			log.error "Did NOT inserted SourceDoc into DB: ${e.getMessage()}"
+		}
+		return sdoc_id
+	}
 	
+	/** Add the fields in this object to the DB 
+	 * @return The new id for the doc table, from the DB
+	 */
+	public Long replaceThisToDB() {	
+		try {
+			if (sdoc_content) {
+			 // apagar o conteúdo anterior
+				if (sdoc_webstore) {
+					try {
+						webstore.delete(sdoc_webstore, SaskiaWebstore.VOLUME_SDOC)
+						log.info "Replacing SourceDoc: deleted webstore $sdoc_webstore."
+					} catch(Exception e) {
+						log.error "Error while replacing SourceDoc: "+e.getMessage()
+					}
+					String key = webstore.store(sdoc_content, SaskiaWebstore.VOLUME_SDOC)
+					log.info "Got content (${sdoc_content.size()} bytes), wrote to Webstore SDOC, got key $key"
+				}	
+				// add sdoc_id so it can make the replacement
+		    	def res = db.getDB().executeInsert(
+					"REPLACE INTO ${SourceDoc.tablename}(sdoc_id, sdoc_original_id, sdoc_webstore, "+
+					"sdoc_collection, sdoc_lang, sdoc_comment, sdoc_date, sdoc_doc, sdoc_proc) "+
+					"VALUES(?,?,?,?,?,?,?,?,?)", [sdoc_id, sdoc_original_id, key, 
+					sdoc_collection.col_id, sdoc_lang, sdoc_comment, sdoc_date, sdoc_doc, 
+					sdoc_proc.text()]) 		
+				sdoc_id = (long) res[0][0]
+				sdoc_webstore = key                        
+				log.info "Replaced SourceDoc into DB: ${this}"
+			} else {
+				log.error "Did NOT replaced SourceDoc into DB: ${e.getMessage()}"
+			}
+		} catch (Exception e) {
+			log.error "Error while replaced SourceDoc into DB: ${e.getMessage()}"
+		}
+		return sdoc_id
+	}
+	
+	public int removeThisFromDB() {	
+		if (!sdoc_id) return null
+	   def res = db.getDB().executeUpdate(
+		"DELETE FROM ${SourceDoc.tablename} where sdoc_id=?",[sdoc_id]) 
+		log.info "Removed SourceDoc ${this} from DB, got $res"
+		return res	    
+	}
+
 	public String toString() {
 		return "${sdoc_id}:${sdoc_collection}:${sdoc_lang}"
 	}

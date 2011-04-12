@@ -25,8 +25,6 @@ import rembrandt.obj.NamedEntity
 import rembrandt.obj.Sentence
 import rembrandt.obj.Term
 import rembrandt.obj.SemanticClassification
-import saskia.wikipedia.WikipediaDocument
-import saskia.wikipedia.WikipediaAPI
 import org.apache.log4j.Logger
 /**
  * @author Nuno Cardoso

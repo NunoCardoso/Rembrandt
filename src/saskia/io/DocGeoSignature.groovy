@@ -26,7 +26,7 @@ import saskia.bin.Configuration
  * GeoSignature generation
  *
  */
-class DocGeoSignature {
+class DocGeoSignature extends DBObject {
     
     static String tablename = "doc_geo_signature"
     Long dgs_id
@@ -41,7 +41,8 @@ class DocGeoSignature {
     
     static Configuration conf = Configuration.newInstance()
     static SaskiaDB db = SaskiaDB.newInstance()
-    static Logger log = Logger.getLogger("SaskiaDB")
+    static Logger log = Logger.getLogger("DocGeoSignature")
+
     static LinkedHashMap<Long,DocGeoSignature> idCache = \
            new LinkedHashMap(conf.getInt("saskia.doc_geo_signature.cache.number",1000), 0.75f, true) // true: access order.  
 
@@ -74,7 +75,7 @@ class DocGeoSignature {
         if (!dgs_id) return null
         if (idCache.containsKey(dgs_id)) return idCache[dgs_id]
         List<DocGeoSignature> dgs = queryDB("SELECT * FROM ${tablename} WHERE dgs_id=?", [dgs_id])
-        log.debug "Querying for dgs_id $dgs_id got DocGeoSignature $dgs." 
+        log.info "Querying for dgs_id $dgs_id got DocGeoSignature $dgs." 
         if (dgs) {
            idCache[dgs_id] = dgs[0]
            return dgs[0] 
@@ -105,11 +106,19 @@ class DocGeoSignature {
             "dgs_signature, dgs_tag, dgs_date_created) VALUES(?,?,?, NOW())", 
         [dgs_document, dgs_signature, dgs_tag.tag_id])
         long new_dgs_id = (long)res[0][0]
-        log.debug "Inserted new DocGeoSignature for doc $dgs_document, got new_dgs_id $new_dgs_id"        
+        log.info "Inserted new DocGeoSignature for doc $dgs_document, got new_dgs_id $new_dgs_id"        
         idCache[new_dgs_id] = this
        return new_dgs_id
     }
 
+	public removeThisFromDB() {	
+		def res = db.getDB().executeUpdate(
+			"DELETE FROM ${tablename} where dgs_id=?",[dgs_id]) 
+		idCache.remove(dgs_id)
+		log.info "Removing DocGeoSignature ${this} from DB, got $res"
+		return res
+	}
+	
     public String toString() {
         return "${dgs_id}:${dgs_document}"
     }

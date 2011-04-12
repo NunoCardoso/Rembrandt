@@ -22,7 +22,7 @@ import org.apache.log4j.*
 import saskia.bin.Configuration
 import rembrandt.obj.Sentence
 
-class Subject {
+class Subject extends DBObject implements JSONable {
 
 	static String tablename = "subject"
 	Long sbj_id
@@ -32,7 +32,7 @@ class Subject {
 	static Configuration conf = Configuration.newInstance()
 	
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Subject")
 	static Map type = ['sbj_id':'Long', 'sbj_subject':'String'] 
             
 	static Map conceptList = [:] // to be made, creating a Map that can be used for conceptMatch
@@ -59,21 +59,15 @@ class Subject {
 	    Subject s = Subject.getFromID(id)
 	    return s?.removeThisFromDB()
 	}
-		
-	public int removeThisFromDB() {
-	    if (!sbj_id) return null
-	    def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE sbj_id=?", [sbj_id])
-	    cacheSubject.each{key, valuelist -> 
-	         if (valuelist.contains(this)) cacheSubject[key].remove(this)
-	    }
-	    entityIDCache.remove(sbj_id)
-	    return res	    
-	}
-	
+
 	public Map toMap() {
 	    return ['sbj_id':sbj_id, 'sbj_subject':sbj_subject, 'subject':subject]
 	}
 
+	public Map toSimpleMap() {
+	    return toMap()
+	}
+	
 	static Map listSubjects(limit = 10, offset = 0, column = null, needle = null) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10
@@ -154,6 +148,20 @@ class Subject {
 	   }
 	}
 	
+	static void removeFromSubjectCache(Subject s) {
+	    s.subject.each{lang, sub -> 
+	    
+	   	Map lang_subject = cacheSubject[sub]
+
+	   	if (!lang_subject) cacheSubject[sub] = [:]
+	   	if (!cacheSubject[sub][lang]) cacheSubject[sub][lang] = []                     
+	   	
+	   	//                                 println "cacheSubject[sub] = "+cacheSubject[sub]+" cacheSubject[sub][lang]="+cacheSubject[sub][lang]
+	   	if (cacheSubject[sub][lang].isEmpty() || !cacheSubject[sub][lang].contains(s)) {
+	   	   cacheSubject[sub][lang] << s
+	   	} 	 
+	   }
+	}
 	
 	/** Get a Subject from id.
 	 * @param id The id as needle.
@@ -265,19 +273,29 @@ class Subject {
 	/** Add this NECategory o the database. Note that a null is a valid insertion...
 	 * return 1 if successfully inserted.
 	 */	
-	public long addThisToDB() {
+	public Long addThisToDB() {
 	   if (!subject) throw new IllegalStateException ("I have to parse subject before putting in the DB!")
 		def res = db.getDB().executeInsert("INSERT INTO ${tablename} VALUES(0,?)", [sbj_subject])
-		
 		// add to the cache. Check both en and pt strings, add to cache
 		this.sbj_id = (long)res[0][0]
-		                           
 		if (!cacheID.containsKey(this.sbj_id)) cacheID[this.sbj_id] = this
-		Subject.addToSubjectCache(this) 
-		
+		Subject.addToSubjectCache(this) 		
+		log.info "Adding subject to DB: ${this}"
 		return this.sbj_id
 	}	
+		
+	public int removeThisFromDB() {
+	    if (!sbj_id) return null
+	    def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE sbj_id=?", [sbj_id])
+	    cacheSubject.each{key, valuelist -> 
+	         if (valuelist.contains(this)) cacheSubject[key].remove(this)
+	    }
+	    entityIDCache.remove(sbj_id)
+		 log.info "Removing subject ${this} from DB, got $res"
+	    return res	    
+	}
 	
+		
 	public String toString() {
 	    return sbj_id
 	}

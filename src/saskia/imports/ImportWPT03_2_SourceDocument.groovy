@@ -67,7 +67,8 @@ class ImportWPT03_2_SourceDocument {
 	HashMap status
 	File f
 	String encoding
-	
+	String ynae
+
 	public ImportWPT03_2_SourceDocument(String filename, Collection collection,
 			String encoding) {
         
@@ -158,8 +159,12 @@ class ImportWPT03_2_SourceDocument {
 							title = value
 						}
 					} else {
-						log.error("Erro: linha $l não é suposto estar aqui!")
-						System.exit(0)
+						if (inbody) {
+						// é uma linha que começa e acaba com (), mas que pertence ao corpo
+							text += l						
+						//log.error("Erro: linha $l não é suposto estar aqui!")
+						//System.exit(0)
+						}
 					}
 					
 				} else {
@@ -218,7 +223,7 @@ class ImportWPT03_2_SourceDocument {
    public SourceDoc addSourceDoc(String original_id, String content, String lang, Date date) {
 		
 		SourceDoc s = new SourceDoc(
-			sdoc_original_id:original_id,
+		  sdoc_original_id:original_id,
         sdoc_collection:collection, 
         sdoc_lang:lang, 
         sdoc_content:content, 
@@ -270,11 +275,9 @@ class ImportWPT03_2_SourceDocument {
 		    
 	 	if (!collection) {
 			try {
-				 collection = Collection.getFromID(
-					Integer.parseInt(collection_)	)    
+				 collection = Collection.getFromID(Integer.parseInt(collection_)	)    
 			}catch(Exception e) {}
 		}
-		
 		if (!collection) {
 			throw new IllegalStateException("Don't know where the collection $collection_ is. Exiting.")
 			System.exit(0)
@@ -284,21 +287,23 @@ class ImportWPT03_2_SourceDocument {
 			println "No --file arg. Please specify the file. Exiting."
 			System.exit(0)
 		}
-	    
+
+		String lang = collection.col_lang
+		log.info "Using collection language $lang as default for documents without language info"
+					    
 	   String encoding = ""
 	   if (!cmd.hasOption("encoding")) {
 			println "No encoding given. ISO-8859-1 (WPT-03 default) used."
 			encoding = "ISO-8859-1"
 		} else {
 			encoding = cmd.getOptionValue("encoding")
+			println "Encoding configured to $encoding"
 		}
 		
-	    
-	
 		ImportWPT03_2_SourceDocument w2s = new ImportWPT03_2_SourceDocument(
-			cmd.getOptionValue("file"), collection, encoding)
+			new File(cmd.getOptionValue("file")), collection, lang, encoding)
 			
-		HashMap status = w2s.parse()
+		HashMap status = w2s.importDocs()
 		log.info "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."
 	}
 }

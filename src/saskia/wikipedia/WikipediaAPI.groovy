@@ -21,7 +21,7 @@ package saskia.wikipedia
 import groovy.sql.Sql
 
 import saskia.bin.Configuration
-import saskia.io.WikipediaDB
+import saskia.db.WikipediaDB
 import rembrandt.tokenizer.TokenizerPT
 import saskia.util.XMLUtil
 import rembrandt.obj.*
@@ -34,6 +34,7 @@ import org.apache.lucene.queryParser.QueryParser
 import org.apache.lucene.search.*
 import org.apache.log4j.*
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
 /**
  * @author Nuno Cardoso
  * WIkipedia API: Allows an interaction with the Wikipedia indexed documents,
@@ -143,10 +144,15 @@ class WikipediaAPI {
 	public WikipediaDocument getRedirectDocumentFromTitle(String title) {	
 		if (!title) return null
 		def newid = null, newtitle=null
-	    db.eachRow (WikipediaDB.getSelectIDandTitleFromRedirectionTitle(this.lang), 
+	   
+		try {
+			db.eachRow (WikipediaDB.getSelectIDandTitleFromRedirectionTitle(this.lang), 
 		 [withUnderscore(title)]) {row -> 
 	         newid = row[0]
 	         newtitle = withoutUnderscore(new String(row[1], "UTF-8"))
+		}
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
 		}
 		if (!newid) return null 
 		return new WikipediaDocument(newid, newtitle, this.lang)     	    
@@ -158,10 +164,14 @@ class WikipediaAPI {
 	public WikipediaDocument getRedirectDocumentFromID(id) {	
 		if (!id) return null
 		def newid = null, newtitle=null
-	    db.eachRow (WikipediaDB.getSelectIDandTitleFromRedirectionID(this.lang), 
+	   try {
+		db.eachRow (WikipediaDB.getSelectIDandTitleFromRedirectionID(this.lang), 
 		 [id]) {row -> 
 	         newid = row[0]
 	         newtitle = withoutUnderscore(new String(row[1], "UTF-8"))
+		}
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
 		}
 		if (!newid) return null 
 		return new WikipediaDocument(newid, newtitle, this.lang)     	    
@@ -178,20 +188,17 @@ class WikipediaAPI {
 	    // was made. null means that was not made, [] means it was made but with no results	    
 	    def cats = []
 	  //   println "tou aqui com id $id."
-		db.eachRow (WikipediaDB.getSelectCategoriesFromPageDocumentFromID(this.lang), [id])  {row->
-		//db.eachRow ( "select cl_to from pt_categorylinks where cl_from = 4508") {//row->
-		//	println "cats: ${row[0]}"
-		//	println "cats forced to UTF-8: "+new String(row[0].getBytes(), "UTF-8")
-		//	println "cats forced to ISO: "+new String(row[0].getBytes(), "ISO-8859-1")
-		//	println id
-		//	println row.cl_to
+		 try {
+			db.eachRow (WikipediaDB.getSelectCategoriesFromPageDocumentFromID(this.lang), [id])  {row->
 
 			//if ( row[0] instanceof String){
 				cats += withoutUnderscore(new String(row[0], "UTF-8"))				
 			//}
 			///println row.class
 		}   
-
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
+		}
 	    return cats
 	}	
 
@@ -205,9 +212,13 @@ class WikipediaAPI {
 	public List getCategoriesFromPageTitle(String title) {
 	     if (!title) return null
 	     def cats = []    
-		 db.eachRow (WikipediaDB.getSelectCategoriesFromPageDocumentFromTitle(this.lang), [withUnderscore(title) ]) {row-> 
+		 try {
+			db.eachRow (WikipediaDB.getSelectCategoriesFromPageDocumentFromTitle(this.lang), [withUnderscore(title) ]) {row-> 
 		    cats += withoutUnderscore(new String(row[0],"UTF-8"))    
 	     }
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
+		}
 	    return cats
 	}	
 	 
@@ -217,9 +228,13 @@ class WikipediaAPI {
 	     if (!regex) return null
 	     def answer = []    
 	//println "Performing "+WikipediaDB.getSelectCategoriesFromRegex(regex, this.lang)
-		 db.eachRow (WikipediaDB.getSelectCategoriesFromRegex(regex, this.lang)) {row-> 
+		 try{
+			db.eachRow (WikipediaDB.getSelectCategoriesFromRegex(regex, this.lang)) {row-> 
 			 answer << new WikipediaDocument(row[0], withoutUnderscore(new String(row[1],"UTF-8")), this.lang)
 	     }
+	} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
+		}
 	    return answer
 	}	
 	
@@ -231,10 +246,14 @@ class WikipediaAPI {
 	public WikipediaDocument getCategoryDocumentFromPageID(id) {		
 	   def newid = null, newtitle = null	
 	  // this select seems too slow.	
-	    db.eachRow (WikipediaDB.getSelectCategoryDocumentIDandTitleFromPageDocumentID(this.lang), [id])  {row -> 
+	    try{
+		db.eachRow (WikipediaDB.getSelectCategoryDocumentIDandTitleFromPageDocumentID(this.lang), [id])  {row -> 
 	        newid = row[0]
 	        newtitle = new String(row[1],"UTF-8" )
 	    }
+	} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
+		}
 		if (newid == null) return null 
 		return new WikipediaDocument(newid, newtitle, this.lang)
 	}
@@ -249,10 +268,14 @@ class WikipediaAPI {
 	    if (!title) return null
 	    def newid = null, newtitle = null	
 		//println "WikipediaAPI: title=$title"
-		db.eachRow (WikipediaDB.getSelectCategoryDocumentIDandTitleFromPageDocumentTitle(this.lang), 
+		try{
+			db.eachRow (WikipediaDB.getSelectCategoryDocumentIDandTitleFromPageDocumentTitle(this.lang), 
 			[withUnderscore(title)]) {row -> 
 		    newid = row[0]
 		    newtitle = new String(row[1], "UTF-8")
+		}
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
 		}
 		if (!newid) return null 
 		//println "id: $newid title=$newtitle"
@@ -279,8 +302,12 @@ class WikipediaAPI {
 	public List<WikipediaDocument> getPageDocumentsFromCategoryTitle(String title) {
 	   // get the title, the categories, the links. 
 	   def res = []
-	   db.eachRow(WikipediaDB.getSelectPageIdTitleWithCategory(this.lang), [withUnderscore(title) ]) {row -> 
+	   try {
+		db.eachRow(WikipediaDB.getSelectPageIdTitleWithCategory(this.lang), [withUnderscore(title) ]) {row -> 
 	      res += new WikipediaDocument(row[0], new String(row[1], "UTF-8"), this.lang)} 
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
+		}
 	   return res
 	}
 
@@ -293,10 +320,13 @@ class WikipediaAPI {
 		// note: id can be a long.
 	   // get the title, the categories, the links. 
 	   def title = null
-	   db.eachRow(WikipediaDB.getSelectTitleFromPageID(this.lang), [id])
+	   try {
+		db.eachRow(WikipediaDB.getSelectTitleFromPageID(this.lang), [id])
 	      {row -> title = new String(row[0], "UTF-8")}
-	     // {row -> title = ISO88591toUTF8.convertBadISO88591(row[0])}
-	   if (!title) return null
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
+		}
+		 if (!title) return null
 	   return new WikipediaDocument(id, title, this.lang) 
 	}
 
@@ -315,9 +345,13 @@ class WikipediaAPI {
 	  // def x = db.firstRow(WikipediaDB.selectIDFromPageTitle, [withUnderscore(title) ])
 	  // id = x?.getAt(0)
 	   //print "Going for "+withUnderscore(title)
-	   db.eachRow(WikipediaDB.getSelectIDFromPageTitle(this.lang), [withUnderscore(title) ]) { row -> 
+	   try {
+		db.eachRow(WikipediaDB.getSelectIDFromPageTitle(this.lang), [withUnderscore(title) ]) { row -> 
 	      id = row[0]
 	      redirect = row[1] }
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
+		}
 	  //println " gave id $id"
 	   if (!id) return null
 	  // println redirect.class.name
@@ -329,9 +363,13 @@ class WikipediaAPI {
 
 	public String getLanguageLinkFrom(String line, String targetLanguage, String sourceLanguage) {
 	   def answer 
+		try {
 		db.eachRow(WikipediaDB.getLanguageLink(sourceLanguage), 
 		[targetLanguage, withUnderscore(line) ]) { row -> 
 	      answer = row[0]
+		}
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
 		}
 		return answer
 	}  
@@ -339,11 +377,15 @@ class WikipediaAPI {
 	public String getRawWikipediaTextFromWikipediaPageID(id) {
 		if (!id) return null
 		String answer = null
-	    db.eachRow(WikipediaDB.getRawWikipediaTextFromWikipediaPageID(lang), [id]) { row ->
+	   try {
+		db.eachRow(WikipediaDB.getRawWikipediaTextFromWikipediaPageID(lang), [id]) { row ->
 			java.sql.Blob blob = row.getBlob('old_text')
 			byte[] bdata = blob.getBytes(1, (int) blob.length())
 			// you have to say explicitly that mediawiki's mediumblob is in UTF-8
 			answer = new String(bdata, "UTF-8") 
+		}
+		} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
 		}
 		return answer
 	}  
@@ -358,11 +400,15 @@ class WikipediaAPI {
 	public List getInlinksFromID(id) {
 	     // first, get the title; then, get the 
 	     def inlinksFromDB = [] 
-	     db.eachRow (WikipediaDB.getSelectInlinkIDandTitleFromPageID(this.lang), [id]) {row -> 
+	     try {
+			db.eachRow (WikipediaDB.getSelectInlinkIDandTitleFromPageID(this.lang), [id]) {row -> 
 	          inlinksFromDB += [source_id:row[0], 
 	           source_title:withoutUnderscore(new String(row[1], "UTF-8")) ] 
 	          // source_title:ISO88591toUTF8.convertBadISO88591(withoutUnderscore(row[1])) ] 
 	      }
+	} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
+		}
 	     return inlinksFromDB 
 	 }    
 
@@ -376,12 +422,16 @@ class WikipediaAPI {
 	public List getOutlinksFromID(id) {
 	     // first, get the title; then, get the 
 	     def outlinksFromDB = [] 
-	     db.eachRow (WikipediaDB.getSelectOutlinkIDandTitlePagesFromPageID(this.lang), [id]) {row -> 
+	     try {
+			db.eachRow (WikipediaDB.getSelectOutlinkIDandTitlePagesFromPageID(this.lang), [id]) {row -> 
 	          def nrow = 
 	          outlinksFromDB += [target_id:row[0],
 	           target_title:withoutUnderscore(new String(row[1], "UTF-8")) ] 
 //	          target_title:ISO88591toUTF8.convertBadISO88591(withoutUnderscore(row[1])) ] 
 	      }
+	} catch(MySQLSyntaxErrorException e) {
+			log.error "Erro de sintaxe no MySQL: "+e.getMessage()
+		}
 	     return outlinksFromDB 
 	 }
 	//selectOutlinkIDandTitlePagesFromPageTitle

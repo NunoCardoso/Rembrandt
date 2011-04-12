@@ -24,16 +24,16 @@ import org.apache.log4j.*
   * Static methods are used to return results from DB, using where clauses.
   * Class methods are used to insert results to DB.  
   */
-class NESubtype {
+class NESubtype  extends DBObject implements JSONable {
 
-	static String nes_table = "ne_subtype"
+	static String tablename = "ne_subtype"
 	static Map<Long,String> all_id_subtype = [:]
 	static Map<String,Long> all_subtype_id = [:]
     
 	long nes_id
 	String nes_subtype
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("NESubtype")
 
 	static List<NESubtype> queryDB(String query, List params = []) {
 	    List<NESubtype> s = []
@@ -43,12 +43,19 @@ class NESubtype {
 	    return s
        }
 	
-	/** Get all NE categories. It's easier to have them in memory, than hammering the DB 
+	public Map toMap() {
+	    return ["nes_id":nes_id, "nes_subtype":nes_subtype]
+	}
+	
+	public Map toSimpleMap() {
+	    return toMap()
+	}	
+		/** Get all NE categories. It's easier to have them in memory, than hammering the DB 
 	 * return List<NECategory> A list of NECategory objects
 	 */
 	static void createCache() {
 	    if (all_id_subtype.isEmpty()) {
-               def nes = queryDB("SELECT * FROM ${nes_table}")
+               def nes = queryDB("SELECT * FROM ${tablename}")
 		log.debug "Searched for all subtypes, got ${nes.size()} entries."
 		nes.each{ updateCacheElement( it.nes_id, it.nes_subtype)}     
                 
@@ -82,24 +89,31 @@ class NESubtype {
             return all_subtype_id[nes_subtype]
         }
             
-           //	NESubtype nes = queryDB("SELECT * FROM ${nes_table} WHERE nes_id=?", [nes_id])?.getAt(0)
+           //	NESubtype nes = queryDB("SELECT * FROM ${tablename} WHERE nes_id=?", [nes_id])?.getAt(0)
 	//	log.debug "Querying for nes_id $nes_id got NESubtype $nes." 
 	//	if (nes.nes_id) return nes else return null
 		
-	
-	/** Add this NESubtype o the database. Note that a null is a valid insertion...
-	 * return 1 if successfully inserted.
-	 */	
-	public int addThisToDB() {
-	    def res = db.getDB().executeInsert("INSERT IGNORE INTO ${nes_table} VALUES(0,?)", [nes_subtype])
-	    // returns an auto_increment value
-	    updateCacheElement(nes_id, nes_subtype)
-	    return (res ? (int)res[0][0] : 0)
+
+	public Long addThisToDB() {
+	    def res = db.getDB().executeInsert("INSERT IGNORE INTO ${tablename} VALUES(0,?)", [nes_subtype])
+		// returns an auto_increment value	
+		if (res) {
+			nes_id = (long)res[0][0]
+			updateCacheElement(nes_id, nes_subtype)
+			log.info "Inserted new NESubtype in DB: ${this}"
+		}
+		return nes_id
 	}	
-	
-	public Map toMap() {
-	    return ["nes_id":nes_id, "nes_subtype":nes_subtype]
+		
+	public int removeThisFromDB() {
+		if (!nes_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE nes_id=?", [nes_id])	
+		all_subtype_id.remove(nes_subtype)
+		all_id_subtype.remove(nes_id)
+		log.info "Removed NESubtype ${this} from DB, got $res"
+		return res	    
 	}
+	
 	
 	boolean equals(Entity e) {
 		return this.toMap().equals(e.toMap())

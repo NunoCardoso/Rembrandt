@@ -38,7 +38,9 @@ select page_namespace, count(*) as c from ${LG}_page group by page_namespace ord
 println "Starting..."
 
 files.each{f -> 
-	def inputstream = new InputStreamReader(new FileInputStream(rootDir+"/"+f), "UTF-8") 
+	def inputstream = new InputStreamReader(new FileInputStream(rootDir+"/"+f), 
+	     conf.get("global.encoding", System.getProperty('file.encoding')) 
+	) 
 	println "Starting file $f..."
 	def BufferedReader br = new BufferedReader(inputstream)	    
 	def line

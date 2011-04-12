@@ -23,6 +23,9 @@
  import rembrandt.io.*
  import org.apache.log4j.*
  import org.apache.commons.cli.*
+ import java.util.jar.Manifest
+ import java.util.jar.Attributes
+
 
  /**
   * @author Nuno Cardoso
@@ -44,29 +47,33 @@
      
      def inputstream, inputstyle, inputreader 
      def outputstream, outputstyle, outputwriter
-     def errputstream, errstyle, errwriter
-     int inputstyleverbose, outputstyleverbose, errputstyleverbose     
-     String inputFileName, outputFileName, errFileName
+     def errputstream, errputstyle, errputwriter
 
+     String inputFileName, outputFileName, errFileName
+	  String rembrandtInputEncodingParamDefault, rembrandtOutputEncodingParamDefault, rembrandtErrEncodingParamDefault
+	
+	  def inputEncodingParam, outputEncodingParam, errEncodingParam
+	  def inputReaderParam, outputWriterParam, errWriterParam
+	  def inputStyleVerbose, outputStyleVerbose, errStyleVerbose
+	  def inputStyleLang, outputStyleLang, errStyleLang
+	  def inputStyleParam, outputStyleParam, errStyleParam
+		
      String rembrandtRulesParamDefault = 'HAREM' 
 
      String rembrandtInputReaderParamDefault = 'rembrandt.io.HTMLDocumentReader'
      String rembrandtInputTagStyleParamDefault = 'rembrandt.io.RembrandtStyleTag'
      int rembrandtInputTagStyleVerboseParamDefault = 2
-     String rembrandtInputEncodingParamDefault = System.getProperty('file.encoding') 
-
+ 
      String rembrandtOutputTagStyleParamDefault = 'rembrandt.io.RembrandtStyleTag'
      String rembrandtOutputWriterParamDefault = 'rembrandt.io.RembrandtWriter' 
      int rembrandtOutputTagStyleVerboseParamDefault = 2
-     String rembrandtOutputEncodingParamDefault = System.getProperty('file.encoding') 
 
      String rembrandtErrTagStyleParamDefault = 'rembrandt.io.RembrandtStyleTag'   
      String rembrandtErrWriterParamDefault = 'rembrandt.io.UnformattedWriter'
      boolean rembrandtErrEnabledParamDefault = true   
      String rembrandtErrFileDefault = 'rembrandt.err.log'    
      int rembrandtErrTagStyleVerboseParamDefault = 3
-     String rembrandtErrEncodingParamDefault = System.getProperty('file.encoding') 
-
+ 
      static Logger log = Logger.getLogger("RembrandtMain")  
          
      /**
@@ -74,8 +81,39 @@
       * @return Rembrandt version in major version - build number format.
       */
      public static String getVersion() {
-	String v = Rembrandt.class.getPackage().getImplementationVersion() 
-        return (v? v : "Unknown-build")
+	
+		String impTitle, impVersion, impBuildDate, impBuiltBy
+		try {         
+			
+			Class clazz = Class.forName("rembrandt.bin.Rembrandt");
+			String className = clazz.getSimpleName() + ".class";
+			String classPath = clazz.getResource(className).toString();
+			String manifestPath
+			if (!classPath.startsWith("jar")) {
+				manifestPath = "file://"+System.getProperty("user.dir")+"/MANIFEST.MF";
+			} else {
+		 		manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + 
+   		"/META-INF/MANIFEST.MF";
+		
+			}
+		 Manifest manifest 
+		try {
+			manifest = new Manifest(new URL(manifestPath).openStream());
+		} catch(Exception e) {
+			return "unknown" 
+		}
+		Attributes attributes = manifest.getMainAttributes();
+
+      impTitle = attributes.getValue("Implementation-Title");
+      impVersion = attributes.getValue("Implementation-Version");
+      impBuildDate = attributes.getValue("Built-Date");
+      impBuiltBy = attributes.getValue("Built-By");
+      }
+       catch (IOException e) {            
+          	log.info("Couldn't find REMBRANDT manifest.");
+        }        
+    
+        return (impVersion ? impVersion+( impBuildDate ? " "+impBuildDate: "") : "Unknown-build")
      }
       
       /**
@@ -90,29 +128,34 @@
         this.conf=conf
         def outstream, instream, errstream
         
-        
+        String defaultEncoding = conf.get("global.encoding")
+		  if (!(defaultEncoding)) defaultEncoding = System.getProperty('file.encoding') 
+		  rembrandtInputEncodingParamDefault = defaultEncoding 
+		  rembrandtOutputEncodingParamDefault = defaultEncoding 
+		  rembrandtErrEncodingParamDefault = defaultEncoding 
+
 	/* input configuration */
         
-        def inputStyleParam = conf.get("rembrandt.input.styletag")
-        def inputStyleLang = conf.get("rembrandt.input.styletag.lang",conf.get("global.lang"))
-        def inputStyleVerbose = conf.getInt("rembrandt.input.styletag.verbose", rembrandtInputTagStyleVerboseParamDefault)
+        inputStyleParam = conf.get("rembrandt.input.styletag")
+        inputStyleLang = conf.get("rembrandt.input.styletag.lang",conf.get("global.lang"))
+        inputStyleVerbose = conf.getInt("rembrandt.input.styletag.verbose", rembrandtInputTagStyleVerboseParamDefault)
         if (!inputStyleParam) {
-            log.warn "No input style specified. Using $rembrandtInputTagStyleParamDefault"
-            log.warn "Tag language set to $inputStyleLang, verbosity set to $inputStyleVerbose"
+            log.debug "No input style specified. Using $rembrandtInputTagStyleParamDefault"
+            log.debug "Tag language set to $inputStyleLang, verbosity set to $inputStyleVerbose"
             inputStyleParam = rembrandtInputTagStyleParamDefault
         }
         inputstyle = Class.forName(inputStyleParam).newInstance(inputStyleLang)   
         
-        def inputReaderParam = conf.get("rembrandt.input.reader")
+        inputReaderParam = conf.get("rembrandt.input.reader")
         if (!inputReaderParam) {
-            log.warn "No input reader specified. Using $rembrandtInputReaderParamDefault"
+            log.debug "No input reader specified. Using $rembrandtInputReaderParamDefault"
             inputReaderParam = rembrandtInputReaderParamDefault
 	}
         inputreader = Class.forName(inputReaderParam).newInstance()
 
-        def inputEncodingParam = conf.get("rembrandt.input.encoding")
+        inputEncodingParam = conf.get("rembrandt.input.encoding")
         if (!inputEncodingParam) {
-            log.warn "No input encoding specified. Using $rembrandtInputEncodingParamDefault"
+            log.debug "No input encoding specified. Using $rembrandtInputEncodingParamDefault"
             inputEncodingParam = rembrandtInputEncodingParamDefault
 	}
  
@@ -129,27 +172,27 @@
 
         /* output configuration */
         
-        def outputStyleParam = conf.get("rembrandt.output.styletag")
-        def outputStyleLang = conf.get("rembrandt.output.styletag.lang",conf.get("global.lang"))
-        int outputStyleVerbose = conf.getInt("rembrandt.output.styletag.verbose", rembrandtOutputTagStyleVerboseParamDefault)
+        outputStyleParam = conf.get("rembrandt.output.styletag")
+        outputStyleLang = conf.get("rembrandt.output.styletag.lang",conf.get("global.lang"))
+        outputStyleVerbose = conf.getInt("rembrandt.output.styletag.verbose", rembrandtOutputTagStyleVerboseParamDefault)
         if (!outputStyleParam) {
-            log.warn "No output style specified. Using $rembrandtOutputTagStyleParamDefault"
-            log.warn "Tag language set to $outputStyleLang, verbosity set to $outputStyleVerbose"
+            log.debug "No output style specified. Using $rembrandtOutputTagStyleParamDefault"
+            log.debug "Tag language set to $outputStyleLang, verbosity set to $outputStyleVerbose"
             outputStyleParam = rembrandtOutputTagStyleParamDefault
 		}        
         outputstyle = Class.forName(outputStyleParam).newInstance(outputStyleLang)       
 
-        def outputWriterParam = conf.get("rembrandt.output.writer")
+        outputWriterParam = conf.get("rembrandt.output.writer")
         if (!outputWriterParam) {
-            log.warn "No output writer specified. Using $rembrandtOutputWriterParamDefault"
+            log.debug "No output writer specified. Using $rembrandtOutputWriterParamDefault"
             outputWriterParam = rembrandtOutputWriterParamDefault
 		}
         outputwriter = Class.forName(outputWriterParam).newInstance(outputstyle)
 		
-        def outputEncodingParam = conf.get("rembrandt.output.encoding")
+        outputEncodingParam = conf.get("rembrandt.output.encoding")
 		
 		if (!outputEncodingParam) {
-	    	log.warn "No output encoding specified. Using $rembrandtOutputEncodingParamDefault"
+	    	log.debug "No output encoding specified. Using $rembrandtOutputEncodingParamDefault"
 	    	outputEncodingParam = rembrandtOutputEncodingParamDefault
 		}
         
@@ -171,26 +214,26 @@
             errputstream = null
             errstream = "System.err disabled"
         } else {
-            def errStyleParam = conf.get("rembrandt.err.styletag")
-            def errStyleLang = conf.get("rembrandt.err.styletag.lang",conf.get("global.lang"))
-            int errStyleVerbose = conf.getInt("rembrandt.err.styletag.verbose", rembrandtErrTagStyleVerboseParamDefault)
+            errStyleParam = conf.get("rembrandt.err.styletag")
+            errStyleLang = conf.get("rembrandt.err.styletag.lang",conf.get("global.lang"))
+            errStyleVerbose = conf.getInt("rembrandt.err.styletag.verbose", rembrandtErrTagStyleVerboseParamDefault)
             if (!errStyleParam) {
-        	log.warn "No err style specified. Using $rembrandtErrTagStyleParamDefault"
-        	log.warn "Tag language set to $errStyleLang, verbosity set to $errStyleVerbose"
+        	log.debug "No err style specified. Using $rembrandtErrTagStyleParamDefault"
+        	log.debug "Tag language set to $errStyleLang, verbosity set to $errStyleVerbose"
         	errStyleParam = rembrandtErrTagStyleParamDefault
             }        
-            errstyle = Class.forName(errStyleParam).newInstance(errStyleLang)       
+            errputstyle = Class.forName(errStyleParam).newInstance(errStyleLang)       
 
-            def errWriterParam = conf.get("rembrandt.err.writer")
+            errWriterParam = conf.get("rembrandt.err.writer")
             if (!errWriterParam) {
-        	log.warn "No err writer specified. Using $rembrandtErrWriterParamDefault"
+        	log.debug "No err writer specified. Using $rembrandtErrWriterParamDefault"
         	errWriterParam = rembrandtErrWriterParamDefault
             }
-            errwriter = Class.forName(errWriterParam).newInstance(errstyle)
+            errputwriter = Class.forName(errWriterParam).newInstance(errputstyle)
 
-            def errEncodingParam = conf.get("rembrandt.err.encoding")
+            errEncodingParam = conf.get("rembrandt.err.encoding")
             if (!errEncodingParam) {
-        	log.warn "No err encoding specified. Using $rembrandtErrEncodingParamDefault"
+        	log.debug "No err encoding specified. Using $rembrandtErrEncodingParamDefault"
         	errEncodingParam = rembrandtErrEncodingParamDefault
             }
         
@@ -198,17 +241,17 @@
             if (errFileName) {
            	File f = new File(errFileName)
            	if (!f) throw new Exception("Err file cannot be written. Please check rembrandt.err.file")
-           	errstream = new OutputStreamWriter(new FileOutputStream(f), errEncodingParam) 
-           	errstream ="File ${f.getName()} <${errstream.getEncoding()}>"
+           	errputstream = new OutputStreamWriter(new FileOutputStream(f), errEncodingParam) 
+           	errstream ="File ${f.getName()} <${errputstream.getEncoding()}>"
             } else {
-        	errstream = new OutputStreamWriter(System.err, errEncodingParam);
-        	errstream ="System.err <${errstream.getEncoding()}>"
+        	errputstream = new OutputStreamWriter(System.err, errEncodingParam);
+        	errstream ="System.err <${errputstream.getEncoding()}>"
             } 
         }   
  	    
         log.info ("IN: $instream, reader: ${inputreader.class.name}")    
         log.info ("OUT: $outstream, writer: ${outputwriter.class.name}, style:${outputstyle.class.name}")    
-        log.info ("ERR: $errstream, writer: ${errwriter.class.name}, style:${errstyle.class.name}")    
+        log.info ("ERR: $errstream, writer: ${errputwriter.class.name}, style:${errputstyle.class.name}")    
      }	
  	
     /** 
@@ -216,33 +259,41 @@
      * @return List of Documents
      */
     List<Document> loadDocuments() {
-	inputreader.processInputStream(inputstream)
-	return inputreader.docs
+		inputreader.processInputStream(inputstream)
+		return inputreader.docs
     }
      
     /**
      * Prints a heads for the output stream
      */
     public void printHeader() {	
-	if (outputstream) outputstream.write outputwriter.printHeader()		
-	if (errputstream) errputstream.write errwriter.printHeader()
+		if (outputstream) outputstream.write outputwriter.printHeader()		
+		if (errputstream) errputstream.write errputwriter.printHeader()
     }
 	
+	 public Document releaseRembrandtOnDocument(Document doc) {   
+		return releaseRembrandtOnDocument(doc, null)
+	 } 
+
+
     /**
      * As name says it all, releases REMBRANDT on document. It reads important vars from doc 
      * (id, lang and rules) to pick the correct RembrandtCore, then releases it. 
      * This is the method you should invoke on your little application. :)
      */
-    public Document releaseRembrandtOnDocument(Document doc) {    		
-
-	/** Get metadata from document, so that we can select the proper core */
-	String lang = (!doc.lang  ? conf.get("global.lang", System.getProperty('user.language')) : doc.lang)
-	String rules = (!doc.rules  ? conf.get("rembrandt.core.rules", "HAREM") : doc.rules)
-	RembrandtCore currentcore = Rembrandt.getCore(lang, rules)
+    public Document releaseRembrandtOnDocument(Document doc, RembrandtCore core) {    		
+		if (core) {
+			core.releaseRembrandtOnDocument(doc)
+		} else {
+			/** Get metadata from document, so that we can select the proper core */
+			String lang = (!doc.lang  ? conf.get("global.lang", System.getProperty('user.language')) : doc.lang)
+			String rules = (!doc.rules  ? conf.get("rembrandt.core.rules", "HAREM") : doc.rules)
+			RembrandtCore currentcore = Rembrandt.getCore(lang, rules)
 	
-	// this method is thread-safe, all changes are made in the doc arg.
-	currentcore.releaseRembrandtOnDocument(doc)	
-        return doc
+			// this method is thread-safe, all changes are made in the doc arg.
+			currentcore.releaseRembrandtOnDocument(doc)	
+ 		}
+       return doc
     }	
  			
  	 /**
@@ -254,7 +305,7 @@
 	    outputstream.flush()	
  	}
 	if (errputstream) {
-	    errputstream.write errwriter.printDocument(processedDoc)
+	    errputstream.write errputwriter.printDocument(processedDoc)
 	    errputstream.flush()	
  	}
    }
@@ -268,7 +319,7 @@
   	    outputstream.close()
 	}
 	if (errputstream) {
-	    errputstream.write errwriter.printFooter()
+	    errputstream.write errputwriter.printFooter()
 	    errputstream.close()
 	}
    }
@@ -308,6 +359,7 @@
 	def rembrandt, conf, conffilepath
 	Options o = new Options()
 	o.addOption("conf", true, "Configuration file")
+	o.addOption("gui", true, "Activates a graphic GUI")
 	o.addOption("help", false, "Gives this help information")
 	    
 	CommandLineParser parser = new GnuParser()
@@ -320,39 +372,53 @@
 	}
  		
 	if (!cmd.hasOption("conf")) {
-	    log.info "No configuration file given. Using default configuration file."
 	    conffilepath = Configuration.defaultconf
+	    log.info "No configuration file given. Using default configuration file."
  	} else {
  	    conffilepath = cmd.getOptionValue("conf")
+	    log.info "Configuration file $conffilepath given."
  	}
+ 
+	conf = Configuration.newInstance(conffilepath)
+	rembrandt = new Rembrandt(conf)
 	log.info "Rembrandt version ${Rembrandt.getVersion()}. Welcome."
+	
+	if (cmd.hasOption("gui")) {
+
+	    RembrandtGui gui = new RembrandtGui(rembrandt, conf)//)
+		 gui.start()
+	    log.info "Rembrandt GUI started."
+
+	} else {
+
+		log.info "Invoking reader ${rembrandt.inputreader.class.name} to parse the input stream."  
+	
+		List<Document> docs = rembrandt.loadDocuments()
+		log.info "Got ${docs.size()} doc(s). "
  
-	rembrandt = new Rembrandt(Configuration.newInstance(conffilepath))
-	log.info "Invoking reader ${rembrandt.inputreader.class.name} to parse the input stream."  
- 
-	List<Document> docs = rembrandt.loadDocuments()
-	log.info "Got ${docs.size()} doc(s). "
- 
-	// give labels if the doc does not have...
-	String docid_header
-	if (rembrandt.inputFileName) docid_header =rembrandt.inputFileName else docid_header = 'stdin'
-	rembrandt.printHeader()
+		// give labels if the doc does not have...
+		String docid_header
+		if (rembrandt.inputFileName) 
+			docid_header = rembrandt.inputFileName 
+		else 
+			docid_header = 'stdin'
+	
+		rembrandt.printHeader()
  		 		
-	/* stats stuff */
-	def stats = new DocStats(docs.size())
-	stats.begin()
-	docs.eachWithIndex { doc, i->
-	   if (!doc.docid) doc.docid = docid_header+"-"+(i+1)
-	   stats.beginDoc(doc.docid)
-	   // lang / rules selection? must all be included in the doc metadata.
-	   doc = rembrandt.releaseRembrandtOnDocument(doc)
-	   /* stats stuff */
-	   rembrandt.printDoc(doc)
-	   stats.endDoc()					   			  
-	   stats.printMemUsage()	  
+		/* stats stuff */
+		def stats = new DocStats(docs.size())
+		stats.begin()
+		docs.eachWithIndex { doc, i->
+	   	if (!doc.docid) doc.docid = docid_header+"-"+(i+1)
+	   	stats.beginDoc(doc.docid)
+	   	doc = rembrandt.releaseRembrandtOnDocument(doc)
+	   	rembrandt.printDoc(doc)
+	   	stats.endDoc()					   			  
+	   	stats.printMemUsage()	  
+		}
+		stats.end()
+		rembrandt.printFooter()
+		log.info "All Done. Have a nice day."
+   }
 	}
-	stats.end()
- 	rembrandt.printFooter()
- 	log.info "All Done. Have a nice day."
-    }
 }

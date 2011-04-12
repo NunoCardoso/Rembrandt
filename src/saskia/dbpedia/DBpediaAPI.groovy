@@ -286,7 +286,8 @@ class DBpediaAPI {
 		// one must ensure that the title is correctly encoded
 		// Wikipedia URL titles are uppercase on first letter
 		def newTitle = title[0].toUpperCase() + title.substring(1) 
-		newTitle = URLEncoder.encode(newTitle.replaceAll(/ /,"_"), "UTF-8")
+		newTitle = URLEncoder.encode(newTitle.replaceAll(/ /,"_"), 	    
+			conf.get("global.encoding", System.getProperty('file.encoding')))
 		
 		// funny thing, DBpedia loads non-English URL links as <wikipage-${lang}> properties, but the English ones are in 
 		//<http://xmlns.com/foaf/0.1/page> links. 

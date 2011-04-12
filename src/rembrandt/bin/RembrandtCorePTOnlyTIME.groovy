@@ -29,7 +29,6 @@ import rembrandt.obj.BoundaryCriteria
 import rembrandt.obj.ClassificationCriteria as CC
 import rembrandt.obj.ConflictPolicy
 import rembrandt.obj.EntityRelation
-import saskia.wikipedia.WikipediaAPI
 import saskia.bin.Configuration
 import saskia.bin.AskSaskia
 import rembrandt.rules.harem.pt.*

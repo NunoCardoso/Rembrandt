@@ -25,14 +25,14 @@ import org.apache.log4j.*
   * Static methods are used to return results from DB, using where clauses.
   * Class methods are used to insert results to DB.  
   */
-class Tag {
+class Tag extends DBObject implements JSONable {
 
-	static String tag_table = "tag"
+	static String tablename = "tag"
 	Long tag_id
 	String tag_version
 	String tag_comment
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Tag")
 	
 	static Map<Long,Tag> cache = [:]
 
@@ -49,7 +49,7 @@ class Tag {
 	}
 	
 	static void refreshCache() {
-	    List<Tag> l = queryDB("SELECT * FROM ${tag_table}".toString(), [])
+	    List<Tag> l = queryDB("SELECT * FROM ${tablename}".toString(), [])
 	    l.each{cache[it.tag_id] = it}
 	}
 	
@@ -61,7 +61,7 @@ class Tag {
 	    // version has UNIQUE key
 	    if (!tag_version) return null
 	    if (!cache) refreshCache()
-	    /*Tag t = queryDB("SELECT * FROM ${tag_table} WHERE tag_version=?", [tag_version])
+	    /*Tag t = queryDB("SELECT * FROM ${tablename} WHERE tag_version=?", [tag_version])
 		log.debug "Querying for tag_version $tag_version got Tag $t." 
 		if (t.tag_id) return t else return null*/
 	    return cache.values().toList().find{it.tag_version == tag_version}
@@ -74,7 +74,7 @@ class Tag {
 	static Tag getFromID(Long tag_id) {
 	    if (!tag_id) return null
 	    if (!cache) refreshCache()
-	    /*Tag t = queryDB("SELECT * FROM ${tag_table} WHERE tag_id=?", [tag_id])
+	    /*Tag t = queryDB("SELECT * FROM ${tablename} WHERE tag_id=?", [tag_id])
 		log.debug "Querying for tag_id $tag_id got Tag $t." 
 		if (t.tag_id) return t else return null*/
 	    return cache[tag_id]
@@ -84,25 +84,37 @@ class Tag {
 	    return ["tag_id":tag_id, "tag_version":tag_version, "tag_comment":tag_comment]
 	}
 	
+		
+	Map toSimpleMap() {
+	    return toMap()
+	}
 	/** Add this Rembrandt Tag to the database.
 	 * @param version The version label. By default, it's own version field.
 	 * @param comment The version comment. By default, it's own comment field.
 	 * return 1 if successfully inserted.
 	 */	
-	public long addThisToDB() {
-	    if (!tag_version) {
-		log.error "Can't add a Tag without a valid version! Skipping."
-		return null
-	    }
-	    if (!cache) refreshCache()	
-	    def res = db.getDB().executeInsert("INSERT INTO ${tag_table} VALUES(0,?,?)", 
+	public Long addThisToDB() {
+		if (!tag_version) {
+			log.error "Can't add a Tag without a valid version! Skipping."
+			return null
+		}
+		if (!cache) refreshCache()	
+		def res = db.getDB().executeInsert("INSERT INTO ${tablename} VALUES(0,?,?)", 
 		[tag_version, tag_comment])
-		// returns an auto_increment value
-	    tag_id = (long)res[0][0]
-	    cache[tag_id] = this
-	    return tag_id                           
+		tag_id = (long)res[0][0]
+		cache[tag_id] = this
+		log.info "Adding tag to DB: ${this}"
+		return tag_id                           
 	}	
-	
+
+	public int removeThisFromDB() {
+	    if (!tag_id) return null
+	    def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE tag_id=?", [tag_id])
+	    cache.remove(tag_id)
+		 log.info "Removing tag ${this} from DB, got $res"
+	    return res	    
+	}
+		
 	boolean equals(Entity e) {
 		return this.toMap().equals(e.toMap())
 	}

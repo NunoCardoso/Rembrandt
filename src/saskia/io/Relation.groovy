@@ -27,12 +27,12 @@ import org.apache.log4j.*
   */
 class Relation {
 
-	static String rel_table = "relation"
+	static String tablename = "relation"
 	static String default_relation = "sameAs"
 	long rel_id
 	String rel_relation
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Relation")
 
 	static List<Relation> queryDB(String query, ArrayList params = []) {
 		List<Relation> t = []
@@ -47,7 +47,7 @@ class Relation {
 	 */
 	static Map getAllRelations() {
 		def map = [:]
-		def r = queryDB("SELECT * FROM ${rel_table}")
+		def r = queryDB("SELECT * FROM ${tablename}")
 		log.debug "Searched for all relations, got ${r.size()} entries."
 		r.each{map[it.rel_relation] = it.rel_id}
 		return map
@@ -59,7 +59,7 @@ class Relation {
 	 */
 	static Relation getFromID(long rel_id) {
 		if (!rel_id) return null
-		Relation r = queryDB("SELECT * FROM ${rel_table} WHERE rel_id=?", [rel_id])?.getAt(0)
+		Relation r = queryDB("SELECT * FROM ${tablename} WHERE rel_id=?", [rel_id])?.getAt(0)
 		log.debug "Querying for rel_id $rel_id got Relation $r." 
 		if (r.rel_id) return r else return null
 	}	
@@ -68,7 +68,7 @@ class Relation {
 	 * return 1 if successfully inserted.
 	 */	
 	public int addThisToDB() {
-		def res = db.getDB().executeInsert("INSERT INTO ${rel_table} VALUES(0,?)", [rel_relation])
+		def res = db.getDB().executeInsert("INSERT INTO ${tablename} VALUES(0,?)", [rel_relation])
 		// returns an auto_increment value
 		return (int)res[0][0]
 	}	

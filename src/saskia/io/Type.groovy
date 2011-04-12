@@ -23,12 +23,12 @@ import org.apache.log4j.*
 
 class Type {
 
-	static String typ_table = "type"
+	static String tablename = "type"
 	long typ_id
 	String typ_name
 	
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Type")
 
 	static Map<Long,Type> cache = [:]
 
@@ -41,7 +41,7 @@ class Type {
 	}
 	
 	static void refreshCache() {
-	    List<Tag> l = queryDB("SELECT * FROM ${typ_table}".toString(), [])
+	    List<Tag> l = queryDB("SELECT * FROM ${tablename}".toString(), [])
 	    l.each{cache[it.typ_id] = it}
 	}
 	
@@ -50,7 +50,7 @@ class Type {
 	 */
 	static Map getAllTypes() {
 		def map = [:]
-		def typ = queryDB("SELECT * FROM ${typ_table}")
+		def typ = queryDB("SELECT * FROM ${tablename}")
 		log.debug "Searched for all doc types, got ${typ.size()} entries."
 		typ.each{ map[it.typ_name] = it.typ_id}
 		return map 
@@ -62,7 +62,7 @@ class Type {
 	 */
 	static Type getFromID(long typ_id) {
 		if (!typ_id) return null
-		Type typ = queryDB("SELECT * FROM ${typ_table} WHERE typ_id=?", [typ_id])?.getAt(0)
+		Type typ = queryDB("SELECT * FROM ${tablename} WHERE typ_id=?", [typ_id])?.getAt(0)
 		log.debug "Querying for typ_id $typ_id got Type $typ." 
 		if (typ.typ_id) return typ else return null
 	}	
@@ -70,11 +70,19 @@ class Type {
 	/** Add this NECategory o the database. Note that a null is a valid insertion...
 	 * return 1 if successfully inserted.
 	 */	
-	public int addThisToDB() {
-		def res = db.getDB().executeInsert("INSERT INTO ${typ_table} VALUES(0,?)", [typ_name])
+	public Long addThisToDB() {
+		def res = db.getDB().executeInsert("INSERT INTO ${tablename} VALUES(0,?)", [typ_name])
 		// returns an auto_increment value
-		return (int)res[0][0]
+		log.info "Adding type to DB: ${this}"
+		return (long)res[0][0]
 	}	
+
+	public int removeThisFromDB() {
+		if (!typ_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE typ_id=?", [typ_id])
+		log.info "Removing type to DB: ${this}, got res $res"
+		return res	    
+   }
 	
 	public String toString() {
 		return typ_name

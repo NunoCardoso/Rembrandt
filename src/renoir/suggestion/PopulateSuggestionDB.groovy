@@ -18,8 +18,8 @@
 
 package renoir.suggestion
 
-import saskia.io.SaskiaDB
-import saskia.io.WikipediaDB
+import saskia.db.SaskiaDB
+import saskia.db.WikipediaDB
 import saskia.io.Geoscope
 import saskia.bin.Configuration
 import saskia.wikipedia.WikipediaAPI
@@ -34,14 +34,16 @@ class PopulateSuggestionDB {
    WikipediaDB db_wikipedia
    Logger log = Logger.getLogger("SuggestionDB")
    static String suggestion_table = "suggestion"
-   Configuration conf
+   static Configuration conf = Configuration.newInstance()
    String defaultquery =  "INSERT INTO ${suggestion_table}(sug_name, sug_type, sug_lang, sug_desc, "+
    "sug_ground, sug_score) VALUES(?,?,?,?,?,?)"
    SuggestionType type
    public static final int NE_THRESHOLD_COUNT = 5
    
    public PopulateSuggestionDB() {
-       db_wikipedia = WikipediaDB.newInstance()
+		if (conf.getBoolean("saskia.wikipedia.enabled",true)) {
+			db_wikipedia = WikipediaDB.newInstance()
+		 }
        db_saskia = SaskiaDB.newInstance()
        conf = Configuration.newInstance()
     }
@@ -412,8 +414,9 @@ class PopulateSuggestionDB {
                     log.info "Added ${num} DBPedia classes for lang ${lang} in "+(start2-start1)/1000.0+" secs."
                     
                 case ['WC','ALL']:				    	    
-                    start1 = System.currentTimeMillis()	
-                    num = s.addWikipediaCategories(lang)
+                    start1 = System.currentTimeMillis()
+						  if (conf.getBoolean("saskia.wikipedia.enabled",true))
+                    	  num = s.addWikipediaCategories(lang)
                     start2 = System.currentTimeMillis()	
                     log.info "Added ${num} Wikipedia categories for lang ${lang} in "+(start2-start1)/1000.0+" secs."
                 }

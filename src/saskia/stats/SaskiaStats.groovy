@@ -20,7 +20,7 @@ package saskia.stats
 
 //import rembrandt
 import org.apache.log4j.*
-import saskia.io.SaskiaDB
+import saskia.db.SaskiaDB
 import saskia.io.Collection
 import saskia.io.RembrandtedDoc
 import saskia.io.Cache

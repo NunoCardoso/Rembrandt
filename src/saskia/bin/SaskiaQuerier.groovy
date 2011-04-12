@@ -18,7 +18,7 @@
 
 package saskia.bin
 
-import saskia.io.SaskiaDB
+import saskia.db.SaskiaDB
 import saskia.io.RembrandtedDoc
 import saskia.io.Collection
 //import saskia.converters.RembrandtedDocument2PlainTextConverter 

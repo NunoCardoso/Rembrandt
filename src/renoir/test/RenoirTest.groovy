@@ -58,7 +58,7 @@ class RenoirTest {
         } else {
             conffilepath = cmd.getOptionValue("conf")
         }
-        log.info "RenoirTest version ${Rembrandt.getVersion()}. Welcome."
+     //   log.info "RenoirTest version ${Rembrandt.getVersion()}. Welcome."
         conf = Configuration.newInstance(conffilepath)
 
          String indexdir = conf.get("rembrandt.home.dir")

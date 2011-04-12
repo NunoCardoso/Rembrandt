@@ -25,16 +25,16 @@ import saskia.bin.Configuration
   * Static methods are used to return results from DB, using where clauses.
   * Class methods are used to insert results to DB.  
   */
-class NEName {
+class NEName extends DBObject implements JSONable {
 
-	static String nen_table = "ne_name"
+	static String tablename = "ne_name"
 	long nen_id
 	String nen_name
 	int nen_nr_terms
     
 	static Configuration conf = Configuration.newInstance()
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("NEName")
 	
 	static LinkedHashMap<Long,Geoscope> idCache = \
            new LinkedHashMap(conf.getInt("saskia.nename.cache.number",1000), 0.75f, true) // true: access order.  
@@ -67,7 +67,7 @@ class NEName {
 	    // if from cache, return
 	    if (idCache.containsKey(nen_id)) return idCache[nen_id]
         
-	    List<NEName> nen = queryDB("SELECT * FROM ${nen_table} WHERE nen_id=?", [nen_id])
+	    List<NEName> nen = queryDB("SELECT * FROM ${tablename} WHERE nen_id=?", [nen_id])
 	    log.debug "Querying for nen_id $nen_id got NEName $nen." 
 	    if (nen) {
 		idCache[nen.nen_id] = nen[0]
@@ -86,7 +86,7 @@ class NEName {
 	    // if from cache, return
 	    if (nameCache.containsKey(nen_name)) return nameCache[nen_name]
         
-	    List<NEName> nen = queryDB("SELECT * FROM ${nen_table} WHERE nen_name=?", [nen_name])
+	    List<NEName> nen = queryDB("SELECT * FROM ${tablename} WHERE nen_name=?", [nen_name])
 	    log.debug "Querying for nen_name '${nen_name}' got NEName $nen." 
             if (nen) {
                 idCache[nen.nen_id] = nen[0]
@@ -100,19 +100,34 @@ class NEName {
 	   return ["nen_id":nen_id, "nen_name":nen_name]
 	}
 	
+		
+	public Map toSimpleMap() {
+	   return toMap()
+	}
+	
 	/** Add this NEName to the database. Note that a null is a valid insertion...
 	 * return 1 if successfully inserted.
 	 */	
-	public long addThisToDB() {
+	public Long addThisToDB() {
 	    // returns an auto_increment value
-            def res = db.getDB().executeInsert("INSERT INTO ${nen_table} VALUES(0,?,?)", 
+            def res = db.getDB().executeInsert("INSERT INTO ${tablename} VALUES(0,?,?)", 
             [nen_name, nen_nr_terms])
             nen_id = (long)res[0][0]
             idCache[nen_id] = this
             nameCache[nen_name] = this
+				log.info "Inserted new NEName in DB: ${this}"
             return nen_id 
 	}	
-	
+
+	public int removeThisFromDB() {
+		if (!nen_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE nen_id=?", [nen_id])	
+		idCache.remove(nen_id)
+		nameCache.remove(nen_name)
+		log.info "Removed NEName ${this} from DB, got $res"
+		return res	    
+	}
+		
 	public String toString() {
 	    return nen_name
 	}

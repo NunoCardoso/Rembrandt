@@ -111,6 +111,7 @@ class ImportRembrandtedDocument2NEPool {
 	}
 
 	public HashMap syncDocToPool(Collection collection, long doc_id) {
+
 		 log.trace "Requesting doc -> NE pool sync for doc_id ${doc_id}."
 		 int rows = 0 
 		 HashMap status = [sync:0, notsync:0]
@@ -175,9 +176,15 @@ class ImportRembrandtedDocument2NEPool {
 		 }// if rdoc
 
 		 try {
-			 status = syncNEPoolFromDoc(rdoc)		
+			 HashMap status_ = syncNEPoolFromDoc(rdoc)
+			 	if (status_) {
+		    	    status.sync += status_.sync
+		    	    status.notsync += status_.notsync	
+		    	}
+		
 		 } catch(Exception e) {
 			 abort()
+			 status.notsync += 1
 		 }
 		 return status
 	}	
@@ -189,6 +196,8 @@ class ImportRembrandtedDocument2NEPool {
 	private HashMap syncNEPoolFromDoc(RembrandtedDoc rdoc) {	
 		
 		HashMap status = [sync:0, notsync:0]
+		
+		try {
 		rdoc.doc_job.changeEditStatusInDBto(DocStatus.LOCKED)	
 		current_rdoc = rdoc // mark it, for abort if SIGINT is called
 		log.info "Syncing RembrandtedDoc ${rdoc.doc_id} to NE pool..."
@@ -215,8 +224,11 @@ class ImportRembrandtedDocument2NEPool {
 		current_rdoc = null // mark it, for abort if CTRL-C is pressed
 
 		log.info "RembrandtedDoc ${rdoc.doc_id} synced."
-		
 		status.sync++
+		} catch(Exception e) {
+			log.error "Erro : "+e.getMessage()
+			status.notsync++
+		}
 		return status
 	}
 	
@@ -228,7 +240,6 @@ class ImportRembrandtedDocument2NEPool {
 			current_rdoc.changeProcStatusInDBto(DocStatus.NOT_READY)
 			log.warn "Doc proc status changed to NOT_READY."
 	    }
-	    log.info "Exiting."
 	}
 	
 	static void main(args) {    

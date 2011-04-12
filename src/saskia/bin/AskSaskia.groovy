@@ -59,7 +59,11 @@ class AskSaskia {
 	 this.conf = conf
 	 this.lang = lang
   	 this.cache = new LinkedHashMap(conf.getInt("saskia.necache.number",100), 0.75f, true) // true: access order. 		 
-	 wikipedia = WikipediaAPI.newInstance(lang, conf)
+	 if (this.conf.getBoolean("saskia.wikipedia.enabled", true)) {
+		wikipedia = WikipediaAPI.newInstance(this.lang, this.conf)
+	} else {
+		log.warn("WikipediaAPI access is disabled by request of saskia.wikipedia.enabled.")
+	}
 	 dbpedia = DBpediaAPI.newInstance(conf)	     
 	 catmining = Class.forName("rembrandt.rules.harem."+lang.toLowerCase()+
 		   ".WikipediaCategoryRules"+lang.toUpperCase()).newInstance()
@@ -161,7 +165,10 @@ class AskSaskia {
 
 	// THIS is for NEs that have unknown classification, let's Wikipedia it
 
+	if (wikipedia) {
+
 	log.trace "3.0 Get page document from title '${ne_text}'"		
+	
 	WikipediaDocument doc = wikipedia.getPageDocumentFromTitle(ne_text)
 		
 	if (doc) {
@@ -187,10 +194,11 @@ class AskSaskia {
 	   }
 	} else {
 	    log.trace "X.99 No doc. Nothing. Returning original ne"
-		if (ne.classification.isEmpty()) ne.classification << SC.unknown
-	    return ne
-    	}		
-    }
+	}
+	}
+	if (ne.classification.isEmpty()) ne.classification << SC.unknown
+	return ne
+   }
   
     /**
      * Get category needle, that is, check if a category is the same as the needle.
@@ -485,12 +493,10 @@ class AskSaskia {
     
 	if (ne.classification.isEmpty()) ne.classification << SC.unknown
  	return ne	     	     
-    } 
-
+   } 
 
 // dbpprop:redirect
 
-	
     /**
      * Classify a NE with DBpedia resource
      * @param ne the NamedEntity to classify. Changes will be made into it
@@ -528,7 +534,8 @@ class AskSaskia {
 	
 	// if there's a ne.link (=wikipediaPageTitle), use it also for classification. 
 	// if there is no wikipediaPageTitle, leave it. Next steps will try to classify them
-	if (wikipediaPageTitle) {
+	// also check if the WikipediaAPI singleton is enabled 
+	if (wikipediaPageTitle && wikipedia) {
 	    WikipediaDocument doc = wikipedia.getPageDocumentFromTitle(wikipediaPageTitle)
 	    if (doc) {
 		log.trace "2.6 Resource has Wiki page: $doc"

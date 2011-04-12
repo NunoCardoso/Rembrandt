@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!-- Sample configuration file for a WebStore instance -->
+ 
+<webstore name="SampleWS">
+	<volume id="rdoc" mode="writable" tree-depth="2" server="127.0.0.1" port="4444"/>
+	<volume id="sdoc" mode="writable" tree-depth="2" server="127.0.0.1" port="4445"/>
+</webstore>
+

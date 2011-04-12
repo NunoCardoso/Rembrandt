@@ -48,8 +48,8 @@ class HTMLDocumentReader extends Reader {
     String lang
     
     public HTMLDocumentReader(StyleTag style) {
-	super(style)
-	lang = Configuration.newInstance().get("global.lang")
+		super(style)
+		lang = Configuration.newInstance().get("global.lang")
     }
 	
     private String saveanchor(item) {

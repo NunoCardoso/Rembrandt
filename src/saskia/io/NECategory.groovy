@@ -25,9 +25,9 @@ import org.apache.log4j.*
   * Static methods are used to return results from DB, using where clauses.
   * Class methods are used to insert results to DB.  
   */
-class NECategory {
+class NECategory extends DBObject implements JSONable {
 
-	static String nec_table = "ne_category"
+	static String tablename = "ne_category"
 	     
 	static Map<String,String> local_lang = ["pt":"LOCAL","en":"PLACE","rembrandt":"@LOCAL"]
 	static Map<Long,NECategory> all_id_category = [:]
@@ -37,7 +37,7 @@ class NECategory {
 	String nec_category
     
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("NECategory")
 
 	static int getIDforLOCAL(String lang) {
 	    if (!lang) return
@@ -64,7 +64,7 @@ class NECategory {
 	 */
 	static void createCache() {
 	    if (all_id_category.isEmpty()) {
-               def nec = queryDB("SELECT * FROM ${nec_table}")
+               def nec = queryDB("SELECT * FROM ${tablename}")
 		log.debug "Searched for all categories, got ${nec.size()} entries."
 		nec.each{ updateCacheElement( it.nec_id, it.nec_category)}               
 	    }
@@ -76,7 +76,15 @@ class NECategory {
             all_category_id[category] = nec
             all_id_category[id] = nec
         }
-	
+
+	public Map toMap() {
+	    return ["nec_id":nec_id, "nec_category":nec_category]
+	}
+
+	public Map toSimpleMap() {
+	    return toMap()
+	}
+			
 	/** Get a NECategory from id.
 	 * @param id The id as needle.
 	 * return the NECategory result object, or null
@@ -85,7 +93,7 @@ class NECategory {
 		if (!nec_id) return null
 		createCache()
 		return all_id_category[nec_id]
-		//NECategory nec = queryDB("SELECT * FROM ${nec_table} WHERE nec_id=?", [nec_id])?.getAt(0)
+		//NECategory nec = queryDB("SELECT * FROM ${tablename} WHERE nec_id=?", [nec_id])?.getAt(0)
 		//log.debug "Querying for nec_id $nec_id got NECategory $nec." 
 		//if (nec.nec_id) return nec else return null
 	}	
@@ -98,29 +106,38 @@ class NECategory {
             if (!nec_category) return null
             createCache()
             return all_category_id[nec_category]
-            //NECategory nec = queryDB("SELECT * FROM ${nec_table} WHERE nec_category=?", [nec_category])
+            //NECategory nec = queryDB("SELECT * FROM ${tablename} WHERE nec_category=?", [nec_category])
             //log.debug "Querying for nec_category $nec_category got NECategory $nec." 
             //return nec
         }	
     
 	/** Add this NECategory o the database. Note that a null is a valid insertion...
-	 * return 1 if successfully inserted.
+	 * return the id  if either successfully inserted or ignored.
 	 */	
-	public int addThisToDB() {
-		def res = db.getDB().executeInsert("INSERT IGNORE INTO ${nec_table} VALUES(0,?)", [nec_category])
+	public Long addThisToDB() {
+		def res = db.getDB().executeInsert("INSERT IGNORE INTO ${tablename} VALUES(0,?)", [nec_category])
 		// returns an auto_increment value	
-		updateCacheElement(nec_id, nec_category)
-		return (res ? (int)res[0][0] : 0)
+		if (res) {
+			nec_id = (long)res[0][0]
+			updateCacheElement(nec_id, nec_category)
+			log.info "Inserted new NECategory in DB: ${this}"
+		}
+		return nec_id
 	}	
-	
+		
+	public int removeThisFromDB() {
+		if (!nec_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE nec_id=?", [nec_id])	
+		all_category_id.remove(nec_category)
+		all_id_category.remove(nec_id)
+		log.info "Removed NECategory ${this} from DB, got $res"
+		return res	    
+	}
+      
 	boolean equals(Entity e) {
 		return this.toMap().equals(e.toMap())
 	}
      
-	public Map toMap() {
-	    return ["nec_id":nec_id, "nec_category":nec_category]
-	}
-	
 	public String toString() {
 		return nec_category
 	}

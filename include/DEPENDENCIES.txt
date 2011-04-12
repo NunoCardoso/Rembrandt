@@ -20,6 +20,7 @@ REQUIRED:
 * slf4j-log4j12-1.5.8.jar
 * junit
 * webstore (plus tumba-utils)
+* bliki-core-3.0.16.jar (Wikipedia parse)
 
 SUBDEPENDENCIES: 
 ================

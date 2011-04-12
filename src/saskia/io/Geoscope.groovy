@@ -33,10 +33,10 @@ import org.apache.log4j.*
   * 400 - Closed
   * 301 - Redirect. For example, 'Holland' redirects to 'Netherlands'
   */
-class Geoscope {
+class Geoscope extends DBObject implements JSONable {
 
-	static String geo_table = "geoscope"
-	static String ent_has_geo_table = "entity_has_geoscope"
+	static String tablename = "geoscope"
+	static String ent_has_tablename = "entity_has_geoscope"
 	
 	Long geo_id
 	String geo_name
@@ -47,15 +47,15 @@ class Geoscope {
 	String geo_woeid_ancestors
 	String geo_woeid_belongsto
 	String geo_woeid_neighbors
-    String geo_woeid_siblings
-    String geo_woeid_children
-    String geo_geonetpt02
- 	
+	String geo_woeid_siblings
+	String geo_woeid_children
+	String geo_geonetpt02
+	
 	static SaskiaDB db = SaskiaDB.newInstance()
 	static GeoPlanetAPI geoplanet = GeoPlanetAPI.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Geoscope")
 
-	 static Map type = ['geo_id':'Long', 'geo_name':'String','geo_woeid':'Long',
+	static Map type = ['geo_id':'Long', 'geo_name':'String','geo_woeid':'Long',
             'geo_woeid_place':'String', 'geo_woeid_parent':'String', 'geo_woeid_ancestors':'String',
             'geo_woeid_belongsto':'String', 'geo_woeid_neighbors':'String', 'geo_woeid_siblings':'String',
             'geo_woeid_children':'String', 'geo_geonetpt02':'String'] 
@@ -65,13 +65,13 @@ class Geoscope {
 	 * return Geoscope result object, or null
 	 */
 
-        static List<Geoscope> queryDB(String query, List params = []) {
-           List<Geoscope> l = []
-            db.getDB().eachRow(query, params, {row  -> 
-            	Geoscope g = new Geoscope()
-                g.geo_id = row['geo_id']
-                g.geo_name = row['geo_name']
-                if (row['geo_woeid']) g.geo_woeid = row['geo_woeid']
+	static List<Geoscope> queryDB(String query, List params = []) {
+		List<Geoscope> l = []
+		db.getDB().eachRow(query, params, {row  -> 
+			Geoscope g = new Geoscope()
+			g.geo_id = row['geo_id']
+			g.geo_name = row['geo_name']
+			if (row['geo_woeid']) g.geo_woeid = row['geo_woeid']
                 if (row['geo_woeid_type']) g.geo_woeid_type = row['geo_woeid_type']
                 if (row['geo_woeid_place']) g.geo_woeid_place = row['geo_woeid_place']
                 if (row['geo_woeid_parent']) g.geo_woeid_parent = row['geo_woeid_parent']
@@ -81,26 +81,19 @@ class Geoscope {
                 if (row['geo_woeid_siblings']) g.geo_woeid_siblings = row['geo_woeid_siblings']
                 if (row['geo_woeid_children']) g.geo_woeid_children = row['geo_woeid_children']
                 if (row['geo_geonetpt02']) g.geo_geonetpt02 = row['geo_geonetpt02']
-                l << g                                                  
-            })
-            if (l) return l else return null            
-        }
+			l << g                                                  
+		})
+		if (l) return l else return null            
+	}
 
 	static int deleteGeoscope(Long id) {
 		Geoscope g = Geoscope.getFromID(id)
-		return g.deleteGeoscope()
-	}
-		
-	
-	public int deleteGeoscope() {
-		if (!geo_id) return null
-		def res = db.getDB().executeUpdate("DELETE FROM ${geo_table} WHERE geo_id=?", [geo_id])	
-		return res	    
+		return g?.removeThisFromDB()
 	}
 	  
 	public List<Entity> hasEntities() {
         List<Entity> e = []
-        db.getDB().eachRow("SELECT * FROM ${ent_has_geo_table} WHERE ehg_geoscope = ?", [geo_id], {row -> 
+        db.getDB().eachRow("SELECT * FROM ${ent_has_tablename} WHERE ehg_geoscope = ?", [geo_id], {row -> 
                 e << Entity.getFromID(row["ehg_entity"])
         })
         return e
@@ -119,18 +112,17 @@ class Geoscope {
 	    return ['geo_id':geo_id, 'geo_name':geo_name, 'geo_woeid':geo_woeid]
 	}
 	
-	
 	boolean equals(Entity e) {
 		return this.toMap().equals(e.toMap())
 	}
 	                
-	 static Map listGeoscopes(limit = 10, offset = 0, column = null, needle = null) {
+	static Map listGeoscopes(limit = 10, offset = 0, column = null, needle = null) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10
 		if (!offset) offset = 0
 			
 		String where = ""
-		String from = " FROM ${geo_table}"	
+		String from = " FROM ${tablename}"	
 		List params = []	
 		if (column && needle) {
 		    switch (type[column]) {
@@ -140,7 +132,7 @@ class Geoscope {
 		    }
 		}
 		    
-		String query = "SELECT SQL_CALC_FOUND_ROWS ${geo_table}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
+		String query = "SELECT SQL_CALC_FOUND_ROWS ${tablename}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
 		"UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL"
 		//log.debug "query = $query params = $params class = "+params*.class
 		List<Entity> u 
@@ -151,7 +143,7 @@ class Geoscope {
 		log.debug "Returning "+u.size()+" results."
 		return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,
 		        "column":column, "value":needle]
-	    }
+	}
 	 
 	/** Get a Geoscope from id.
 	 * @param id The id as needle.
@@ -159,36 +151,36 @@ class Geoscope {
 	 */
 	static Geoscope getFromID(long geo_id) {
 		if (!geo_id) return null 
-		List<Geoscope> geos = queryDB("SELECT * FROM ${geo_table} WHERE geo_id=?", [geo_id])
+		List<Geoscope> geos = queryDB("SELECT * FROM ${tablename} WHERE geo_id=?", [geo_id])
 		log.debug "Querying for geo_id $geo_id got Geoscope $geos." 
-		 // if geoscope is a redirection, use it instead
-        if (geos) {
+			// if geoscope is a redirection, use it instead
+		if (geos) {
 			for (int i=0; i<geos.size(); i++) {
 				if (geos[i].geo_woeid_place.startsWith("301\t")) {
         			String new_woeid_string = geos[i].geo_woeid_place.find(/301\t.*?\t(\d+)/) {all, g1 -> return g1}
                		geos[i] = Geoscope.getFromWOEID(Long.parseLong(new_woeid_string))
 				}
 			}
-            // let's hope there is no double redirect!
-        }
+      // let's hope there is no double redirect!
+      }
 		if (geos && geos[0].geo_id) return geos[0] else return null
 	}	
        
 	static List<Geoscope> getFromName(String geo_name, String lang) {
 		if (!geo_name || !lang) return null 
 		String needle = "${lang}:${geo_name}"
-		List<Geoscope> geos = queryDB("SELECT * FROM ${geo_table} WHERE geo_name REGEXP '^(.*;)?${needle}(;.*)?\$'",[])
-		log.debug "Querying for geo_name $needle got Geoscope $geos." 
+		List<Geoscope> geos = queryDB("SELECT * FROM ${tablename} WHERE geo_name REGEXP '^(.*;)?${needle}(;.*)?\$'",[])
+		log.info "Querying for geo_name $needle got Geoscope $geos." 
 		 // if geoscope is a redirection, use it instead
-        if (geos) {
+		if (geos) {
 			for (int i=0; i<geos.size(); i++) {
 				if (geos[i].geo_woeid_place.startsWith("301\t")) {
         			String new_woeid_string = geos[i].geo_woeid_place.find(/301\t.*?\t(\d+)/) {all, g1 -> return g1}
                		geos[i] = Geoscope.getFromWOEID(Long.parseLong(new_woeid_string))
 				}
 			}
-            // let's hope there is no double redirect!
-        }
+			// let's hope there is no double redirect!
+      }
 		if (geos) return geos else return null
 	}	
 	
@@ -205,18 +197,18 @@ class Geoscope {
 	        case 'Integer': newvalue = Integer.parseInt(value); break
 	        case 'Long': newvalue = Long.parseLong(value); break
 	    }
-	    def res = db.getDB().executeUpdate("UPDATE ${geo_table} SET ${column}=? WHERE geo_id=?",[newvalue, geo_id])
+	    def res = db.getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE geo_id=?",[newvalue, geo_id])
 	    return res
 	}
 	
-        /** Get a Geoscope from id.
-         * @param id The id as needle.
-         * return the Geoscope result object, or null
-         */
-        static Geoscope getFromWOEID(long woeid) {
+  /** Get a Geoscope from id.
+   * @param id The id as needle.
+   * return the Geoscope result object, or null
+   */
+	static Geoscope getFromWOEID(long woeid) {
            //if (!woeid) return null - it can be 0
-            List<Geoscope> geos = queryDB("SELECT * FROM ${geo_table} WHERE geo_woeid=?", [woeid])
-            log.debug "Querying for woeid $woeid got Geoscope $geos." 
+            List<Geoscope> geos = queryDB("SELECT * FROM ${tablename} WHERE geo_woeid=?", [woeid])
+            log.info "Querying for woeid $woeid got Geoscope $geos." 
  			
             // if geoscope is a redirection, use it instead
             if (geos) {
@@ -229,37 +221,41 @@ class Geoscope {
                 // let's hope there is no double redirect!
             }
 
-            return (geos? geos[0] : null)
-         }
+		return (geos? geos[0] : null)
+	}
         
-       	public Map getName() {
-			if (!geo_name) return null
-			Map m = [:]
-			geo_name.split(/;/).each{it -> 
-				List l = it.split(/:/)
-				m[l[0]]=l[1]
-			}
-			return m
+   public Map getName() {
+		if (!geo_name) return null
+		Map m = [:]
+		geo_name.split(/;/).each{it -> 
+			List l = it.split(/:/)
+			m[l[0]]=l[1]
 		}
-		
-        public boolean isACountry() {
-            return geo_woeid_type == GeoPlanetAPI.types["Country"]
-        }       
- 		public boolean isAContinent() {
-            return geo_woeid_type == GeoPlanetAPI.types["Continent"]
-        }
-		public boolean isASupername() {
-            return geo_woeid_type == GeoPlanetAPI.types["Supername"]
-        }
-		public boolean isAColloquial() {
-            return geo_woeid_type == GeoPlanetAPI.types["Colloquial"]
-        }
-		public boolean isAboveCountry() {
-            return isAContinent() || isASupername() || isAColloquial()
-        }
-		
-        static Geoscope getNewGeoscopeForPlacename(String placename) {
-           Geoscope geo = new Geoscope()
+		return m
+	}
+	
+	public boolean isACountry() {
+		return geo_woeid_type == GeoPlanetAPI.types["Country"]
+	}       
+
+	public boolean isAContinent() {
+		return geo_woeid_type == GeoPlanetAPI.types["Continent"]
+   }
+	
+	public boolean isASupername() {
+		return geo_woeid_type == GeoPlanetAPI.types["Supername"]
+	}
+	
+	public boolean isAColloquial() {
+		return geo_woeid_type == GeoPlanetAPI.types["Colloquial"]
+	}
+	
+	public boolean isAboveCountry() {
+		return isAContinent() || isASupername() || isAColloquial()
+	}
+
+	static Geoscope getNewGeoscopeForPlacename(String placename) {
+		Geoscope geo = new Geoscope()
         
            // let's fetch it! Use terms from the named entity                       
            log.info "New Geoscope, going to get GeoPlanet info for placename $placename"
@@ -275,14 +271,14 @@ class Geoscope {
 			if (code)  geo.geo_woeid_type = code[0] 
             log.info "Got name ${geo.geo_name} and weoid ${geo.geo_woeid} and type ${geo.geo_woeid_type}"                           
            } 
-           return geo
-        }
+		return geo
+	}
         
-        // called when there's no ancestors in DB, have to go to GeoPlanet
-        public List<Long> fetchAncestors() {
-            // it happens when GeoPlanet can't ground a geographic entity.
-            // we return no ancestors.
-            if (!geo_woeid) return []
+// called when there's no ancestors in DB, have to go to GeoPlanet
+	public List<Long> fetchAncestors() {
+		// it happens when GeoPlanet can't ground a geographic entity.
+		// we return no ancestors.
+		if (!geo_woeid) return []
             
             log.info "Geoscope has no ancesters, fetching GeoPlanet for ancesters"
             List<Long> woeids 
@@ -306,11 +302,11 @@ class Geoscope {
         
             // if it's a Geoscope from the DB, but with null ancestors, let's just update it
             if (geo_id) updateAncestorsInDB()
-            return woeids
-        }
+		return woeids
+	}
         
-		 // called when there's no children in DB, have to go to GeoPlanet
-        public List<Long> fetchDescendents() {
+	// called when there's no children in DB, have to go to GeoPlanet
+	public List<Long> fetchDescendents() {
             // it happens when GeoPlanet can't ground a geographic entity.
             // we return no ancestors.
             if (!geo_woeid) return []
@@ -337,8 +333,8 @@ class Geoscope {
         
             // if it's a Geoscope from the DB, but with null ancestors, let's just update it
             if (geo_id) updateDescendentsInDB()
-            return woeids
-        }
+		return woeids
+	}
 
         /** just add  justification of a country entry why it does not have ancestors */
         public void closeAncestorsBecauseItsACountry() {
@@ -352,7 +348,7 @@ class Geoscope {
             String date = String.format('%tF %<tT', new Date()) 
             String info = "400\t${date}"
             def updated_doc = db.getDB().executeUpdate(
-                "UPDATE ${geo_table} SET geo_woeid_ancestors=? where geo_woeid=?", 
+                "UPDATE ${tablename} SET geo_woeid_ancestors=? where geo_woeid=?", 
                 [info, woeid]) 
                 log.debug "Updated Geoscope with woeid:${woeid}, closed the ancestors."
             return updated_doc
@@ -363,7 +359,7 @@ class Geoscope {
             String date = String.format('%tF %<tT', new Date()) 
             String info = "400\t${date}"
             def updated_doc = db.getDB().executeUpdate(
-                "UPDATE ${geo_table} SET geo_woeid_children=? where geo_woeid=?", 
+                "UPDATE ${tablename} SET geo_woeid_children=? where geo_woeid=?", 
                 [info, woeid]) 
                 log.debug "Updated Geoscope with woeid:${woeid}, closed the descendents."
             return updated_doc
@@ -453,21 +449,10 @@ class Geoscope {
             return  geo      
         }
            
-        public long addThisToDB() {	
-  
-            def res = db.getDB().executeInsert("INSERT INTO ${geo_table}(geo_name, geo_woeid, geo_woeid_type,"+
-      "geo_woeid_place, geo_woeid_parent, geo_woeid_ancestors, geo_woeid_belongsto, geo_woeid_neighbors, "+
-      "geo_woeid_siblings, geo_woeid_children, geo_geonetpt02) VALUES(?,?,?,?,?,?,?,?,?,?,?)", 
-        [geo_name, geo_woeid, geo_woeid_type, geo_woeid_place, geo_woeid_parent, geo_woeid_ancestors, 
-        geo_woeid_belongsto, geo_woeid_neighbors, geo_woeid_siblings, geo_woeid_children, geo_geonetpt02])
-
-           log.debug "Inserted new Geoscope with geo_name:${geo_name}"        
-           return (long)res[0][0]
-        }
-        
+	       
         public updateAncestorsInDB() {	
            def updated_doc = db.getDB().executeUpdate(
-            "UPDATE ${geo_table} SET geo_woeid_ancestors=? where geo_id=?", 
+            "UPDATE ${tablename} SET geo_woeid_ancestors=? where geo_id=?", 
             [geo_woeid_ancestors, geo_id]) 
             log.debug "Updated Geoscope with geo_id:${geo_id} with new ancestors."
             return updated_doc
@@ -475,7 +460,7 @@ class Geoscope {
         
  		public updateDescendentsInDB() {	
            def updated_doc = db.getDB().executeUpdate(
-            "UPDATE ${geo_table} SET geo_woeid_children=? where geo_id=?", 
+            "UPDATE ${tablename} SET geo_woeid_children=? where geo_id=?", 
             [geo_woeid_children, geo_id]) 
             log.debug "Updated Geoscope with geo_id:${geo_id} with new descendents."
             return updated_doc
@@ -485,12 +470,30 @@ class Geoscope {
             String date = String.format('%tF %<tT', new Date()) 
             String result = "200\t${date}\t"+geo_woeid_place
             def updated_doc = db.getDB().executeUpdate(
-            "UPDATE ${geo_table} SET geo_woeid_place=? where geo_id=?", 
+            "UPDATE ${tablename} SET geo_woeid_place=? where geo_id=?", 
             [result, geo_id]) 
             log.debug "Updated Geoscope with geo_id:${geo_id} with new place XML."
             return updated_doc
         }
-        
+
+	public Long addThisToDB() {	
+		def res = db.getDB().executeInsert("INSERT INTO ${tablename}(geo_name, geo_woeid, geo_woeid_type,"+
+      "geo_woeid_place, geo_woeid_parent, geo_woeid_ancestors, geo_woeid_belongsto, geo_woeid_neighbors, "+
+      "geo_woeid_siblings, geo_woeid_children, geo_geonetpt02) VALUES(?,?,?,?,?,?,?,?,?,?,?)", 
+        [geo_name, geo_woeid, geo_woeid_type, geo_woeid_place, geo_woeid_parent, geo_woeid_ancestors, 
+        geo_woeid_belongsto, geo_woeid_neighbors, geo_woeid_siblings, geo_woeid_children, geo_geonetpt02])
+		geo_id = (long)res[0][0]
+		log.info "Inserted new Geoscope in DB: ${this}"
+		return geo_id
+	}
+	
+	public int removeThisFromDB() {
+		if (!geo_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE geo_id=?", [geo_id])	
+		log.info "Removed Geoscope ${this} from DB, got $res"
+		return res	    
+	}
+      
 	public String toString() {
 		return "${geo_id}:${geo_name}"
 	}

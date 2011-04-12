@@ -26,7 +26,7 @@ import org.apache.log4j.Logger
   * Static methods are used to return results from DB, using where clauses.
   * Class methods are used to insert results to DB.  
   */
-class Entity {
+class Entity extends DBObject implements JSONable {
 
     static String ent_table = "entity"
     static String ent_has_geo_table = "entity_has_geoscope"    
@@ -44,7 +44,7 @@ class Entity {
         new LinkedHashMap(conf.getInt("saskia.entity.cache.number",1000), 0.75f, true) // true: access order.  
 
     static SaskiaDB db = SaskiaDB.newInstance()
-    static Logger log = Logger.getLogger("SaskiaDB")
+    static Logger log = Logger.getLogger("Entity")
 	
     static Map type = ['ent_id':'Long', 'ent_name':'String', 
             'ent_dbpedia_resource':'String', 'ent_dbpedia_class':'String'] 
@@ -67,6 +67,11 @@ class Entity {
 	    return ["ent_id":ent_id, "ent_name":ent_name, "ent_dbpedia_resource":ent_dbpedia_resource, 
 	      "ent_dbpedia_class":ent_dbpedia_class]
 	}
+	
+	public Map toSimpleMap() {
+	    return toMap()
+	}
+	
 	public Map getName() {
 			if (!ent_name) return null
 			Map m = [:]
@@ -77,63 +82,49 @@ class Entity {
 			return m
 	}
 	
-   static int removeEntity(Long id) {
-		Entity e = Entity.getFromID(id)
-		return e?.removeThisFromDB()
-   }
-	
-   public int removeThisFromDB() {
-		if (!ent_id) return null
-		def res = db.getDB().executeUpdate("DELETE FROM ${ent_table} WHERE ent_id=?", [ent_id])
-		entityDBPediaResourceCache.remove(ent_dbpedia_resource)
-		entityIDCache.remove(ent_id)
-		return res	    
-   }
-	
-    static Map listEntities(limit = 10, offset = 0, column = null, needle = null) {
+	static Map listEntities(limit = 10, offset = 0, column = null, needle = null) {
 	// limit & offset can come as null... they ARE initialized...
-	if (!limit) limit = 10
-	if (!offset) offset = 0
+		if (!limit) limit = 10
+		if (!offset) offset = 0
 		
-	String where = ""
-	String from = " FROM ${ent_table}"	
-	List params = []	
-	if (column && needle) {
-	    switch (type[column]) {
-	        case 'String': where += " WHERE $column LIKE '%${needle}%'"; break
-	        case 'Long': where += " WHERE $column=? "; params << Long.parseLong(needle); break
-	    }
-	}
+		String where = ""
+		String from = " FROM ${ent_table}"	
+		List params = []	
+		if (column && needle) {
+			switch (type[column]) {
+				case 'String': where += " WHERE $column LIKE '%${needle}%'"; break
+				case 'Long': where += " WHERE $column=? "; params << Long.parseLong(needle); break
+			}
+		}
 	    
-	String query = "SELECT SQL_CALC_FOUND_ROWS ${ent_table}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
-	"UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL"
-	//log.debug "query = $query params = $params class = "+params*.class
-	List<Entity> u 
-	try {u = queryDB(query, params) }
-	catch(Exception e) {log.error "Error getting Entity list: ", e}
-	// last "item" it's the count.
-	int total = (int)(u.pop().ent_id)
-	log.debug "Returning "+u.size()+" results."
-	return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,
-	        "column":column, "value":needle]
-    }
+		String query = "SELECT SQL_CALC_FOUND_ROWS ${ent_table}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
+		"UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL"
+
+		List<Entity> u 
+		try {u = queryDB(query, params) }
+		catch(Exception e) {log.error "Error getting Entity list: ", e}
+		// last "item" it's the count.
+		int total = (int)(u.pop().ent_id)
+		log.debug "Returning "+u.size()+" results."
+		return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,
+			"column":column, "value":needle]
+	}
 	
 	/** Get an entity from id. 
 	 * @param ent_id The id as needle.
 	 * return the Entity for that id.
 	 */
 	static Entity getFromID(Long ent_id) {
-	    if (!ent_id) return null
-	    if (entityIDCache.containsKey(ent_id)) return entityIDCache[ent_id]
+		if (!ent_id) return null
+		if (entityIDCache.containsKey(ent_id)) return entityIDCache[ent_id]
 		
-	    List<Entity> e = queryDB("SELECT * FROM ${ent_table} WHERE ent_id=?", [ent_id])
-	    log.trace "Querying for ent_id $ent_id got Entity $e." 
-	    if (e) {
-		entityIDCache[ent_id] = e[0]
-		return e[0] 
-	    }
-	    return null
-	    
+		List<Entity> e = queryDB("SELECT * FROM ${ent_table} WHERE ent_id=?", [ent_id])
+		log.trace "Querying for ent_id $ent_id got Entity $e." 
+		if (e) {
+			entityIDCache[ent_id] = e[0]
+			return e[0] 
+		}
+		return null 
 	}	 
 	
 	static updateValue(Long ent_id, column, value) {
@@ -163,7 +154,7 @@ class Entity {
 		if (!ent_name || !lang) return null 
 		String needle = "${lang}:${ent_name}"
 		List<Entity> ents = queryDB("SELECT * FROM ${ent_table} WHERE ent_name REGEXP '^(.*;)?${needle}(;.*)?\$'",[])
-		log.debug "Querying for ent_name $needle got Entity $ents." 
+		log.info "Querying for ent_name $needle got Entity $ents." 
 		return ents
 	}	
 		
@@ -185,7 +176,7 @@ class Entity {
 		   e = queryDB("SELECT * FROM ${ent_table} WHERE ent_dbpedia_resource = ?", [ent_dbpedia_resource])
 		}
 	    	
-		log.trace "Querying for ent_dbpedia_resource $ent_dbpedia_resource got Entity $e." 
+		log.debug "Querying for ent_dbpedia_resource $ent_dbpedia_resource got Entity $e." 
 		if (e) {
 		    entityDBPediaResourceCache[ent_dbpedia_resource] = e[0]
 		    return e[0]
@@ -209,34 +200,48 @@ class Entity {
 		if (e) return e else return null
 	}
     
-        public Geoscope hasGeoscope() {
-            Geoscope g
-            db.getDB().eachRow("SELECT * FROM ${ent_has_geo_table} WHERE ehg_entity = ?", [ent_id], {row -> 
-                if (g) log.warn "Entity $ent has more than one link to a geoscope!!!"
-                else g = Geoscope.getFromID(row["ehg_geoscope"])
-            })
-            return g
-        }
-        
-        public associateWithGeoscope(long geo_id) { 
-            db.getDB().executeInsert("INSERT IGNORE INTO ${ent_has_geo_table} VALUES(?,?)", 
-            [ent_id, geo_id])
-        }
+	public Geoscope hasGeoscope() {
+      Geoscope g
+     	db.getDB().eachRow("SELECT * FROM ${ent_has_geo_table} WHERE ehg_entity = ?", [ent_id], {row -> 
+         if (g) log.warn "Entity $ent has more than one link to a geoscope!!!"
+          else g = Geoscope.getFromID(row["ehg_geoscope"])
+        })
+      return g
+	}
+     
+	public associateWithGeoscope(long geo_id) { 
+       db.getDB().executeInsert("INSERT IGNORE INTO ${ent_has_geo_table} VALUES(?,?)", 
+       [ent_id, geo_id])
+	}
         
 	/** Add this Entity to the database. Note that a null is a valid insertion...
 	 * return 1 if successfully inserted.
 	 */	
-	public long addThisToDB() {
+	public Long addThisToDB() {
 	    def res = db.getDB().executeInsert("INSERT INTO ${ent_table} VALUES(0,?,?,?)", 
 	    [ent_name, ent_dbpedia_resource, ent_dbpedia_class] )
-		// returns an auto_increment value
+
 	    ent_id = (long)res[0][0]
 	    entityDBPediaResourceCache[ent_dbpedia_resource] = this
 	    entityIDCache[ent_id] = this
+		 log.info "Adding entity to DB: ${this}"
 	    return ent_id
 	}	
 
+   static int removeEntity(Long id) {
+		Entity e = Entity.getFromID(id)
+		return e?.removeThisFromDB()
+   }
 	
+   public int removeThisFromDB() {
+		if (!ent_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${ent_table} WHERE ent_id=?", [ent_id])
+		entityDBPediaResourceCache.remove(ent_dbpedia_resource)
+		entityIDCache.remove(ent_id)
+		log.info "Removing entity ${this} from DB, got $res"
+		return res	    
+   }
+		
 	boolean equals(Entity e) {
 		return this.toMap().equals(e.toMap())
 	}

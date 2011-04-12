@@ -29,7 +29,7 @@ import saskia.bin.Configuration;
  * GeoSignature generation
  *
  */
-class DocTimeSignature {
+class DocTimeSignature extends DBObject {
     
     static String tablename = "doc_time_signature"
     Long dts_id
@@ -42,11 +42,11 @@ class DocTimeSignature {
 
     Long dts_document_id
     String dts_document_original_id
-
-    
+  
     static Configuration conf = Configuration.newInstance()
     static SaskiaDB db = SaskiaDB.newInstance()
-    static Logger log = Logger.getLogger("SaskiaDB")
+    static Logger log = Logger.getLogger("DocTimeSignature")
+
     static LinkedHashMap<Long,DocTimeSignature> idCache = \
            new LinkedHashMap(conf.getInt("saskia.doc_time_signature.cache.number",1000), 0.75f, true) // true: access order.  
 
@@ -76,7 +76,7 @@ class DocTimeSignature {
         if (!dts_id) return null
         if (idCache.containsKey(dts_id)) return idCache[dts_id]
         List<DocTimeSignature> dts = queryDB("SELECT * FROM ${tablename} WHERE dts_id=?", [dts_id])
-        log.debug "Querying for dts_id $dts_id got DocTimeSignature $dts." 
+        log.info "Querying for dts_id $dts_id got DocTimeSignature $dts." 
         if (dts) {
             idCache[dts_id] = dts[0]
             return dts[0] 
@@ -99,17 +99,25 @@ class DocTimeSignature {
         
     }
     
-    public long addThisToDB() {	
+    public Long addThisToDB() {	
         
         def res = db.getDB().executeInsert("INSERT INTO ${tablename}(dts_document, " +
             "dts_signature, dts_tag, dts_date_created) VALUES(?,?,?, NOW())", 
         [dts_document, dts_signature, dts_tag.tag_id])
         long new_dts_id = (long)res[0][0]
-        log.debug "Inserted new DocTimeSignature for doc $dts_document, got new_dts_id $new_dts_id"        
+        log.info "Inserted new DocTimeSignature for doc $dts_document, got new_dts_id $new_dts_id"        
         idCache[new_dts_id] = this
         return new_dts_id
     }
 
+	public int removeThisFromDB() {	
+		def res = db.getDB().executeUpdate(
+			"DELETE FROM ${tablename} where dts_id=?",[dts_id]) 
+		idCache.remove(dts_id)
+		log.info "Removing DocTimeSignature ${this} from DB, got $res"
+		return res
+	}
+	
     public String toString() {
         return "${dts_id}:${dts_document}"
     }

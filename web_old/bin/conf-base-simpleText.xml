@@ -1,0 +1,26 @@
+<configuration>
+ 
+ <!-- REMBRANDT STUFF -->
+   <property>
+    <name>global.lang</name>
+    <value>pt</value>
+   </property>
+
+    <property>
+    <name>rembrandt.core.doALT</name>
+    <value>true</value>
+    <description>
+    Allows alternative NEs just like in HAREM style.
+    </description> 
+   </property>
+
+    <property>
+    <name>rembrandt.core.removeRemainingUnknownNE</name>
+    <value>false</value>
+    <description>
+    In the end, discard remaining NE that were not properly classified.
+    </description> 
+   </property>
+
+</configuration>
+   

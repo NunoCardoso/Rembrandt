@@ -40,7 +40,8 @@ class GetLeftovers {
 			int docs_read = 0
 			int docs_processed = 0
 			Map docs = [:]
-	    		String content = f.getText("UTF-8")
+	    		String content = f.getText(
+					conf.get("global.encoding", System.getProperty('file.encoding')))
 	    		println "Parsing file..."
 			content.findAll(/(?si)<html>.*?<\/html>/) {all -> 
 				all.find(/(?si)<TITLE>(.*?)<\/TITLE>/) {all2, g1 -> 

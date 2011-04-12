@@ -35,7 +35,7 @@ import saskia.bin.Configuration
 import saskia.io.Collection
 import rembrandt.io.DocStats
 import saskia.io.RembrandtedDoc
-import saskia.io.SaskiaDB
+import saskia.db.SaskiaDB
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
 

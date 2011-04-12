@@ -21,14 +21,13 @@ package saskia.imports
 import saskia.bin.Configuration
 import saskia.io.Collection
 import saskia.io.SourceDoc
-import saskia.io.DocStatus
 
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
 
-import javax.xml.parsers.SAXParserFactory
 import org.xml.sax.helpers.DefaultHandler
-import org.xml.sax.* 
+import org.xml.sax.*
+import javax.xml.parsers.SAXParserFactory
 
 import rembrandt.obj.Document
 import rembrandt.io.RembrandtWriter
@@ -70,20 +69,20 @@ class WPT05Handler extends DefaultHandler {
 	
 	ImportWPT05_2_SourceDocument w2s
 	RembrandtWriter writer 
+	def text
+	def content
+	Date date_modified
+	Date date_fetched
+	String lang 
+	String id
+	Document doc
 
 	public WPT05Handler(ImportWPT05_2_SourceDocument w2s) {
 		this.w2s = w2s
 		writer = new RembrandtWriter(new RembrandtStyleTag("pt"))
 	}
 
-	 def text
-	 def content
-	 Date date_modified
-	 Date date_fetched
-	 String lang 
-	 String id
-	
-    void startElement(String ns, String localName, String qName, Attributes atts) {
+   void startElement(String ns, String localName, String qName, Attributes atts) {
         switch (qName) {
            case 'rdf:Description':
 	 			text = ""; content = null; lang = null; id = null;
@@ -110,8 +109,6 @@ class WPT05Handler extends DefaultHandler {
         }
     }
 
- 
-
     void characters(char[] chars, int offset, int length) {
        text += new String(chars, offset, length)      
     }
@@ -126,7 +123,13 @@ class WPT05Handler extends DefaultHandler {
 					date = date_fetched
 				if (!date)
 					date = new Date(0)
-				addSourceDoc(id, content, lang, date)
+				
+				// Há alguns rdf.Description que não possuem doc. 
+				// se não possuem, passar à frente.
+				// testar com id
+				if (doc && doc.docid)
+					w2s.addSourceDoc(id, writer.printDocument(doc), doc.lang, date, "")
+				doc = null
 				break
            case 'dcterm:modified':
 				date_modified = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
@@ -138,82 +141,43 @@ class WPT05Handler extends DefaultHandler {
 				lang = text;
 				break 
            case 'wpt:filteredText':
-				Document doc = new Document()
+				doc = new Document()
 				doc.body = text
 				doc.docid = id
-				doc.lang = lang
+				doc.lang = (lang ? lang : w2s.lang)
 				doc.tokenize()
-				content = writer.printDocument(doc)
 				break
         }
     }
 }
 
-class ImportWPT05_2_SourceDocument {
+class ImportWPT05_2_SourceDocument extends Import {
 	
-	Configuration conf 
 	static Logger log = Logger.getLogger("SaskiaImports")
-	Collection collection 
-	String lang= "pt"
-	String filename
-   HashMap status
-
-	File f 
-	FileInputStream fis
 	
-	public ImportWPT05_2_SourceDocument(String filename, Collection collection) {
-        
-		conf = Configuration.newInstance()
-	   this.collection = collection
-	
-		f= new File(filename)
-		fis = new FileInputStream(f)
-      status = [imported:0, skipped:0]
+	public ImportWPT05_2_SourceDocument(File file, 
+		Collection collection, String lang, String encoding) {
+		super(file, collection, lang, encoding)
 	}
-	
-	public HashMap parse() {
+ 	
+	public HashMap importDocs() {
 		def handler = new WPT05Handler(this)
 		def reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader()
 		reader.setContentHandler(handler)
-		reader.parse(new InputSource(fis))
-		return status
-   }
-
-   public SourceDoc addSourceDoc(String original_id, String content, String lang, Date date) {
-		
-		SourceDoc s = new SourceDoc(
-			sdoc_original_id:original_id,
-        sdoc_collection:collection, 
-        sdoc_lang:lang, 
-        sdoc_content:content, 
-        sdoc_doc:null,
-        sdoc_date:date,
-        sdoc_proc:DocStatus.READY,
-        sdoc_comment:""
-		)
-		// by adding to DB, it already checks for duplicates
-		
-      try {
-         s.addThisToDB()
-         log.debug "Inserted $s into Saskia DB."
-			status.imported++
-      } catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
-         log.warn "Found duplicate entry in DB. Skipping."  
-			status.skipped++
-
-      }catch(Exception e2) {
-         log.warn "Found other error. Skipping. " + e2.getMessage()  
-			status.skipped++
+		try {
+			reader.parse(new InputSource(this.getInputStreamReader()))
+		} catch(Exception e) {
+			log.error "Erro na leitura de XML: "+e.getMessage()
 		}
-		return s
-	
-	//println "I have $s. $content" 	
-	}      
+		return status
+   }    
  	
 	static void main(args) {
-	
+		
+		Configuration conf = Configuration.newInstance()
 		Options o = new Options()
 		o.addOption("file", true, "collection file to load")
+		o.addOption("encoding", false, "encoding")
 		o.addOption("col", true, "collection number/name")
 		o.addOption("help", false, "Gives this help information")
 	    
@@ -234,8 +198,7 @@ class ImportWPT05_2_SourceDocument {
 		    
 	 	if (!collection) {
 			try {
-				 collection = Collection.getFromID(
-					Integer.parseInt(collection_)	)    
+				 collection = Collection.getFromID(Integer.parseInt(collection_))
 			}catch(Exception e) {}
 		}
 		if (!collection) {
@@ -247,11 +210,23 @@ class ImportWPT05_2_SourceDocument {
 			println "No --file arg. Please specify the file. Exiting."
 			System.exit(0)
 		}
-	    
+
+		String lang = collection.col_lang
+		log.info "Using collection language $lang as default for documents without language info"
+
+	   String encoding = ""
+	   if (!cmd.hasOption("encoding")) {
+			println "No encoding given. UTF-8 (WPT-05 default) used."
+			encoding = "UTF-8"
+		} else {
+			encoding = cmd.getOptionValue("encoding")
+			println "Encoding configured to $encoding"
+		}
+		    
 		ImportWPT05_2_SourceDocument w2s = new ImportWPT05_2_SourceDocument(
-			cmd.getOptionValue("file"), collection)
+			new File(cmd.getOptionValue("file")), collection, lang, encoding)
 			
-		HashMap status = w2s.parse()
+		HashMap status = w2s.importDocs()
 		log.info "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."
 	}
 }

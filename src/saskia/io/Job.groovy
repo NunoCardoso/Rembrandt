@@ -32,7 +32,7 @@ CREATE TABLE `job` (
 );
 
   */
-class Job {
+class Job extends DBObject implements JSONable {
 
 	static String tablename = "job"
 	Long job_id
@@ -49,7 +49,7 @@ class Job {
 	static Map type = ['job_id':'Long','job_task':'Task', 'job_worker':'String','job_doc_type':'String',
 	  'job_doc_id':'Long','job_doc_edit':'DocStatus','job_doc_edit_date':'Date']
 
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Job")
 	
 	static Map<Long,Job> cache = [:]
 
@@ -94,10 +94,14 @@ class Job {
 	  'job_doc_id':job_doc_id,'job_doc_edit':job_doc_edit, 'job_doc_edit_date':job_doc_edit_date]
 	}
 	
+	Map toSimpleMap() {
+		return toMap()
+	}
+	
 	public int changeEditStatusInDBto(DocStatus status) {	
 		def res = db.getDB().executeUpdate("UPDATE ${tablename} SET job_doc_edit=? WHERE job_id=?", 
 			[status.text(), job_id]) 
-		log.debug "Wrote edit status ${status}(${status.text()}) to job_id ${job_id}, ${res} rows were changed."
+		log.info "Wrote edit status ${status}(${status.text()}) to job_id ${job_id}, ${res} rows were changed."
 		return res
 	}
 	
@@ -107,21 +111,22 @@ class Job {
 	 * @param comment The version comment. By default, it's own comment field.
 	 * return 1 if successfully inserted.
 	 */	
-	public Long addThisToDB() {
-	    
+	public Long addThisToDB() {	    
 	    if (!cache) refreshCache()	
 	    def res = db.getDB().executeInsert("INSERT INTO ${tablename} VALUES(0,?,?,?,?,?,?)", 
 		[job_task.tsk_id, job_worker, job_doc_type, job_doc_id, job_doc_edit.text(), job_doc_edit_date])
 		// returns an auto_increment value
 	    job_id = (long)res[0][0]
 	    cache[job_id] = this
+		 log.info "Inserted new Job in DB: ${this}"
 	    return job_id                           
 	}	
 	
-		public removeThisFromDB() {
-		if (!job_id) throw new IllegalStateException("Can't remobe myself from DB if I don't have a job_id")
+	public int removeThisFromDB() {
+		if (!job_id) throw new IllegalStateException("Can't remove myself from DB if I don't have a job_id")
 	   def res = db.getDB().executeUpdate("DELETE FROM ${tablename} where job_id=?",[job_id]) 
 		cache.remove(job_id)		
+		log.info "Removed Job ${this} from DB, got ${res}"
 		return res
 	}
 	

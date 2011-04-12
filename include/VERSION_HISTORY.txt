@@ -1,5 +1,8 @@
 VERSION HISTORY of REMBRANDT
 ============================
+v1.3
+  Allow Wikipedia mode off, rules only
+
 v1.2
   Added term filters.
   Added saskia.import.* and saskia.index.* configuration values, to be fore flexible

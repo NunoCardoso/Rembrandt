@@ -242,7 +242,6 @@ class WikipediaDocument2HTMLDocumentConverter {
 		String title = ""
 		if (!args) {
 			println "No args found. Expecting STDIN input."
-			System.exit(0)
 		} 
 		String line = ""
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in))

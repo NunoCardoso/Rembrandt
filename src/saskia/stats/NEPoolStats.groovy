@@ -18,7 +18,7 @@
  
 package saskia.stats
 
-import saskia.io.SaskiaDB
+import saskia.db.SaskiaDB
 import rembrandt.obj.Document
 import rembrandt.obj.Sentence
 import saskia.io.RembrandtedDoc

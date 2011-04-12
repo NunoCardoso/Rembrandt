@@ -68,7 +68,7 @@ class RenoirShell {
             conffilepath = cmd.getOptionValue("conf")
         }
 
-        log.info "Renoir version ${Rembrandt.getVersion()}. Welcome."
+ //       log.info "Renoir version ${Rembrandt.getVersion()}. Welcome."
         conf = Configuration.newInstance(conffilepath)
         
         Collection collection 

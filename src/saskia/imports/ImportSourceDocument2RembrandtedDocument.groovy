@@ -25,7 +25,7 @@ import saskia.bin.Configuration
 import rembrandt.obj.Document
 import rembrandt.bin.Rembrandt
 import rembrandt.bin.RembrandtCore
-import saskia.io.SaskiaDB
+import saskia.db.SaskiaDB
 import saskia.io.SourceDoc
 import rembrandt.io.DocStats
 import rembrandt.io.HTMLDocumentReader
@@ -467,7 +467,9 @@ class ImportSourceDocument2RembrandtedDocument {
 	 	HashMap status = [inserted:0, updated:0, skipped:0]
 	    
 	    // get rembrandtVersion
-		String rembrandtversion = Rembrandt.getVersion().substring(0, Rembrandt.getVersion().indexOf("-"))
+		String rembrandtversion = Rembrandt.getVersion()
+		if (rembrandtversion.indexOf("-") > 0) rembrandtversion =rembrandtversion.substring(0, rembrandtversion.indexOf("-"))
+		else rembrandtversion="unknown"
 		
 		if (cmd.getOptionValue("from")== "DB") {
 		   /* List docs = cmd.getOptionValues("docid")

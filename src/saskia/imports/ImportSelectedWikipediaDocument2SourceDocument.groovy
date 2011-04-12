@@ -18,7 +18,7 @@
  
 package saskia.imports
 
-import saskia.io.WikipediaDB
+import saskia.db.WikipediaDB
 import saskia.dbpedia.DBpediaAPI
 import saskia.dbpedia.DBpediaOntology
 import saskia.wikipedia.WikipediaDocument
@@ -46,7 +46,7 @@ import org.apache.commons.cli.*
 class ImportSelectedWikipediaDocument2SourceDocument {
 	
 	WikipediaDB wikipedia_db
-	Configuration conf
+	Configuration conf = Configuration.newInstance()
 	WikipediaDocument2HTMLDocumentConverter w2h
 	static Logger log = Logger.getLogger("Saskia")
 	String wikipediaDB
@@ -59,10 +59,16 @@ class ImportSelectedWikipediaDocument2SourceDocument {
 	
 	public ImportSelectedWikipediaDocument2SourceDocument(String lang) {
 
-	    conf = Configuration.newInstance()
 	    this.lang=lang
-	    wikipedia_db = WikipediaDB.newInstance()
-	    w2h = new WikipediaDocument2HTMLDocumentConverter()
+		 if (conf.getBoolean("saskia.wikipedia.enabled",true)) {
+	    	wikipedia_db = WikipediaDB.newInstance()
+	    } else {
+			log.fatal("Wikipedia mode is off, as requested in saskia.wikipedia.enabled.")
+			log.fatal("How am I supposed to import Wikipedia documents, if it's forbidden to access WikipediaDB?! Exiting...")
+			System.exit(0)
+		}
+		
+		 w2h = new WikipediaDocument2HTMLDocumentConverter()
 	    dbpedia = DBpediaAPI.newInstance()
 	    dbpediaontology = DBpediaOntology.getInstance()
 	
@@ -241,6 +247,7 @@ class ImportSelectedWikipediaDocument2SourceDocument {
 	    java.sql.Blob blob = row.getBlob('old_text')
 		byte[] bdata = blob.getBytes(1, (int) blob.length())
 		// you have to say explicitly that mediawiki's mediumblob is in UTF-8
+		// don't allow configuration: wikipedia DB is always in UTF-8! 
 		String text = new String(bdata, "UTF-8")
 
 		String datetouched = row['page_touched'] // ex, 20080622185108

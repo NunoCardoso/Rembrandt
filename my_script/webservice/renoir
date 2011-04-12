@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+prog="Renoir server"
+javaclass="RenoirServer"
+exec="/var/www/html/Rembrandt/renoirServer.sh"
+logfile="/var/log/rembrandt/renoirinit.log"
+lock="/var/lock/subsys/renoir"
+pid="/var/run/renoir.pid"
+
+
+start() {
+	# Start daemons.
+        LOGDATE=`date "+%m-%d-%y [%k:%M:%S]"`
+	
+	echo -n $"Starting $prog: "
+        if [ -e $lock ]; then
+            if [ -e $pid ]; then 
+		getpid=`cat $pid`
+		if [ -d "/proc/$getpid" ]; then
+		    echo -n $"cannot start $exec: $exec is already running.";
+		    failure $"cannot start $exec: $exec already running.";
+		    echo
+		    return 1
+		fi
+            fi
+        fi
+	echo  $"$LOGDATE: Starting $prog" >> $logfile
+	daemon $exec 2>> $logfile
+
+ 	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch $lock && `ps -ef | grep $javaclass | grep -v grep | awk '{print $2}' > $pid`
+
+	return $RETVAL
+}
+
+stop() {
+	# Stop daemons.
+        LOGDATE=`date "+%m-%d-%y [%k:%M:%S]"`
+
+	echo -n $"Shutting down $prog: "
+       if [ ! -e $lock ]; then
+            echo -n $"cannot stop $exec: $exec is not running."
+            failure $"cannot stop $exec: $exec is not running."
+            echo
+            return 1;
+        fi
+
+       echo  $"$LOGDATE: Stopping $prog">> $logfile
+
+        getPID=`cat $pid`
+        kill $getPID
+	
+	RETVAL=$?
+	rm -f $lock
+	rm -f $pid
+	
+	#echo
+	#[ $RETVAL -eq 0 ] && rm -f $lock && rm -f $pid
+	return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  reload)
+	reload
+	RETVAL=$?
+	;;
+  restart)
+	stop
+	sleep 2
+	start
+	RETVAL=$?
+	;;
+  status)
+	status rembrandt
+	RETVAL=$?
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|restart|condrestart|status}"
+	exit 1
+esac
+
+exit $RETVAL

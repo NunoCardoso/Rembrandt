@@ -77,7 +77,7 @@ abstract class Writer {
      * The output stream header
      */
     public String printHeader() {
-	 String s = "<!-- Rembrandted by v.${rembrandt.bin.Rembrandt.getVersion()} -->\n"
+ 	 String s = "<!-- Rembrandted by v.${rembrandt.bin.Rembrandt.getVersion()} -->\n"
          if (getFileTag()) s += "<${getFileTag()}>${getAfterFileHeaderTag()}"
          return s      
     }

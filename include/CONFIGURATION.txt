@@ -1,10 +1,18 @@
 REMBRANDT's CONFIGURATION PARAMETERS
 ====================================
 
+REMBRANDT has default parameters, but they can be changed by: 
+  1 - Placing a file called *rembrandt.properties* from the current directory. 
+  2 - Launch REMBRANDT with a parameter '--conf={file}', where {file} is a valid REMBRANDT configuration file. The file parameters will overwrite the default parameter file ./rembrandt.properties.
+  3 - Giving -D parameters on the command line to REMBRANDT.
+
+Note: see conf/rembrandt.neurotic.properties for an example of a configuration file with all settings, as described here, and what are the full list of parameters that you can change.
+
 1. GLOBAL PARAMETERS
 ====================
 
 	global.lang - Default language that Rembrandt will work on.
+	global.encoding - Default encoding for internal stuff. Bt default, is given by file.encoding
 	rembrandt.home.dir - REMBRANDT's base home directory. You should store test data, indexes here.
 
 2. REMBRANDT PARAMETERS
@@ -20,7 +28,7 @@ REMBRANDT's CONFIGURATION PARAMETERS
 
 	2.2 Stream parameters
 
-	rembrandt.input.encoding - Character encoding of input stream. Default: System property file.encoding
+	rembrandt.input.encoding - Character encoding of input stream. Default: global.encoding
 	rembrandt.input.reader - Reader class of input stream, one of rembrandt.io.*Reader. Default: rembrandt.io.HTMLDocumentReader 
 	rembrandt.input.styletag - Tag style for input NEs, one of rembrandt.io.*StyleTags. Default: rembrandt.io.RembrandtStyleTags
 	rembrandt.input.styletag.lang - Language of NE tags. Default: global.lang
@@ -32,7 +40,7 @@ REMBRANDT's CONFIGURATION PARAMETERS
 	rembrandt.input.file - If defined, read from file instead of System.in. File can NOT be a directory (maybe in a future version).
 	                       Default: null (use System.in)
 
-	rembrandt.output.encoding - Character encoding of output stream. Default: System property file.encoding
+	rembrandt.output.encoding - Character encoding of output stream. Default: 	global.encoding
 	rembrandt.output.writer - Writer class for output stream, one of rembrandt.io.*Writer. Default: rembrandt.io.RembrandtWriter
 	rembrandt.output.styletag - Tag style for NEs found, one of rembrandt.io.*StyleTags. Default: rembrandt.io.RembrandtStyleTags
 	rembrandt.output.styletag.lang - Language of NE tags. Default: global.lang
@@ -45,7 +53,7 @@ REMBRANDT's CONFIGURATION PARAMETERS
 	                       Default: null (use System.out)
 
 	rembrandt.err.enabled - true or false. Default: true
-	rembrandt.err.encoding - Character encoding of stderr stream. Default: System property file.encoding
+	rembrandt.err.encoding - Character encoding of stderr stream. Default: global.encoding
 	rembrandt.err.writer - Writer class for stderr stream, one of rembrandt.io.*Writer. Default: rembrandt.io.UnformattedWriter
 	rembrandt.err.styletag - Tag style for NEs found, one of rembrandt.io.*StyleTags. Default: rembrandt.io.RembrandtStyleTags
 	rembrandt.err.styletag.lang - Language of NE tags. Default: global.lang
@@ -77,7 +85,7 @@ REMBRANDT's CONFIGURATION PARAMETERS
 	4.1 DBpedia parameters
 	
 	saskia.dbpedia.enabled - Use DBpedia to help tagging. Recommended, turn off if you don't have internet or you know what you're doing. Default: true 
-        saskia.dbpedia.version - Tell SASKIA which DBpediaOntology to use, for ontology reasoning.
+   saskia.dbpedia.version - Tell SASKIA which DBpediaOntology to use, for ontology reasoning.
 	saskia.dbpedia.mode - DBpedia access mode: local, sdb or webservice. Local is for local files, sdb is for SDB access. Default: webservice 
 	saskia.dbpedia.local.fileformat - Define file format if mode is local. N3, N-TRIPLE. RDF are fine.
 	saskia.dbpedia.local.files - Define filenames for mode local. Use complete pathname+filename, files separated by a comma.
@@ -109,12 +117,13 @@ REMBRANDT's CONFIGURATION PARAMETERS
 	saskia.index.woeid_label - default to 'woeid' - the WOEID label
 	saskia.index.time_label - default to 'tg' - the time label. It can't be 'time', because LGTE already uses it.
 	
-	saskia.wikipedia.db.driver - Driver to access Saskia's DB. Default: com.mysql.jdbc.Driver
-	saskia.wikipedia.db.name - name of Saskia's DB. Default: saskia
+	saskia.wikipedia.enabled - Use Wikipedia to help tagging. Recommended, turn off if you don't have MySQL access to Wikipedia snapshots or you know what you're doing. Default: true 
+	saskia.wikipedia.db.driver - Driver to access Wikipedia DB. Default: com.mysql.jdbc.Driver
+	saskia.wikipedia.db.name - name of Wikipedia DB. Default: wikipedia
 	saskia.wikipedia.db.param - Additional parameters. Default: useUnicode=yes&characterEncoding=UTF8&characterSetResults=UTF8&autoReconnect=true
-	saskia.wikipedia.db.password - Password for Saskia's DB. Default: saskia
-	saskia.wikipedia.db.url - URL for MySQL running Saskia's DB. Default: jdbc:mysql://127.0.0.1
-	saskia.wikipedia.db.user - Default username for Saskia's DB. Default: wikipedia (was saskia before v1.2)
+	saskia.wikipedia.db.password - Password for Wikipedia DB. Default: saskia
+	saskia.wikipedia.db.url - URL for MySQL running Wikipedia DB. Default: jdbc:mysql://127.0.0.1
+	saskia.wikipedia.db.user - Default username for Wikipedia DB. Default: wikipedia (was saskia before v1.2)
 
 	saskia.geonetpt02.mode - Ontology's access mode: local, sdb or webservice. Local is for local files, sdb is for SDB access. Default: webservice 
 	saskia.geonetpt02.local.fileformat - Define file format if mode is local. N3, N-TRIPLE. RDF are fine.
@@ -147,7 +156,7 @@ REMBRANDT's CONFIGURATION PARAMETERS
 	saskia.db.url - URL for MySQL running RembrandtPool's DB. Default: jdbc:mysql://127.0.0.1
 	saskia.db.user - Default username for RembrandtPool's DB. Default: saskia 
 	
-	saskia.webstore.volume - Name of the Webstore volume. Default: saskia
+
 
    saskia.imports.max_allowed_html_size - Max value of source docs to be tagged. Default:; 100000 (bytes)
 	saskia.imports.source_doc_pool_size - pool of source docs to be tagged. Default: 10

@@ -26,9 +26,9 @@ import saskia.stats.SaskiaStats
   * Static methods are used to return results from DB, using where clauses.
   * Class methods are used to insert results to DB.  
   */
-class Cache {
+class Cache extends DBObject {
 
-	static String cac_table = "cache"
+	static String tablename = "cache"
 	String cac_id
 	Collection cac_collection
 	String cac_lang
@@ -37,57 +37,75 @@ class Cache {
 	def cac_obj
 	
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Cache")
 
-	static Cache queryDB(String query, ArrayList params = []) {
-	    Cache  c = new Cache()
-	    db.getDB().eachRow(query, params, {row  -> 
-	        c.cac_id = row['cac_id']
-		c.cac_collection = Collection.getFromID(row['cac_collection'])
-		c.cac_lang = row['cac_lang']
-		c.cac_date = (Date)row['cac_date']
-		c.cac_expire = (Date)row['cac_expire']
-		java.sql.Blob blob = row.getBlob('cac_obj')
-		byte[] bdata = blob.getBytes(1, (int) blob.length())
+	static queryDB(String query, ArrayList params = []) {
+		Cache  c = new Cache()
+		db.getDB().eachRow(query, params, {row  -> 
+			c.cac_id = row['cac_id']
+			c.cac_collection = Collection.getFromID(row['cac_collection'])
+			c.cac_lang = row['cac_lang']
+			c.cac_date = (Date)row['cac_date']
+			c.cac_expire = (Date)row['cac_expire']
+			java.sql.Blob blob = row.getBlob('cac_obj')
+			byte[] bdata = blob.getBytes(1, (int) blob.length())
 		 // you have to say explicitly that mediawiki's mediumblob is in UTF-8
-		c.cac_obj = new String(bdata, "UTF-8")
-	    })
-	    return (c.cac_id ? c : null)
+			c.cac_obj = new String(bdata, "UTF-8")
+		})
+		return (c.cac_id ? c : null)
 	}
 	
 	boolean isCacheFresh() {
-	   // log.debug "cac_expire: "+(long)(cac_expire.getTime())+" d=$d"
-	    return cac_expire.getTime() > new Date().getTime()
+		log.debug "Chech cahe fresh: cac_expire is "+(long)(cac_expire.getTime())+" d=$d"
+		return cac_expire.getTime() > new Date().getTime()
 	}
-	
 	
 	static HashMap getFrontPageCacheDates(Collection collection) {
 	    HashMap res = [:]
-	    db.getDB().eachRow("SELECT cac_lang, cac_date FROM ${cac_table} WHERE cac_id=? AND "+
+	    db.getDB().eachRow("SELECT cac_lang, cac_date FROM ${tablename} WHERE cac_id=? AND "+
 		    "cac_collection=?",  [SaskiaStats.statsFrontPage, collection.col_id], { row -> 
 		    	res[ row['cac_lang'] ] = (Date)row['cac_date'] })
 	    return res	
 	}
 	
 	void refreshCache(String cac_id, Collection cac_collection, String cac_lang, String cac_obj, long howmuch) {
-	    Date cac_expire = new Date( (new Date().getTime()+howmuch))
-	    db.getDB().executeInsert("INSERT INTO cache(cac_id, cac_collection, cac_date, cac_expire, cac_lang, cac_obj) "+
-	 		"VALUES(?,?, NOW(),?, ?, ?) ON DUPLICATE KEY UPDATE cac_date=NOW(), cac_expire=?, cac_obj=?", 
-	 			[cac_id, cac_collection.col_id, cac_expire, cac_lang, cac_obj, cac_expire, cac_obj])
-	
+	    Cache c = new Cache(
+		    cac_id:cac_id, cac_collection:cac_collection, 
+		    cac_lang:cac_lang, cac_obj:cac_obj
+		 )
+	    c.cac_expire = new Date( (new Date().getTime()+howmuch))
+		 c.addThisToDB()
+		 log.info "Cache successfully refreshened: ${c}"
 	}
-	
+
 	
 	/** Get a NEName from id.
 	 * @param id The id as needle.
 	 * return the NEName result object, or null
 	 */
-	static Cache getFromIDAndCollectionAndLang(String cac_id, Collection cac_collection, String cac_lang) {
+	static Cache getFromIDAndCollectionAndLang(
+		String cac_id, Collection cac_collection, String cac_lang) {
 		if (!cac_id || !cac_collection || !cac_lang) return null
-		Cache c = queryDB("SELECT * FROM ${cac_table} WHERE cac_id=? and cac_collection=? and cac_lang=?",
+		Cache c = queryDB("SELECT * FROM ${tablename} WHERE cac_id=? and cac_collection=? and cac_lang=?",
 			[cac_id, cac_collection.col_id, cac_lang])
 		 return c // can be null
-	}		
+	}	
+	
+		// used to add new collections.
+	public long addThisToDB() {	
+	   def res = db.getDB().executeInsert(
+		"INSERT INTO ${tablename}(cac_id, cac_collection, cac_date, cac_expire, cac_lang, cac_obj) "+
+	 	"VALUES(?,?, NOW(),?, ?, ?) ON DUPLICATE KEY UPDATE cac_date=NOW(), cac_expire=?, cac_obj=?", 
+	 			[cac_id, cac_collection.col_id, cac_expire, cac_lang, cac_obj, cac_expire, cac_obj])       
+		log.info "Cache added to DB: ${this}"
+		return res
+	}	  
+	
+	public removeThisFromDB() {	
+	    def res = db.getDB().executeUpdate("DELETE FROM ${tablename} where cac_id=?",[cac_id]) 
+		 log.info "Cache removed from DB: ${cac_id}"
+	    return res
+	}	
 	
 	public String toString() {
 		return ""+cac_id+":"+cac_collection+":"+cac_lang

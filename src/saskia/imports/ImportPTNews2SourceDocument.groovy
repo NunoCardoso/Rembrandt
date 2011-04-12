@@ -18,8 +18,7 @@
  
 package saskia.imports
 
-import saskia.io.WikipediaDB
-import saskia.io.SaskiaDB
+import saskia.db.SaskiaDB
 import saskia.io.SourceDoc
 import saskia.io.Collection
 import saskia.io.DocStatus

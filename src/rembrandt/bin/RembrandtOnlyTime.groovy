@@ -104,9 +104,9 @@ import org.apache.commons.cli.*
  	} else {
  	    conffilepath = cmd.getOptionValue("conf")
  	}
-	log.info "Rembrandt version ${Rembrandt.getVersion()}. Welcome."
  
 	rembrandt = new RembrandtOnlyTime(Configuration.newInstance(conffilepath))
+	log.info "Rembrandt version ${rembrandt.getVersion()}. Welcome."
 	log.info "Invoking reader ${rembrandt.inputreader.class.name} to parse the input stream."  
  
 	List<Document> docs = rembrandt.loadDocuments()

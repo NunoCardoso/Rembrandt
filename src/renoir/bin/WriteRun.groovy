@@ -18,7 +18,7 @@
  package renoir.bin
 
 import renoir.obj.Question
-import saskia.io.WikipediaDB
+import saskia.db.WikipediaDB
 import rembrandt.obj.Sentence
 import groovy.sql.Sql
 import saskia.dbpedia.DBpediaAPI
@@ -27,7 +27,7 @@ import saskia.bin.Configuration
 
 class WriteRun {
 	
-     	WikipediaDB db 
+   WikipediaDB db 
 	static Logger log = Logger.getLogger("RenoirMain")
 	DBpediaAPI dbpediaAPI
 	List allowedLangs = ["pt","en","es","de","it","nn","nl","no","ro","bg"]
@@ -40,7 +40,13 @@ class WriteRun {
 		conf.set("saskia.dbpedia.mode", "webservice")
 		dbpediaAPI = DBpediaAPI.newInstance(conf)
 		qca = new QueryCandidateAnswers()
-		db = WikipediaDB.newInstance()
+		if (conf.getBoolean("saskia.wikipedia.enabled",true)) {
+			db = WikipediaDB.newInstance()
+		} else {
+			println("Can't work: Wikipedia mode is off, as requested.")
+			println("Set saskia.wikipedia.enabled to true, to proceed. Exiting...")
+			System.exit(0)
+		}
 	}
 
 	public List format(Question q, String language) {	

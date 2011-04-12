@@ -73,7 +73,11 @@ class RembrandtCorePTforHAREM extends RembrandtCore {
     public RembrandtCorePTforHAREM(Configuration conf) {
 	
 	this.conf = (conf ? conf : Configuration.newInstance() )		
-	wikipedia = WikipediaAPI.newInstance(this.lang, this.conf)
+	if (this.conf.getBoolean("saskia.wikipedia.enabled", true)) {
+		wikipedia = WikipediaAPI.newInstance(this.lang, this.conf)
+	} else {
+		log.warn("WikipediaAPI access is disabled by request of saskia.wikipedia.enabled.")
+	}
 	saskia = AskSaskia.newInstance(this.lang, this.conf)
 	
 	// preload first batch of rules

@@ -25,9 +25,9 @@ import saskia.bin.Configuration
   * Static methods are used to return results from DB, using where clauses.
   * Class methods are used to insert results to DB.  
   */
-class NE {
+class NE extends DBObject implements JSONable {
 
-	static String ne_table = "ne"
+	static String tablename = "ne"
 	Long ne_id
 	NEName ne_name
 	String ne_lang
@@ -37,15 +37,14 @@ class NE {
 	Entity ne_entity
 	
 	static SaskiaDB db = SaskiaDB.newInstance()
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("NE")
 
 	static Configuration conf = Configuration.newInstance()
 	
 	static Map type = ['ne_id':'Long', 'ne_name':'NEName', 'ne_lang':'String',
            'ne_category':'NECategory', 'ne_type':'NEType', 'ne_subtype':'NESubtype',
            'ne_entity':'Entity'] 
-    
-             	  
+          	  
 	// used by getFromNameAndLangAndClassificationAndEntity
 	static LinkedHashMap<Long,NE> neKeyCache = \
            new LinkedHashMap(conf.getInt("saskia.ne.cache.number",1000), 0.75f, true) // true: access order.  
@@ -73,7 +72,7 @@ class NE {
 	    if (!offset) offset = 0
 		
 	    String where = ""
-	    String from = " FROM ${ne_table}"	
+	    String from = " FROM ${tablename}"	
 	    List params = []	
 	    if (column && needle) {
 		switch (type[column]) {
@@ -106,7 +105,7 @@ class NE {
 		}
 	    }
 	    
-	    String query = "SELECT SQL_CALC_FOUND_ROWS ${ne_table}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
+	    String query = "SELECT SQL_CALC_FOUND_ROWS ${tablename}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
 	    "UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, '', NULL, NULL, NULL, NULL"
 	    //log.debug "query = $query params = $params class = "+params*.class
 	    List<NE> u 
@@ -131,6 +130,9 @@ class NE {
 	            "ne_entity":ne_entity?.toMap()]
 	}
 	
+	public Map toSimpleMap() {
+		return toMap()
+	}
 	/** Get a NE from id.
 	 * This has no cache, it's used by 
 	 * NEMapping.groovy
@@ -141,7 +143,7 @@ class NE {
 	 */
 	static NE getFromID(long ne_id) {
 		if (!ne_id) return null
-		List<NE> ne = queryDB("SELECT * FROM ${ne_table} WHERE ne_id=?", [ne_id])
+		List<NE> ne = queryDB("SELECT * FROM ${tablename} WHERE ne_id=?", [ne_id])
 		log.debug "Querying for ne_id $ne_id got NE $ne." 
 		if (ne) return ne[0] else return null
 	}	
@@ -149,23 +151,10 @@ class NE {
 	 
 	static List<NE> getFromEntity(Entity ent) {
 	    if (!(ent?.ent_id)) return null
-		List<NE> nes = queryDB("SELECT * FROM ${ne_table} WHERE ne_entity=?", [ent.ent_id])
+		List<NE> nes = queryDB("SELECT * FROM ${tablename} WHERE ne_entity=?", [ent.ent_id])
 	    log.trace "Querying for ne_entity ${ent.ent_id} got NEs $nes" 
 	    return nes
 	}	
-	
-	
-	static int deleteNE(long ne_id) {
-	    NE ne = NE.getFromID(ne_id)
-	    return ne.deleteNE()
-	}
-	
-	public int deleteNE() {
-	    if (!ne_id) return null
-	    def res = db.getDB().executeUpdate("DELETE FROM ${ne_table} WHERE ne_id=?", [ne_id])
-	    neKeyCache.remove(getKey()) 
-	    return res	    
-	}
 	
 	/** Get a NE from name and language.
 	 * This has no cache, since it's only used by ImportSelectedWikipediaDocument2SourceDocument.groovy
@@ -176,7 +165,7 @@ class NE {
 	 */
 	static List<NE> getFromNameAndLang(String name, String lang) {
 	    if (!name || !lang)  return null
-	    List<NE> ne = queryDB("SELECT * FROM ${ne_table}, ${NEName.nen_table} WHERE ne_name=nen_id and "+
+	    List<NE> ne = queryDB("SELECT * FROM ${tablename}, ${NEName.nen_table} WHERE ne_name=nen_id and "+
 		    "nen_name=? and ne_lang=?", [name, lang])
             log.debug "Querying for ne_name $name and ne_lang $lang got NE $ne." 
 	    return ne
@@ -213,7 +202,7 @@ class NE {
            if (ent == null) { ent_string = "IS NULL"}
            else {ent_string = "=?"; params << ent.ent_id}              
         
-           List<NE> ne = queryDB("SELECT * FROM ${ne_table} WHERE ne_name=? and ne_lang=? and "+
+           List<NE> ne = queryDB("SELECT * FROM ${tablename} WHERE ne_name=? and ne_lang=? and "+
            "ne_category ${nec_string} AND ne_type ${net_string} AND ne_subtype ${nes_string}"+
             " AND ne_entity ${ent_string}", params)
            if (ne) {
@@ -243,7 +232,7 @@ class NE {
            if (nes == null) { nes_string = "IS NULL"}
            else {nes_string = "=?"; params << nes.nes_id} 	              
           
-           List<NE> ne = queryDB("SELECT * FROM ${ne_table} WHERE ne_name=? and ne_lang=? and "+
+           List<NE> ne = queryDB("SELECT * FROM ${tablename} WHERE ne_name=? and ne_lang=? and "+
            "ne_category ${nec_string} AND ne_type ${net_string} AND ne_subtype ${nes_string}"+
             " AND ne_entity IS NOT NULL", params)
 
@@ -256,36 +245,12 @@ class NE {
 	   	    return null
         }
        
-       static NE addThisToDB(Long nen_id, String lang, Long nec_id, Long net_id, Long nes_id, Long ent_id) {
-        
-	   		NE ne = new NE()
 
-	   		ne.ne_name = NEName.getFromID(nen_id)
-	   		ne.ne_lang = lang
-	   		ne.ne_category = (nec_id ? NECategory.getFromID(nec_id) : null)
-	   		ne.ne_type = (net_id ? NEType.getFromID(net_id) : null)
-	   		ne.ne_subtype = (nes_id ? NESubtype.getFromID(nes_id) : null)
-	   		ne.ne_entity = (ent_id ? Entity.getFromID(ent_id) : null)
-    			ne.ne_id = ne.addThisToDB()
-				return ne
-			}
-			
-			public Long addThisToDB() {
-	   		def res = db.getDB().executeInsert(
-            "INSERT INTO ${ne_table}(ne_id, ne_name, ne_lang, ne_category, "+
-            "ne_type, ne_subtype, ne_entity) VALUES(0,?,?,?,?,?,?)", 
-            [ne_name.nen_id, ne_lang, ne_category.nec_id, ne_type?.net_id, ne_subtype?.nes_id, ne_entity?.ent_id])	
-
-            ne_id = (long)res[0][0]
-            neKeyCache[getKey()] = this
-            return ne_id
-    		}
-       
        public updateNEName(NEName new_ne_name) {
 	   println "updateNEName: replacing $ne_name into $new_ne_name for ne_id $ne_id" 
 	   if (!new_ne_name || !ne_id) return null
 	   def res = db.getDB().executeUpdate(
-	      "UPDATE ${ne_table} SET ne_name=? where ne_id=?",[new_ne_name.nen_id, ne_id]) 
+	      "UPDATE ${tablename} SET ne_name=? where ne_id=?",[new_ne_name.nen_id, ne_id]) 
 	      
 	   if (res) {
 	       ne_name = new_ne_name
@@ -299,7 +264,7 @@ class NE {
 	   if (!ne_id) return null
 	   // new_ne_category can be null
 	   def res = db.getDB().executeUpdate(
-	      "UPDATE ${ne_table} SET ne_category=? where ne_id=?",[new_ne_category?.nec_id, ne_id]) 
+	      "UPDATE ${tablename} SET ne_category=? where ne_id=?",[new_ne_category?.nec_id, ne_id]) 
 	   if (res) {
 	       ne_category = new_ne_category
 	       String key = getKey()
@@ -313,7 +278,7 @@ class NE {
 	   if (!ne_id) return null
 	   // new_ne_category can be null
 	   def res = db.getDB().executeUpdate(
-	      "UPDATE ${ne_table} SET ne_type=? where ne_id=?",[new_ne_type?.net_id, ne_id]) 
+	      "UPDATE ${tablename} SET ne_type=? where ne_id=?",[new_ne_type?.net_id, ne_id]) 
 	   if (res) {
 	       ne_type = new_ne_type
 	       String key = getKey()
@@ -327,7 +292,7 @@ class NE {
 	   if (!ne_id) return null
 	   // new_ne_category can be null
 	   def res = db.getDB().executeUpdate(
-	      "UPDATE ${ne_table} SET ne_subtype=? where ne_id=?",[new_ne_subtype?.nes_id, ne_id]) 
+	      "UPDATE ${tablename} SET ne_subtype=? where ne_id=?",[new_ne_subtype?.nes_id, ne_id]) 
 	   if (res) {
 	       ne_subtype = new_ne_subtype
 	       String key = getKey()
@@ -341,7 +306,7 @@ class NE {
 	   if (!ne_id) return null
 	   // new_entity can be null
 	   def res = db.getDB().executeUpdate(
-	      "UPDATE ${ne_table} SET ne_entity=? where ne_id=?",[new_entity?.ent_id, ne_id]) 
+	      "UPDATE ${tablename} SET ne_entity=? where ne_id=?",[new_entity?.ent_id, ne_id]) 
 	   if (res) {
 	       ne_entity = new_entity
 	       String key = getKey()
@@ -369,7 +334,45 @@ class NE {
 	    List<NE> ne = queryDB(query, args)
 	    return (ne ? ne : null)
         }
+
+	static NE addThisToDB(Long nen_id, String lang, 
+		Long nec_id, Long net_id, Long nes_id, Long ent_id) {
+        
+		NE ne = new NE()
+		ne.ne_name = NEName.getFromID(nen_id)
+		ne.ne_lang = lang
+		ne.ne_category = (nec_id ? NECategory.getFromID(nec_id) : null)
+		ne.ne_type = (net_id ? NEType.getFromID(net_id) : null)
+		ne.ne_subtype = (nes_id ? NESubtype.getFromID(nes_id) : null)
+		ne.ne_entity = (ent_id ? Entity.getFromID(ent_id) : null)
+		ne.ne_id = ne.addThisToDB()
+		return ne
+	}
+			
+	public Long addThisToDB() {
+		def res = db.getDB().executeInsert(
+			"INSERT INTO ${tablename}(ne_id, ne_name, ne_lang, ne_category, "+
+			"ne_type, ne_subtype, ne_entity) VALUES(0,?,?,?,?,?,?)", 
+			[ne_name.nen_id, ne_lang, ne_category.nec_id, ne_type?.net_id, ne_subtype?.nes_id, ne_entity?.ent_id])	
+		ne_id = (long)res[0][0]
+		neKeyCache[getKey()] = this
+		log.info "Inserted new NE in DB: ${this}"
+		return ne_id
+	}
+
+	static int deleteNE(long ne_id) {
+		NE ne = NE.getFromID(ne_id)
+		return ne?.removeThisFromDB()
+	}
 	
+	public int removeThisFromDB() {
+		if (!ne_id) return null
+		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE ne_id=?", [ne_id])
+		neKeyCache.remove(getKey()) 
+		log.info "Removed NE ${this} from DB, got $res"
+		return res	    
+	}
+	       	
 	public String toString() {
 		return ""+ne_id+":"+ne_name
 	}

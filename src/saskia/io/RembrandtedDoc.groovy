@@ -38,7 +38,7 @@ import saskia.bin.Configuration
   * all the foreign keys and keep the integrity of the database (which MyISAM does not support yet).
   */
 
-class RembrandtedDoc {
+class RembrandtedDoc extends DBObject implements JSONable {
 
     static String tablename = "doc"
     static String die_table = "doc_is_entity"
@@ -82,7 +82,7 @@ class RembrandtedDoc {
 	 static Configuration conf = Configuration.newInstance()
     static SaskiaDB db = SaskiaDB.newInstance()
     static SaskiaWebstore webstore = SaskiaWebstore.newInstance()
-    static Logger log = Logger.getLogger("SaskiaDB")
+    static Logger log = Logger.getLogger("RembrandtedDoc")
     String lang = Configuration.newInstance().get("global.lang")
     DBpediaAPI dbpedia = DBpediaAPI.newInstance()
 	 DBpediaOntology dbpediaontology = DBpediaOntology.getInstance()
@@ -138,7 +138,11 @@ class RembrandtedDoc {
 				]
 			]
     }
-    
+
+    public Map toSimpleMap() {
+      return toMap()
+	}	
+
     static Map listRembrandtedDocs(Collection collection, limit = 10,  offset = 0, column = null, needle = null) {
 
 	// limit & offset can come as null... they ARE initialized...
@@ -221,7 +225,7 @@ class RembrandtedDoc {
     static RembrandtedDoc getFromID(long doc_id) {
 		if (!doc_id) return null 
 		List<RembrandtedDoc> l = queryDB("SELECT * FROM ${RembrandtedDoc.tablename} WHERE doc_id=?", [doc_id])
-		log.debug "Querying for doc_id $doc_id, got RembrandtedDoc ${l}" 
+		log.info "Querying for doc_id $doc_id, got RembrandtedDoc ${l}" 
 		return (l ? l[0] : null) 
     }
 
@@ -232,7 +236,7 @@ class RembrandtedDoc {
     static RembrandtedDoc getFromOriginalID(String doc_original_id) {
 		if (!doc_original_id) return null 
 		List<RembrandtedDoc> l = queryDB("SELECT * FROM ${RembrandtedDoc.tablename} WHERE doc_original_id=?", [doc_original_id])
-		log.debug "Querying for doc_original_id $doc_original_id, got RembrandtedDoc ${l}" 
+		log.info "Querying for doc_original_id $doc_original_id, got RembrandtedDoc ${l}" 
 		return (l ? l[0] : null) 
     }
 
@@ -712,49 +716,7 @@ class RembrandtedDoc {
 	}
 	
  	
-	/** Add the fields in this object to the DB 
-	 * @return The new id for the doc table, from the DB
-	 */
-	 
-	public Long addThisToDB() {	
-		// try to ground the document to an entity	
-	   
-	    if (doc_content) {
-		    String key = webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
-		    def res = db.getDB().executeInsert("INSERT INTO ${RembrandtedDoc.tablename}(doc_original_id, doc_collection, "+
-		"doc_webstore, doc_version, doc_lang, doc_date_created, doc_date_tagged) VALUES(?,?,?,?,?,?,NOW())", 
-		[doc_original_id, doc_collection.col_id, key, doc_version, doc_lang, doc_date_created]) 
-		doc_id = (long) res[0][0]
-		doc_webstore = key     
-	    } else {
-		log.warn "I'm not adding a document with no content!"
-		return null
-	    }  
-	    return doc_id
-	}
-	
-	public void replaceThisToDB() {	
-	    def res
-	    if (doc_content) {
-		 	String key = webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
-	    
-	    //println "replaceThisToDB: doc_id="+doc_id
-	        String query1 = ("UPDATE ${RembrandtedDoc.tablename} SET doc_original_id=?, doc_collection=?, doc_webstore=?, "+
-		    " doc_lang=?, doc_date_tagged=NOW(), doc_version=doc_version+1 WHERE doc_id=? ").toString()
-	        res = db.getDB().executeUpdate(query1, [doc_original_id, doc_collection.col_id, key, doc_lang, doc_id]) 		
-			  doc_version++
-	    } else {
-			log.warn "I'm not replacing a document that has no content!"
-			return null
-	    }  
-	    log.debug "Updated RembrandtedDoc with doc_original_id:${doc_original_id}, doc_lang:${doc_lang}, got ${res}"		
-	}
-	
-	public removeThisFromDB() {	
-	    def res = db.getDB().executeUpdate("DELETE FROM ${RembrandtedDoc.tablename} where doc_id=?",[doc_id]) 
-	    return res
-	}
-	
+
 	public int changeProcStatusInDBto(DocStatus status) {	
 		def res = db.getDB().executeUpdate("UPDATE ${RembrandtedDoc.tablename} SET doc_proc=? WHERE doc_id=?", 
 			[status.text(), doc_id]) 
@@ -781,7 +743,7 @@ class RembrandtedDoc {
      * The IGNORE does not generate error for duplicate keys 
      */
 	public associateWithTag(Tag tag) { 
-	    println "going for $doc_id, ${tag.tag_id}"
+	    //println "going for $doc_id, ${tag.tag_id}"
 	    db.getDB().executeInsert("INSERT IGNORE INTO ${dtg_table} VALUES(?,?)", 
 		    [doc_id, tag.tag_id])
 	}
@@ -970,8 +932,65 @@ class RembrandtedDoc {
 	ListOfNE NEs = new ListOfNE()
 	return NEs
     }	
+
+	/** Add the fields in this object to the DB 
+	 * @return The new id for the doc table, from the DB
+	 */
+	 
+	public Long addThisToDB() {	
+		// try to ground the document to an entity	
+		try {
+			if (doc_content) {
+				String key = webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
+				log.trace "Got content $doc_content, wrote to Webstore RDOC, got key $key"
+
+				def res = db.getDB().executeInsert("INSERT INTO ${RembrandtedDoc.tablename}"+
+				"(doc_original_id, doc_collection, doc_webstore, doc_version, doc_lang, "+
+				"doc_date_created, doc_date_tagged) VALUES(?,?,?,?,?,?,NOW())", 
+				[doc_original_id, doc_collection.col_id, key, doc_version, doc_lang, doc_date_created]) 
+				doc_id = (long) res[0][0]
+				doc_webstore = key     
+				log.info "Inserted RembrandtedDoc into DB: ${this}"
+			} else {
+				log.error "Did NOT inserted RembrandtedDoc into DB: doc_content for {$this} is empty!"
+			}
+		} catch (Exception e) {
+			log.error "Did NOT inserted RembrandtedDoc into DB: ${e.getMessage()}"
+		}
+		return doc_id
+	}
 	
-    public String toString() {
-	return "DocId(${doc_id});DocOriginalId(${doc_original_id});Webstore(${doc_webstore});Lang(${doc_lang})"
-    }
+	public Long replaceThisToDB() {
+		def res
+		try {
+			if (doc_content) {
+				String key = webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
+				log.trace "Got content $doc_content, wrote to Webstore RDOC, got key $key"
+
+ 				res = db.getDB().executeUpdate("UPDATE ${RembrandtedDoc.tablename} SET "+
+				"doc_original_id=?, doc_collection=?, doc_webstore=?, doc_lang=?, "+
+				"doc_date_tagged=NOW(), doc_version=doc_version+1 WHERE doc_id=? ", 
+				[doc_original_id, doc_collection.col_id, key, doc_lang, doc_id]) 
+			  	doc_version++
+				log.info "Replaced RembrandtedDoc into DB: ${this}"
+			} else {
+				log.error "Did NOT replaced RembrandtedDoc into DB: doc_content for {$this} is empty!"
+			}
+		} catch (Exception e) {
+			log.error "Did NOT replaced RembrandtedDoc into DB: ${e.getMessage()}"
+		}
+		return doc_id
+	}
+	
+	public int removeThisFromDB() {	
+		if (!doc_id) return null
+	   def res = db.getDB().executeUpdate(
+		"DELETE FROM ${RembrandtedDoc.tablename} where doc_id=?",[doc_id]) 
+		log.info "Removed RembrandtedDoc ${this} from DB, got $res"
+		return res	    
+	}
+		
+	public String toString() {
+		return "RDoc(${doc_id});DocOriginalId(${doc_original_id});Webstore(${doc_webstore});Lang(${doc_lang})"
+	}
 }

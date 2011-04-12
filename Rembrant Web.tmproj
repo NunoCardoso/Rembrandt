@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>web/js/rrs.common.js</string>
+	<string>web/docs/devel-configuration_pt.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -18,7 +18,7 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>268</integer>
+	<integer>258</integer>
 	<key>metaData</key>
 	<dict>
 		<key>web/css/rrs.admin.css</key>
@@ -29,20 +29,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>11</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>web/docs/devel-api_en.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>7</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -63,49 +49,19 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>web/docs/devel-install_en.php</key>
+		<key>web/docs/devel-configuration_pt.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>13</integer>
+				<integer>134</integer>
 				<key>line</key>
-				<integer>53</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>21</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>43</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>13</integer>
-				<key>line</key>
-				<integer>53</integer>
-			</dict>
-		</dict>
-		<key>web/docs/devel-install_pt.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
 				<integer>9</integer>
-				<key>line</key>
-				<integer>172</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
-			<integer>0</integer>
+			<integer>298</integer>
 			<key>firstVisibleLine</key>
-			<integer>168</integer>
+			<integer>18</integer>
 		</dict>
 		<key>web/docs/download-db_pt.php</key>
 		<dict>
@@ -120,20 +76,6 @@
 			<integer>180</integer>
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
-		</dict>
-		<key>web/docs/download-dependencies_en.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>21</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>10</integer>
-			<key>firstVisibleLine</key>
-			<integer>9</integer>
 		</dict>
 		<key>web/docs/download-dependencies_pt.php</key>
 		<dict>
@@ -164,20 +106,6 @@
 				<key>line</key>
 				<integer>25</integer>
 			</dict>
-		</dict>
-		<key>web/docs/home_pt.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>73</integer>
-				<key>line</key>
-				<integer>26</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>11</integer>
 		</dict>
 		<key>web/docs/rembrandt-tag_pt.php</key>
 		<dict>
@@ -223,50 +151,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>web/inc/lib.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>95</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>66</integer>
-		</dict>
-		<key>web/inc/var.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>6</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-		</dict>
 		<key>web/js/rrs.admin.js</key>
 		<dict>
 			<key>caret</key>
@@ -280,36 +164,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>web/js/rrs.common.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>272</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>28</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>285</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>272</integer>
-			</dict>
 		</dict>
 		<key>web/js/rrs.entity.js</key>
 		<dict>
@@ -340,20 +194,6 @@
 				<key>line</key>
 				<integer>15</integer>
 			</dict>
-		</dict>
-		<key>web/js/rrs.rembrandt.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>12</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>web/js/rrs.renoir.js</key>
 		<dict>
@@ -442,16 +282,11 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>web/js/rrs.tablelist.js</string>
-		<string>web/js/rrs.waitingdiv.js</string>
-		<string>web/docs/devel-install_pt.php</string>
-		<string>web/js/rrs.rembrandt.js</string>
-		<string>web/js/rrs.common.js</string>
-		<string>web/docs/devel-install_en.php</string>
+		<string>web/docs/devel-configuration_pt.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{299, -122}, {883, 755}}</string>
+	<string>{{77, 49}, {768, 729}}</string>
 </dict>
 </plist>

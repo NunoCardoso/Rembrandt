@@ -92,7 +92,7 @@ class Cache extends DBObject {
 	}	
 	
 		// used to add new collections.
-	public long addThisToDB() {	
+	public Long addThisToDB() {	
 	   def res = db.getDB().executeInsert(
 		"INSERT INTO ${tablename}(cac_id, cac_collection, cac_date, cac_expire, cac_lang, cac_obj) "+
 	 	"VALUES(?,?, NOW(),?, ?, ?) ON DUPLICATE KEY UPDATE cac_date=NOW(), cac_expire=?, cac_obj=?", 
@@ -101,7 +101,7 @@ class Cache extends DBObject {
 		return res
 	}	  
 	
-	public removeThisFromDB() {	
+	public int removeThisFromDB() {	
 	    def res = db.getDB().executeUpdate("DELETE FROM ${tablename} where cac_id=?",[cac_id]) 
 		 log.info "Cache removed from DB: ${cac_id}"
 	    return res

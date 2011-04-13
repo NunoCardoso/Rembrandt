@@ -39,7 +39,7 @@ abstract class Import {
 	String ynae
 	*/
 	
-	public class Import(File file, Collection collection,
+	public Import(File file, Collection collection,
 			String lang, String encoding) {
         
 		this.conf = Configuration.newInstance()
@@ -74,7 +74,7 @@ abstract class Import {
          log.warn "Found duplicate entry in DB. Skipping SourceDoc $s."  
 			status.skipped++
       } catch(Exception e2) {
-         log.warn "Found error while adding SourceDoc $s into SaskiaDB. Skipping".
+         log.warn "Found error while adding SourceDoc $s into SaskiaDB. Skipping."
 			log.warn "Why? " + e2.getMessage()  
 			status.skipped++
 		}

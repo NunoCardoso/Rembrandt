@@ -100,7 +100,7 @@ class DocGeoSignature extends DBObject {
         "ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id])      
     }
     
-    public long addThisToDB() {	
+    public Long addThisToDB() {	
         
         def res = db.getDB().executeInsert("INSERT INTO ${tablename}(dgs_document, " +
             "dgs_signature, dgs_tag, dgs_date_created) VALUES(?,?,?, NOW())", 
@@ -111,7 +111,7 @@ class DocGeoSignature extends DBObject {
        return new_dgs_id
     }
 
-	public removeThisFromDB() {	
+	public int removeThisFromDB() {	
 		def res = db.getDB().executeUpdate(
 			"DELETE FROM ${tablename} where dgs_id=?",[dgs_id]) 
 		idCache.remove(dgs_id)

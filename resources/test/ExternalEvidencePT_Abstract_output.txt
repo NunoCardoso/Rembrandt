@@ -1,0 +1,11 @@
+% REGRA AbstraccaoNomeExternalEvidence 1
+%--------------------------------------
+encontrei o cão, e dei-lhe o nome '<EM C1="ABSTRACCAO" C2="NOME">Bobi</EM>'.
+encontrei a gata, dei a designação <EM C1="ABSTRACCAO" C2="NOME">Tareca</EM>.
+a doença, denominada <EM C1="ABSTRACCAO" C2="NOME">Peste Suína</EM>, alastra.
+ele encontrou o gato, batizou-o de "<EM C1="ABSTRACCAO" C2="NOME">Tareco</EM>".
+Os gatos, conhecidos como os "<EM C1="ABSTRACCAO" C2="NOME">Miadores</EM>", eram giros.
+
+% REGRA AbstraccaoNomeEstadoExternalEvidence 2
+%--------------------------------------
+ainda não conheço alguém com a doença de <EM C1="ABSTRACCAO" C2="ESTADO">Alzeimer</EM>, mas conheço com o síndrome de <EM C1="ABSTRACCAO" C2="ESTADO">Parkinson</EM>.

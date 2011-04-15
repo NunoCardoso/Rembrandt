@@ -1,0 +1,286 @@
+% DATA-completa-1 
+% {\d{2,4}}[-/]{\d{2,4}}, {\d{2,4}}[-/]{\d{2,4}}[-/]{\d{2,4}}.
+%---------------------------------------------------------------------------
+A data é 02/97 .
+A data é 97-02 .
+A data é 02-1997 .
+A data é 1997/02 .
+A data é 1997/98 .
+A data é 1997/02/20 .
+A data é 20-2-1997 .	
+A data é 97-02-20 .
+A data é 20/2/97 .
+
+% DATA-completa-3
+% mês por abrev. ou extenso
+%---------------------------------------------------------------------------
+A data é 20/Fev/97 .
+A data é 97-Fevereiro-20 .
+A data é 1997/Fevereiro/20 .
+A data é 20-Fev-1997 .
+
+% DATA-completa-3
+% "{<NUM>! -/! <NUM>! -/? <NUM>?}
+%---------------------------------------------------------------------------
+A data é 02 / 97 .
+A data é 97 - 02 .
+A data é 02 - 1997 .
+A data é 1997 / 02 .
+A data é 1997 / 02 / 20 .
+A data é 20 - 2 - 1997 .	
+A data é 97 - 02 - 20 .
+A data é 20 / 2 / 97 .
+
+% DATA-Seculo-1
+%------------------------
+A data é século 14 .
+A data é Século 13 a.d. .
+A data é séc. 4 a.c. .
+ 
+% DATA-Seculo-2
+%------------------------
+A data é cerca de 3000 a.c. .
+A data é cerca de 3 ac. . 
+A data é cerca de catorze b.c. .
+
+% DATA-Seculo-3
+%------------------------
+A data é século XIV . 
+A data é Séc. IX b.c. .
+A data é séculos IV a.c. e VI d.c. . 
+
+% DATA-mes
+% [Ff]evereiro, etc.
+%---------------------------------------------------------------------------
+A data é Fevereiro .
+A data é Agosto .
+
+% DATA-mes-X
+%[Ff]evereiro|[Ff]ev]]! [de|,]? <NUM>!
+%---------------------------------------------------------------------------
+A data é Fevereiro de 2007.
+A data é mar de 2007 .
+
+% DATA-dia-X
+% <NUM>! de <TEMPO>! - primeira vez que há um TimeGrounding gerado a partir de mais de uma regra (TEMPOCALEND3 e TEMPOCALEND4)
+%---------------------------------------------------------------------------
+A data é 23 de Fevereiro de 2007 .
+A data é vinte e três de março de 2007 .
+
+% DATA-diasemana-X
+% {[quarta-feira|...]! ,? <TEMPO>?}
+%----------------------
+A data é quarta-feira, vinte e quatro de março de 2007 .
+A data é quarta-feira, 24 de Julho .
+A data é quarta-feira .
+
+% DATE-seasons
+% Natal|Consoada|Páscoa|Carnaval|Entrudo|Quaresma|Inverno|Primavera|Verão|Outono
+%-----------------------
+A data é Outono .
+A data é Natal .
+
+% DATE-ordinal-type-X
+% segundo!+ [dia|mês|trimestre]! d[aoe]? <TEMPO|NUMERO>!
+%---------------------------------
+Na vigésima terceira hora de 24 de Março de 2007 .
+No décimo dia de Março de 2007 .
+Na segunda semana de Março de 2007 .
+No segundo trimestre de 2007.
+
+% DATE-number-type-X
+%  <NUM>? [dia|mês|semana|ano]! d[aeo]! <TEMPO|NUMERO>!
+%------------------------
+no 21 dia de Abril de 2007 .
+no ano de 1979 .
+
+% DATE-day-holiday
+%  dia! d[aoe]! [Xxxx]!+ +d[aoe]s??  [Xxxx]?+
+%------------------------
+
+% DATE-middles-X
+%  em! (princípios|meados|fins)! de! <NUMERO|TEMPO>
+%------------------------
+
+% DATE-relative-1
+%  <NUM> <X!> (depois|antes|desde)! d[ao]! <TEMPO>! 
+%-------------------------
+Estudei dois meses antes do 25 de Abril .
+
+% DATE-relative-2
+%   <TEMPO>? (depois|antes|desde)! d[ao]! <TEMPO>! 
+%-------------------------
+pois desde o Natal que não estudo .
+
+% DATE-relative-3
+% em|desde o? <TEMPO>! (seguinte|passado|anterior)?
+%---------------------------------
+pois desde o 24 de Março que não estudo .
+
+% DATE-relative-4
+% {<TEMPO>! (seguinte|passado|anterior)!}
+%---------------------------------
+
+% DATE-relative-5
+% {<X>! (seguinte|passado|anterior)!}, x = dia, trimestre, etc
+%---------------------------------
+fica para o dia seguinte .
+
+% DATE-relative-6
+% (antes|depois|desde)|(manhã|tarde|noite|madrugada)? de? [ontem|amanhã|hoje|dantes|depois]!
+%---------------------------------
+
+% DATE-relative-7
+% para! [a|o]! <X>! que! vem!
+%---------------------------------
+fica para o ano que vem .
+
+% DATE-relative-8
+% para! [a|o]! <TEMPO>! que! vem!  
+%---------------------------------
+
+% DATE-relative-9
+% <NUMERO>! de? <X>! mais! tarde|cedo! 
+%----------------------------------
+Estudei dois anos mais tarde .
+
+% DATE-relative-10
+% há|faz! <NUMERO>! <X>! atrás?
+%-----------------------------
+Faz dois dias atrás que estudei .
+Há 68 milhões de anos que o universo começou .
+
+% DATE-relative-11
+% agora/recentemente   
+%-----------------------------
+
+% DATE-year-catch-1
+% Em [12][0-9]\\d{2}
+%-----------------------------
+Em 2007 eu estudei .
+
+% DATE-year-catch-2
+% Apanhar anos... ",! [em|de]! \\d\\d! ,! ",
+%-----------------------------
+Nota que, em 97, eu estudei .
+
+% DATE-year-catch-3
+% desde [12][0-9]\\d{2} [.,]
+%-----------------------------
+Desde 1987, que estudo. 
+ 
+% HOUR-14h
+% {\\d{1,2}[hH](ora)s!}
+%-----------------------------
+O acidente ocorreu às 14H em ponto.
+
+% HOUR-14h-&-30m
+% Clause.newRegex1Clause(~/\d{1,2}[Mm](?:inuto)?s?/,"\\d{1,2}[Mm](inuto)?s?") ]))
+%-----------------------       
+O acidente ocorreu às 14H 30m em ponto.   
+
+% HOUR-14h
+% {\\d{1,2} {[hH](ora)s!}
+%-----------------------------
+O acidente ocorreu às 14 horas em ponto.
+
+% HOUR-14h:30m
+% \\d{1,2}[Hh:]\\d{1,2}[Mm]?
+%-----------------------------
+O acidente ocorreu às 14:30 em ponto.
+
+% HOUR-textual
+% X horas e X minutos
+%-----------------------------
+O acidente ocorreu às 14 horas e 30 minutos em ponto.
+
+% HOUR-on-X
+%-----------------------------
+
+% HOUR-textual-2
+% horas, minutos e segundos
+%---------------------------
+O acidente ocorreu às 14 horas, 30 minutos e dez segundos em ponto.
+
+% HOUR-relative-X
+% antes|depois|desde as <HORA>
+%-----------------------------
+estudei antes das 14h .
+estudei depois das 14 horas e 30 minutos . 
+
+% HOUR-afternoon
+% <HORA> de tarde
+%----------------------------
+ 
+% HOUR-day
+% <HORAS> antes|depois|ontem|hoje|atrás|amanhã
+%----------------------------
+Olha que 2 horas antes, eu estudei . 
+Olha que 2 horas depois, eu estudei . 
+Olha que às 2 horas de ontem, eu estudei . 
+Olha que às 2 horas de amanhã, vou estudar . 
+
+% INTERVAL-1
+% {[entre|de|desde]! as? \\d{4}! e|a(té?)! as? \\d{4}!}",
+%----------------------------
+Olha que entre 2005 até 2007, eu estudei .
+ 
+% INTERVAL-2
+% {[entre|de|desde]! as? <TEMPO!> e|a(té?)! as? <TEMPO>!}
+%----------------------------
+Olha que entre 27 de Setembro de 2007 até 29 de Setembro de 2007, eu estudei .
+
+% INTERVAL-3
+% De NUM a NUM <X>!
+%-------------------
+ 
+% INTERVAL-decade
+% anos <NUM>
+%----------------
+Eu vivi nos anos 90 .
+
+% INTERVAL-during
+% entre! os! <TEMPO> [ex: entre os <TEMPO>séculos XV e XVI</TEMPO>]
+%----------------
+nota que entre os séculos XV e XVI, eu estudei .
+
+% INTERVAL-two-years
+% Em ano[-/]ano
+%----------------
+nota que em 2001-2002, eu estudei .
+  
+% DURATION-1
+% nestas alturas do <X>!
+%----------------
+ 
+% DURATION-2
+% nestas alturas do <TEMPO>!
+%----------------
+
+% DURATION-3
+% durante <NUMERO> <X>, x= anos meses, etc.
+%----------------
+ 
+% DURATION-4
+% durante! (muitos|poucos)! <X>!
+%----------------
+
+% DURATION-5
+% todo o <X>, x = dia (Single), etc.
+%----------------
+
+% DURATION-6
+% durante! os? <TEMPO> [ex: durante os <TEMPO>séculos XV e XVI</TEMPO>], durante a Páscoa
+%----------------
+ 
+% FREQUENCY-1
+% (diaria|semanal|anual)-mente
+%----------------
+
+% FREQUENCY-2
+% todo o <X>, x = dia (Single), etc.
+%----------------
+
+% FREQUENCY-3
+% <NUMERO>! vezes! [ao|por]! <x>!
+%----------------

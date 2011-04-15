@@ -1,0 +1,204 @@
+% DATA-completa-1 
+% {\d{2,4}}[-/]{\d{2,4}}, {\d{2,4}}[-/]{\d{2,4}}[-/]{\d{2,4}}.
+%---------------------------------------------------------------------------
+The date is 02/97 .
+The date is 97-02 .
+The date is 02-1997 .
+The date is 1997/02 .
+The date is 1997/98 .
+The date is 1997/02/20 .
+The date is 20-2-1997 .	
+The date is 97-02-20 .
+The date is 20/2/97 .
+
+% DATA-completa-3
+% mês por abrev. ou extenso
+%---------------------------------------------------------------------------
+The date is 20/Feb/97 .
+The date is 97-February-20 .
+The date is 1997/February/20 .
+The date is 20-Feb-1997 .
+
+% DATA-completa-3
+% "{<NUM>! -/! <NUM>! -/? <NUM>?}
+%---------------------------------------------------------------------------
+The date is 02 / 97 .
+The date is 97 - 02 .
+The date is 02 - 1997 .
+The date is 1997 / 02 .
+The date is 1997 / 02 / 20 .
+The date is 20 - 2 - 1997 .	
+The date is 97 - 02 - 20 .
+The date is 20 / 2 / 97 .
+
+% DATA-Seculo-1
+%------------------------
+The date is 14th century .
+The date is 13 Century a.d. .
+ 
+% DATA-Seculo-2
+%------------------------
+The date is about 3000 b.c. .
+The date is about 3 bc. . 
+The date is about fourteenth b.c. .
+
+% DATA-Seculo-3
+%------------------------
+The date is XIV century. 
+The date is IX century b.c. .
+The date is between IV century b.c. and VI a.d. century . 
+
+% DATA-mes
+% [Ff]evereiro, etc.
+%---------------------------------------------------------------------------
+The date is February .
+The date is August .
+
+% DATA-mes-X
+%[Ff]evereiro|[Ff]ev]]! [de|,]? <NUM>!
+%---------------------------------------------------------------------------
+The date is February of 2007.
+The date is mar of 2007 .
+
+% DATA-dia-X
+% <NUM>! de <TEMPO>! - primeira vez que há um TimeGrounding gerado a partir de mais de uma regra (TEMPOCALEND3 e TEMPOCALEND4)
+%---------------------------------------------------------------------------
+The date is 23th of February, 2007 .
+The date is the twentieth third of March of 2007 .
+
+% DATA-diasemana-X
+% {[quarta-feira|...]! ,? <TEMPO>?}
+%----------------------
+The date is Wednesday, twenty four of March, 2007 .
+The date is Wednesday, 24th of July .
+The date is Wednesday .
+
+% DATE-seasons
+% Natal|Consoada|Páscoa|Carnaval|Entrudo|Quaresma|Inverno|Primavera|Verão|Outono
+%-----------------------
+The date is Autumn .
+The date is Xmas .
+
+% DATE-ordinal-type-X"
+% segundo!+ [dia|mês|trimestre]! d[aoe]? <TEMPO|NUMERO>!
+%---------------------------------
+On the twentieth third hour of 24th of March, 2007 .
+On the tenth day of March of 2007 .
+On the second week of March of 2007 .
+On the second quarter of 2007.
+
+% DATE-number-type-X"
+%  <NUM>? [dia|mês|semana|ano]! d[aeo]! <TEMPO|NUMERO>!
+%------------------------
+no of 21th day of April of 2007 .
+
+% DATE-middles-X
+%  em! (princípios|meados|fins)! de! <NUMERO|TEMPO>
+%------------------------
+
+% DATE-relative-3
+% em|desde o? <TEMPO>! (seguinte|passado|anterior)?
+%---------------------------------
+since the 24th of March that I don't study .
+
+% HOUR-14h
+% {\\d{1,2}[hH](ora)s!}
+%-----------------------------
+The accident happened at 14H sharp.
+
+% HOUR-14h-&-30m
+% Clause.newRegex1Clause(~/\d{1,2}[Mm](?:inuto)?s?/,"\\d{1,2}[Mm](inuto)?s?") ]))
+%-----------------------       
+The accident happened at 14H 30m sharp.  
+
+% HOUR-14_h
+% {\\d{1,2} {[hH](ora)s!|[o'clock]}
+%-----------------------------
+The accident happened at 14 hours sharp.
+
+% HOUR-o'clock
+% {NUM [o'clock]}
+%-----------------------------
+The accident happened at 14 o'clock sharp.
+
+% HOUR-14h:30m
+% \\d{1,2}[Hh:]\\d{1,2}[Mm]?
+%-----------------------------
+The accident happened at 14:30 sharp.
+
+% HOUR-textual
+% X horas e X minutos
+%-----------------------------
+The accident happened at 14 hours and 30 minutes sharp.
+
+% HOUR-on-X
+%-----------------------------
+
+% HOUR-textual-2
+% horas, minutos e segundos
+%---------------------------
+The accident happened at 14 hours, 30 minutes and ten seconds sharp.
+
+% HOUR-relative-X
+% antes|depois|desde as <HORA>
+%-----------------------------
+I study before 14h .
+I studied after 14 hours and 30 minutes . 
+
+% HOUR-afternoon
+% <HORA> de tarde
+%----------------------------
+ 
+% HOUR-day
+% <HORAS> antes|depois|ontem|hoje|atrás|amanhã
+%----------------------------
+Note that 2 hours before, I studied .
+Note that 2 hours after, I studied .
+Note that at 2 hours of yesterday, I studied .
+Note that at 2 hours of tomorrow, I studied .
+
+% INTERVAL-1
+% {[entre|de|desde]! as? \\d{4}! e|a(té?)! as? \\d{4}!}",
+%----------------------------
+between 2005 until 2007, I studied .
+ 
+% INTERVAL-2
+% {[entre|de|desde]! as? <TEMPO!> e|a(té?)! as? <TEMPO>!}
+%----------------------------
+between 27th of September of 2007 until 29th of September of 2007, I studied .
+
+% INTERVAL-3
+% De NUM a NUM <X>!
+%-------------------
+ 
+% INTERVAL-decade-1
+% anos <NUM>
+%----------------
+I lived on the 90s .
+
+% INTERVAL-decade-2
+% anos <NUM>
+%----------------
+I lived on the 90's .
+
+% INTERVAL-during
+% entre! os! <TEMPO> [ex: entre os <TEMPO>séculos XV e XVI</TEMPO>]
+%----------------
+between the XV and XVI century .
+
+% INTERVAL-two-years
+% Em ano[-/]ano
+%----------------
+note that in 2001-2002, I studied .
+ 
+% FREQUENCY-1
+% (diaria|semanal|anual)-mente
+%----------------
+
+% FREQUENCY-2
+% todo o <X>, x = dia (Single), etc.
+%----------------
+
+% FREQUENCY-3
+% <NUMERO>! vezes! [ao|por]! <x>!
+%----------------

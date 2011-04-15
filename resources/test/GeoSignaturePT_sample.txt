@@ -1,0 +1,9 @@
+<DOC ID="GeoSignatureExample-1" LANG="pt">
+<TITLE>
+</TITLE>
+<BODY>
+{[O]<EM ID="1" S="0" T="1" C1="LOCAL" C2="HUMANO" C3="DIVISAO" WK="Porto" DB="Porto">[Porto]</EM>[fica][a][norte][de]<EM ID="2" S="0" T="6" C1="LOCAL" C2="HUMANO" C3="PAIS" WK="Portugal" DB="Portugal">[Portugal]</EM>[.]} 
+{<EM ID="3" S="1" T="0" C1="LOCAL" C2="HUMANO" C3="DIVISAO" WK="Lisboa" DB="Lisbon">[Lisboa]</EM>[fica][mais][a][sul][de]<EM ID="4" S="1" T="6" C1="LOCAL" C2="HUMANO" C3="PAIS" WK="Portugal" DB="Portugal">[Portugal]</EM>[.]} 
+{[Acima][do]<EM ID="5" S="2" T="2" C1="LOCAL" C2="HUMANO" C3="DIVISAO" WK="Porto" DB="Porto">[Porto]</EM>[fica]<EM ID="6" S="2" T="4" C1="LOCAL" C2="HUMANO" C3="PAIS" WK="Braga" DB="Braga">[Braga]</EM>[.]} 
+</BODY>
+</DOC>

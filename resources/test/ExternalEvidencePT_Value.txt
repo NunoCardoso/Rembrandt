@@ -1,0 +1,63 @@
+% VALORMOEDA1, VALORMOEDA 1.5
+%--------------------------
+O preço é 1.000.000$, ou 1,000$00, ou 1 000 $ 00 ou 1.000 $ 00 ou 1,000 $ 00, ah pois.
+
+O preço é 1.000.000€, ou 1,000,000€ ou 1 000 € ou 1.000 € ou 1,000 €, ah pois.
+
+% VALORMOEDA2, VALORMOEDA 2.5
+%--------------------------
+A moeda é $34 ou então $34.000 ou $34,000 ou $34.1 mil milhões, ah pois.
+
+A moeda é £34 ou então £34.000 ou £34,000 ou £34.1 mil milhões, ah pois.
+
+A moeda é $ 34 ou então $ 34.000 ou $ 34,000 ou $ 34.1 mil milhões, ah pois.
+
+A moeda é £ 34 ou então £ 34.000 ou £ 34,000 ou £ 34.1 mil milhões, ah pois.
+
+% VALORMOEDA3, VALORMOEDA3.5
+%--------------------------
+Tenho mil milhões de dólares angolanos.
+Tenho 3 milhões de libras austríacas.
+Tenho 34.000 dinares portugueses.
+Tenho 5 francos suíços.
+
+% VALORMOEDA4
+%--------------------------
+Tenho US 3,000 em acções.
+tenho R 3 milhões em acções.
+
+% VALORMOEDA5 - acrescenta "cerca de" a <MOEDA>
+%--------------------------
+Tenho cerca de US 3,000 em acções.
+tenho cerca de R 3 milhões em acções.
+
+% VALORQUANTIDADE1 {<NUM>! de? [units]! por|/? [timeunit]?}
+% \u00B2 é ², \u00B3 é ³ 
+%--------------------
+A quantidade é 30 calorias.
+A quantidade é 4.000 quilómetros / ano.
+A quantidade é 4.000 quilómetros por mês.
+A quantidade é 24.3 m2.
+A quantidade é 24.3 m².
+A quantidade é 24,3 milhões de Km³ arados.
+A quantidade é 24,3 Joules por metro quadrado.
+A quantidade é 33 GB/s . 
+Estão 34ºC lá fora.
+Estão -32 ºC lá fora.
+
+% VALORQUANTIDADE2 (percentagem colada) VALORQUANTIDADE2.5 (percentagem colada)
+% VALORQUANTIDADE5 (percentagem por extenso) 
+%--------------------
+A percentagem é 34%.
+A percentagem é 34 %.
+A percentagem é 34 por cento.
+
+% VALORQUANTIDADE6 (sufixo acima|abaixo)
+% VALORQUANTIDADE7 (prefixo aproximandamente | cerca de | acima de | abaixo de ) 
+%--------------------
+Eu tenho acima de 34 % de acções.
+Eu tenho aproximadamente 34 % de acções.
+Uma variação de 4 % abaixo das espectativas.
+
+% VALOR CLASSIFICACAO 1
+%----------------------

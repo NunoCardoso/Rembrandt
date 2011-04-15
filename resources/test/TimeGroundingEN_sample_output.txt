@@ -1,0 +1,208 @@
+% DATA-completa-1
+% {\d{2,4}}[./]{\d{2,4}}, {\d{2,4}}[./]{\d{2,4}}[./]{\d{2,4}}.
+%--------------------------------------------------------------
+!:Y+__97M02
+!:Y+__97M02
+!:Y+1997M02
+!:Y+1997M02
+~:Y+1997:Y+1998
+!:Y+1997M02D20
+!:Y+1997M02D20
+!:Y+__97M02D20
+!:Y+__97M02D20
+
+% DATA-completa-2
+% mês por abrev. ou extenso
+%--------------------------------------------------------------
+!:Y+__97M02D20
+!:Y+__97M02D20
+!:Y+1997M02D20
+!:Y+1997M02D20
+
+% DATA-completa-3
+% "{<NUM>!: ./!: <NUM>!: ./? <NUM>?}
+%--------------------------------------------------------------
+!:Y+__97M02
+!:Y+__97M02
+!:Y+1997M02
+!:Y+1997M02
+!:Y+1997M02D20
+!:Y+1997M02D20
+!:Y+__97M02D20
+!:Y+__97M02D20
+
+% DATA-Seculo-1
+%------------------------
+~:Y+1301:Y+1400
+~:Y+1201:Y+1300
+ 
+% DATA-Seculo-2
+%------------------------
+!:Y-3000
+~:Y-_300:Y-_201
+~:Y-1400:Y-1301
+
+% DATA-Seculo-3
+%------------------------
+~:Y+1301:Y+1400
+~:Y-_900:Y-_801
+~:Y-_400:Y+_600
+
+% DATA-mes
+% [Ff]evereiro, etc.
+%--------------------------------------------------------------
+!:M02
+!:M08
+
+% DATA-mes-X
+%[Ff]evereiro|[Ff]ev]]!: [de|,]? <NUM>!:
+%--------------------------------------------------------------
+!:Y+2007M02
+!:Y+2007M03
+
+% DATA-dia-X
+% <NUM>!: de <TEMPO>!: - primeira vez que há um TimeGrounding gerado a partir de mais de uma regra
+%--------------------------------------------------------------
+!:Y+2007M02D23
+!:Y+2007M03D23
+
+% DATA-diasemana-X
+% {[quarta-feira|__.]!: ,? <TEMPO>?}
+%----------------------
+!:Y+2007M03D24
+!:M07D24
+?:
+
+% DATE-seasons
+% Natal|Consoada|Páscoa|Carnaval|Entrudo|Quaresma|Inverno|Primavera|Verão|Outono
+%-----------------------
+~:M09D23:M12D21
+,:M12D25
+
+% DATE-ordinal-type-X"
+% segundo!+ [dia|mês|trimestre]! d[aoe]? <TEMPO|NUMERO>!
+%---------------------------------
+!:Y+2007M03D24h23
+!:Y+2007M03D10
+~:Y+2007M03D08:Y+2007M03D14
+~:Y+2007M04D01:Y+2007M06D30
+
+% DATE-number-type-X"
+%  <NUM>? [dia|mês|semana|ano]! d[aeo]! <TEMPO|NUMERO>!
+%------------------------
+!:Y+2007M04D21
+
+% DATE-middles-X
+%  em! (princípios|meados|fins)! de! <NUMERO|TEMPO>
+%------------------------
+
+% DATE-relative-3
+% em|desde o? <TEMPO>! (seguinte|passado|anterior)?
+%---------------------------------
+≥:M03D24
+
+% DATE-relative-4
+% {<TEMPO>! (seguinte|passado|anterior)!}
+%---------------------------------
+
+% HOUR-14h
+% {\\d{1,2}[hH](ora)s!}
+%-----------------------------
+!:h14
+
+% HOUR-14h-&-30m
+% Clause.newRegex1Clause(~/\d{1,2}[Mm](?:inuto)?s?/,"\\d{1,2}[Mm](inuto)?s?") ]))
+%-----------------------       
+!:h14m30
+
+% HOUR-14_h
+% {\\d{1,2} {[hH](ora)s!}
+%-----------------------------
+!:h14
+
+% HOUR-14_o'clock
+% <NUM> o'clock!
+%-----------------------------
+!:h14
+
+% HOUR-14h:30m
+% \\d{1,2}[Hh:]\\d{1,2}[Mm]?
+%-----------------------------
+!:h14m30
+
+% HOUR-textual
+% X horas e X minutos
+%-----------------------------
+!:h14m30
+
+% HOUR-on-X
+%-----------------------------
+
+% HOUR-textual-2
+% horas, minutos e segundos
+%---------------------------
+!:h14m30s10
+
+% HOUR-relative-X
+% antes|depois|desde as <HORA>
+%-----------------------------
+≤:h14
+≥:h14m30
+
+% HOUR-afternoon
+% <HORA> de tarde
+%----------------------------
+ 
+% HOUR-day
+% <HORAS> antes|depois|ontem|hoje|atrás|amanhã
+%----------------------------
+-::P2h
++::P2h
+-:h02:P1D
++:h02:P1D
+
+% INTERVAL-1
+% {[entre|de|desde]! as? \\d{4}! e|a(té?)! as? \\d{4}!}",
+%----------------------------
+~:Y+2005:Y+2007
+
+% INTERVAL-2
+% {[entre|de|desde]! as? <TEMPO!> e|a(té?)! as? <TEMPO>!}
+%----------------------------
+~:Y+2007M09D27:Y+2007M09D29
+
+% INTERVAL-3
+% De NUM a NUM <X>!
+%-------------------
+ 
+% INTERVAL-decade-1
+% anos <NUM>
+%----------------
+~:Y+1990:Y+1999
+
+% INTERVAL-decade-2
+% anos <NUM>
+%----------------
+~:Y+1990:Y+1999
+
+% INTERVAL-during
+% entre! os! <TEMPO> [ex: entre os <TEMPO>séculos XV e XVI</TEMPO>]
+%----------------
+~:Y+1401:Y+1600
+
+% INTERVAL-two-years
+% Em ano[-/]ano
+%----------------
+~:Y+2001:Y+2002
+  
+% FREQUENCY-1
+% (diaria|semanal|anual)-mente
+%----------------
+
+% FREQUENCY-2
+% todo o <X>, x = dia (Single), etc.
+%----------------
+
+% FREQUENCY-3
+% <NUMERO>! vezes! [ao|por]! <x>!
+%----------------

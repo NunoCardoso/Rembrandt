@@ -1,0 +1,43 @@
+% Regra LocalRulesPT LOCAL HUMANO REGIAO 1: [regiao]! deaos? {<EM>!}
+% ------------------------------------------------------------------
+fui à região das <EM C1="LOCAL" C2="HUMANO" C3="REGIAO">Alminhas</EM>. 
+
+% Regra LocalRulesPT LOCAL HUMANO DIVISAO 2: [cidade]! deaos? {<EM>!}
+% ------------------------------------------------------------------
+fui à cidade de <EM C1="LOCAL" C2="HUMANO" C3="DIVISAO">Berlêngica</EM>.
+
+% Regra LocalRulesPT LOCAL HUMANO CONSTRUCAO 1 [ponte]! deaos01? {<EM>!} passa a [LOCAL HUMANO CONSTRUCAO] 
+% ------------------------------------------------------------------
+fui à ponte das <EM C1="LOCAL" C2="HUMANO" C3="CONSTRUCAO">Cretórias</EM>.
+
+% Regra  LocalRulesPT LOCAL HUMANO RUA 1 [rua|travessa|praça]! deaos? {<EM>!} passa a [LOCAL HUMANO RUA] 
+% ------------------------------------------------------------------ 
+fui à travessa das <EM C1="LOCAL" C2="HUMANO" C3="RUA">Dalilas</EM>.
+
+% LocalRulesPT LOCAL FISICO AGUACURSO 1 [rio]! deaos? {<EM>!} passa a [LOCAL FISICO AGUACURSO] 
+% ------------------------------------------------------------------ 
+fui ao rio <EM C1="LOCAL" C2="FISICO" C3="AGUACURSO">Elália</EM>.
+
+% LocalRulesPT LOCAL FISICO AGUAMASSA 1 [mar]! deaos01? {<EM>!} passa a [LOCAL FISICO AGUAMASSA] 
+% ------------------------------------------------------------------ 
+fui ao mar das <EM C1="LOCAL" C2="FISICO" C3="AGUAMASSA">Facas</EM>.			
+            
+% LocalRulesPT LOCAL FISICO RELEVO 1 [serra]! deaos? {<EM>!} passa a [LOCAL FISICO RELEVO] 
+% ------------------------------------------------------------------
+fui à serra das <EM C1="LOCAL" C2="FISICO" C3="RELEVO">Galhardas</EM>.			
+            
+% LocalRulesPT LOCAL FISICO PLANETA 1  [planeta]! deaos? {<EM>!} passa a [LOCAL FISICO PLANETA] 
+% ------------------------------------------------------------------
+vi o planeta <EM C1="LOCAL" C2="FISICO" C3="PLANETA">Homérico</EM>.
+
+% LocalRulesPT LOCAL FISICO ILHA 1 [ilha]! deaos? {<EM>!} passa a [LOCAL FISICO ILHA] 
+% ------------------------------------------------------------------
+vivo na ilha <EM C1="LOCAL" C2="FISICO" C3="ILHA">Ilhéu</EM>.
+
+% LocalRulesPT LOCAL VIRTUAL SITIO 1  [site|página]! d[eoa]s? {<EM>!}
+% ------------------------------------------------------------------
+visita o site da <EM C1="LOCAL" C2="VIRTUAL" C3="SITIO">KFMX</EM>.
+
+% LocalRulesPT LOCAL VIRTUAL COMSOCIAL 1 [art|publi|lei|revista|etc] d[eoa]s? {<EM>!}
+% ------------------------------------------------------------------
+li a revista <EM C1="LOCAL" C2="VIRTUAL" C3="COMSOCIAL">Lollaby</EM>.

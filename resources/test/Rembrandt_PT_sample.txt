@@ -1,0 +1,11 @@
+<DOC DOCID="example1" LANG="pt" TAGLANG="pt" RULES="harem">
+<TITLE>
+{<EM ID="0" S="0" T="0" C1="PESSOA" C2="INDIVIDUAL" WK="http://pt.wikipedia.org/wiki/Rembrandt" DB="Rembrandt">[Rembrandt]</EM>}
+</TITLE>
+<BODY>
+{[O]<B><EM ID="0" S="0" T="1" C1="PESSOA" C2="INDIVIDUAL" WK="http://pt.wikipedia.org/wiki/Rembrandt" DB="Rembrandt">[Rembrandt]</EM></B>[é]<EM ID="1" S="0" T="3" C1="NUMERO" C2="TEXTUAL">[um]</EM>[pintor][holandês][.]}
+{<P>[Nasceu][a]<EM ID="2" S="1" T="2" C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">[15][de][Julho][de][1606]</EM>[em]<EM ID="5" S="1" T="8" C1="LOCAL" C2="HUMANO" WK="http://pt.wikipedia.org/wiki/Leida" DB="Leiden">[Leiden]</EM>[,][nos]<EM ID="6" S="1" T="11" C1="LOCAL" C2="HUMANO" C3="PAIS" WK="http://pt.wikipedia.org/wiki/Países_Baixos" DB="Netherlands">[Países][Baixos]</EM>[.]}
+{[Estudou][na]<EM ID="8" S="2" T="2" C1="ORGANIZACAO" C2="INSTITUICAO" WK="http://pt.wikipedia.org/wiki/Universidade_de_Leiden" DB="Leiden_University">[Universidade][de][Leiden]</EM>[.]</P>}
+{[Estudou][na]<ALT><SUBALT><EM ID="9" S="3" T="2" C1="ORGANIZACAO" C2="INSTITUICAO" WK="http://pt.wikipedia.org/wiki/Universidade_de_Leiden" DB="Leiden_University">[Universidade][de][Leiden]</EM></SUBALT><SUBALT>[Universidade][de]<EM ID="10" S="3" T="4" C1="LOCAL" C2="HUMANO" C3="DIVISAO" WK="http://pt.wikipedia.org/wiki/Leiden" DB="Leiden">[Leiden]</EM></SUBALT></ALT>[.]}
+</BODY>
+</DOC>

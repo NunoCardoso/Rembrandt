@@ -1,0 +1,4 @@
+% Regra ExternalEvidence ACONTECIMENTO ORGANIZADO 1
+% [cerimónia]! daeos? { <EM>! } 
+%----------------------------
+assisti à cerimónia dos <EM ID="0" S="0" T="4" C1="ACONTECIMENTO" C2="ORGANIZADO">Óscares</EM>. 

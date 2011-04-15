@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>src/saskia/imports/ImportWPT03_2_SourceDocument.groovy</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -803,20 +801,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>src/renoir/test/RenoirQueryParserTest.groovy</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>170</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>119</integer>
-		</dict>
 		<key>src/renoir/test/geoclef/pertopic/year2007/GeoCLEF_EN_2007_055_Test.groovy</key>
 		<dict>
 			<key>caret</key>
@@ -1099,34 +1083,6 @@
 			<key>firstVisibleLine</key>
 			<integer>83</integer>
 		</dict>
-		<key>src/saskia/imports/GenerateGeoSignatures.groovy</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>29</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>44</integer>
-		</dict>
-		<key>src/saskia/imports/GenerateTimeSignatures.groovy</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>38</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>119</integer>
-		</dict>
 		<key>src/saskia/imports/GetLeftovers.groovy</key>
 		<dict>
 			<key>caret</key>
@@ -1146,28 +1102,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>24</integer>
+				<integer>82</integer>
 				<key>line</key>
-				<integer>47</integer>
+				<integer>76</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>21</integer>
-		</dict>
-		<key>src/saskia/imports/ImportCLEFCollectionPT2SourceDocument.groovy</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>160</integer>
-				<key>line</key>
-				<integer>241</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>30</integer>
+			<integer>44</integer>
 		</dict>
 		<key>src/saskia/imports/ImportWPT03_2_SourceDocument.groovy</key>
 		<dict>
@@ -1183,19 +1125,33 @@
 			<key>firstVisibleLine</key>
 			<integer>252</integer>
 		</dict>
-		<key>src/saskia/imports/ImportWPT05_2_SourceDocument.groovy</key>
+		<key>src/saskia/io/Cache.groovy</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>69</integer>
+				<integer>12</integer>
 				<key>line</key>
-				<integer>200</integer>
+				<integer>103</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>174</integer>
+			<integer>75</integer>
+		</dict>
+		<key>src/saskia/io/DocGeoSignature.groovy</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>113</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>87</integer>
 		</dict>
 		<key>src/saskia/server/SaskiaServer.groovy</key>
 		<dict>
@@ -1298,18 +1254,9 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>src/saskia/imports/ImportWPT03_2_SourceDocument.groovy</string>
-		<string>src/saskia/imports/Import.groovy</string>
-		<string>src/saskia/imports/ImportWPT05_2_SourceDocument.groovy</string>
-		<string>src/saskia/imports/GenerateGeoSignatures.groovy</string>
-		<string>src/saskia/imports/GenerateTimeSignatures.groovy</string>
-		<string>src/saskia/imports/ImportCLEFCollectionPT2SourceDocument.groovy</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{193, -206}, {1035, 727}}</string>
+	<string>{{350, 114}, {629, 662}}</string>
 </dict>
 </plist>

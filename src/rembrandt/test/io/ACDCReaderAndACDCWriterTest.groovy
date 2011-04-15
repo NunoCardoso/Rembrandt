@@ -41,7 +41,7 @@ public class ACDCReaderAndACDCWriterTest extends GroovyTestCase {
      List text_output 
      Logger log = Logger.getLogger("RembrandtTest")
      
-     public ACDCReaderAndACDCWriterTest() {
+    public ACDCReaderAndACDCWriterTest() {
 	 conf = Configuration.newInstance()
 	 conf.setBoolean("rembrandt.output.styletag.verbose",false)
 	 reader = new ACDCReader()

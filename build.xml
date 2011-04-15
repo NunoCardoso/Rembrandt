@@ -1,0 +1,222 @@
+<project name="Rembrandt" basedir="." default="compile">
+	
+	<property name="version"    	value="1.3"/>
+	<property name="projectname"    value="rembrandt"/>
+	<property name="Project_Name"   value="Rembrandt"/>
+	<property name="user.name"      value="Nuno Cardoso"/>
+
+	<property name="src.dir"    	value="src"/>
+        <property name="lib.dir"        value="lib"/>
+        <property name="db.dir"        value="db"/>
+        <property name="bin-groovy.dir"	value="bin-groovy"/>
+	<property name="build.dir"    	value="build"/>
+	<!-- config as settings to be included in the pakage; private has settings (passowrds, etc) to not include -->
+        <property name="config.dir"    	value="conf"/>
+	<property name="doc.dir"    	value="doc"/>
+        <property name="web.dir"        value="web"/>
+	<!-- include has files to put in the package; resources has files no not include (ex: tests) -->
+	<property name="include.dir"    value="include"/>
+	<!-- scripts has utilities to include in the package; sandbox has utilities to not include -->
+	<property name="script.dir"    value="script"/>
+	<property name="jar.dir" 	    value="/Users/ncardoso/Programs/jar"/>
+
+	<!--
+	compile + jar = build
+	build + groovy = build-withdoc	
+	build-withdoc + package = deploy		
+	
+	for test: compile-test
+	-->
+	<path id="all.classpath">	
+		<pathelement location="${jar.dir}/hadoop.jar" />
+		<pathelement location="${jar.dir}/lucene-core-2.4.1.jar"/>
+                <pathelement location="${jar.dir}/lucene-snowball-2.4.1.jar"/>
+                <pathelement location="${jar.dir}/lucene-regex-2.9.0.jar"/>
+		<pathelement location="${jar.dir}/log4j-1.2.14.jar"/>
+		<pathelement location="${jar.dir}/junit-4.4.jar"/>
+                <pathelement location="${jar.dir}/jena.jar"/>
+                <pathelement location="${jar.dir}/sdb.jar"/>
+                <pathelement location="${jar.dir}/arq.jar"/>
+		<pathelement location="${jar.dir}/groovy-all-1.7.5.jar"/>
+		<pathelement location="${jar.dir}/xstream-1.3.1.jar"/>
+                <pathelement location="${jar.dir}/org.restlet.jar"/>
+		<pathelement location="${jar.dir}/commons-cli-1.2.jar"/>
+                <pathelement location="${jar.dir}/mysql-connector-java-5.1.7-bin.jar"/>
+		<pathelement location="${jar.dir}/lgte-1.2.12.jar"/>
+		<pathelement location="${bin-groovy.dir}"/>
+	</path>
+
+	<taskdef name="groovydoc" classname="org.codehaus.groovy.ant.Groovydoc"
+		classpathref="all.classpath">
+	</taskdef>
+	
+	<taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy"
+		classpathref="all.classpath">
+	</taskdef>
+
+	<taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc"
+		classpathref="all.classpath">
+	</taskdef>	 
+	
+	<target name="init" description="Rembrandt Version Initializer">
+	 <echo message="Rembrandt Version ${version}"/>
+	</target>
+	
+        <target name="clean" description="clean Groovydocs, jars and bins">
+         <delete dir="${bin-groovy.dir}"/>
+        </target>
+	
+        <target name="compile" description="Compile main source groovy/java files"
+           depends="init">
+        <mkdir dir="${bin-groovy.dir}"/>
+ 
+          <groovyc encoding="UTF-8" srcdir="${src.dir}" destdir="${bin-groovy.dir}" memoryMaximumSize="1536m" memoryInitialSize="1024m">
+            <include name="**/*.groovy"/>
+            <exclude name="*/test/**"/>
+          </groovyc>
+        </target>
+	
+	<target name="compile-all" description="Compile main source groovy/java files plus tests"
+           depends="init">
+        <mkdir dir="${bin-groovy.dir}"/>
+
+          <groovyc encoding="UTF-8" srcdir="${src.dir}" destdir="${bin-groovy.dir}" memoryMaximumSize="1536m" memoryInitialSize="1024m">
+            <include name="**/*.groovy"/>
+          </groovyc>
+        </target>
+
+        <target name="compile-test" description="Compile test groovy/java files">
+          <groovyc encoding="UTF-8" srcdir="${src.dir}" destdir="${bin-groovy.dir}" memoryMaximumSize="1024m"
+            memoryInitialSize="1024m" includes="*/test/**" />
+        </target>
+
+	<target name="test" description="Run JUnit tests">
+	 <!--	  <junit fork="yes" haltonfailure="yes">-->
+<junit fork="yes" haltonfailure="no">
+          <classpath refid="all.classpath" />
+          <formatter type="brief" usefile="false" />
+              <batchtest>
+              <fileset dir="${bin-groovy.dir}">
+		<include name="**/*Test*"/>
+      		<!-- a '$' in the filename means it's an inner class -->
+      		<exclude name="**/*$*"/>
+	      </fileset>
+      	      </batchtest>
+         </junit>
+	</target>
+	
+    <target name="groovydoc" description="Generate Groovy Doc">	
+	  <delete dir="${doc.dir}"/>
+	  <mkdir dir="${doc.dir}"/>
+	  <groovydoc destdir="${doc.dir}" sourcepath="${src.dir}" 
+         packagenames="*.*" use="true" private="false"
+	  	  windowtitle="${Project_Name} ${version} API" />
+
+	  <!--<symlink link="${web.dir}/api/${version}" resource="${doc.dir}"/>-->
+
+    </target>
+
+    <target name="jar" description="Create JAR file">
+         <buildnumber file="build.num"/>
+	  <tstamp>
+	    <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+	  </tstamp>
+
+         <manifest file="MANIFEST.MF">
+           <attribute name="Built-By" value="${user.name}"/>
+           <attribute name="Main-Class" value="rembrandt.bin.Rembrandt"/>
+	   <attribute name="Implementation-Version" 
+                     value="${version}-b${build.number}"/> 
+	   <attribute name="Built-Date" value="${TODAY}"/>     
+         </manifest>
+	 
+        <jar destfile="${jar.dir}/${projectname}-${version}.jar" basedir="${bin-groovy.dir}" includes="**/*.class" 
+	     excludes="**/test/*" manifest="MANIFEST.MF" />
+	<echo message="Build nr. ${build.number}"/>
+    </target>
+	
+ <target name="jar-all" description="Create JAR file">
+         <buildnumber file="build.num"/>
+          <tstamp>
+            <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+          </tstamp>
+
+         <manifest file="MANIFEST.MF">
+           <attribute name="Built-By" value="${user.name}"/>
+           <attribute name="Main-Class" value="rembrandt.bin.Rembrandt"/>
+           <attribute name="Implementation-Version"
+                     value="${version}-b${build.number}"/>
+           <attribute name="Built-Date" value="${TODAY}"/>
+         </manifest>
+
+        <jar destfile="${jar.dir}/${projectname}-${version}.jar" basedir="${bin-groovy.dir}" includes="**/*.class" manifest="MANIFEST.MF" />
+        <echo message="Build nr. ${build.number}"/>
+    </target>
+
+	<target name="build" description="Create simple JAR" 
+	    	depends="compile, jar">
+	</target>
+
+	<target name="build-all" description="Create simple JAR with tests"
+                depends="compile-all, jar-all">
+        </target>
+
+	
+	<target name="build-withdoc" description="Create simple JAR with docs" 
+	    	depends="build, groovydoc">
+	</target>
+	
+	<target name="package" description="Create a package" >	
+    	<delete dir="${build.dir}"/>
+    	<mkdir dir="${build.dir}"/>
+
+    	<!-- src -->
+        <tar tarfile="${build.dir}/${projectname}-${version}-src.tar" basedir="${src.dir}" />
+    	<gzip zipfile="${build.dir}/${projectname}-${version}-src.tar.gz" src="${build.dir}/${projectname}-${version}-src.tar"/>
+		<delete file="${build.dir}/${projectname}-${version}-src.tar" />
+
+    	<!-- groovydoc -->
+        <tar tarfile="${build.dir}/${projectname}-${version}-doc.tar" basedir="${doc.dir}" />
+    	<gzip zipfile="${build.dir}/${projectname}-${version}-doc.tar.gz" src="${build.dir}/${projectname}-${version}-doc.tar"/>
+		<delete file="${build.dir}/${projectname}-${version}-doc.tar" />
+ 
+    	<!-- config -->    	
+        <mkdir dir="${build.dir}/${config.dir}"/>
+    	<copy todir="${build.dir}/${config.dir}">
+    	    <fileset dir="${config.dir}" includes="*" />
+    	</copy>
+
+	<!-- lib -->
+	<mkdir dir="${build.dir}/${lib.dir}"/>
+        <copy todir="${build.dir}/${lib.dir}">
+            <fileset dir="${lib.dir}" includes="*" />
+        </copy>
+
+        <!-- db -->
+        <mkdir dir="${build.dir}/${db.dir}"/>
+        <copy todir="${build.dir}/${db.dir}">
+            <fileset dir="${db.dir}" includes="*" />
+        </copy>
+
+     	<!-- script -->    	
+        <mkdir dir="${build.dir}/${script.dir}"/>
+        <copy todir="${build.dir}/${script.dir}">
+            <fileset dir="${script.dir}" includes="*" />
+        </copy>
+
+    	<!-- include -->    
+     	<copy todir="${build.dir}"> 
+    	    <fileset dir="${include.dir}" includes="*" />
+    	</copy>
+
+    	<!-- jar -->
+    	<copy file="${jar.dir}/${projectname}-${version}.jar" 
+    		todir="${build.dir}" /> 
+     </target>
+
+	<target name="deploy" description="Create simple JAR with docs" 
+	    	depends="build-withdoc, package">
+	 </target>
+	
+</project>
+

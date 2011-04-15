@@ -1,0 +1,9 @@
+<DOC ID="TimeSignatureExample-1" LANG="pt">
+<TITLE>
+</TITLE>
+<BODY>
+{[Visitei][o]<EM ID="1" S="0" T="2" C1="LOCAL" C2="HUMANO" C3="DIVISAO" WK="Porto" DB="Porto">[Porto]</EM>[em]<EM ID="2" S="0" T="4" C1="TEMPO" C2="TEMPO_CALEND" C3="DATA" TG="!:Y+2007M05D27">[27][de][Maio][de][2007]</EM>[.]} 
+{[Fiquei][até]<EM ID="3" S="1" T="2" C1="TEMPO" C2="TEMPO_CALEND" C3="DATA" TG="!:M05D28">[28][de][Maio]</EM>[.]} 
+{[No][dia]<EM ID="4" S="2" T="2" C1="TEMPO" C2="TEMPO_CALEND" C3="DATA" TG="!:D30">[30]</EM>[fui][embora][.]} 
+</BODY>
+</DOC>

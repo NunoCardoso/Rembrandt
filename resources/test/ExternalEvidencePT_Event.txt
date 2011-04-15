@@ -1,0 +1,4 @@
+% Regra ExternalEvidence ACONTECIMENTO ORGANIZADO 1
+% [cerimónia]! daeos? { <EM>! } 
+%----------------------------
+assisti à cerimónia dos Óscares. 

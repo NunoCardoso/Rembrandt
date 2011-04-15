@@ -1,0 +1,261 @@
+% TEMPO CALEND 0: description:"{XX-/XX-/XX}
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20/02</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20/02/2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">2007/02/20</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">02/2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">2007/02</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20-02-2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">2007-02-20</EM>.
+
+% TEMPO CALEND 0.5: description:"{XX-/Fev-/XX}
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">fevereiro/2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20/Fev/2007</EM>.
+
+% TEMPO CALEND 1: "{<NUM>! -/! <NUM>! -/? <NUM>?}
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 / 02</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 / 02 / 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">2007 / 02 / 20</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">02 / 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">2007 / 02</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 - 02 - 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">2007 - 02 - 20</EM>.
+
+% TEMPO CALEND 2: {[[Ff]evereiro]}
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Fevereiro</EM>. 
+
+% TEMPO CALEND 3: {[[Ff]evereiro|[Ff]ev.?]]! [de|,]? <NUM>!}
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">fev 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Fev de 2007</EM>.
+
+% TEMPO CALEND 4: {<NUM>! de? <TEMPO>!}
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 fev 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 Fev 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 mar 2007</EM> e vejo o mar lá ao fundo. 
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 de fevereiro</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 de Fevereiro</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 de fevereiro, 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 de Fevereiro, 2007</EM>. 
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 de fevereiro de 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">20 de Fevereiro de 2007</EM>. 
+
+% TEMPO CALEND 5: {[[Qua]rta]-feira]! ,? <TEMPO DATA>?}
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">quarta-feira, 20 de fev de 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Quarta-feira, 20 de fev de 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">quarta-feira, 20 de Fevereiro de 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Quarta-feira, 20 de fevereiro de 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">quarta-feira, 20 de Fevereiro, 2007</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Quarta-feira, 20 de fevereiro, 2007</EM>.
+
+% TEMPO CALEND 6: {[Ss][é]c(ulo)?s?! <NUM>! ac|dc?}',
+% TEMPO CALEND 7: '{[Ss][é]c(ulo)?s?! [IVX]+! ac|dc? e? [IVX]+?}'
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">século XXI</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">século 21</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">século XXI a.c.</EM> .
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">século 21 DC.</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">séc. XXI</EM>.
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">séc. 21</EM>.
+
+% TEMPO CALEND 8: {<NUM>! ac|dc!}
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">3000 a.C.</EM>. 
+                  
+% TEMPO CALEND 9: 'Festividade+estacões'
+%========================================= 
+Estou no <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Inverno</EM>, já acabou o <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Natal</EM>, e na <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Primavera</EM> vem a <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Páscoa</EM>.
+
+% TEMPO CALEND 10: '<NUM>? [dia|mês|semana|ano]! d[aoe]? <TEMPO|NUMERO>!
+%=========================================        
+No dia <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">3 de Março</EM>.
+No <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">mês de Março</EM>.
+No <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">dia de Natal</EM>.
+No <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">ano de 2007</EM>.
+Após <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">21 dias de abril</EM>.     
+        
+% TEMPO CALEND 11: 'segundo!+ [dia|mês|trimestre]! d[aoe]? <TEMPO|NUMERO>!
+%=========================================     
+No <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">segundo trimestre de 2007</EM>, eu acabei.
+No <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">terceiro dia da Quaresma</EM>, eu acabei.  
+Na <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">3ª semana de Abril</EM>, eu acabei.
+
+% TEMPO CALEND 12: 'dia! d[aoe]! [Xxxx]!+ +d[aoe]s??  [Xxxx]?+'
+%=========================================   
+No <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">dia de São Valentim</EM>, eu acabei.
+No <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">dia de Nossa Senhora dos Aflitos</EM>, eu acabei.
+
+% TEMPO CALEND 13: 'em! (princípios|meados|fins)! de! <NUMERO|TEMPO>',
+%=========================================  
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">em princípios de 2007</EM>, eu acabei.
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">em meados de Fevereiro</EM>, eu acabei.
+
+% TEMPO CALEND 14: 'em|n[oa]?|desde|até|a|d[eao]! o? <TEMPO>! (seguinte|passado|anterior)?
+%========================================= 
+Nota que no <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Natal anterior</EM>, eu acabei.
+Nota que no <EM C1="LOCAL" C2="HUMANO" C3="DIVISAO">Rio de Janeiro</EM> anterior, não pode ser entidade temporal.
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">desde Março passado</EM>, eu acabei.
+Nota que adiamos para as <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">semanas de Abril seguinte</EM>.
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">desde 2007</EM>, acabei.
+Nota que na <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">Páscoa seguinte</EM>, vou acabar. 
+Nota que no <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">dia seguinte</EM>, eu acabei.
+        
+% TEMPO CALEND 15:  (antes|depois|desde)? [nd]?[oa]s?! [férias]! d[eao]! <TEMPO>! (ex: nas férias da páscoa) 
+%========================================= 
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">antes das férias da Páscoa</EM>, vou acabar.
+
+% TEMPO CALEND 16: (antes|depois|desde)|(manhã|tarde|noite|madrugada)? de? [ontem|amanhã|hoje|dantes|depois]!
+%========================================= 
+Nota que na <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">manhã de ontem</EM>, ia acabar.
+Nota que na <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">noite depois</EM> disso, ia acabar.
+
+% TEMPO CALEND 17: para! o! <X>! que! vem!
+%========================================= 
+Isso fica <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">para a Páscoa que vem</EM>. 
+
+% TEMPO CALEND 18: <TEMPO>? (depois|antes|desde)! d[ao]! <TEMPO>! 
+%========================================= 
+Isso fica para <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">dois dias depois do Natal</EM>.
+Isso fica para <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">depois da Páscoa</EM>.
+Isso fica para <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">três semanas desde o Natal</EM>.
+   
+% TEMPO CALEND 19: <NUMERO>! de? <X>! mais! tarde|cedo! 
+%========================================= 
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">dois anos mais cedo</EM>, eu acabei.
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">68 milhões de anos mais tarde</EM>, vou acabar.
+
+% TEMPO CALEND 20: há|faz! <NUMERO>! <X>! atrás?
+%========================================= 
+Eu acabei <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">faz 2 dias</EM>.
+Nota que, <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">há 300 anos atrás</EM>, eu tinha acabado.
+              
+% TEMPO CALEND 21:  [agora|recentemente]!
+%========================================= 
+Eu acabei <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">recentemente</EM>, e vou terminar <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">agora</EM>.
+
+% TEMPO CALEND 22: N[este]aos! (alturas?|tempos?|momentos?|períodos?|eras?)! do? <x>?, x= dia mês,
+%========================================= 
+É <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">nestes momentos do mês</EM> que quero acabar.
+É <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">nos períodos da Páscoa</EM> que vou acabar.
+   
+% TEMPO CALEND 23:   Apanhar anos de 4 dígitos... Em [12][0-9]\\d{2}
+%========================================= 
+Nota que em <EM C1="NUMERO" C2="NUMERAL">3465</EM> não pode ser expressão temporal. 
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">em 1965</EM> já pode ser expressão temporal. 
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">em 2965</EM> já pode ser expressão temporal. 
+
+% TEMPO CALEND 24: Apanhar anos de 2 dígitos ,! [em|de]! \d\d! ,! " 
+%========================================= 
+Nota que, <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">em 63</EM>, já é expressão temporal. 
+Nota que em <EM C1="NUMERO" C2="NUMERAL">63</EM> só é expressão numeral.
+
+% TEMPO CALEND 25: desde X
+%========================================= 
+Estou a acabar <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">desde 1967</EM>.
+Nota que, <EM C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">desde 2003</EM>, estou a acabar. 
+
+% TEMPO CALEND HORA 1: {\\d{1,2}[hH](ora)s!}
+%========================================= 
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14h</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14H</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14hs</EM>. 
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14horas</EM>. 
+
+% TEMPO CALEND HORA 2: "{XX[hH](ora)s! e? XXm(inutos?)!}"
+%========================================= 
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14h 30m</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14H e 30M</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14hs 30minutos</EM>. 
+
+% TEMPO CALEND HORA 3: "\\d{1,2}! [hH](ora)s!",
+%========================================= 
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14 h</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14 H</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14 hs</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14 horas</EM>.
+
+% TEMPO CALEND HORA 4: "\\d{1,2}[hH:]\\d{1,2}[Mm]?",
+%========================================= 
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14h00</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14H00</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14:00</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14h30m</EM>.
+
+% TEMPO CALEND HORA 5: "XX horas e XX minutos",
+%========================================= 
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14 horas e 30 minutos</EM>.
+A hora é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14 Horas e 30 Minutos</EM>.              
+
+% TEMPO CALEND HORA 6: "[à|às]! <HORA>!",
+%=========================================   
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">às 15h</EM>, eu acabo.
+
+% TEMPO CALEND HORA 7: "[antes|depois|desde]! d?as! <HORA>!",
+%=========================================   
+Nota que <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">antes das 13 horas</EM> eu não acabo.
+
+% TEMPO CALEND HORA 8: <HORA>, <numero> minutos e <numero> segundos
+%=========================================   
+Acabei nas <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">15 horas, 30 minutos e 17 segundos</EM>.
+
+% TEMPO CALEND HORA 9: <HORA> da (manhã|tarde|etc)",
+% TEMPO CALEND HORA 10:<HORA> de? (ontem|hoje|etc)",
+%=========================================   
+Acabei eram <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">15h ontem</EM>.
+Acabei eram <EM C1="TEMPO" C2="TEMPO_CALEND" C3="HORA">14h30m da tarde</EM>.
+
+% TEMPO CALEND INTERVALO 1: "{[entre|de|desde]! as? \\d{4}! e|a(té?)! as? \\d{4}!}",
+%=========================================
+O intervalo <EM C1="TEMPO" C2="TEMPO_CALEND" C3="INTERVALO">entre 2000 a 2007</EM>.
+O intervalo <EM C1="TEMPO" C2="TEMPO_CALEND" C3="INTERVALO">entre as 14h e as 15h</EM>.
+O intervalo <EM C1="TEMPO" C2="TEMPO_CALEND" C3="INTERVALO">desde 1970 até 1980</EM> foi bom.
+O intervalo <EM C1="TEMPO" C2="TEMPO_CALEND" C3="INTERVALO">de 3 a 6 meses</EM> foi mau.
+O intervalo <EM C1="TEMPO" C2="TEMPO_CALEND" C3="INTERVALO">de Outubro de 2006 até Janeiro de 2007</EM> foi complicado.
+
+% TEMPO CALEND INTERVALO 2: anos {NUMERO}
+%=========================================
+Nota que nos <EM C1="TEMPO" C2="TEMPO_CALEND" C3="INTERVALO">anos 70</EM> eu acabei.
+
+% TEMPO CALEND INTERVALO 2: entre os {NUMERO}
+%=========================================
+A data é <EM C1="TEMPO" C2="TEMPO_CALEND" C3="INTERVALO">entre os séculos XV e XVI</EM>. 
+
+% TEMPO CALEND INTERVALO 4: 2001-/2002
+%=========================================
+Nota que em <EM C1="TEMPO" C2="TEMPO_CALEND" C3="INTERVALO">2000-2001</EM> eu acabei.
+Isso terminou em <EM C1="TEMPO" C2="TEMPO_CALEND" C3="INTERVALO">2003/2004</EM>.
+
+% TEMPO DURACAO 1: durante! os? {TEMPO}!
+%=========================================
+Nota que <EM C1="TEMPO" C2="DURACAO">durante os séculos XV e XVI</EM>, eu acabei.
+Nota que <EM C1="TEMPO" C2="DURACAO">durante a Páscoa</EM>, eu acabei.
+		 			    
+% TEMPO DURACAO 2: "durante! {NUMERO}! <X>!",
+%=========================================
+Nota que <EM C1="TEMPO" C2="DURACAO">durante 3 meses</EM>, eu acabei.
+
+% TEMPO DURACAO 3: durante! (muitos|poucos)! <X>!
+%=========================================
+Nota que <EM C1="TEMPO" C2="DURACAO">durante muitos meses</EM>, eu acabei.
+
+% TEMPO DURACAO 4: "todo! o! <X>!",
+%=========================================
+Nota que <EM C1="TEMPO" C2="DURACAO">durante todo o mês</EM>, eu acabei.
+
+% TEMPO FREQUENCIA 1: "(diaria|semanal|anual)-mente",
+%=========================================
+Nota que <EM C1="TEMPO" C2="FREQUENCIA">diariamente</EM> eu durmo.
+
+% TEMPO FREQUENCIA 2: "tod[ao]s?! os! <X>!",
+%=========================================
+Nota que <EM C1="TEMPO" C2="FREQUENCIA">todos os dias</EM> eu durmo.
+	
+% TEMPO FREQUENCIA 3: "<NUMERO>! vezes! por! <x>!",
+%=========================================
+Nota que eu durmo <EM C1="TEMPO" C2="FREQUENCIA">uma vez por dia</EM>.
+Nota que eu durmo <EM C1="TEMPO" C2="FREQUENCIA">365 vezes ao ano</EM>.

@@ -1,0 +1,46 @@
+% vamos começar pelo EntityRelationCore. 
+
+% Regra ER1:
+números não tem relação, portanto a data <EM ID="0" S="0" T="8" C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">15/02/2007</EM> e a data <EM ID="1" S="0" T="12" C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">15/02/2007</EM> não tem relação.
+outras coisas tem relação, portanto <EM ID="2" S="1" T="6" C1="EM">José Sócrates</EM> e a pessoa <EM ID="3" S="1" T="11" C1="PESSOA" C2="INDIVIDUAL">José Sócrates</EM> tem relação identidade, embora de categorias diferentes.
+
+% Regras ER2:
+
+%partialmatch 2.1 setoccurson
+por exemplo os <EM ID="4" S="2" T="3" C1="ACONTECIMENTO" C2="ORGANIZADO">Jogos Olímpicos de Munique</EM> e a entidade <EM ID="5" S="2" T="10" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Munique</EM>.
+
+%partialmatch 2.2 basedon, 
+por exemplo a <EM ID="6" S="3" T="3" C1="LOCAL" C2="ORGANIZACAO" C3="INSTITUICAO">Universidade de Lisboa</EM> e a entidade <EM ID="7" S="3" T="9" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Lisboa</EM>. 
+
+%partialmatch 2.3 setother, 
+por exemplo o <EM ID="8" S="4" T="3" C1="ORGANIZACAO" C2="INSTITUICAO">Museu Nacional de Machado de Castro</EM> que homenageia <EM ID="9" S="4" T="11" C1="PESSOA" C2="INDIVIDUAL">Machado de Castro</EM>.
+
+%partialmatch 2.4 basedon, 
+por exemplo a <EM ID="10" S="5" T="3" C1="LOCAL" C2="HUMANO" C3="CONSTRUCAO">Piscina Municipal de Coimbra</EM> e a entidade <EM ID="11" S="5" T="10" C1="LOCAL" C2="HUMANO" C3="DIVISAO"> Coimbra</EM>. 
+
+%partialmatch 2.5 identity, 
+por exemplo o <EM ID="12" S="6" T="3" C1="LOCAL" C2="HUMANO" C3="CONSTRUCAO">Museu Militar do Porto</EM> e a entidade <EM ID="13" S="6" T="10" C1="LOCAL" C2="HUMANO" C3="CONSTRUCAO">Museu Militar</EM>.
+
+%partialmatch 2.6 identity, 
+por exemplo o <EM ID="14" S="7" T="3" C1="PESSOA" C2="INDIVIDUAL">Xpto Silva</EM> e a entidade <EM ID="15" S="7" T="8" C1="EM">Silva</EM>.
+também funciona com <EM ID="16" S="8" T="3" C1="PESSOA" C2="INDIVIDUAL">Ypto</EM> e a entidade <EM ID="17" S="8" T="7" C1="EM">José Ypto</EM>.
+
+%partialmatch 2.7 identity, 
+por exemplo a <EM ID="18" S="9" T="3" C1="LOCAL" C2="HUMANO" C3="RUA">Rua Sampaio Pina</EM> e a entidade <EM ID="19" S="9" T="9" C1="EM">Sampaio Pina</EM>.
+
+% Regras ER3, que usam o EntityRelationRulesPT
+
+%regra EntityRelationRulesPT-1: <LOCAL>! ,! [em|[dn][aoe]]? <LOCAL>! -> INCLUDES
+por exemplo <EM ID="20" S="10" T="2" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Madrid</EM>, em <EM ID="21" S="10" T="5" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Espanha</EM>.
+
+%regra EntityRelationRulesPT-2: <LOCAL>! (! [em|[dn][aoe]]? <LOCAL>! -> INCLUDES
+por exemplo <EM ID="22" S="11" T="2" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Londres</EM> (<EM ID="23" S="11" T="4" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Inglaterra</EM>).
+	   		     
+%regra EntityRelationRulesPT-3: <EM1>! ,? localizad[oa]|sediad[oa]! n[ao]|em! <EM2>! -> BasedOn
+por exemplo <EM ID="24" S="12" T="2" C1="LOCAL" C2="HUMANO" C3="CONSTRUCAO">Torre Eiffel</EM>, sediada em <EM ID="25" S="12" T="7" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Paris</EM>.
+
+%regra EntityRelationRulesPT-4: <EM1>! ,! [presidente|chefe|etc]! [dn][aeo]! <EM2>! -> Other
+por exemplo <EM ID="26" S="13" T="2" C1="PESSOA" C2="INDIVIDUAL">João</EM>, presidente da <EM ID="27" S="13" T="6" C1="ORGANIZACAO" C2="EMPRESA">ABC Lda</EM>.
+
+%regra EntityRelationRulesPT-5: <EM1>! ,! [primo|etc]! daeo! <EM2>! -> Other
+por exemplo <EM ID="28" S="14" T="2" C1="PESSOA" C2="INDIVIDUAL">Mário</EM>, primo da <EM ID="29" S="14" T="6" C1="PESSOA" C2="INDIVIDUAL">Maria</EM>.

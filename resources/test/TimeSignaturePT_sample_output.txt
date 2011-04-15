@@ -1,0 +1,21 @@
+% TimeSignatureExample-1
+%--------------------- 
+ <TimeSignature version="1.0" totalcount="3">
+  <Doc id="TimeSignatureExample-1" original_id="null" lang="pt">
+  <DocDateCreated>19700101</DocDateCreated>
+  <Time count="1">
+     <NE>27 de Maio de 2007</NE>
+     <TimeGrounding>!:Y+2007M05D27</TimeGrounding>
+     <Index>20070527</Index>
+  </Time>
+   <Time count="1">
+     <NE>28 de Maio</NE>
+     <TimeGrounding>!:M05D28</TimeGrounding>
+     <Index>20070528</Index>
+  </Time>
+   <Time count="1">
+     <NE>30</NE>
+     <TimeGrounding>!:D30</TimeGrounding>
+     <Index>20070530</Index>
+  </Time>
+</TimeSignature>

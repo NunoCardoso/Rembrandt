@@ -1,0 +1,29 @@
+números não tem relação, portanto a data <EM ID="0" S="0" T="8" C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">15/02/2007</EM> e a data <EM ID="1" S="0" T="12" C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">15/02/2007</EM> não tem relação.
+
+outras coisas tem relação, portanto <EM ID="2" S="1" T="6" C1="EM" RI="3" RT="sameAs">José Sócrates</EM> e a pessoa <EM ID="3" S="1" T="11" C1="PESSOA" C2="INDIVIDUAL">José Sócrates</EM> tem relação identidade, embora de categorias diferentes.
+
+por exemplo os <EM ID="4" S="2" T="3" C1="ACONTECIMENTO" C2="ORGANIZADO" RI="5" RT="ocorre_em">Jogos Olímpicos de Munique</EM> e a entidade <EM ID="5" S="2" T="10" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Munique</EM>.
+
+por exemplo a <EM ID="6" S="3" T="3" C1="LOCAL" C2="ORGANIZACAO" C3="INSTITUICAO" RI="7" RT="incluido">Universidade de Lisboa</EM> e a entidade <EM ID="7" S="3" T="9" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Lisboa</EM>.
+
+por exemplo o <EM ID="8" S="4" T="3" C1="ORGANIZACAO" C2="INSTITUICAO" RI="9" RT="outro">Museu Nacional de Machado de Castro</EM> que homenageia <EM ID="9" S="4" T="11" C1="PESSOA" C2="INDIVIDUAL">Machado de Castro</EM>.
+
+por exemplo a <EM ID="10" S="5" T="3" C1="LOCAL" C2="HUMANO" C3="CONSTRUCAO" RI="11" RT="sede_de">Piscina Municipal de Coimbra</EM> e a entidade <EM ID="11" S="5" T="10" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Coimbra</EM>.
+
+por exemplo o <EM ID="12" S="6" T="3" C1="LOCAL" C2="HUMANO" C3="CONSTRUCAO" RI="13" RT="ident">Museu Militar do Porto</EM> e a entidade <EM ID="13" S="6" T="10" C1="LOCAL" C2="HUMANO" C3="CONSTRUCAO">Museu Militar</EM>.
+
+por exemplo o <EM ID="14" S="7" T="3" C1="PESSOA" C2="INDIVIDUAL" RI="15" RT="sameAs">Xpto Silva</EM> e a entidade <EM ID="15" S="7" T="8" C1="PESSOA" C2="INDIVIDUAL">Silva</EM>.
+
+também funciona com <EM ID="16" S="8" T="3" C1="PESSOA" C2="INDIVIDUAL">Ypto</EM> e a entidade <EM ID="17" S="8" T="7" C1="PESSOA" C2="INDIVIDUAL" RI="16" RT="sameAs">José Ypto</EM>.
+
+por exemplo a <EM ID="18" S="9" T="3" C1="LOCAL" C2="HUMANO" C3="RUA" RI="19" RT="ident">Rua Sampaio Pina</EM> e a entidade <EM ID="19" S="9" T="9" C1="LOCAL" C2="HUMANO" C3="RUA">Sampaio Pina</EM>.
+
+por exemplo <EM ID="20" S="10" T="2" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Madrid</EM>, em <EM ID="21" S="10" T="5" C1="LOCAL" C2="HUMANO" C3="DIVISAO" RI="20" RT="inclui">Espanha</EM>.
+
+por exemplo <EM ID="22" S="11" T="2" C1="LOCAL" C2="HUMANO" C3="DIVISAO">Londres</EM> (<EM ID="23" S="11" T="4" C1="LOCAL" C2="HUMANO" C3="DIVISAO" RI="22" RT="inclui">Inglaterra</EM>).
+
+por exemplo <EM ID="24" S="12" T="2" C1="LOCAL" C2="HUMANO" C3="CONSTRUCAO">Torre Eiffel</EM>, sediada em <EM ID="25" S="12" T="7" C1="LOCAL" C2="HUMANO" C3="DIVISAO" RI="24" RT="sede_de">Paris</EM>.
+
+por exemplo <EM ID="26" S="13" T="2" C1="PESSOA" C2="INDIVIDUAL">João</EM>, presidente da <EM ID="27" S="13" T="6" C1="ORGANIZACAO" C2="EMPRESA" RI="26" RT="outro">ABC Lda</EM>.
+
+por exemplo <EM ID="28" S="14" T="2" C1="PESSOA" C2="INDIVIDUAL">Mário</EM>, primo da <EM ID="29" S="14" T="6" C1="PESSOA" C2="INDIVIDUAL" RI="28" RT="outro">Maria</EM>.

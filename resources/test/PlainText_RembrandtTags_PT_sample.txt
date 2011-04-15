@@ -1,0 +1,3 @@
+O <EM ID="0" S="0" T="1" C1="PESSOA" C2="INDIVIDUAL" WK="Rembrandt" DB="Rembrandt">Rembrandt</EM> é um pintor holandês. 
+Nasceu a <EM ID="2" S="1" T="2" C1="TEMPO" C2="TEMPO_CALEND" C3="DATA">15 de Julho de 1606</EM> em <EM ID="5" S="1" T="8" C1="LOCAL" C2="HUMANO" WK="Leida" DB="Leiden">Leiden</EM>, nos <EM ID="6" S="1" T="11" C1="LOCAL" C2="HUMANO" C3="PAIS" WK="Países_Baixos" DB="Netherlands">Países_Baixos</EM>. 
+Estudou na <ALT><SUBALT><EM ID="8" S="2" T="2" C1="ORGANIZACAO" C2="INSTITUICAO" WK="Universidade_de_Leiden" DB="Leiden_University">Universidade_de_Leiden</EM></SUBALT><SUBALT>Universidade de <EM ID="9" S="2" T="4" C1="LOCAL" C2="HUMANO" WK="Leida" DB="Leiden">Leiden</EM>Leiden</EM></ALT>.

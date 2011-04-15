@@ -1,0 +1,63 @@
+% VALORMOEDA1, VALORMOEDA 1.5
+%--------------------------
+O preço é <EM C1="VALOR" C2="MOEDA">1.000.000$</EM>, ou <EM C1="VALOR" C2="MOEDA">1,000$00</EM>, ou <EM C1="VALOR" C2="MOEDA">1 000 $ 00</EM> ou <EM C1="VALOR" C2="MOEDA">1.000 $ 00</EM> ou <EM C1="VALOR" C2="MOEDA">1,000 $ 00</EM>, ah pois.
+
+O preço é <EM C1="VALOR" C2="MOEDA">1.000.000€</EM>, ou <EM C1="VALOR" C2="MOEDA">1,000,000€</EM> ou <EM C1="VALOR" C2="MOEDA">1 000 €</EM> ou <EM C1="VALOR" C2="MOEDA">1.000 €</EM> ou <EM C1="VALOR" C2="MOEDA">1,000 €</EM>, ah pois.
+
+% VALORMOEDA2, VALORMOEDA 2.5
+%--------------------------
+A moeda é <EM C1="VALOR" C2="MOEDA">$34</EM> ou então <EM C1="VALOR" C2="MOEDA">$34.000</EM> ou <EM C1="VALOR" C2="MOEDA">$34,000</EM> ou <EM C1="VALOR" C2="MOEDA">$34.1 mil milhões</EM>, ah pois.
+
+A moeda é <EM C1="VALOR" C2="MOEDA">£34</EM> ou então <EM C1="VALOR" C2="MOEDA">£34.000</EM> ou <EM C1="VALOR" C2="MOEDA">£34,000</EM> ou <EM C1="VALOR" C2="MOEDA">£34.1 mil milhões</EM>, ah pois.
+
+A moeda é <EM C1="VALOR" C2="MOEDA">$ 34</EM> ou então <EM C1="VALOR" C2="MOEDA">$ 34.000</EM> ou <EM C1="VALOR" C2="MOEDA">$ 34,000</EM> ou <EM C1="VALOR" C2="MOEDA">$ 34.1 mil milhões</EM>, ah pois.
+
+A moeda é <EM C1="VALOR" C2="MOEDA">£ 34</EM> ou então <EM C1="VALOR" C2="MOEDA">£ 34.000</EM> ou <EM C1="VALOR" C2="MOEDA">£ 34,000</EM> ou <EM C1="VALOR" C2="MOEDA">£ 34.1 mil milhões</EM>, ah pois.
+
+% VALORMOEDA3, VALORMOEDA3.5
+%--------------------------
+Tenho <EM C1="VALOR" C2="MOEDA">mil milhões de dólares angolanos</EM>.
+Tenho <EM C1="VALOR" C2="MOEDA">3 milhões de libras austríacas</EM>.
+Tenho <EM C1="VALOR" C2="MOEDA">34.000 dinares portugueses</EM>.
+Tenho <EM C1="VALOR" C2="MOEDA">5 francos suíços</EM>.
+
+% VALORMOEDA4
+%--------------------------
+Tenho <EM C1="VALOR" C2="MOEDA">US 3,000</EM> em acções.
+tenho <EM C1="VALOR" C2="MOEDA">R 3 milhões</EM> em acções.
+
+% VALORMOEDA5 - acrescenta "cerca de" a <MOEDA>
+%--------------------------
+Tenho <EM C1="VALOR" C2="MOEDA">cerca de US 3,000</EM> em acções.
+tenho <EM C1="VALOR" C2="MOEDA">cerca de R 3 milhões</EM> em acções.
+
+% VALORQUANTIDADE1 {<NUM>! de? [units]! por|/? [timeunit]?}
+% \u00B2 é ², \u00B3 é ³ 
+%--------------------
+A quantidade é <EM C1="VALOR" C2="QUANTIDADE">30 calorias</EM>.
+A quantidade é <EM C1="VALOR" C2="QUANTIDADE">4.000 quilómetros / ano</EM>.
+A quantidade é <EM C1="VALOR" C2="QUANTIDADE">4.000 quilómetros por mês</EM>.
+A quantidade é <EM C1="VALOR" C2="QUANTIDADE">24.3 m2</EM>.
+A quantidade é <EM C1="VALOR" C2="QUANTIDADE">24.3 m²</EM>.
+A quantidade é <EM C1="VALOR" C2="QUANTIDADE">24,3 milhões de Km³</EM> arados.
+A quantidade é <EM C1="VALOR" C2="QUANTIDADE">24,3 Joules por metro quadrado</EM>.
+A quantidade é <EM C1="VALOR" C2="QUANTIDADE">33 GB/s</EM>. 
+Estão <EM C1="VALOR" C2="QUANTIDADE">34ºC</EM> lá fora.
+Estão <EM C1="VALOR" C2="QUANTIDADE">-32 ºC</EM> lá fora.
+
+% VALORQUANTIDADE2 (percentagem colada) VALORQUANTIDADE2.5 (percentagem colada)
+% VALORQUANTIDADE5 (percentagem por extenso) 
+%--------------------
+A percentagem é <EM C1="VALOR" C2="QUANTIDADE">34%</EM>.
+A percentagem é <EM C1="VALOR" C2="QUANTIDADE">34 %</EM>.
+A percentagem é <EM C1="VALOR" C2="QUANTIDADE">34 por cento</EM>.
+
+% VALORQUANTIDADE6 (sufixo acima|abaixo)
+% VALORQUANTIDADE7 (prefixo aproximandamente | cerca de | acima de | abaixo de ) 
+%--------------------
+Eu tenho <EM C1="VALOR" C2="QUANTIDADE">acima de 34 %</EM> de acções.
+Eu tenho <EM C1="VALOR" C2="QUANTIDADE">aproximadamente 34 %</EM> de acções.
+Uma variação de <EM C1="VALOR" C2="QUANTIDADE">4 % abaixo</EM> das espectativas.
+
+% VALOR CLASSIFICACAO 1
+%----------------------

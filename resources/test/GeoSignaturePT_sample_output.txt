@@ -1,0 +1,98 @@
+% GeoSignatureExample-1
+%--------------------- 
+<GeoSignature version="1.0" totalcount="6">
+  <Doc id="GeoSignatureExample-1" original_id="null" lang="pt" />
+  <Place count="2" woeid="746203">
+     <NE id="null">Porto</NE>
+     <Name>Porto</Name>
+     <Type>HUMANO</Type>
+     <Subtype>DIVISAO</Subtype>
+     <DBpediaClass>PopulatedPlace</DBpediaClass>
+     <Ancestor woeid="12596515">Porto</Ancestor>
+     <Ancestor woeid="2346575">Porto</Ancestor>
+     <Ancestor woeid="23424925">Portugal</Ancestor>
+     <Centroid>
+        <Latitude>41.149380</Latitude>
+        <Longitude>-8.610340</Longitude>
+     </Centroid>
+     <BoundingBox>
+       <southWest>
+        <Latitude>41.139370</Latitude>
+        <Longitude>-8.691360</Longitude>
+       </southWest>
+       <northEast>
+        <Latitude>41.186111</Latitude>
+        <Longitude>-8.550840</Longitude>
+       </northEast>
+     </BoundingBox>
+  </Place>
+  <Place count="2" woeid="23424925">
+     <NE id="null">Portugal</NE>
+     <Name>Portugal</Name>
+     <Type>HUMANO</Type>
+     <Subtype>PAIS</Subtype>
+     <DBpediaClass>Country</DBpediaClass>
+     <Centroid>
+        <Latitude>39.557919</Latitude>
+        <Longitude>-7.844810</Longitude>
+     </Centroid>
+     <BoundingBox>
+       <southWest>
+        <Latitude>30.028061</Latitude>
+        <Longitude>-31.266001</Longitude>
+       </southWest>
+       <northEast>
+        <Latitude>42.154121</Latitude>
+        <Longitude>-6.189310</Longitude>
+       </northEast>
+     </BoundingBox>
+  </Place>
+  <Place count="1" woeid="742676">
+     <NE id="null">Lisboa</NE>
+     <Name>Lisboa</Name>
+     <Type>HUMANO</Type>
+     <Subtype>DIVISAO</Subtype>
+     <DBpediaClass>Municipality</DBpediaClass>
+     <Ancestor woeid="12596415">Lisboa</Ancestor>
+     <Ancestor woeid="2346573">Lisboa</Ancestor>
+     <Ancestor woeid="23424925">Portugal</Ancestor>
+     <Centroid>
+        <Latitude>38.725670</Latitude>
+        <Longitude>-9.150370</Longitude>
+     </Centroid>
+     <BoundingBox>
+       <southWest>
+        <Latitude>38.713249</Latitude>
+        <Longitude>-9.248300</Longitude>
+       </southWest>
+       <northEast>
+        <Latitude>38.818378</Latitude>
+        <Longitude>-9.108760</Longitude>
+       </northEast>
+     </BoundingBox>
+  </Place>
+  <Place count="1" woeid="737514">
+     <NE id="null">Braga</NE>
+     <Name>Braga</Name>
+     <Type>HUMANO</Type>
+     <Subtype>PAIS</Subtype>
+     <DBpediaClass>Municipality</DBpediaClass>
+     <Ancestor woeid="12596498">Braga</Ancestor>
+     <Ancestor woeid="2346564">Braga</Ancestor>
+     <Ancestor woeid="23424925">Portugal</Ancestor>
+     <Centroid>
+        <Latitude>41.553051</Latitude>
+        <Longitude>-8.417010</Longitude>
+     </Centroid>
+     <BoundingBox>
+       <southWest>
+        <Latitude>41.543140</Latitude>
+        <Longitude>-8.429190</Longitude>
+       </southWest>
+       <northEast>
+        <Latitude>41.561321</Latitude>
+        <Longitude>-8.404890</Longitude>
+       </northEast>
+     </BoundingBox>
+  </Place>
+</GeoSignature>

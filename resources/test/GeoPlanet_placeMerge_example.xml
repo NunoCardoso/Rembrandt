@@ -1,0 +1,34 @@
+<place xmlns="http://where.yahooapis.com/v1/schema.rng" yahoo:uri="http://where.yahooapis.com/v1/place/742676" xmlns:yahoo="http://www.yahooapis.com/v1/base.rng">
+  <woeid>742676</woeid>
+  <placeTypeName code="7" lang="pt">Pueblo</placeTypeName>
+  <name lang="pt">Lisboa</name>
+  <country type="País" code="PT" lang="pt">Portugal</country>
+  <admin1 type="Distrito" code="PT-11" lang="pt">Lisboa</admin1>
+  <admin2 type="Municipality" code="" lang="pt">Lisboa</admin2>
+  <admin3/>
+  <locality1 type="Pueblo" lang="pt">Lisboa</locality1>
+  <locality2 lang="pt"/>
+  <postal/>
+  <centroid>
+    <latitude>38.725670</latitude>
+    <longitude>-9.150370</longitude>
+  </centroid>
+  <boundingBox>
+    <southWest>
+      <latitude>38.713249</latitude>
+      <longitude>-9.248300</longitude>
+    </southWest>
+    <northEast>
+      <latitude>38.818378</latitude>
+      <longitude>-9.108760</longitude>
+    </northEast>
+  </boundingBox>
+  <placeTypeName code="7" lang="en">Town</placeTypeName>
+  <name lang="en">Lisbon</name>
+  <country type="Country" code="PT" lang="en">Portugal</country>
+  <admin1 type="District" code="" lang="en">Lisbon</admin1>
+  <admin2 type="Municipality" code="" lang="en">Lisbon</admin2>
+  <admin3 lang="en"/>
+  <locality1 type="Town" lang="en">Lisbon</locality1>
+  <locality2 lang="en"/>
+</place>

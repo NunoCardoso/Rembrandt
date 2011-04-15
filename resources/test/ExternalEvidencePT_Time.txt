@@ -1,0 +1,261 @@
+% TEMPO CALEND 0: description:"{XX-/XX-/XX}
+%=========================================
+A data é 20/02.
+A data é 20/02/2007.
+A data é 2007/02/20.
+A data é 02/2007.
+A data é 2007/02.
+A data é 20-02-2007.
+A data é 2007-02-20.
+
+% TEMPO CALEND 0.5: description:"{XX-/Fev-/XX}
+%=========================================
+A data é fevereiro/2007.
+A data é 20/Fev/2007.
+
+% TEMPO CALEND 1: "{<NUM>! -/! <NUM>! -/? <NUM>?}
+%=========================================
+A data é 20 / 02.
+A data é 20 / 02 / 2007.
+A data é 2007 / 02 / 20.
+A data é 02 / 2007.
+A data é 2007 / 02.
+A data é 20 - 02 - 2007.
+A data é 2007 - 02 - 20.
+
+% TEMPO CALEND 2: {[[Ff]evereiro]}
+%=========================================
+A data é Fevereiro. 
+
+% TEMPO CALEND 3: {[[Ff]evereiro|[Ff]ev.?]]! [de|,]? <NUM>!}
+%=========================================
+A data é fev 2007.
+A data é Fev de 2007.
+
+% TEMPO CALEND 4: {<NUM>! de? <TEMPO>!}
+%=========================================
+A data é 20 fev 2007.
+A data é 20 Fev 2007.
+A data é 20 mar 2007 e vejo o mar lá ao fundo. 
+A data é 20 de fevereiro.
+A data é 20 de Fevereiro.
+A data é 20 de fevereiro, 2007.
+A data é 20 de Fevereiro, 2007. 
+A data é 20 de fevereiro de 2007.
+A data é 20 de Fevereiro de 2007. 
+
+% TEMPO CALEND 5: {[[Qua]rta]-feira]! ,? <TEMPO DATA>?}
+%=========================================
+A data é quarta-feira, 20 de fev de 2007.
+A data é Quarta-feira, 20 de fev de 2007.
+A data é quarta-feira, 20 de Fevereiro de 2007.
+A data é Quarta-feira, 20 de fevereiro de 2007.
+A data é quarta-feira, 20 de Fevereiro, 2007.
+A data é Quarta-feira, 20 de fevereiro, 2007.
+
+% TEMPO CALEND 6: {[Ss][é]c(ulo)?s?! <NUM>! ac|dc?}',
+% TEMPO CALEND 7: '{[Ss][é]c(ulo)?s?! [IVX]+! ac|dc? e? [IVX]+?}'
+%=========================================
+A data é século XXI.
+A data é século 21.
+A data é século XXI a.c. .
+A data é século 21 DC..
+A data é séc. XXI.
+A data é séc. 21.
+
+% TEMPO CALEND 8: {<NUM>! ac|dc!}
+%=========================================
+A data é 3000 a.C. .
+                  
+% TEMPO CALEND 9: 'Festividade+estacões'
+%========================================= 
+Estou no Inverno, já acabou o Natal, e na Primavera vem a Páscoa.
+
+% TEMPO CALEND 10: '<NUM>? [dia|mês|semana|ano]! d[aoe]? <TEMPO|NUMERO>!
+%=========================================        
+No dia 3 de Março.
+No mês de Março.
+No dia de Natal.
+No ano de 2007.
+Após 21 dias de abril.     
+        
+% TEMPO CALEND 11: 'segundo!+ [dia|mês|trimestre]! d[aoe]? <TEMPO|NUMERO>!
+%=========================================     
+No segundo trimestre de 2007, eu acabei.
+No terceiro dia da Quaresma, eu acabei.  
+Na 3ª semana de Abril, eu acabei.
+
+% TEMPO CALEND 12: 'dia! d[aoe]! [Xxxx]!+ +d[aoe]s??  [Xxxx]?+'
+%=========================================   
+No dia de São Valentim, eu acabei.
+No dia de Nossa Senhora dos Aflitos, eu acabei.
+
+% TEMPO CALEND 13: 'em! (princípios|meados|fins)! de! <NUMERO|TEMPO>',
+%=========================================  
+Nota que em princípios de 2007, eu acabei.
+Nota que em meados de Fevereiro, eu acabei.
+
+% TEMPO CALEND 14: 'em|n[oa]?|desde|até|a|d[eao]! o? <TEMPO>! (seguinte|passado|anterior)?
+%========================================= 
+Nota que no Natal anterior, eu acabei.
+Nota que no Rio de Janeiro anterior, não pode ser entidade temporal.
+Nota que desde Março passado, eu acabei.
+Nota que adiamos para as semanas de Abril seguinte.
+Nota que desde 2007, acabei.
+Nota que na Páscoa seguinte, vou acabar. 
+Nota que no dia seguinte, eu acabei.
+        
+% TEMPO CALEND 15:  (antes|depois|desde)? [nd]?[oa]s?! [férias]! d[eao]! <TEMPO>! (ex: nas férias da páscoa) 
+%========================================= 
+Nota que antes das férias da Páscoa, vou acabar.
+
+% TEMPO CALEND 16: (antes|depois|desde)|(manhã|tarde|noite|madrugada)? de? [ontem|amanhã|hoje|dantes|depois]!
+%========================================= 
+Nota que na manhã de ontem, ia acabar.
+Nota que na noite depois disso, ia acabar.
+
+% TEMPO CALEND 17: para! o! <X>! que! vem!
+%========================================= 
+Isso fica para a Páscoa que vem. 
+
+% TEMPO CALEND 18: <TEMPO>? (depois|antes|desde)! d[ao]! <TEMPO>! 
+%========================================= 
+Isso fica para dois dias depois do Natal.
+Isso fica para depois da Páscoa.
+Isso fica para três semanas desde o Natal.
+   
+% TEMPO CALEND 19: <NUMERO>! de? <X>! mais! tarde|cedo! 
+%========================================= 
+Nota que dois anos mais cedo, eu acabei.
+Nota que 68 milhões de anos mais tarde, vou acabar.
+
+% TEMPO CALEND 20: há|faz! <NUMERO>! <X>! atrás?
+%========================================= 
+Eu acabei faz 2 dias.
+Nota que, há 300 anos atrás, eu tinha acabado.
+              
+% TEMPO CALEND 21:  [agora|recentemente]!
+%========================================= 
+Eu acabei recentemente, e vou terminar agora.
+
+% TEMPO CALEND 22: N[este]aos! (alturas?|tempos?|momentos?|per√≠odos?|eras?)! do? <x>?, x= dia mês,
+%========================================= 
+É nestes momentos do mês que quero acabar.
+É nos períodos da Páscoa que vou acabar.
+   
+% TEMPO CALEND 23:   Apanhar anos de 4 dígitos... Em [12][0-9]\\d{2}
+%========================================= 
+Nota que em 3465 não pode ser expressão temporal. 
+Nota que em 1965 já pode ser expressão temporal. 
+Nota que em 2965 já pode ser expressão temporal. 
+
+% TEMPO CALEND 24: Apanhar anos de 2 dígitos ,! [em|de]! \d\d! ,! " 
+%========================================= 
+Nota que, em 63, já é expressão temporal. 
+Nota que em 63 só é expressão numeral.
+
+% TEMPO CALEND 25: desde X
+%========================================= 
+Estou a acabar desde 1967.
+Nota que, desde 2003, estou a acabar. 
+
+% TEMPO CALEND HORA 1: {\\d{1,2}[hH](ora)s!}
+%========================================= 
+A hora é 14h.
+A hora é 14H.
+A hora é 14hs. 
+A hora é 14horas. 
+
+% TEMPO CALEND HORA 2: "{XX[hH](ora)s! e? XXm(inutos?)!}"
+%========================================= 
+A hora é 14h 30m.
+A hora é 14H e 30M.
+A hora é 14hs 30minutos. 
+
+% TEMPO CALEND HORA 3: "\\d{1,2}! [hH](ora)s!",
+%========================================= 
+A hora é 14 h.
+A hora é 14 H.
+A hora é 14 hs.
+A hora é 14 horas.
+
+% TEMPO CALEND HORA 4: "\\d{1,2}[hH:]\\d{1,2}[Mm]?",
+%========================================= 
+A hora é 14h00.
+A hora é 14H00.
+A hora é 14:00.
+A hora é 14h30m.
+
+% TEMPO CALEND HORA 5: "XX horas e XX minutos",
+%========================================= 
+A hora é 14 horas e 30 minutos.
+A hora é 14 Horas e 30 Minutos.              
+
+% TEMPO CALEND HORA 6: "[à|às]! <HORA>!",
+%=========================================   
+Nota que às 15h, eu acabo.
+
+% TEMPO CALEND HORA 7: "[antes|depois|desde]! d?as! <HORA>!",
+%=========================================   
+Nota que antes das 13 horas eu não acabo.
+
+% TEMPO CALEND HORA 8: <HORA>, <numero> minutos e <numero> segundos
+%=========================================   
+Acabei nas 15 horas, 30 minutos e 17 segundos.
+
+% TEMPO CALEND HORA 9: <HORA> da (manhã|tarde|etc)",
+% TEMPO CALEND HORA 10:<HORA> de? (ontem|hoje|etc)",
+%=========================================   
+Acabei eram 15h ontem.
+Acabei eram 14h30m da tarde.
+
+% TEMPO CALEND INTERVALO 1: "{[entre|de|desde]! as? \\d{4}! e|a(té?)! as? \\d{4}!}",
+%=========================================
+O intervalo entre 2000 a 2007.
+O intervalo entre as 14h e as 15h.
+O intervalo desde 1970 até 1980 foi bom.
+O intervalo de 3 a 6 meses foi mau.
+O intervalo de Outubro de 2006 até Janeiro de 2007 foi complicado.
+
+% TEMPO CALEND INTERVALO 2: anos {NUMERO}
+%=========================================
+Nota que nos anos 70 eu acabei.
+
+% TEMPO CALEND INTERVALO 3: entre os {NUMERO}
+%=========================================
+A data é entre os séculos XV e XVI. 
+
+% TEMPO CALEND INTERVALO 4: 2001-/2002
+%=========================================
+Nota que em 2000-2001 eu acabei.
+Isso terminou em 2003/2004.
+
+% TEMPO DURACAO 1: durante! os? {TEMPO}!
+%=========================================
+Nota que durante os séculos XV e XVI, eu acabei.
+Nota que durante a Páscoa, eu acabei.
+		 			    
+% TEMPO DURACAO 2: "durante! {NUMERO}! <X>!",
+%=========================================
+Nota que durante 3 meses, eu acabei.
+
+% TEMPO DURACAO 3: durante! (muitos|poucos)! <X>!
+%=========================================
+Nota que durante muitos meses, eu acabei.
+
+% TEMPO DURACAO 4: "todo! o! <X>!",
+%=========================================
+Nota que durante todo o mês, eu acabei.
+
+% TEMPO FREQUENCIA 1: "(diaria|semanal|anual)-mente",
+%=========================================
+Nota que diariamente eu durmo.
+
+% TEMPO FREQUENCIA 2: "tod[ao]s?! os! <X>!",
+%=========================================
+Nota que todos os dias eu durmo.
+	
+% TEMPO FREQUENCIA 3: "<NUMERO>! vezes! por! <x>!",
+%=========================================
+Nota que eu durmo uma vez por dia.
+Nota que eu durmo 365 vezes ao ano.

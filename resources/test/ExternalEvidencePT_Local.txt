@@ -1,0 +1,43 @@
+% Regra LocalRulesPT LOCAL HUMANO REGIAO 1: [regiao]! deaos? {<EM>!}
+
+fui à região das Alminhas. 
+
+% Regra LocalRulesPT LOCAL HUMANO DIVISAO 2: [cidade]! deaos? {<EM>!}
+
+fui à cidade de Berlêngica.
+
+% Regra LocalRulesPT LOCAL HUMANO CONSTRUCAO 1 [ponte]! deaos01? {<EM>!} passa a [LOCAL HUMANO CONSTRUCAO] 
+
+fui à ponte das Cretórias.
+
+% Regra  LocalRulesPT LOCAL HUMANO RUA 1 [rua|travessa|praça]! deaos? {<EM>!} passa a [LOCAL HUMANO RUA] 
+ 
+fui à travessa das Dalilas.
+
+% LocalRulesPT LOCAL FISICO AGUACURSO 1 [rio]! deaos? {<EM>!} passa a [LOCAL FISICO AGUACURSO] 
+ 
+fui ao rio Elália.
+
+% LocalRulesPT LOCAL FISICO AGUAMASSA 1 [mar]! deaos01? {<EM>!} passa a [LOCAL FISICO AGUAMASSA] 
+ 
+fui ao mar das Facas.			
+            
+% LocalRulesPT LOCAL FISICO RELEVO 1 [serra]! deaos? {<EM>!} passa a [LOCAL FISICO RELEVO] 
+ 
+fui à serra das Galhardas.			
+            
+% LocalRulesPT LOCAL FISICO PLANETA 1  [planeta]! deaos? {<EM>!} passa a [LOCAL FISICO PLANETA] 
+
+vi o planeta Homérico.
+
+% LocalRulesPT LOCAL FISICO ILHA 1 [ilha]! deaos? {<EM>!} passa a [LOCAL FISICO ILHA] 
+        
+vivo na ilha Ilhéu.
+
+% LocalRulesPT LOCAL VIRTUAL SITIO 1  [site|página]! d[eoa]s? {<EM>!}
+
+visita o site da KFMX.
+
+% LocalRulesPT LOCAL VIRTUAL COMSOCIAL 1 [art|publi|lei|revista|etc] d[eoa]s? {<EM>!}
+
+li a revista Lollaby.

@@ -1,0 +1,44 @@
+/** This file is part of REMBRANDT - Named Entity Recognition Software
+ *  (http://xldb.di.fc.ul.pt/Rembrandt)
+ *  Copyright (c) 2008-2009, Nuno Cardoso, University of Lisboa and Linguateca.
+ *
+ *  REMBRANDT is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  REMBRANDT is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package saskia.util.validator
+
+class EncodingValidator {
+	
+	public String validate(String given_encoding, 
+		 DEFAULT_ENCODING, boolean mandatory = true) {
+
+		String encoding = null
+		if (!given_encoding) {
+			println "Which encoding for file output? (Default: ${DEFAULT_ENCODING}) "
+			print "> "
+			 BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
+			encoding = input.readLine().trim()
+			if (!encoding) encoding = DEFAULT_ENCODING
+		} 
+		else { 
+			encoding = given_encoding
+		}
+		
+		if (!encoding && mandatory) {
+			log.fatal "No encoding defined. Please specify the encoding."
+			System.exit(0)
+		}
+		return encoding
+	}
+}

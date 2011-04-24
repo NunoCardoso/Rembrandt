@@ -52,7 +52,7 @@ class GeoscopeTable extends DBTable {
 	public List<Geoscope> queryDB(String query, ArrayList params = []) {
 		List<Geoscope> l = []
 		getSaskiaDB().getDB().eachRow(query, params, {row  ->
-			l << Geoscope.createFromDBRow(this.owner, row)
+			l << Geoscope.createNew(this, row)
 		})
 		if (l) return l else return null
 	}
@@ -108,7 +108,7 @@ class GeoscopeTable extends DBTable {
 	}
 
 	static Geoscope getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.GeoscopeTable").getFromID(id)
+		return  db.getDBTable("GeoscopeTable").getFromID(id)
 	}
 
 	public List<Geoscope> getFromName(String geo_name, String lang) {

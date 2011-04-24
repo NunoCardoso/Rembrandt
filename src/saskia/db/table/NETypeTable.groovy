@@ -46,7 +46,7 @@ class NETypeTable extends DBTable {
 	public List<NEType> queryDB(String query, ArrayList params = []) {
 		List<NEType> t = []
 		db.getDB().eachRow(query, params, {row  ->
-			t << NEType.createFromDBRow(this.owner, row)
+			t << NEType.createNew(this, row)
 		})
 		return t
 	}
@@ -59,15 +59,14 @@ class NETypeTable extends DBTable {
 		if (all_id_type.isEmpty()) {
 			def net = queryDB("SELECT * FROM ${tablename}")
 			log.debug "Searched for all types, got ${net.size()} entries."
-			net.each{updateCacheElement(it.net_id, it.net_type)}
+			net.each{updateCacheElement(it)}
 		}
 	}
 
-	public updateCacheElement(long id, String type) {
-		if (!id || !type) return
-			NEType net = new NEType(net_id:id, net_type:type)
-		all_type_id[type] = net
-		all_id_type[id] = net
+	public updateCacheElement(NEType net) {
+		if (!net.net_id || !net.net_type) return
+		all_type_id[net.net_type] = net
+		all_id_type[net.net_id] = net
 	}
 
 	/** Get a NEType from id.
@@ -84,7 +83,7 @@ class NETypeTable extends DBTable {
 	}
 
 	static NEType getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.NETypeTable").getFromID(id)
+		return  db.getDBTable("NETypeTable").getFromID(id)
 	}
 
 	/** Get a NESubtype from id.
@@ -98,6 +97,6 @@ class NETypeTable extends DBTable {
 	}
 
 	static NEType getFromType(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.NETypeTable").getFromType(id)
+		return  db.getDBTable("NETypeTable").getFromType(id)
 	}
 }

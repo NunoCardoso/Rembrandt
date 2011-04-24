@@ -52,7 +52,7 @@ class SourceDocTable extends DBTable {
 		List l = []
 
 		db.getDB().eachRow(query, params, {row  ->
-			l << SourceDoc.createFromDBRow(this.owner,row)
+			l << SourceDoc.createNew(this,row)
 		})
 		return (l ? l : null)
 	}
@@ -70,7 +70,7 @@ class SourceDocTable extends DBTable {
 	}
 
 	static SourceDoc getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.SourceDocTable").getFromID(id)
+		return  db.getDBTable("SourceDocTable").getFromID(id)
 	}
 
 
@@ -128,34 +128,27 @@ class SourceDocTable extends DBTable {
 				db.getDB().withTransaction{
 					log.info "Try #${tries+1}: Getting a set of $limit processable sourceDocs"
 
-					def query = "SELECT * FROM ${SourceDoc.tablename} WHERE sdoc_collection=? AND "+
-							"sdoc_proc IN "+DocStatus.whereConditionGoodToProcess()+" AND sdoc_doc IS NULL AND "+
-							"sdoc_id NOT IN (select job_doc_id from "+Job.tablename+" where job_doc_type='"+job_doc_type_label+
-							"' and job_doc_edit NOT IN "+DocStatus.whereConditionUnlocked()+") LIMIT ${limit} FOR UPDATE"
+					def query = "SELECT * FROM ${tablename} WHERE sdoc_collection=? AND "+
+						"sdoc_proc IN "+DocStatus.whereConditionGoodToProcess()+" AND sdoc_doc IS NULL AND "+
+						"sdoc_id NOT IN (select job_doc_id from ${JobTable.tablename} WHERE "+
+						"job_doc_type='"+job_doc_type_label+"' and job_doc_edit NOT IN "+
+						DocStatus.whereConditionUnlocked()+") LIMIT ${limit} FOR UPDATE"
 					// VERY IMPORTANT, the FOR UPDATE, it locks the table until the transaction is complete
 
 					def params = [sdoc_collection.col_id]
+
 					db.getDB().eachRow(query, params, {row ->
-						log.trace "Got "+ row['sdoc_id']
-						sd = new SourceDoc()
-						sd.sdoc_id = row['sdoc_id']
-						sd.sdoc_original_id = row['sdoc_original_id']
-						if (row['sdoc_collection']) sd.sdoc_collection = Collection.getFromID(row['sdoc_collection'])
-
-						sd.sdoc_lang = row['sdoc_lang']
-						sd.sdoc_date = (row['sdoc_date'] ?  (Date)row['sdoc_date']: new Date(0))
-						sd.sdoc_comment = row['sdoc_comment']
-						sd.sdoc_webstore = row['sdoc_webstore']
-						if (sd.sdoc_webstore) sd.sdoc_content = webstore.retrieve(sd.sdoc_webstore)
-						sd.sdoc_proc = DocStatus.getFromValue(row['sdoc_proc'])
-
-						l << sd
-
+						sd = SourceDoc.createNew(this, row)
+						
 						// LET's create JOBS to mark the queue
-						Job job = new Job(job_task:task, job_worker:process_signature, job_doc_type:job_doc_type_label,
-								job_doc_id:sd.sdoc_id, job_doc_edit:DocStatus.QUEUED, job_doc_edit_date:new Date())
-						job.job_id = job.addThisToDB()
-						sd.sdoc_job = job
+						Job job = Job.createNew(db.getDBTable("JobTable"), 
+						 [job_task:task, job_worker:process_signature, job_doc_type:job_doc_type_label,
+						  job_doc_id:sd.sdoc_id, job_doc_edit:DocStatus.QUEUED, job_doc_edit_date:new Date()
+						 ])
+						 job.job_id = job.addThisToDB()
+						 sd.sdoc_job = job
+						 l << sd
+						
 					})
 				}
 			} catch (org.codehaus.groovy.runtime.InvokerInvocationException iie) {

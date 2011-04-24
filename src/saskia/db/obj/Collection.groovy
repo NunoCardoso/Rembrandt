@@ -18,11 +18,9 @@
 
 package saskia.db.obj
 
-import java.util.HashMap
-
 import org.apache.log4j.Logger
 
-import saskia.db.table.DBTable
+import saskia.db.table.*
 
 /**
  * @author Nuno Cardoso
@@ -46,11 +44,13 @@ class Collection extends DBObject implements JSONable {
 		super(dbtable)
 	}
 
-	static Collection createFromDBRow(DBTable dbtable, row) {
+	static Collection createNew(DBTable dbtable, row) {
 		Collection c = new Collection(dbtable)
 		c.col_id = row['col_id']
 		c.col_name = row['col_name']
-		c.col_owner = User.getFromID(row['col_owner'])
+		c.col_owner = (row['col_owner'] instanceof User ? 
+			row['col_owner'] : 
+			dbtable.getSaskiaDB().getDBTable("UserTable").getFromID(row['col_owner']) )
 		c.col_lang = row['col_lang']
 		c.col_permission = row['col_permission']
 		c.col_comment = row['col_comment']
@@ -76,7 +76,7 @@ class Collection extends DBObject implements JSONable {
 		if (!col_id) throw new IllegalStateException(
 			"Can't check the number of source documents of a collection without a collection ID.")
 		getDBTable().getSaskiaDB().getDB().eachRow(
-				"SELECT count(doc_id) from ${RembrandtedDoc.tablename} "+
+				"SELECT count(doc_id) from ${RembrandtedDocTable.tablename} "+
 				"WHERE doc_collection=?",[col_id], {row -> i = row[0]})
 		return i
 	}
@@ -89,7 +89,7 @@ class Collection extends DBObject implements JSONable {
 		if (!col_id) throw new IllegalStateException(
 			"Can't check the number of source documents of a collection without a collection ID.")
 		getDBTable().getSaskiaDB().getDB().eachRow(
-				"SELECT count(sdoc_id) from ${SourceDoc.tablename} "+
+				"SELECT count(sdoc_id) from ${SourceDocTable.tablename} "+
 				"WHERE sdoc_collection=?",[col_id], {row -> i = row[0]})
 		return i
 	}
@@ -110,7 +110,7 @@ class Collection extends DBObject implements JSONable {
 				case 'Date': where += " AND $column = ?"; params << needle; break
 			}
 		}
-		String query = "SELECT SQL_CALC_FOUND_ROWS * FROM ${SourceDoc.tablename} $where "+
+		String query = "SELECT SQL_CALC_FOUND_ROWS * FROM ${SourceDocTable.tablename} $where "+
 				"LIMIT ${limit} OFFSET ${offset} UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL, "+
 				"NULL, NULL, NULL, NULL, NULL, NULL"
 		log.debug "query = $query params = $params class = "+params*.class
@@ -132,7 +132,7 @@ class Collection extends DBObject implements JSONable {
 	// used to add new collections.
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-				"INSERT INTO ${getDBTable().getTablename()} VALUES(0,?,?,?,?,?)",
+				"INSERT INTO ${getDBTable().tablename} VALUES(0,?,?,?,?,?)",
 				[
 					col_name,
 					col_owner.usr_id,
@@ -148,7 +148,7 @@ class Collection extends DBObject implements JSONable {
 
 	public int removeThisFromDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"DELETE FROM ${getDBTable().getTablename()} where col_id=?",[col_id])
+				"DELETE FROM ${getDBTable().tablename} where col_id=?",[col_id])
 		getDBTable().cacheIDCollection.remove(col_id)
 		log.info "Removing collection ${this} from DB, got $res"
 		return res

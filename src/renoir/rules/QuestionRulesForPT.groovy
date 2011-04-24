@@ -38,7 +38,7 @@ class QuestionRulesForPT extends QuestionRules {
 
 	static Clause subject1pt = new Clause(name:"subject1pt",
 	cardinality:Cardinality.One, criteria:Criteria.MeaningMatch,
-	pattern:SaskiaMainDB.newInstance().getDBTable("saskia.db.table.SubjectTable")
+	pattern:SaskiaMainDB.newInstance().getDBTable("SubjectTable")
 	.makeConceptList("pt"), options:["case_insensitive":true])
 
 	/******* #1: RULES FOR QUESTION TYPE *********/

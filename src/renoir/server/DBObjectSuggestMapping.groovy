@@ -35,13 +35,13 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 	public DBObjectSuggestMapping(SaskiaDB db) {
 
 		this.db = db
-		CollectionTable collectionTable = db.getDBTable("saskia.db.table.CollectionTable")
-		UserTable userTable = db.getDBTable("saskia.db.table.UserTable")
-		TagTable tagTable = db.getDBTable("saskia.db.table.TagTable")
-		TypeTable typeTable = db.getDBTable("saskia.db.table.TypeTable")
-		NECategoryTable neCategoryTable = db.getDBTable("saskia.db.table.NECategoryTable")
-		NETypeTable neTypeTable = db.getDBTable("saskia.db.table.NETypeTable")
-		NESubtypeTable neSubtypeTable = db.getDBTable("saskia.db.table.NESubtypeTable")
+		CollectionTable collectionTable = db.getDBTable("CollectionTable")
+		UserTable userTable = db.getDBTable("UserTable")
+		TagTable tagTable = db.getDBTable("TagTable")
+		TypeTable typeTable = db.getDBTable("TypeTable")
+		NECategoryTable neCategoryTable = db.getDBTable("NECategoryTable")
+		NETypeTable neTypeTable = db.getDBTable("NETypeTable")
+		NESubtypeTable neSubtypeTable = db.getDBTable("NESubtypeTable")
 
 		//	  JSON response
 		JSONanswer = { req, par, bind ->

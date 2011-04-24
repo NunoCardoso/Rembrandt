@@ -25,65 +25,70 @@ import org.apache.log4j.Logger
  *
  */
 class SaskiaWebstore {
-     
-    static SaskiaWebstore _this
-    static String VOLUME_SDOC = "sdoc"
-    static String VOLUME_RDOC = "rdoc"
-    WebStore webstore
-    Map<String,Volume> volumes 
-         
-    static Logger log = Logger.getLogger("SaskiaMain")
-    
-    public static SaskiaWebstore newInstance() {
-        if (!_this) _this = new SaskiaWebstore()
-        return _this
-    } 
- 
-    private SaskiaWebstore() {
-        
-	Configuration conf = Configuration.newInstance()
-	try {
-            log.debug "Beginning Webstore..."    
-	    String webstorefile = System.getenv()["WEBSTORE_CONFIG_FILE"]
-            log.debug "Webstore config file: $webstorefile"    
-            webstore = new WebStore(new File(webstorefile))      
-            log.debug "Webstore: $webstore" 
-            webstore.setDefaultCompressMode(WebStore.ZLIB)
-	    Volume[] vs = webstore.getVolumes(WebStore.WRITABLE)
-            log.debug "Volumes: $vs" 
-	    volumes = [:]
-	    vs.each{v ->
-      //      println "adding volume $v to key ${v.volId()}"
-	    	volumes[v.volId()] = v 
-	    }
-            log.debug "Final volumes:  $volumes" 
-	} catch(Exception e) {log.error e.getMessage()}
-         log.info "Webstore initialized with volumes ${volumes.keySet()}"
-        
-    }
-    
-    public String store(String content, String volume) {       
-        if (!content) throw IllegalStateException("Can't add null content to Webstore.")
-        if (!volume) throw IllegalStateException("Please give a volume.")
-        if (!volumes.containsKey(volume)) throw IllegalStateException("Don't have volume $volume in Webstore.")
-        Content c = new Content(content.getBytes()) 
-       // println "Content: $c Volume: ${volumes[volume]}"
-        Key key = webstore.store(c, volumes[volume])
-       // println "Got key $key ${key.toString()}"
-        return key.toString()
-    }
-    
-    public void delete(String key, String volume) {       
-        if (!volume) throw IllegalStateException("Please give a volume.")
-        if (!volumes.containsKey(volume)) throw IllegalStateException("Don't have volume $volume in Webstore.")
-		  Key key_ = Key.toKey(key)
-        if (!key) throw IllegalStateException("Illegal key $key")
-	     webstore.delete(key)
+
+	static SaskiaWebstore _this
+	static String VOLUME_SDOC = "sdoc"
+	static String VOLUME_RDOC = "rdoc"
+	WebStore webstore
+	Map<String,Volume> volumes
+
+	static Logger log = Logger.getLogger("SaskiaMain")
+
+	public static SaskiaWebstore newInstance() {
+		if (!_this) _this = new SaskiaWebstore()
+		return _this
 	}
-        
-    public String retrieve(String key) {
-        Key key_ = Key.toKey(key)
-        Content cont = webstore.retrieve(key_)
-        return new String(cont.getData())//), "UTF-8")
-    }
+
+	private SaskiaWebstore() {
+
+		Configuration conf = Configuration.newInstance()
+		try {
+			log.debug "Beginning Webstore..."
+			String webstorefile = System.getenv()["WEBSTORE_CONFIG_FILE"]
+			log.debug "Webstore config file: $webstorefile"
+			webstore = new WebStore(new File(webstorefile))
+			log.debug "Webstore: $webstore"
+			webstore.setDefaultCompressMode(WebStore.ZLIB)
+			Volume[] vs = webstore.getVolumes(WebStore.WRITABLE)
+			log.debug "Volumes: $vs"
+			volumes = [:]
+			vs.each{v ->
+				//      println "adding volume $v to key ${v.volId()}"
+				volumes[v.volId()] = v
+			}
+			log.debug "Final volumes:  $volumes"
+		} catch(Exception e) {
+			log.error e.getMessage()
+		}
+	//	log.info "Webstore initialized with volumes ${volumes.keySet()}"
+	}
+
+	public boolean checkIfContainsVolume(String volume) {
+		return volumes.containsKey(volume)
+	}
+
+	public String store(String content, String volume) {
+		if (!content) throw IllegalStateException("Can't add null content to Webstore.")
+		if (!volume) throw IllegalStateException("Please give a volume.")
+		if (!volumes.containsKey(volume)) throw IllegalStateException("Don't have volume $volume in Webstore.")
+		Content c = new Content(content.getBytes())
+		// println "Content: $c Volume: ${volumes[volume]}"
+		Key key = webstore.store(c, volumes[volume])
+		// println "Got key $key ${key.toString()}"
+		return key.toString()
+	}
+
+	public void delete(String key, String volume) {
+		if (!volume) throw IllegalStateException("Please give a volume.")
+		if (!volumes.containsKey(volume)) throw IllegalStateException("Don't have volume $volume in Webstore.")
+		Key key_ = Key.toKey(key)
+		if (!key) throw IllegalStateException("Illegal key $key")
+		webstore.delete(key)
+	}
+
+	public String retrieve(String key) {
+		Key key_ = Key.toKey(key)
+		Content cont = webstore.retrieve(key_)
+		return new String(cont.getData())//), "UTF-8")
+	}
 }

@@ -48,12 +48,20 @@ public class Task extends DBObject implements JSONable {
 		'tsk_priority':'Integer','tsk_limit':'Integer','tsk_offset':'Long','tsk_done':'Integer','tsk_scope':'String',
 		'tsk_persistence':'String','tsk_status':'String','tsk_comment':'String']
 
-	static Task createFromDBRow(DBTable dbtable, row) {
+	public Task(DBTable dbtable) {
+		super(dbtable)
+	}
+
+	static Task createNew(DBTable dbtable, row) {
 		Task t = new Task(dbtable)
 		t.tsk_id = row['tsk_id']
 		t.tsk_task = row['tsk_task']
-		t.tsk_user= User.getFromID(row['tsk_user'])
-		t.tsk_collection = Collection.getFromID(row['tsk_collection'])
+		t.tsk_user= (row['tsk_user'] instanceof User? 
+			row['tsk_user'] : 
+			dbtable.getSaskiaDB().getDBTable("UserTable").getFromID(row['tsk_user']))
+		t.tsk_collection = (row['tsk_collection'] instanceof Collection ? 		
+			row['tsk_collection'] : 
+			dbtable.getSaskiaDB().getDBTable("CollectionTable").getFromID(row['tsk_collection']) )
 		t.tsk_type = row['tsk_type']
 		t.tsk_priority = row['tsk_priority']
 		t.tsk_limit = row['tsk_limit']
@@ -94,9 +102,9 @@ public class Task extends DBObject implements JSONable {
 		}
 
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getTable().getTablename()} SET ${column}=? WHERE tsk_id=?",
+				"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE tsk_id=?",
 				[newval, tsk_id])
-		cache[tsk_id][column] = (object ? object : newval)
+				getDBTable().cache[tsk_id][column] = (object ? object : newval)
 		return res
 	}
 
@@ -113,7 +121,7 @@ public class Task extends DBObject implements JSONable {
 
 	void incrementDone() {
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getTable().getTablename()} SET tsk_done=tsk_done+1 where tsk_id=?",
+				"UPDATE ${getDBTable().tablename} SET tsk_done=tsk_done+1 where tsk_id=?",
 				[tsk_id])
 		getDBTable().cache[tsk_id].tsk_done++
 	}
@@ -125,9 +133,9 @@ public class Task extends DBObject implements JSONable {
 	 */	
 	public Long addThisToDB() {
 
-		if (!cache) refreshCache()
+		if (!getDBTable().cache) getDBTable().refreshCache()
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-				"INSERT INTO ${getTable().getTablename()} VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?)",
+				"INSERT INTO ${getDBTable().tablename} VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?)",
 				[
 					tsk_task,
 					tsk_user.usr_id,
@@ -143,7 +151,7 @@ public class Task extends DBObject implements JSONable {
 					tsk_comment
 				])
 		// returns an auto_increment value
-		tsk_id = (long)res[0][0]
+		tsk_id = (Long)res[0][0]
 		getDBTable().cache[tsk_id] = this
 		log.info "Adding Task to DB: ${this}"
 		return tsk_id
@@ -152,8 +160,8 @@ public class Task extends DBObject implements JSONable {
 	public int removeThisFromDB() {
 		if (!tsk_id) throw new IllegalStateException("Can't remove myself from DB if I don't have a tsk_id")
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"DELETE FROM ${getTable().getTablename()} where tsk_id=?",[tsk_id])
-		cache.remove(tsk_id)
+				"DELETE FROM ${getDBTable().tablename} where tsk_id=?",[tsk_id])
+		getDBTable().cache.remove(tsk_id)
 		log.info "Removing Task to DB: ${this}, got res $res"
 		return res
 	}

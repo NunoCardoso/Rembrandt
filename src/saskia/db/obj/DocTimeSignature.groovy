@@ -44,12 +44,14 @@ class DocTimeSignature extends DBObject {
 		super(dbtable)
 	}
 	
-	static createFromDBRow(DBTable dbtable, row) {
+	static createNew(DBTable dbtable, row) {
 		DocTimeSignature g = new DocTimeSignature(dbtable)
 		g.dts_id = row['dts_id']
 		g.dts_document = row['dts_document']
 		if (row['dts_signature']) g.dts_signature = row['dts_signature']
-		if (row['dts_tag']) g.dts_tag = Tag.getFromID(row['dts_tag'])
+		if (row['dts_tag']) 
+			g.dts_tag = (row['dts_tag'] instanceof Tag ? row['dts_tag'] :
+			 	dbtable.getSaskiaDB().getDBTable("TagTable").getFromID(row['dts_tag']) )
 		if (row['dts_date_created']) g.dts_date_created = (Date)row['dts_date_created']
 
 		//meta
@@ -63,7 +65,7 @@ class DocTimeSignature extends DBObject {
 	public Long addThisToDB() {
 
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-				"INSERT INTO ${getDBTable().getTablename()}(dts_document, " +
+				"INSERT INTO ${getDBTable().tablename}(dts_document, " +
 				"dts_signature, dts_tag, dts_date_created) VALUES(?,?,?, NOW())",
 				[dts_document, dts_signature, dts_tag.tag_id])
 		long new_dts_id = (long)res[0][0]
@@ -74,7 +76,7 @@ class DocTimeSignature extends DBObject {
 
 	public int removeThisFromDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"DELETE FROM ${getDBTable().getTablename()} where dts_id=?",
+				"DELETE FROM ${getDBTable().tablename} where dts_id=?",
 				[dts_id])
 		getDBTable().idCache.remove(dts_id)
 		log.info "Removing DocTimeSignature ${this} from DB, got $res"

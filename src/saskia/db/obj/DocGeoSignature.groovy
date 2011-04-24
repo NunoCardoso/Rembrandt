@@ -45,12 +45,14 @@ class DocGeoSignature extends DBObject { // implements JSONable {
 		super(dbtable)
 	}
 	
-	static createFromDBRow(DBTable dbtable, row) {
+	static createNew(DBTable dbtable, row) {
 		DocGeoSignature g = new DocGeoSignature(dbtable)
 		g.dgs_id = row['dgs_id']
 		g.dgs_document = row['dgs_document']
 		if (row['dgs_signature']) g.dgs_signature = row['dgs_signature']
-		if (row['dgs_tag']) g.dgs_tag = Tag.getFromID(row['dgs_tag'])
+		if (row['dgs_tag']) 
+			g.dgs_tag = (row['dgs_tag'] instanceof Tag ? row['dgs_tag'] :
+			 	dbtable.getSaskiaDB().getDBTable("TagTable").getFromID(row['dgs_tag']) )
 		if (row['dgs_date_created']) g.dgs_date_created = (Date)row['dgs_date_created']
 
 		// meta-info
@@ -65,7 +67,7 @@ class DocGeoSignature extends DBObject { // implements JSONable {
 	public Long addThisToDB() {
 
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-				"INSERT INTO ${getDBTable().getTablename()}(dgs_document, " +
+				"INSERT INTO ${getDBTable().tablename}(dgs_document, " +
 				"dgs_signature, dgs_tag, dgs_date_created) VALUES(?,?,?, NOW())",
 				[dgs_document, dgs_signature, dgs_tag.tag_id])
 		long new_dgs_id = (long)res[0][0]
@@ -76,7 +78,7 @@ class DocGeoSignature extends DBObject { // implements JSONable {
 
 	public int removeThisFromDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"DELETE FROM ${getDBTable().getTablename()} where dgs_id=?",[dgs_id])
+				"DELETE FROM ${getDBTable().tablename} where dgs_id=?",[dgs_id])
 		getDBTable().idCache.remove(dgs_id)
 		log.info "Removing DocGeoSignature ${this} from DB, got $res"
 		return res

@@ -49,7 +49,7 @@ class SubjectTable extends DBTable {
 	public List<Subject> queryDB(String query, ArrayList params = []) {
 		List<Subject> t = []
 		db.getDB().eachRow(query, params, {row  ->
-			t << Subject.createFromDBRow(row)
+			t << Subject.createNew(row)
 		})
 		return t
 	}
@@ -93,7 +93,7 @@ class SubjectTable extends DBTable {
 
 		db.getDB().eachRow("select * from ${getTablename()}", [],  {row ->
 			// Make Subject object
-			Subject s = Subject.createFromDBRow(this.owner, row)
+			Subject s = Subject.createNew(this, row)
 			s.subject = Subject.parseSubject(s.sbj_subject)
 
 			// cache everything first
@@ -166,7 +166,7 @@ class SubjectTable extends DBTable {
 	}
 
 	static Subject getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.SubjectTable").getFromID(id)
+		return  db.getDBTable("SubjectTable").getFromID(id)
 	}
 
 

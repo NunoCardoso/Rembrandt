@@ -127,7 +127,7 @@ abstract class DB {
 	public getDB() {
 		long thiscall = System.currentTimeMillis()
 		boolean recent = ( (thiscall - lastCall) < timeout)
-		//  log.trace "SaskiaDB: recent? $recent ($thiscall - $lastCall) < $timeout "
+		log.trace "SaskiaDB: recent? $recent ($thiscall - $lastCall) < $timeout "
 
 		if (recent) {
 			lastCall = thiscall
@@ -140,8 +140,9 @@ abstract class DB {
 			boolean connected = false
 
 			while (!connected && (retry > 0)) {
-				log.warn "retrying..."
-				try { db.eachRow("Select 1", {row ->
+				log.info "retrying..."
+				try {
+					db.eachRow("Select 1", {row ->
 						def x = row[0]
 						if (x == 1) {
 							log.info "DB is now up and running"
@@ -164,6 +165,8 @@ abstract class DB {
 			}
 			if (connected) {
 				lastCall = thiscall
+				log.warn "...reconnected!"
+
 				return db
 			}
 		}
@@ -173,5 +176,7 @@ abstract class DB {
 	/**
 	 * Close the database.
 	 */
-	public close() {db.close() }
+	public close() {
+		db.close()
+	}
 }

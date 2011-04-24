@@ -9,10 +9,16 @@ echo "+-----------------------------------------+"
 echo "| SASKIA Generate NE Index for Collection |"
 echo "+-----------------------------------------+"
 echo ""
+echo "Which database (main/test)? (blank means main)"
+read DB
 echo "What collection do you want to sync?"
 read COL
 echo "Get NEs from the RembrandtDoc text (rdoc) or from the NEs synced to the pool (pool)?"
 read SYNC
 echo "OK. Starting script..."
 
-java $JAVA_OPTS saskia.index.GenerateNEIndexForCollection --col=$COL --sync=$SYNC
+if [ "${DB}" != "" ]; then
+    DB="main"
+fi
+
+java $JAVA_OPTS saskia.index.GenerateNEIndexForCollection --db=$DB --col=$COL --sync=$SYNC

@@ -56,7 +56,7 @@ class TaskTable extends DBTable {
 	public List<Task> queryDB(String query, ArrayList params) {
 		List<Task> res = []
 		db.getDB().eachRow(query, params, {row  ->
-			res << Task.createFromDBRow(this.owner, row)
+			res << Task.createNew(this, row)
 		})
 		return res
 	}
@@ -145,6 +145,6 @@ class TaskTable extends DBTable {
 	}
 
 	static Task getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.TaskTable").getFromID(id)
+		return  db.getDBTable("TaskTable").getFromID(id)
 	}
 }

@@ -43,7 +43,7 @@ class Type extends DBObject {// implements JSONable {
 		this.typ_name = typ_name
 	}
 	
-	static Type createFromDBRow(DBTable dbtable, row) {
+	static Type createNew(DBTable dbtable, row) {
 		return new Type(dbtable, row['typ_id'], row['typ_name'] )
 	}
 	
@@ -52,7 +52,7 @@ class Type extends DBObject {// implements JSONable {
 	*/
    public Long addThisToDB() {
 	   def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-		   "INSERT INTO ${getTable().getTablename()} VALUES(0,?)", 
+		   "INSERT INTO ${getDBTable().tablename} VALUES(0,?)", 
 		   [typ_name])
 	   // returns an auto_increment value
 	   log.info "Adding type to DB: ${this}"
@@ -62,7 +62,7 @@ class Type extends DBObject {// implements JSONable {
    public int removeThisFromDB() {
 	   if (!typ_id) return null
 	   def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-		   "DELETE FROM ${getTable().getTablename()} WHERE typ_id=?", 
+		   "DELETE FROM ${getDBTable().tablename} WHERE typ_id=?", 
 		   [typ_id])
 	   log.info "Removing type to DB: ${this}, got res $res"
 	   return res

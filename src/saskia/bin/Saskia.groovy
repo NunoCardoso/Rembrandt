@@ -23,7 +23,7 @@ import org.apache.log4j.*
 import saskia.db.DocStatus;
 import saskia.db.obj.RembrandtedDoc
 import saskia.db.obj.SourceDoc;
-import saskia.imports.ImportSourceDocument2RembrandtedDocument
+import saskia.imports.ImportSourceDocument_2_RembrandtedDocument
 import saskia.imports.ImportRembrandtedDocument2NEPool
 
 import rembrandt.obj.Document
@@ -44,7 +44,7 @@ class Saskia {
 		this.lang= conf.get("global.lang")
 		rw = new RembrandtWriter(new RembrandtStyleTag(
   		   conf.get("rembrandt.output.styletag.lang", this.lang)) )
-		sd2rd = new ImportSourceDocument2RembrandtedDocument()
+		sd2rd = new ImportSourceDocument_2_RembrandtedDocument()
 		rd2nepool = new ImportRembrandtedDocument2NEPool()
     }
    

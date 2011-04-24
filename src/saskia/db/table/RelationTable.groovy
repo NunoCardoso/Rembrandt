@@ -42,7 +42,7 @@ class RelationTable extends DBTable {
 	public List<Relation> queryDB(String query, ArrayList params = []) {
 		List<Relation> t = []
 		db.getDB().eachRow(query, params, {row  ->
-			t << Relation.createFromDBRow(this.owner,row)
+			t << Relation.createNew(this,row)
 		})
 		return t
 	}
@@ -70,6 +70,6 @@ class RelationTable extends DBTable {
 	}
 
 	static Relation getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.RelationTable").getFromID(id)
+		return  db.getDBTable("RelationTable").getFromID(id)
 	}
 }

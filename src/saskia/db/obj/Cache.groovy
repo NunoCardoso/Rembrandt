@@ -21,7 +21,7 @@ import org.apache.log4j.Logger
 
 import saskia.db.obj.Collection
 import saskia.db.table.DBTable
-
+import groovy.sql.GroovyResultSet
 /**
  * @author Nuno Cardoso
  * A Cache object
@@ -46,24 +46,32 @@ class Cache extends DBObject {
 	}
 	
 	
-	static Cache createFromDBRow(DBTable dbtable, row) {
+	static Cache createNew(DBTable dbtable, row) {
 		Cache cache = new Cache(dbtable)
 		cache.cac_id = row['cac_id']
-		cache.cac_collection = Collection.getFromID(row['cac_collection'])
+		cache.cac_collection = (row['cac_collection'] instanceof Collection ? 
+			row['cac_collection'] :
+			dbtable.getSaskiaDB().getDBTable("CollectionTable").getFromID(row['cac_collection']) )
 		cache.cac_lang = row['cac_lang']
 		cache.cac_date = (Date)row['cac_date']
 		cache.cac_expire = (Date)row['cac_expire']
-		java.sql.Blob blob = row.getBlob('cac_obj')
-		byte[] bdata = blob.getBytes(1, (int) blob.length())
+		
+		if (row instanceof GroovyResultSet) {
+			java.sql.Blob blob = row.getBlob('cac_obj')
+			byte[] bdata = blob.getBytes(1, (int) blob.length())
 		// you have to say explicitly that mediawiki's mediumblob is in UTF-8
-		cache.cac_obj = new String(bdata, "UTF-8")
+			cache.cac_obj = new String(bdata, "UTF-8")
+		} else {
+			cache.cac_obj = row['cac_obj']
+		}
+			
 		return cache
 	}
 	
 	// used to add new collections.
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-			"INSERT INTO ${getDBTable().getTablename()}(cac_id, cac_collection, cac_date, cac_expire, cac_lang, cac_obj) "+
+			"INSERT INTO ${getDBTable().tablename}(cac_id, cac_collection, cac_date, cac_expire, cac_lang, cac_obj) "+
 			"VALUES(?,?, NOW(),?, ?, ?) ON DUPLICATE KEY UPDATE cac_date=NOW(), cac_expire=?, cac_obj=?",
 			[cac_id, cac_collection.col_id, cac_expire, cac_lang, cac_obj, cac_expire, cac_obj])
 		log.info "Cache added to DB: ${this}"
@@ -72,7 +80,7 @@ class Cache extends DBObject {
 
 	public int removeThisFromDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"DELETE FROM ${getDBTable().getTablename()} where cac_id=?",
+			"DELETE FROM ${getDBTable().tablename} where cac_id=?",
 			[cac_id])
 		log.info "Cache removed from DB: ${cac_id}"
 		return res

@@ -20,122 +20,86 @@ package saskia.imports
 
 import rembrandt.obj.Document
 import saskia.bin.Configuration
-import saskia.db.obj.SourceDoc;
+import saskia.db.obj.*
+import saskia.db.database.*
+import saskia.db.DocStatus
 
 import org.apache.log4j.Logger
 import java.util.regex.*
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
 
 abstract class Import {
-	
+
 	Configuration conf = Configuration.newInstance()
-	static Logger log = Logger.getLogger("SaskiaImports")
+	static Logger log = Logger.getLogger("Imports")
+
 	Collection collection
+	SaskiaDB db
 	File file
 	InputStreamReader inputStreamReader
 	HashMap status
 	String lang
 	String encoding
-	
+
 	public Import() {
-		this.status = [imported:0, skipped:0]
+		this.status = [imported:0, refreshed:0, skipped:0, failed:0]
 	}
-	
+
 	public prepareInputStreamReader() {
-		return new InputStreamReader(new FileInputStream(file), encoding)
+		inputStreamReader = new InputStreamReader(new FileInputStream(file), encoding)
 	}
-	
-	public Import(File file, Collection collection,
+
+	public Import(File file, SaskiaDB db, Collection collection,
 	String lang, String encoding) {
-		
+
 		this.lang = lang
+		this.db = db
 		this.collection = collection
 		this.encoding = encoding
 		this.file = file
-		
+
 		this.status = [imported:0, skipped:0]
 		this.inputStreamReader = prepareInputStreamReader()
 	}
-	
-	
-	/**
-	 * Let's validate if a given collection name and/or id gets to a 
-	 * real collection.
-	 * @return A collection if it's there, null otherwise
-	 */
-	Collection validateCollection(String collection_given_name, String DEFAULT_COLLECTION_NAME) {
-		
-		String collection_name
-		
-		if (!collection_given_name) {
-			println "no collection given. What is the target collection ID/name?"
-			println "(Default: ${DEFAULT_COLLECTION_NAME}) "
-			println "> "
-			BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
-			collection_name = input.readLine().trim()
-			if (!collection_name) collection_name = DEFAULT_COLLECTION_NAME
-		} else {
-			collection_name = collection_given_name
+
+
+	abstract importer();
+
+	public String statusMessage() {
+		String message = "Done."
+		status.each{k, v->
+			if (v) {
+				message << "$v doc(s) $k. "
+			}
 		}
-		
-		return Collection.getFromNameOrID(collection_name)
-	}
-	
-	/**
-	 * Validade a filename to a file
-	 * @param filename The filename
-	 * @return File if exists, null otherwise
-	 */
-	File validateFile(String filename) {
-		
-		File file = new File(filename)
-		if (!file.exists()) {
-			println "no file given. What is the file name for the import?"
-			println "> "
-			BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
-			file = new File(input.readLine().trim())
-		}
-		return file
-	}
-	
-	/**
-	 * Validate the encoding
-	 * 
-	 */
-	String validateEncoding(given_encoding) {
-		
-		String default_encoding = conf.get("rembrandt.input.encoding", System.getProperty("file.encoding"))
-		String encoding = null
-		if (given_encoding) {
-			encoding = given_encoding
-		} else {
-			println "no file encoding given. What is the import file encoding (default: ${default_encoding})?"
-			println "> "
-			BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
-			encoding = new File(input.readLine().trim())
-		}
-		return encoding
-	}
-	
-	public abstract HashMap importDocs();
+		return message
+	}	
 	
 	public SourceDoc addSourceDoc(String original_id, String content, String lang, Date date,
 	String comment = "") {
-		
-		SourceDoc s = new SourceDoc(
-		sdoc_original_id:original_id,
-		sdoc_collection:collection,
-		sdoc_lang:lang,
-		sdoc_content:content,
-		sdoc_doc:null,
-		sdoc_date:date,
-		sdoc_proc:DocStatus.READY,
-		sdoc_comment:comment
-		)
-		
+
+		if (!db) {
+			log.fatal "No DB specified, so SourceDoc doesn't know where to be stored."
+			log.fatal "Please configure your importer to have a DB reference"
+			System.exit(0)
+		}
+
+		SourceDoc s = SourceDoc.createNew(
+				db.getDBTable("SourceDocTable"),
+				[sdoc_original_cd:original_id, sdoc_collection:collection,
+				 sdoc_lang:lang, sdoc_content:content,
+				 sdoc_date:date, sdo_proc:DocStatus.READY,
+				 sdoc_comment:comment]
+				)
+
+		// why does it matter? So that SourceDoc s knows in which database it shall be stored.
+		// it's a big deal, so fail if there is no DB
+
+		s.setDBTable(db.getDBTable("SourceDocTable"))
+
 		// by adding to DB, it already checks for duplicates
 		try {
-			s.addThisToDB()
+			s.sdoc_id = s.addThisToDB()
 			log.info "SourceDoc $s is now into Saskia DB."
 			status.imported++
 		} catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
@@ -147,5 +111,5 @@ abstract class Import {
 			status.skipped++
 		}
 		return s
-	}	
+	}
 }

@@ -59,9 +59,9 @@ public class SearchMapping extends WebServiceRestletMapping {
 	public SearchMapping(SaskiaDB db) {
 
 		this.db=db
-		CollectionTable collectionTable = db.getDBTable("saskia.db.table.CollectionTable")
-		UserTable userTable = db.getDBTable("saskia.db.table.UserTable")
-		RembrandtedDocTable rembrandtedDocTable = db.getDBTable("saskia.db.table.RembrandtedDocTable")
+		CollectionTable collectionTable = db.getDBTable("CollectionTable")
+		UserTable userTable = db.getDBTable("UserTable")
+		RembrandtedDocTable rembrandtedDocTable = db.getDBTable("RembrandtedDocTable")
 
 		JSONanswer = {req, par, bind ->
 

@@ -27,22 +27,22 @@ import saskia.db.table.DBTable
  */
 abstract class DBObject {
 
-	DBTable dbtable    
+	DBTable dbtable
 	//public static queryDB(String query, ArrayList params);
-	
-	public setDBTable(DBTable dbtable) {
-		this.dbtable = dbtable
-	}
-	
+
 	public DBObject(DBTable dbtable) {
 		this.dbtable = dbtable
 	}
-	
-	public SaskiaDB getDBTable() {
+
+	public setDBTable(DBTable dbtable) {
+		this.dbtable = dbtable
+	}
+
+	public DBTable getDBTable() {
 		return this.dbtable
 	}
-	
+
 	public abstract Long addThisToDB()
-	
+
 	public abstract int removeThisFromDB()
 }

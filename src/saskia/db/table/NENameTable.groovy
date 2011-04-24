@@ -55,7 +55,7 @@ class NENameTable extends DBTable {
 	public List<NEName> queryDB(String query, ArrayList params = []) {
 		List<NEName> res = []
 		db.getDB().eachRow(query, params, {row  ->
-			res << NEName.createFronDBRow(this.owner,row)
+			res << NEName.createNew(this,row)
 		})
 		return res
 	}
@@ -81,7 +81,7 @@ class NENameTable extends DBTable {
 	}
 
 	static NEName getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.NENameTable").getFromID(id)
+		return  db.getDBTable("NENameTable").getFromID(id)
 	}
 
 	/** Get a NEName from id.
@@ -104,7 +104,7 @@ class NENameTable extends DBTable {
 	}
 
 	static NEName getFromName(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.NENameTable").getFromName(id)
+		return  db.getDBTable("NENameTable").getFromName(id)
 	}
 
 }

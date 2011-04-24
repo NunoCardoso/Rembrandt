@@ -34,25 +34,38 @@ abstract class SaskiaDB extends DB {
 		tables = [:]
 	}
 
+	static getSaskiaMainDB() {
+		return SaskiaMainDB.newInstance()
+	}
+
+	static getSaskiaTestDB() {
+		return SaskiaTestDB.newInstance()
+	}
+
 	// multiple singleton
 	public DBTable getDBTable(String classname) {
 		DBTable tableToReturn = null
-		String targetClassName = "rembrandt.obj.table."+classname
+
+		String targetClassName = (classname.startsWith("saskia.db.table.") ? classname : "saskia.db.table."+classname)
 		if (tables.containsKey(targetClassName))
 			tableToReturn = tables[targetClassName]
 
 		if (!tableToReturn) {
 			try {
 				// calls the getInstance(SaskiaDB db) static method from all DBTable objects
-				tableToReturn = Class.forName(targetClassName).getInstance(this)
-				
+				tableToReturn = Class.forName(targetClassName).newInstance(this)
+
 
 			}catch(Exception e) {
 				log.error "Can't load DBTable $targetClassName."
 				e.printStackTrace()
 			}
-			tables[targetClassName] << tableToReturn
+			tables[targetClassName] = tableToReturn
 		}
 		return tableToReturn
+	}
+
+	public String toString() {
+		return this.getClass().getName()
 	}
 }

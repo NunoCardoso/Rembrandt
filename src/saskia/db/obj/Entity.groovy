@@ -43,7 +43,7 @@ class Entity extends DBObject implements JSONable {
 	}
 	
 	
-	static Entity createFromDBRow(DBTable dbtable, row) {
+	static Entity createNew(DBTable dbtable, row) {
 	    Entity e = new Entity(dbtable)
 		e.ent_id = row['ent_id']
 		e.ent_name = row['ent_name']
@@ -77,7 +77,7 @@ class Entity extends DBObject implements JSONable {
 			case 'Long': newvalue = Long.parseLong(value); break
 		}
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"UPDATE ${getDBTable().getTablename()} SET ${column}=? WHERE ent_id=?",
+			"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE ent_id=?",
 			[newvalue, ent_id])
 		if (ent_dbpedia_resource) getDBTable().entityDBPediaResourceCache[ent_dbpedia_resource][column] = newvalue
 		getDBTable().entityIDCache[ent_id][column] = newvalue
@@ -90,7 +90,7 @@ class Entity extends DBObject implements JSONable {
 			"SELECT ${GeoscopeTable.tablename}.* FROM ${GeoscopeTable.tablename}*, ${getDBTable().ent_has_geo_table} "+
 			"WHERE ehg_entity = ? and ehg_geoscope = geo_id ", [ent_id], {row ->
 			if (g) log.warn "Entity ${this} has more than one link to a geoscope!!!"
-			else g = Geoscope.createFromDBRow(row)
+			else g = Geoscope.createNew(row)
 		})
 		return g
 	}
@@ -107,7 +107,7 @@ class Entity extends DBObject implements JSONable {
 	 */
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-			"INSERT INTO ${getDBTable().getTablename()} VALUES(0,?,?,?)",
+			"INSERT INTO ${getDBTable().tablename} VALUES(0,?,?,?)",
 				[ent_name, ent_dbpedia_resource, ent_dbpedia_class] )
 
 		ent_id = (long)res[0][0]
@@ -120,7 +120,7 @@ class Entity extends DBObject implements JSONable {
 	public int removeThisFromDB() {
 		if (!ent_id) return null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"DELETE FROM ${getDBTable().getTablename()} WHERE ent_id=?", 
+			"DELETE FROM ${getDBTable().tablename} WHERE ent_id=?", 
 			[ent_id])
 		getDBTable().entityDBPediaResourceCache.remove(ent_dbpedia_resource)
 		getDBTable().entityIDCache.remove(ent_id)

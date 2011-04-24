@@ -28,7 +28,7 @@ import saskia.db.obj.User
  * Static methods are used to return results from DB, using where clauses.
  * Class methods are used to insert results to DB.  
  */
-class UserTable {
+class UserTable extends DBTable {
 
 	static String tablename = "user"
 
@@ -48,7 +48,7 @@ class UserTable {
 	public List<User> queryDB(String query, ArrayList params = []) {
 		List l = []
 		db.getDB().eachRow(query, params, {row  ->
-			l << User.createFromDBRow(this.owner, row)
+			l << User.createNew(this, row)
 		})
 		return (l ? l : null)
 	}
@@ -121,7 +121,7 @@ class UserTable {
 	}
 
 	static User getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.UserTable").getFromID(id)
+		return  db.getDBTable("UserTable").getFromID(id)
 	}
 
 	public User getFromEmail(String email) {
@@ -131,7 +131,7 @@ class UserTable {
 	}
 
 	static User getFromEmail(SaskiaDB db, String email) {
-		return  db.getDBTable("saskia.db.table.UserTable").getFromEmail(email)
+		return  db.getDBTable("UserTable").getFromEmail(email)
 	}
 
 	public User getFromAPIKey(String api_key) {
@@ -141,7 +141,7 @@ class UserTable {
 	}
 
 	static User getFromAPIKey(SaskiaDB db, String api_key) {
-		return  db.getDBTable("saskia.db.table.UserTable").getFromAPIKey(api_key)
+		return  db.getDBTable("UserTable").getFromAPIKey(api_key)
 	}
 
 	public User getFromTempAPIKey(String tmp_api_key) {
@@ -151,10 +151,10 @@ class UserTable {
 	}
 
 	static User getFromTempAPIKey(SaskiaDB db, String tmp_api_key) {
-		return  db.getDBTable("saskia.db.table.UserTable").getFromTempAPIKey(tmp_api_key)
+		return  db.getDBTable("UserTable").getFromTempAPIKey(tmp_api_key)
 	}
 
-	public String createPassword(String password) {
+	static String createPassword(String password) {
 		return renoir.util.MD5Hex.digest(password)
 	}
 

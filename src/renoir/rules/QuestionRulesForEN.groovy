@@ -39,7 +39,7 @@ class QuestionRulesForEN extends QuestionRules {
 
 	static Clause subject1en = new Clause(name:"subject1en",
 	cardinality:Cardinality.One, criteria:Criteria.MeaningMatch,
-	pattern:SaskiaMainDB.newInstance().getDBTable("saskia.db.table.SubjectTable")
+	pattern:SaskiaMainDB.newInstance().getDBTable("SubjectTable")
 	.makeConceptList("en"), options:["case_insensitive":true])
 
 	/******* #1: RULES FOR QUESTION TYPE *********/

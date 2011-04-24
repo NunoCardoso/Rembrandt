@@ -27,7 +27,7 @@ import saskia.bin.Configuration
 class SaskiaTestDB extends SaskiaDB {
 
 	static SaskiaTestDB _this
-	static String LABEL = "SaskiaTest"
+	static String LABEL = "test"
 
 	String default_db_driver = 'com.mysql.jdbc.Driver'
 	String default_db_url = 'jdbc:mysql://127.0.0.1'

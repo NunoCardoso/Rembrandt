@@ -32,7 +32,17 @@ class Tag extends DBObject implements JSONable  {
 	String tag_comment
 	static Logger log = Logger.getLogger("Tag")
 
-	static Tag createFromDBRow(DBTable dbtable, row) {
+	public Tag(DBTable dbtable) {
+		super(dbtable)
+	}
+
+	public Tag(DBTable dbtable, String tag_version, String tag_comment) {
+		super(dbtable)
+		this.tag_version = tag_version
+		this.tag_comment = tag_comment
+	}
+	
+	static Tag createNew(DBTable dbtable, row) {
 		Tag t = new Tag(dbtable)
 		t.tag_id = row['tag_id']
 		t.tag_version = row['tag_version']
@@ -59,9 +69,9 @@ class Tag extends DBObject implements JSONable  {
 			log.error "Can't add a Tag without a valid version! Skipping."
 			return null
 		}
-		if (!cache) refreshCache()
+		if (!getDBTable().cache) getDBTable().refreshCache()
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-				"INSERT INTO ${getTable().getTablename()} VALUES(0,?,?)",
+				"INSERT INTO ${getDBTable().tablename} VALUES(0,?,?)",
 				[tag_version, tag_comment])
 		tag_id = (long)res[0][0]
 		getDBTable().cache[tag_id] = this
@@ -72,8 +82,8 @@ class Tag extends DBObject implements JSONable  {
 	public int removeThisFromDB() {
 		if (!tag_id) return null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"DELETE FROM ${getTable().getTablename()} WHERE tag_id=?", [tag_id])
-		getTable().cache.remove(tag_id)
+				"DELETE FROM ${getDBTable().tablename} WHERE tag_id=?", [tag_id])
+		getDBTable().cache.remove(tag_id)
 		log.info "Removing tag ${this} from DB, got $res"
 		return res
 	}

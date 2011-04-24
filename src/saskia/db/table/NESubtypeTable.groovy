@@ -44,7 +44,7 @@ class NESubtypeTable  extends DBTable {
 	public List<NESubtype> queryDB(String query, ArrayList params = []) {
 		List<NESubtype> s = []
 		db.getDB().eachRow(query, params, {row  ->
-			s << NESubtype.createFromDBRow(this.owner, row)
+			s << NESubtype.createNew(this, row)
 		})
 		return s
 	}
@@ -57,15 +57,14 @@ class NESubtypeTable  extends DBTable {
 		if (all_id_subtype.isEmpty()) {
 			def nes = queryDB("SELECT * FROM ${tablename}")
 			log.debug "Searched for all subtypes, got ${nes.size()} entries."
-			nes.each{ updateCacheElement( it.nes_id, it.nes_subtype)}
+			nes.each{ updateCacheElement(it)}
 		}
 	}
 
-	public updateCacheElement(long id, String subtype) {
-		if (!id || !subtype) return
-			NESubtype nes = new NESubtype(nes_id:id, nes_subtype:subtype)
-		all_subtype_id[subtype] = nes
-		all_id_subtype[id] = nes
+	public updateCacheElement(NESubtype nes) {
+		if (!nes.nes_id || !nes.nes_subtype) return
+		all_subtype_id[nes.nes_subtype] = nes
+		all_id_subtype[nes.nes_id] = nes
 	}
 
 	/** Get a NESubtype from id.
@@ -79,7 +78,7 @@ class NESubtypeTable  extends DBTable {
 	}
 
 	static NESubtype getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.NESubtypeTable").getFromID(id)
+		return  db.getDBTable("NESubtypeTable").getFromID(id)
 	}
 
 	/** Get a NESubtype from id.
@@ -93,6 +92,6 @@ class NESubtypeTable  extends DBTable {
 	}
 
 	static NESubtype getFromSubtype(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.NESubtypeTable").getFromSubtype(id)
+		return  db.getDBTable("NESubtypeTable").getFromSubtype(id)
 	}
 }

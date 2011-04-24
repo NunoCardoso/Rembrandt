@@ -46,15 +46,25 @@ class NE extends DBObject implements JSONable {
 		super(dbtable)
 	}
 
-	static NE createFromDBRown(DBTable dbtable, row) {
+	static NE createNew(DBTable dbtable, row) {
 		NE n = new NE(dbtable)
 		n.ne_id = row['ne_id']
-		if (row['ne_name']) n.ne_name = NEName.getFromID(dbtable, row['ne_name'])
+		if (row['ne_name']) 
+			n.ne_name = (row['ne_name'] instanceof NEName ? row['ne_name'] : 
+				dbtable.getSaskiaDB().getDBTable("NENameTable").getFromID(row['ne_name']) )
 		n.ne_lang = row['ne_lang']
-		if (row['ne_category']) n.ne_category = NECategory.getFromID(dbtable, row['ne_category'])
-		if (row['ne_type']) n.ne_type = NEType.getFromID(dbtable, row['ne_type'])
-		if (row['ne_subtype']) n.ne_subtype = NESubtype.getFromID(dbtable, row['ne_subtype'])
-		if (row['ne_entity']) n.ne_entity = EntityTable.getFromID(dbtable, row['ne_entity'])
+		if (row['ne_category']) 
+			n.ne_category = (row['ne_category'] instanceof NECategory ? row['ne_category'] : 
+				dbtable.getSaskiaDB().getDBTable("NECategoryTable").getFromID(row['ne_category']) )
+		if (row['ne_type']) 
+			n.ne_type = (row['ne_type'] instanceof NEType ? row['ne_type'] : 
+				dbtable.getSaskiaDB().getDBTable("NETypeTable").getFromID(row['ne_type']) )
+		if (row['ne_subtype'])
+			n.ne_subtype = (row['ne_subtype'] instanceof NESubtype ? row['ne_subtype'] : 
+				dbtable.getSaskiaDB().getDBTable("NESubtypeTable").getFromID(row['ne_subtype']) )
+		if (row['ne_entity']) 
+			n.ne_entity = (row['ne_entity'] instanceof Entity ? row['ne_entity'] : 
+				dbtable.getSaskiaDB().getDBTable("EntityTable").getFromID(row['ne_entity']) )
 		return n
 	}
 
@@ -96,7 +106,7 @@ class NE extends DBObject implements JSONable {
 		if (!ne_id) return null
 		// new_ne_category can be null
 		def res =getDBTable().getSaskiaDB().executeUpdate(
-				"UPDATE ${getDBTable().getTablename()} SET ne_category=? where ne_id=?",
+				"UPDATE ${getDBTable().tablename} SET ne_category=? where ne_id=?",
 				[
 					new_ne_category?.nec_id,
 					ne_id
@@ -115,7 +125,7 @@ class NE extends DBObject implements JSONable {
 		if (!ne_id) return null
 		// new_ne_category can be null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getDBTable().getTablename()} SET ne_type=? where ne_id=?",
+				"UPDATE ${getDBTable().tablename} SET ne_type=? where ne_id=?",
 				[new_ne_type?.net_id, ne_id])
 		if (res) {
 			ne_type = new_ne_type
@@ -131,7 +141,7 @@ class NE extends DBObject implements JSONable {
 		if (!ne_id) return null
 		// new_ne_category can be null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getDBTable().getTablename()} SET ne_subtype=? where ne_id=?",
+				"UPDATE ${getDBTable().tablename} SET ne_subtype=? where ne_id=?",
 				[
 					new_ne_subtype?.nes_id,
 					ne_id
@@ -150,7 +160,7 @@ class NE extends DBObject implements JSONable {
 		if (!ne_id) return null
 		// new_entity can be null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getDBTable().getTablename()} SET ne_entity=? where ne_id=?",
+				"UPDATE ${getDBTable().tablename} SET ne_entity=? where ne_id=?",
 				[new_entity?.ent_id, ne_id])
 		if (res) {
 			ne_entity = new_entity
@@ -164,7 +174,7 @@ class NE extends DBObject implements JSONable {
 
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-				"INSERT INTO ${getDBTable().getTablename()}(ne_id, ne_name, ne_lang, ne_category, "+
+				"INSERT INTO ${getDBTable().tablename}(ne_id, ne_name, ne_lang, ne_category, "+
 				"ne_type, ne_subtype, ne_entity) VALUES(0,?,?,?,?,?,?)",
 				[
 					ne_name.nen_id,
@@ -183,7 +193,7 @@ class NE extends DBObject implements JSONable {
 	public int removeThisFromDB() {
 		if (!ne_id) return null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"DELETE FROM  ${getDBTable().getTablename()} WHERE ne_id=?", [ne_id])
+				"DELETE FROM  ${getDBTable().tablename} WHERE ne_id=?", [ne_id])
 		getDBTable().neKeyCache.remove(getKey())
 		log.info "Removed NE ${this} from DB, got $res"
 		return res

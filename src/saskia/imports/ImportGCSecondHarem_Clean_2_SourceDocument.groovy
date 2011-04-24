@@ -20,108 +20,103 @@ package saskia.imports
 
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
-import saskia.db.obj.Collection;
-import saskia.db.obj.SourceDoc;
+import saskia.db.obj.*
+import saskia.db.database.*
 
 import org.apache.log4j.Logger
 import rembrandt.io.*
 import rembrandt.obj.ListOfNE
-
+import saskia.util.validator.*
 
 /** 
  * This class imports the Golden Collection from Second HAREM into the Source Documents table of the Saskia DB
  */
-class ImportGCSecondHAREM_Clean_2_SourceDocument extends Import {
-	
+class ImportGCSecondHarem_Clean_2_SourceDocument extends Import {
+
 	Configuration conf = Configuration.newInstance()
 	static Logger log = Logger.getLogger("SaskiaImports")
-	static String DEFAULT_COLLECTION_NAME = "CD do Segundo HAREM"
+
 	SecondHAREMCollectionReader reader
-	RembrandtWriter writer 
-	
-	public ImportGCSecondHAREM_Clean_2_SourceDocument() {
+	RembrandtWriter writer
+
+	public ImportGCSecondHarem_Clean_2_SourceDocument() {
 		super()
 		reader = new SecondHAREMCollectionReader(new SecondHAREMStyleTag(
-			conf.get("rembrandt.input.styletag.lang", "pt")))
+				conf.get("rembrandt.input.styletag.lang", "pt")))
 		writer = new RembrandtWriter(new RembrandtStyleTag(
-			conf.get("rembrandt.output.styletag.lang", "pt")))
+				conf.get("rembrandt.output.styletag.lang", "pt")))
 	}
-	
-	public HashMap importDocs() {
-		
+
+	public importer() {
+
 		// connect the file input stream reader to the SecondHaremReader
 		reader.processInputStream(this.inputStreamReader)
-		
+
 		// discard all existing NEs
 		reader.docs.each{doc ->
 			if (!doc.lang) doc.lang = collection.col_lang
 			doc.bodyNEs = new ListOfNE() // to erase the ALT print styles
 			String content = writer.printDocument(doc)
 			SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, new Date(0), "")
-			if (s) status.imported++ else status.skipped++
 		}
-		return status
 	}
-	
+
 	static void main(args) {
-		
+
 		Options o = new Options()
 		Configuration conf = Configuration.newInstance()
-		
+
+		o.addOption("db", true, "target Saskia DB (main/test)")
 		o.addOption("col", true, "target collection name/id of the DB")
 		o.addOption("file", true, "source collection file to load")
 		o.addOption("encoding", true, "file encoding")
 		o.addOption("help", false, "Gives this help information")
-		
+
 		CommandLineParser parser = new GnuParser()
 		CommandLine cmd = parser.parse(o, args)
-		
-		ImportPlainGCSecondHAREM2SourceDocument importer = new ImportPlainGCSecondHAREM2SourceDocument()
-		
+
+	 	String DEFAULT_COLLECTION_NAME = "CD do Segundo HAREM"
+	 	String DEFAULT_DB_NAME = "main"
+	 	String DEFAULT_ENCODING = conf.get("rembrandt.input.encoding",
+			System.getProperty("file.encoding"))
+
+		ImportGCSecondHarem_Clean_2_SourceDocument importer = new ImportGCSecondHarem_Clean_2_SourceDocument()
+
 		log.info "*********************************************************"
 		log.info "* This class loads the Second HAREM+s Golden Collection *"
 		log.info "* in a clean formt, into SourceDocuments. For that, all *"
-		log.info "* existing NE tags will be stripped.                    *"	
+		log.info "* existing NE tags will be stripped.                    *"
 		log.info "*********************************************************"
-	
+
 		// --help
 		if (cmd.hasOption("help")) {
 			HelpFormatter formatter = new HelpFormatter()
 			formatter.printHelp( "java "+importer.class.name, o )
 			System.exit(0)
 		}
-		
+		// --db
+		SaskiaDB db = new DBValidator().validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)
+		importer.setDb(db)
+		log.info "DB: $db"
+
 		// --col
-		Collection collection = importer.validateCollection(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
-		if (!collection) {
-			log.fatal "Collection couldn't be found."
-			log.fatal "Please make sure you have that collection in the DB before the import."
-			System.exit(0)
-		}
-		
-		// --file
-		File file = importer.validateFile(cmd.getOptionValue("file"))
-		if (!file) {
-			log.fatal "No import file found. Please check if the given file exists"
-			System.exit(0)
-		}
-		
-		//--encoding
-		String encoding = importer.validateEncoding(cmd.getOptionValue("encoding"))
-		if (!encoding) {
-			log.fatal "No encoding defined. Please specify the encoding of the import file."
-			System.exit(0)
-		}
-		
+		Collection collection = new CollectionValidator(db).validate( cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
 		importer.setCollection(collection)
-		log.info "Collection: $collection"		
+		log.info "Collection: $collection"
+
+		// --file
+		File file = new FileValidator().validate(cmd.getOptionValue("file"), null)
+
+		//--encoding
+		String encoding = new EncodingValidator().validate(cmd.getOptionValue("encoding"), 
+		 DEFAULT_ENCODING)
+	
 		importer.setFile(file)
 		importer.setEncoding(encoding)
-		log.info "File: $file <"+encoding+"> "	
-		
+		log.info "File: $file <"+encoding+"> "
+
 		importer.prepareInputStreamReader()
-		HashMap status = importer.importDocs()
-		
-		log.info "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."
+		importer.importer()
+		println importer.statusMessage()
 	}
 }

@@ -37,16 +37,13 @@ class NEType extends DBObject implements JSONable {
 	}
 	
 	
-	public NEType(DBTable dbtable, Long net_id, String net_type) {
-		super(dbtable)
-		this.net_id = net_id
-		this.net_type = net_type
+	static NEType createNew(dbtable, row) {
+		NEType net = new NEType(dbtable)
+		if (row['net_id']) net.net_id = row['net_id']
+		if (row['net_type']) net.net_type = row['net_type']
+		return net
 	}
 	
-	
-	static NEType createFromDBRow(DBTable dbtable, row) {
-		return new NEType(dbtable, row['net_id'], row['net_type'] )
-	}
 
 	public Map toMap() {
 		return ["net_id":net_id, "net_type":net_type]
@@ -58,7 +55,7 @@ class NEType extends DBObject implements JSONable {
 
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-				"INSERT IGNORE INTO ${getDBTable().getTablename()} VALUES(0,?)",
+				"INSERT IGNORE INTO ${getDBTable().tablename} VALUES(0,?)",
 				[net_type])
 		// returns an auto_increment value
 		if (res) {
@@ -72,7 +69,7 @@ class NEType extends DBObject implements JSONable {
 	public int removeThisFromDB() {
 		if (!nes_id) return null
 		def res = getDBTable().getSaskiaDB().executeUpdate(
-				"DELETE FROM ${getDBTable().getTablename()} WHERE net_id=?", [net_id])
+				"DELETE FROM ${getDBTable().tablename} WHERE net_id=?", [net_id])
 		getDBTable().all_type_id.remove(net_type)
 		getDBTable().all_id_type.remove(net_id)
 		log.info "Removed NEType ${this} from DB, got $res"

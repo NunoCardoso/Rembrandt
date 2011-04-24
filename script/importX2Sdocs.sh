@@ -7,4 +7,4 @@ echo "| SASKIA ImportPlainText 2 SourceDocument import script |"
 echo "+-------------------------------------------------------+"
 echo ""
 
-java $JAVA_OPTS saskia.imports.ImportPlainText_2_SourceDocument
+java $JAVA_OPTS saskia.imports.ImportPlainText_2_SourceDocument 

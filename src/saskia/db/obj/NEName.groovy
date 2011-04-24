@@ -38,11 +38,11 @@ class NEName extends DBObject implements JSONable {
 		super(dbtable)
 	}
 	
-	static NEName createFromDBRow(DBTable dbtable, row) {
+	static NEName createNew(DBTable dbtable, row) {
 		NEName n = new NEName(dbtable)
-		n.nen_id = row['nen_id']
-		n.nen_name = row['nen_name']
-		n.nen_nr_terms = (int)(row['nen_nr_terms'])
+		if (row['nen_id']) n.nen_id = row['nen_id']
+		if (row['nen_name']) n.nen_name = row['nen_name']
+		if (row['nen_nr_terms']) n.nen_nr_terms = (int)(row['nen_nr_terms'])
 		return n
 	}
 
@@ -64,7 +64,7 @@ class NEName extends DBObject implements JSONable {
 	public Long addThisToDB() {
 		// returns an auto_increment value
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-				"INSERT INTO ${getDBTable().getTablename()} VALUES(0,?,?)",
+				"INSERT INTO ${getDBTable().tablename} VALUES(0,?,?)",
 				[nen_name, nen_nr_terms])
 		nen_id = (long)res[0][0]
 		getDBTable().idCache[nen_id] = this
@@ -76,7 +76,7 @@ class NEName extends DBObject implements JSONable {
 	public int removeThisFromDB() {
 		if (!nen_id) return null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"DELETE FROM ${getDBTable().getTablename()} WHERE nen_id=?",
+				"DELETE FROM ${getDBTable().tablename} WHERE nen_id=?",
 				[nen_id])
 		getDBTable().idCache.remove(nen_id)
 		getDBTable().nameCache.remove(nen_name)

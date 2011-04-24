@@ -51,7 +51,7 @@ class DocGeoSignatureTable extends DBTable {
 		DocGeoSignatureTable g
 
 		getSaskiaDB().getDB().eachRow(query, params, {row  ->
-			res << DocGeoSignature.createFromDBRow(this.owner, row)
+			res << DocGeoSignature.createNew(this, row)
 		})
 		return res
 	}
@@ -74,7 +74,7 @@ class DocGeoSignatureTable extends DBTable {
 
 
 	static DocGeoSignature getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.DocGeoSignatureTable").getFromID(id)
+		return  db.getDBTable("DocGeoSignatureTable").getFromID(id)
 	}
 
 	public List<DocGeoSignature> getBatchOfGeoSignatures(Collection collection, limit = 10,  offset = 0) {

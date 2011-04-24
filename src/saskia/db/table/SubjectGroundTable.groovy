@@ -35,7 +35,7 @@ class SubjectGroundTable extends DBTable {
 	public List<SubjectGround> queryDB(String query, ArrayList params = []) {
 		List<SubjectGround> t = []
 		db.getDB().eachRow(query, params, {row  ->
-			t << SubjectGround.createFromDBRow(this, row)
+			t << SubjectGround.createNew(this, row)
 		})
 		return t
 	}
@@ -80,7 +80,7 @@ class SubjectGroundTable extends DBTable {
 	}
 
 	static SubjectGround getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.SubjectGroundTable").getFromID(id)
+		return  db.getDBTable("SubjectGroundTable").getFromID(id)
 	}
 
 	/** Get a Subject from id.

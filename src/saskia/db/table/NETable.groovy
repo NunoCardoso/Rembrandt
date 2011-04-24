@@ -56,7 +56,7 @@ class NETable extends DBTable{
 	public List<NE> queryDB(String query, ArrayList params = []) {
 		List<NE> res = []
 		db.getDB().eachRow(query, params, {row  ->
-			res << NE.createFromDBRow(this.owner, row)
+			res << NE.createNew(this, row)
 		})
 		return res
 	}
@@ -94,7 +94,7 @@ class NETable extends DBTable{
 					where += " WHERE $column=nes_id AND nes_subtype LIKE '%${needle}%'";
 					break
 				case 'Entity':
-					from += ", ${EntityTable.ent_table}";
+					from += ", ${Entity.ent_table}";
 					where += " WHERE $column=ent_id AND ent_dbpedia_resource LIKE '%${needle}%'";
 					break
 			}
@@ -130,7 +130,7 @@ class NETable extends DBTable{
 	}
 
 	static NE getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.NETable").getFromID(id)
+		return  db.getDBTable("NETable").getFromID(id)
 	}
 
 	public List<NE> getFromEntity(Entity ent) {
@@ -161,7 +161,7 @@ class NETable extends DBTable{
 	 * on syncing a tagged document to NE Pool 
 	 */
 	public NE getFromNameAndLangAndClassificationAndEntity(NEName nen, String lang,
-	NECategory nec, NEType net, NESubtype nes, EntityTable ent) {
+	NECategory nec, NEType net, NESubtype nes, Entity ent) {
 		if (!nen) {
 			log.warn "getFromNameAndLangAndClassificationAndEntity: tried a query with empty NEName!"
 			return null
@@ -256,7 +256,7 @@ class NETable extends DBTable{
 	 ne.ne_category = (nec_id ? NECategory.getFromID(nec_id) : null)
 	 ne.ne_type = (net_id ? NEType.getFromID(net_id) : null)
 	 ne.ne_subtype = (nes_id ? NESubtype.getFromID(nes_id) : null)
-	 ne.ne_entity = (ent_id ? EntityTable.getFromID(ent_id) : null)
+	 ne.ne_entity = (ent_id ? Entity.getFromID(ent_id) : null)
 	 ne.ne_id = ne.addThisToDB()
 	 return ne
 	 }

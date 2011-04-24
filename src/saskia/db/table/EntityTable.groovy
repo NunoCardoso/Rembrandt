@@ -54,7 +54,7 @@ class EntityTable extends DBTable {
 	public List<Entity> queryDB(String query, ArrayList params = []) {
 		List<Entity> res = []
 		getSaskiaDB().getDB().eachRow(query, params, {row ->
-			res << Entity.createFromDBRow(this.owner, row)
+			res << Entity.createNew(this, row)
 		})
 		return res
 	}
@@ -78,7 +78,7 @@ class EntityTable extends DBTable {
 		String query = "SELECT SQL_CALC_FOUND_ROWS ${tablename}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
 				"UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL"
 
-		List<EntityTable> u
+		List<Entity> u
 		try {u = queryDB(query, params) }
 		catch(Exception e) {log.error "Error getting Entity list: ", e}
 		// last "item" it's the count.
@@ -96,7 +96,7 @@ class EntityTable extends DBTable {
 		if (!ent_id) return null
 		if (entityIDCache.containsKey(ent_id)) return entityIDCache[ent_id]
 
-		List<EntityTable> e = queryDB("SELECT * FROM ${tablename} WHERE ent_id=?", [ent_id])
+		List<Entity> e = queryDB("SELECT * FROM ${tablename} WHERE ent_id=?", [ent_id])
 		log.trace "Querying for ent_id $ent_id got Entity $e."
 		if (e) {
 			entityIDCache[ent_id] = e[0]
@@ -107,7 +107,7 @@ class EntityTable extends DBTable {
 
 
 	static Entity getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.EntityTable").getFromID(id)
+		return  db.getDBTable("EntityTable").getFromID(id)
 	}
 
 	/** Get from Wikipedia URL. 
@@ -157,7 +157,7 @@ class EntityTable extends DBTable {
 	 */
 	public List<Entity> getFromDBpediaClass(String ent_dbpedia_class) {
 		// dbpedia_url can be null
-		List<EntityTable> e
+		List<Entity> e
 		if (!ent_dbpedia_class)
 			e = queryDB("SELECT * FROM ${tablename} WHERE ent_dbpedia_class IS NULL")
 		else

@@ -49,7 +49,7 @@ class JobTable extends DBTable {
 	public List<Job> queryDB(String query, ArrayList params) {
 		List<Job> res = []
 		db.getDB().eachRow(query, params, {row  ->
-			res << Job.createFromDBRow(this.owner, row)
+			res << Job.createNew(this, row)
 		})
 		return res
 	}
@@ -70,7 +70,7 @@ class JobTable extends DBTable {
 	}
 
 	static Job getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.JobTable").getFromID(id)
+		return  db.getDBTable("JobTable").getFromID(id)
 	}
 
 	public Job getFromDocIDAndDocType(Long job_doc_id, String job_doc_type) {

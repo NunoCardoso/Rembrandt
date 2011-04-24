@@ -44,13 +44,16 @@ class Job extends DBObject implements JSONable {
 		super(dbtable)
 	}
 	
-	static Job createFromDBRow(DBTable dbtable, row) {
+	static Job createNew(DBTable dbtable, row) {
 		Job j = new Job(dbtable)
 		j.job_id = row['job_id']
-		j.job_task = Task.getFromID(row['job_task'])
+		j.job_task = (row['job_task'] instanceof Task ? 
+			row['job_task'] : 
+			dbtable.getSaskiaDB().getDBTable("TaskTable").getFromID(row['job_task']) )
 		j.job_doc_type = row['job_doc_type']
 		j.job_doc_id = row['job_doc_id']
-		j.job_doc_edit =  DocStatus.getFromValue(row['job_doc_edit'])
+		j.job_doc_edit = (row['job_doc_edit'] instanceof DocStatus ? 
+			row['job_doc_edit'] : DocStatus.getFromValue(row['job_doc_edit']) )
 		if (row['job_doc_edit_date'] && (Date)row['job_doc_edit_date'] != nulldate)
 		j.job_doc_edit_date = (Date)row['job_doc_edit_date']
 		return j
@@ -72,7 +75,7 @@ class Job extends DBObject implements JSONable {
 	
 	public int changeEditStatusInDBto(DocStatus status) {
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"UPDATE ${getDBTable().getTablename()} SET job_doc_edit=? WHERE job_id=?",
+			"UPDATE ${getDBTable().tablename} SET job_doc_edit=? WHERE job_id=?",
 			[status.text(), job_id])
 		log.info "Wrote edit status ${status}(${status.text()}) to job_id ${job_id}, ${res} rows were changed."
 		return res
@@ -84,9 +87,9 @@ class Job extends DBObject implements JSONable {
 	 * return 1 if successfully inserted.
 	 */
 	public Long addThisToDB() {
-		if (!cache) refreshCache()
+		if (!getDBTable().cache) getDBTable().refreshCache()
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-			"INSERT INTO ${getDBTable().getTablename()} VALUES(0,?,?,?,?,?,?)",
+			"INSERT INTO ${getDBTable().tablename} VALUES(0,?,?,?,?,?,?)",
 		[job_task.tsk_id, job_worker, job_doc_type, job_doc_id, job_doc_edit.text(), job_doc_edit_date])
 		// returns an auto_increment value
 		job_id = (long)res[0][0]
@@ -98,7 +101,7 @@ class Job extends DBObject implements JSONable {
 	public int removeThisFromDB() {
 		if (!job_id) throw new IllegalStateException("Can't remove myself from DB if I don't have a job_id")
 	   def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-		   "DELETE FROM ${getDBTable().getTablename()} where job_id=?",[job_id])
+		   "DELETE FROM ${getDBTable().tablename} where job_id=?",[job_id])
 		getDBTable().cache.remove(job_id)
 		log.info "Removed Job ${this} from DB, got ${res}"
 		return res

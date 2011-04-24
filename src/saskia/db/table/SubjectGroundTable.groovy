@@ -20,23 +20,25 @@ package saskia.db.table
 
 import org.apache.log4j.*
 
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
 
 class SubjectGroundTable extends DBTable {
 
-	String tablename = "subject_ground"
-
+	static String tablename = "subject_ground"
 	static Logger log = Logger.getLogger("SubjectGround")
 
-	static List<SubjectGround> queryDB(String query, ArrayList params = []) {
+	public SubjectGroundTable(SaskiaDB db) {
+		super(db)
+	}
+
+	public List<SubjectGround> queryDB(String query, ArrayList params = []) {
 		List<SubjectGround> t = []
 		db.getDB().eachRow(query, params, {row  ->
 			t << SubjectGround.createFromDBRow(this, row)
 		})
 		return t
 	}
-
-
 
 	public Map listSubjectGrounds(limit = 10, offset = 0, column = null, needle = null) {
 		// limit & offset can come as null... they ARE initialized...
@@ -45,7 +47,8 @@ class SubjectGroundTable extends DBTable {
 
 		String where = ""
 		String from = " FROM ${tablename}"
-		List params = []if (column && needle) {
+		List params = []
+		if (column && needle) {
 			switch (type[column]) {
 				case 'String': where += " WHERE $column LIKE '%${needle}%'"; break
 				case 'Long': where += " WHERE $column=? "; params << Long.parseLong(needle); break
@@ -55,7 +58,7 @@ class SubjectGroundTable extends DBTable {
 		}
 
 		String query = "SELECT SQL_CALC_FOUND_ROWS ${tablename}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
-		"UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL, NULL, NULL, NULL"
+				"UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL, NULL, NULL, NULL"
 		//log.debug "query = $query params = $params class = "+params*.class
 		List<EntityTable> u = queryDB(query, params)
 
@@ -76,6 +79,9 @@ class SubjectGroundTable extends DBTable {
 
 	}
 
+	static SubjectGround getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.SubjectGroundTable").getFromID(id)
+	}
 
 	/** Get a Subject from id.
 	 * @param id The id as needle.

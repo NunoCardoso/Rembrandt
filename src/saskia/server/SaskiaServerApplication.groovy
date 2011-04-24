@@ -17,21 +17,16 @@
  */
 
 package saskia.server
- 
-import java.net.URLDecoder
+
 import org.apache.log4j.*
-
-import saskia.db.obj.RembrandtedDoc;
-import saskia.db.table.UserTable;
-import saskia.db.obj.User;
-
-import saskia.util.Native2AsciiWrapper
-
 import org.restlet.Application
 import org.restlet.Restlet
-import org.restlet.routing.Router
 import org.restlet.data.MediaType
-import org.restlet.data.Status
+import org.restlet.routing.Router
+
+import saskia.bin.Configuration
+import saskia.db.database.SaskiaDB
+import saskia.db.obj.User
 
 /**
  * @author ncardoso, extended from rlopes's code
@@ -42,92 +37,99 @@ public class SaskiaServerApplication extends Application {
 	//RembrandtedDocument2PlainTextConverter r2t
 	Logger log = Logger.getLogger("SaskiaServerMain")
 	List<User> superusers
-	
+	Configuration conf
+	SaskiaDB db
+
+	public SaskiaServerApplication(Configuration conf, SaskiaDB db) {
+		this.conf=conf
+		this.db=db
+	}
+
 	public synchronized Restlet createRoot() {
 
-	    Router router = new Router(this.context) 
-	  //  r2t = new RembrandtedDocument2PlainTextConverter()	    
-        
-		AskSaskiaMapping askSaskiaMapping = new AskSaskiaMapping()
-		// askSaskiaMapping.attach(MediaType.TEXT_HTML, askSaskiaMapping.HTMLanswer)        
+		Router router = new Router(this.context)
+		//  r2t = new RembrandtedDocument2PlainTextConverter()
+
+		AskSaskiaMapping askSaskiaMapping = new AskSaskiaMapping(db)
+		// askSaskiaMapping.attach(MediaType.TEXT_HTML, askSaskiaMapping.HTMLanswer)
 		askSaskiaMapping.attach(MediaType.APPLICATION_JSON, askSaskiaMapping.JSONanswer)
-	
-	    SourceDocMapping sdocMapping = new SourceDocMapping()
-	    sdocMapping.attach(MediaType.APPLICATION_JSON, sdocMapping.JSONanswer)
-    
-	    RembrandtedDocMapping rdocMapping = new RembrandtedDocMapping()
-	    rdocMapping.attach(MediaType.APPLICATION_JSON, rdocMapping.JSONanswer)
-	    
-	    NEMapping neMapping = new NEMapping()
-	    neMapping.attach(MediaType.APPLICATION_JSON, neMapping.JSONanswer)
 
-	    TaskMapping taskMapping = new TaskMapping()
-	    taskMapping.attach(MediaType.APPLICATION_JSON, taskMapping.JSONanswer)
+		SourceDocMapping sdocMapping = new SourceDocMapping(db)
+		sdocMapping.attach(MediaType.APPLICATION_JSON, sdocMapping.JSONanswer)
 
-	    StatsMapping statsMapping = new StatsMapping()
-	    statsMapping.attach(MediaType.TEXT_HTML, statsMapping.HTMLanswer)
+		RembrandtedDocMapping rdocMapping = new RembrandtedDocMapping(db)
+		rdocMapping.attach(MediaType.APPLICATION_JSON, rdocMapping.JSONanswer)
 
-	    CollectionMapping collectionMapping = new CollectionMapping()
-	    collectionMapping.attach(MediaType.APPLICATION_JSON, collectionMapping.JSONanswer)
+		NEMapping neMapping = new NEMapping(db)
+		neMapping.attach(MediaType.APPLICATION_JSON, neMapping.JSONanswer)
 
-	    UserMapping userMapping = new UserMapping()
-	    userMapping.attach(MediaType.TEXT_HTML, userMapping.HTMLanswer)
-	    userMapping.attach(MediaType.APPLICATION_JSON, userMapping.JSONanswer)
+		TaskMapping taskMapping = new TaskMapping(db)
+		taskMapping.attach(MediaType.APPLICATION_JSON, taskMapping.JSONanswer)
 
-	    AdminCollectionMapping adminCollectionMapping = new AdminCollectionMapping()
-	    adminCollectionMapping.attach(MediaType.APPLICATION_JSON, adminCollectionMapping.JSONanswer)
-	     
-	    AdminUserMapping adminUserMapping = new AdminUserMapping()
-	    adminUserMapping.attach(MediaType.APPLICATION_JSON, adminUserMapping.JSONanswer)
+		StatsMapping statsMapping = new StatsMapping(db)
+		statsMapping.attach(MediaType.TEXT_HTML, statsMapping.HTMLanswer)
 
-	    AdminTaskMapping adminTaskMapping = new AdminTaskMapping()
-	    adminTaskMapping.attach(MediaType.APPLICATION_JSON, adminTaskMapping.JSONanswer)
+		CollectionMapping collectionMapping = new CollectionMapping(db)
+		collectionMapping.attach(MediaType.APPLICATION_JSON, collectionMapping.JSONanswer)
 
-	    AdminStatsMapping adminStatsMapping = new AdminStatsMapping()
-	    adminStatsMapping.attach(MediaType.APPLICATION_JSON, adminStatsMapping.JSONanswer)
+		UserMapping userMapping = new UserMapping(db)
+		userMapping.attach(MediaType.TEXT_HTML, userMapping.HTMLanswer)
+		userMapping.attach(MediaType.APPLICATION_JSON, userMapping.JSONanswer)
 
-	    AdminSourceDocMapping adminSourceDocMapping = new AdminSourceDocMapping()
-	    adminSourceDocMapping.attach(MediaType.APPLICATION_JSON, adminSourceDocMapping.JSONanswer)
+		AdminCollectionMapping adminCollectionMapping = new AdminCollectionMapping(db)
+		adminCollectionMapping.attach(MediaType.APPLICATION_JSON, adminCollectionMapping.JSONanswer)
 
-	    AdminRembrandtedDocMapping adminRembrandtedDocMapping = new AdminRembrandtedDocMapping()
-	    adminRembrandtedDocMapping.attach(MediaType.APPLICATION_JSON, adminRembrandtedDocMapping.JSONanswer)
+		AdminUserMapping adminUserMapping = new AdminUserMapping(db)
+		adminUserMapping.attach(MediaType.APPLICATION_JSON, adminUserMapping.JSONanswer)
 
-	    AdminNEMapping adminNEMapping = new AdminNEMapping()
-	    adminNEMapping.attach(MediaType.APPLICATION_JSON, adminNEMapping.JSONanswer)
+		AdminTaskMapping adminTaskMapping = new AdminTaskMapping(db)
+		adminTaskMapping.attach(MediaType.APPLICATION_JSON, adminTaskMapping.JSONanswer)
 
-	    AdminEntityMapping adminEntityMapping = new AdminEntityMapping()
-	    adminEntityMapping.attach(MediaType.APPLICATION_JSON, adminEntityMapping.JSONanswer)
+		AdminStatsMapping adminStatsMapping = new AdminStatsMapping(db)
+		adminStatsMapping.attach(MediaType.APPLICATION_JSON, adminStatsMapping.JSONanswer)
 
-	    AdminGeoscopeMapping adminGeoscopeMapping = new AdminGeoscopeMapping()
-	    adminGeoscopeMapping.attach(MediaType.APPLICATION_JSON, adminGeoscopeMapping.JSONanswer)
+		AdminSourceDocMapping adminSourceDocMapping = new AdminSourceDocMapping(db)
+		adminSourceDocMapping.attach(MediaType.APPLICATION_JSON, adminSourceDocMapping.JSONanswer)
 
-	    AdminSubjectMapping adminSubjectMapping = new AdminSubjectMapping()
-	    adminSubjectMapping.attach(MediaType.APPLICATION_JSON, adminSubjectMapping.JSONanswer)
+		AdminRembrandtedDocMapping adminRembrandtedDocMapping = new AdminRembrandtedDocMapping(db)
+		adminRembrandtedDocMapping.attach(MediaType.APPLICATION_JSON, adminRembrandtedDocMapping.JSONanswer)
 
-	    AdminSubjectGroundMapping adminSubjectGroundMapping = new AdminSubjectGroundMapping()
-	    adminSubjectGroundMapping.attach(MediaType.APPLICATION_JSON, adminSubjectGroundMapping.JSONanswer)
+		AdminNEMapping adminNEMapping = new AdminNEMapping(db)
+		adminNEMapping.attach(MediaType.APPLICATION_JSON, adminNEMapping.JSONanswer)
 
-	    router.attach("/Saskia/ask", askSaskiaMapping)
-	
-	    router.attach("/Saskia/rdoc", rdocMapping)
-		 router.attach("/Saskia/sdoc", sdocMapping)
-		 router.attach("/Saskia/collection", collectionMapping)
-		 router.attach("/Saskia/task", taskMapping)
-		 router.attach("/Saskia/ne", neMapping)
-	    router.attach("/Saskia/stats", statsMapping)
-	    router.attach("/Saskia/user", userMapping)	
-	
-	    router.attach("/Saskia/admin/collection", adminCollectionMapping)	
-	    router.attach("/Saskia/admin/task", adminTaskMapping)	
-	    router.attach("/Saskia/admin/user", adminUserMapping)	
-	    router.attach("/Saskia/admin/stats", adminStatsMapping)	
-	    router.attach("/Saskia/admin/sdoc", adminSourceDocMapping)	
-	    router.attach("/Saskia/admin/rdoc", adminRembrandtedDocMapping)	
-	    router.attach("/Saskia/admin/ne", adminNEMapping)	
-	    router.attach("/Saskia/admin/entity", adminEntityMapping)	
-	    router.attach("/Saskia/admin/geoscope", adminGeoscopeMapping)	
-	    router.attach("/Saskia/admin/subject", adminSubjectMapping)	
-	    router.attach("/Saskia/admin/subjectground", adminSubjectGroundMapping)			
-	    return router
-	}	
+		AdminEntityMapping adminEntityMapping = new AdminEntityMapping(db)
+		adminEntityMapping.attach(MediaType.APPLICATION_JSON, adminEntityMapping.JSONanswer)
+
+		AdminGeoscopeMapping adminGeoscopeMapping = new AdminGeoscopeMapping(db)
+		adminGeoscopeMapping.attach(MediaType.APPLICATION_JSON, adminGeoscopeMapping.JSONanswer)
+
+		AdminSubjectMapping adminSubjectMapping = new AdminSubjectMapping(db)
+		adminSubjectMapping.attach(MediaType.APPLICATION_JSON, adminSubjectMapping.JSONanswer)
+
+		AdminSubjectGroundMapping adminSubjectGroundMapping = new AdminSubjectGroundMapping(db)
+		adminSubjectGroundMapping.attach(MediaType.APPLICATION_JSON, adminSubjectGroundMapping.JSONanswer)
+
+		router.attach("/Saskia/ask", askSaskiaMapping)
+
+		router.attach("/Saskia/rdoc", rdocMapping)
+		router.attach("/Saskia/sdoc", sdocMapping)
+		router.attach("/Saskia/collection", collectionMapping)
+		router.attach("/Saskia/task", taskMapping)
+		router.attach("/Saskia/ne", neMapping)
+		router.attach("/Saskia/stats", statsMapping)
+		router.attach("/Saskia/user", userMapping)
+
+		router.attach("/Saskia/admin/collection", adminCollectionMapping)
+		router.attach("/Saskia/admin/task", adminTaskMapping)
+		router.attach("/Saskia/admin/user", adminUserMapping)
+		router.attach("/Saskia/admin/stats", adminStatsMapping)
+		router.attach("/Saskia/admin/sdoc", adminSourceDocMapping)
+		router.attach("/Saskia/admin/rdoc", adminRembrandtedDocMapping)
+		router.attach("/Saskia/admin/ne", adminNEMapping)
+		router.attach("/Saskia/admin/entity", adminEntityMapping)
+		router.attach("/Saskia/admin/geoscope", adminGeoscopeMapping)
+		router.attach("/Saskia/admin/subject", adminSubjectMapping)
+		router.attach("/Saskia/admin/subjectground", adminSubjectGroundMapping)
+		return router
+	}
 }

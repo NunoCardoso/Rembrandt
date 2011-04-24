@@ -33,12 +33,13 @@ class DocGeoSignatureTable extends DBTable {
 
 	Configuration conf
 	static Logger log = Logger.getLogger("DocGeoSignature")
+	static String tablename = "doc_geo_signature"
 
 	LinkedHashMap<Long,DocGeoSignatureTable> idCache
 
 
 	public DocGeoSignatureTable(SaskiaDB db) {
-		super(db, "doc_geo_signature")
+		super(db)
 		conf = Configuration.newInstance()
 		idCache = new LinkedHashMap(
 				conf.getInt("saskia.doc_geo_signature.cache.number",1000), 0.75f, true) // true: access order.
@@ -69,6 +70,11 @@ class DocGeoSignatureTable extends DBTable {
 			return dgs[0]
 		}
 		return null
+	}
+
+
+	static DocGeoSignature getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.DocGeoSignatureTable").getFromID(id)
 	}
 
 	public List<DocGeoSignature> getBatchOfGeoSignatures(Collection collection, limit = 10,  offset = 0) {

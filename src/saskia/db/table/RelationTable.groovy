@@ -30,16 +30,16 @@ import saskia.db.obj.Relation
  */
 class RelationTable extends DBTable {
 
-	String tablename = "relation"
 	static String default_relation = "sameAs"
+	static String tablename = "relation"
 
 	static Logger log = Logger.getLogger("Relation")
 
 	public RelationTable(SaskiaDB db) {
-		super(db, tablename)
+		super(db)
 	}
 
-	static List<Relation> queryDB(String query, ArrayList params = []) {
+	public List<Relation> queryDB(String query, ArrayList params = []) {
 		List<Relation> t = []
 		db.getDB().eachRow(query, params, {row  ->
 			t << Relation.createFromDBRow(this.owner,row)
@@ -67,5 +67,9 @@ class RelationTable extends DBTable {
 		Relation r = queryDB("SELECT * FROM ${tablename} WHERE rel_id=?", [rel_id])?.getAt(0)
 		log.debug "Querying for rel_id $rel_id got Relation $r."
 		if (r.rel_id) return r else return null
+	}
+
+	static Relation getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.RelationTable").getFromID(id)
 	}
 }

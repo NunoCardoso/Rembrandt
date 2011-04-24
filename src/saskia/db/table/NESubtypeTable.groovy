@@ -29,19 +29,19 @@ import saskia.db.obj.NESubtype
  */
 class NESubtypeTable  extends DBTable {
 
-	String tablename = "ne_subtype"
+	static String tablename = "ne_subtype"
 	Map<Long,String> all_id_subtype
 	Map<String,Long> all_subtype_id
 
 	static Logger log = Logger.getLogger("NESubtype")
 
 	public NESubtypeTable(SaskiaDB db) {
-		super(db, tablename)
+		super(db)
 		all_id_subtype = [:]
 		all_subtype_id = [:]
 	}
 
-	public List<NESubtype> queryDB(String query, List params = []) {
+	public List<NESubtype> queryDB(String query, ArrayList params = []) {
 		List<NESubtype> s = []
 		db.getDB().eachRow(query, params, {row  ->
 			s << NESubtype.createFromDBRow(this.owner, row)
@@ -78,6 +78,10 @@ class NESubtypeTable  extends DBTable {
 		return all_id_subtype[nes_id]
 	}
 
+	static NESubtype getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.NESubtypeTable").getFromID(id)
+	}
+
 	/** Get a NESubtype from id.
 	 * @param id The id as needle.
 	 * return the NESubtype result object, or null
@@ -86,5 +90,9 @@ class NESubtypeTable  extends DBTable {
 		if (!nes_subtype) return null
 		createCache()
 		return all_subtype_id[nes_subtype]
+	}
+
+	static NESubtype getFromSubtype(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.NESubtypeTable").getFromSubtype(id)
 	}
 }

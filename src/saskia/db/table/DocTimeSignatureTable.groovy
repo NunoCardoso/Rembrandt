@@ -23,7 +23,6 @@ import saskia.bin.Configuration
 import saskia.db.database.SaskiaDB
 import saskia.db.obj.Collection
 import saskia.db.obj.DocTimeSignature
-
 /**
  * @author Nuno Cardoso
  * This is an interface for doc_time_signature table, and also for 
@@ -35,12 +34,13 @@ class DocTimeSignatureTable extends DBTable {
 	Configuration conf
 
 	static Logger log = Logger.getLogger("DocTimeSignature")
+	static String tablename = "doc_time_signature"
 
 	LinkedHashMap<Long,DocTimeSignatureTable> idCache
 
 
 	public DocTimeSignatureTable(SaskiaDB db) {
-		super(db, "doc_time_signature")
+		super(db)
 		conf = Configuration.newInstance()
 		idCache = new LinkedHashMap(
 				conf.getInt("saskia.doc_time_signature.cache.number",1000), 0.75f, true) // true: access order.
@@ -68,6 +68,10 @@ class DocTimeSignatureTable extends DBTable {
 			return dts[0]
 		}
 		return null
+	}
+
+	static DocTimeSignature getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.DocTimeSignatureTable").getFromID(id)
 	}
 
 	static List<DocTimeSignature> getBatchOfTimeSignatures(Collection collection, limit = 10,  offset = 0) {

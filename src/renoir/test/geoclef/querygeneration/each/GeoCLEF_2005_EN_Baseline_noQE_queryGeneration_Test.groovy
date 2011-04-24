@@ -30,7 +30,6 @@ import saskia.bin.Configuration
  */
 class GeoCLEF_2005_EN_Baseline_NoQE_QueryGeneration_Test extends GeoCLEF_Baseline_NoQE_QueryGeneration_Test {
 
-	Configuration conf
 	static Logger log = Logger.getLogger("RenoirTest")
 
 	static int year = 2005

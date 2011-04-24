@@ -36,14 +36,14 @@ import saskia.db.obj.Job
  */
 class JobTable extends DBTable {
 
-	String tablename = "job"
+	static String tablename = "job"
 	static Logger log = Logger.getLogger("Job")
 
-	Map<Long,Job> cache = [:]
+	Map<Long,Job> cache
 
-	static public getInstance(SaskiaDB db) {
-		if (!_this) _this = new EntityTable(db)
-		return _this
+	public JobTable(SaskiaDB db) {
+		super(db)
+		cache = [:]
 	}
 
 	public List<Job> queryDB(String query, ArrayList params) {
@@ -67,6 +67,10 @@ class JobTable extends DBTable {
 		if (!job_id) return null
 		if (!cache) refreshCache()
 		return cache[job_id]
+	}
+
+	static Job getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.JobTable").getFromID(id)
 	}
 
 	public Job getFromDocIDAndDocType(Long job_doc_id, String job_doc_type) {

@@ -15,49 +15,93 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
- 
- package saskia.server
 
- import org.apache.log4j.*
+package saskia.server
+
+import org.apache.commons.cli.*
+import org.apache.log4j.*
+import org.restlet.Component
+import org.restlet.data.Protocol
 import org.slf4j.bridge.SLF4JBridgeHandler
- import saskia.bin.Configuration
- import org.restlet.Component
- import org.restlet.data.Protocol
- 
- /**
-  * @author Nuno Cardoso
-  * 
-  * This is the main class. Reads in args[0] a configuration file that sets up 
-  * the Renoir, such as server port. proxy settings, etc. 
-  */
+
+import saskia.bin.Configuration
+import saskia.db.database.*
+
+/**
+ * @author Nuno Cardoso
+ * 
+ * This is the main class. Reads in args[0] a configuration file that sets up 
+ * the Renoir, such as server port. proxy settings, etc. 
+ */
 
 class SaskiaServer {
 
-	def static Logger log = Logger.getLogger("SaskiaServerMain")  
+	def static Logger log = Logger.getLogger("SaskiaServerMain")
 	Component component
-		
-	public SaskiaServer(int port) {
-        SLF4JBridgeHandler.install()
-	   try {
-	        component = new Component()           
-		    component.servers.add(Protocol.HTTP, port)
-		    component.defaultHost.attach(new SaskiaServerApplication())           		 
-	   } catch (Exception e) { e.printStackTrace()}	          	  
+
+	public SaskiaServer(Configuration conf, SaskiaDB db, int port) {
+		SLF4JBridgeHandler.install()
+		try {
+			component = new Component()
+			component.servers.add(Protocol.HTTP, port)
+			component.defaultHost.attach(new SaskiaServerApplication(conf, db))
+		} catch (Exception e) {
+			e.printStackTrace()
+		}
 	}
-		
+
 	void start() {
-	    component.start()
+		component.start()
 	}
-		
+
 	public static void main(args) {
-	    
-	    def conf
- 		if (args.size() < 1) conf = Configuration.newInstance()
- 		else conf = Configuration.newInstance(args[0])
- 		int port = conf.getInt("saskia.server.port",33334)
-		SaskiaServer server = new SaskiaServer(port)
-	    server.start()	
-	    log.info "SaskiaServer starting on port ${port}"
+		Options o = new Options()
+		Configuration conf = Configuration.newInstance()
+
+		o.addOption("conf", false, "Optional configuration file")
+		o.addOption("db", false, "SaskiaDB: main or test")
+		o.addOption("help", false, "Gives this help information")
+
+		CommandLineParser parser = new GnuParser()
+		CommandLine cmd = parser.parse(o, args)
+
+		// --help
+		if (cmd.hasOption("help")) {
+			HelpFormatter formatter = new HelpFormatter()
+			formatter.printHelp( "java renoir.server.RenoirServer", o )
+			System.exit(0)
+		}
+
+		// --conf
+		if (cmd.hasOption("conf")) {
+			conf = Configuration.newInstance(cmd.getOptionValue("conf"))
+			log.info("Reading configuration file "+cmd.getOptionValue("conf")+".")
+		} else {
+			conf = Configuration.newInstance()
+			log.info("Reading default configuration file.")
+		}
+
+		SaskiaDB db
+		// --conf
+		if (cmd.hasOption("db")) {
+			if (cmd.getOptionValue("db") == "main") {
+				log.info("--db option set for SaskiaMainDB...")
+				db = SaskiaMainDB.newInstance()
+			}
+			if (cmd.getOptionValue("db") == "test") {
+				log.info("--db option set for SaskiaTestDB...")
+				db = SaskiaTestDB.newInstance()
+			}
+		}
+		if (!db) {
+			log.info("--db unknown option or not specified: launching SaskiaMainDB...")
+			db = SaskiaMainDB.newInstance()
+		}
+
+		int port = conf.getInt("saskia.server.port",33334)
+		SaskiaServer server = new SaskiaServer(conf, db, port)
+		server.start()
+		log.info "SaskiaServer starting on port ${port}"
 
 	}
 }

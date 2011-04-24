@@ -45,8 +45,8 @@ public class Task extends DBObject implements JSONable {
 	static Logger log = Logger.getLogger("SaskiaDB")
 
 	static Map type = ['tsk_id':'Long','tsk_task':'String', 'tsk_user':'User', 'tsk_collection':'Collection','tsk_type':'String',
-	             	  'tsk_priority':'Integer','tsk_limit':'Integer','tsk_offset':'Long','tsk_done':'Integer','tsk_scope':'String',
-	             	  'tsk_persistence':'String','tsk_status':'String','tsk_comment':'String']
+		'tsk_priority':'Integer','tsk_limit':'Integer','tsk_offset':'Long','tsk_done':'Integer','tsk_scope':'String',
+		'tsk_persistence':'String','tsk_status':'String','tsk_comment':'String']
 
 	static Task createFromDBRow(DBTable dbtable, row) {
 		Task t = new Task(dbtable)
@@ -63,91 +63,103 @@ public class Task extends DBObject implements JSONable {
 		t.tsk_persistence = row['tsk_persistence']
 		t.tsk_status = row['tsk_status']
 		t.tsk_comment = row['tsk_comment']
-		return t	
+		return t
 	}
-	
+
 	/** generic purpose value update on DB and cache */
-	static updateValue(String column, newvalue) {
-		 if (!tsk_id) throw new IllegalStateException("Task tsk_id is not valid: "+tsk_id)
-		 def newval
-		 def object
-		
-	    switch (type[column]) {
-	        case 'Integer': 
-					if (!(newvalue instanceof Integer)) newval = Integer.parseInt(newvalue)
-					else newval = newvalue
+	public updateValue(String column, newvalue) {
+		if (!tsk_id) throw new IllegalStateException("Task tsk_id is not valid: "+tsk_id)
+		def newval
+		def object
+
+		switch (type[column]) {
+			case 'Integer':
+				if (!(newvalue instanceof Integer)) newval = Integer.parseInt(newvalue)
+				else newval = newvalue
 				break
-				case ['Long', 'User','Collection']:	
-		 			if (newvalue instanceof User) {
-						newval = newvalue.usr_id
-						object = newvalue
-					}
-					else if (newvalue instanceof Collection) {
-						newval = newvalue.col_id
-						object = newvalue
-					}
-					else if (!(newvalue instanceof Long)) newval = Long.parseLong(newvalue)
+			case ['Long', 'User', 'Collection']:
+				if (newvalue instanceof User) {
+					newval = newvalue.usr_id
+					object = newvalue
+				}
+				else if (newvalue instanceof Collection) {
+					newval = newvalue.col_id
+					object = newvalue
+				}
+				else if (!(newvalue instanceof Long)) newval = Long.parseLong(newvalue)
 				break
-				case 'String':
-			 	newval = newvalue
-		      break
+			case 'String':
+				newval = newvalue
+				break
 		}
-		      
-	   def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			   "UPDATE ${getTable().getTablename()} SET ${column}=? WHERE tsk_id=?",
-			   [newval, tsk_id])
-	   cache[tsk_id][column] = (object ? object : newval)
-	   return res
+
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
+				"UPDATE ${getTable().getTablename()} SET ${column}=? WHERE tsk_id=?",
+				[newval, tsk_id])
+		cache[tsk_id][column] = (object ? object : newval)
+		return res
 	}
-	
+
 	Map toMap() {
-	    return ['tsk_id':tsk_id,'tsk_task':tsk_task,'tsk_user':tsk_user.toSimpleMap(), 'tsk_collection':tsk_collection.toSimpleMap(),
-	  'tsk_type':tsk_type, 'tsk_priority':tsk_priority,'tsk_limit':tsk_limit,'tsk_offset':tsk_offset,
-	  'tsk_done':tsk_done, 'tsk_scope':tsk_scope, 'tsk_persistence':tsk_persistence,'tsk_status':tsk_status,
-	  'tsk_comment':tsk_comment]
+		return ['tsk_id':tsk_id,'tsk_task':tsk_task,'tsk_user':tsk_user.toSimpleMap(), 'tsk_collection':tsk_collection.toSimpleMap(),
+			'tsk_type':tsk_type, 'tsk_priority':tsk_priority,'tsk_limit':tsk_limit,'tsk_offset':tsk_offset,
+			'tsk_done':tsk_done, 'tsk_scope':tsk_scope, 'tsk_persistence':tsk_persistence,'tsk_status':tsk_status,
+			'tsk_comment':tsk_comment]
 	}
-	
+
 	Map toSimpleMap() {
-	    return toMap()
+		return toMap()
 	}
-	
+
 	void incrementDone() {
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
 				"UPDATE ${getTable().getTablename()} SET tsk_done=tsk_done+1 where tsk_id=?",
 				[tsk_id])
 		getDBTable().cache[tsk_id].tsk_done++
 	}
-	
+
 	/** Add this Rembrandt Tag to the database.
 	 * @param version The version label. By default, it's own version field.
 	 * @param comment The version comment. By default, it's own comment field.
 	 * return 1 if successfully inserted.
 	 */	
 	public Long addThisToDB() {
-	    
-	    if (!cache) refreshCache()	
-	    def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-	    		"INSERT INTO ${getTable().getTablename()} VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?)", 
-		[tsk_task, tsk_user.usr_id, tsk_collection.col_id, tsk_type, tsk_priority, tsk_limit, tsk_offset,
-		 tsk_done, tsk_scope, tsk_persistence, tsk_status, tsk_comment ])
+
+		if (!cache) refreshCache()
+		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
+				"INSERT INTO ${getTable().getTablename()} VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?)",
+				[
+					tsk_task,
+					tsk_user.usr_id,
+					tsk_collection.col_id,
+					tsk_type,
+					tsk_priority,
+					tsk_limit,
+					tsk_offset,
+					tsk_done,
+					tsk_scope,
+					tsk_persistence,
+					tsk_status,
+					tsk_comment
+				])
 		// returns an auto_increment value
-	    tsk_id = (long)res[0][0]
-	    getDBTable().cache[tsk_id] = this
-		 log.info "Adding Task to DB: ${this}"
-	    return tsk_id                           
-	}	
-	
+		tsk_id = (long)res[0][0]
+		getDBTable().cache[tsk_id] = this
+		log.info "Adding Task to DB: ${this}"
+		return tsk_id
+	}
+
 	public int removeThisFromDB() {
 		if (!tsk_id) throw new IllegalStateException("Can't remove myself from DB if I don't have a tsk_id")
-	   def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			   "DELETE FROM ${getTable().getTablename()} where tsk_id=?",[tsk_id]) 
-		cache.remove(tsk_id)		
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
+				"DELETE FROM ${getTable().getTablename()} where tsk_id=?",[tsk_id])
+		cache.remove(tsk_id)
 		log.info "Removing Task to DB: ${this}, got res $res"
 		return res
 	}
-	
+
 	public String toString() {
-	    return "${tsk_id}:${tsk_task}"
+		return "${tsk_id}:${tsk_task}"
 	}
 
 }

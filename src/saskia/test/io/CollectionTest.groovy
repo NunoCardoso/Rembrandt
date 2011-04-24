@@ -17,14 +17,13 @@
  */
 package saskia.test.io
 
+import org.apache.log4j.*
 import org.junit.*
 import org.junit.runner.*
-import org.apache.log4j.*
 
 import saskia.bin.Configuration
-import saskia.db.obj.Collection
-import saskia.db.table.User;
 import saskia.db.database.SaskiaTestDB
+import saskia.db.obj.Collection
 
 /**
  * @author Nuno Cardoso
@@ -34,18 +33,18 @@ class TestCollection extends GroovyTestCase {
 	def Logger log = Logger.getLogger("UnitTest")
 	SaskiaTestDB db
 	Configuration conf
-	
+
 	public TestCollection() {
 		conf = Configuration.newInstance()
 		// conf.set('saskia.db.name','ohterName')
 		db = SaskiaTestDB.newInstance(conf)
 		// now this is the one that'll be passed to io objects
 	}
-	
+
 	// Holland has a 301 redirect to Netherlands.
 	void testListAccessibleCollectionsForUser() {
 		User user = User.getFromLogin('guest')
 		println Collection.listAccessibleCollectionsForUser(user)
-		
-	}  
+
+	}
 }

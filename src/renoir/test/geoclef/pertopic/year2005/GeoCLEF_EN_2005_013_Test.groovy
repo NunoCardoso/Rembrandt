@@ -16,74 +16,82 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
-package renoir.test.geoclef.pertopic
+package renoir.test.geoclef.pertopic.year2005
 
 import groovy.util.GroovyTestCase
-import org.apache.log4j.Logger
-import saskia.bin.Configuration
-import renoir.obj.*
 import rembrandt.gazetteers.CommonClassifications as SC
+import renoir.obj.*
+import renoir.test.geoclef.pertopic.GeoCLEF_PerTopic_Test
+import saskia.bin.Configuration
 /**
  * @author Nuno Cardoso
  *
  */
- class GeoCLEF_2005_EN_013_Test extends GroovyTestCase {
-        
-    Configuration conf 
-    GeoCLEF_PerTopic_Test pertopic
-    
-    public GeoCLEF_2005_EN_013_Test() {
+class GeoCLEF_2005_EN_013_Test extends GroovyTestCase {
+
+	Configuration conf
+	GeoCLEF_PerTopic_Test pertopic
+
+	public GeoCLEF_2005_EN_013_Test() {
 		conf = Configuration.newInstance()
-	//	conf.set("saskia.dbpedia.url","http://xldb.di.fc.ul.pt/dbpedia/sparql")
-	//	conf.set("saskia.dbpedia.url","http://dbpedia.org/sparql")
-	//	println "DBpedia sparql service set to "+conf.get("saskia.dbpedia.url","none")	
+		//	conf.set("saskia.dbpedia.url","http://xldb.di.fc.ul.pt/dbpedia/sparql")
+		//	conf.set("saskia.dbpedia.url","http://dbpedia.org/sparql")
+		//	println "DBpedia sparql service set to "+conf.get("saskia.dbpedia.url","none")
 		pertopic = new GeoCLEF_PerTopic_Test(conf)
-    }
-	
-    void testTopic() {
+	}
+
+	void testTopic() {
 		String lang = "en"
 		String topic = "label:013 visits of the American president to Germany"
-	    
+
 		RenoirQuery rq = RenoirQueryParser.parse(topic)
 		Question question = pertopic.process(rq, lang)
 		//dumpQuestion(question)
-     
+
 		/** check sentences and question types */
-		assert question.sentence*.text == ['visits','of','the','American','president','to','Germany']
+		assert question.sentence*.text == [
+			'visits',
+			'of',
+			'the',
+			'American',
+			'president',
+			'to',
+			'Germany'
+		]
 		assert question.questionType == QuestionType.None
 		assert question.questionTypeTerms.size() == 0
-	
-  
-	// check detected NEs 
+
+
+		// check detected NEs
 		assert question.nes.size() == 1
 		assert question.nes[0].terms*.text == ["Germany"]
-    
+
 		/// contains gives false. Use find
 		assert question.nes[0].classification.find{it == SC.place_human_country}
-		
-	// check subjects 
-	// Deve ter American president!!
+
+		// check subjects
+		// Deve ter American president!!
 		assert !question.subject
-    
-	// check conditions 
+
+		// check conditions
 		assert question.conditions.size() == 1
 		assert question.conditions[0].object instanceof QueryGeoscope
 		assert question.conditions[0].object.ne.terms*.text == ["Germany"]
-		
+
 		assert !question.expectedAnswerTypes
-		
-	// check answers 
+
+		// check answers
 		assert !question.answer
 
-	// now, question object full -> reformulated query 
-		ReformulatedQuery refq = QueryReformulator2.reformulate(rq, question)                                  
-	// reformulated Query -> string    
-	
+		// now, question object full -> reformulated query
+		ReformulatedQuery refq = QueryReformulator2.reformulate(rq, question)
+		// reformulated Query -> string
+
 		println refq.toString()
 		String reformulated_x = """
 label:013 contents:visits contents:American contents:president contents:"Germany" woeid:23424829
-"""		
+"""
 
-	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
-  } 
+		assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"")
+	}
 }

@@ -15,15 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
- 
+
 package renoir.server
 
+import org.apache.log4j.*
 import org.restlet.Application
 import org.restlet.Restlet
-import org.restlet.routing.Router
 import org.restlet.data.MediaType
+import org.restlet.routing.Router
 
-import org.apache.log4j.*
+import saskia.bin.Configuration
+import saskia.db.database.SaskiaDB
 
 /**
  * @author ncardoso, extended from rlopes's code
@@ -31,28 +33,33 @@ import org.apache.log4j.*
  */
 public class RenoirServerApplication extends Application {
 
+	Logger log = Logger.getLogger("RenoirServerMain")
+	Configuration conf
+	SaskiaDB db
 
-    Logger log = Logger.getLogger("RenoirServerMain") 
-    
-	public synchronized Restlet createRoot() { 
-	
-	    Router router = new Router(this.context)
-
-	    SuggestMapping suggestMapping = new SuggestMapping()
-	    suggestMapping.attach(MediaType.TEXT_HTML, suggestMapping.HTMLanswer)
-	    suggestMapping.attach(MediaType.APPLICATION_JSON, suggestMapping.JSONanswer)
-	
-	    DBObjectSuggestMapping dboMapping = new DBObjectSuggestMapping()
-	    dboMapping.attach(MediaType.APPLICATION_JSON, dboMapping.JSONanswer)
-
-	    SearchMapping searchMapping = new SearchMapping()
-	    searchMapping.attach(MediaType.APPLICATION_JSON, searchMapping.JSONanswer)
-
-	    router.attach("/Renoir/suggest", suggestMapping)
-	    router.attach("/Renoir/dbosuggest", dboMapping)
-	    router.attach("/Renoir/search", searchMapping)
-				
-	    return router
+	public RenoirServerApplication(Configuration conf, SaskiaDB db) {
+		this.conf=conf
+		this.db=db
 	}
-	
+
+	public synchronized Restlet createRoot() {
+
+		Router router = new Router(this.context)
+
+		SuggestMapping suggestMapping = new SuggestMapping(db)
+		suggestMapping.attach(MediaType.TEXT_HTML, suggestMapping.HTMLanswer)
+		suggestMapping.attach(MediaType.APPLICATION_JSON, suggestMapping.JSONanswer)
+
+		DBObjectSuggestMapping dboMapping = new DBObjectSuggestMapping(db)
+		dboMapping.attach(MediaType.APPLICATION_JSON, dboMapping.JSONanswer)
+
+		SearchMapping searchMapping = new SearchMapping(db)
+		searchMapping.attach(MediaType.APPLICATION_JSON, searchMapping.JSONanswer)
+
+		router.attach("/Renoir/suggest", suggestMapping)
+		router.attach("/Renoir/dbosuggest", dboMapping)
+		router.attach("/Renoir/search", searchMapping)
+
+		return router
+	}
 }

@@ -20,6 +20,7 @@ package saskia.db.obj
 import org.apache.log4j.Logger
 
 import saskia.db.table.DBTable
+import saskia.db.table.EntityTable
 
 /**
  * @author Nuno Cardoso
@@ -40,20 +41,20 @@ class NE extends DBObject implements JSONable {
 	static Map type = ['ne_id':'Long', 'ne_name':'NEName', 'ne_lang':'String',
 		'ne_category':'NECategory', 'ne_type':'NEType', 'ne_subtype':'NESubtype',
 		'ne_entity':'Entity']
-	
+
 	public NE(DBTable dbtable) {
 		super(dbtable)
 	}
-	
+
 	static NE createFromDBRown(DBTable dbtable, row) {
 		NE n = new NE(dbtable)
 		n.ne_id = row['ne_id']
-		if (row['ne_name']) n.ne_name = NEName.getFromID(row['ne_name'])
+		if (row['ne_name']) n.ne_name = NEName.getFromID(dbtable, row['ne_name'])
 		n.ne_lang = row['ne_lang']
-		if (row['ne_category']) n.ne_category = NECategory.getFromID(row['ne_category'])
-		if (row['ne_type']) n.ne_type = NEType.getFromID(row['ne_type'])
-		if (row['ne_subtype']) n.ne_subtype = NESubtype.getFromID(row['ne_subtype'])
-		if (row['ne_entity']) n.ne_entity = EntityTable.getFromID(row['ne_entity'])
+		if (row['ne_category']) n.ne_category = NECategory.getFromID(dbtable, row['ne_category'])
+		if (row['ne_type']) n.ne_type = NEType.getFromID(dbtable, row['ne_type'])
+		if (row['ne_subtype']) n.ne_subtype = NESubtype.getFromID(dbtable, row['ne_subtype'])
+		if (row['ne_entity']) n.ne_entity = EntityTable.getFromID(dbtable, row['ne_entity'])
 		return n
 	}
 
@@ -96,7 +97,10 @@ class NE extends DBObject implements JSONable {
 		// new_ne_category can be null
 		def res =getDBTable().getSaskiaDB().executeUpdate(
 				"UPDATE ${getDBTable().getTablename()} SET ne_category=? where ne_id=?",
-				[new_ne_category?.nec_id, ne_id])
+				[
+					new_ne_category?.nec_id,
+					ne_id
+				])
 		if (res) {
 			ne_category = new_ne_category
 			String key = getKey()
@@ -128,7 +132,10 @@ class NE extends DBObject implements JSONable {
 		// new_ne_category can be null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
 				"UPDATE ${getDBTable().getTablename()} SET ne_subtype=? where ne_id=?",
-				[new_ne_subtype?.nes_id, ne_id])
+				[
+					new_ne_subtype?.nes_id,
+					ne_id
+				])
 		if (res) {
 			ne_subtype = new_ne_subtype
 			String key = getKey()
@@ -154,12 +161,19 @@ class NE extends DBObject implements JSONable {
 		}
 		return res
 	}
-	
+
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-			"INSERT INTO ${getDBTable().getTablename()}(ne_id, ne_name, ne_lang, ne_category, "+
-			"ne_type, ne_subtype, ne_entity) VALUES(0,?,?,?,?,?,?)",
-			[ne_name.nen_id, ne_lang, ne_category.nec_id, ne_type?.net_id, ne_subtype?.nes_id, ne_entity?.ent_id])
+				"INSERT INTO ${getDBTable().getTablename()}(ne_id, ne_name, ne_lang, ne_category, "+
+				"ne_type, ne_subtype, ne_entity) VALUES(0,?,?,?,?,?,?)",
+				[
+					ne_name.nen_id,
+					ne_lang,
+					ne_category.nec_id,
+					ne_type?.net_id,
+					ne_subtype?.nes_id,
+					ne_entity?.ent_id
+				])
 		ne_id = (long)res[0][0]
 		getDBTable().neKeyCache[getKey()] = this
 		log.info "Inserted new NE in DB: ${this}"
@@ -169,12 +183,12 @@ class NE extends DBObject implements JSONable {
 	public int removeThisFromDB() {
 		if (!ne_id) return null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"DELETE FROM  ${getDBTable().getTablename()} WHERE ne_id=?", [ne_id])
+				"DELETE FROM  ${getDBTable().getTablename()} WHERE ne_id=?", [ne_id])
 		getDBTable().neKeyCache.remove(getKey())
 		log.info "Removed NE ${this} from DB, got $res"
 		return res
 	}
-			   
+
 	public String toString() {
 		return ""+ne_id+":"+ne_name
 	}

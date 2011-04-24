@@ -38,7 +38,7 @@ import saskia.ontology.GeoPlanetAPI
  */
 class GeoscopeTable extends DBTable {
 
-	String tablename = "geoscope"
+	static String tablename = "geoscope"
 	String ent_has_tablename = "entity_has_geoscope"
 
 	static GeoPlanetAPI geoplanet = GeoPlanetAPI.newInstance()
@@ -46,10 +46,10 @@ class GeoscopeTable extends DBTable {
 	static Logger log = Logger.getLogger("Geoscope")
 
 	public GeoscopeTable(SaskiaDB db) {
-		super(db, tablename)
+		super(db)
 	}
 
-	static List<Geoscope> queryDB(String query, List params = []) {
+	public List<Geoscope> queryDB(String query, ArrayList params = []) {
 		List<Geoscope> l = []
 		getSaskiaDB().getDB().eachRow(query, params, {row  ->
 			l << Geoscope.createFromDBRow(this.owner, row)
@@ -105,6 +105,10 @@ class GeoscopeTable extends DBTable {
 			// let's hope there is no double redirect!
 		}
 		if (geos && geos[0].geo_id) return geos[0] else return null
+	}
+
+	static Geoscope getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.GeoscopeTable").getFromID(id)
 	}
 
 	public List<Geoscope> getFromName(String geo_name, String lang) {

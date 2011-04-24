@@ -20,6 +20,7 @@ package saskia.db.table
 
 import org.apache.log4j.*
 
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.Tag
 
 /** This class is an interface for the Tag table in the WikiRembrandt database. 
@@ -29,11 +30,15 @@ import saskia.db.obj.Tag
  */
 class TagTable extends DBTable {
 
-	String tablename = "tag"
-
 	static Logger log = Logger.getLogger("Tag")
+	static String tablename = "tag"
 
-	static Map<Long,Tag> cache = [:]
+	Map<Long,Tag> cache
+
+	public TagTable(SaskiaDB db) {
+		super(db)
+		cache= [:]
+	}
 
 	public List<Tag> queryDB(String query, ArrayList params) {
 		List<Tag> res = []
@@ -44,7 +49,7 @@ class TagTable extends DBTable {
 	}
 
 	static void refreshCache() {
-		List<Tag> l = queryDB("SELECT * FROM ${tablename}".toString(), [])
+		List<Tag> l = queryDB("SELECT * FROM ${getTablename()}".toString(), [])
 		l.each{cache[it.tag_id] = it}
 	}
 
@@ -75,6 +80,8 @@ class TagTable extends DBTable {
 		return cache[tag_id]
 	}
 
-
+	static Tag getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.TagTable").getFromID(id)
+	}
 
 }

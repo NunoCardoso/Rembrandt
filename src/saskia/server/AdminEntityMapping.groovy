@@ -19,21 +19,26 @@ package saskia.server
 
 import org.apache.log4j.*
 
-import saskia.db.obj.User
-import saskia.db.table.EntityTable
+import saskia.db.database.SaskiaDB
+import saskia.db.obj.*
+import saskia.db.table.*
 import saskia.util.I18n
 
 public class AdminEntityMapping extends WebServiceRestletMapping {
 
 	Closure JSONanswer
 	I18n i18n
+	SaskiaDB db
 	static Logger mainlog = Logger.getLogger("SaskiaServerMain")
 	static Logger errorlog = Logger.getLogger("SaskiaServerErrors")
 	static Logger processlog = Logger.getLogger("SaskiaServerProcessing")
 
-	public AdminEntityMapping() {
+	public AdminEntityMapping(SaskiaDB db) {
 
+		this.db = db
 		i18n = I18n.newInstance()
+		CollectionTable collectionTable = db.getDBTable("saskia.db.table.CollectionTable")
+		UserTable userTable = db.getDBTable("saskia.db.table.UserTable")
 
 		JSONanswer = {req, par, bind ->
 			long session = System.currentTimeMillis()

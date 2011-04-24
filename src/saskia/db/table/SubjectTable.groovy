@@ -27,9 +27,8 @@ import saskia.db.obj.Subject
 
 class SubjectTable extends DBTable {
 
-	String tablename = "subject"
-
 	Configuration conf
+	static String tablename = "subject"
 	static Logger log = Logger.getLogger("Subject")
 	LinkedHashMap<String,List<Subject>> cacheSubject
 	LinkedHashMap<Long,Subject> cacheID
@@ -37,8 +36,8 @@ class SubjectTable extends DBTable {
 	Map conceptList = [:] // to be made, creating a Map that can be used for conceptMatch
 
 	public SubjectTable(SaskiaDB db) {
-		super(db, tablename)
-		conf	= Configuration.newInstance()
+		super(db)
+		conf = Configuration.newInstance()
 		// cacheSubject[terms] = Map<Lang:List<Subject>>
 		cacheSubject = new LinkedHashMap(conf.getInt("saskia.subject.cache.number",1000), 0.75f, true) // true: access order.
 		// NOTE: this has a id -> sbj_subject STRING, NOT subject MAP.
@@ -92,9 +91,9 @@ class SubjectTable extends DBTable {
 	public List makeConceptList(String lang) {
 		List res = []
 
-		db.getDB().eachRow("select * from ${tablename}", [],  {row ->
+		db.getDB().eachRow("select * from ${getTablename()}", [],  {row ->
 			// Make Subject object
-			Subject s = new Subject(sbj_id:row['sbj_id'], sbj_subject:row['sbj_subject'])
+			Subject s = Subject.createFromDBRow(this.owner, row)
 			s.subject = Subject.parseSubject(s.sbj_subject)
 
 			// cache everything first
@@ -158,7 +157,7 @@ class SubjectTable extends DBTable {
 		if (!sbj_id) return null
 		if (cacheID.containsKey(sbj_id)) return cacheID[sbj_id]
 
-		Subject sbj = queryDB("SELECT * FROM ${tablename} WHERE sbj_id=?", [sbj_id])?.getAt(0)
+		Subject sbj = queryDB("SELECT * FROM ${getTablename()} WHERE sbj_id=?", [sbj_id])?.getAt(0)
 		log.debug "Querying for sbj_id $sbj_id got Subject $sbj."
 		cacheID[sbj_id] = sbj
 		Subject.addToSubjectCache(sbj)
@@ -166,10 +165,15 @@ class SubjectTable extends DBTable {
 		if (sbj.sbj_id) return sbj else return null
 	}
 
+	static Subject getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.SubjectTable").getFromID(id)
+	}
+
+
 	public List<Subject> getFromSubject(String subject) {
 		if (!subject) return null
 
-		List<Subject> sbj = queryDB("SELECT * FROM ${tablename} WHERE sbj_subject=?", [subject])
+		List<Subject> sbj = queryDB("SELECT * FROM ${getTablename()} WHERE sbj_subject=?", [subject])
 		log.debug "Querying for sbj_subject $subject got Subject $sbj."
 
 		return sbj
@@ -204,7 +208,7 @@ class SubjectTable extends DBTable {
 		}
 
 		String needle = "%${lang}:${subject_terms}%"
-		List<Subject> sbjs = queryDB("SELECT * FROM ${tablename} WHERE sbj_subject LIKE ?", [needle])
+		List<Subject> sbjs = queryDB("SELECT * FROM ${getTablename()} WHERE sbj_subject LIKE ?", [needle])
 		log.debug "Querying for $subject_terms in lang $lang got Subjects $sbjs."
 		if (sbjs) {
 			sbjs.each{sbj ->

@@ -29,14 +29,12 @@ import saskia.db.obj.DBObject
  */
 abstract class DBTable {
 
-	SaskiaDB db   
-	String tablename
-	
-	public DBTable(SaskiaDB db, String tablename) {
+	SaskiaDB db
+
+	public DBTable(SaskiaDB db) {
 		this.db = db
-		this.tablename = tablename
-	} 
-	
+	}
+
 	/**
 	 * Interface for table queries and returning encapsulated objects
 	 * @param query The query to submit to this table
@@ -45,20 +43,12 @@ abstract class DBTable {
 	 * @return A list of DBObjects
 	 */
 	public abstract List<DBObject> queryDB(String query, ArrayList params)
-	
+
 	public setSaskiaDB(SaskiaDB db) {
 		this.db = db
 	}
-	
+
 	public SaskiaDB getSaskiaDB() {
 		return this.db
-	}	
-	
-	public setTablename(String tablename) {
-		this.tablename = tablename
-	}
-	
-	public String getTablename() {
-		return this.tablename
 	}
 }

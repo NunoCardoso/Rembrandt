@@ -32,9 +32,10 @@ import saskia.stats.SaskiaStats
 class CacheTable extends DBTable {
 
 	static Logger log = Logger.getLogger("Cache")
+	static String tablename = "cache"
 
 	public CacheTable(SaskiaDB db) {
-		super(db, "cache")
+		super(db)
 	}
 
 	public List<Cache> queryDB(String query, ArrayList params = []) {

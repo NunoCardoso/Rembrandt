@@ -34,8 +34,8 @@ import saskia.db.obj.*
  */
 class SourceDocTable extends DBTable {
 
-	String tablename = "source_doc"
 	static String job_doc_type_label = "SDOC"
+	static String tablename = "source_doc"
 
 	static Logger log = Logger.getLogger("SaskiaDB")
 
@@ -43,51 +43,18 @@ class SourceDocTable extends DBTable {
 	SaskiaWebstore webstore
 
 	public SourceDocTable(SaskiaDB db) {
-		super(db, tablename)
+		super(db)
 		conf = Configuration.newInstance()
 		webstore = SaskiaWebstore.newInstance()
 	}
 
-	static List<SourceDoc> queryDB(String query, ArrayList params) {
+	public List<SourceDoc> queryDB(String query, ArrayList params) {
 		List l = []
 
 		db.getDB().eachRow(query, params, {row  ->
 			l << SourceDoc.createFromDBRow(this.owner,row)
 		})
 		return (l ? l : null)
-	}
-	static HashMap listSourceDocs(Collection collection, limit = 10,  offset = 0, column = null, needle = null) {
-		// limit & offset can come as null... they ARE initialized...
-		if (!limit) limit = 10
-		if (!offset) offset = 0
-
-		String where = "WHERE sdoc_collection=?"
-		List params = [collection.col_id]
-		if (column && needle) {
-
-			switch (type[column]) {
-				case 'String': where += " AND $column LIKE '%${needle}%'"; break
-				case 'Long': where += " AND $column=? "; params << Long.parseLong(needle); break
-				case 'DocStatus':  where += " AND $column = ?"; params << needle; break
-				case 'Date': where += " AND $column = ?"; params << needle; break
-			}
-		}
-		String query = "SELECT SQL_CALC_FOUND_ROWS * FROM ${SourceDoc.tablename} $where "+
-				"LIMIT ${limit} OFFSET ${offset} UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL, "+
-				"NULL, NULL, NULL, NULL, NULL, NULL"
-		log.debug "query = $query params = $params class = "+params*.class
-
-		List u
-		try {u = queryDB(query, params) }
-		catch(Exception e) {log.error "Error getting source doc list: ", e}
-
-		// last item is not a document... it's the count.
-		SourceDoc fakesdoc = u.pop()
-		long total = fakesdoc.sdoc_id
-
-		log.debug "Returning "+u.size()+" results."
-		return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,
-			"column":column, "value":needle, "col_id":collection.col_id]
 	}
 
 
@@ -102,7 +69,9 @@ class SourceDocTable extends DBTable {
 		return (l ? l[0] : null)
 	}
 
-
+	static SourceDoc getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.SourceDocTable").getFromID(id)
+	}
 
 
 	/** Get a SourceDoc from an original id, collection and lang
@@ -208,8 +177,6 @@ class SourceDocTable extends DBTable {
 				}  else tries = max_tries
 			}
 		} // !l && max tries
-		return (l ? l : null)
+		return l
 	}
-
-
 }

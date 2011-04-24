@@ -20,9 +20,9 @@
 package saskia.imports
 
 import saskia.bin.Configuration
-import saskia.io.Collection
+import saskia.db.DocStatus;
+import saskia.db.obj.Collection;
 import saskia.io.SourceDoc
-import saskia.io.DocStatus
 
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*

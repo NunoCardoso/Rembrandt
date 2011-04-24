@@ -17,6 +17,7 @@
  */
 package renoir.server
 
+import saskia.db.obj.Collection;
 import saskia.io.*
 import java.net.URLDecoder
 import org.apache.log4j.*

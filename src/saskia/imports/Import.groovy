@@ -78,7 +78,6 @@ abstract class Import {
 		}
 		
 		return Collection.getFromNameOrID(collection_name)
-		
 	}
 	
 	/**

@@ -18,7 +18,7 @@
  package renoir.bin
 
 import renoir.obj.Question
-import saskia.db.WikipediaDB
+import saskia.db.database.WikipediaDB;
 import rembrandt.obj.Sentence
 import groovy.sql.Sql
 import saskia.dbpedia.DBpediaAPI

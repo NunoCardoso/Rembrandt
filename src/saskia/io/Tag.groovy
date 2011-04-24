@@ -20,6 +20,10 @@ package saskia.io
 
 import org.apache.log4j.*
 
+import saskia.db.obj.DBObject;
+import saskia.db.obj.JSONable;
+import saskia.db.table.EntityTable;
+
 /** This class is an interface for the Tag table in the WikiRembrandt database. 
   * It stores tagging information associated to a Rembrandt annotation of documents.
   * Static methods are used to return results from DB, using where clauses.
@@ -115,7 +119,7 @@ class Tag extends DBObject implements JSONable {
 	    return res	    
 	}
 		
-	boolean equals(Entity e) {
+	boolean equals(EntityTable e) {
 		return this.toMap().equals(e.toMap())
 	}
 	

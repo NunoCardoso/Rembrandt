@@ -22,6 +22,9 @@ import saskia.wikipedia.WikipediaAPI
 import saskia.wikipedia.WikipediaDocument
 import saskia.bin.Configuration
 import org.apache.log4j.*
+
+import saskia.db.table.EntityTable;
+import saskia.db.table.Geoscope;
 import saskia.dbpedia.DBpediaOntology
 import saskia.gazetteers.DBpediaOntologyDefinitionsPT 
 import saskia.gazetteers.DBpediaOntology_to_SemanticClassification
@@ -36,9 +39,7 @@ import rembrandt.obj.TermProperty
 import rembrandt.gazetteers.pt.ClausesPT
 import saskia.wizards.SearchWikipediaCategories
 import saskia.io.Subject as SubjectDB
-import saskia.io.Geoscope as GeoscopeDB
 import saskia.io.SubjectGround as SubjectGroundDB
-import saskia.io.Entity as EntityDB
 
 class Subject {
 	

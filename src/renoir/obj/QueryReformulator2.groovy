@@ -27,10 +27,11 @@ import rembrandt.obj.TimeGrounding
 import rembrandt.obj.TimeGroundingType
 import rembrandt.obj.SemanticClassification
 import org.apache.log4j.*
+
+import saskia.db.table.EntityTable;
+import saskia.db.table.Geoscope;
 import saskia.dbpedia.*
 import saskia.bin.*
-import saskia.io.Entity
-import saskia.io.Geoscope
 /**
  * @author Nuno Cardoso
  * 
@@ -136,7 +137,7 @@ class QueryReformulator2 extends QueryReformulator {
 
 	/** 3. Do for OTHERS */
 	question.others?.each{other -> 
-		if (other instanceof Entity) {
+		if (other instanceof EntityTable) {
 			addEntityToReformulatedQuery(other, ref_query, question.language)
 		}
 	}
@@ -206,14 +207,14 @@ class QueryReformulator2 extends QueryReformulator {
 				log.info "Going for DBpedia-related geoscope stuff. Note: ne.dbpedia = ${ne.dbpediaPage}"
 				
 	       		ne.dbpediaPage[cl].each{resource -> 
-		   			Entity ent = Entity.getFromDBpediaResource(DBpediaResource.getShortName(resource))
+		   			EntityTable ent = EntityTable.getFromDBpediaResource(DBpediaResource.getShortName(resource))
 			        if (!ent) {
                     	log.trace "no DBpedia entry ${resource} on DB. Creating a new entry."
                     	// let's get a classification.
                     	List listOfClasses = dbpedia.getDBpediaOntologyClassFromDBpediaResource(resource)
                     	log.trace "Classifying DBpedia resource $resource generated classes ${listOfClasses}" 
                     	log.trace "Narrower one: "+dbpediaontology.getNarrowerClassFrom(listOfClasses) 
-                    	ent = new Entity(
+                    	ent = new EntityTable(
                 			ent_dbpedia_resource:DBpediaResource.getShortName(resource),
                 			ent_dbpedia_class:dbpediaontology.getNarrowerClassFrom(listOfClasses)
                     	)
@@ -269,7 +270,7 @@ class QueryReformulator2 extends QueryReformulator {
 		} // each cl
     }// end method
 
-   static addEntityToReformulatedQuery(Entity ent, ReformulatedQuery ref_query, String lang) {
+   static addEntityToReformulatedQuery(EntityTable ent, ReformulatedQuery ref_query, String lang) {
 
 		log.debug "Adding Entity $ent the ReformulatedQuery"
 		

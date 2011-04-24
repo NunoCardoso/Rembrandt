@@ -17,6 +17,7 @@
  */
 package saskia.server
 
+import saskia.db.table.EntityTable;
 import saskia.io.*
 import saskia.util.I18n
 
@@ -77,7 +78,7 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
         			Map h
                try {
                   sm.logProcessDebug "Querying Entities: limit $limit offset $offset column $column value $value"
-                  h = Entity.listEntities(limit, offset, column, value)
+                  h = EntityTable.listEntities(limit, offset, column, value)
                 } catch(Exception e) {
 	              		errorlog.error i18n.servermessage['error_getting_entity_list'][lang]+": "+e.printStackTrace()
                     	return sm.statusMessage(-1, i18n.servermessage["error_getting_entity_list"][lang]+": "+e.getMessage())
@@ -101,10 +102,10 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
                if (!ent_id) return sm.notEnoughVars("id=$ent_id") 
                if (!column || !value) return sm.notEnoughVars("c=$column v=$value")
                 
-               Entity entity
+               EntityTable entity
                try {
                     log.debug "Querying Entity with id $ent_id"
-                    entity = Entity.getFromID(ent_id)
+                    entity = EntityTable.getFromID(ent_id)
                } catch(Exception e) {
 	              		errorlog.error i18n.servermessage['error_getting_entity'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_entity"][lang]+": "+e.getMessage())                 
@@ -130,9 +131,9 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
                 }catch(Exception e) {}              
                 if (!id)  return sm.notEnoughVars("id=$id")      
                 
-					Entity entity 
+					EntityTable entity 
                try {
-                    entity = Entity.getFromID(id)
+                    entity = EntityTable.getFromID(id)
                 } catch(Exception e) {
 	              	  errorlog.error i18n.servermessage['error_getting_entity'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_entity"][lang]+": "+e.getMessage())                 
@@ -161,7 +162,7 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
                if (!ent_name || !ent_dbpedia_resource || !ent_dbpedia_class) 
 						return sm.notEnoughVars("$ent_name $ent_dbpedia_resource $ent_dbpedia_class") 
 
-               Entity ent = new Entity(ent_name:ent_name, ent_dbpedia_resource:ent_dbpedia_resource,
+               EntityTable ent = new EntityTable(ent_name:ent_name, ent_dbpedia_resource:ent_dbpedia_resource,
         	       ent_dbpedia_class:ent_dbpedia_class)
                try {
                     log.debug "Adding Entity"

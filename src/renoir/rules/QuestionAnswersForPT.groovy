@@ -21,7 +21,7 @@ package renoir.rules
 import org.apache.log4j.*
 import rembrandt.obj.*
 import saskia.bin.Configuration
-import saskia.io.Entity
+import saskia.db.table.EntityTable;
 import saskia.dbpedia.*
 import renoir.obj.Question
 import renoir.obj.QuestionType
@@ -290,10 +290,10 @@ q.expectedAnswerTypes.each{eat ->
 											String resource = DBpediaResource.getShortName(s)
 											if (!resource.startsWith("List_of_")) {
 												// Since "others" is a pool, let's identity by encapsulating in an Entity object
-												Entity ent = Entity.getFromDBpediaResource(DBpediaResource.getShortName(resource))
+												EntityTable ent = EntityTable.getFromDBpediaResource(DBpediaResource.getShortName(resource))
 			        							if (!ent) {
                     								List listOfClasses = dbpedia.getDBpediaOntologyClassFromDBpediaResource(resource)
-                    								ent = new Entity(
+                    								ent = new EntityTable(
                 										ent_dbpedia_resource:DBpediaResource.getShortName(resource),
                 										ent_dbpedia_class:dbpediaontology.getNarrowerClassFrom(listOfClasses)
                     								)
@@ -314,10 +314,10 @@ q.expectedAnswerTypes.each{eat ->
 											String resource = DBpediaResource.getShortName(s)
 											if (!resource.startsWith("List_of_")) {
 												// Since "others" is a pool, let's identity by encapsulating in an Entity object
-												Entity ent = Entity.getFromDBpediaResource(DBpediaResource.getShortName(resource))
+												EntityTable ent = EntityTable.getFromDBpediaResource(DBpediaResource.getShortName(resource))
 			        							if (!ent) {
                     								List listOfClasses = dbpedia.getDBpediaOntologyClassFromDBpediaResource(resource)
-                    								ent = new Entity(
+                    								ent = new EntityTable(
                 										ent_dbpedia_resource:DBpediaResource.getShortName(resource),
                 										ent_dbpedia_class:dbpediaontology.getNarrowerClassFrom(listOfClasses)
                     								)
@@ -372,10 +372,10 @@ q.expectedAnswerTypes.each{eat ->
 										String resource = DBpediaResource.getShortName(s)
 										if (!resource.startsWith("List_of_")) {
 										// Since "others" is a pool, let's identity by encapsulating in an Entity object
-											Entity ent = Entity.getFromDBpediaResource(DBpediaResource.getShortName(resource))
+											EntityTable ent = EntityTable.getFromDBpediaResource(DBpediaResource.getShortName(resource))
 											if (!ent) {
 												List listOfClasses = dbpedia.getDBpediaOntologyClassFromDBpediaResource(resource)
-												ent = new Entity(
+												ent = new EntityTable(
 												ent_dbpedia_resource:DBpediaResource.getShortName(resource),
 												ent_dbpedia_class:dbpediaontology.getNarrowerClassFrom(listOfClasses)
 												)
@@ -436,10 +436,10 @@ q.expectedAnswerTypes.each{eat ->
 									String resource = DBpediaResource.getShortName(s)
 									if (!resource.startsWith("List_of_")) {
 									// Since "others" is a pool, let's identity by encapsulating in an Entity object
-										Entity ent = Entity.getFromDBpediaResource(DBpediaResource.getShortName(resource))
+										EntityTable ent = EntityTable.getFromDBpediaResource(DBpediaResource.getShortName(resource))
 										if (!ent) {
 											List listOfClasses = dbpedia.getDBpediaOntologyClassFromDBpediaResource(resource)
-											ent = new Entity(
+											ent = new EntityTable(
 											ent_dbpedia_resource:DBpediaResource.getShortName(resource),
 											ent_dbpedia_class:dbpediaontology.getNarrowerClassFrom(listOfClasses)
 											)

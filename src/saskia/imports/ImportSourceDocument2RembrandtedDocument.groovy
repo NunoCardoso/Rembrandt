@@ -25,7 +25,10 @@ import saskia.bin.Configuration
 import rembrandt.obj.Document
 import rembrandt.bin.Rembrandt
 import rembrandt.bin.RembrandtCore
-import saskia.db.SaskiaDB
+import saskia.db.DocStatus;
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.obj.Collection;
+import saskia.db.table.Job;
 import saskia.io.SourceDoc
 import rembrandt.io.DocStats
 import rembrandt.io.HTMLDocumentReader
@@ -33,11 +36,8 @@ import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtWriter
 import saskia.io.Task
 import saskia.io.User
-import saskia.io.Job
-import saskia.io.Collection
 import saskia.io.RembrandtedDoc
 import saskia.io.Tag
-import saskia.io.DocStatus
 import rembrandt.io.RembrandtWriter
 import rembrandt.io.RembrandtStyleTag
 import rembrandt.obj.Document
@@ -82,7 +82,7 @@ class ImportSourceDocument2RembrandtedDocument {
 		source_doc_pool_size = conf.getInt("saskia.imports.source_doc_pool_size",10)
 		this.lang =lang
 		taglang = conf.get("rembrandt.output.styletag.lang", lang)
-	    db = SaskiaDB.newInstance()
+	    db = SaskiaMainDB.newInstance()
 	    styletag = new RembrandtStyleTag(taglang)
 	    readerHTML = new HTMLDocumentReader()
 	    readerRembrandt = new RembrandtReader(styletag)

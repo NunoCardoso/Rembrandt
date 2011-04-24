@@ -1,4 +1,4 @@
-package renoir.gikiclef
+package renoir.test.gikiclef
 
 import org.junit.*
 import org.junit.runner.*
@@ -31,10 +31,10 @@ class TestTopic02 extends GroovyTestCase {
 	
 	void testGenerateTopic02() {
 
-	 // ****  T—pico: ***	
+	 // ****  Tï¿½pico: ***	
 	 String linguateca_line ="""Que	que	DET_interr	0	P	M	>N	0
-pa’ses	pa’s	N	0	P	M	SUBJ>	0
-tm	ter	V_fmc	PR_IND	3P	0	FMV	0
+paï¿½ses	paï¿½s	N	0	P	M	SUBJ>	0
+tï¿½m	ter	V_fmc	PR_IND	3P	0	FMV	0
 branco	branco	N	0	S	M	<ACC	0
 ,	,	PU	0	0	0	PONT	0
 verde	verde	ADJ	0	S	M	N<PRED	0
@@ -60,7 +60,7 @@ nacional	nacional	ADJ	0	S	F	N<	0
 
 	 // Assert question subjects 
      qa.applyRules(q, GikiCLEFQuestionRulesPT.gikiclefRules)
-	 assert q.subject.terms*.text == ["pa’ses"], "Got ${q.subject.terms*.text} instead"
+	 assert q.subject.terms*.text == ["paï¿½ses"], "Got ${q.subject.terms*.text} instead"
 	 assert q.subject.subtypeHAREM.contains("PAIS"), "got ${q.subject.subtypeHAREM} instead"
 
 	// Assert Question EAT
@@ -77,8 +77,8 @@ nacional	nacional	ADJ	0	S	F	N<	0
 
 	// let's create a pool of documents that are countries 
 //select distinct page_id, page_title from pt_page, pt_categorylinks where 
-//cl_from = page_id and cl_to LIKE "Pa’ses%" and page_namespace=0 order by page_id
-// tudo acima de 1000000 n‹o vale a pena.
+//cl_from = page_id and cl_to LIKE "Paï¿½ses%" and page_namespace=0 order by page_id
+// tudo acima de 1000000 nï¿½o vale a pena.
 
 /*   List ids = [3374, 21472,1510119, 1826610, 11682, 1444910, 166945, 41001, 818181, 35364,
  648610, 526272, 1244604, 1422288,  536394, 818187, 60810, 1440419, 1748038, 304, 3862, 3847,

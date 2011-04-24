@@ -17,6 +17,8 @@
  */
 package saskia.patches
 
+import saskia.db.SaskiaWebstore;
+import saskia.db.obj.Collection;
 import saskia.io.*
 import org.apache.log4j.*
 import org.apache.commons.cli.*

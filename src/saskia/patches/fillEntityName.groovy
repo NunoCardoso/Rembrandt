@@ -22,6 +22,7 @@ import org.apache.log4j.*
 import org.apache.commons.cli.*
 import saskia.dbpedia.DBpediaAPI
 import saskia.bin.Configuration
+import saskia.db.database.*
 
 /**
  * @author Nuno Cardoso
@@ -29,10 +30,11 @@ import saskia.bin.Configuration
 class FillEntityName {
   
     int number
-    SaskiaDB db = SaskiaDB.newInstance()
-	 DBpediaAPI dbpedia = DBpediaAPI.newInstance(Configuration.newInstance())
+    SaskiaDB db
+	DBpediaAPI dbpedia = DBpediaAPI.newInstance(Configuration.newInstance())
 
-	public FillEntityName(int number) {
+	public FillEntityName(SaskiaDB db, int number) {
+		this.db=db
 		this.number = number
 	}
 	
@@ -68,10 +70,16 @@ class FillEntityName {
         String fileseparator = System.getProperty("file.separator")
         
         o.addOption("n", true, "Number of those to tage (0 = all)")
+        o.addOption("db", true, "DB")
         CommandLineParser parser = new GnuParser()
         CommandLine cmd = parser.parse(o, args)
         
-        
+		
+		if (!cmd.hasOption("db")) {
+			println "No --db arg. Please specify the database. Exiting."
+			System.exit(0)
+		}
+		
         if (!cmd.hasOption("n")) {
             println "No --n arg. Setting to all."
             n = 0
@@ -79,12 +87,17 @@ class FillEntityName {
 				try {
 					n = Integer.parseInt(cmd.getOptionValue("n"))
 				}catch(Exception e) {
-					println "n musst be a number. Exiting."
+					println "n must be a number. Exiting."
 					System.exit(0)
 				}
 			}		
-        
-			FillEntityName f = new FillEntityName(n)
+        	
+		SaskiaDB db
+        String db_ = cmd.getOptionValue("db")
+		if (db_ == "SaskiaMain") db = SaskiaMainDB.newInstance()
+		if (db_ == "SaskiaTest") db = SaskiaTestDB.newInstance()
+
+			FillEntityName f = new FillEntityName(db, n)
 			Map status = f.doit()
 			println "Done. Status: "+status
  	 }

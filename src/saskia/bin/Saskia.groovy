@@ -20,7 +20,7 @@ package saskia.bin
 
 import org.apache.log4j.*
 
-import saskia.io.DocStatus
+import saskia.db.DocStatus;
 import saskia.io.SourceDoc
 import saskia.io.RembrandtedDoc 
 import saskia.imports.ImportSourceDocument2RembrandtedDocument

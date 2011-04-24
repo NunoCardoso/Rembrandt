@@ -19,6 +19,10 @@ package saskia.io
 
 import org.apache.log4j.*
 
+import saskia.db.obj.DBObject;
+import saskia.db.obj.JSONable;
+import saskia.db.table.EntityTable;
+
 /** This class is an interface for the NEsubtype table in the WikiRembrandt database. 
   * It stores tagging information associated to a NE subtype.
   * Static methods are used to return results from DB, using where clauses.
@@ -115,7 +119,7 @@ class NESubtype  extends DBObject implements JSONable {
 	}
 	
 	
-	boolean equals(Entity e) {
+	boolean equals(EntityTable e) {
 		return this.toMap().equals(e.toMap())
 	}
     

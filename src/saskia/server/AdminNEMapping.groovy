@@ -17,8 +17,8 @@
  */
 package saskia.server
 
-import saskia.io.Entity
-import saskia.io.NE
+import saskia.db.table.EntityTable;
+import saskia.db.table.NE;
 import saskia.io.User
 import saskia.io.NECategory
 import saskia.io.NEName
@@ -164,9 +164,9 @@ public class AdminNEMapping extends WebServiceRestletMapping {
                   break   
                   
   						case "ne_entity": 
-                	Entity ne_entity
+                	EntityTable ne_entity
                 	try {
-                     ne_entity = Entity.getFromID(Long.parseLong(value))
+                     ne_entity = EntityTable.getFromID(Long.parseLong(value))
                      res = ne.updateEntity(ne_entity)
                   } catch(Exception e)  {
                	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
@@ -249,7 +249,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
                if (c3v) c3v = NESubtype.getFromSubtype(c3v)
          
                // let's see if there is already on DB
-               Entity entity = Entity.getFromID(ent)
+               EntityTable entity = EntityTable.getFromID(ent)
                
                NE ne2 = NE.getFromNameAndLangAndClassificationAndEntity(db_ne_name, ne_lang, c1v, c2v, c3v, entity) 
         	   

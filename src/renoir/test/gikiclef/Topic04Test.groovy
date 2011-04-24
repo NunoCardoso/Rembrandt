@@ -1,4 +1,4 @@
-package renoir.gikiclef
+package renoir.test.gikiclef
 
 import org.junit.*
 import org.junit.runner.*

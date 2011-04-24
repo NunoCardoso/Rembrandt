@@ -18,14 +18,14 @@
  
 package saskia.imports
 
-import saskia.db.WikipediaDB
+import saskia.db.DocStatus;
+import saskia.db.database.WikipediaDB;
+import saskia.db.obj.Collection;
+import saskia.db.table.NE;
 import saskia.dbpedia.DBpediaAPI
 import saskia.dbpedia.DBpediaOntology
 import saskia.wikipedia.WikipediaDocument
-import saskia.io.NE
 import saskia.io.SourceDoc
-import saskia.io.Collection
-import saskia.io.DocStatus
 import saskia.converters.WikipediaDocument2HTMLDocumentConverter
 import saskia.bin.Configuration
 import org.apache.log4j.*

@@ -17,8 +17,8 @@
  */
 package saskia.server
 
+import saskia.db.obj.Collection;
 import saskia.io.User
-import saskia.io.Collection
 import org.apache.log4j.*
 import renoir.util.SHA1 //SHA1.convert(passwd)
 import renoir.util.MD5Hex 

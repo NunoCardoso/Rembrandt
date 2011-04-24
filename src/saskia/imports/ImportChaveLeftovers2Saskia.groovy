@@ -24,7 +24,9 @@ import rembrandt.io.*
 import rembrandt.tokenizer.*
 import java.util.regex.*
 import saskia.bin.Configuration
-import saskia.db.SaskiaDB
+import saskia.db.DocStatus;
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.obj.Collection;
 import saskia.util.I18n
 import org.apache.log4j.*
 
@@ -34,7 +36,7 @@ import org.apache.log4j.*
 
 class ImportChaveLeftovers2Saskia {
 	
-	SaskiaDB saskia_db
+	SaskiaMainDB saskia_db
 	Configuration conf
 	static Logger log = Logger.getLogger("Saskia")
 	String saskiaDB

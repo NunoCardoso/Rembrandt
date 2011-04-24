@@ -17,6 +17,8 @@
  */
 package saskia.patches
 
+import saskia.db.table.GeoscopeTable
+import saskia.db.database.*
 import saskia.io.*
 import org.apache.log4j.*
 import org.apache.commons.cli.*
@@ -32,7 +34,8 @@ class FillGeoscope {
         String fileseparator = System.getProperty("file.separator")
         
         o.addOption("text", true, "text")
-        o.addOption("lang", true, "text")
+        o.addOption("lang", true, "lang")
+        o.addOption("db", true, "db. SaskiaMain or SaskiaTest")
         o.addOption("help", false, "help")
         CommandLineParser parser = new GnuParser()
         CommandLine cmd = parser.parse(o, args)
@@ -42,6 +45,12 @@ class FillGeoscope {
             println "No --text arg. Please specify the text needle. Exiting."
             System.exit(0)
         }
+		
+		if (!cmd.hasOption("db")) {
+			println "No --db arg. Please specify the database. Exiting."
+			System.exit(0)
+		}
+		
    		if (!cmd.hasOption("lang")) {
             println "No --lang arg. Please specify the language. Exiting."
             System.exit(0)
@@ -49,11 +58,18 @@ class FillGeoscope {
 
         String text = cmd.getOptionValue("text")		
         String lang = cmd.getOptionValue("lang")	
-        println "Fetching geoscope for name $text, lang $lang"
+        String db_ = cmd.getOptionValue("db")
+		
+		SaskiaDB db
+		if (db_ == "SaskiaMain") db = SaskiaMainDB.newInstance()
+		if (db_ == "SaskiaTest") db = SaskiaTestDB.newInstance()
+		GeoscopeTable gt = new GeoscopeTable(db)
+			
+		println "Fetching geoscope for name $text, lang $lang"
         
 //Geoscope fetchPlaceForWOEID(Long woeid) {
 	
-		List<Geoscope> geos = Geoscope.getFromName(text, lang)
+		List<Geoscope> geos = gt.getFromName(text, lang)
 		if (geos) {
 			println "Found geoscopes on DB: $geos"
 			println "Exiting..."

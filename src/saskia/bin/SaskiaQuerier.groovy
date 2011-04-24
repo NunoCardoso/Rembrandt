@@ -18,9 +18,9 @@
 
 package saskia.bin
 
-import saskia.db.SaskiaDB
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.obj.Collection;
 import saskia.io.RembrandtedDoc
-import saskia.io.Collection
 //import saskia.converters.RembrandtedDocument2PlainTextConverter 
 import org.apache.log4j.*
 
@@ -32,10 +32,10 @@ import org.apache.log4j.*
 class SaskiaQuerier {
      
     static Logger log = Logger.getLogger("Querier")
-    SaskiaDB db
+    SaskiaMainDB db
     
     public SaskiaQuerier() {
-	db = SaskiaDB.newInstance()
+	db = SaskiaMainDB.newInstance()
     }
 
     // obsolete

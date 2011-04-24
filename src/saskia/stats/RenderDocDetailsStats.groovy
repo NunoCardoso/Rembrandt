@@ -18,11 +18,11 @@
  
 package saskia.stats
 
-import saskia.io.Collection
+import saskia.db.GeoSignature;
+import saskia.db.obj.Collection;
+import saskia.db.table.DocGeoSignatureTable;
+import saskia.db.table.DocTimeSignatureTable;
 import saskia.io.RembrandtedDoc
-import saskia.io.DocGeoSignature
-import saskia.io.GeoSignature
-import saskia.io.DocTimeSignature
 import saskia.util.I18n
 import rembrandt.obj.Document
 import rembrandt.io.RembrandtReader
@@ -82,7 +82,7 @@ class RenderDocDetailsStats {
         
             s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-geo-signature-div' class='stats-box'>\n"
             s.append "<P><B>${i18n.statstitle['doc_geo_signature'][lang]}</B></P>"
-            DocGeoSignature dgs = rdoc.getGeographicSignature()
+            DocGeoSignatureTable dgs = rdoc.getGeographicSignature()
             String ss = "" 
 				if (dgs?.dgs_signature) 
 					dgs.dgs_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
@@ -91,7 +91,7 @@ class RenderDocDetailsStats {
             
             s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-time-signature-div' class='stats-box'>\n"
             s.append "<P><B>${i18n.statstitle['doc_time_signature'][lang]}</B></P>"
-            DocTimeSignature dts = rdoc.getTimeSignature()
+            DocTimeSignatureTable dts = rdoc.getTimeSignature()
 				if (dts?.dts_signature)
             	ss = dts.dts_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
             s.append ss

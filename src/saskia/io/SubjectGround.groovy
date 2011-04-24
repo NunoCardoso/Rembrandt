@@ -20,6 +20,10 @@ package saskia.io
 
 import org.apache.log4j.*
 import saskia.bin.Configuration
+import saskia.db.obj.DBObject;
+import saskia.db.obj.JSONable;
+import saskia.db.table.EntityTable;
+import saskia.db.table.Geoscope;
 import rembrandt.obj.Sentence
 
 class SubjectGround extends DBObject implements JSONable {
@@ -89,7 +93,7 @@ class SubjectGround extends DBObject implements JSONable {
 		String query = "SELECT SQL_CALC_FOUND_ROWS ${tablename}.* $from $where LIMIT ${limit} OFFSET ${offset} "+
 		"UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL, NULL, NULL, NULL"
 		//log.debug "query = $query params = $params class = "+params*.class
-		List<Entity> u = queryDB(query, params) 
+		List<EntityTable> u = queryDB(query, params) 
 	
 		// last "item" it's the count.
 		int total = (int)(u.pop().sgr_id)

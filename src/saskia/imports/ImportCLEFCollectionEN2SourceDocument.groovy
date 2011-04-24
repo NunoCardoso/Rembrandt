@@ -18,11 +18,12 @@
  
 package saskia.imports
 
-import saskia.io.NE
 import saskia.io.SourceDoc
-import saskia.io.Collection
-import saskia.io.DocStatus
 import saskia.bin.Configuration
+import saskia.db.DocStatus;
+import saskia.db.obj.Collection;
+import saskia.db.table.NE;
+
 import org.apache.log4j.*
 import org.apache.commons.cli.*
 import java.util.regex.Matcher

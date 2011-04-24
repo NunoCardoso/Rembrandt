@@ -18,25 +18,25 @@
  
 package saskia.stats
 
-import saskia.db.SaskiaDB
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.obj.Collection;
 import rembrandt.obj.Document
 import rembrandt.obj.Sentence
 import saskia.io.RembrandtedDoc
-import saskia.io.Collection
 import saskia.util.I18n
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
 
 class NEPoolStats {
      
-     SaskiaDB db
+     SaskiaMainDB db
      RembrandtReader reader
      Collection collection
      String lang
      I18n i18n
      
      public NEPoolStats(Collection collection, String lang) { 	
-	 	db = SaskiaDB.newInstance()
+	 	db = SaskiaMainDB.newInstance()
 	 	i18n = I18n.newInstance()
 	 	this.collection = collection
 	 	this.lang=lang

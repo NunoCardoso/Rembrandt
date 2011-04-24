@@ -21,7 +21,8 @@ package saskia.server
 import java.util.Map
 import java.util.List
 import java.util.Set
-import saskia.io.DocStatus
+
+import saskia.db.DocStatus;
 
 /**
  * @author rlopes

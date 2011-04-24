@@ -17,12 +17,12 @@
  */
 package saskia.imports
 
-import saskia.io.DocTimeSignature
-import saskia.io.TimeSignatureFactory
-import saskia.io.Collection
 import saskia.io.Tag
 import rembrandt.io.DocStats
 import saskia.bin.Configuration
+import saskia.db.TimeSignatureFactory;
+import saskia.db.obj.Collection;
+import saskia.db.table.DocTimeSignatureTable;
 import saskia.io.RembrandtedDoc
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
@@ -88,7 +88,7 @@ class GenerateTimeSignatures {
                 HashMap status_
                 
                 try {
-                    DocTimeSignature dts = new DocTimeSignature()
+                    DocTimeSignatureTable dts = new DocTimeSignatureTable()
                     // the String is a XML
                     dts.dts_document = doc_id
                     dts.dts_signature = tsf.generate(doc_id, stuff)

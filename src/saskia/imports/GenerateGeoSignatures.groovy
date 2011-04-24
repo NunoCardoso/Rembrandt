@@ -17,12 +17,12 @@
  */
 package saskia.imports
 
-import saskia.io.DocGeoSignature
-import saskia.io.GeoSignatureFactory
-import saskia.io.Collection
 import saskia.io.Tag
 import rembrandt.io.DocStats
 import saskia.bin.Configuration
+import saskia.db.GeoSignatureFactory;
+import saskia.db.obj.Collection;
+import saskia.db.table.DocGeoSignatureTable;
 import saskia.io.RembrandtedDoc
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
@@ -90,7 +90,7 @@ class GenerateGeoSignatures {
                 HashMap status_
                 
                 try {
-                    DocGeoSignature dgs = new DocGeoSignature()
+                    DocGeoSignatureTable dgs = new DocGeoSignatureTable()
                     // the String is a XML
                     dgs.dgs_document = doc_id
                     dgs.dgs_signature = gsf.generate(doc_id, stuff)

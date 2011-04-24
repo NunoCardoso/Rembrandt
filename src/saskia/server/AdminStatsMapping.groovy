@@ -18,11 +18,13 @@
 package saskia.server
 
 import saskia.io.User
-import saskia.io.Collection
 import saskia.io.Cache
 import saskia.util.I18n
 import saskia.stats.SaskiaStats
 import org.apache.log4j.*
+
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.obj.Collection;
 
 public class AdminStatsMapping extends WebServiceRestletMapping {
     
@@ -31,14 +33,16 @@ public class AdminStatsMapping extends WebServiceRestletMapping {
     static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
     static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
     static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
- 
+	SaskiaMainDB db
+	
 /** Note: this mapping should be used only by superuser folks *managing user stuff*, so 
  * it requires an api_key. For standard uses, the UserMapping is the one that has standard actions.
  */
     public AdminStatsMapping() {
         
         i18n = I18n.newInstance()
-        
+        db = SaskiaMainDB.newInstance()
+		 
         JSONanswer = {req, par, bind ->
             
             long session = System.currentTimeMillis()
@@ -77,7 +81,7 @@ public class AdminStatsMapping extends WebServiceRestletMapping {
         	 		if (!col_id) return sm.notEnoughVars("ci=$col_id")   
         	 		collection = Collection.getFromID(col_id)
         	 
-        			Map dates = Cache.getFrontPageCacheDates(collection)
+        			Map dates = Cache.getFrontPageCacheDates(db, collection)
         			Map h = [:]
         			h['cache_dates'] = dates
         			SaskiaStats stats = new SaskiaStats()

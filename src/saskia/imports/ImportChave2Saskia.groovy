@@ -18,11 +18,11 @@
  
 package saskia.imports
 
-import saskia.db.SaskiaDB
+import saskia.db.DocStatus;
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.obj.Collection;
 import saskia.io.Tag
 import saskia.io.RembrandtedDoc
-import saskia.io.Collection
-import saskia.io.DocStatus
 import saskia.converters.CHAVE2RembrandtedDocumentConverter
 import saskia.bin.Configuration
 import saskia.util.I18n
@@ -34,7 +34,7 @@ import org.apache.log4j.*
 
 class ImportChave2Saskia {
 	
-	SaskiaDB saskia_db
+	SaskiaMainDB saskia_db
 	Configuration conf
 	static Logger log = Logger.getLogger("Saskia")
 	String saskiaDB
@@ -47,7 +47,7 @@ class ImportChave2Saskia {
 	public ImportChave2Saskia() {
 
 	    conf = Configuration.newInstance()
-	    saskia_db = SaskiaDB.newInstance()
+	    saskia_db = SaskiaMainDB.newInstance()
 	    saskiaDB = "saskia"
 	    log.debug "Target Saskia DB set to $saskiaDB"
 	    c2rd = new CHAVE2RembrandtedDocumentConverter()

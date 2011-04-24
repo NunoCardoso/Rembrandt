@@ -20,6 +20,13 @@ package saskia.io
 
 import org.apache.log4j.*
 import saskia.bin.Configuration
+import saskia.db.DocStatus;
+import saskia.db.SaskiaWebstore;
+import saskia.db.obj.Collection;
+import saskia.db.obj.DBObject;
+import saskia.db.obj.JSONable;
+import saskia.db.table.Job;
+
 import java.sql.SQLException
 import java.util.Map;
 

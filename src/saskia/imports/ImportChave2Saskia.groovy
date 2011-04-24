@@ -20,9 +20,8 @@ package saskia.imports
 
 import saskia.db.DocStatus;
 import saskia.db.database.SaskiaMainDB;
-import saskia.db.obj.Collection;
-import saskia.io.Tag
-import saskia.io.RembrandtedDoc
+import saskia.db.obj.*;
+import saskia.db.table.*
 import saskia.converters.CHAVE2RembrandtedDocumentConverter
 import saskia.bin.Configuration
 import saskia.util.I18n

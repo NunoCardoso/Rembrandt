@@ -20,7 +20,8 @@ package saskia.imports
 
 import rembrandt.obj.Document
 import saskia.bin.Configuration
-import saskia.io.SourceDoc
+import saskia.db.obj.SourceDoc;
+
 import org.apache.log4j.Logger
 import java.util.regex.*
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException

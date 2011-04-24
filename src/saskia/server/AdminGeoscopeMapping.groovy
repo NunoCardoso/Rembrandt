@@ -17,8 +17,10 @@
  */
 package saskia.server
 
-import saskia.db.table.Geoscope;
-import saskia.io.*
+import saskia.db.obj.Geoscope
+import saskia.db.table.UserTable
+import saskia.db.obj.User
+
 import saskia.util.I18n
 import org.apache.log4j.*
 

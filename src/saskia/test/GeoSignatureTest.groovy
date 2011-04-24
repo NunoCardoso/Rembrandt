@@ -20,7 +20,7 @@ package saskia.test
 
 import saskia.bin.Configuration
 import saskia.db.GeoSignature;
-import saskia.io.*
+
 import org.apache.log4j.*
 
 /**

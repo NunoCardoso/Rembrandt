@@ -16,12 +16,12 @@ import rembrandt.util.XMLUtil
 import rembrandt.bin.*
 
 import saskia.bin.Configuration
+import saskia.db.table.RembrandtedDoc;
 import saskia.dbpedia.*
 import saskia.ontology.*
 
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
-import saskia.io.RembrandtedDoc
 
 class TestTopic01 extends GroovyTestCase {
 

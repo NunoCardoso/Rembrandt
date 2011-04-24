@@ -18,8 +18,9 @@
 package saskia.server
 
 import saskia.db.obj.Collection;
-import saskia.db.table.NE;
-import saskia.io.User
+import saskia.db.obj.NE;
+import saskia.db.table.UserTable;
+import saskia.db.obj.User;
 import saskia.stats.SaskiaStats
 import saskia.util.I18n
 import org.apache.log4j.*

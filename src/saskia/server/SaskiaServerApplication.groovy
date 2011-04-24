@@ -21,8 +21,9 @@ package saskia.server
 import java.net.URLDecoder
 import org.apache.log4j.*
 
-import saskia.io.RembrandtedDoc
-import saskia.io.User
+import saskia.db.obj.RembrandtedDoc;
+import saskia.db.table.UserTable;
+import saskia.db.obj.User;
 
 import saskia.util.Native2AsciiWrapper
 

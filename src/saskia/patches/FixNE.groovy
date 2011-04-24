@@ -18,9 +18,10 @@
  */
 package saskia.patches
 
-import saskia.db.table.EntityTable;
-import saskia.db.table.NE;
-import saskia.io.*
+import saskia.db.obj.Entity
+import saskia.db.obj.NE
+import saskia.db.database.SaskiaDB
+
 import org.apache.log4j.*
 import org.apache.commons.cli.*
 
@@ -35,7 +36,7 @@ class FixNE {
 
     List l
     SaskiaDB db
-    static LinkedHashMap<Long,EntityTable> cache = new LinkedHashMap(10000, 0.75f, true) 
+    static LinkedHashMap<Long,Entity> cache = new LinkedHashMap(10000, 0.75f, true) 
     
     public FixNE(List l) {
 	this.l = l     
@@ -86,14 +87,14 @@ class FixNE {
             // verify that it has all ids != min_ne_id
            // assert neids.size() + 1 == it.count
             
-            List<EntityTable> ent = nes*.ne_entity.unique()
+            List<Entity> ent = nes*.ne_entity.unique()
             List ent_nulls = ent.findAll{it == null}
             List ent_not_nulls = ent.findAll{it != null}
             log.debug "Got entities $ent"
                 
             // if it's jut null, check cache.
             // the ne_name is the same for all NEs so there's no worry on gling for nes[0]
-            EntityTable e = null
+            Entity e = null
             
             if (ent == [null]) {
                 log.debug "Got no entities in this NE list!"

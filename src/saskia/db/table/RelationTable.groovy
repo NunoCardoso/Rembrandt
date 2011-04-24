@@ -16,64 +16,56 @@
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package saskia.io
+package saskia.db.table
 
 import org.apache.log4j.*
 
-/** This class is an interface for the NEsubtype table in the WikiRembrandt database. 
-  * It stores tagging information associated to a NE subtype.
-  * Static methods are used to return results from DB, using where clauses.
-  * Class methods are used to insert results to DB.  
-  */
-class Relation {
+import saskia.db.database.SaskiaDB
+import saskia.db.obj.Relation
 
-	static String tablename = "relation"
+/** This class is an interface for the NEsubtype table in the WikiRembrandt database. 
+ * It stores tagging information associated to a NE subtype.
+ * Static methods are used to return results from DB, using where clauses.
+ * Class methods are used to insert results to DB.  
+ */
+class RelationTable extends DBTable {
+
+	String tablename = "relation"
 	static String default_relation = "sameAs"
-	long rel_id
-	String rel_relation
-	static SaskiaDB db = SaskiaDB.newInstance()
+
 	static Logger log = Logger.getLogger("Relation")
+
+	public RelationTable(SaskiaDB db) {
+		super(db, tablename)
+	}
 
 	static List<Relation> queryDB(String query, ArrayList params = []) {
 		List<Relation> t = []
-		db.getDB().eachRow(query, params, {row  -> 
-			t << new Relation(rel_id:row['rel_id'], rel_relation:row['rel_relation'] )
+		db.getDB().eachRow(query, params, {row  ->
+			t << Relation.createFromDBRow(this.owner,row)
 		})
 		return t
 	}
-	
+
 	/** Get all relations. It's easier to have them in memory, than hammering the DB 
 	 * return List<Relation> A list of Relation objects
 	 */
-	static Map getAllRelations() {
+	public Map getAllRelations() {
 		def map = [:]
 		def r = queryDB("SELECT * FROM ${tablename}")
 		log.debug "Searched for all relations, got ${r.size()} entries."
 		r.each{map[it.rel_relation] = it.rel_id}
 		return map
 	}
-	
+
 	/** Get a Relation from id.
 	 * @param id The id as needle.
 	 * return the Relation result object, or null
 	 */
-	static Relation getFromID(long rel_id) {
+	public Relation getFromID(long rel_id) {
 		if (!rel_id) return null
 		Relation r = queryDB("SELECT * FROM ${tablename} WHERE rel_id=?", [rel_id])?.getAt(0)
-		log.debug "Querying for rel_id $rel_id got Relation $r." 
+		log.debug "Querying for rel_id $rel_id got Relation $r."
 		if (r.rel_id) return r else return null
-	}	
-	
-	/** Add this Relation o the database. Note that a null is a valid insertion...
-	 * return 1 if successfully inserted.
-	 */	
-	public int addThisToDB() {
-		def res = db.getDB().executeInsert("INSERT INTO ${tablename} VALUES(0,?)", [rel_relation])
-		// returns an auto_increment value
-		return (int)res[0][0]
-	}	
-	
-	public String toString() {
-		return rel_relation
 	}
 }

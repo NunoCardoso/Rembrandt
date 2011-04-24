@@ -26,9 +26,9 @@ import renoir.obj.RenoirQueryParser
 import saskia.bin.Configuration
 import saskia.db.GeoSignature;
 import saskia.db.obj.Collection;
-import saskia.db.table.DocGeoSignatureTable;
-import saskia.io.RembrandtedDoc
-import saskia.io.User
+import saskia.db.obj.DocGeoSignature
+import saskia.db.obj.RembrandtedDoc
+import saskia.db.obj.User
 import saskia.util.I18n
 import saskia.server.ServerMessage
 import org.apache.lucene.search.highlight.Highlighter
@@ -212,7 +212,7 @@ public class SearchMapping extends WebServiceRestletMapping {
 					List coordinates = [], polylines = []
 					if (maps) { 
 			    		// get from table doc_geo_signature the stuff for this document
-			    		DocGeoSignatureTable dgs = rdoc.getGeographicSignature()
+			    		DocGeoSignature dgs = rdoc.getGeographicSignature()
 			    		if (dgs) {
 							// get the dgs_signature. Note that is has only ancestors/centroid/bb info, no shape.
 							GeoSignature geosig = new GeoSignature(dgs)

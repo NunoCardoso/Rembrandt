@@ -17,7 +17,8 @@
  */
 package saskia.server
 
-import saskia.io.User
+import saskia.db.table.UserTable
+import saskia.db.obj.User
 import saskia.util.I18n
 import org.apache.log4j.*
 

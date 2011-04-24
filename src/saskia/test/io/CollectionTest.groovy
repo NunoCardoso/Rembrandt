@@ -20,9 +20,10 @@ package saskia.test.io
 import org.junit.*
 import org.junit.runner.*
 import org.apache.log4j.*
-import saskia.io.*
+
 import saskia.bin.Configuration
 import saskia.db.obj.Collection
+import saskia.db.table.User;
 import saskia.db.database.SaskiaTestDB
 
 /**

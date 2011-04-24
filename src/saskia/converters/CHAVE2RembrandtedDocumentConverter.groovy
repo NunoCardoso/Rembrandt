@@ -26,7 +26,7 @@ import rembrandt.obj.Sentence
 import rembrandt.obj.Term
 import rembrandt.io.RembrandtWriter
 import rembrandt.io.RembrandtStyleTag
-import saskia.io.*
+
 
 class CHAVE2RembrandtedDocumentConverter {
 	

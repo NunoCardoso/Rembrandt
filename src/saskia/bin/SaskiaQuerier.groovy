@@ -18,10 +18,9 @@
 
 package saskia.bin
 
-import saskia.db.database.SaskiaMainDB;
-import saskia.db.obj.Collection;
-import saskia.io.RembrandtedDoc
-//import saskia.converters.RembrandtedDocument2PlainTextConverter 
+import saskia.db.database.SaskiaMainDB
+import saskia.db.obj.Collection
+import saskia.db.obj.RembrandtedDoc
 import org.apache.log4j.*
 
 /**

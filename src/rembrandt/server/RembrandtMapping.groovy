@@ -20,7 +20,8 @@ package rembrandt.server
 import rembrandt.bin.*
 import rembrandt.obj.Document
 import saskia.bin.Configuration
-import saskia.io.User
+import saskia.db.obj.User
+import saskia.db.table.UserTable
 import saskia.server.ServerMessage
 import saskia.util.I18n
 import org.apache.log4j.*
@@ -75,7 +76,7 @@ public class RembrandtMapping extends WebServiceRestletMapping {
          if (!api_key) return sm.noAPIKeyMessage()
             
 			// verification of user
-	      User user = User.getFromAPIKey(api_key)
+	      User user = UserTable.getFromAPIKey(api_key)
 	      if (!user) return sm.userNotFound()
 	      if (! user.canExecuteAPICall()) return sm.dailyAPILimitExceeded()      
         

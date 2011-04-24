@@ -21,7 +21,7 @@ package saskia.imports
 import saskia.db.DocStatus;
 import saskia.db.database.SaskiaMainDB;
 import saskia.db.obj.Collection;
-import saskia.io.SourceDoc
+import saskia.db.obj.SourceDoc;
 import saskia.bin.Configuration
 import saskia.util.I18n
 import org.apache.log4j.*

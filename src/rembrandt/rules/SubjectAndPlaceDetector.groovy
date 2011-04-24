@@ -18,15 +18,14 @@
  
 package rembrandt.rules
 
-
 import org.apache.log4j.Logger
 import rembrandt.obj.*
 import rembrandt.rules.*
 import rembrandt.gazetteers.en.ClausesEN
 import rembrandt.gazetteers.pt.ClausesPT
 import rembrandt.gazetteers.CommonClauses as CC
+import saskia.db.obj.Subject
 import saskia.gazetteers.Places
-import saskia.io.Subject
 /**
  * @author Nuno Cardoso
  * 

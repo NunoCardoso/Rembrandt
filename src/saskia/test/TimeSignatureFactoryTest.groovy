@@ -20,7 +20,7 @@ package saskia.test
 
 import saskia.bin.Configuration
 import saskia.db.TimeSignatureFactory;
-import saskia.io.*
+
 import org.apache.log4j.Logger
 import rembrandt.io.RembrandtStyleTag
 import rembrandt.io.UnformattedStyleTag

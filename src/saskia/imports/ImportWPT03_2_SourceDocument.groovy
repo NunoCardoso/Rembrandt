@@ -20,7 +20,7 @@ package saskia.imports
 
 import saskia.bin.Configuration
 import saskia.db.obj.Collection;
-import saskia.io.SourceDoc
+import saskia.db.obj.SourceDoc;
 
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*

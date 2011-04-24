@@ -18,19 +18,16 @@
  
 package saskia.exports
 
-import saskia.io.RembrandtedDoc
 import rembrandt.io.DocStats
-import saskia.io.Task
-import saskia.io.User
 import rembrandt.obj.Document
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
 import org.apache.log4j.*
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
-import saskia.db.DocStatus;
-import saskia.db.obj.Collection;
-import saskia.db.table.Job;
+import saskia.db.DocStatus
+import saskia.db.obj.*
+import saskia.db.table.*
 
 /** 
  * This class exports tagged documents from a collection into files on a directory

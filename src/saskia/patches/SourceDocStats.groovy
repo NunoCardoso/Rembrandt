@@ -18,7 +18,9 @@
 package saskia.patches;
 
 import saskia.db.obj.Collection;
-import saskia.io.*
+import saskia.db.obj.SourceDoc;
+import saskia.db.database.SaskiaMainDB
+
 import org.apache.log4j.*
 import org.apache.commons.cli.*
 import pt.tumba.webstore.*
@@ -57,7 +59,7 @@ class SourceDocStats {
         } 
         
         println "Initializing collection $collection"
-        SaskiaDB db = SaskiaDB.newInstance()
+        SaskiaMainDB db = SaskiaMainDB.newInstance()
 
 
         int limit = 500

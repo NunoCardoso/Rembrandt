@@ -16,39 +16,44 @@
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package saskia.io
+package saskia.db.table
 
 import org.apache.log4j.*
 
+import saskia.db.obj.Type
+import saskia.db.database.SaskiaDB
 
-class Type {
+
+class TypeTable {
 
 	static String tablename = "type"
-	long typ_id
-	String typ_name
 	
-	static SaskiaDB db = SaskiaDB.newInstance()
 	static Logger log = Logger.getLogger("Type")
 
-	static Map<Long,Type> cache = [:]
+	Map<Long,Type> cache
 
-	static List<Type> queryDB(String query, ArrayList params = []) {
+	public TypeTable(DBTable dbtable) {
+		super(db)
+		cache= [:]
+	}
+	
+	public List<Type> queryDB(String query, ArrayList params = []) {
 		List<Type> t = []
 		db.getDB().eachRow(query, params, {row  -> 
-			t << new Type(typ_id:row['typ_id'], typ_name:row['typ_name'] )
+			t << Type.createFromDBRow(this.owner, row)
 		})
 		return t
 	}
 	
-	static void refreshCache() {
-	    List<Tag> l = queryDB("SELECT * FROM ${tablename}".toString(), [])
+	public void refreshCache() {
+	    List<Type> l = queryDB("SELECT * FROM ${tablename}".toString(), [])
 	    l.each{cache[it.typ_id] = it}
 	}
 	
 	/** Get all NE categories. It's easier to have them in memory, than hammering the DB 
 	 * return List<NECategory> A list of NECategory objects
 	 */
-	static Map getAllTypes() {
+	public Map getAllTypes() {
 		def map = [:]
 		def typ = queryDB("SELECT * FROM ${tablename}")
 		log.debug "Searched for all doc types, got ${typ.size()} entries."
@@ -60,31 +65,12 @@ class Type {
 	 * @param id The id as needle.
 	 * return the NECategory result object, or null
 	 */
-	static Type getFromID(long typ_id) {
+	public Type getFromID(long typ_id) {
 		if (!typ_id) return null
 		Type typ = queryDB("SELECT * FROM ${tablename} WHERE typ_id=?", [typ_id])?.getAt(0)
 		log.debug "Querying for typ_id $typ_id got Type $typ." 
 		if (typ.typ_id) return typ else return null
 	}	
 	
-	/** Add this NECategory o the database. Note that a null is a valid insertion...
-	 * return 1 if successfully inserted.
-	 */	
-	public Long addThisToDB() {
-		def res = db.getDB().executeInsert("INSERT INTO ${tablename} VALUES(0,?)", [typ_name])
-		// returns an auto_increment value
-		log.info "Adding type to DB: ${this}"
-		return (long)res[0][0]
-	}	
 
-	public int removeThisFromDB() {
-		if (!typ_id) return null
-		def res = db.getDB().executeUpdate("DELETE FROM ${tablename} WHERE typ_id=?", [typ_id])
-		log.info "Removing type to DB: ${this}, got res $res"
-		return res	    
-   }
-	
-	public String toString() {
-		return typ_name
-	}
 }

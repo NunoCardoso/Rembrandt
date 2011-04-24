@@ -18,13 +18,14 @@
 package saskia.patches
 
 import saskia.bin.Configuration
-import saskia.io.*
-import saskia.db.table.EntityTable;
-import saskia.db.table.Geoscope;
+
+import saskia.db.table.*;
+import saskia.db.obj.*;
 import saskia.dbpedia.DBpediaAPI
 import saskia.dbpedia.DBpediaOntology
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
+import saskia.db.database.SaskiaMainDB
 
 
 /**
@@ -36,14 +37,14 @@ class ReviewEntitiesTo351 {
 	Configuration conf = Configuration.newInstance()
 	static Logger log = Logger.getLogger("Patches")
 	DBpediaOntology dbpediaontology
-	SaskiaDB db
+	SaskiaMainDB db
 	DBpediaAPI dbpedia
 	Geoscope nullgeo
 	
 	public ReviewEntitiesTo351() {
 		conf = Configuration.newInstance()
 		dbpediaontology = DBpediaOntology.getInstance()
-		db = SaskiaDB.newInstance()
+		db = SaskiaMainDB.newInstance()
 		dbpedia = DBpediaAPI.newInstance()
 	    nullgeo = Geoscope.getFromWOEID(0)
         log.info "Got $nullgeo"

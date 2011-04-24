@@ -21,11 +21,12 @@ package saskia.imports
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
 import saskia.db.obj.Collection;
+import saskia.db.obj.SourceDoc;
 
 import org.apache.log4j.Logger
 import rembrandt.io.*
 import rembrandt.obj.ListOfNE
-import saskia.io.*
+
 
 /** 
  * This class imports the Golden Collection from Second HAREM into the Source Documents table of the Saskia DB

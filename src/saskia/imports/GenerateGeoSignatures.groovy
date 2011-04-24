@@ -17,13 +17,12 @@
  */
 package saskia.imports
 
-import saskia.io.Tag
 import rembrandt.io.DocStats
 import saskia.bin.Configuration
 import saskia.db.GeoSignatureFactory;
-import saskia.db.obj.Collection;
-import saskia.db.table.DocGeoSignatureTable;
-import saskia.io.RembrandtedDoc
+import saskia.db.obj.*;
+import saskia.db.table.*
+
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
 

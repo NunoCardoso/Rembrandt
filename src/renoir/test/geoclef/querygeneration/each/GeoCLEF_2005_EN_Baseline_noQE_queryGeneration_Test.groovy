@@ -20,10 +20,9 @@ package renoir.test.geoclef.querygeneration.each
 
 import org.apache.log4j.Logger
 
+import renoir.obj.*
 import renoir.test.geoclef.querygeneration.GeoCLEF_Baseline_NoQE_QueryGeneration_Test
 import saskia.bin.Configuration
-import renoir.bin.Renoir
-import renoir.obj.*
 
 /**
  * @author Nuno Cardoso
@@ -31,23 +30,21 @@ import renoir.obj.*
  */
 class GeoCLEF_2005_EN_Baseline_NoQE_QueryGeneration_Test extends GeoCLEF_Baseline_NoQE_QueryGeneration_Test {
 
-    Configuration conf
-    static Logger log = Logger.getLogger("RenoirTest")
-    
-    static int year = 2005
-    static String lang = "en"
-    	
-    public GeoCLEF_2005_EN_Baseline_NoQE_QueryGeneration_Test() {
-	super("GeoCLEF_${lang.toUpperCase()}_${year}_simple_topic.txt", 
-		"GeoCLEF_${lang.toUpperCase()}_${year}_baseline_query.txt", 
+	Configuration conf
+	static Logger log = Logger.getLogger("RenoirTest")
+
+	static int year = 2005
+	static String lang = "en"
+
+	public GeoCLEF_2005_EN_Baseline_NoQE_QueryGeneration_Test() {
+		super("GeoCLEF_${lang.toUpperCase()}_${year}_simple_topic.txt",
+		"GeoCLEF_${lang.toUpperCase()}_${year}_baseline_query.txt",
 		lang)
-			
-    }   
-    
-    void testGenerate() {
-	log.debug "Starting query generation..."
-	super.generate()
-	log.debug "Query generation done."
-   }
-    
+	}
+
+	void testGenerate() {
+		log.debug "Starting query generation..."
+		super.generate()
+		log.debug "Query generation done."
+	}
 }

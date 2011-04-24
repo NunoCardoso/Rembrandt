@@ -18,9 +18,9 @@
 
 package renoir.suggestion
 
-import saskia.db.database.SaskiaMainDB;
-import saskia.db.database.WikipediaDB;
-import saskia.db.table.Geoscope;
+import saskia.db.database.SaskiaMainDB
+import saskia.db.database.WikipediaDB
+import saskia.db.obj.Geoscope
 import saskia.bin.Configuration
 import saskia.wikipedia.WikipediaAPI
 import renoir.obj.QuestionType

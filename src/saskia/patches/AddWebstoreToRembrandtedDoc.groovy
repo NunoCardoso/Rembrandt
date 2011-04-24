@@ -19,7 +19,8 @@ package saskia.patches
 
 import saskia.db.SaskiaWebstore;
 import saskia.db.obj.Collection;
-import saskia.io.*
+import saskia.db.database.SaskiaMainDB
+
 import org.apache.log4j.*
 import org.apache.commons.cli.*
 import pt.tumba.webstore.*
@@ -57,7 +58,7 @@ class AddWebstoreToRembrandtedDoc {
         } 
         
         println "Initializing collection $collection"
-        SaskiaDB db = SaskiaDB.newInstance()
+        SaskiaMainDB db = SaskiaMainDB.newInstance()
 
         String file = System.getenv()["WEBSTORE_CONFIG_FILE"]
         WebStore ws = new WebStore(new File(file))

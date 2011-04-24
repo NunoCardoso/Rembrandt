@@ -1,5 +1,3 @@
-
-
 package saskia.wizards
 
 import saskia.wikipedia.WikipediaDocument

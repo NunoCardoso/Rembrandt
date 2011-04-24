@@ -22,7 +22,8 @@ import org.apache.commons.cli.*
 import rembrandt.obj.* 
 import saskia.gazetteers.*
 import saskia.obj.*
-import saskia.io.*
+import saskia.db.database.SaskiaMainDB
+
 /**
  * @author Nuno Cardoso
  *
@@ -59,7 +60,7 @@ class LoadSubjectFiles {
 	 cats_pt.eachLine{l -> stuff_pt << l.trim()}
 	 println "Got ${stuff_en.size()} EN entries, ${stuff_pt.size()} PT entries."
 	 
-	 SaskiaDB db = SaskiaDB.newInstance()
+	 SaskiaMainDB db = SaskiaMainDB.newInstance()
 	 stuff_en.eachWithIndex{item_en, i -> 
 	    String item_pt = stuff_pt[i]
 	    Sentence s_en = Sentence.simpleTokenize(item_en)  

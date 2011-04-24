@@ -21,7 +21,7 @@ package saskia.test
 import saskia.bin.Configuration
 import saskia.db.GeoSignatureFactory;
 import saskia.db.table.EntityTable;
-import saskia.io.*
+
 import org.apache.log4j.Logger
 import rembrandt.io.RembrandtStyleTag
 import rembrandt.io.UnformattedStyleTag

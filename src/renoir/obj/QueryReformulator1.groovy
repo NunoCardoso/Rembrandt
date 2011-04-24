@@ -28,8 +28,9 @@ import rembrandt.obj.TimeGroundingType
 import rembrandt.obj.SemanticClassification
 import org.apache.log4j.*
 
-import saskia.db.table.EntityTable;
-import saskia.db.table.Geoscope;
+import saskia.db.table.EntityTable
+import saskia.db.obj.Entity
+import saskia.db.obj.Geoscope
 import saskia.dbpedia.*
 import saskia.bin.*
 /**

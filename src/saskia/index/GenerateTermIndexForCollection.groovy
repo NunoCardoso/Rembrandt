@@ -33,9 +33,9 @@ import org.apache.commons.cli.*
 import rembrandt.obj.Document
 import saskia.bin.Configuration
 import rembrandt.io.DocStats
-import saskia.io.RembrandtedDoc
-import saskia.db.database.SaskiaMainDB;
-import saskia.db.obj.Collection;
+import saskia.db.database.SaskiaMainDB
+import saskia.db.obj.Collection
+import saskia.db.obj.RembrandtedDoc
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
 

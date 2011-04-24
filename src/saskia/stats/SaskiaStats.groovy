@@ -15,154 +15,154 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 package saskia.stats
 
 //import rembrandt
-import org.apache.log4j.*
-
-import saskia.db.database.SaskiaMainDB;
-import saskia.db.obj.Collection;
-import saskia.io.RembrandtedDoc
-import saskia.io.Cache
-import saskia.util.I18n
 import java.text.SimpleDateFormat
 
+import org.apache.log4j.*
 
-class SaskiaStats { 
-     
-     static Logger log = Logger.getLogger("SaskiaStats")
-     static String statsFrontPage = 'stats_front_page'
-     SimpleDateFormat dateFormat 
-     SaskiaMainDB db
-     I18n i18n
-     static long NE_CACHE_REFRESH=(long)1000*60*60*24*30
-	 static long DOC_CACHE_REFRESH=(long)1000*60*60*24*30
-	 static long STATS_PAGE_CACHE_REFRESH=(long)1000*60*60*24*30
-     
-     public SaskiaStats() {
-	 	db = SaskiaMainDB.newInstance()
-	 	i18n =  I18n.newInstance()	 	
-  }
-     
-     public String renderFrontPage(Collection collection, String lang) {
-	 	StringBuffer s = new StringBuffer()
-	 	
-	 	dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
-	 	log.debug "Asking cache for ${SaskiaStats.statsFrontPage}, ${collection_}, ${lang}"
-	 	Cache c = Cache.getFromIDAndCollectionAndLang(db, SaskiaStats.statsFrontPage, collection_, lang)
-	 	  
-	 	if (c && c.isCacheFresh()) {
-	 	    log.debug "Cache is new, let's use it."	 	    
-	 	    s.append "<DIV CLASS='stats-main'>\n" 
-	 	    s.append c.cac_obj
-	 		s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
-	 		s.append dateFormat.format((Date)c.cac_date)+"</DIV>\n</DIV>\n"
-	 	} else {
-	 	    log.debug "Cache is old or non-existent, time to refresh it."
-	 	    RenderFrontPageStats stat = new RenderFrontPageStats()    
-	 	    String content = stat.render(collection_, lang)
-	 	    if (!c) c = new Cache()
-	 	    c.refreshCache(SaskiaStats.statsFrontPage, collection_, lang, content, STATS_PAGE_CACHE_REFRESH)
-	 	    s.append "<DIV CLASS='stats-main'>\n" 
-	 	    s.append content
-	 		s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
-	 		s.append dateFormat.format(new Date())+"</DIV>\n</DIV>\n"
-	 	} 
+import saskia.db.database.SaskiaMainDB
+import saskia.db.obj.Cache
+import saskia.db.obj.Collection
+import saskia.db.obj.RembrandtedDoc
+import saskia.util.I18n
 
-	 	return s.toString()
-     }
-     
-    public String renderNEPage(long ne_id, Collection collection, String lang) {
+class SaskiaStats {
+
+	static Logger log = Logger.getLogger("SaskiaStats")
+	static String statsFrontPage = 'stats_front_page'
+	SimpleDateFormat dateFormat
+	SaskiaMainDB db
+	I18n i18n
+	static long NE_CACHE_REFRESH=(long)1000*60*60*24*30
+	static long DOC_CACHE_REFRESH=(long)1000*60*60*24*30
+	static long STATS_PAGE_CACHE_REFRESH=(long)1000*60*60*24*30
+
+	public SaskiaStats() {
+		db = SaskiaMainDB.newInstance()
+		i18n =  I18n.newInstance()
+	}
+
+	public String renderFrontPage(Collection collection, String lang) {
 		StringBuffer s = new StringBuffer()
-	    log.debug "Request of stats for NE $ne_id, collection $collection, lang $lang";
-	 	Cache c = Cache.getFromIDAndCollectionAndLang(db, "NE:"+ne_id, collection, lang)
-	    dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
+
+		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
+		log.debug "Asking cache for ${SaskiaStats.statsFrontPage}, ${collection_}, ${lang}"
+		Cache c = Cache.getFromIDAndCollectionAndLang(db, SaskiaStats.statsFrontPage, collection_, lang)
 
 		if (c && c.isCacheFresh()) {
-		    log.debug "Cache is new, let's use it."	 	
-	 	    s.append "<DIV ID='rembrandt-detailne-${ne_id}' CLASS='stats-main'>\n" 
-	 	    s.append c.cac_obj
-	 		s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
-	 		s.append dateFormat.format((Date)c.cac_date)+"</DIV>\n</DIV>\n"
+			log.debug "Cache is new, let's use it."
+			s.append "<DIV CLASS='stats-main'>\n"
+			s.append c.cac_obj
+			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
+			s.append dateFormat.format((Date)c.cac_date)+"</DIV>\n</DIV>\n"
 		} else {
-	 	    log.debug "Cache is old or non-existent, time to refresh it."
-	 	    RenderNEDetailsStats stat = new RenderNEDetailsStats()    
-	 	    String content = stat.render(ne_id, collection, lang)
-	 	    if (!c) c = new Cache()
-	 	    c.refreshCache("NE:"+ne_id, collection, lang, content, NE_CACHE_REFRESH)
-	 	    s.append "<DIV ID='rembrandt-detailne-${ne_id}'  CLASS='stats-main'>\n" 
-	 	    s.append content
-	 		s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
-	 		s.append dateFormat.format(new Date())+"</DIV>\n</DIV>\n"	    
+			log.debug "Cache is old or non-existent, time to refresh it."
+			RenderFrontPageStats stat = new RenderFrontPageStats()
+			String content = stat.render(collection_, lang)
+			if (!c) c = new Cache()
+			c.refreshCache(SaskiaStats.statsFrontPage, collection_, lang, content, STATS_PAGE_CACHE_REFRESH)
+			s.append "<DIV CLASS='stats-main'>\n"
+			s.append content
+			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
+			s.append dateFormat.format(new Date())+"</DIV>\n</DIV>\n"
 		}
-    }
-    
-    public String renderDocPage(RembrandtedDoc rdoc, Collection collection, String lang) {
+
+		return s.toString()
+	}
+
+	public String renderNEPage(long ne_id, Collection collection, String lang) {
 		StringBuffer s = new StringBuffer()
-	    log.debug "Request of stats for doc ${rdoc.doc_id}, collection $collection, lang $lang";
-		    dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
-		 	Cache c = Cache.getFromIDAndCollectionAndLang(db, "DOC:"+rdoc.doc_id, collection, lang)
+		log.debug "Request of stats for NE $ne_id, collection $collection, lang $lang";
+		Cache c = Cache.getFromIDAndCollectionAndLang(db, "NE:"+ne_id, collection, lang)
+		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
+
 		if (c && c.isCacheFresh()) {
-		    log.debug "Cache is new, let's use it."	 	
-	 	    s.append "<DIV ID='rembrandt-detaildoc-${rdoc.doc_id}'  CLASS='stats-main'>\n" 
-	 	    s.append c.cac_obj
-	 		s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
-	 		s.append dateFormat.format((Date)c.cac_date)+"</DIV>\n</DIV>\n"
+			log.debug "Cache is new, let's use it."
+			s.append "<DIV ID='rembrandt-detailne-${ne_id}' CLASS='stats-main'>\n"
+			s.append c.cac_obj
+			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
+			s.append dateFormat.format((Date)c.cac_date)+"</DIV>\n</DIV>\n"
 		} else {
-	 	    log.debug "Cache is old or non-existent, time to refresh it."
-	 	    RenderDocDetailsStats stat = new RenderDocDetailsStats()    
-	 	    String content = stat.render(rdoc, collection, lang)
-	 	    if (!c) c = new Cache()
-	 	    c.refreshCache("DOC:"+rdoc.doc_id, collection, lang, content, DOC_CACHE_REFRESH)
-	 	    s.append "<DIV ID='rembrandt-detaildoc-${rdoc.doc_id}'  CLASS='stats-main'>\n" 
-	 	    s.append content
-	 	    s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
-	 	    s.append dateFormat.format(new Date())+"</DIV>\n</DIV>\n"	    
+			log.debug "Cache is old or non-existent, time to refresh it."
+			RenderNEDetailsStats stat = new RenderNEDetailsStats()
+			String content = stat.render(ne_id, collection, lang)
+			if (!c) c = new Cache()
+			c.refreshCache("NE:"+ne_id, collection, lang, content, NE_CACHE_REFRESH)
+			s.append "<DIV ID='rembrandt-detailne-${ne_id}'  CLASS='stats-main'>\n"
+			s.append content
+			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
+			s.append dateFormat.format(new Date())+"</DIV>\n</DIV>\n"
 		}
 	}
-   
-    public void forceRefreshCacheOnFrontPage(Collection collection, String lang) {
-		RenderFrontPageStats stat = new RenderFrontPageStats()    
-	    String content = stat.render(collection, lang)
-	 	Cache c = new Cache()
-	 	   c.refreshCache(SaskiaStats.statsFrontPage, collection, lang, content, 
-	 		  SaskiaStats.STATS_PAGE_CACHE_REFRESH)
-	 }
-     
-     static void main(args) {
-	 
-	 	SaskiaStats stats
-	 	
-	 	String usage = "Usage:\njava saskia.stats.SaskiaStats [-refreshMain ] collection lang\n"+
-	 	"Learn it."
-	 	
-	 	if (!args || args.size() < 3) {
-	 	    println usage
-	 	    System.exit(0) 	    
-	 	}
-	 
-	 	switch(args[0]) {
-	 	
-	 		case "-refreshMain":
-	 		   stats = new SaskiaStats()    
-		 	   Collection collection 
-		 	   if (args[1].matches(/^\d+$/)) {
-		 	       collection = Collection.getFromID(Long.parseLong(args[1]))
-		 	   } else { 
-		 	      collection = Collection.getFromName(args[1])
-		 	   } 
-		 	   if (!collection) {
-		 	       log.error "Collection ${args[1]} unknown. Exiting."
-		 	       return null
-		 	   }
-		 	   stats.forceRefreshCacheOnFrontPage(collection, args[2])
-		 	   println "Cache is now refreshed."
-	 		break
-	 		
-	 		default:
-	 		    println usage
-	 		break
-	 	}
-     }
- }
+
+	public String renderDocPage(RembrandtedDoc rdoc, Collection collection, String lang) {
+		StringBuffer s = new StringBuffer()
+		log.debug "Request of stats for doc ${rdoc.doc_id}, collection $collection, lang $lang";
+		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
+		Cache c = Cache.getFromIDAndCollectionAndLang(db, "DOC:"+rdoc.doc_id, collection, lang)
+		if (c && c.isCacheFresh()) {
+			log.debug "Cache is new, let's use it."
+			s.append "<DIV ID='rembrandt-detaildoc-${rdoc.doc_id}'  CLASS='stats-main'>\n"
+			s.append c.cac_obj
+			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
+			s.append dateFormat.format((Date)c.cac_date)+"</DIV>\n</DIV>\n"
+		} else {
+			log.debug "Cache is old or non-existent, time to refresh it."
+			RenderDocDetailsStats stat = new RenderDocDetailsStats()
+			String content = stat.render(rdoc, collection, lang)
+			if (!c) c = new Cache()
+			c.refreshCache("DOC:"+rdoc.doc_id, collection, lang, content, DOC_CACHE_REFRESH)
+			s.append "<DIV ID='rembrandt-detaildoc-${rdoc.doc_id}'  CLASS='stats-main'>\n"
+			s.append content
+			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
+			s.append dateFormat.format(new Date())+"</DIV>\n</DIV>\n"
+		}
+	}
+
+	public void forceRefreshCacheOnFrontPage(Collection collection, String lang) {
+		RenderFrontPageStats stat = new RenderFrontPageStats()
+		String content = stat.render(collection, lang)
+		Cache c = new Cache()
+		c.refreshCache(SaskiaStats.statsFrontPage, collection, lang, content,
+				SaskiaStats.STATS_PAGE_CACHE_REFRESH)
+	}
+
+	static void main(args) {
+
+		SaskiaStats stats
+
+		String usage = "Usage:\njava saskia.stats.SaskiaStats [-refreshMain ] collection lang\n"+
+				"Learn it."
+
+		if (!args || args.size() < 3) {
+			println usage
+			System.exit(0)
+		}
+
+		switch(args[0]) {
+
+			case "-refreshMain":
+				stats = new SaskiaStats()
+				Collection collection
+				if (args[1].matches(/^\d+$/)) {
+					collection = Collection.getFromID(Long.parseLong(args[1]))
+				} else {
+					collection = Collection.getFromName(args[1])
+				}
+				if (!collection) {
+					log.error "Collection ${args[1]} unknown. Exiting."
+					return null
+				}
+				stats.forceRefreshCacheOnFrontPage(collection, args[2])
+				println "Cache is now refreshed."
+				break
+
+			default:
+				println usage
+				break
+		}
+	}
+}

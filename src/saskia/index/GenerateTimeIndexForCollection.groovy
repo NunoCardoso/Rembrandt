@@ -31,9 +31,9 @@ import org.apache.lucene.analysis.Analyzer
 
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
-import saskia.db.TimeSignature;
-import saskia.db.obj.Collection;
-import saskia.db.table.DocTimeSignatureTable;
+import saskia.db.TimeSignature
+import saskia.db.obj.Collection
+import saskia.db.table.DocTimeSignatureTable
 import rembrandt.io.DocStats
 
 

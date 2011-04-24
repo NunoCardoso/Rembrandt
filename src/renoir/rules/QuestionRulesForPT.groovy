@@ -4,12 +4,12 @@ import org.apache.log4j.*
 import rembrandt.obj.*
 import rembrandt.rules.*
 import rembrandt.gazetteers.pt.*
+import saskia.db.obj.Subject
 import saskia.dbpedia.*
 import saskia.bin.*
 import renoir.obj.*
 import org.apache.log4j.*
 import saskia.gazetteers.*
-import saskia.io.Subject as SubjectDB
 import rembrandt.gazetteers.CommonClauses as CC
 import rembrandt.gazetteers.CommonClassifications as SC
 import rembrandt.gazetteers.NEGazetteer

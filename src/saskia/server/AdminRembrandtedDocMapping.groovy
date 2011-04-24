@@ -17,11 +17,8 @@
  */
 package saskia.server
 
-import saskia.db.obj.Collection;
-import saskia.db.table.EntityTable;
-import saskia.io.User
-import saskia.io.RembrandtedDoc
-import saskia.io.Tag
+import saskia.db.obj.*;
+import saskia.db.table.*
 import saskia.stats.SaskiaStats
 import saskia.util.I18n
 import org.apache.log4j.*

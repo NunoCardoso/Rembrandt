@@ -22,11 +22,12 @@ import org.apache.log4j.Logger
 
 import org.apache.commons.cli.*
 import rembrandt.obj.* 
-import saskia.db.table.EntityTable;
-import saskia.db.table.Geoscope;
+import saskia.db.table.*
+import saskia.db.obj.*
 import saskia.gazetteers.*
 import saskia.obj.*
-import saskia.io.*
+import saskia.db.database.SaskiaDB
+
 import rembrandt.rules.SubjectAndPlaceDetector
 
 /**

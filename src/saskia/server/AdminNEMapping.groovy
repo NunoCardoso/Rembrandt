@@ -17,13 +17,9 @@
  */
 package saskia.server
 
-import saskia.db.table.EntityTable;
-import saskia.db.table.NE;
-import saskia.io.User
-import saskia.io.NECategory
-import saskia.io.NEName
-import saskia.io.NESubtype
-import saskia.io.NEType
+import saskia.db.table.*
+import saskia.db.obj.*
+
 import org.apache.log4j.*
 import rembrandt.obj.Sentence
 import rembrandt.gazetteers.SemanticClassificationDefinitions

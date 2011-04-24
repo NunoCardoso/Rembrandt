@@ -20,12 +20,11 @@ package saskia.imports
 
 import saskia.db.DocStatus;
 import saskia.db.database.WikipediaDB;
-import saskia.db.obj.Collection;
-import saskia.db.table.NE;
+import saskia.db.obj.*;
+import saskia.db.table.*;
 import saskia.dbpedia.DBpediaAPI
 import saskia.dbpedia.DBpediaOntology
 import saskia.wikipedia.WikipediaDocument
-import saskia.io.SourceDoc
 import saskia.converters.WikipediaDocument2HTMLDocumentConverter
 import saskia.bin.Configuration
 import org.apache.log4j.*

@@ -18,11 +18,10 @@
  
 package saskia.imports
 
-import saskia.io.SourceDoc
 import saskia.bin.Configuration
 import saskia.db.DocStatus;
-import saskia.db.obj.Collection;
-import saskia.db.table.NE;
+import saskia.db.obj.*;
+import saskia.db.table.*;
 
 import org.apache.log4j.*
 import org.apache.commons.cli.*

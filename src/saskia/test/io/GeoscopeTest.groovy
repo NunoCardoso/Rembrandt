@@ -22,7 +22,8 @@ import org.junit.runner.*
 import org.apache.log4j.*
 
 import saskia.db.table.Geoscope;
-import saskia.io.*
+import saskia.db.table.Subject;
+
 
 /**
  * @author Nuno Cardoso

@@ -16,81 +16,93 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
-package renoir.test.geoclef.pertopic
+package renoir.test.geoclef.pertopic.year2005
 
 import groovy.util.GroovyTestCase
-import org.apache.log4j.Logger
-import saskia.bin.Configuration
+import rembrandt.bin.*
+import rembrandt.gazetteers.CommonClassifications as SC
+import rembrandt.tokenizer.*
 import renoir.obj.*
 import renoir.rules.*
-import rembrandt.obj.Document
-import rembrandt.bin.*
-import rembrandt.tokenizer.*
-import rembrandt.gazetteers.CommonClassifications as SC
+import renoir.test.geoclef.pertopic.GeoCLEF_PerTopic_Test
+import saskia.bin.Configuration
 /**
  * @author Nuno Cardoso
  *
  */
- class GeoCLEF_2005_EN_004_Test extends GroovyTestCase{
-        
-    Configuration conf 
-    GeoCLEF_PerTopic_Test pertopic
-    
-    public GeoCLEF_2005_EN_004_Test() {
+class GeoCLEF_2005_EN_004_Test extends GroovyTestCase{
+
+	Configuration conf
+	GeoCLEF_PerTopic_Test pertopic
+
+	public GeoCLEF_2005_EN_004_Test() {
 		conf = Configuration.newInstance()
-	//	conf.set("saskia.dbpedia.url","http://xldb.di.fc.ul.pt/dbpedia/sparql")
-	//	conf.set("saskia.dbpedia.url","http://dbpedia.org/sparql")
-	//	println "DBpedia sparql service set to "+conf.get("saskia.dbpedia.url","none")	
+		//	conf.set("saskia.dbpedia.url","http://xldb.di.fc.ul.pt/dbpedia/sparql")
+		//	conf.set("saskia.dbpedia.url","http://dbpedia.org/sparql")
+		//	println "DBpedia sparql service set to "+conf.get("saskia.dbpedia.url","none")
 		pertopic = new GeoCLEF_PerTopic_Test(conf)
-    }
-	
-    void testTopic() {
+	}
+
+	void testTopic() {
 		String lang = "en"
 		String topic = "label:004 animal rights actions against the fur industry in Europe and the United States"
-	    
+
 		RenoirQuery rq = RenoirQueryParser.parse(topic)
 		Question question = pertopic.process(rq, lang)
 		//dumpQuestion(question)
-     
+
 		/** check sentences and question types */
-		assert question.sentence*.text == ['animal','rights','actions','against','the','fur','industry','in','Europe','and','the','United','States']	    
+		assert question.sentence*.text == [
+			'animal',
+			'rights',
+			'actions',
+			'against',
+			'the',
+			'fur',
+			'industry',
+			'in',
+			'Europe',
+			'and',
+			'the',
+			'United',
+			'States']
 		assert question.questionType == QuestionType.None
 		assert question.questionTypeTerms.size() == 0
-	
-  
-	// check detected NEs 
+
+
+		// check detected NEs
 		assert question.nes.size() == 2
-	//println "question nes wikipedia stuff & dbpedia stuff: "+question.nes[0].wikipediaPage+ " "+question.nes[0].dbpediaPage
-	//	assert question.nes[0].terms*.text == ["Animal"]
+		//println "question nes wikipedia stuff & dbpedia stuff: "+question.nes[0].wikipediaPage+ " "+question.nes[0].dbpediaPage
+		//	assert question.nes[0].terms*.text == ["Animal"]
 		assert question.nes[0].terms*.text == ["Europe"]
-		assert question.nes[1].terms*.text == ["United","States"]
-    
+		assert question.nes[1].terms*.text == ["United", "States"]
+
 		/// contains gives false. Use find
 		//assert question.nes[0].classification.find{it == SC.thing_object}
 		assert question.nes[0].classification.find{it == SC.place_human_division}
 		assert question.nes[1].classification.find{it == SC.place_human_country}
-		
-	// check subjects 
+
+		// check subjects
 		// subject matches to "States"
-	//	assert !question.subject
-    
-	// check conditions 
+		//	assert !question.subject
+
+		// check conditions
 		assert question.conditions.size() == 2
 		assert question.conditions[0].object instanceof QueryGeoscope
 		assert question.conditions[1].object instanceof QueryGeoscope
 		assert question.conditions[0].object.ne.terms*.text == ["Europe"]
-		assert question.conditions[1].object.ne.terms*.text == ["United","States"]
-			
+		assert question.conditions[1].object.ne.terms*.text == ["United", "States"]
+
 		// como há um subject... mas seja o que for em SPARQL, deve devolver nada de jeito e não deve ser adicionado
 		assert !question.expectedAnswerTypes
-		
-	// check answers 
+
+		// check answers
 		assert !question.answer
 
-	// now, question object full -> reformulated query 
-		ReformulatedQuery refq = QueryReformulator2.reformulate(rq, question)                                  
-	// reformulated Query -> string    
-	
+		// now, question object full -> reformulated query
+		ReformulatedQuery refq = QueryReformulator2.reformulate(rq, question)
+		// reformulated Query -> string
+
 		println refq.toString()
 		String reformulated_x = """
 label:004 contents:animal contents:rights contents:actions contents:against 
@@ -108,6 +120,6 @@ woeid:23424957 woeid:23424975 woeid:23424976 woeid:23424986 woeid:26812346
 woeid:28289413 woeid:23424977
 """
 
-	assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"") 
-  } 
+		assert reformulated_x.replaceAll(/(?m)[\s\n]/,"") == refq.toString().replaceAll(/(?m)[\s\n]/,"")
+	}
 }

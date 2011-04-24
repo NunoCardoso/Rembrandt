@@ -1,4 +1,5 @@
-/* Rembrandt
+
+/** Rembrandt
  * Copyright (C) 2008 Nuno Cardoso. ncardoso@xldb.di.fc.ul.pt
  *
  * This program is free software; you can redistribute it and/or

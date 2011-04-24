@@ -20,13 +20,14 @@ package saskia.imports
 
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
+import saskia.db.obj.SourceDoc;
+
 import org.apache.log4j.Logger
 import java.util.regex.*
 import rembrandt.io.RembrandtWriter
 import rembrandt.io.NYTimesReader
 import rembrandt.io.UnformattedStyleTag
 import rembrandt.io.RembrandtStyleTag
-import saskia.io.SourceDoc
 
 /** 
  * This class imports NYT files to the Source Documents

@@ -18,7 +18,7 @@
  
 package saskia.imports
 
-import saskia.io.*
+
 import rembrandt.obj.*
 import rembrandt.io.*
 import rembrandt.tokenizer.*
@@ -26,7 +26,8 @@ import java.util.regex.*
 import saskia.bin.Configuration
 import saskia.db.DocStatus;
 import saskia.db.database.SaskiaMainDB;
-import saskia.db.obj.Collection;
+import saskia.db.obj.*
+import saskia.db.table.*;
 import saskia.util.I18n
 import org.apache.log4j.*
 

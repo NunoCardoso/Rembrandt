@@ -17,7 +17,7 @@
  */
 package saskia.patches
 
-import saskia.io.*
+
 import org.apache.log4j.*
 import org.apache.commons.cli.*
 import saskia.dbpedia.DBpediaAPI

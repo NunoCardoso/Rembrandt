@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
-package saskia.io
+package saskia.db
 
 import org.apache.log4j.*
 import groovy.xml.MarkupBuilder
@@ -404,7 +404,5 @@ class Place {
             } 
         }
         return writer.toString() 
-    }
-    
-  
+    } 
 }   

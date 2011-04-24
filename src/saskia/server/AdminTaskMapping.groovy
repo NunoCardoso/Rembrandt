@@ -18,7 +18,10 @@
 package saskia.server
 
 import saskia.db.obj.Collection;
-import saskia.io.*
+import saskia.db.table.TaskTable
+import saskia.db.obj.Task
+import saskia.db.table.UserTable
+import saskia.db.obj.User
 import saskia.util.I18n
 import org.apache.log4j.*
 

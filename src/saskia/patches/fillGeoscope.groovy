@@ -18,8 +18,9 @@
 package saskia.patches
 
 import saskia.db.table.GeoscopeTable
+import saskia.db.obj.Geoscope
 import saskia.db.database.*
-import saskia.io.*
+
 import org.apache.log4j.*
 import org.apache.commons.cli.*
 

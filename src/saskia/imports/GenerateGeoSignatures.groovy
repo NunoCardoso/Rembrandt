@@ -22,58 +22,70 @@ import saskia.bin.Configuration
 import saskia.db.GeoSignatureFactory;
 import saskia.db.obj.*;
 import saskia.db.table.*
+import saskia.db.database.*
 
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
 
+import saskia.util.validator.*
 /**
  * @author Nuno Cardoso
  * Script to generate geographic signatures for the documents of a given collection
  */
-class GenerateGeoSignatures {
+class GenerateGeoSignatures  {
 
+    static Logger log = Logger.getLogger("GeoSignature")
     Tag tag
     Collection collection
-    static Logger log = Logger.getLogger("GeoSignature")
-    int ndocs 
+    int docs 
+	 Map status 
+
     GeoSignatureFactory gsf
     Configuration conf = Configuration.newInstance()
 	 int rembrandted_doc_pool_size = conf.getInt("saskia.imports.rembrandted_doc_pool_size",30)
     String sync
 
-    public GenerateGeoSignatures(Collection collection, String sync, int ndocs) {
-        
-        this.collection = collection
-        this.ndocs = ndocs  
-		this.sync = sync
+    public GenerateGeoSignatures() {
+        status = [generated:0, skipped:0, failed:0]
         gsf = new GeoSignatureFactory() 
-        tag = Tag.getFromVersion(GeoSignatureFactory.geoSignatureVersionLabel)
-        
-        if (!tag) {
-            tag = new Tag(tag_version:GeoSignatureFactory.geoSignatureVersionLabel, tag_comment:null)
-            tag.tag_id = tag.addThisToDB()
-        }  
+ 
     }
 
+	 public setTag() {
+		 tag = collection.getDBTable().getSaskiaDB().getDBTable("TagTable")
+			.getFromVersion(GeoSignatureFactory.geoSignatureVersionLabel)
+        
+        if (!tag) {
+            tag = Tag.createNew(collection.getDBTable(),
+				[tag_version:GeoSignatureFactory.geoSignatureVersionLabel, 
+				tag_comment:null])
+				
+            tag.tag_id = tag.addThisToDB()
+        }  
+	 }
+	
     public Map generate() {
         
-        Map status = [generated:0, skipped:0]
-        
-        def stats = new DocStats(ndocs)
+      	def stats = new DocStats(docs)
         stats.begin()
-        
-        for (int i=ndocs; i > 0; i -= rembrandted_doc_pool_size) {
+     
+		  RembrandtedDocTable rembrandtedDocTable = collection
+			.getDBTable().getSaskiaDB().getDBTable("RembrandtedDocTable")
+   
+        for (int i=docs; i > 0; i -= rembrandted_doc_pool_size) {
              
             int limit = (i > rembrandted_doc_pool_size ? rembrandted_doc_pool_size : i)
-            log.debug "Initial batch size: $ndocs Remaining: $i Next pool size: $limit"
+            log.debug "Initial batch size: $docs Remaining: $i Next pool size: $limit"
             
             // NOT THREAD-SAFE!
 
             Map docs 
 			if (sync == "pool") {
-				docs = RembrandtedDoc.getBatchDocsAndNEsFromPoolToGenerateGeoSignatures(collection, limit)
+				docs = rembrandtedDocTable.getBatchDocsAndNEsFromPoolToGenerateGeoSignatures(
+					collection, limit)
 			} else if (sync == "rdoc") {
-				docs = RembrandtedDoc.getBatchDocsAndNEsFromRDOCToGenerateGeoSignatures(collection, limit)
+				docs = rembrandtedDocTable.getBatchDocsAndNEsFromRDOCToGenerateGeoSignatures(
+					collection, limit)
 			}
 			
             log.debug "Got ${docs?.size()} RembrandtedDoc(s)."
@@ -89,13 +101,14 @@ class GenerateGeoSignatures {
                 HashMap status_
                 
                 try {
-                    DocGeoSignatureTable dgs = new DocGeoSignatureTable()
-                    // the String is a XML
-                    dgs.dgs_document = doc_id
-                    dgs.dgs_signature = gsf.generate(doc_id, stuff)
-                    dgs.dgs_tag = tag
+                    DocGeoSignatureTable dgs = DocGeoSignatureTable.createNew(
+							db.getDBTable("DocGeoSignatureTableTable"), 
+							[dgs_document:doc_id,
+                    	 dgs_signature:gsf.generate(doc_id, stuff),
+                    	 dgs_tag:tag
+							])
                     long dgs_new_id = dgs.addThisToDB()
-                    RembrandtedDoc.addGeoSignatureIDtoDocID(dgs_new_id, doc_id)
+                    rembrandtedDocTable.addGeoSignatureIDtoDocID(dgs_new_id, doc_id)
                     status.generated++
                                        
                 } catch(Exception e) {
@@ -103,7 +116,7 @@ class GenerateGeoSignatures {
                      status.skipped++
                      abort()
                 }
-                stats.endDoc()					   			  
+                stats.endDoc()
                 stats.printMemUsage()	
             }
             
@@ -119,9 +132,10 @@ class GenerateGeoSignatures {
     static void main(args) {  
         
         Options o = new Options()
+        o.addOption("db", true, "DB (main/test)")
         o.addOption("col", true, "target collection. Can be id or name")
         o.addOption("sync", true, "Get NEs from RDOC or from Pool")
-        o.addOption("ndocs", true, "number of docs in batch process")    
+        o.addOption("docs", true, "number of docs in batch process")    
         o.addOption("help", false, "Gives this help information")
         
         CommandLineParser parser = new GnuParser()
@@ -132,40 +146,41 @@ class GenerateGeoSignatures {
             formatter.printHelp( "java saskia.imports.GenerateGeoSignatures", o )
             System.exit(0)
         }
-        
-        if (!cmd.hasOption("col")) {
-            println "No --col arg. Please specify the target collection (id or name). Exiting."
-            System.exit(0)
-        }
-        
-        if (!cmd.hasOption("ndocs")) {
-            println "No --ndocs arg. Please specify the number of docs to process. Exiting."
-            System.exit(0)
-        }
-        
- 		String sync = cmd.getOptionValue("sync")
-        if (!(["rdoc", "pool"].contains(sync))) {
-            log.error "Don't know sync ${cmd.getOptionValue('sync')}. Exiting."
-            System.exit(0)    
-        }
+		
+		String DEFAULT_DB_NAME = "main"
+		String DEFAULT_COLLECTION_NAME="none"
+		String DEFAULT_DOCS = 10000
+		String DEFAULT_SYNC = "pool"
+		
+		GenerateGeoSignatures ggs = new GenerateGeoSignatures()
+ 
+		// --db
+		SaskiaDB db = new DBValidator()
+			.validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)
+		log.info "DB: $db "
+		
+		// --col
+		Collection collection = new CollectionValidator(db)
+			.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
+			
+		ggs.setCollection(collection)
+		ggs.setTag()
+		log.info "Collection: $collection "
+		
+		// --docs		
+		Integer docs = new DocsValidator()
+			.validate(cmd.getOptionValue("docs"), DEFAULT_DOCS)
+		ggs.setDocs(docs)
+		log.info "Docs: $docs "
+		
+		// --sync		
+		def sync = new SyncValidator()
+			.validate(cmd.getOptionValue("sync"), DEFAULT_SYNC)
+		ggs.setSync(sync)
+		log.info "Sync: sync "
+		
+      ggs.generate()
+      log.info "Done. Generated ${ggs.status.generated} geosignatures, skipped ${ggs.status.skipped} geosignatures."
 
-        Collection collection 
-        try {
-            collection = Collection.getFromID(Long.parseLong(cmd.getOptionValue("col")))		
-        } catch(Exception e) {
-            collection = Collection.getFromName(cmd.getOptionValue("col"))
-        }
-        if (!collection) {
-            log.error "Don't know collection ${cmd.getOptionValue('col')} to parse documents on. Exiting."
-            System.exit(0) 
-        } 
-        
-        GenerateGeoSignatures ggs = new GenerateGeoSignatures(
-        collection, sync, Integer.parseInt(cmd.getOptionValue("ndocs")))
-        
-        Map status = ggs.generate()
-        
-        log.info "Done. Generated ${status.generated} geosignatures, skipped ${status.skipped} geosignatures."
     }   
-    
 }

@@ -49,7 +49,7 @@ class Geoscope extends DBObject implements JSONable {
 		super(dbtable)
 	}
 	
-	static Geoscope createFromDBRow(DBTable dbtable, row) {
+	static Geoscope createNew(DBTable dbtable, row) {
 		Geoscope g = new Geoscope(dbtable)
 		g.geo_id = row['geo_id']
 		g.geo_name = row['geo_name']
@@ -101,7 +101,7 @@ class Geoscope extends DBObject implements JSONable {
 			case 'Long': newvalue = Long.parseLong(value); break
 		}
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"UPDATE ${getDBTable().getTablename()} SET ${column}=? WHERE geo_id=?",
+			"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE geo_id=?",
 			[newvalue, geo_id])
 		return res
 	}
@@ -242,7 +242,7 @@ class Geoscope extends DBObject implements JSONable {
 	
 	public updateAncestorsInDB() {
 		def updated_doc = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"UPDATE ${getDBTable().getTablename()} SET geo_woeid_ancestors=? where geo_id=?",
+			"UPDATE ${getDBTable().tablename} SET geo_woeid_ancestors=? where geo_id=?",
 		[geo_woeid_ancestors, geo_id])
 		log.debug "Updated Geoscope with geo_id:${geo_id} with new ancestors."
 		return updated_doc
@@ -250,7 +250,7 @@ class Geoscope extends DBObject implements JSONable {
 
 	public updateDescendentsInDB() {
 		def updated_doc = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"UPDATE ${getDBTable().getTablename()} SET geo_woeid_children=? where geo_id=?",
+			"UPDATE ${getDBTable().tablename} SET geo_woeid_children=? where geo_id=?",
 		[geo_woeid_children, geo_id])
 		log.debug "Updated Geoscope with geo_id:${geo_id} with new descendents."
 		return updated_doc
@@ -260,7 +260,7 @@ class Geoscope extends DBObject implements JSONable {
 		String date = String.format('%tF %<tT', new Date())
 		String result = "200\t${date}\t"+geo_woeid_place
 		def updated_doc = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"UPDATE ${getDBTable().getTablename()} SET geo_woeid_place=? where geo_id=?",
+			"UPDATE ${getDBTable().tablename} SET geo_woeid_place=? where geo_id=?",
 		[result, geo_id])
 		log.debug "Updated Geoscope with geo_id:${geo_id} with new place XML."
 		return updated_doc
@@ -268,7 +268,7 @@ class Geoscope extends DBObject implements JSONable {
 
 	public Long addThisToDB() {
 		def res =  getDBTable().getSaskiaDB().getDB().executeInsert(
-			"INSERT INTO ${getDBTable().getTablename()}(geo_name, geo_woeid, geo_woeid_type,"+
+			"INSERT INTO ${getDBTable().tablename}(geo_name, geo_woeid, geo_woeid_type,"+
 		"geo_woeid_place, geo_woeid_parent, geo_woeid_ancestors, geo_woeid_belongsto, geo_woeid_neighbors, "+
 		"geo_woeid_siblings, geo_woeid_children, geo_geonetpt02) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
 		[geo_name, geo_woeid, geo_woeid_type, geo_woeid_place, geo_woeid_parent, geo_woeid_ancestors,
@@ -281,7 +281,7 @@ class Geoscope extends DBObject implements JSONable {
 	public int removeThisFromDB() {
 		if (!geo_id) return null
 		def res =  getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"DELETE FROM ${getDBTable().getTablename()} WHERE geo_id=?", [geo_id])
+			"DELETE FROM ${getDBTable().tablename} WHERE geo_id=?", [geo_id])
 		log.info "Removed Geoscope ${this} from DB, got $res"
 		return res
 	}

@@ -9,6 +9,8 @@ echo "+----------------------------------------------+"
 echo "| SASKIA Generate Geographic Signatures script |"
 echo "+----------------------------------------------+"
 echo ""
+echo "What database (main/test)? (blank means main)"
+read DB
 echo "What collection do you want to sync?"
 read COL
 echo "How many docs would you like to sync?"
@@ -17,5 +19,9 @@ echo "Get Geographic NEs/entities from the RembrandtDoc text (rdoc) or from the 
 read SYNC
 echo "OK. Starting script..."
 
+if [ "${DB}" != "" ]; then
+    DB="main"
+fi
 
-java $JAVA_OPTS saskia.imports.GenerateGeoSignatures --col=$COL --ndocs=$N --sync=$SYNC
+
+java $JAVA_OPTS saskia.imports.GenerateGeoSignatures --db=$DB --col=$COL --ndocs=$N --sync=$SYNC

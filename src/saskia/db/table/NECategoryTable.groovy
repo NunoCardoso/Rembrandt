@@ -47,12 +47,12 @@ class NECategoryTable extends DBTable {
 
 	public int getIDforLOCAL(String lang) {
 		if (!lang) return
-			createCache()
+		createCache()
 		if (!all_category_id.containsKey(local_lang[lang])) {
 			// there's noting in DB, let's create it.
-			NECategory nec = new NECategory()
-			def id = nec.addThisToDB()
-			updateCacheElement(id, local_lang[lang])
+			NECategory nec = new NECategory(this, [nec_category:local_lang[lang]])
+			nec.nec_id = nec.addThisToDB()
+			updateCacheElement(nec)
 		}
 		return (int)all_category_id[local_lang[lang]].nec_id
 	}
@@ -60,7 +60,7 @@ class NECategoryTable extends DBTable {
 	public List<NECategory> queryDB(String query, ArrayList params = []) {
 		List<NECategory> t = []
 		db.getDB().eachRow(query, params, {row  ->
-			t << NECategory.createFromDBRow(this.owner,row)
+			t << NECategory.createNew(this,row)
 		})
 		return t
 	}
@@ -72,15 +72,14 @@ class NECategoryTable extends DBTable {
 		if (all_id_category.isEmpty()) {
 			def nec = queryDB("SELECT * FROM ${tablename}")
 			log.debug "Searched for all categories, got ${nec.size()} entries."
-			nec.each{ updateCacheElement( it.nec_id, it.nec_category)}
+			nec.each{ updateCacheElement(it)}
 		}
 	}
 
-	public updateCacheElement(Long id, String category) {
-		if (!id || !category) return
-			NECategory nec = new NECategory(nec_id:id, nec_category:category)
-		all_category_id[category] = nec
-		all_id_category[id] = nec
+	public updateCacheElement(NECategory nec) {
+		if (!nec.nec_id || !nec.nec_category) return
+		all_category_id[nec.nec_category] = nec
+		all_id_category[nec.nec_id] = nec
 	}
 
 	/** Get a NECategory from id.
@@ -97,7 +96,7 @@ class NECategoryTable extends DBTable {
 	}
 
 	static NECategory getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.NECategoryTable").getFromID(id)
+		return  db.getDBTable("NECategoryTable").getFromID(id)
 	}
 
 	/** Get a NECategory from id.
@@ -114,6 +113,6 @@ class NECategoryTable extends DBTable {
 	}
 
 	static NECategory getFromCategory(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.NECategoryTable").getFromCategory(id)
+		return  db.getDBTable("NECategoryTable").getFromCategory(id)
 	}
 }

@@ -41,7 +41,7 @@ class CacheTable extends DBTable {
 	public List<Cache> queryDB(String query, ArrayList params = []) {
 		List<Cache> list = []
 		getSaskiaDB().getDB().eachRow(query, params, {row  ->
-			list << Cache.createFromDBRow(this.owner, row)
+			list << Cache.createNew(this, row)
 		})
 		return list
 	}

@@ -20,6 +20,7 @@ package saskia.db.table
 import org.apache.log4j.Logger
 
 import saskia.db.database.SaskiaDB
+import saskia.db.obj.Collection
 import saskia.db.obj.User
 /**
  * @author Nuno Cardoso
@@ -51,7 +52,7 @@ class CollectionTable extends DBTable {
 
 		List<Collection> list = []
 		getSaskiaDB().getDB().eachRow(query, params, {row  ->
-			list << Collection.createFromDBRow(this.owner, row)
+			list << Collection.createNew(this, row)
 		})
 		return list
 	}
@@ -66,7 +67,7 @@ class CollectionTable extends DBTable {
 	 * Load the internal cache for collections
 	 */
 	public void refreshCache() {
-		List l = queryDB(db, "SELECT * FROM ${tablename}".toString(), [])
+		List l = queryDB("SELECT * FROM ${tablename}".toString(), [])
 		l.each{cacheIDCollection[it.col_id] = it}
 	}
 
@@ -285,7 +286,7 @@ class CollectionTable extends DBTable {
 	}
 
 	static Collection getFromName(SaskiaDB db, Long id) {
-		CollectionTable instance = db.getDBTable("saskia.db.table.CollectionTable")
+		CollectionTable instance = db.getDBTable("CollectionTable")
 		return instance.getFromName(id)
 	}
 
@@ -307,7 +308,7 @@ class CollectionTable extends DBTable {
 	}
 
 	static Collection getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.CollectionTable").getFromID(id)
+		return  db.getDBTable("CollectionTable").getFromID(id)
 	}
 
 	/**
@@ -339,7 +340,7 @@ class CollectionTable extends DBTable {
 			case 'Long': newvalue = Long.parseLong(value); break
 			case 'User': newvalue = Long.parseLong(value); object = User.getFromID(newvalue); break // value is usr_id
 		}
-		def res = db.getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE col_id=?",[newvalue, col_id])
+		def res = getSaskiaDB().getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE col_id=?",[newvalue, col_id])
 		// if we have a User (object), add it to cache
 		cacheIDCollection[col_id][column] = (object ? object : newvalue)
 		log.info "Updating value $column to $value for collection ${this}"

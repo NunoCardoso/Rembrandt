@@ -22,6 +22,8 @@ import saskia.bin.Configuration
 import saskia.db.TimeSignatureFactory;
 import saskia.db.obj.*;
 import saskia.db.table.*
+import saskia.db.database.*
+import saskia.util.validator.*
 
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
@@ -32,36 +34,43 @@ import org.apache.commons.cli.*
  */
 class GenerateTimeSignatures {
 
+    static Logger log = Logger.getLogger("GeoSignature")
     Tag tag
     Collection collection
-    static Logger log = Logger.getLogger("TimeSignature")
-    int ndocs 
+    int docs 
+	 Map status 
+
     TimeSignatureFactory tsf
     Configuration conf = Configuration.newInstance()
- 	 int rembrandted_doc_pool_size = conf.getInt("saskia.imports.rembrandted_doc_pool_size",30)
+	 int rembrandted_doc_pool_size = conf.getInt("saskia.imports.rembrandted_doc_pool_size",30)
     String sync
 
-    public GenerateTimeSignatures(Collection collection, String sync, int ndocs) {
-        
-        this.collection = collection
-        this.ndocs = ndocs  
-        this.sync = sync  
+    public GenerateTimeSignatures() {
+        status = [generated:0, skipped:0, failed:0]
         tsf = new TimeSignatureFactory() 
-        tag = Tag.getFromVersion(TimeSignatureFactory.timeSignatureVersionLabel)
-        
-        if (!tag) {
-            tag = new Tag(tag_version:TimeSignatureFactory.timeSignatureVersionLabel, tag_comment:null)
-            tag.tag_id = tag.addThisToDB()
-        }  
+ 
     }
 
-    public Map generate() {
+	 public setTag() {
+		 tag = collection.getDBTable().getSaskiaDB().getDBTable("TagTable")
+			.getFromVersion(TimeSignatureFactory.timeSignatureVersionLabel)
         
-        Map status = [generated:0, skipped:0]
+        if (!tag) {
+            tag = Tag.createNew(collection.getDBTable(),
+				[tag_version:TimeSignatureFactory.timeSignatureVersionLabel, 
+				tag_comment:null])
+				
+            tag.tag_id = tag.addThisToDB()
+        }  
+	 }
+
+    public Map generate() {
         
         def stats = new DocStats(ndocs)
         stats.begin()
         
+		  RembrandtedDocTable rembrandtedDocTable = collection
+			.getDBTable().getSaskiaDB().getDBTable("RembrandtedDocTable")
         for (int i=ndocs; i > 0; i -= rembrandted_doc_pool_size) {
              
             int limit = (i > rembrandted_doc_pool_size ? rembrandted_doc_pool_size : i)
@@ -70,9 +79,11 @@ class GenerateTimeSignatures {
             // NOT THREAD-SAFE!
             Map docs 
 			if (sync == "pool") {
-				docs = RembrandtedDoc.getBatchDocsAndNEsFromPoolToGenerateTimeSignatures(collection, limit)
+				docs = rembrandtedDocTable.getBatchDocsAndNEsFromPoolToGenerateTimeSignatures(
+					collection, limit)
 			} else if (sync == "rdoc") {
-				docs = RembrandtedDoc.getBatchDocsAndNEsFromRDOCToGenerateTimeSignatures(collection, limit)
+				docs = rembrandtedDocTable.getBatchDocsAndNEsFromRDOCToGenerateTimeSignatures(
+					collection, limit)
 			}
 			log.debug "Got ${docs?.size()} RembrandtedDoc(s)."
                     
@@ -80,20 +91,21 @@ class GenerateTimeSignatures {
             if (!docs) return status
                     
             docs.each {doc_id, stuff ->
-                
+               
                 stats.beginDoc(doc_id)
                 
                 log.debug "Generating time-signature for doc $doc_id..."
                 HashMap status_
                 
                 try {
-                    DocTimeSignatureTable dts = new DocTimeSignatureTable()
-                    // the String is a XML
-                    dts.dts_document = doc_id
-                    dts.dts_signature = tsf.generate(doc_id, stuff)
-                    dts.dts_tag = tag
+                    DocTimeSignature dts = DocTimeSignature.createNew(
+							db.getDBTable("DocTimeSignatureTable"), 
+							[ dts_document:doc_id,
+                    	  dts_signature:tsf.generate(doc_id, stuff),
+                    	  dts_tag:tag
+							])
                     long dts_new_id = dts.addThisToDB()
-                    RembrandtedDoc.addTimeSignatureIDtoDocID(dts_new_id, doc_id)
+                    rembrandtedDocTable.addTimeSignatureIDtoDocID(dts_new_id, doc_id)
                     status.generated++
                                        
                 } catch(Exception e) {
@@ -101,7 +113,7 @@ class GenerateTimeSignatures {
                      status.skipped++
                      abort()
                 }
-                stats.endDoc()					   			  
+                stats.endDoc()
                 stats.printMemUsage()	
             }
             
@@ -117,9 +129,10 @@ class GenerateTimeSignatures {
     static void main(args) {  
         
         Options o = new Options()
+        o.addOption("db", true, "DB (main/test)")
         o.addOption("col", true, "target collection. Can be id or name")
         o.addOption("sync", true, "Get NEs from RDOC or from Pool")
-        o.addOption("ndocs", true, "number of docs in batch process")    
+        o.addOption("docs", true, "number of docs in batch process")    
         o.addOption("help", false, "Gives this help information")
         
         CommandLineParser parser = new GnuParser()
@@ -127,44 +140,44 @@ class GenerateTimeSignatures {
         
         if (cmd.hasOption("help")) {
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp( "java saskia.imports.GenerateTimeSignatures", o )
+            formatter.printHelp( "java saskia.imports.GenerateGeoSignatures", o )
             System.exit(0)
         }
-        
-        if (!cmd.hasOption("col")) {
-            println "No --col arg. Please specify the target collection (id or name). Exiting."
-            System.exit(0)
-        }
-        
-        if (!cmd.hasOption("ndocs")) {
-            println "No --ndocs arg. Please specify the number of docs to process. Exiting."
-            System.exit(0)
-        }
-        
- 		String sync = cmd.getOptionValue("sync")
-        if (!(["rdoc", "pool"].contains(sync))) {
-            log.error "Don't know sync ${cmd.getOptionValue('sync')}. Exiting."
-            System.exit(0)    
-        }
+		
+		String DEFAULT_DB_NAME = "main"
+		String DEFAULT_COLLECTION_NAME="none"
+		String DEFAULT_DOCS = 10000
+		String DEFAULT_SYNC = "pool"
+		
+		GenerateTimeSignatures gts = new GenerateTimeSignatures()
+ 
+		// --db
+		SaskiaDB db = new DBValidator()
+			.validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)
+		log.info "DB: $db "
 
-        Collection collection 
-        try {
-            collection = Collection.getFromID(Long.parseLong(cmd.getOptionValue("col")))		
-        } catch(Exception e) {
-            collection = Collection.getFromName(cmd.getOptionValue("col"))
-        }
-        if (!collection) {
-            log.error "Don't know collection ${cmd.getOptionValue('col')} to parse documents on. Exiting."
-            System.exit(0) 
-        } 
-        
-        
-        GenerateTimeSignatures gts = new GenerateTimeSignatures(
-        collection, sync, Integer.parseInt(cmd.getOptionValue("ndocs")))
-        
-        Map status = gts.generate()
-        
-        log.info "Done. Generated ${status.generated} time signatures, skipped ${status.skipped} time signatures."
+		// --col
+		Collection collection = new CollectionValidator(db)
+			.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
+			
+		gts.setCollection(collection)
+		gts.setTag()
+		log.info "Collection: $collection "
+		
+		// --docs		
+		Integer docs = new DocsValidator()
+			.validate(cmd.getOptionValue("docs"), DEFAULT_DOCS)
+		gts.setDocs(docs)
+		log.info "Docs: $docs "
+		
+		// --sync		
+		def sync = new SyncValidator()
+		.validate(cmd.getOptionValue("sync"), DEFAULT_SYNC)
+		gts.setSync(sync)
+		log.info "Sync: sync "
+		
+      gts.generate()
+      log.info "Done. Generated ${gts.status.generated} geosignatures, skipped ${gts.status.skipped} geosignatures."
+
     }   
-    
 }

@@ -35,15 +35,13 @@ class NESubtype extends DBObject implements JSONable{
 	public NESubtype(DBTable dbtable) {
 		super(dbtable)
 	}
+
 	
-	public NESubtype(DBTable dbtable, Long nes_id, String nes_subtype) {
-		super(dbtable)
-		this.nes_id = nes_id
-		this.nes_subtype = nes_subtype
-	}
-	
-	static NESubtype createFromDBRow(dbtable, row) {
-		return new NESubtype(dbtable, row['nes_id'], row['nes_subtype'] )
+	static NESubtype createNew(dbtable, row) {
+		NESubtype nes = new NESubtype(dbtable)
+		if (row['nes_id']) nes.nes_id = row['nes_id']
+		if (row['nes_subtype']) nes.nes_subtype = row['nes_subtype']
+		return nes
 	}
 	
 	public Map toMap() {
@@ -57,7 +55,7 @@ class NESubtype extends DBObject implements JSONable{
 	
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-			"INSERT IGNORE INTO ${getDBTable().getTablename()} VALUES(0,?)", [nes_subtype])
+			"INSERT IGNORE INTO ${getDBTable().tablename} VALUES(0,?)", [nes_subtype])
 		// returns an auto_increment value
 		if (res) {
 			nes_id = (long)res[0][0]
@@ -70,7 +68,7 @@ class NESubtype extends DBObject implements JSONable{
 	public int removeThisFromDB() {
 		if (!nes_id) return null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"DELETE FROM ${getDBTable().getTablename()} WHERE nes_id=?", [nes_id])
+			"DELETE FROM ${getDBTable().tablename} WHERE nes_id=?", [nes_id])
 		getDBTable().all_subtype_id.remove(nes_subtype)
 		getDBTable().all_id_subtype.remove(nes_id)
 		log.info "Removed NESubtype ${this} from DB, got $res"

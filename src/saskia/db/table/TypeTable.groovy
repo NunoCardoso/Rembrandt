@@ -40,7 +40,7 @@ class TypeTable {
 	public List<Type> queryDB(String query, ArrayList params = []) {
 		List<Type> t = []
 		db.getDB().eachRow(query, params, {row  ->
-			t << Type.createFromDBRow(this.owner, row)
+			t << Type.createNew(this, row)
 		})
 		return t
 	}
@@ -73,6 +73,6 @@ class TypeTable {
 	}
 
 	static Type getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.TypeTable").getFromID(id)
+		return  db.getDBTable("TypeTable").getFromID(id)
 	}
 }

@@ -36,15 +36,11 @@ class NECategory extends DBObject implements JSONable {
 		super(dbtable)
 	}
 	
-	
-	public NECategory(DBTable dbtable, Long nec_id, String nec_category) {
-		super(dbtable)
-		this.nec_id = nec_id
-		this.nec_category = nec_category
-	}
-	
-	static NECategory createFromDBRow(DBTable dbtable, row) {
-		return new NECategory(dbtable, row['nec_id'], row['nec_category'] )
+	static NECategory createNew(DBTable dbtable, row) {
+		NECategory nec = new NECategory(dbtable)
+		if (row['nec_id']) nec.nec_id = row['nec_id']
+		if (row['nec_category']) nec.nec_category = row['nec_category']
+		return nec
 	}
 		
 	public Map toMap() {
@@ -60,7 +56,7 @@ class NECategory extends DBObject implements JSONable {
 	*/
    public Long addThisToDB() {
 	   def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-		   "INSERT IGNORE INTO ${getDBTable().getTablename()} VALUES(0,?)", 
+		   "INSERT IGNORE INTO ${getDBTable().tablename} VALUES(0,?)", 
 		   [nec_category])
 	   // returns an auto_increment value
 	   if (res) {
@@ -74,7 +70,7 @@ class NECategory extends DBObject implements JSONable {
    public int removeThisFromDB() {
 	   if (!nec_id) return null
 	   def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-		   "DELETE FROM ${getDBTable().getTablename()} WHERE nec_id=?", 
+		   "DELETE FROM ${getDBTable().tablename} WHERE nec_id=?", 
 		   [nec_id])
 	   getDBTable().all_category_id.remove(nec_category)
 	   getDBTable().all_id_category.remove(nec_id)

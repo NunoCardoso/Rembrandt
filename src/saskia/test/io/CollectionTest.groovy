@@ -24,7 +24,7 @@ import org.junit.runner.*
 import saskia.bin.Configuration
 import saskia.db.database.SaskiaTestDB
 import saskia.db.obj.Collection
-
+import saskia.db.obj.User
 /**
  * @author Nuno Cardoso
  */
@@ -43,7 +43,7 @@ class TestCollection extends GroovyTestCase {
 
 	// Holland has a 301 redirect to Netherlands.
 	void testListAccessibleCollectionsForUser() {
-		User user = User.getFromLogin('guest')
+		User user = User.getFromLogin(db, 'guest')
 		println Collection.listAccessibleCollectionsForUser(user)
 
 	}

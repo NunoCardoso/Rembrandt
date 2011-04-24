@@ -17,11 +17,9 @@
  */
 package saskia.db.obj
 
-import java.util.HashMap;
-
 import saskia.db.table.DBTable
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
 
 /**
  * @author Nuno Cardoso
@@ -66,7 +64,11 @@ class User extends DBObject implements JSONable {
 		'usr_max_daily_api_calls':'Integer', 'usr_current_daily_api_calls':'Integer',
 		'usr_total_api_calls':'Long','usr_date_last_api_call':'Date']
 
-	static User createFromDBRow(DBTable dbtable, row) {
+	public User(DBTable dbtable) {
+		super(dbtable)
+	}
+
+	static User createNew(DBTable dbtable, row) {
 		User u = new User(dbtable)
 		u.usr_id = row['usr_id']
 		u.usr_login = row['usr_login']
@@ -121,23 +123,23 @@ class User extends DBObject implements JSONable {
 		return ['usr_id':usr_id, 'usr_login':usr_login]
 	}
 
-	
+
 	public static boolean isGuestUser(String user, String lang) {
-//		println "user $user guests[lang]=${guests[lang]}"
+		//		println "user $user guests[lang]=${guests[lang]}"
 		return guests[lang] == user
 	}
 
 	public void enableUser() {
 		usr_enabled=true
 		getDBTable().cacheIDUser[usr_id].usr_enabled=true
-		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().getTablename()} set usr_enabled=1 where usr_id=?", [usr_id])
+		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} set usr_enabled=1 where usr_id=?", [usr_id])
 	}
 
 	public void generatePubKey() {
 
 		String s = renoir.util.MD5Hex.digest(usr_login+System.currentTimeMillis())
 		getDBTable().cacheIDUser[usr_id].usr_pub_key=s
-		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().getTablename()} set usr_pub_key=? where usr_id=?", [s, usr_id])
+		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} set usr_pub_key=? where usr_id=?", [s, usr_id])
 	}
 
 	/** get my groups in a nice way */
@@ -176,7 +178,7 @@ class User extends DBObject implements JSONable {
 		usr_date_last_api_call = d
 		getDBTable().cacheIDUser[usr_id].usr_current_daily_api_calls = 0
 		getDBTable().cacheIDUser[usr_id].usr_date_last_api_call = d
-		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().getTablename()} set usr_date_last_api_call=NOW(), "+
+		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} set usr_date_last_api_call=NOW(), "+
 				"usr_current_daily_api_calls=0 where usr_id=?", [usr_id])
 	}
 
@@ -186,7 +188,7 @@ class User extends DBObject implements JSONable {
 		usr_total_api_calls++
 		getDBTable().cacheIDUser[usr_id].usr_current_daily_api_calls++
 		getDBTable().cacheIDUser[usr_id].usr_total_api_calls++
-		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().getTablename()} set usr_current_daily_api_calls="+
+		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} set usr_current_daily_api_calls="+
 				"usr_current_daily_api_calls + 1, usr_total_api_calls = usr_total_api_calls + 1, "+
 				"usr_date_last_api_call=NOW() where usr_id=?", [usr_id])
 		return usr_current_daily_api_calls
@@ -195,29 +197,28 @@ class User extends DBObject implements JSONable {
 
 
 	public void insertTempPassword(String password) {
-		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().getTablename()} set usr_tmp_password=? where usr_id=?",
+		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} set usr_tmp_password=? where usr_id=?",
 				[password, usr_id])
 		getDBTable().cacheIDUser[usr_id].usr_tmp_password=password
 	}
 
 	public void insertTempAPIKey(String tmp_api_key) {
-		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().getTablename()} set usr_tmp_api_key=? where usr_id=?",
+		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} set usr_tmp_api_key=? where usr_id=?",
 				[tmp_api_key, usr_id])
 		getDBTable().cacheIDUser[usr_id].usr_tmp_api_key = tmp_api_key
 	}
 
 	public void updatePasswordAndAPIKeyFromTemp() {
-		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().getTablename()} set usr_password=usr_tmp_password, "+
+		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} set usr_password=usr_tmp_password, "+
 				"usr_api_key=usr_tmp_api_key where usr_id=?", [usr_id])
 		getDBTable().cacheIDUser[usr_id].usr_password = getDBTable().cacheIDUser[usr_id].usr_tmp_password
 		getDBTable().cacheAPIKeyUser[usr_tmp_api_key] = getDBTable().cacheAPIKeyUser[usr_api_key]
 		getDBTable().cacheAPIKeyUser.remove(usr_api_key)
 		getDBTable().cacheIDUser[usr_id].usr_api_key = getDBTable().cacheIDUser[usr_id].usr_tmp_api_key
-
 	}
 
 	public void updatePassword(String password) {
-		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().getTablename()} set usr_password=? "+
+		getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} set usr_password=? "+
 				" where usr_id=?", [password, usr_id])
 		getDBTable().cacheIDUser[usr_id].usr_password = password
 	}
@@ -232,7 +233,7 @@ class User extends DBObject implements JSONable {
 		else if (el instanceof Integer) newval = Integer.parseInt(newvalue)
 		else if (el instanceof Long) newval = Long.parseLong(newvalue)
 
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().getTablename()} SET ${column}=? WHERE usr_id=?",[newval, usr_id])
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} SET ${column}=? WHERE usr_id=?",[newval, usr_id])
 		getDBTable().cacheIDUser[usr_id][column] = newval
 		if (column == "usr_api_key") {
 			getDBTable().cacheAPIKeyUser.remove(usr.usr_api_key)
@@ -243,13 +244,28 @@ class User extends DBObject implements JSONable {
 	}
 
 	public Long addThisToDB() {
-		def res = getDBTable().getSaskiaDB().getDB().executeInsert("INSERT INTO ${getDBTable().getTablename()} "+
+		def res = getDBTable().getSaskiaDB().getDB().executeInsert("INSERT INTO ${getDBTable().tablename} "+
 				"VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-				[usr_login, usr_enabled, usr_groups, usr_superuser, usr_firstname,
-					usr_lastname, usr_email, usr_password, usr_tmp_password, usr_api_key,
-					usr_tmp_api_key, usr_pub_key, usr_max_number_collections, usr_max_docs_per_collection,
-					usr_max_daily_api_calls, usr_current_daily_api_calls, usr_total_api_calls,
-					usr_date_last_api_call] )
+				[
+					usr_login,
+					usr_enabled,
+					usr_groups,
+					usr_superuser,
+					usr_firstname,
+					usr_lastname,
+					usr_email,
+					usr_password,
+					usr_tmp_password,
+					usr_api_key,
+					usr_tmp_api_key,
+					usr_pub_key,
+					usr_max_number_collections,
+					usr_max_docs_per_collection,
+					usr_max_daily_api_calls,
+					usr_current_daily_api_calls,
+					usr_total_api_calls,
+					usr_date_last_api_call]
+				)
 		usr_id = (long)res[0][0]
 		getDBTable().cacheIDUser[usr_id] = this
 		log.info "Inserted User into DB: ${this}"
@@ -257,9 +273,9 @@ class User extends DBObject implements JSONable {
 	}
 
 	public int removeThisFromDB() {
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate("DELETE FROM ${getDBTable().getTablename()} WHERE usr_id=?", [usr_id])
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate("DELETE FROM ${getDBTable().tablename} WHERE usr_id=?", [usr_id])
 		getDBTable().cacheIDUser.remove(usr_id)
-		getDBTable().getSaskiaDB().getInstance("saskia.db.table.CollectionTable").cacheIDuoc.remove(usr_id)
+		getDBTable().getSaskiaDB().getInstance("CollectionTable").cacheIDuoc.remove(usr_id)
 		log.info "Removed User ${this} into DB, got res $res"
 		return res
 	}
@@ -271,7 +287,4 @@ class User extends DBObject implements JSONable {
 	public String toString() {
 		return "${usr_id}:${usr_login}"
 	}
-
-
-
 }

@@ -42,9 +42,13 @@ class Relation extends DBObject implements JSONable {
 		this.rel_relation = rel_relation
 	}
 
-	static Relation createFromDBRow(DBTable dbtable, row) {
-		return new Relation(dbtable, row['rel_id'], row['rel_relation'] )
+	static Relation createNew(DBTable dbtable, row) {
+		Relation r = new Relation(dbtable)
+		if (row['rel_id']) r.rel_id = row['rel_id']
+		if (row['rel_relation']) r.rel_relation = row['rel_relation']
+		return r
 	}
+	
 
 	public Map toMap() {
 		return ["rel_id":rel_id, "rel_relation":rel_relation]
@@ -62,7 +66,7 @@ class Relation extends DBObject implements JSONable {
 	public Long addThisToDB() {
 		if (!rel_id) return null
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-				"INSERT INTO ${getDBTable().getTablename()} VALUES(0,?)",
+				"INSERT INTO ${getDBTable().tablename} VALUES(0,?)",
 				[rel_relation])
 		// returns an auto_increment value
 		return (long)res[0][0]
@@ -71,7 +75,7 @@ class Relation extends DBObject implements JSONable {
 	public int removeThisFromDB() {
 		if (!rel_id) return null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"DELETE FROM ${getDBTable().getTablename()} WHERE rel_id=?",
+				"DELETE FROM ${getDBTable().tablename} WHERE rel_id=?",
 				[rel_id])
 		log.info "Removed Relation ${this} from DB, got $res"
 		return res

@@ -49,7 +49,7 @@ class DocTimeSignatureTable extends DBTable {
 	public List<DocTimeSignatureTable> queryDB(String query, ArrayList params = []) {
 		List<DocTimeSignatureTable> res = []
 		getSaskiaDB().getDB().eachRow(query, params, {row  ->
-			res << DocTimeSignature.createFromDBRow(this.owner, row)
+			res << DocTimeSignature.createNew(this, row)
 		})
 		return res
 	}
@@ -71,7 +71,7 @@ class DocTimeSignatureTable extends DBTable {
 	}
 
 	static DocTimeSignature getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.DocTimeSignatureTable").getFromID(id)
+		return  db.getDBTable("DocTimeSignatureTable").getFromID(id)
 	}
 
 	static List<DocTimeSignature> getBatchOfTimeSignatures(Collection collection, limit = 10,  offset = 0) {

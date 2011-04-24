@@ -37,8 +37,8 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 
 		this.db = db
 		i18n = I18n.newInstance()
-		CollectionTable collectionTable = db.getDBTable("saskia.db.table.CollectionTable")
-		UserTable userTable = db.getDBTable("saskia.db.table.UserTable")
+		CollectionTable collectionTable = db.getDBTable("CollectionTable")
+		UserTable userTable = db.getDBTable("UserTable")
 
 		JSONanswer = {req, par, bind ->
 			long session = System.currentTimeMillis()

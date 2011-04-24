@@ -43,12 +43,12 @@ class TagTable extends DBTable {
 	public List<Tag> queryDB(String query, ArrayList params) {
 		List<Tag> res = []
 		db.getDB().eachRow(query, params, {row  ->
-			res << Tag.createFromDBRow(this.owner, row)
+			res << Tag.createNew(this, row)
 		})
 		return res
 	}
 
-	static void refreshCache() {
+	public void refreshCache() {
 		List<Tag> l = queryDB("SELECT * FROM ${getTablename()}".toString(), [])
 		l.each{cache[it.tag_id] = it}
 	}
@@ -81,7 +81,7 @@ class TagTable extends DBTable {
 	}
 
 	static Tag getFromID(SaskiaDB db, Long id) {
-		return  db.getDBTable("saskia.db.table.TagTable").getFromID(id)
+		return  db.getDBTable("TagTable").getFromID(id)
 	}
 
 }

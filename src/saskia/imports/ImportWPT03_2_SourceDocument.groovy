@@ -28,6 +28,9 @@ import rembrandt.io.WPT03Reader
 import rembrandt.obj.Document
 import saskia.bin.Configuration
 import saskia.db.obj.*
+import saskia.db.database.*
+import saskia.db.table.*
+import saskia.util.validator.*
 
 class ImportWPT03_2_SourceDocument extends Import {
 
@@ -44,7 +47,7 @@ class ImportWPT03_2_SourceDocument extends Import {
 				conf.get("rembrandt.output.styletag.lang", "pt")))
 	}
 
-	public HashMap importDocs() {
+	public HashMap importer() {
 
 		// connect the file input stream reader to the SecondHaremReader
 		reader.processInputStream(this.inputStreamReader)
@@ -57,7 +60,6 @@ class ImportWPT03_2_SourceDocument extends Import {
 			SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, doc.date_created, "")
 			if (s) status.imported++ else status.skipped++
 		}
-		return status
 	}
 
 	static void main(args) {
@@ -65,6 +67,7 @@ class ImportWPT03_2_SourceDocument extends Import {
 		Options o = new Options()
 		Configuration conf = Configuration.newInstance()
 
+		o.addOption("db", true, "target Saskia DB (main/test)")
 		o.addOption("col", true, "target collection name/id of the DB")
 		o.addOption("file", true, "source collection file to load")
 		o.addOption("encoding", true, "file encoding")
@@ -75,6 +78,9 @@ class ImportWPT03_2_SourceDocument extends Import {
 
 		ImportWPT03_2_SourceDocument importer = new ImportWPT03_2_SourceDocument()
 		String DEFAULT_COLLECTION_NAME = "WPT 03"
+	   String DEFAULT_DB_NAME = "main"
+	 	String DEFAULT_ENCODING = conf.get("rembrandt.input.encoding",
+			System.getProperty("file.encoding"))
 
 		log.info "******************************************"
 		log.info "* This class loads the WPT 03 Collection *"
@@ -87,37 +93,34 @@ class ImportWPT03_2_SourceDocument extends Import {
 			System.exit(0)
 		}
 
+		// --db
+		SaskiaDB db = new DBValidator()
+			.validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)	
+		importer.setDb(db)
+		log.info "DB: $db"
+
 		// --col
-		Collection collection = importer.validateCollection(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
-		if (!collection) {
-			log.fatal "Collection couldn't be found."
-			log.fatal "Please make sure you have that collection in the DB before the import."
-			System.exit(0)
-		}
-
-		// --file
-		File file = importer.validateFile(cmd.getOptionValue("file"))
-		if (!file) {
-			log.fatal "No import file found. Please check if the given file exists"
-			System.exit(0)
-		}
-
-		//--encoding
-		String encoding = importer.validateEncoding(cmd.getOptionValue("encoding"))
-		if (!encoding) {
-			log.fatal "No encoding defined. Please specify the encoding of the import file."
-			System.exit(0)
-		}
-
+		Collection collection = new CollectionValidator(db)
+			.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
 		importer.setCollection(collection)
-		log.info "Collection: $collection"
+		log.info "Collection: $collection"		
+		
+		// --file
+		File file = new FileValidator()
+			.validate(cmd.getOptionValue("file"), null, true)
+	
+		//--encoding
+		String encoding = new EncodingValidator()
+			.validate(cmd.getOptionValue("encoding"), DEFAULT_ENCODING)
+	
 		importer.setFile(file)
 		importer.setEncoding(encoding)
-		log.info "File: $file <"+encoding+"> "
-
+		log.info "File: $file <"+encoding+"> "	
+		
 		importer.prepareInputStreamReader()
-		HashMap status = importer.importDocs()
-
-		log.info "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."
+		importer.importer()
+		log.info importer.statusMessage()
+	
+	
 	}
 }

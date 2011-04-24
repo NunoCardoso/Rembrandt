@@ -31,21 +31,19 @@ public class Subject extends DBObject implements JSONable {
 	Map<String,String> subject
 
 	static Logger log = Logger.getLogger("Subject")
-	static Map type = ['sbj_id':'Long', 'sbj_subject':'String'] 
+	static Map type = ['sbj_id':'Long', 'sbj_subject':'String']
 
-	public Subject(DBTable dbtable, Long sbj_id, String sbj_subject) {
+	public Subject(DBTable dbtable) {
 		super(dbtable)
-		this.sbj_id = sbj_id
-		this.sbj_subject = sbj_subject
 	}
 
-	static Subject createFromDBRow(DBTable dbtable, row) {
-
-		Subject s = new Subject(dbtable, row['sbj_id'], row['sbj_subject'] )
+	static Subject createNew(DBTable dbtable, row) {
+		Subject s = new Subject(dbtable)
+		if (row['sbj_id']) s.sbj_id = row['sbj_id']
+		if (row['sbj_subject']) s.sbj_subject = row['sbj_subject'] 
 		s.subject = Subject.parseSubject(s.sbj_subject) // reads sbj_subject, populates subject Map
 		return s
 	}
-
 
 	public Map toMap() {
 		return ['sbj_id':sbj_id, 'sbj_subject':sbj_subject, 'subject':subject]
@@ -57,43 +55,43 @@ public class Subject extends DBObject implements JSONable {
 
 	String unparseSubject(Map map) {
 		if (!map) return
-				List s = []
-						// convert something like "en:[xxx];pt:[xxx]" into a hash[lang]
-						map.each{k, v ->  s << "${k}:${v}"}
-		return s.join(";")    
+			List s = []
+		// convert something like "en:[xxx];pt:[xxx]" into a hash[lang]
+		map.each{k, v ->  s << "${k}:${v}"}
+		return s.join(";")
 	}
 
 	static Map parseSubject(String subject) {
 		if (!subject) return
-				Map s = [:]
-						// convert something like "en:[xxx];pt:[xxx]" into a hash[lang]
-						List itens = subject.split(/;/)
-						itens?.each{
+			Map s = [:]
+		// convert something like "en:[xxx];pt:[xxx]" into a hash[lang]
+		List itens = subject.split(/;/)
+		itens?.each{
 			List fields = it.split(/:/)
-					s[fields[0]] = fields[1] 
+			s[fields[0]] = fields[1]
 		}
 		return s
 	}
 
 	static updateValue(Long id, column, value) {
 		Subject sbj = Subject.getFromID(id)
-				if (!id) return -1
-						return sbj.updateValue(column, value)
+		if (!id) return -1
+		return sbj.updateValue(column, value)
 	}
 
 	public updateValue(column, value) {
-		def newvalue	    
+		def newvalue
 		switch (type[column]) {
 			case 'String': newvalue = value; break
 			case 'Long': newvalue = Long.parseLong(value); break
 		}
 		def res = db.getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE sbj_id=?",[newvalue, sbj_id])
-				cacheSubject.each{key, valuelist -> 
-				int index = valuelist.indexOf(this)
-				if (index) cacheSubject[key][index][column] = newvalue
+		cacheSubject.each{key, valuelist ->
+			int index = valuelist.indexOf(this)
+			if (index) cacheSubject[key][index][column] = newvalue
 		}
 		cacheID[this][column] = newvalue
-				return res
+		return res
 	}
 
 	/** Add this NECategory o the database. Note that a null is a valid insertion...
@@ -103,23 +101,23 @@ public class Subject extends DBObject implements JSONable {
 		if (!subject) throw new IllegalStateException ("I have to parse subject before putting in the DB!")
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
 				"INSERT INTO ${tablename} VALUES(0,?)", [sbj_subject])
-				// add to the cache. Check both en and pt strings, add to cache
-				this.sbj_id = (long)res[0][0]
-						if (!cacheID.containsKey(this.sbj_id)) cacheID[this.sbj_id] = this
-						getDBTable().addToSubjectCache(this) 		
-						log.info "Adding subject to DB: ${this}"
-						return this.sbj_id
-	}	
+		// add to the cache. Check both en and pt strings, add to cache
+		this.sbj_id = (long)res[0][0]
+		if (!cacheID.containsKey(this.sbj_id)) cacheID[this.sbj_id] = this
+		getDBTable().addToSubjectCache(this)
+		log.info "Adding subject to DB: ${this}"
+		return this.sbj_id
+	}
 
 	public int removeThisFromDB() {
 		if (!sbj_id) return null
-				def res = getDBTable().getSaskiaDB().getDB().executeUpdate("DELETE FROM ${tablename} WHERE sbj_id=?", [sbj_id])
-				cacheSubject.each{key, valuelist -> 
-				if (valuelist.contains(this)) cacheSubject[key].remove(this)
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate("DELETE FROM ${tablename} WHERE sbj_id=?", [sbj_id])
+		cacheSubject.each{key, valuelist ->
+			if (valuelist.contains(this)) cacheSubject[key].remove(this)
 		}
 		getDBTable().entityIDCache.remove(sbj_id)
 		log.info "Removing subject ${this} from DB, got $res"
-		return res	    
+		return res
 	}
 
 

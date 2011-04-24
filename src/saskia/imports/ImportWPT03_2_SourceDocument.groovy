@@ -21,289 +21,106 @@ package saskia.imports
 import saskia.bin.Configuration
 import saskia.io.Collection
 import saskia.io.SourceDoc
-import saskia.io.DocStatus
 
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
 
-import java.util.regex.*
-
 import rembrandt.obj.Document
+
 import rembrandt.io.RembrandtWriter
 import rembrandt.io.RembrandtStyleTag
+import rembrandt.io.WPT03Reader
+import rembrandt.io.UnformattedStyleTag
 
-
-/** 
- * This class imports WPT03 files to the Source Documents
-
-----!!- colecção WPT 03 - separador de documento -!!----
-URL: http://7mares.terravista.pt/atlda/
-(Content-Length, -1)
-(Content-Type, text/html)
-(Last-Modified, unknown)
-(ServerSW, apache)
-(dataRec, 16/04/2003)
-(estado, 200)
-(filtrado, /vcrMom/data/WEBSTATS/filtrados/20/24/748)
-(ip, 62.151.16.12)
-(language, unknown)
-(prof, 0)
-(realSize, 778)
-(textSize, 14)
-(title, Alves e Trigo)
-
-Alves e Trigo
-*/
-
-
-class ImportWPT03_2_SourceDocument {
+class ImportWPT03_2_SourceDocument extends Import {
 	
-	Configuration conf 
+	Configuration conf = Configuration.newInstance()
 	static Logger log = Logger.getLogger("SaskiaImports")
-	Collection collection 
-	String lang= "pt"
-	String filename
-   RembrandtWriter writer 
-	HashMap status
-	File f
-	String encoding
-	String ynae
-
-	public ImportWPT03_2_SourceDocument(String filename, Collection collection,
-			String encoding) {
-        
-		conf = Configuration.newInstance()
-	   this.collection = collection
-		writer = new RembrandtWriter(new RembrandtStyleTag("pt"))
-		this.encoding = encoding
-		
-		f = new File(filename)
-      status = [imported:0, skipped:0]
+	WPT03Reader reader
+	RembrandtWriter writer
+	
+	public ImportWPT03_2_SourceDocument() {
+		super()
+		reader = new WPT03Reader(new UnformattedStyleTag(
+			conf.get("rembrandt.input.styletag.lang", "pt")))
+		writer = new RembrandtWriter(new RembrandtStyleTag(
+			conf.get("rembrandt.output.styletag.lang", "pt")))
 	}
 	
-	HashMap parse() {
-	    Matcher m
-		 Boolean indoc = false
-		 Boolean inbody = false
-		 Boolean inheader = false
-		 
-		 String text // buffer
+	public HashMap importDocs() {
 		
-		 Date date_modified
-		 Date date_fetched
-		 String lang 
-		 String id
+		// connect the file input stream reader to the SecondHaremReader
+		reader.processInputStream(this.inputStreamReader)
 		
-		 String content 
-		 String url 
-		 String title
-		
-		InputStreamReader is = new InputStreamReader(new FileInputStream(f), encoding)
-		BufferedReader br = new BufferedReader(is)	    
-      String l
-      while ((l = br.readLine()) != null) {
-
-			m = l =~ /^----!!- .* WPT 03 - separador de documento -!!----$/
-			if (m.matches()) {
-				if (inbody && indoc) {
-					inbody = false; indoc=false; inheader = false; 
-					Document doc = new Document()
-					doc.body = text.trim()
-					if (title && title != "null")
-						doc.title = title
-					doc.docid = id
-					doc.lang = lang
-					doc.tokenize()
-					content = writer.printDocument(doc)
-				
-					Date date = null
-					if (date_modified)
-						date = date_modified
-					if (!date && date_fetched)
-						date = date_fetched
-					if (!date) 
-						date = new Date(0)
-
-					addSourceDoc(id, content, lang, date)
-					text = "";title = ""; url = "";content = "";
-					lang="";id="";date_modified=null;date_fetched=null;
-				}
-			} else {
-
-				m = l =~ /^\((.*?), (.*?)\)$/
-				if (m.matches()) {
-					if (inheader && !inbody) {
-						def key = m.group(1)
-						def value = m.group(2)
-						
-						if (key == "Last-Modified") {
-							if (value != "unknown") {
-								date_modified = Date.parse("dd/MM/yyyy", value)
-							}	
-						}
-						if (key == "dataRec") {
-							if (value != "unknown") {
-								date_fetched = Date.parse("dd/MM/yyyy", value)
-							}	
-						}
-						if (key == "language") {
-							if (value == "portuguese") {
-								lang="pt"
-							}else if (value == "english") {
-								lang="en"
-							} else {
-								lang="xx"
-							}
-						}
-						if (key == "title") {
-							title = value
-						}
-					} else {
-						if (inbody) {
-						// é uma linha que começa e acaba com (), mas que pertence ao corpo
-							text += l						
-						//log.error("Erro: linha $l não é suposto estar aqui!")
-						//System.exit(0)
-						}
-					}
-					
-				} else {
-					
-					Matcher m2 = l =~ /URL: https?:\/\/(.*)/
-					
-					if (m2.matches()) {
-						if (!inheader) {
-							inheader = true; 
-							indoc = true
-							url = m2.group(1);
-						
-							// o id vai ser o URL, só que há URLs que, truncados a 255, ficam iguais.
-							// vou usar uma hash com 8 números, um '_', depois o URL truncado a 240. 
-							String random =  Long.toHexString(Double.doubleToLongBits(Math.random()));
-							int index = (url.size() > 240 ? 240 : url.size()) 
-							id = random.substring(0,8)+"_"+url.substring(0,index)
-						}
-					// body 	
-					} else {
-						if (inbody && !inheader) {
-							text += l
-						}
-						else if (inheader && !inbody) {
-							inheader = false;
-							inbody = true;
-							text = ""
-						}
-					}
-				}
-			}
-		}
-		
-		// the last document
-		if (text) {
-			Document doc = new Document()
-			doc.body = text
-			doc.docid = id
-			doc.lang = lang
-			doc.tokenize()
-			content = writer.printDocument(doc)
-				
-			Date date = null
-			if (date_modified)
-				date = date_modified
-			if (!date && date_fetched)
-				date = date_fetched
-			if (!date) 
-				date = new Date(0)
-
-			addSourceDoc(id, content, lang, date)
+		// discard all existing NEs
+		reader.docs.each{doc ->
+			if (!doc.lang) doc.lang = collection.col_lang
+			if (!doc.date_created) doc.date_created = new Date(0) 
+			String content = writer.printDocument(doc)
+			SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, doc.date_created, "")
+			if (s) status.imported++ else status.skipped++
 		}
 		return status
-   }
-
-   public SourceDoc addSourceDoc(String original_id, String content, String lang, Date date) {
-		
-		SourceDoc s = new SourceDoc(
-		  sdoc_original_id:original_id,
-        sdoc_collection:collection, 
-        sdoc_lang:lang, 
-        sdoc_content:content, 
-        sdoc_doc:null,
-        sdoc_date:date,
-        sdoc_proc:DocStatus.READY,
-        sdoc_comment:""
-		)
-		// by adding to DB, it already checks for duplicates
-		
-      try {
-         s.addThisToDB()
-         log.debug "Inserted $s into Saskia DB."
-			status.imported++
-      } catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
-         log.warn "Found duplicate entry in DB. Skipping."  
-			status.skipped++
-      } catch(Exception e2) {
-         log.warn "Found other error. Skipping. " + e2.getMessage()  
-			status.skipped++
-		}
-		return s
+	}
 	
-	println "I have $s $content" 	
-	}      
- 	
 	static void main(args) {
-	
+		
 		Options o = new Options()
-		o.addOption("file", true, "collection file to load")
-		o.addOption("encoding", false, "encoding")
-		o.addOption("col", true, "collection number/name")
+		Configuration conf = Configuration.newInstance()
+		
+		o.addOption("col", true, "target collection name/id of the DB")
+		o.addOption("file", true, "source collection file to load")
+		o.addOption("encoding", true, "file encoding")
 		o.addOption("help", false, "Gives this help information")
-	    
+		
 		CommandLineParser parser = new GnuParser()
 		CommandLine cmd = parser.parse(o, args)
-
-	   if (cmd.hasOption("help")) {
+		
+		ImportWPT03_2_SourceDocument importer = new ImportWPT03_2_SourceDocument()
+		String DEFAULT_COLLECTION_NAME = "WPT 03"
+		
+		log.info "******************************************"
+		log.info "* This class loads the WPT 03 Collection *"
+		log.info "******************************************"
+	
+		// --help
+		if (cmd.hasOption("help")) {
 			HelpFormatter formatter = new HelpFormatter()
-			formatter.printHelp( "java saskia.imports.ImportWPT03_2_SourceDocument", o )
+			formatter.printHelp( "java "+importer.class.name, o )
 			System.exit(0)
-		}
-
-		Collection collection = null
-		String collection_ = cmd.getOptionValue("col")
-		try {
-			collection = Collection.getFromName(collection_)
-		}catch(Exception e) {}	
-		    
-	 	if (!collection) {
-			try {
-				 collection = Collection.getFromID(Integer.parseInt(collection_)	)    
-			}catch(Exception e) {}
-		}
-		if (!collection) {
-			throw new IllegalStateException("Don't know where the collection $collection_ is. Exiting.")
-			System.exit(0)
-		}       
-
-	   if (!cmd.hasOption("file")) {
-			println "No --file arg. Please specify the file. Exiting."
-			System.exit(0)
-		}
-
-		String lang = collection.col_lang
-		log.info "Using collection language $lang as default for documents without language info"
-					    
-	   String encoding = ""
-	   if (!cmd.hasOption("encoding")) {
-			println "No encoding given. ISO-8859-1 (WPT-03 default) used."
-			encoding = "ISO-8859-1"
-		} else {
-			encoding = cmd.getOptionValue("encoding")
-			println "Encoding configured to $encoding"
 		}
 		
-		ImportWPT03_2_SourceDocument w2s = new ImportWPT03_2_SourceDocument(
-			new File(cmd.getOptionValue("file")), collection, lang, encoding)
-			
-		HashMap status = w2s.importDocs()
+		// --col
+		Collection collection = importer.validateCollection(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
+		if (!collection) {
+			log.fatal "Collection couldn't be found."
+			log.fatal "Please make sure you have that collection in the DB before the import."
+			System.exit(0)
+		}
+		
+		// --file
+		File file = importer.validateFile(cmd.getOptionValue("file"))
+		if (!file) {
+			log.fatal "No import file found. Please check if the given file exists"
+			System.exit(0)
+		}
+		
+		//--encoding
+		String encoding = importer.validateEncoding(cmd.getOptionValue("encoding"))
+		if (!encoding) {
+			log.fatal "No encoding defined. Please specify the encoding of the import file."
+			System.exit(0)
+		}
+		
+		importer.setCollection(collection)
+		log.info "Collection: $collection"
+		importer.setFile(file)
+		importer.setEncoding(encoding)
+		log.info "File: $file <"+encoding+"> "
+		
+		importer.prepareInputStreamReader()
+		HashMap status = importer.importDocs()
+		
 		log.info "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."
 	}
 }

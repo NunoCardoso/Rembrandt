@@ -37,7 +37,8 @@ class Document { //  extending it as Expando gives some weird sync stuff... go t
     String body	
     String docid // this is THE ORIGINAL ID
     String taglang
-    
+    Date date_created
+	
     @XStreamAlias('params')
     Map property = [:]
     

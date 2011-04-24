@@ -156,6 +156,12 @@ Note: see conf/rembrandt.neurotic.properties for an example of a configuration f
 	saskia.db.url - URL for MySQL running RembrandtPool's DB. Default: jdbc:mysql://127.0.0.1
 	saskia.db.user - Default username for RembrandtPool's DB. Default: saskia 
 	
+	saskia.test.db.driver - Driver to access RembrandtPool's DB. Default: com.mysql.jdbc.Driver
+	saskia.test.db.name - name of RembrandtPool's DB. Default: saskia:_test
+	saskia.test.db.param - Additional parameters. Default: useUnicode=yes&characterEncoding=UTF8&characterSetResults=UTF8&autoReconnect=true
+	saskia.test.db.password - Password for RembrandtPool's DB. Default: saskia
+	saskia.test.db.url - URL for MySQL running RembrandtPool's DB. Default: jdbc:mysql://127.0.0.1
+	saskia.test.db.user - Default username for RembrandtPool's DB. Default: saskia 
 
 
    saskia.imports.max_allowed_html_size - Max value of source docs to be tagged. Default:; 100000 (bytes)

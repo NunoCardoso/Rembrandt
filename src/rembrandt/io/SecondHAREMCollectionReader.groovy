@@ -52,7 +52,7 @@ class SecondHAREMCollectionReader extends Reader {
     int number = 0
     
     public SecondHAREMCollectionReader(StyleTag style) {
-	super(style)
+		super(style)
     }
 
     private String save(item) {

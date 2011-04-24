@@ -18,21 +18,24 @@
 
 package saskia.db.database
 
-import saskia.bin.Configuration
 import groovy.sql.Sql
+
 import java.sql.SQLException
+
 import org.apache.log4j.*
+
+import saskia.bin.Configuration
 
 /**
  * @author Nuno Cardoso
  * This is the DB connect singleton.
  */
 abstract class DB {
-	
+
 	def db
 	Configuration conf
 	static Logger log = Logger.getLogger("DB")
-	
+
 	String default_db_driver = 	'com.mysql.jdbc.Driver'
 	String default_db_url = 	'jdbc:mysql://127.0.0.1'
 	String default_db_name = 	'saskia'
@@ -40,16 +43,16 @@ abstract class DB {
 	String default_db_password ='saskia'
 	String default_db_param = 	'useUnicode=yes&characterEncoding=UTF8&characterSetResults=UTF8&autoReconnect=true'
 	static long lastCall
-	
+
 	String default_conf_driver = 	'saskia.db.driver'
 	String default_conf_url = 		'saskia.db.url'
 	String default_conf_name = 		'saskia.db.name'
 	String default_conf_user = 		'saskia.db.user'
 	String default_conf_password = 	'saskia.db.password'
 	String default_conf_param =		'saskia.db.param'
-	
+
 	long timeout = 691200000
-	
+
 	/**
 	 * Initializes a connection to te DB.
 	 * @param conf Configuration file.
@@ -57,47 +60,47 @@ abstract class DB {
 	public DB(Configuration conf) {
 		this.conf = conf
 	}
-	
+
 	public connect() {
 		def driver, url, name, param, user, password
-		
+
 		driver = conf.get(getDefault_conf_driver())
 		if (!driver) {
 			log.info "No DB driver, using default ${getDefault_db_driver()}"
 			driver = getDefault_db_driver()
 		}
-		
+
 		url= conf.get(getDefault_conf_url())
 		if (!url) {
 			log.info "No DB URL, using default ${getDefault_db_url()}"
 			url = getDefault_db_url()
 		}
-		
+
 		name= conf.get(getDefault_conf_name())
 		if (!name) {
 			log.info "No DB name, using default ${getDefault_db_name()}"
 			name = getDefault_db_name()
 		}
-		
+
 		user= conf.get(getDefault_conf_user())
 		if (!user) {
 			log.info "No DB user, using default ${getDefault_db_user()}"
 			user = getDefault_db_user()
 		}
-		
+
 		password= conf.get(getDefault_conf_password())
 		if (!password) {
 			log.info "No DB password, using default password"
 			password = getDefault_db_password()
 		}
-		
+
 		param= conf.get(getDefault_conf_param())
 		if (!param) {
 			log.info "No DB param, using default param"
 			param = getDefault_db_param()
 		}
 		param = saskia.util.XMLUtil.decodeAmpersand(param)
-		
+
 		println "Connecting to $driver:$url/$name?${param}"
 		try {
 			db = Sql.newInstance("$url/${name}?${param}", user, password, driver)
@@ -114,9 +117,9 @@ abstract class DB {
 			System.exit(0)
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * get DB.
 	 * Good to hook a timeout check. 
@@ -125,7 +128,7 @@ abstract class DB {
 		long thiscall = System.currentTimeMillis()
 		boolean recent = ( (thiscall - lastCall) < timeout)
 		//  log.trace "SaskiaDB: recent? $recent ($thiscall - $lastCall) < $timeout "
-		
+
 		if (recent) {
 			lastCall = thiscall
 			//   log.trace "SaskiaDB: returning recent db"
@@ -135,7 +138,7 @@ abstract class DB {
 			log.warn "Connection is old, I'll try to revive it"
 			int retry = 3
 			boolean connected = false
-			
+
 			while (!connected && (retry > 0)) {
 				log.warn "retrying..."
 				try { db.eachRow("Select 1", {row ->

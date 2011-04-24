@@ -31,7 +31,7 @@ import saskia.db.obj.NEName
  */
 class NENameTable extends DBTable {
 
-	String tablename = "ne_name"
+	static String tablename = "ne_name"
 
 	Configuration conf
 
@@ -41,7 +41,7 @@ class NENameTable extends DBTable {
 	LinkedHashMap<Long,Geoscope> nameCache
 
 	public NENameTable(SaskiaDB db) {
-		super(db, tablename)
+		super(db)
 		conf = Configuration.newInstance()
 		idCache = new LinkedHashMap(
 				conf.getInt("saskia.nename.cache.number",1000), 0.75f, true) // true: access order.
@@ -52,7 +52,7 @@ class NENameTable extends DBTable {
 	/** 
 	 * DB query method 
 	 */
-	static List<NEName> queryDB(String query, ArrayList params = []) {
+	public List<NEName> queryDB(String query, ArrayList params = []) {
 		List<NEName> res = []
 		db.getDB().eachRow(query, params, {row  ->
 			res << NEName.createFronDBRow(this.owner,row)
@@ -80,6 +80,10 @@ class NENameTable extends DBTable {
 		return null
 	}
 
+	static NEName getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.NENameTable").getFromID(id)
+	}
+
 	/** Get a NEName from id.
 	 * @param id The id as needle.
 	 * return the NEName result object, or null
@@ -97,6 +101,10 @@ class NENameTable extends DBTable {
 			return nen[0]
 		}
 		return null
+	}
+
+	static NEName getFromName(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.NENameTable").getFromName(id)
 	}
 
 }

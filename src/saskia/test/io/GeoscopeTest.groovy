@@ -17,12 +17,12 @@
  */
 package saskia.test.io
 
+import org.apache.log4j.*
 import org.junit.*
 import org.junit.runner.*
-import org.apache.log4j.*
 
-import saskia.db.table.Geoscope;
-import saskia.db.table.Subject;
+import saskia.db.obj.*
+import saskia.db.table.*
 
 
 /**
@@ -32,18 +32,16 @@ class TestGeoscope extends GroovyTestCase {
 
 	def Logger log = Logger.getLogger("UnitTest")
 	Subject subject
-	
+
 	public TestGeoscope() {
-		
-	
 	}
-	
+
 	// Holland has a 301 redirect to Netherlands.
 	void testRedirectGeoscope() {
 		List<Geoscope> holland = Geoscope.getFromName("Holanda","pt")
-	    Geoscope netherlands = Geoscope.getFromWOEID(23424909)
+		Geoscope netherlands = Geoscope.getFromWOEID(23424909)
 		assert holland[0] == netherlands
 	}
-    
-   
+
+
 }

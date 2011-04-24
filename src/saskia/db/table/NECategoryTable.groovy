@@ -30,7 +30,7 @@ import saskia.db.obj.NECategory
  */
 class NECategoryTable extends DBTable {
 
-	String tablename = "ne_category"
+	static String tablename = "ne_category"
 	static NECategoryTable _this
 	static Map<String,String> local_lang = ["pt":"LOCAL","en":"PLACE","rembrandt":"@LOCAL"]
 
@@ -39,18 +39,13 @@ class NECategoryTable extends DBTable {
 
 	static Logger log = Logger.getLogger("NECategory")
 
-	static public getInstance(SaskiaDB db) {
-		if (!_this) _this = new NECategoryTable(db)
-		return _this
-	}
-
 	public NECategoryTable(SaskiaDB db) {
-		super(db, tablename)
+		super(db)
 		all_id_category = [:]
 		all_category_id = [:]
 	}
 
-	static int getIDforLOCAL(String lang) {
+	public int getIDforLOCAL(String lang) {
 		if (!lang) return
 			createCache()
 		if (!all_category_id.containsKey(local_lang[lang])) {
@@ -101,6 +96,10 @@ class NECategoryTable extends DBTable {
 		//if (nec.nec_id) return nec else return null
 	}
 
+	static NECategory getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.NECategoryTable").getFromID(id)
+	}
+
 	/** Get a NECategory from id.
 	 * @param id The id as needle.
 	 * return the NECategory result object, or null
@@ -112,5 +111,9 @@ class NECategoryTable extends DBTable {
 		//NECategory nec = queryDB("SELECT * FROM ${tablename} WHERE nec_category=?", [nec_category])
 		//log.debug "Querying for nec_category $nec_category got NECategory $nec."
 		//return nec
+	}
+
+	static NECategory getFromCategory(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.NECategoryTable").getFromCategory(id)
 	}
 }

@@ -27,7 +27,9 @@ import saskia.bin.Configuration
 class WikipediaDB extends DB {
 
 	static WikipediaDB _this
-	static Configuration conf = Configuration.newInstance()
+
+	// para não colidir com o do DB
+	static Configuration conf2 = Configuration.newInstance()
 
 	String default_db_driver = 'com.mysql.jdbc.Driver'
 	String default_db_url = 'jdbc:mysql://127.0.0.1'
@@ -101,85 +103,85 @@ class WikipediaDB extends DB {
 	 */
 
 	//force it to be of namespace 0
-	def static String getSelectIDandTitleFromRedirectionTitle(String lang = conf.get("global.lang")) {
+	def static String getSelectIDandTitleFromRedirectionTitle(String lang = conf2.get("global.lang")) {
 		return "select p2.page_id, p2.page_title from ${lang}_page as p2, ${lang}_page as p, "+
 		"${lang}_redirect as r where p.page_namespace=0 and p.page_id=r.rd_from "+
 		"and r.rd_title=p2.page_title and r.rd_namespace = 0 and "+
 		"p2.page_namespace=0 and p.page_title=?"
 	}
 
-	def static String getSelectIDandTitleFromRedirectionID(String lang = conf.get("global.lang")) {
+	def static String getSelectIDandTitleFromRedirectionID(String lang = conf2.get("global.lang")) {
 		return "select p.page_id, p.page_title from ${lang}_page as p, "+
 		"${lang}_redirect as r where r.rd_namespace = 0 and r.rd_from = ? "+
 		"and r.rd_title=p.page_title and p.page_namespace=0"
 	}
 
-	def static String getSelectCategoriesFromPageDocumentFromID(String lang = conf.get("global.lang")) {
+	def static String getSelectCategoriesFromPageDocumentFromID(String lang = conf2.get("global.lang")) {
 		return "select cl_to from ${lang}_categorylinks where cl_from = ?"
 	}
 
-	def static String getSelectCategoriesFromPageDocumentFromTitle(String lang = conf.get("global.lang")) {
+	def static String getSelectCategoriesFromPageDocumentFromTitle(String lang = conf2.get("global.lang")) {
 		return "select cl_to from ${lang}_categorylinks, ${lang}_page where cl_from=page_id "+
 		"and page_namespace=0 and page_title=?"
 	}
 
 	// force it to be of namespace 14
-	def static String getSelectCategoryDocumentIDandTitleFromPageDocumentID(String lang = conf.get("global.lang")) {
+	def static String getSelectCategoryDocumentIDandTitleFromPageDocumentID(String lang = conf2.get("global.lang")) {
 		return "select p2.page_id, p2.page_title from ${lang}_page as p2, ${lang}_page as p where "+
 		"p.page_title=p2.page_title and p2.page_namespace=14 and p.page_id=?"
 	}
 
-	def static String getSelectCategoryDocumentIDandTitleFromPageDocumentTitle(String lang = conf.get("global.lang")) {
+	def static String getSelectCategoryDocumentIDandTitleFromPageDocumentTitle(String lang = conf2.get("global.lang")) {
 		return "select page_id, page_title from ${lang}_page where page_namespace=14 and page_title=?"
 	}
 
-	def static String getSelectTitleFromPageID(String lang = conf.get("global.lang")) {
+	def static String getSelectTitleFromPageID(String lang = conf2.get("global.lang")) {
 		return "select page_title from ${lang}_page where page_id=?"
 	}
 
 	// force it to be of namespace 0
-	def static String getSelectIDFromPageTitle(String lang = conf.get("global.lang")) {
+	def static String getSelectIDFromPageTitle(String lang = conf2.get("global.lang")) {
 		return "select page_id, page_is_redirect from ${lang}_page where page_title=? and "+
 		"page_namespace=0"
 	}
 
 	// é preciso forçar p2.page_namespace=0 para não haver lixo de outros namespaces
-	def static String getSelectInlinkIDandTitleFromPageID(String lang = conf.get("global.lang")) {
+	def static String getSelectInlinkIDandTitleFromPageID(String lang = conf2.get("global.lang")) {
 		return "select p2.page_id, p2.page_title from ${lang}_pagelinks as pl, ${lang}_page as p, "+
 		"${lang}_page as p2 where pl.pl_title=p.page_title and pl_namespace=p.page_namespace "+
 		"and pl_from=p2.page_id and p2.page_namespace=0 and p.page_id=?"
 	}
 	// To avoid by title, because we don't know if it is a page doc or a category doc.
 	//  def static String selectInlinkIDFromPageTitle = "select pl_from from "+
-	//  conf.get('db.table.pagelinks')+" where pl_namespace = 0 and pl_title=?"
+	//  conf2.get('db.table.pagelinks')+" where pl_namespace = 0 and pl_title=?"
 
-	def static String getSelectOutlinkIDandTitlePagesFromPageID(String lang = conf.get("global.lang")) {
+	def static String getSelectOutlinkIDandTitlePagesFromPageID(String lang = conf2.get("global.lang")) {
 		return "select p.page_id, p.page_title from ${lang}_pagelinks as pl, ${lang}_page as p where "+
 		"pl.pl_namespace=p.page_namespace and p.page_title=pl.pl_title and pl_from=?"
 	}
 	// forcei a namespace 0...
-	def static String getSelectOutlinkIDandTitlePagesFromPageTitle(String lang = conf.get("global.lang")) {
+	def static String getSelectOutlinkIDandTitlePagesFromPageTitle(String lang = conf2.get("global.lang")) {
 		return "select p.page_id, p.page_title from ${lang}_pagelinks as pl, ${lang}_page as p where "+
 		"pl.pl_namespace=p.page_namespace and p.page_id=pl_from and p.page_namespace=0 and pl_title=?"
 	}
 
-	def static String getSelectPageIdTitleWithCategory(String lang = conf.get("global.lang")) {
+	def static String getSelectPageIdTitleWithCategory(String lang = conf2.get("global.lang")) {
 		return "select page_id, page_title from ${lang}_page, ${lang}_categorylinks where "+
 		"page_id=cl_from and cl_to=?"
 	}
 
-	def static String getSelectCategoriesFromRegex(String regex, String lang = conf.get("global.lang")) {
+	def static String getSelectCategoriesFromRegex(String regex, String lang = conf2.get("global.lang")) {
 		//COLLATE instructions are needed to make consistency on case insensitive regexes
 		return "select page_id, page_title from ${lang}_page where page_namespace=14 and "+
 		"page_title RLIKE \""+regex.replaceAll(" ","_")+"\" COLLATE utf8_general_ci"
 	}
 
-	def static String getLanguageLink(String sourceLang = conf.get("global.lang")) {
+	def static String getLanguageLink(String sourceLang = conf2.get("global.lang")) {
 		return "select ll_title from ${sourceLang}_langlinks, ${sourceLang}_page where ll_lang=? "+
 		"and ll_from = page_id and page_title=?"
 	}
 
-	def static String getRawWikipediaTextFromWikipediaPageID(String lang = conf.get("global.lang")) {
+	def static String getRawWikipediaTextFromWikipediaPageID(String lang = conf2.get("global.lang")) {
 		return "SELECT ${lang}_text.old_text from ${lang}_text, ${lang}_page where "+
 		"${lang}_page.page_latest=${lang}_text.old_id and ${lang}_page.page_id=?"
 	}
@@ -190,7 +192,7 @@ class WikipediaDB extends DB {
 
 	public static WikipediaDB newInstance() {
 		if (_this == null) {
-			_this = new WikipediaDB(WikipediaDB.conf)
+			_this = new WikipediaDB(WikipediaDB.conf2)
 			_this.connect()
 		}
 		return _this

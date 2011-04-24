@@ -45,7 +45,7 @@ import saskia.dbpedia.DBpediaResource
 
 class RembrandtedDocTable extends DBTable {
 
-	String tablename = "doc"
+	static String tablename = "doc"
 	String die_table = "doc_is_entity"
 	String dhn_table = "doc_has_ne"
 	String dtg_table = "doc_has_tag"
@@ -63,10 +63,8 @@ class RembrandtedDocTable extends DBTable {
 	DBpediaAPI dbpedia = DBpediaAPI.newInstance()
 	DBpediaOntology dbpediaontology = DBpediaOntology.getInstance()
 
-	static Date nulldate = new Date(0)
-
 	public RembrandtedDocTable(SaskiaDB db) {
-		super(db, tablename)
+		super(db)
 		conf = Configuration.newInstance()
 		webstore = SaskiaWebstore.newInstance()
 		lang = conf.get("global.lang")
@@ -75,7 +73,7 @@ class RembrandtedDocTable extends DBTable {
 
 	}
 
-	static List<RembrandtedDoc> queryDB(String query, List params) {
+	public List<RembrandtedDoc> queryDB(String query, ArrayList params) {
 		List<RembrandtedDoc> l = []
 		db.getDB().eachRow(query, params, {row  ->
 			l << RembrandtedDoc.createFromDBRow(this.owner, row)
@@ -162,6 +160,10 @@ class RembrandtedDocTable extends DBTable {
 		return (l ? l[0] : null)
 	}
 
+	static RembrandtedDoc getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.RembrandtedDocTable").getFromID(id)
+	}
+
 	/** Get a RembrandtedDoc from an id of the Doc table.
 	 * @param doc_id The id of the document. 
 	 * return the RembrandtedDoc
@@ -171,6 +173,10 @@ class RembrandtedDocTable extends DBTable {
 		List<RembrandtedDoc> l = queryDB("SELECT * FROM ${RembrandtedDoc.tablename} WHERE doc_original_id=?", [doc_original_id])
 		log.info "Querying for doc_original_id $doc_original_id, got RembrandtedDoc ${l}"
 		return (l ? l[0] : null)
+	}
+
+	static RembrandtedDoc getFromOriginalID(SaskiaDB db, String doc_original_id) {
+		return  db.getDBTable("saskia.db.table.RembrandtedDoceTable").getFromOriginalID(doc_original_id)
 	}
 
 	/**
@@ -205,8 +211,7 @@ class RembrandtedDocTable extends DBTable {
 					") LIMIT ${limit} FOR UPDATE"
 			// VERY IMPORTANT, the FOR UPDATE, it locks the table until the transaction is complete
 
-			def params = [
-				collection.col_id]
+			def params = [collection.col_id]
 			log.trace query
 			log.trace params
 
@@ -237,7 +242,7 @@ class RembrandtedDocTable extends DBTable {
 	 |     28 | B           |           35 |       20 | Estados Unidos da América  |       2 |          2 |        | Country          | 
 	 |     37 | B           |           27 |       20 | Estados Unidos da América  |       2 |          2 |        | Country          |  
 	 NOT THREAD SAFE!*/
-	static Map getBatchDocsAndNEsFromPoolToGenerateGeoSignatures(Collection collection, int limit) {
+	public Map getBatchDocsAndNEsFromPoolToGenerateGeoSignatures(Collection collection, int limit) {
 
 		Map docs = [:]
 		NEType.createCache()
@@ -284,7 +289,7 @@ class RembrandtedDocTable extends DBTable {
 		return docs
 	}
 
-	static Map getBatchDocsAndNEsFromRDOCToGenerateGeoSignatures(Collection collection, int limit) {
+	public Map getBatchDocsAndNEsFromRDOCToGenerateGeoSignatures(Collection collection, int limit) {
 
 		Map docs = [:]
 		NEType.createCache()
@@ -385,7 +390,7 @@ class RembrandtedDocTable extends DBTable {
 	}
 
 	/*NOT THREAD SAFE!*/
-	static Map getBatchDocsAndNEsFromPoolToGenerateTimeSignatures(Collection collection, int limit) {
+	public Map getBatchDocsAndNEsFromPoolToGenerateTimeSignatures(Collection collection, int limit) {
 
 		Map docs = [:]
 
@@ -412,7 +417,7 @@ class RembrandtedDocTable extends DBTable {
 		return docs
 	}
 
-	static Map getBatchDocsAndNEsFromRDOCToGenerateTimeSignatures(Collection collection, int limit) {
+	public Map getBatchDocsAndNEsFromRDOCToGenerateTimeSignatures(Collection collection, int limit) {
 
 		Map docs = [:]
 
@@ -437,7 +442,7 @@ class RembrandtedDocTable extends DBTable {
 		return docs
 	}
 	/*NOT THREAD SAFE!*/
-	static Map getBatchDocsAndNEsFromPoolToGenerateNEIndex(Collection collection, int limit = 10,  offset = 0) {
+	public Map getBatchDocsAndNEsFromPoolToGenerateNEIndex(Collection collection, int limit = 10,  offset = 0) {
 
 		Map docs = [:]
 		NECategory.createCache()
@@ -562,7 +567,7 @@ class RembrandtedDocTable extends DBTable {
 	 * @param batchsize The batchsize, default to 100
 	 * return A list of RembrandtedDocs
 	 */ 
-	static List<RembrandtedDoc> getBatchDocsToSyncFromNEPool(Task task, Collection collection,
+	public List<RembrandtedDoc> getBatchDocsToSyncFromNEPool(Task task, Collection collection,
 	String process_signature, int batchSize = 30) {
 		List<RembrandtedDoc> l = []
 		RembrandtedDoc r
@@ -611,7 +616,7 @@ class RembrandtedDocTable extends DBTable {
 	/**
 	 * Add a reference to the latest geo_signature for this document
 	 */
-	static int addGeoSignatureIDtoDocID(long dgs_id, long doc_id) {
+	public int addGeoSignatureIDtoDocID(long dgs_id, long doc_id) {
 		if (!dgs_id || !doc_id) return null
 		int res = db.getDB().executeUpdate("UPDATE ${RembrandtedDoc.tablename} SET doc_latest_geo_signature =? WHERE doc_id=?",
 				[dgs_id, doc_id])
@@ -621,7 +626,7 @@ class RembrandtedDocTable extends DBTable {
 	/**
 	 * Add a reference to the latest time_signature for this document
 	 */
-	static int addTimeSignatureIDtoDocID(long dts_id, long doc_id) {
+	public int addTimeSignatureIDtoDocID(long dts_id, long doc_id) {
 		if (!dts_id || !doc_id) return null
 		int res = db.getDB().executeUpdate("UPDATE ${RembrandtedDoc.tablename} SET doc_latest_time_signature =? WHERE doc_id=?",
 				[dts_id, doc_id])

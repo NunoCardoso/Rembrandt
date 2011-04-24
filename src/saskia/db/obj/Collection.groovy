@@ -18,11 +18,10 @@
 
 package saskia.db.obj
 
+import java.util.HashMap
+
 import org.apache.log4j.Logger
 
-import saskia.db.obj.User
-import saskia.db.obj.RembrandtedDoc
-import saskia.db.obj.SourceDoc
 import saskia.db.table.DBTable
 
 /**
@@ -42,11 +41,11 @@ class Collection extends DBObject implements JSONable {
 
 	static Map type = ['col_id':'Long', 'col_name':'String', 'col_owner':'User',
 		'col_lang':'String', 'col_permission':'String', 'col_comment':'String']
-	
+
 	public Collection(DBTable dbtable) {
 		super(dbtable)
 	}
-	
+
 	static Collection createFromDBRow(DBTable dbtable, row) {
 		Collection c = new Collection(dbtable)
 		c.col_id = row['col_id']
@@ -57,7 +56,7 @@ class Collection extends DBObject implements JSONable {
 		c.col_comment = row['col_comment']
 		return c
 	}
-	
+
 	Map toMap() {
 		return ["col_id":col_id, "col_name":col_name,
 			"col_owner":col_owner.toSimpleMap(), "col_lang":col_lang,
@@ -68,38 +67,79 @@ class Collection extends DBObject implements JSONable {
 		return ["col_id":col_id, "col_name":col_name]
 	}
 
-	
-	/*
-	* Returns the number of REMBRANDTed documents for this collection
-	*/
-   public int getNumberOfRembrandtedDocuments() {
-	   int i
-	   if (!col_id) throw new IllegalStateException(
-		   "Can't check the number of source documents of a collection without a collection ID.")
-	   getDBTable().getSaskiaDB().getDB().eachRow(
-		   "SELECT count(doc_id) from ${RembrandtedDoc.tablename} "+
-			   "WHERE doc_collection=?",[col_id], {row -> i = row[0]})
-	   return i
-   }
 
-   /*
-	* Returns the number of source documents for this collection
-	*/
-   public int getNumberOfSourceDocuments() {
-	   int i
-	   if (!col_id) throw new IllegalStateException(
-		   "Can't check the number of source documents of a collection without a collection ID.")
-	    getDBTable().getSaskiaDB().getDB().eachRow(
-			"SELECT count(sdoc_id) from ${SourceDoc.tablename} "+
-			   "WHERE sdoc_collection=?",[col_id], {row -> i = row[0]})
-	   return i
-   }
-   
-    // used to add new collections.
+	/*
+	 * Returns the number of REMBRANDTed documents for this collection
+	 */
+	public int getNumberOfRembrandtedDocuments() {
+		int i
+		if (!col_id) throw new IllegalStateException(
+			"Can't check the number of source documents of a collection without a collection ID.")
+		getDBTable().getSaskiaDB().getDB().eachRow(
+				"SELECT count(doc_id) from ${RembrandtedDoc.tablename} "+
+				"WHERE doc_collection=?",[col_id], {row -> i = row[0]})
+		return i
+	}
+
+	/*
+	 * Returns the number of source documents for this collection
+	 */
+	public int getNumberOfSourceDocuments() {
+		int i
+		if (!col_id) throw new IllegalStateException(
+			"Can't check the number of source documents of a collection without a collection ID.")
+		getDBTable().getSaskiaDB().getDB().eachRow(
+				"SELECT count(sdoc_id) from ${SourceDoc.tablename} "+
+				"WHERE sdoc_collection=?",[col_id], {row -> i = row[0]})
+		return i
+	}
+
+	public HashMap listSourceDocs(limit = 10,  offset = 0, column = null, needle = null) {
+		// limit & offset can come as null... they ARE initialized...
+		if (!limit) limit = 10
+		if (!offset) offset = 0
+
+		String where = "WHERE sdoc_collection=?"
+		List params = [col_id]
+		if (column && needle) {
+
+			switch (SourceDoc.type[column]) {
+				case 'String': where += " AND $column LIKE '%${needle}%'"; break
+				case 'Long': where += " AND $column=? "; params << Long.parseLong(needle); break
+				case 'DocStatus':  where += " AND $column = ?"; params << needle; break
+				case 'Date': where += " AND $column = ?"; params << needle; break
+			}
+		}
+		String query = "SELECT SQL_CALC_FOUND_ROWS * FROM ${SourceDoc.tablename} $where "+
+				"LIMIT ${limit} OFFSET ${offset} UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL, "+
+				"NULL, NULL, NULL, NULL, NULL, NULL"
+		log.debug "query = $query params = $params class = "+params*.class
+
+		List u
+		try {u = queryDB(query, params) }
+		catch(Exception e) {log.error "Error getting source doc list: ", e}
+
+		// last item is not a document... it's the count.
+		SourceDoc fakesdoc = u.pop()
+		long total = fakesdoc.sdoc_id
+
+		log.debug "Returning "+u.size()+" results."
+		return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,
+			"column":column, "value":needle, "col_id":collection.col_id]
+	}
+
+
+	// used to add new collections.
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
 				"INSERT INTO ${getDBTable().getTablename()} VALUES(0,?,?,?,?,?)",
-				[col_name, col_owner.usr_id, col_lang, col_permission, col_comment])
+				[
+					col_name,
+					col_owner.usr_id,
+					col_lang,
+					col_permission,
+					col_comment
+				])
 		col_id = (long)res[0][0]
 		getDBTable().cacheIDCollection[col_id] = this
 		log.info "Adding collection to DB: ${this}"

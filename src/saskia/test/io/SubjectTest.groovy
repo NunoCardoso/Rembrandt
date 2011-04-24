@@ -17,11 +17,11 @@
  */
 package saskia.test.io
 
+import org.apache.log4j.*
 import org.junit.*
 import org.junit.runner.*
-import org.apache.log4j.*
 
-import saskia.db.table.Subject;
+import saskia.db.obj.Subject
 
 
 /**
@@ -31,16 +31,12 @@ class TestSubject extends GroovyTestCase {
 
 	def Logger log = Logger.getLogger("UnitTest")
 	Subject subject
-	
+
 	public TestSubject() {
-		
-	
 	}
-	
+
 	void testSubjectConcepts() {
-	   List concepts_pt = Subject.getConceptListForLang("pt")
-	   println concepts_pt
+		List concepts_pt = Subject.getConceptListForLang("pt")
+		println concepts_pt
 	}
-    
-   
 }

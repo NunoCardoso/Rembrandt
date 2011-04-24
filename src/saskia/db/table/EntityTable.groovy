@@ -32,18 +32,18 @@ import saskia.dbpedia.DBpediaResource
 class EntityTable extends DBTable {
 
 	String ent_has_geo_table = "entity_has_geoscope"
+	static String tablename = "entity"
 
 	static Logger log = Logger.getLogger("Entity")
 
 	Configuration conf
 
 	LinkedHashMap<String,EntityTable> entityDBPediaResourceCache
-
 	LinkedHashMap<Long,EntityTable> entityIDCache
 
 
 	public EntityTable(SaskiaDB db) {
-		super(db, "entity")
+		super(db)
 		conf = Configuration.newInstance()
 		entityDBPediaResourceCache =new LinkedHashMap(
 				conf.getInt("saskia.entity.cache.number",1000), 0.75f, true) // true: access order.
@@ -51,9 +51,8 @@ class EntityTable extends DBTable {
 				conf.getInt("saskia.entity.cache.number",1000), 0.75f, true) // true: access order.
 	}
 
-	public List<Entity> queryDB(String query, List params = []) {
+	public List<Entity> queryDB(String query, ArrayList params = []) {
 		List<Entity> res = []
-		EntityTable e
 		getSaskiaDB().getDB().eachRow(query, params, {row ->
 			res << Entity.createFromDBRow(this.owner, row)
 		})
@@ -104,6 +103,11 @@ class EntityTable extends DBTable {
 			return e[0]
 		}
 		return null
+	}
+
+
+	static Entity getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.EntityTable").getFromID(id)
 	}
 
 	/** Get from Wikipedia URL. 

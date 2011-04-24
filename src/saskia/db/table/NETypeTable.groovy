@@ -30,20 +30,20 @@ import saskia.db.obj.NEType
  */
 class NETypeTable extends DBTable {
 
-	String tablename = "ne_type"
+	static String tablename = "ne_type"
 	Map<Long,String> all_id_type
 	Map<String,Long> all_type_id
 
 	static Logger log = Logger.getLogger("NEType")
 
 	public NETypeTable(SaskiaDB db) {
-		super(db, tablename)
+		super(db)
 		all_id_type = [:]
 		all_type_id = [:]
 	}
 
 
-	static List<NEType> queryDB(String query, List params = []) {
+	public List<NEType> queryDB(String query, ArrayList params = []) {
 		List<NEType> t = []
 		db.getDB().eachRow(query, params, {row  ->
 			t << NEType.createFromDBRow(this.owner, row)
@@ -83,6 +83,10 @@ class NETypeTable extends DBTable {
 		//if (net.net_id) return net else return null
 	}
 
+	static NEType getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.NETypeTable").getFromID(id)
+	}
+
 	/** Get a NESubtype from id.
 	 * @param id The id as needle.
 	 * return the NESubtype result object, or null
@@ -93,7 +97,7 @@ class NETypeTable extends DBTable {
 		return all_type_id[net_type]
 	}
 
-	/** Add this NEType o the database. Note that a null is a valid insertion...
-	 * return 1 if successfully inserted.
-	 */
+	static NEType getFromType(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.NETypeTable").getFromType(id)
+	}
 }

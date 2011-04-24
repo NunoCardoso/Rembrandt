@@ -19,9 +19,9 @@ package saskia.server
 
 import org.apache.log4j.*
 
-import saskia.db.obj.Collection
-import saskia.db.obj.User
-import saskia.db.table.UserTable
+import saskia.db.database.SaskiaDB
+import saskia.db.obj.*
+import saskia.db.table.*
 import saskia.stats.SaskiaStats
 import saskia.util.I18n
 
@@ -30,13 +30,17 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 	Closure JSONanswer
 	I18n i18n
 	SaskiaStats stats
+	SaskiaDB db
 	static Logger mainlog = Logger.getLogger("SaskiaServerMain")
 	static Logger errorlog = Logger.getLogger("SaskiaServerErrors")
 	static Logger processlog = Logger.getLogger("SaskiaServerProcessing")
 
-	public AdminCollectionMapping() {
+	public AdminCollectionMapping(SaskiaDB db) {
 
+		this.db = db
 		i18n = I18n.newInstance()
+		CollectionTable collectionTable = db.getDBTable("saskia.db.table.CollectionTable")
+		UserTable userTable = db.getDBTable("saskia.db.table.UserTable")
 
 		JSONanswer = {req, par, bind ->
 
@@ -63,7 +67,7 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 			if (!api_key) api_key = par["COOKIE"]["api_key"]
 			if (!api_key) return sm.noAPIKeyMessage()
 
-			User user = UserTable.getFromAPIKey(api_key)
+			User user = userTable.getFromAPIKey(api_key)
 			if (!user) return sm.userNotFound()
 			if (!user.isEnabled()) return sm.userNotEnabled()
 			// all Admin*Mappings must have this
@@ -78,7 +82,7 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 			if (action == "list") {
 				Map h
 				try {
-					h = Collection.listCollectionForAdminUser(limit, offset, column, value)
+					h = collectionTable.listCollectionForAdminUser(limit, offset, column, value)
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_col_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage['error_getting_col_list'][lang]+": "+e.getMessage(), action)
@@ -104,7 +108,7 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 				if (!id) return sm.notEnoughVars("id=$id")
 
 				// let's check permissions
-				Collection collection = Collection.getFromID(id)
+				Collection collection = collectionTable.getFromID(id)
 				if (!collection) return sm.collectionNotFound()
 				if (value == null || !column) return sm.notEnoughVars("v=$value, c=$column")
 
@@ -133,7 +137,7 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 				if (!id) return sm.notEnoughVars("id=$id")
 
 				// let's check permissions
-				Collection collection = Collection.getFromID(id)
+				Collection collection = collectionTable.getFromID(id)
 				if (!collection) return sm.collectionNotFound()
 				stats = new SaskiaStats()
 				try {
@@ -166,16 +170,17 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 				if (!col_permission) return sm.notEnoughVars("col_permission=$col_permission")
 				if (!owner) return sm.userNotFound("col_owner=$col_owner")
 
-				Collection collection = Collection.getFromNameAndOwner(col_name, col_owner)
+				Collection collection = collectionTable.getFromNameAndOwner(col_name, col_owner)
 				if (collection) return sm.statusMessage(-1, i18n.servermessage['collection_already_exists'][lang])
 
-				if (!Collection.canHaveANewCollection(col_owner)) {
+				if (!collectionTable.canHaveANewCollection(col_owner)) {
 					return sm.statusMessage(-1, i18n.servermessage['user_not_allowed_to_create_more_collection'][lang],
 					"Max: "+owner.usr_max_number_collections+ "Now: "+owner.collectionsOwned())
 				}
 				try {
 					collection = new Collection(col_name:col_name, col_comment:col_comment,
 							col_owner:owner, col_lang:col_lang, col_permission:col_permission)
+					collection.setDBTable(collectionTable)
 					collection.col_id = collection.addThisToDB()
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error_creating_collection'][lang]+": "+e.printStackTrace()
@@ -198,7 +203,7 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 				if (!id) return sm.notEnoughVars("id=$id")
 
 				// let's check permissions
-				Collection collection = Collection.getFromID(id)
+				Collection collection = collectionTable.getFromID(id)
 				if (!collection) return sm.collectionNotFound()
 
 				def res

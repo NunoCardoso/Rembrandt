@@ -15,81 +15,78 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 package saskia.imports
 
-import saskia.bin.Configuration
-import saskia.db.obj.Collection;
-import saskia.db.obj.SourceDoc;
-
-import org.apache.log4j.Logger
 import org.apache.commons.cli.*
+import org.apache.log4j.Logger
 
-import rembrandt.obj.Document
-
-import rembrandt.io.RembrandtWriter
 import rembrandt.io.RembrandtStyleTag
-import rembrandt.io.WPT03Reader
+import rembrandt.io.RembrandtWriter
 import rembrandt.io.UnformattedStyleTag
+import rembrandt.io.WPT03Reader
+import rembrandt.obj.Document
+import saskia.bin.Configuration
+import saskia.db.obj.*
 
 class ImportWPT03_2_SourceDocument extends Import {
-	
+
 	Configuration conf = Configuration.newInstance()
 	static Logger log = Logger.getLogger("SaskiaImports")
 	WPT03Reader reader
 	RembrandtWriter writer
-	
+
 	public ImportWPT03_2_SourceDocument() {
 		super()
 		reader = new WPT03Reader(new UnformattedStyleTag(
-			conf.get("rembrandt.input.styletag.lang", "pt")))
+				conf.get("rembrandt.input.styletag.lang", "pt")))
 		writer = new RembrandtWriter(new RembrandtStyleTag(
-			conf.get("rembrandt.output.styletag.lang", "pt")))
+				conf.get("rembrandt.output.styletag.lang", "pt")))
 	}
-	
+
 	public HashMap importDocs() {
-		
+
 		// connect the file input stream reader to the SecondHaremReader
 		reader.processInputStream(this.inputStreamReader)
-		
+
 		// discard all existing NEs
 		reader.docs.each{doc ->
 			if (!doc.lang) doc.lang = collection.col_lang
-			if (!doc.date_created) doc.date_created = new Date(0) 
+			if (!doc.date_created) doc.date_created = new Date(0)
 			String content = writer.printDocument(doc)
 			SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, doc.date_created, "")
 			if (s) status.imported++ else status.skipped++
 		}
 		return status
 	}
-	
+
 	static void main(args) {
-		
+
 		Options o = new Options()
 		Configuration conf = Configuration.newInstance()
-		
+
 		o.addOption("col", true, "target collection name/id of the DB")
 		o.addOption("file", true, "source collection file to load")
 		o.addOption("encoding", true, "file encoding")
 		o.addOption("help", false, "Gives this help information")
-		
+
 		CommandLineParser parser = new GnuParser()
 		CommandLine cmd = parser.parse(o, args)
-		
+
 		ImportWPT03_2_SourceDocument importer = new ImportWPT03_2_SourceDocument()
 		String DEFAULT_COLLECTION_NAME = "WPT 03"
-		
+
 		log.info "******************************************"
 		log.info "* This class loads the WPT 03 Collection *"
 		log.info "******************************************"
-	
+
 		// --help
 		if (cmd.hasOption("help")) {
 			HelpFormatter formatter = new HelpFormatter()
 			formatter.printHelp( "java "+importer.class.name, o )
 			System.exit(0)
 		}
-		
+
 		// --col
 		Collection collection = importer.validateCollection(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
 		if (!collection) {
@@ -97,30 +94,30 @@ class ImportWPT03_2_SourceDocument extends Import {
 			log.fatal "Please make sure you have that collection in the DB before the import."
 			System.exit(0)
 		}
-		
+
 		// --file
 		File file = importer.validateFile(cmd.getOptionValue("file"))
 		if (!file) {
 			log.fatal "No import file found. Please check if the given file exists"
 			System.exit(0)
 		}
-		
+
 		//--encoding
 		String encoding = importer.validateEncoding(cmd.getOptionValue("encoding"))
 		if (!encoding) {
 			log.fatal "No encoding defined. Please specify the encoding of the import file."
 			System.exit(0)
 		}
-		
+
 		importer.setCollection(collection)
 		log.info "Collection: $collection"
 		importer.setFile(file)
 		importer.setEncoding(encoding)
 		log.info "File: $file <"+encoding+"> "
-		
+
 		importer.prepareInputStreamReader()
 		HashMap status = importer.importDocs()
-		
+
 		log.info "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."
 	}
 }

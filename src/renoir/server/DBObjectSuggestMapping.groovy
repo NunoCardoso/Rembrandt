@@ -21,7 +21,7 @@ import java.net.URLDecoder
 
 import org.apache.log4j.*
 
-import saskia.db.database.SaskiaMainDB
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
 import saskia.db.table.*
 
@@ -29,12 +29,19 @@ import saskia.db.table.*
 public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 
 	Closure JSONanswer
-	SaskiaMainDB db
+	SaskiaDB db
 	static Logger processlog = Logger.getLogger("RenoirServerProcessing")
 
-	public DBObjectSuggestMapping() {
+	public DBObjectSuggestMapping(SaskiaDB db) {
 
-		db = SaskiaMainDB.newInstance()
+		this.db = db
+		CollectionTable collectionTable = db.getDBTable("saskia.db.table.CollectionTable")
+		UserTable userTable = db.getDBTable("saskia.db.table.UserTable")
+		TagTable tagTable = db.getDBTable("saskia.db.table.TagTable")
+		TypeTable typeTable = db.getDBTable("saskia.db.table.TypeTable")
+		NECategoryTable neCategoryTable = db.getDBTable("saskia.db.table.NECategoryTable")
+		NETypeTable neTypeTable = db.getDBTable("saskia.db.table.NETypeTable")
+		NESubtypeTable neSubtypeTable = db.getDBTable("saskia.db.table.NESubtypeTable")
 
 		//	  JSON response
 		JSONanswer = { req, par, bind ->
@@ -86,8 +93,8 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 					// needle
 						String newtype = "col_name"
 					// type will work as column filter, needle will be the query
-						List<Collection> res = Collection.filterFromColumnAndNeedle(
-								Collection.getAllCollections().values().toList(), newtype, q)
+						List<Collection> res = collectionTable.filterFromColumnAndNeedle(
+								collectionTable.getAllCollections().values().toList(), newtype, q)
 						res.each{it -> answer << [it.col_id, it.col_name]}
 						break
 
@@ -95,21 +102,21 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 					case ["col_owner", "tsk_owner"]:
 					// needle
 						String newtype = "usr_login"
-						Map res = User.listUsersForAdminUser(0,0,newtype, q)
+						Map res = userTable.listUsersForAdminUser(0,0,newtype, q)
 						res['result'].each{it -> answer << [it.usr_id, it.usr_login]}
 						break
 
 					/*** TAG ***/
 					case "dtg_tag":
-						if (!Tag.cache) Tag.refreshCache()
-						List<Tag> res = Tag.cache.values().toList().findAll{it.tag_version =~ /(?i)${q}/}
+						if (!tagTable.cache) tagTable.refreshCache()
+						List<Tag> res = tagTable.cache.values().toList().findAll{it.tag_version =~ /(?i)${q}/}
 						res.each{it -> answer << [it.tag_id, it.tag_version]}
 						break
 
 					/*** TYPE ***/
 					case "dht_type":
-						if (!Type.cache) Type.refreshCache()
-						List<Type> res = Type.cache.values().toList().findAll{it.typ_name =~ /(?i)${q}/}
+						if (!typeTable.cache) typeTable.refreshCache()
+						List<Type> res = typeTable.cache.values().toList().findAll{it.typ_name =~ /(?i)${q}/}
 						res.each{it -> answer << [it.typ_id, it.typ_name]}
 						break
 
@@ -119,29 +126,30 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 						"%') ORDER BY nen_name", {row ->
 							answer << [
 								row['nen_id'],
-								row['nen_name']]
+								row['nen_name']
+							]
 						})
 						break
 
 					/*** NECATEGORY ***/
 					case "ne_category":
-						NECategory.createCache() // it checks if there is one, relax
-						List<NECategory> res = NECategory.all_id_category.values().toList()
+						neCategoryTable.createCache() // it checks if there is one, relax
+						List<NECategory> res = neCategoryTable.all_id_category.values().toList()
 								.findAll{it.nec_category =~ /(?i)${q}/}
 						res.each{answer << [it.nec_id, it.nec_category]}
 						break
 
 					/*** NETYPE ***/
 					case "ne_type":
-						NEType.createCache() // it checks if there is one, relax
-						List<NEType> res = NEType.all_id_type.values().toList().findAll{it.net_type =~ /(?i)${q}/}
+						neTypeTable.createCache() // it checks if there is one, relax
+						List<NEType> res = neTypeTable.all_id_type.values().toList().findAll{it.net_type =~ /(?i)${q}/}
 						res.each{answer << [it.net_id, it.net_type]}
 						break
 
 					/*** NESUBTYPE ***/
 					case "ne_subtype":
-						NESubtype.createCache() // it checks if there is one, relax
-						List<NESubtype> res = NESubtype.all_id_subtype.values().toList().findAll{it.nes_subtype =~ /(?i)${q}/}
+						neSubtypeTable.createCache() // it checks if there is one, relax
+						List<NESubtype> res = neSubtypeTable.all_id_subtype.values().toList().findAll{it.nes_subtype =~ /(?i)${q}/}
 						res.each{answer << [it.nes_id, it.nes_subtype]}
 						break
 
@@ -151,7 +159,8 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 						"ent_name like('%" +q+ "%') ORDER BY ent_name", {row ->
 							answer << [
 								row['ent_id'],
-								row['ent_name'] ]
+								row['ent_name']
+							]
 						})
 						break
 
@@ -164,7 +173,8 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 						"geo_name like('%" +q+ "%') ORDER BY geo_name", {row ->
 							answer << [
 								row['geo_id'],
-								row['geo_name'] ]
+								row['geo_name']
+							]
 						})
 						break
 
@@ -174,7 +184,8 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 						"sbj_subject like('%" +q+ "%') ORDER BY sbj_subject", {row ->
 							answer << [
 								row['sbj_id'],
-								+row['sbj_subject'] ]
+								+row['sbj_subject']
+							]
 						})
 						break
 				}

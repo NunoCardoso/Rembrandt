@@ -17,14 +17,14 @@
  */
 package saskia.db.obj
 
-import rembrandt.obj.ListOfNE;
-import saskia.db.DocStatus;
-import saskia.db.table.DocGeoSignatureTable
-import saskia.db.obj.Entity;
-import saskia.db.obj.Geoscope;
-import saskia.db.obj.Job;
-import saskia.db.obj.Tag;
+import java.util.Date
+
+import org.apache.log4j.Logger
+
+import rembrandt.obj.ListOfNE
+import saskia.db.DocStatus
 import saskia.db.table.DBTable
+import saskia.db.table.RembrandtedDocTable
 
 /**
  * @author Nuno Cardoso
@@ -57,13 +57,17 @@ class RembrandtedDoc extends DBObject implements JSONable {
 	List<Geoscope> geoscopes
 	List<Entity> entities
 
+	static Date nulldate = new Date(0)
+
+	static Logger log = Logger.getLogger("RembrandtedDoc")
+
 	static Map type = ['doc_id':'Long', 'doc_original_id':'String', 'doc_collection':'Collection',
 		'doc_webstore':'String', 'doc_version':'Integer',
 		'doc_lang':'String', 'doc_date_created':'Date', 'doc_date_created':'Date',
 		'doc_proc':'DocStatus', 'doc_sync':'DocStatus',
 		'doc_latest_geo_signature':'Long', 'doc_latest_time_signature':'Long']
 
-	static RembrandtedDoc createFromDBRow(DBTable table, row) {
+	static RembrandtedDoc createFromDBRow(DBTable dbtable, row) {
 		RembrandtedDoc r = new RembrandtedDoc(dbtable)
 		r.doc_id = row['doc_id']
 		r.doc_original_id = row['doc_original_id']
@@ -125,14 +129,14 @@ class RembrandtedDoc extends DBObject implements JSONable {
 
 	public DocGeoSignature getGeographicSignature() {
 		return getDBTable().getSaskiaDB()
-			.getDBTable("saskia.db.table.DocGeoSignatureTable")
-			.getFromID(doc_latest_geo_signature)
+		.getDBTable("saskia.db.table.DocGeoSignatureTable")
+		.getFromID(doc_latest_geo_signature)
 	}
 
 	public DocTimeSignature getTimeSignature() {
 		return getDBTable().getSaskiaDB()
-			.getDBTable("saskia.db.table.DocTimeSignatureTable")
-			.getFromID(doc_latest_time_signature)
+		.getDBTable("saskia.db.table.DocTimeSignatureTable")
+		.getFromID(doc_latest_time_signature)
 	}
 
 
@@ -244,7 +248,14 @@ class RembrandtedDoc extends DBObject implements JSONable {
 						"INSERT INTO ${RembrandtedDoc.tablename}"+
 						"(doc_original_id, doc_collection, doc_webstore, doc_version, doc_lang, "+
 						"doc_date_created, doc_date_tagged) VALUES(?,?,?,?,?,?,NOW())",
-						[doc_original_id, doc_collection.col_id, key, doc_version, doc_lang, doc_date_created])
+						[
+							doc_original_id,
+							doc_collection.col_id,
+							key,
+							doc_version,
+							doc_lang,
+							doc_date_created
+						])
 				doc_id = (long) res[0][0]
 				doc_webstore = key
 				log.info "Inserted RembrandtedDoc into DB: ${this}"
@@ -268,7 +279,13 @@ class RembrandtedDoc extends DBObject implements JSONable {
 						"UPDATE ${RembrandtedDoc.tablename} SET "+
 						"doc_original_id=?, doc_collection=?, doc_webstore=?, doc_lang=?, "+
 						"doc_date_tagged=NOW(), doc_version=doc_version+1 WHERE doc_id=? ",
-						[doc_original_id, doc_collection.col_id, key, doc_lang, doc_id])
+						[
+							doc_original_id,
+							doc_collection.col_id,
+							key,
+							doc_lang,
+							doc_id
+						])
 				doc_version++
 				log.info "Replaced RembrandtedDoc into DB: ${this}"
 			} else {

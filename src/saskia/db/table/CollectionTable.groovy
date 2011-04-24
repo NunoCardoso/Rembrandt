@@ -28,6 +28,7 @@ import saskia.db.obj.User
 class CollectionTable extends DBTable {
 
 	static Logger log = Logger.getLogger("Collection")
+	static String tablename = "collection"
 
 	// caches
 	Map<Long,Collection> cacheIDCollection
@@ -41,7 +42,7 @@ class CollectionTable extends DBTable {
 
 
 	public CollectionTable(SaskiaDB db) {
-		super(db, "collection")
+		super(db)
 		cacheIDCollection = [:]
 		cacheIDuoc = [:]
 	}
@@ -64,7 +65,7 @@ class CollectionTable extends DBTable {
 	/**
 	 * Load the internal cache for collections
 	 */
-	static void refreshCache() {
+	public void refreshCache() {
 		List l = queryDB(db, "SELECT * FROM ${tablename}".toString(), [])
 		l.each{cacheIDCollection[it.col_id] = it}
 	}
@@ -72,7 +73,7 @@ class CollectionTable extends DBTable {
 	/**
 	 * Load the internal cache for users
 	 */
-	static Map listAccessibleCollectionsForUser(User user) {
+	public Map listAccessibleCollectionsForUser(User user) {
 
 		if (cacheIDuoc.containsKey(user.usr_id))
 			return cacheIDuoc[user.usr_id]
@@ -283,6 +284,11 @@ class CollectionTable extends DBTable {
 		return collection_list
 	}
 
+	static Collection getFromName(SaskiaDB db, Long id) {
+		CollectionTable instance = db.getDBTable("saskia.db.table.CollectionTable")
+		return instance.getFromName(id)
+	}
+
 	public Collection getFromNameAndOwner(String name, User user) {
 		if (!name) return null
 		if (!cacheIDCollection) refreshCache()
@@ -298,6 +304,10 @@ class CollectionTable extends DBTable {
 		Collection c = cacheIDCollection[id]
 		log.info "Querying for collection id $id got Collection $c."
 		return c
+	}
+
+	static Collection getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.CollectionTable").getFromID(id)
 	}
 
 	/**

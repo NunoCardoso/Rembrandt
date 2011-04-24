@@ -88,7 +88,7 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 					return sm.statusMessage(-1, i18n.servermessage['insufficient_permissions'][lang])
 
 				try {
-					h = SourceDoc.listSourceDocs(collection, limit, offset, column, value)
+					h = collection.listSourceDocs(limit, offset, column, value)
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_sdoc_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage["error_getting_sdoc_list"][lang]+": "+e.getMessage())

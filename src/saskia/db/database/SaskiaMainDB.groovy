@@ -27,7 +27,6 @@ import saskia.bin.Configuration
 class SaskiaMainDB extends SaskiaDB {
 
 	static SaskiaMainDB _this
-	static Configuration conf = Configuration.newInstance()
 	static String LABEL = "SaskiaMain"
 
 	String default_db_driver = 'com.mysql.jdbc.Driver'
@@ -44,7 +43,7 @@ class SaskiaMainDB extends SaskiaDB {
 	String default_conf_password = 'saskia.db.password'
 	String default_conf_param = 'saskia.db.param'
 
-	private SaskiaMainDB(conf) {
+	private SaskiaMainDB(Configuration conf) {
 		super(conf)
 	}
 
@@ -52,9 +51,10 @@ class SaskiaMainDB extends SaskiaDB {
 	 * Get new instance of the DBConnect
 	 * @return new instance of DBConnect
 	 */
-	public static SaskiaMainDB newInstance() {
+	public static SaskiaMainDB newInstance(Configuration conf = null) {
+		if (!conf) conf = Configuration.newInstance()
 		if (_this == null) {
-			_this = new SaskiaMainDB(SaskiaMainDB.conf)
+			_this = new SaskiaMainDB(conf)
 			_this.connect()
 		}
 		return _this

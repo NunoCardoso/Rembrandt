@@ -42,7 +42,7 @@ import saskia.db.obj.User
  */
 class TaskTable extends DBTable {
 
-	String tablename = "task"
+	static String tablename = "task"
 
 	static Logger log = Logger.getLogger("SaskiaDB")
 
@@ -144,4 +144,7 @@ class TaskTable extends DBTable {
 		return cache[tsk_id]
 	}
 
+	static Task getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.TaskTable").getFromID(id)
+	}
 }

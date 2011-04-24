@@ -18,6 +18,7 @@
 package saskia.db.obj
 
 import org.apache.log4j.Logger
+
 import saskia.db.table.DBTable
 
 /**
@@ -30,21 +31,21 @@ class Relation extends DBObject implements JSONable {
 	String rel_relation
 
 	static Logger log = Logger.getLogger("Relation")
-	
+
 	public Relation(DBTable dbtable) {
 		super(dbtable)
 	}
-	
+
 	public Relation(DBTable dbtable, Long rel_id, String rel_relation) {
 		super(dbtable)
 		this.rel_id = rel_id
 		this.rel_relation = rel_relation
 	}
-	
+
 	static Relation createFromDBRow(DBTable dbtable, row) {
 		return new Relation(dbtable, row['rel_id'], row['rel_relation'] )
 	}
-	
+
 	public Map toMap() {
 		return ["rel_id":rel_id, "rel_relation":rel_relation]
 	}
@@ -54,33 +55,33 @@ class Relation extends DBObject implements JSONable {
 	}
 
 
-	
+
 	/** Add this Relation o the database. Note that a null is a valid insertion...
-	* return 1 if successfully inserted.
-	*/
-   public int addThisToDB() {
-	   if (!rel_id) return null
-	   def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-		   "INSERT INTO ${getDBTable().getTablename()} VALUES(0,?)", 
-		   [rel_relation])
-	   // returns an auto_increment value
-	   return (int)res[0][0]
-   }
- 
-   public int removeThisFromDB() {
-	   if (!rel_id) return null
-	   def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			   "DELETE FROM ${getDBTable().getTablename()} WHERE rel_id=?", 
-			   [rel_id])
-		   log.info "Removed Relation ${this} from DB, got $res"
-	   return res
-   }
+	 * return 1 if successfully inserted.
+	 */
+	public Long addThisToDB() {
+		if (!rel_id) return null
+		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
+				"INSERT INTO ${getDBTable().getTablename()} VALUES(0,?)",
+				[rel_relation])
+		// returns an auto_increment value
+		return (long)res[0][0]
+	}
 
-   boolean equals(Relation rel) {
-	   return this.toMap().equals(rel.toMap())
-   }
+	public int removeThisFromDB() {
+		if (!rel_id) return null
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
+				"DELETE FROM ${getDBTable().getTablename()} WHERE rel_id=?",
+				[rel_id])
+		log.info "Removed Relation ${this} from DB, got $res"
+		return res
+	}
 
-   public String toString() {
-	   return rel_relation
-   }
+	boolean equals(Relation rel) {
+		return this.toMap().equals(rel.toMap())
+	}
+
+	public String toString() {
+		return rel_relation
+	}
 }

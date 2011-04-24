@@ -17,16 +17,15 @@
  */
 
 package rembrandt.server
- 
-import saskia.bin.Configuration 
-import org.apache.log4j.*
 
+import org.apache.log4j.*
 import org.restlet.Application
 import org.restlet.Restlet
-import org.restlet.routing.Router
 import org.restlet.data.MediaType
-import org.restlet.data.Status
+import org.restlet.routing.Router
 
+import saskia.bin.Configuration
+import saskia.db.database.SaskiaDB
 
 /**
  * @author ncardoso, extended from rlopes's code
@@ -36,19 +35,21 @@ public class RembrandtServerApplication extends Application {
 
 	Logger log = Logger.getLogger("RembrandtServerMain")
 	Configuration conf
-	
-	public RembrandtServerApplication(Configuration conf) {
-	    this.conf=conf
+	SaskiaDB db
+
+	public RembrandtServerApplication(Configuration conf, SaskiaDB db) {
+		this.conf=conf
+		this.db=db
 	}
-	
+
 	public synchronized Restlet createRoot() {
 
-	    Router router = new Router(this.context)
-	    
-	    RembrandtMapping rembrandtMapping = new RembrandtMapping(conf)    
-	    rembrandtMapping.attach(MediaType.APPLICATION_JSON, rembrandtMapping.JSONanswer)
-	    log.info "Attaching /Rembrandt/api/rembrandt"
-	    router.attach("/Rembrandt/api/rembrandt", rembrandtMapping)
-	    return router
-	}	
+		Router router = new Router(this.context)
+
+		RembrandtMapping rembrandtMapping = new RembrandtMapping(conf, db)
+		rembrandtMapping.attach(MediaType.APPLICATION_JSON, rembrandtMapping.JSONanswer)
+		log.info "Attaching /Rembrandt/api/rembrandt"
+		router.attach("/Rembrandt/api/rembrandt", rembrandtMapping)
+		return router
+	}
 }

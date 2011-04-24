@@ -17,59 +17,60 @@
  */
 package renoir.server
 
-import saskia.db.database.SaskiaMainDB;
-
 import java.net.URLDecoder
+
 import org.apache.log4j.*
 
+import saskia.db.database.SaskiaDB
+
 public class SuggestMapping extends WebServiceRestletMapping {
-    
-    Closure HTMLanswer
-    Closure JSONanswer
-    SaskiaMainDB db 
-    static Logger log2 = Logger.getLogger("RenoirServer") 
-    
-    public SuggestMapping() {
-        
-        db = SaskiaMainDB.newInstance()
-        
-        HTMLanswer = { req, par, bind ->
-            return "Sorry, HTML mimetype is not handled. JSON only."	
-        }
-        
-        //	  JSON response
-        JSONanswer = { req, par, bind ->
- 
-            def url = URLDecoder.decode(par["GET"]["q"], "UTF-8")
-            def type
-            def collection 
-            def lang
-                        
-            if (par["GET"]["t"])  type = par["GET"]["t"]
-            //if (par(["GET"]["c"]))  collection = par["GET"]["c"]
-            if (par["GET"]["lg"]) lang = par["GET"]["lg"]
-            
-            def answer = []   
-            if (url) {
-                if (type && type == "ne") {
-                    db.getDB().eachRow("SELECT sug_name, sug_type, sug_desc, sug_ground FROM suggestion WHERE sug_name like('" +url+ "%') "+
-                            "AND sug_type=? AND sug_lang=? ORDER BY sug_name", ["NE", lang], {row -> 
-                                answer << ""+row['sug_name']+"|"+row['sug_type']+"|"+row['sug_desc']+"|"+row['sug_ground']
-                            })	
-                } else {
-                    db.getDB().eachRow("SELECT sug_name, sug_type, sug_desc, sug_ground FROM suggestion WHERE sug_name like('" +url+ "%') ORDER BY sug_name") {row -> 
-                        answer << ""+row['sug_name']+"|"+row['sug_type']+"|"+row['sug_desc']+"|"+row['sug_ground']
-                    }
-                }
-                
-            }
-            //log.debug "Returning JSON answer:${answer}"
-            bind["answer"] = answer
-            
-            //suggestMapping.modifyStatus
-            
-            return JSONHelper.toJSON(bind)
-            
-        }	
-    }
+
+	Closure HTMLanswer
+	Closure JSONanswer
+	SaskiaDB db
+	static Logger log2 = Logger.getLogger("RenoirServer")
+
+	public SuggestMapping(SaskiaDB db) {
+
+		this.db = db
+
+		HTMLanswer = { req, par, bind ->
+			return "Sorry, HTML mimetype is not handled. JSON only."
+		}
+
+		//	  JSON response
+		JSONanswer = { req, par, bind ->
+
+			def url = URLDecoder.decode(par["GET"]["q"], "UTF-8")
+			def type
+			def collection
+			def lang
+
+			if (par["GET"]["t"])  type = par["GET"]["t"]
+			//if (par(["GET"]["c"]))  collection = par["GET"]["c"]
+			if (par["GET"]["lg"]) lang = par["GET"]["lg"]
+
+			def answer = []
+			if (url) {
+				if (type && type == "ne") {
+					db.getDB().eachRow("SELECT sug_name, sug_type, sug_desc, sug_ground FROM suggestion WHERE sug_name like('" +url+ "%') "+
+							"AND sug_type=? AND sug_lang=? ORDER BY sug_name", ["NE", lang], {row ->
+								answer << ""+row['sug_name']+"|"+row['sug_type']+"|"+row['sug_desc']+"|"+row['sug_ground']
+							})
+				} else {
+					db.getDB().eachRow("SELECT sug_name, sug_type, sug_desc, sug_ground FROM suggestion WHERE sug_name like('" +url+ "%') ORDER BY sug_name") {row ->
+						answer << ""+row['sug_name']+"|"+row['sug_type']+"|"+row['sug_desc']+"|"+row['sug_ground']
+					}
+				}
+
+			}
+			//log.debug "Returning JSON answer:${answer}"
+			bind["answer"] = answer
+
+			//suggestMapping.modifyStatus
+
+			return JSONHelper.toJSON(bind)
+
+		}
+	}
 }

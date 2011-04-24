@@ -20,36 +20,36 @@ package saskia.db.table
 
 import org.apache.log4j.*
 
-import saskia.db.obj.Type
 import saskia.db.database.SaskiaDB
+import saskia.db.obj.Type
 
 
 class TypeTable {
 
 	static String tablename = "type"
-	
+
 	static Logger log = Logger.getLogger("Type")
 
 	Map<Long,Type> cache
 
-	public TypeTable(DBTable dbtable) {
+	public TypeTable(SaskiaDB db) {
 		super(db)
 		cache= [:]
 	}
-	
+
 	public List<Type> queryDB(String query, ArrayList params = []) {
 		List<Type> t = []
-		db.getDB().eachRow(query, params, {row  -> 
+		db.getDB().eachRow(query, params, {row  ->
 			t << Type.createFromDBRow(this.owner, row)
 		})
 		return t
 	}
-	
+
 	public void refreshCache() {
-	    List<Type> l = queryDB("SELECT * FROM ${tablename}".toString(), [])
-	    l.each{cache[it.typ_id] = it}
+		List<Type> l = queryDB("SELECT * FROM ${tablename}".toString(), [])
+		l.each{cache[it.typ_id] = it}
 	}
-	
+
 	/** Get all NE categories. It's easier to have them in memory, than hammering the DB 
 	 * return List<NECategory> A list of NECategory objects
 	 */
@@ -58,9 +58,9 @@ class TypeTable {
 		def typ = queryDB("SELECT * FROM ${tablename}")
 		log.debug "Searched for all doc types, got ${typ.size()} entries."
 		typ.each{ map[it.typ_name] = it.typ_id}
-		return map 
+		return map
 	}
-	
+
 	/** Get a NECategory from id.
 	 * @param id The id as needle.
 	 * return the NECategory result object, or null
@@ -68,9 +68,11 @@ class TypeTable {
 	public Type getFromID(long typ_id) {
 		if (!typ_id) return null
 		Type typ = queryDB("SELECT * FROM ${tablename} WHERE typ_id=?", [typ_id])?.getAt(0)
-		log.debug "Querying for typ_id $typ_id got Type $typ." 
+		log.debug "Querying for typ_id $typ_id got Type $typ."
 		if (typ.typ_id) return typ else return null
-	}	
-	
+	}
 
+	static Type getFromID(SaskiaDB db, Long id) {
+		return  db.getDBTable("saskia.db.table.TypeTable").getFromID(id)
+	}
 }

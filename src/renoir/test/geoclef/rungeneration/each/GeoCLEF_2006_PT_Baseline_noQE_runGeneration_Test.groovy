@@ -9,7 +9,7 @@ import renoir.test.geoclef.rungeneration.GeoCLEF_Baseline_NoQE_RunGeneration_Tes
 import renoir.bin.Renoir
 import renoir.obj.RenoirQuery
 import renoir.obj.RenoirQueryParser
-import saskia.io.Collection
+import saskia.db.obj.Collection;
 /**
  * Check the detection of question types
  * @author Nuno Cardoso

@@ -20,6 +20,8 @@ package saskia.io
 
 import org.apache.log4j.*
 
+import saskia.db.obj.Collection;
+
 /** This class is an interface for the RembrandtTag table in the WikiRembrandt database. 
   * It stores tagging information associated to a Rembrandt annotation of documents.
   * Static methods are used to return results from DB, using where clauses.
@@ -313,6 +315,10 @@ class User {
             cacheIDUser[usr_id].usr_password = password
 	}
     
+	static String createPassword(String password) {
+		return renoir.util.MD5Hex.digest(password)
+	}
+	
 	static int deleteUser(long usr_id) {
 	    if (!usr_id) return null
 		 User u = User.getFromID(usr_id)

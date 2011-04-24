@@ -21,7 +21,7 @@ package saskia.wikipedia
 import groovy.sql.Sql
 
 import saskia.bin.Configuration
-import saskia.db.WikipediaDB
+import saskia.db.database.WikipediaDB;
 import rembrandt.tokenizer.TokenizerPT
 import saskia.util.XMLUtil
 import rembrandt.obj.*

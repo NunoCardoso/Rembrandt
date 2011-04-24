@@ -17,6 +17,7 @@
  */
 package saskia.server
 
+import saskia.db.table.Geoscope;
 import saskia.io.*
 import saskia.util.I18n
 import org.apache.log4j.*

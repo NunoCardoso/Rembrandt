@@ -19,6 +19,8 @@ package saskia.patches
 
 import saskia.bin.Configuration
 import saskia.io.*
+import saskia.db.table.EntityTable;
+import saskia.db.table.Geoscope;
 import saskia.dbpedia.DBpediaAPI
 import saskia.dbpedia.DBpediaOntology
 import org.apache.log4j.Logger
@@ -65,7 +67,7 @@ class ReviewEntitiesTo351 {
            
          
 			//  ent_id , ent_wikipedia_page , ent_dbpedia_resource, ent_dbpedia_class 
-            String select = "SELECT SQL_CALC_FOUND_ROWS * FROM ${Entity.ent_table} "+
+            String select = "SELECT SQL_CALC_FOUND_ROWS * FROM ${EntityTable.ent_table} "+
                     "LIMIT $limit OFFSET $counter UNION SELECT FOUND_ROWS(), '%%%TOTAL%%%', '', ''"
            
             db.getDB().eachRow(select, [], {row -> 
@@ -73,7 +75,7 @@ class ReviewEntitiesTo351 {
                 if (row['ent_wikipedia_page'] == "%%%TOTAL%%%") {
                     total = (int)row['ent_id']	 
                 } else {            
-                   batch << new Entity(ent_id:row['ent_id'], ent_wikipedia_page:row['ent_wikipedia_page'], 
+                   batch << new EntityTable(ent_id:row['ent_id'], ent_wikipedia_page:row['ent_wikipedia_page'], 
                           ent_dbpedia_resource:row['ent_dbpedia_resource'],ent_dbpedia_class:row['ent_dbpedia_class'])
                   counter++
 				  
@@ -101,7 +103,7 @@ class ReviewEntitiesTo351 {
 										
 				    try {
 						def res = db.getDB().executeUpdate(
-					  "UPDATE ${Entity.ent_table} SET ent_dbpedia_class=? WHERE ent_id=?",[new_class, entity.ent_id])
+					  "UPDATE ${EntityTable.ent_table} SET ent_dbpedia_class=? WHERE ent_id=?",[new_class, entity.ent_id])
 				    	log.info "Got update result $res"
 						status.upgraded++
 					}catch(Exception e) {
@@ -202,9 +204,9 @@ class ReviewEntitiesTo351 {
             		}// if isAPlace
 				
 					// let's get a brand new refreshed Entity
-					Entity final_e
-				 	db.getDB().eachRow("SELECT * FROM ${Entity.ent_table} WHERE ent_id=?", [entity.ent_id], {row -> 
-                		final_e = new Entity(ent_id:row['ent_id'], ent_wikipedia_page:row['ent_wikipedia_page'], 
+					EntityTable final_e
+				 	db.getDB().eachRow("SELECT * FROM ${EntityTable.ent_table} WHERE ent_id=?", [entity.ent_id], {row -> 
+                		final_e = new EntityTable(ent_id:row['ent_id'], ent_wikipedia_page:row['ent_wikipedia_page'], 
                           ent_dbpedia_resource:row['ent_dbpedia_resource'],ent_dbpedia_class:row['ent_dbpedia_class'])
 
                 	})

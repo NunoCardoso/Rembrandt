@@ -20,6 +20,8 @@ package saskia.imports
 
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
+import saskia.db.obj.Collection;
+
 import org.apache.log4j.Logger
 import rembrandt.io.*
 import rembrandt.obj.ListOfNE
@@ -32,6 +34,7 @@ class ImportGCSecondHAREM_Clean_2_SourceDocument extends Import {
 	
 	Configuration conf = Configuration.newInstance()
 	static Logger log = Logger.getLogger("SaskiaImports")
+	static String DEFAULT_COLLECTION_NAME = "CD do Segundo HAREM"
 	SecondHAREMCollectionReader reader
 	RembrandtWriter writer 
 	
@@ -73,7 +76,6 @@ class ImportGCSecondHAREM_Clean_2_SourceDocument extends Import {
 		CommandLine cmd = parser.parse(o, args)
 		
 		ImportPlainGCSecondHAREM2SourceDocument importer = new ImportPlainGCSecondHAREM2SourceDocument()
-		String DEFAULT_COLLECTION_NAME = "CD do Segundo HAREM"
 		
 		log.info "*********************************************************"
 		log.info "* This class loads the Second HAREM+s Golden Collection *"

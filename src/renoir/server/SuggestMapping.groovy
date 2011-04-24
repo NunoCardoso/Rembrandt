@@ -17,7 +17,8 @@
  */
 package renoir.server
 
-import saskia.db.SaskiaDB
+import saskia.db.database.SaskiaMainDB;
+
 import java.net.URLDecoder
 import org.apache.log4j.*
 
@@ -25,12 +26,12 @@ public class SuggestMapping extends WebServiceRestletMapping {
     
     Closure HTMLanswer
     Closure JSONanswer
-    SaskiaDB db 
+    SaskiaMainDB db 
     static Logger log2 = Logger.getLogger("RenoirServer") 
     
     public SuggestMapping() {
         
-        db = SaskiaDB.newInstance()
+        db = SaskiaMainDB.newInstance()
         
         HTMLanswer = { req, par, bind ->
             return "Sorry, HTML mimetype is not handled. JSON only."	

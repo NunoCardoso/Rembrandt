@@ -19,6 +19,8 @@ package saskia.io
 
 import org.apache.log4j.*
 import saskia.bin.Configuration
+import saskia.db.obj.DBObject;
+import saskia.db.obj.JSONable;
 
 /** This class is an interface for the NEName table in the WikiRembrandt database. 
   * It stores tagging information associated to a NE name.

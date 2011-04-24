@@ -27,10 +27,11 @@ import rembrandt.obj.TimeGrounding
 import rembrandt.obj.TimeGroundingType
 import rembrandt.obj.SemanticClassification
 import org.apache.log4j.*
+
+import saskia.db.table.EntityTable;
+import saskia.db.table.Geoscope;
 import saskia.dbpedia.*
 import saskia.bin.*
-import saskia.io.Entity
-import saskia.io.Geoscope
 /**
  * @author Nuno Cardoso
  * Gets a Question, returns a ReformulatedQuery, an instance of RenoirQuery
@@ -196,7 +197,7 @@ class QueryReformulator1 extends QueryReformulator {
 				log.info "Going for DBpedia-related geoscope stuff. Note: ne.dbpedia = ${ne.dbpediaPage}"
 	       		if (ne.dbpediaPage.containsKey(cl)) {
 		   			ne.dbpediaPage[cl].each{resource -> 
-		   				Entity ent = Entity.getFromDBpediaResource(resource)
+		   				EntityTable ent = EntityTable.getFromDBpediaResource(resource)
 		   				Geoscope geo = ent?.hasGeoscope()
 						log.info "The entity $ent has geoscope $geo"
 		   				if (geo) {

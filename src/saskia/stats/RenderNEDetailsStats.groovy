@@ -18,8 +18,8 @@
  
 package saskia.stats
 
-import saskia.io.Collection
-import saskia.io.NE
+import saskia.db.obj.Collection;
+import saskia.db.table.NE;
 import saskia.util.I18n
 import rembrandt.obj.Document
 import java.text.SimpleDateFormat

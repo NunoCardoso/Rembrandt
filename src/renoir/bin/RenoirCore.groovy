@@ -19,8 +19,8 @@
 package renoir.bin
 
 import org.apache.log4j.Logger
-import saskia.io.Collection
 import saskia.bin.Configuration
+import saskia.db.obj.Collection;
 
 /**
  * @author Nuno Cardoso

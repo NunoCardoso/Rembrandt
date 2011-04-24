@@ -22,9 +22,9 @@ package renoir.test.ntcir.rungeneration
 import org.apache.log4j.Logger
 
 import saskia.bin.Configuration
+import saskia.db.obj.Collection;
 import renoir.bin.Renoir
 import renoir.obj.*
-import saskia.io.Collection
 /**
  * @author Nuno Cardoso
  *

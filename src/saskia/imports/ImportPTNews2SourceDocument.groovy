@@ -18,10 +18,10 @@
  
 package saskia.imports
 
-import saskia.db.SaskiaDB
+import saskia.db.DocStatus;
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.obj.Collection;
 import saskia.io.SourceDoc
-import saskia.io.Collection
-import saskia.io.DocStatus
 import saskia.bin.Configuration
 import saskia.util.I18n
 import org.apache.log4j.*
@@ -33,7 +33,7 @@ import org.apache.log4j.*
 
 class ImportPTNews2Saskia {
 	
-	SaskiaDB saskia_db
+	SaskiaMainDB saskia_db
 	Configuration conf
 	static Logger log = Logger.getLogger("Saskia")
 	String snewsDB
@@ -44,7 +44,7 @@ class ImportPTNews2Saskia {
 	public ImportPTNews2Saskia() {
 
 	    conf = Configuration.newInstance()
-	    saskia_db = SaskiaDB.newInstance()
+	    saskia_db = SaskiaMainDB.newInstance()
 
 	    snewsDB = "snews"
 	    saskiaDB = "saskia"

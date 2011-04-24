@@ -20,6 +20,8 @@ package saskia.test.io
 import org.junit.*
 import org.junit.runner.*
 import org.apache.log4j.*
+
+import saskia.db.table.Geoscope;
 import saskia.io.*
 
 /**

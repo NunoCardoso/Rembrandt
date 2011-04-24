@@ -25,6 +25,16 @@ import rembrandt.obj.ListOfNE
 import rembrandt.obj.Document
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
+import saskia.db.DocStatus;
+import saskia.db.SaskiaWebstore;
+import saskia.db.obj.Collection;
+import saskia.db.obj.DBObject;
+import saskia.db.obj.JSONable;
+import saskia.db.table.DocGeoSignatureTable;
+import saskia.db.table.DocTimeSignatureTable;
+import saskia.db.table.EntityTable;
+import saskia.db.table.Job;
+import saskia.db.table.NE;
 import saskia.dbpedia.DBpediaResource
 import saskia.dbpedia.DBpediaOntology
 import saskia.dbpedia.DBpediaAPI
@@ -76,7 +86,7 @@ class RembrandtedDoc extends DBObject implements JSONable {
     ListOfNE NEs
     List<Tag> tags
     List<Geoscope> geoscopes
-    List<Entity> entities
+    List<EntityTable> entities
     
     // Document is already post_processed.
 	 static Configuration conf = Configuration.newInstance()
@@ -401,10 +411,10 @@ class RembrandtedDoc extends DBObject implements JSONable {
 					// use only those who are LOCAL
 					
 					if (cl.c == "@LOCAL") {
-						Entity e = (ne.dbpediaPage.containsKey(cl) ? 
+						EntityTable e = (ne.dbpediaPage.containsKey(cl) ? 
 					   	(ne.dbpediaPage[cl] instanceof List ? 
-						 (!ne.dbpediaPage[cl].isEmpty() ? Entity.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
-						: Entity.getFromDBpediaResource(ne.dbpediaPage[cl])
+						 (!ne.dbpediaPage[cl].isEmpty() ? EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
+						: EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
 					    ) : null)
 					
 						if (!e) {
@@ -436,10 +446,10 @@ class RembrandtedDoc extends DBObject implements JSONable {
 					// use only those who are LOCAL
 					
 					if (cl.c == "@LOCAL") {
-						Entity e = (ne.dbpediaPage.containsKey(cl) ? 
+						EntityTable e = (ne.dbpediaPage.containsKey(cl) ? 
 					   	(ne.dbpediaPage[cl] instanceof List ? 
-						 (!ne.dbpediaPage[cl].isEmpty() ? Entity.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
-						: Entity.getFromDBpediaResource(ne.dbpediaPage[cl])
+						 (!ne.dbpediaPage[cl].isEmpty() ? EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
+						: EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
 					    ) : null)
 					
 						if (!e) {
@@ -545,7 +555,7 @@ class RembrandtedDoc extends DBObject implements JSONable {
                             category: (row2['ne_category'] == null ? null : NECategory.getFromID(row2['ne_category'])),
                             type: (row2['ne_type'] == null ? null : NEType.getFromID(row2['ne_type'])),
                             subtype: (row2['ne_subtype'] == null ? null : NESubtype.getFromID(row2['ne_subtype'])), 
-							entity: (row2['ne_entity'] == null ? null : Entity.getFromID(row2['ne_entity']))]
+							entity: (row2['ne_entity'] == null ? null : EntityTable.getFromID(row2['ne_entity']))]
                                              
                         })                               
                     })          
@@ -580,10 +590,10 @@ class RembrandtedDoc extends DBObject implements JSONable {
                     NEType type = (cl.t? NEType.getFromType(cl.t) : null)
                     NESubtype subtype = (cl.s? NESubtype.getFromSubtype(cl.s) : null)
 
-					Entity e = (ne.dbpediaPage.containsKey(cl) ? 
+					EntityTable e = (ne.dbpediaPage.containsKey(cl) ? 
 					   (ne.dbpediaPage[cl] instanceof List ? 
-						 (!ne.dbpediaPage[cl].isEmpty() ? Entity.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
-						: Entity.getFromDBpediaResource(ne.dbpediaPage[cl])
+						 (!ne.dbpediaPage[cl].isEmpty() ? EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
+						: EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
 					    ) : null)
 					
 					if (!e) {
@@ -610,10 +620,10 @@ class RembrandtedDoc extends DBObject implements JSONable {
                     NEType type = (cl.t? NEType.getFromType(cl.t) : null)
                     NESubtype subtype = (cl.s? NESubtype.getFromSubtype(cl.s) : null)
 
-					Entity e = (ne.dbpediaPage.containsKey(cl) ? 
+					EntityTable e = (ne.dbpediaPage.containsKey(cl) ? 
 					   (ne.dbpediaPage[cl] instanceof List ? 
-						 (!ne.dbpediaPage[cl].isEmpty() ? Entity.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
-						: Entity.getFromDBpediaResource(ne.dbpediaPage[cl])
+						 (!ne.dbpediaPage[cl].isEmpty() ? EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
+						: EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
 					    ) : null)
 					
 					if (!e) {
@@ -685,22 +695,22 @@ class RembrandtedDoc extends DBObject implements JSONable {
 	
 	/* there's a difference between entities = null and entity = [] - the last one says that I cheched the DB */
 	/* it both updates the entities var, and returns it */
-	List<Entity> getEntities() {
+	List<EntityTable> getEntities() {
 	   if (entities == null) {
 	       List res = []
 	       db.getDB().eachRow("SELECT die_entity FROM ${die_table} WHERE die_document=?",
-		     [doc_id], {row -> res << Entity.getFromID(row[0])})
+		     [doc_id], {row -> res << EntityTable.getFromID(row[0])})
 		   entities = res
 	   }
 	   return entities
 	}
     
-    public DocGeoSignature getGeographicSignature() {
-            return DocGeoSignature.getFromID(doc_latest_geo_signature)
+    public DocGeoSignatureTable getGeographicSignature() {
+            return DocGeoSignatureTable.getFromID(doc_latest_geo_signature)
         }
         
-    public DocTimeSignature getTimeSignature() {
-            return DocTimeSignature.getFromID(doc_latest_time_signature)
+    public DocTimeSignatureTable getTimeSignature() {
+            return DocTimeSignatureTable.getFromID(doc_latest_time_signature)
         }
         
 	/* there's a difference between tags = null and tags = [] - the last one says that I cheched the DB */
@@ -735,7 +745,7 @@ class RembrandtedDoc extends DBObject implements JSONable {
 	/**
 	 * The IGNORE does not generate error for duplicate keys 
 	 */
-	public associateWithEntity(Entity entity) { 
+	public associateWithEntity(EntityTable entity) { 
 	    db.getDB().executeInsert("INSERT IGNORE INTO ${die_table} VALUES(?,?)", 
 		    [doc_id, entity.ent_id])
 	}
@@ -795,7 +805,7 @@ class RembrandtedDoc extends DBObject implements JSONable {
 	    	NEName nen = null
 	    	//long rel_id = relations[Relation.default_relation]
 	    	List<NE> nelist = []
-	    	List<Entity> entitylist = []
+	    	List<EntityTable> entitylist = []
 			
 		// Check categories
 	    	ne.classification.each{cl -> 
@@ -852,17 +862,17 @@ class RembrandtedDoc extends DBObject implements JSONable {
             if (resources && resources.size() > 2) 
         	log.warn("Note: NE $ne for classification $c has more than one DBpedia resource: $resources. Going to use the first")
 
-            Entity e = null
+            EntityTable e = null
             
             resources?.each{resource -> 
-                e = Entity.getFromDBpediaResource(DBpediaResource.getShortName(resource))
+                e = EntityTable.getFromDBpediaResource(DBpediaResource.getShortName(resource))
                 if (!e) {
                     log.trace "no DBpedia entry ${resource} on DB. Creating a new entry."
                     // let's get a classification.
                     List listOfClasses = dbpedia.getDBpediaOntologyClassFromDBpediaResource(resource)
                     log.trace "Classifying DBpedia resource $resource generated classes ${listOfClasses}" 
                     log.trace "Narrower one: "+dbpediaontology.getNarrowerClassFrom(listOfClasses) 
-                    e = new Entity(
+                    e = new EntityTable(
                 	ent_dbpedia_resource:DBpediaResource.getShortName(resource),
                 	ent_dbpedia_class:dbpediaontology.getNarrowerClassFrom(listOfClasses)
                     )

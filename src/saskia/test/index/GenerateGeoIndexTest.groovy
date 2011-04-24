@@ -23,6 +23,7 @@ import org.junit.runner.*
 import org.apache.log4j.*
 import saskia.io.*
 import saskia.bin.*
+import saskia.db.obj.Collection;
 /**
  * @author Nuno Cardoso
  * Tester for WikipediaAPI.

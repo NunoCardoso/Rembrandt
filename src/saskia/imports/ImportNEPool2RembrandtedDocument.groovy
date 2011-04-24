@@ -18,9 +18,9 @@
  
 package saskia.imports
 
-import saskia.io.DocStatus
+import saskia.db.DocStatus;
+import saskia.db.obj.Collection;
 import saskia.io.RembrandtedDoc
-import saskia.io.Collection
 import rembrandt.obj.Document
 import rembrandt.obj.ListOfNE
 import rembrandt.io.RembrandtReader

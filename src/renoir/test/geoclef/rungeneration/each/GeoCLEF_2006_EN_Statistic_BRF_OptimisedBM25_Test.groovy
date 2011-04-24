@@ -8,7 +8,8 @@ import renoir.test.geoclef.rungeneration.GeoCLEF_Baseline_NoQE_RunGeneration_Tes
 import org.junit.*
 import org.junit.runner.*
 import org.apache.log4j.*
-import saskia.io.Collection
+
+import saskia.db.obj.Collection;
 import renoir.bin.Renoir
 import renoir.obj.RenoirQuery
 import renoir.obj.RenoirQueryParser

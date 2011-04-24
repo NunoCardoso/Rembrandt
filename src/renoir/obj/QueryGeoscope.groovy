@@ -18,8 +18,9 @@
  package renoir.obj
 
 import rembrandt.obj.NamedEntity
-import saskia.io.Entity
-import saskia.io.Geoscope
+import saskia.db.table.EntityTable;
+import saskia.db.table.Geoscope;
+
 import org.apache.log4j.*
 
 class QueryGeoscope {
@@ -34,7 +35,7 @@ class QueryGeoscope {
 	public groundNEtoGeoscope() {
 		List dbpediaresources = ne.dbpediaPage.values().toList().flatten()
 		dbpediaresources?.each{res -> 
-	 		Entity ent = Entity.getFromDBpediaResource(res)
+	 		EntityTable ent = EntityTable.getFromDBpediaResource(res)
 			Geoscope g = ent?.hasGeoscope()
 			if (g) {
 				if (!geo) {
@@ -63,13 +64,13 @@ class QueryGeoscope {
 	public List<String> getDBpediaResourcesFromAllGeoscopes() {
 		List<String> res = []
 		if (geo) {
-			List<Entity> ents = geo.hasEntities()
+			List<EntityTable> ents = geo.hasEntities()
 			ents?.each{ent -> 
 				if (ent?.ent_dbpedia_resource) res << ent.ent_dbpedia_resource
 			}
 		}
 		expanded_country_geos?.each{geo -> 
-			List<Entity> ents = geo.hasEntities()
+			List<EntityTable> ents = geo.hasEntities()
 			ents?.each{ent -> 
 				if (ent?.ent_dbpedia_resource && 
 				ent?.ent_dbpedia_class == "Country") res << ent.ent_dbpedia_resource

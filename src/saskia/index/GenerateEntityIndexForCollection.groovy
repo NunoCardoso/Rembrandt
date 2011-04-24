@@ -33,11 +33,11 @@ import org.apache.lucene.analysis.Analyzer
 import org.apache.commons.cli.*
 import rembrandt.obj.Document
 import saskia.bin.Configuration
-import saskia.io.Collection
 import rembrandt.io.DocStats
 import rembrandt.obj.SemanticClassification
 import saskia.io.RembrandtedDoc
-import saskia.db.SaskiaDB
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.obj.Collection;
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
 

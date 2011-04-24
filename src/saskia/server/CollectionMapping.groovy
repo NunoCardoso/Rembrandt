@@ -17,7 +17,7 @@
  */
 package saskia.server
 
-import saskia.io.Collection
+import saskia.db.obj.Collection;
 import saskia.io.Cache
 import saskia.io.User
 import saskia.util.I18n

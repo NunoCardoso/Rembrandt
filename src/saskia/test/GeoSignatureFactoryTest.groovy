@@ -19,6 +19,8 @@
 package saskia.test
 
 import saskia.bin.Configuration
+import saskia.db.GeoSignatureFactory;
+import saskia.db.table.EntityTable;
 import saskia.io.*
 import org.apache.log4j.Logger
 import rembrandt.io.RembrandtStyleTag
@@ -91,7 +93,7 @@ class GeoSignatureFactoryTest extends GroovyTestCase{
                 // getAt(0) - first classification, getAt(0), first dbpediaResource for that classification 
                 String dbpediaResource = ne.dbpediaPage.collect{it.value}.getAt(0).getAt(0)
                 log.trace "For ne, got dbpediaResource $dbpediaResource"
-                Entity ent = Entity.getFromDBpediaResource(dbpediaResource)
+                EntityTable ent = EntityTable.getFromDBpediaResource(dbpediaResource)
                 
                 Map entry = [section:"B", sentence:ne.sentenceIndex,
                              term:ne.termIndex, name:ne.printTerms(), type:labels.label[ne.classification[0].t],

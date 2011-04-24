@@ -18,11 +18,11 @@
  
 package saskia.stats
 
-import saskia.db.SaskiaDB
+import saskia.db.DocStatus;
+import saskia.db.SaskiaWebstore;
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.obj.Collection;
 import saskia.io.RembrandtedDoc
-import saskia.io.DocStatus
-import saskia.io.Collection
-import saskia.io.SaskiaWebstore;
 import saskia.io.SourceDoc
 import saskia.util.I18n
 import rembrandt.io.RembrandtReader
@@ -34,7 +34,7 @@ import java.util.regex.Matcher
 
 class RembrandtDocStats {
      
-     SaskiaDB db
+     SaskiaMainDB db
      Collection collection
      RembrandtReader reader
      HTMLDocumentWriter writer
@@ -44,7 +44,7 @@ class RembrandtDocStats {
      static SaskiaWebstore webstore = SaskiaWebstore.newInstance()
 	 
      public RembrandtDocStats(Collection collection, String lang) {
-	    db = SaskiaDB.newInstance()
+	    db = SaskiaMainDB.newInstance()
 	    this.collection = collection
 	    reader = new RembrandtReader(new RembrandtStyleTag(lang))
 	    writer = new HTMLDocumentWriter(new HTMLStyleTag(lang))

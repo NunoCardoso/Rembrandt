@@ -19,6 +19,7 @@
 package saskia.test
 
 import saskia.bin.Configuration
+import saskia.db.TimeSignature;
 import saskia.io.*
 import org.apache.log4j.*
 

@@ -25,7 +25,7 @@ import ireval.RetrievalEvaluator.Document
 import ireval.RetrievalEvaluator.Judgment
 
 import saskia.bin.Configuration
-import saskia.io.Collection
+import saskia.db.obj.Collection;
 import renoir.bin.Renoir
 import renoir.obj.RenoirQuery
 import renoir.obj.RenoirQueryParser

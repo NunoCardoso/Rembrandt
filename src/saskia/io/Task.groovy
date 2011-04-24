@@ -20,6 +20,10 @@ package saskia.io
 
 import org.apache.log4j.*
 
+import saskia.db.obj.Collection;
+import saskia.db.obj.DBObject;
+import saskia.db.obj.JSONable;
+
 /** This class is an interface for the Task table in the RembrandtPool database. 
 CREATE TABLE `task` (
 	 `tsk_id` BIGINT PRIMARY KEY AUTO_INCREMENT, 

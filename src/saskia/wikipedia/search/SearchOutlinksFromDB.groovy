@@ -20,7 +20,7 @@ package saskia.wikipedia.search
 
 import org.apache.log4j.*
 import saskia.wikipedia.WikipediaAPI
-import saskia.db.WikipediaDB
+import saskia.db.database.WikipediaDB;
 import saskia.bin.Configuration
 
 /**

@@ -16,7 +16,7 @@
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
  
-package rembrandt.test.rules
+package rembrandt.test.tokenizer
 
 import rembrandt.tokenizer.TokenizerPT
 import saskia.bin.Configuration

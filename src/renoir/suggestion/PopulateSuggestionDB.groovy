@@ -18,9 +18,9 @@
 
 package renoir.suggestion
 
-import saskia.db.SaskiaDB
-import saskia.db.WikipediaDB
-import saskia.io.Geoscope
+import saskia.db.database.SaskiaMainDB;
+import saskia.db.database.WikipediaDB;
+import saskia.db.table.Geoscope;
 import saskia.bin.Configuration
 import saskia.wikipedia.WikipediaAPI
 import renoir.obj.QuestionType
@@ -30,7 +30,7 @@ import org.apache.log4j.*
 
 class PopulateSuggestionDB {
     
-   SaskiaDB db_saskia
+   SaskiaMainDB db_saskia
    WikipediaDB db_wikipedia
    Logger log = Logger.getLogger("SuggestionDB")
    static String suggestion_table = "suggestion"
@@ -44,7 +44,7 @@ class PopulateSuggestionDB {
 		if (conf.getBoolean("saskia.wikipedia.enabled",true)) {
 			db_wikipedia = WikipediaDB.newInstance()
 		 }
-       db_saskia = SaskiaDB.newInstance()
+       db_saskia = SaskiaMainDB.newInstance()
        conf = Configuration.newInstance()
     }
    

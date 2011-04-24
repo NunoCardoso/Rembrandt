@@ -31,10 +31,10 @@ import org.apache.lucene.analysis.Analyzer
 
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
-import saskia.io.Collection
-import saskia.io.TimeSignature
+import saskia.db.TimeSignature;
+import saskia.db.obj.Collection;
+import saskia.db.table.DocTimeSignatureTable;
 import rembrandt.io.DocStats
-import saskia.io.DocTimeSignature
 
 
 /**
@@ -108,7 +108,7 @@ class GenerateTimeIndexForCollection {
             int limit = (i > doc_pool_size ? doc_pool_size : i)
             log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
             
-            List ts = DocTimeSignature.getBatchOfTimeSignatures(collection, limit, stats["processed"])
+            List ts = DocTimeSignatureTable.getBatchOfTimeSignatures(collection, limit, stats["processed"])
             log.debug "Got ${ts?.size()} DocTimeSignatures(s)."
             
             // if it's null, then there's no more docs to process. Leave the loop.

@@ -20,6 +20,9 @@ package saskia.io
 
 import org.apache.log4j.*
 import saskia.bin.Configuration
+import saskia.db.obj.DBObject;
+import saskia.db.obj.JSONable;
+import saskia.db.table.EntityTable;
 import rembrandt.obj.Sentence
 
 class Subject extends DBObject implements JSONable {
@@ -86,7 +89,7 @@ class Subject extends DBObject implements JSONable {
 		String query = "SELECT SQL_CALC_FOUND_ROWS * $from $where LIMIT ${limit} OFFSET ${offset} "+
 		"UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL"
 		//log.debug "query = $query params = $params class = "+params*.class
-		List<Entity> u 
+		List<EntityTable> u 
 		try {u = queryDB(query, params) }
 		catch(Exception e) {log.error "Error getting Subject list: ", e}
 		// last "item" it's the count.

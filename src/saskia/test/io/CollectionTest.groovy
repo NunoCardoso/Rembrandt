@@ -22,6 +22,8 @@ import org.junit.runner.*
 import org.apache.log4j.*
 import saskia.io.*
 import saskia.bin.Configuration
+import saskia.db.obj.Collection
+import saskia.db.database.SaskiaTestDB
 
 /**
  * @author Nuno Cardoso
@@ -29,13 +31,13 @@ import saskia.bin.Configuration
 class TestCollection extends GroovyTestCase {
 
 	def Logger log = Logger.getLogger("UnitTest")
-	SaskiaDB db
+	SaskiaTestDB db
 	Configuration conf
 	
 	public TestCollection() {
 		conf = Configuration.newInstance()
 		// conf.set('saskia.db.name','ohterName')
-		db = SaskiaDB.newInstance(conf)
+		db = SaskiaTestDB.newInstance(conf)
 		// now this is the one that'll be passed to io objects
 	}
 	

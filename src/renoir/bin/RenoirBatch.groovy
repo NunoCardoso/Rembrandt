@@ -18,7 +18,8 @@
 package renoir.bin
 
 import saskia.bin.Configuration
-import saskia.io.Collection
+import saskia.db.obj.Collection;
+
 import org.apache.log4j.Logger
 import org.apache.commons.cli.* 
 import pt.utl.ist.lucene.LgteIndexSearcherWrapper

@@ -22,6 +22,8 @@ import org.apache.log4j.Logger
 
 import org.apache.commons.cli.*
 import rembrandt.obj.* 
+import saskia.db.table.EntityTable;
+import saskia.db.table.Geoscope;
 import saskia.gazetteers.*
 import saskia.obj.*
 import saskia.io.*
@@ -76,7 +78,7 @@ class InsertSubjectsAndPlacesFromSKOSfile {
 	    if (result.placeNameTerms) {
 		dbpediaresource = result.placeNameMatch.answer
 	    } 	    
-	    Entity e = Entity.getFromDBpediaResource(dbpediaresource)
+	    EntityTable e = EntityTable.getFromDBpediaResource(dbpediaresource)
 	    Geoscope geo = e?.hasGeoscope()
 	    sg.sgr_geoscope = geo
 	    

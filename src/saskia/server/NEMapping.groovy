@@ -17,10 +17,10 @@
  */
 package saskia.server
 
-import saskia.io.Collection
+import saskia.db.obj.Collection;
+import saskia.db.table.NE;
 import saskia.io.User
 import saskia.stats.SaskiaStats
-import saskia.io.NE
 import saskia.util.I18n
 import org.apache.log4j.*
 

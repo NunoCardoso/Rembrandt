@@ -18,7 +18,7 @@
  
 package saskia.stats
 
-import saskia.io.Collection
+import saskia.db.obj.Collection;
 import saskia.util.I18n
 
 class RenderFrontPageStats {

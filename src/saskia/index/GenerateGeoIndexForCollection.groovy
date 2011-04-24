@@ -31,10 +31,10 @@ import org.apache.lucene.analysis.Analyzer
 
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
-import saskia.io.Collection
-import saskia.io.GeoSignature
+import saskia.db.GeoSignature;
+import saskia.db.obj.Collection;
+import saskia.db.table.DocGeoSignatureTable;
 import rembrandt.io.DocStats
-import saskia.io.DocGeoSignature
 
 
 /**
@@ -98,7 +98,7 @@ class GenerateGeoIndexForCollection {
             int limit = (i > doc_pool_size ? doc_pool_size : i)
             log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
             
-            List geos = DocGeoSignature.getBatchOfGeoSignatures(collection, limit, stats["processed"])
+            List geos = DocGeoSignatureTable.getBatchOfGeoSignatures(collection, limit, stats["processed"])
             log.debug "Got ${geos?.size()} DocGeoSignatures(s)."
             
             // if it's null, then there's no more docs to process. Leave the loop.

@@ -20,7 +20,7 @@ package renoir.test
 import org.apache.log4j.Logger
 
 import saskia.bin.Configuration
-import saskia.io.Collection
+import saskia.db.obj.Collection;
 import renoir.bin.Renoir
 import renoir.bin.RenoirCore
 import renoir.obj.RenoirQuery

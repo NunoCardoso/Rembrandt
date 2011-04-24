@@ -105,11 +105,12 @@ abstract class DB {
             log.trace "DB: lastCall initialized with "+new Date(lastCall)
         }  catch (Exception e) {	   
             log.fatal "Can't open db: "+e.getMessage()
+            log.fatal "Is your MySQL server running? You should check it out."
         }
         if (db) {
             log.info "Database initialized: $driver:$url/$name"
         } else {
-            log.fatal "Database NOT initialized. Check what's wrong. Exiting."
+            log.fatal "Database NOT initialized. Exiting."
             System.exit(0)
         }
     }

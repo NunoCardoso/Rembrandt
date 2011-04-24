@@ -20,6 +20,7 @@ package saskia.io
 
 import java.util.Map
 import org.apache.log4j.Logger
+import saskia.db.SaskiaDB
 
 /** This class is an interface for the RembrandtTag table in the WikiRembrandt database. 
   * It stores tagging information associated to a Rembrandt annotation of documents.
@@ -316,6 +317,19 @@ class Collection extends DBObject implements JSONable {
 		if (c) return c else return null
 	}
 	 
+	/**
+	 * Returns a given collection, based on a name ir an id.
+	 * Tries the name first. If it doesn't succed, tries the id.
+	 * @param collection_name_or_id Collection's name or id
+	 * @return the collection if found,  null otherwise
+	 */
+	static Collection getFromNameOrID(String collection_name_or_id) {
+		Collection collection = getFromName(collection_name_or_id)
+		if (!collection) 
+			collection = Collection.getFromID(Long.parseLong(collection_name_or_id))
+		return collection
+	}
+		
 	public updateValue(String column, value) {  
 		 def newvalue	    
 		 def object

@@ -24,6 +24,7 @@ import rembrandt.io.*
 import rembrandt.tokenizer.*
 import java.util.regex.*
 import saskia.bin.Configuration
+import saskia.db.SaskiaDB
 import saskia.util.I18n
 import org.apache.log4j.*
 

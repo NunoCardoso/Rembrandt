@@ -36,12 +36,12 @@ class ImportGCSecondHarem_Clean_2_SourceDocument extends Import {
 	Configuration conf = Configuration.newInstance()
 	static Logger log = Logger.getLogger("SaskiaImports")
 
-	SecondHAREMCollectionReader reader
+	SecondHAREMReader reader
 	RembrandtWriter writer
 
 	public ImportGCSecondHarem_Clean_2_SourceDocument() {
 		super()
-		reader = new SecondHAREMCollectionReader(new SecondHAREMStyleTag(
+		reader = new SecondHAREMReader(new SecondHAREMStyleTag(
 				conf.get("rembrandt.input.styletag.lang", "pt")))
 		writer = new RembrandtWriter(new RembrandtStyleTag(
 				conf.get("rembrandt.output.styletag.lang", "pt")))

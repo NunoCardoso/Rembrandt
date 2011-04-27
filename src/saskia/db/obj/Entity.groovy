@@ -19,8 +19,8 @@ package saskia.db.obj
 
 
 import org.apache.log4j.Logger
-import saskia.db.database.SaskiaDB
-import saskia.db.table.DBTable;
+import saskia.db.database.*
+import saskia.db.table.*
 
 /**
  * @author Nuno Cardoso
@@ -44,11 +44,11 @@ class Entity extends DBObject implements JSONable {
 	
 	
 	static Entity createNew(DBTable dbtable, row) {
-	    Entity e = new Entity(dbtable)
-		e.ent_id = row['ent_id']
-		e.ent_name = row['ent_name']
-		e.ent_dbpedia_resource = row['ent_dbpedia_resource']
-		e.ent_dbpedia_class=row['ent_dbpedia_class']
+	   Entity e = new Entity(dbtable)
+		if (row['ent_id']) e.ent_id = row['ent_id']
+		if (row['ent_name']) e.ent_name = row['ent_name']
+		if (row['ent_dbpedia_resource']) e.ent_dbpedia_resource = row['ent_dbpedia_resource']
+		if (row['ent_dbpedia_class']) e.ent_dbpedia_class=row['ent_dbpedia_class']
 		return e
 	}
 	public Map toMap() {
@@ -87,7 +87,7 @@ class Entity extends DBObject implements JSONable {
 	public Geoscope hasGeoscope() {
 		Geoscope g
 		getDBTable().getSaskiaDB().getDB().eachRow(
-			"SELECT ${GeoscopeTable.tablename}.* FROM ${GeoscopeTable.tablename}*, ${getDBTable().ent_has_geo_table} "+
+			"SELECT ${GeoscopeTable.tablename}.* FROM ${GeoscopeTable.tablename}, ${getDBTable().ent_has_geo_table} "+
 			"WHERE ehg_entity = ? and ehg_geoscope = geo_id ", [ent_id], {row ->
 			if (g) log.warn "Entity ${this} has more than one link to a geoscope!!!"
 			else g = Geoscope.createNew(row)

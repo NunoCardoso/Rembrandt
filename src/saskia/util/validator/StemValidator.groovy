@@ -18,13 +18,13 @@
 
 package saskia.util.validator
 
-class StemValidator {
+class StemValidator extends Validator {
 		
 	/**
 	 * Validate the mode
 	 * 
 	 */
-	public boolean validate(given_stem, String DEFAULT_STEM, boolean manadory) {
+	public boolean validate(String given_stem, String DEFAULT_STEM, boolean manadory) {
 
 		Boolean stem
 

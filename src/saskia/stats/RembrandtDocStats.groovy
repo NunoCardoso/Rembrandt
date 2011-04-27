@@ -20,7 +20,7 @@ package saskia.stats
 
 import java.text.SimpleDateFormat
 
-import rembrandt.io.HTMLDocumentWriter
+import rembrandt.io.HTMLWriter
 import rembrandt.io.HTMLStyleTag
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
@@ -37,7 +37,7 @@ class RembrandtDocStats {
 	SaskiaMainDB db
 	Collection collection
 	RembrandtReader reader
-	HTMLDocumentWriter writer
+	HTMLWriter writer
 	String lang
 	SimpleDateFormat dateFormat
 	I18n i18n
@@ -47,7 +47,7 @@ class RembrandtDocStats {
 		db = SaskiaMainDB.newInstance()
 		this.collection = collection
 		reader = new RembrandtReader(new RembrandtStyleTag(lang))
-		writer = new HTMLDocumentWriter(new HTMLStyleTag(lang))
+		writer = new HTMLWriter(new HTMLStyleTag(lang))
 		i18n = I18n.newInstance()
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
 	}

@@ -363,7 +363,8 @@ CREATE TABLE IF NOT EXISTS `geoscope` (
   `geo_woeid_belongsto` text,
   `geo_woeid_neighbors` text,
   `geo_woeid_siblings` text,
-  `geo_woeid_children` text
+  `geo_woeid_children` text,
+  `geo_geonetpt02` VARCHAR(255)
 )   ENGINE = InnoDB;
 
 alter table geoscope add constraint unique key geo_woeid (geo_woeid); 

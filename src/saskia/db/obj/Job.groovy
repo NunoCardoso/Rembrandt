@@ -46,16 +46,17 @@ class Job extends DBObject implements JSONable {
 	
 	static Job createNew(DBTable dbtable, row) {
 		Job j = new Job(dbtable)
-		j.job_id = row['job_id']
-		j.job_task = (row['job_task'] instanceof Task ? 
+		if (row['job_id']) j.job_id = row['job_id']
+		if (row['job_task']) j.job_task = (row['job_task'] instanceof Task ? 
 			row['job_task'] : 
 			dbtable.getSaskiaDB().getDBTable("TaskTable").getFromID(row['job_task']) )
-		j.job_doc_type = row['job_doc_type']
-		j.job_doc_id = row['job_doc_id']
-		j.job_doc_edit = (row['job_doc_edit'] instanceof DocStatus ? 
+		if (row['job_doc_type']) j.job_doc_type = row['job_doc_type']
+		if (row['job_doc_id']) j.job_doc_id = row['job_doc_id']
+		if (row['job_doc_edit']) 
+			j.job_doc_edit = (row['job_doc_edit'] instanceof DocStatus ? 
 			row['job_doc_edit'] : DocStatus.getFromValue(row['job_doc_edit']) )
 		if (row['job_doc_edit_date'] && (Date)row['job_doc_edit_date'] != nulldate)
-		j.job_doc_edit_date = (Date)row['job_doc_edit_date']
+			j.job_doc_edit_date = (Date)row['job_doc_edit_date']
 		return j
 	}
 	

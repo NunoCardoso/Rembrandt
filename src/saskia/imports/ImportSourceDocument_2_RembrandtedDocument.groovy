@@ -30,7 +30,7 @@ import saskia.db.database.*
 import saskia.db.obj.*
 import saskia.db.table.*
 import rembrandt.io.DocStats
-import rembrandt.io.HTMLDocumentReader
+import rembrandt.io.HTMLReader
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtWriter
 import rembrandt.io.RembrandtWriter
@@ -46,7 +46,7 @@ class ImportSourceDocument_2_RembrandtedDocument extends Import {
 
 
 	// readers
-	HTMLDocumentReader readerHTML
+	HTMLReader readerHTML
 	RembrandtReader readerRembrandt
 	RembrandtWriter writer
 	RembrandtStyleTag styletag
@@ -89,7 +89,7 @@ class ImportSourceDocument_2_RembrandtedDocument extends Import {
 	
 		taglang = conf.get("rembrandt.output.styletag.lang", this.lang)
 		styletag = new RembrandtStyleTag(taglang)
-	   readerHTML = new HTMLDocumentReader()
+	   readerHTML = new HTMLReader()
 	   readerRembrandt = new RembrandtReader(styletag)
 	   writer = new RembrandtWriter(styletag)
 	   core = Rembrandt.getCore(this.lang, "harem")

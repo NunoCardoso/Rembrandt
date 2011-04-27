@@ -36,12 +36,6 @@ class Relation extends DBObject implements JSONable {
 		super(dbtable)
 	}
 
-	public Relation(DBTable dbtable, Long rel_id, String rel_relation) {
-		super(dbtable)
-		this.rel_id = rel_id
-		this.rel_relation = rel_relation
-	}
-
 	static Relation createNew(DBTable dbtable, row) {
 		Relation r = new Relation(dbtable)
 		if (row['rel_id']) r.rel_id = row['rel_id']

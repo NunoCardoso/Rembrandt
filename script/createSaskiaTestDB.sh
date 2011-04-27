@@ -1,4 +1,4 @@
-#!/usr/bin/env groovy
+#!/usr/bin/env groovy -Dfile.encoding=UTF-8
 
 import saskia.bin.Configuration
 import saskia.db.database.*
@@ -6,6 +6,7 @@ import saskia.db.table.*
 import saskia.db.obj.*
 import saskia.index.*
 import saskia.imports.*
+import saskia.util.validator.*
 import groovy.sql.Sql
 
 Configuration conf = Configuration.newInstance()
@@ -25,7 +26,7 @@ Collection cd_collection
 
 String CD_COLLECTION_DEFAULT_FILE = conf.get("rembrandt.home.dir",".")
 CD_COLLECTION_DEFAULT_FILE += "/resources/test/collections/CDSegundoHAREM.xml"
-CD_COLLECTION_DEFAULT_ENCODING = "ISO-8859-1"
+CD_COLLECTION_DEFAULT_ENCODING = "UTF-8"
 
 String CD_COLLECTION_NAME = "CD do Segundo HAREM"
 String JUNIT_TEST_COLLECTION_NAME = "JUnit tests"
@@ -224,10 +225,10 @@ saskia.db.table.UserTable.createPassword('rembrandt_pub_key'),
 
 println "User rembrandt added."
  
-// let's create the CD and test collection
+// create the CD and test collection
 sql_db_test.execute "INSERT INTO collection VALUES(?,?,?,?,?,?)",
 [0,CD_COLLECTION_NAME,
- 2, 'pt','rwar--r--','Second HAREM\'s CD (http://www.linguateca.pt/HAREM)']
+ 2, 'pt','rwar--r--','Second HAREM CD (http://www.linguateca.pt/HAREM)']
 
 println "Collection ${CD_COLLECTION_NAME} added."
 
@@ -284,14 +285,14 @@ importer.setEncoding(cd_collection_encoding)
 println "File: $cd_collection_file <"+cd_collection_encoding+"> "	
 		
 importer.prepareInputStreamReader()
-HashMap status = importer.importer()
-println  "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."
+importer.importer()
+println importer.statusMessage()
 
 }
 
 println ""
 println "5. === ANNOTATE TEST COLLECTION ==="
-println "Annotate with REWMBRANDT the Golden Collection (y/Y/yes) or skip it (n/N/no) ? (Default: y)"
+println "Annotate with REMBRANDT the Golden Collection (y/Y/yes) or skip it (n/N/no) ? (Default: y)"
 println "Warning: this may take a while..."
 print "> "
 answer = input.readLine().trim()
@@ -351,40 +352,44 @@ if (!INDEX_TEST_COLLECTION) {
 } else {
    println "performing INDEX TEST COLLECTION..."
 
-File f = new File(INDEX_ROOT_DIR)
-if (!f.exists()) f.mkdir()
+String indexdir = null
 
-INDEX_ROOT_DIR += fileseparator + "db-" + Class.forName(saskia_test_db.class.name).LABEL
-f = new File(INDEX_ROOT_DIR)
-if (!f.exists()) f.mkdir()
+println "Creating term index with stem"
+indexdir = IndexDirectoryValidator.buildIndexDirectory(
+	 conf, cd_collection, GenerateTermIndexForCollection.termWithStemIndexDir)
 
-INDEX_ROOT_DIR += fileseparator+"col-"+cd_collection.col_id
-f = new File(INDEX_ROOT_DIR)
-if (!f.exists()) f.mkdir()
+def indexer = new GenerateTermIndexForCollection(
+    cd_collection, indexdir, true)
 
-   println "Creating term index with stem"
-  String indexdir = INDEX_ROOT_DIR + fileseparator + GenerateTermIndexForCollection.termWithStemIndexDir
- def indexer = new GenerateTermIndexForCollection(
-      cd_collection, indexdir, true)
- indexer.doit()
+indexer.index()
+println indexer.statusMessage()
 
-  println "Creating term index without stem"
-  indexdir = INDEX_ROOT_DIR+ fileseparator + GenerateTermIndexForCollection.termWithoutStemIndexDir
-  indexer = new GenerateTermIndexForCollection(
-      cd_collection, indexdir,false)
-  indexer.doit()
+println "Creating term index without stem"
+indexdir = IndexDirectoryValidator.buildIndexDirectory(
+	conf, cd_collection, GenerateTermIndexForCollection.termWithoutStemIndexDir)
 
- println "Creating NE index from the NE Pool"
-  indexdir = INDEX_ROOT_DIR+ fileseparator + GenerateNEIndexForCollection.NEIndexDirLabel
-  indexer = new GenerateNEIndexForCollection(
-      cd_collection, indexdir, "pool")
-  indexer.doit()
+indexer = new GenerateTermIndexForCollection(
+      cd_collection, indexdir, false)
+indexer.index()
+println indexer.statusMessage()
+
+println "Creating NE index from the NE Pool"
+indexdir = IndexDirectoryValidator.buildIndexDirectory(
+	conf, cd_collection, GenerateNEIndexForCollection.NEIndexDirLabel)
+
+indexer = new GenerateNEIndexForCollection(
+   cd_collection, indexdir, "pool")
+indexer.index()
+println indexer.statusMessage()
 
 println "Creating Entity index from the NE Pool"
-  indexdir = INDEX_ROOT_DIR+ fileseparator + GenerateEntityIndexForCollection.EntityIndexDirLabel
-  indexer = new GenerateEntityIndexForCollection(
+indexdir = IndexDirectoryValidator.buildIndexDirectory(
+	conf, cd_collection, GenerateEntityIndexForCollection.EntityIndexDirLabel)
+
+indexer = new GenerateEntityIndexForCollection(
       cd_collection, indexdir, "pool")
-  indexer.doit()
+indexer.index()
+println indexer.statusMessage()
 
 println  "Making GeoSignatures"
 GenerateGeoSignatures ggs = new GenerateGeoSignatures()
@@ -392,7 +397,37 @@ ggs.setCollection(cd_collection)
 ggs.setTag()
 ggs.setDocs(130)
 ggs.setSync("pool")
+ggs.prepare()
 ggs.generate()
 println "Done. ${ggs.status}"
+
+println "Creating Geo index from the NE Pool"
+indexdir = IndexDirectoryValidator.buildIndexDirectory(
+	conf, cd_collection, GenerateGeoIndexForCollection.geoIndexDirLabel)
+
+indexer = new GenerateGeoIndexForCollection(
+   cd_collection, indexdir)
+indexer.index()
+println indexer.statusMessage()
+
+println  "Making TimeSignatures"
+GenerateTimeSignatures gts = new GenerateTimeSignatures()
+gts.setCollection(cd_collection)
+gts.setTag()
+gts.setDocs(130)
+gts.setSync("pool")
+gts.prepare()
+gts.generate()
+println "Done. ${gts.status}"
+
+println "Creating Time index from the NE Pool"
+indexdir = IndexDirectoryValidator.buildIndexDirectory(
+	conf, cd_collection, GenerateTimeIndexForCollection.timeIndexDirLabel)
+
+indexer = new GenerateTimeIndexForCollection(
+   cd_collection, indexdir)
+indexer.index()
+println indexer.statusMessage()
+
 }
 

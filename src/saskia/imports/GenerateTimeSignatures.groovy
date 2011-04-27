@@ -39,42 +39,42 @@ class GenerateTimeSignatures {
     Collection collection
     int docs 
 	 Map status 
-
+	 SaskiaDB db
+	
     TimeSignatureFactory tsf
     Configuration conf = Configuration.newInstance()
 	 int rembrandted_doc_pool_size = conf.getInt("saskia.imports.rembrandted_doc_pool_size",30)
     String sync
 
     public GenerateTimeSignatures() {
-        status = [generated:0, skipped:0, failed:0]
-        tsf = new TimeSignatureFactory() 
- 
+        status = [generated:0, skipped:0, failed:0] 
     }
 
-	 public setTag() {
-		 tag = collection.getDBTable().getSaskiaDB().getDBTable("TagTable")
+	 public prepare() {
+		 db = collection.getDBTable().getSaskiaDB()
+		 tag = db.getDBTable("TagTable")
 			.getFromVersion(TimeSignatureFactory.timeSignatureVersionLabel)
         
         if (!tag) {
-            tag = Tag.createNew(collection.getDBTable(),
+            tag = Tag.createNew(db.getDBTable("TagTable"),
 				[tag_version:TimeSignatureFactory.timeSignatureVersionLabel, 
 				tag_comment:null])
 				
             tag.tag_id = tag.addThisToDB()
         }  
+        tsf = new TimeSignatureFactory()//new Date) 
 	 }
 
     public Map generate() {
         
-        def stats = new DocStats(ndocs)
+        def stats = new DocStats(docs)
         stats.begin()
         
-		  RembrandtedDocTable rembrandtedDocTable = collection
-			.getDBTable().getSaskiaDB().getDBTable("RembrandtedDocTable")
-        for (int i=ndocs; i > 0; i -= rembrandted_doc_pool_size) {
+		  RembrandtedDocTable rembrandtedDocTable = db.getDBTable("RembrandtedDocTable")
+        for (int i=docs; i > 0; i -= rembrandted_doc_pool_size) {
              
             int limit = (i > rembrandted_doc_pool_size ? rembrandted_doc_pool_size : i)
-            log.debug "Initial batch size: $ndocs Remaining: $i Next pool size: $limit"
+            log.debug "Initial batch size: $docs Remaining: $i Next pool size: $limit"
             
             // NOT THREAD-SAFE!
             Map docs 
@@ -176,6 +176,7 @@ class GenerateTimeSignatures {
 		gts.setSync(sync)
 		log.info "Sync: sync "
 		
+      gts.prepare()
       gts.generate()
       log.info "Done. Generated ${gts.status.generated} geosignatures, skipped ${gts.status.skipped} geosignatures."
 

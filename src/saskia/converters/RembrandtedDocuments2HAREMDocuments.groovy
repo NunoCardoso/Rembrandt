@@ -33,7 +33,7 @@ class RembrandtedDocuments2HAREMDocuments {
 	File input, output
 	Configuration conf = Configuration.newInstance()
 	RembrandtReader reader
-	SecondHAREMDocumentWriter writer
+	SecondHAREMWriter writer
 	List raw_docs = []
 	List parsed_docs = []
 	def inputEncodingParam
@@ -45,7 +45,7 @@ class RembrandtedDocuments2HAREMDocuments {
 		this.input=input
 		this.output=output
 		reader = new RembrandtReader(new RembrandtStyleTag("pt"))
-		writer = new SecondHAREMDocumentWriter(new SecondHAREMStyleTag("pt"))
+		writer = new SecondHAREMWriter(new SecondHAREMStyleTag("pt"))
 	}
 	
 	void readInput() {

@@ -39,6 +39,7 @@ class GenerateGeoSignatures  {
     Collection collection
     int docs 
 	 Map status 
+	 SaskiaDB db
 
     GeoSignatureFactory gsf
     Configuration conf = Configuration.newInstance()
@@ -47,21 +48,22 @@ class GenerateGeoSignatures  {
 
     public GenerateGeoSignatures() {
         status = [generated:0, skipped:0, failed:0]
-        gsf = new GeoSignatureFactory() 
- 
-    }
+     }
 
-	 public setTag() {
-		 tag = collection.getDBTable().getSaskiaDB().getDBTable("TagTable")
+	 public prepare() {
+		 db = collection.getDBTable().getSaskiaDB()
+		 tag = db.getDBTable("TagTable")
 			.getFromVersion(GeoSignatureFactory.geoSignatureVersionLabel)
         
         if (!tag) {
-            tag = Tag.createNew(collection.getDBTable(),
+            tag = Tag.createNew(db.getDBTable("TagTable"),
 				[tag_version:GeoSignatureFactory.geoSignatureVersionLabel, 
 				tag_comment:null])
 				
             tag.tag_id = tag.addThisToDB()
         }  
+
+        gsf = new GeoSignatureFactory(db.getDBTable("GeoscopeTable")) 
 	 }
 	
     public Map generate() {
@@ -69,8 +71,7 @@ class GenerateGeoSignatures  {
       	def stats = new DocStats(docs)
         stats.begin()
      
-		  RembrandtedDocTable rembrandtedDocTable = collection
-			.getDBTable().getSaskiaDB().getDBTable("RembrandtedDocTable")
+		  RembrandtedDocTable rembrandtedDocTable = db.getDBTable("RembrandtedDocTable")
    
         for (int i=docs; i > 0; i -= rembrandted_doc_pool_size) {
              
@@ -101,8 +102,8 @@ class GenerateGeoSignatures  {
                 HashMap status_
                 
                 try {
-                    DocGeoSignatureTable dgs = DocGeoSignatureTable.createNew(
-							db.getDBTable("DocGeoSignatureTableTable"), 
+                    DocGeoSignature dgs = DocGeoSignature.createNew(
+							db.getDBTable("DocGeoSignatureTable"), 
 							[dgs_document:doc_id,
                     	 dgs_signature:gsf.generate(doc_id, stuff),
                     	 dgs_tag:tag
@@ -164,7 +165,6 @@ class GenerateGeoSignatures  {
 			.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
 			
 		ggs.setCollection(collection)
-		ggs.setTag()
 		log.info "Collection: $collection "
 		
 		// --docs		
@@ -178,7 +178,8 @@ class GenerateGeoSignatures  {
 			.validate(cmd.getOptionValue("sync"), DEFAULT_SYNC)
 		ggs.setSync(sync)
 		log.info "Sync: sync "
-		
+
+		ggs.prepare()
       ggs.generate()
       log.info "Done. Generated ${ggs.status.generated} geosignatures, skipped ${ggs.status.skipped} geosignatures."
 

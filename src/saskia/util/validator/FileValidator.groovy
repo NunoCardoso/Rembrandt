@@ -18,7 +18,7 @@
 
 package saskia.util.validator
 
-class FileValidator {
+class FileValidator extends Validator {
 	
 		/**
 	 * Validade a filename to a file

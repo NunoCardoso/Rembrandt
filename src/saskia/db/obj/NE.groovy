@@ -48,11 +48,11 @@ class NE extends DBObject implements JSONable {
 
 	static NE createNew(DBTable dbtable, row) {
 		NE n = new NE(dbtable)
-		n.ne_id = row['ne_id']
+		if (row['ne_id']) n.ne_id = row['ne_id']
 		if (row['ne_name']) 
 			n.ne_name = (row['ne_name'] instanceof NEName ? row['ne_name'] : 
 				dbtable.getSaskiaDB().getDBTable("NENameTable").getFromID(row['ne_name']) )
-		n.ne_lang = row['ne_lang']
+		if (row['ne_lang']) n.ne_lang = row['ne_lang']
 		if (row['ne_category']) 
 			n.ne_category = (row['ne_category'] instanceof NECategory ? row['ne_category'] : 
 				dbtable.getSaskiaDB().getDBTable("NECategoryTable").getFromID(row['ne_category']) )

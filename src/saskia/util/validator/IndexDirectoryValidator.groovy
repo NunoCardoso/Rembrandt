@@ -17,10 +17,11 @@
  */
 
 package saskia.util.validator
+import saskia.db.obj.*
 
 import saskia.bin.Configuration 
 
-class IndexDirectoryValidator {
+class IndexDirectoryValidator extends Validator {
 	
 	static String fileseparator = System.getProperty("file.separator")
 	static String dbLabel = "db"

@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 package rembrandt.test.rules
 
 import rembrandt.obj.Document
@@ -33,66 +33,70 @@ import rembrandt.io.RembrandtStyleTag
  */
 public class TimeGroundingENTest extends GroovyTestCase {
 
-     static Logger log = Logger.getLogger("RembrandtTest")
-    Configuration conf 
-    RembrandtCoreENOnlyTIME core
-     List<Document> source_docs
-    List<Document> solution_docs
-     String lang = "en"
-    
-    UnformattedReader reader
-    RembrandtWriter writer
-     
-     public TimeGroundingENTest() {
-        
-        conf = Configuration.newInstance()
-        conf.set("global.lang","en")
-        core = new RembrandtCoreENOnlyTIME(conf)
-        
-        String sourcefile = conf.get("rembrandt.home.dir",".")+"/resources/test/TimeGroundingEN_sample.txt"     
-        String targetfile = conf.get("rembrandt.home.dir",".")+"/resources/test/TimeGroundingEN_sample_output.txt"     
-                    
-	reader = new UnformattedReader(new RembrandtStyleTag(lang))
-        writer = new RembrandtWriter(new RembrandtStyleTag(lang)) // caso queria debug
-        	 
-	File f = new File(sourcefile)
- 	InputStreamReader is = new InputStreamReader(new FileInputStream(f))
-	reader.processInputStream(is)
-	source_docs = reader.docs
-    
-	reader.docs = []
-	File f2 = new File(targetfile)
-        is = new InputStreamReader(new FileInputStream(f2))   
-        reader.processInputStream(is)
-        solution_docs = reader.docs
-     }
-     
-     void testCompareDocs() {
-           
-        int fail = 0        
-        log.info "Got ${source_docs.size()} source docs and ${solution_docs.size()} solution docs."
-        
-        source_docs?.eachWithIndex{source_doc, doc_index -> 
-            log.info "Doing source doc#${doc_index} $source_doc..."
-            Document solution_doc = solution_docs[doc_index]
-            
-            List<TimeGrounding> tgs = []
-            // don't care how it was tokenized... go to the source text. 
-            solution_doc.body.split(/\n+/).each{tgs <<
-                TimeGrounding.parseString(it.trim())}
-        
-            log.info "REMBRANDTing source doc $source_doc..." 
-            core.releaseRembrandtOnDocument(source_doc)
+	static Logger log = Logger.getLogger("RembrandtTest")
+	static String fileseparator = System.getProperty("file.separator")
+	Configuration conf
+	RembrandtCoreENOnlyTIME core
+	List<Document> source_docs
+	List<Document> solution_docs
+	String lang = "en"
 
-        //println writer.printDocumentBodyContent(doc)
-            println "Got ${source_doc.bodyNEs.size()} NEs in doc, got ${tgs.size()} grounded times to compare."           
-            source_doc.bodyNEs.eachWithIndex {ne, i ->           
-            	if (!(ne.tg.equals(tgs[i]))) {
-            	    log.error "Doc. ${source_doc}: TimeGrounding of NE ${ne.printTerms()} is ${ne.tg}, should be ${tgs[i]}. "//Ne is ${ne.tg.dump()}, should be ${tgs[i].dump()}"// ne history: ${ne.printHistory()}"
-            	    fail++    
-            	}             
-            }
-        }
-	assert fail == 0
-     }
- }
+	UnformattedReader reader
+	RembrandtWriter writer
+
+	public TimeGroundingENTest() {
+
+		conf = Configuration.newInstance()
+		conf.set("global.lang","en")
+		core = new RembrandtCoreENOnlyTIME(conf)
+
+		String sourcefile = conf.get("rembrandt.home.dir",".")+ fileseparator + "resources" +
+				fileseparator + "test" + fileseparator + "rules" + fileseparator + "TimeGroundingEN_sample.txt"
+		String targetfile = conf.get("rembrandt.home.dir",".")+ fileseparator + "resources" +
+				fileseparator + "test" + fileseparator + "rules" + fileseparator + "TimeGroundingEN_sample_output.txt"
+
+		reader = new UnformattedReader(new RembrandtStyleTag(lang))
+		writer = new RembrandtWriter(new RembrandtStyleTag(lang)) // caso queria debug
+
+		File f = new File(sourcefile)
+		InputStreamReader is = new InputStreamReader(new FileInputStream(f))
+		reader.processInputStream(is)
+		source_docs = reader.docs
+
+		reader.docs = []
+		File f2 = new File(targetfile)
+		is = new InputStreamReader(new FileInputStream(f2))
+		reader.processInputStream(is)
+		solution_docs = reader.docs
+	}
+
+	void testCompareDocs() {
+
+		int fail = 0
+		log.info "Got ${source_docs.size()} source docs and ${solution_docs.size()} solution docs."
+
+		source_docs?.eachWithIndex{source_doc, doc_index ->
+			log.info "Doing source doc#${doc_index} $source_doc..."
+			Document solution_doc = solution_docs[doc_index]
+
+			List<TimeGrounding> tgs = []
+			// don't care how it was tokenized... go to the source text.
+			solution_doc.body.split(/\n+/).each{
+				tgs <<
+						TimeGrounding.parseString(it.trim())}
+
+			log.info "REMBRANDTing source doc $source_doc..."
+			core.releaseRembrandtOnDocument(source_doc)
+
+			//println writer.printDocumentBodyContent(doc)
+			println "Got ${source_doc.bodyNEs.size()} NEs in doc, got ${tgs.size()} grounded times to compare."
+			source_doc.bodyNEs.eachWithIndex {ne, i ->
+				if (!(ne.tg.equals(tgs[i]))) {
+					log.error "Doc. ${source_doc}: TimeGrounding of NE ${ne.printTerms()} is ${ne.tg}, should be ${tgs[i]}. "//Ne is ${ne.tg.dump()}, should be ${tgs[i].dump()}"// ne history: ${ne.printHistory()}"
+					fail++
+				}
+			}
+		}
+		assert fail == 0
+	}
+}

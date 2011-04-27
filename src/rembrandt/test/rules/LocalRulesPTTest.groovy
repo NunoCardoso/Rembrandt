@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 package rembrandt.test.rules
 
 import rembrandt.bin.RembrandtCorePTforHAREM
@@ -34,17 +34,17 @@ import org.apache.log4j.Logger
  * Tester for LocalRulesPT
  */
 public class LocalRulesPTTest extends RulesTest {
-    
-    static String path = Configuration.newInstance().get("rembrandt.home.dir",".")
-    
-    public LocalRulesPTTest() {	  
-        super("pt","harem", path+"/resources/test/ExternalEvidencePT_Local.txt",
-        path+"/resources/test/ExternalEvidencePT_Local_output.txt"
-        
-        )	
-    }
-    
-    void testCompareDocs() {
-        super.testCompareDocs()
-    }	
+
+	static String path = Configuration.newInstance().get("rembrandt.home.dir",".")
+
+	public LocalRulesPTTest() {
+		super("pt","harem",
+		"ExternalEvidencePT_Local.txt",
+		"ExternalEvidencePT_Local_output.txt"
+		)
+	}
+
+	void testCompareDocs() {
+		super.testCompareDocs()
+	}
 }

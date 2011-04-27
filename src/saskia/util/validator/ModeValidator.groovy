@@ -18,7 +18,7 @@
 
 package saskia.util.validator
 
-class ModeValidator {
+class ModeValidator extends Validator {
 		
 	/**
 	 * Validate the mode

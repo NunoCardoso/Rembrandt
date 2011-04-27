@@ -18,7 +18,7 @@
 
 package saskia.util.validator
 
-class DirectoryValidator {
+class DirectoryValidator extends Validator {
 	
 	public File validate(String given_directory, 
 		String DEFAULT_DIRECTORY, boolean mandatory = true) {

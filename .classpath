@@ -41,5 +41,7 @@
 	<classpathentry kind="lib" path="lib/xstream-1.3.1.jar"/>
 	<classpathentry kind="lib" path="/Users/ncardoso/Programs/jar/jsoup-1.4.1.jar"/>
 	<classpathentry kind="lib" path="/Users/ncardoso/Programs/jar/snowball.jar"/>
+	<classpathentry kind="lib" path="/Users/ncardoso/Programs/mylyn-wikitext-standalone-3.5.0.I20110104-0100/org.eclipse.mylyn.wikitext.core_1.4.0.I20110104-0100-e3x.jar"/>
+	<classpathentry kind="lib" path="/Users/ncardoso/Programs/mylyn-wikitext-standalone-3.5.0.I20110104-0100/org.eclipse.mylyn.wikitext.mediawiki.core_1.4.0.I20110104-0100-e3x.jar"/>
 	<classpathentry kind="output" path="bin-groovy"/>
 </classpath>

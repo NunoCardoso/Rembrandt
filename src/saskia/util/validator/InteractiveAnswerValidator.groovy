@@ -18,7 +18,7 @@
 
 package saskia.util.validator
 
-class InteractiveAnwserValidator {
+class InteractiveAnswerValidator extends Validator {
 	
 		public String validate(String given_answer, String default_given_answer = null,
 			boolean mandatory = false) {

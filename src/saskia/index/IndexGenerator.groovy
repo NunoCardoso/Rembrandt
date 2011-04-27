@@ -17,12 +17,15 @@
  */
 package saskia.index
 
+import org.apache.log4j.Logger
+
 /**
  * @author Nuno Cardoso
  * 
  */
 abstract class IndexGenerator {
 
+	static Logger log = Logger.getLogger("IndexGeneration")
 	HashMap status
 	
 	public IndexGenerator() {

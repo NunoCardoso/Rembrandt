@@ -50,7 +50,7 @@ class NECategoryTable extends DBTable {
 		createCache()
 		if (!all_category_id.containsKey(local_lang[lang])) {
 			// there's noting in DB, let's create it.
-			NECategory nec = new NECategory(this, [nec_category:local_lang[lang]])
+			NECategory nec = NECategory.createNew(this, [nec_category:local_lang[lang]])
 			nec.nec_id = nec.addThisToDB()
 			updateCacheElement(nec)
 		}

@@ -1,0 +1,11 @@
+<HTML LANG="pt">
+<HEAD>
+<!-- DOC ID="null" LANG="pt" -->
+<TITLE>
+<DIV ID="0" CLASS="NE PESSOA INDIVIDUAL" WK="http://pt.wikipedia.org/wiki/Rembrandt" DB="http://dbpedia.org/resource/Rembrandt">Rembrandt</DIV>
+</TITLE>
+</HEAD>
+<BODY>
+O <B> <DIV ID="0" CLASS="NE PESSOA INDIVIDUAL" WK="http://pt.wikipedia.org/wiki/Rembrandt" DB="http://dbpedia.org/resource/Rembrandt">Rembrandt</DIV> </B> é <DIV ID="1" CLASS="NE NUMERO TEXTUAL">um</DIV> pintor holandês.<P> Nasceu a <DIV ID="2" CLASS="NE TEMPO TEMPO_CALEND DATA">15 de Julho de 1606</DIV> em <DIV ID="3" CLASS="NE LOCAL HUMANO" WK="http://pt.wikipedia.org/wiki/Leida" DB="http://dbpedia.org/resource/Leiden">Leiden</DIV>, nos <DIV ID="4" CLASS="NE LOCAL HUMANO PAIS" WK="http://pt.wikipedia.org/wiki/Países_Baixos" DB="http://dbpedia.org/resource/Netherlands">Países Baixos</DIV>.Estudou na <DIV ID="6" CLASS="NE ORGANIZACAO INSTITUICAO" WK="http://pt.wikipedia.org/wiki/Universidade_de_Leiden" DB="http://dbpedia.org/resource/Leiden_University">Universidade de Leiden</DIV>. </P>
+</BODY>
+</HTML>

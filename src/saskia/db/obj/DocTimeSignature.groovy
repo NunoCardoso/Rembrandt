@@ -46,8 +46,8 @@ class DocTimeSignature extends DBObject {
 	
 	static createNew(DBTable dbtable, row) {
 		DocTimeSignature g = new DocTimeSignature(dbtable)
-		g.dts_id = row['dts_id']
-		g.dts_document = row['dts_document']
+		if (row['dts_id']) g.dts_id = row['dts_id']
+		if (row['dts_document']) g.dts_document = row['dts_document']
 		if (row['dts_signature']) g.dts_signature = row['dts_signature']
 		if (row['dts_tag']) 
 			g.dts_tag = (row['dts_tag'] instanceof Tag ? row['dts_tag'] :
@@ -55,10 +55,8 @@ class DocTimeSignature extends DBObject {
 		if (row['dts_date_created']) g.dts_date_created = (Date)row['dts_date_created']
 
 		//meta
-		try {g.dts_document_id = row['doc_id']}
-		catch(Exception e) {}
-		try {g.dts_document_original_id = row['doc_original_id']}
-		catch(Exception e) {}
+		if (row['doc_id']) g.dts_document_id = row['doc_id']
+		if (row['doc_original_id']) g.dts_document_original_id = row['doc_original_id']
 		return g
 	}
 

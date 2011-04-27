@@ -58,7 +58,7 @@ class GeoSignature {
 
 	String version
 	int totalcount
-	long doc_id
+	Long doc_id
 	String doc_original_id
 	String doc_lang
 	List places = []

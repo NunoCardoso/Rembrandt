@@ -60,7 +60,7 @@ class NEType extends DBObject implements JSONable {
 		// returns an auto_increment value
 		if (res) {
 			net_id = (long)res[0][0]
-			getDBTable().updateCacheElement(net_id, net_type)
+			getDBTable().updateCacheElement(this)
 			log.info "Inserted new NEType in DB: ${this}"
 		}
 		return net_id

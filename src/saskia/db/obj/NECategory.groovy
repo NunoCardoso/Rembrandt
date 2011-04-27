@@ -61,7 +61,7 @@ class NECategory extends DBObject implements JSONable {
 	   // returns an auto_increment value
 	   if (res) {
 		   nec_id = (long)res[0][0]
-		   getDBTable().updateCacheElement(nec_id, nec_category)
+		   getDBTable().updateCacheElement(this)
 		   log.info "Inserted new NECategory in DB: ${this}"
 	   }
 	   return nec_id

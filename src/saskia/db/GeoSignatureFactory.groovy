@@ -18,9 +18,9 @@
 package saskia.db
 
 import saskia.bin.Configuration
-import saskia.db.obj.Entity
-import saskia.db.table.GeoscopeTable
-import saskia.db.obj.Geoscope
+import saskia.db.obj.*
+import saskia.db.table.*
+import saskia.db.database.*
 import saskia.dbpedia.DBpediaOntology
 import org.apache.log4j.Logger
 import rembrandt.util.XMLUtil
@@ -61,9 +61,11 @@ class GeoSignatureFactory {
         new LinkedHashMap(conf.getInt("saskia.geoscope.cache.number",1000), 0.75f, true) // true: access order.  
 	static DBpediaOntology dbpediaontology = DBpediaOntology.getInstance()
 	GeoscopeTable gt
+	EntityTable et
 	
     public GeoSignatureFactory(GeoscopeTable gt) {
 		this.gt = gt
+		this.et = gt.getSaskiaDB().getDBTable("EntityTable")
         println "Generating null geo"
         nullgeo = gt.getFromWOEID(0)
         println "Got $nullgeo"
@@ -88,7 +90,7 @@ class GeoSignatureFactory {
            // println "ne: $ne"
             /*********** STEP 1: Make sure all Geoscopes are grounded into Entities ********/
             
-            Entity e = new Entity(ent_id:ne.entity, ent_dbpedia_class:ne.dbpediaClass)
+            Entity e = Entity.createNew(et, [ent_id:ne.entity, ent_dbpedia_class:ne.dbpediaClass])
             Geoscope geo
             Map<Long,Geoscope> ancestors = [:]
             

@@ -49,7 +49,6 @@ import saskia.util.validator.*
 class GenerateGeoIndexForCollection extends IndexGenerator {
 
 	static Configuration conf = Configuration.newInstance()
-	static Logger log = Logger.getLogger("IndexGeneration")
 	static String geoIndexDirLabel = "geo-index"
 	static String collectionLabel = "col"
 	static String woeid_label = conf.get("saskia.index.woeid_label","woeid")
@@ -82,6 +81,9 @@ class GenerateGeoIndexForCollection extends IndexGenerator {
 	public index() {
 		DocGeoSignatureTable docGeoSignatureTable = collection
 			.getDBTable().getSaskiaDB().getDBTable("DocGeoSignatureTable") 
+		GeoscopeTable gt = collection
+			.getDBTable().getSaskiaDB().getDBTable("GeoscopeTable") 
+			
 		DocStats docstats = new DocStats()
 		docstats.begin()
 
@@ -112,10 +114,11 @@ class GenerateGeoIndexForCollection extends IndexGenerator {
 			}
 			docstats.beginBatchOfDocs(limit)
 
-			geos.each {geo ->
+			geos.each {g ->
 				// log.debug "I'm with geo $geo"
-				GeoSignature geosig = new GeoSignature(geo)
-
+				
+				GeoSignature geosig = new GeoSignature(gt, g)
+				
 				LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
 				ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), geosig.doc_original_id)
 				ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), geosig.doc_id.toString())

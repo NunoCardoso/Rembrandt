@@ -51,7 +51,6 @@ class GenerateTermIndexForCollection extends IndexGenerator {
 
 	static Configuration conf = Configuration.newInstance()
 
-	static Logger log = Logger.getLogger("IndexGeneration")
 	static String termWithoutStemIndexDir = "term-nostem-index"
 	static String termWithStemIndexDir = "term-stem-index"
 	int doc_pool_size=conf.getInt("saskia.index.term.doc_pool_size",1000)
@@ -116,6 +115,7 @@ class GenerateTermIndexForCollection extends IndexGenerator {
 		
 		RembrandtedDocTable rembrandtedDocTable = collection
 			.getDBTable().getSaskiaDB().getDBTable("RembrandtedDocTable") 
+
 		DocStats docstats = new DocStats()
 		docstats.begin()
 

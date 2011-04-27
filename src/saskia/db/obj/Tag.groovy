@@ -44,9 +44,9 @@ class Tag extends DBObject implements JSONable  {
 	
 	static Tag createNew(DBTable dbtable, row) {
 		Tag t = new Tag(dbtable)
-		t.tag_id = row['tag_id']
-		t.tag_version = row['tag_version']
-		t.tag_comment = row['tag_comment']
+		if (row['tag_id']) t.tag_id = row['tag_id']
+		if (row['tag_version']) t.tag_version = row['tag_version']
+		if (row['tag_comment']) t.tag_comment = row['tag_comment']
 		return t
 	}
 

@@ -20,7 +20,7 @@ package saskia.stats
 
 import java.text.SimpleDateFormat
 
-import rembrandt.io.HTMLDocumentWriter
+import rembrandt.io.HTMLWriter
 import rembrandt.io.HTMLStyleTag
 import rembrandt.io.RembrandtReader
 import rembrandt.io.RembrandtStyleTag
@@ -37,7 +37,7 @@ class RenderDocDetailsStats {
 	RembrandtDocStats docstats
 	NEPoolStats nestats
 	RembrandtReader reader
-	HTMLDocumentWriter writer
+	HTMLWriter writer
 	SimpleDateFormat dateFormat
 	I18n i18n
 
@@ -46,7 +46,7 @@ class RenderDocDetailsStats {
 		docstats = new RembrandtDocStats(collection, lang)
 		nestats = new NEPoolStats(collection, lang)
 		reader = new RembrandtReader(new RembrandtStyleTag(lang))
-		writer = new HTMLDocumentWriter(new HTMLStyleTag(lang))
+		writer = new HTMLWriter(new HTMLStyleTag(lang))
 		Document doc = reader.createDocument(rdoc.doc_content)
 
 		StringBuffer s = new StringBuffer()

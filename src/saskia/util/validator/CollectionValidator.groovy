@@ -21,7 +21,7 @@ package saskia.util.validator
 import saskia.db.obj.*
 import saskia.db.database.*
 
-class CollectionValidator {
+class CollectionValidator extends Validator {
 	
 		/**
 	 * Let's validate if a given collection name and/or id gets to a 

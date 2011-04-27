@@ -18,10 +18,10 @@
 
 package saskia.util.validator
 
-class EncodingValidator {
+class EncodingValidator extends Validator {
 	
 	public String validate(String given_encoding, 
-		 DEFAULT_ENCODING, boolean mandatory = true) {
+		 String DEFAULT_ENCODING, boolean mandatory = true) {
 
 		String encoding = null
 		if (!given_encoding) {

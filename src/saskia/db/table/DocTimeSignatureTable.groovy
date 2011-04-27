@@ -74,7 +74,7 @@ class DocTimeSignatureTable extends DBTable {
 		return  db.getDBTable("DocTimeSignatureTable").getFromID(id)
 	}
 
-	static List<DocTimeSignature> getBatchOfTimeSignatures(Collection collection, limit = 10,  offset = 0) {
+	public List<DocTimeSignature> getBatchOfTimeSignatures(Collection collection, limit = 10,  offset = 0) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10
 		if (!offset) offset = 0

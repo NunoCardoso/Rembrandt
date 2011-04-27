@@ -47,8 +47,8 @@ class DocGeoSignature extends DBObject { // implements JSONable {
 	
 	static createNew(DBTable dbtable, row) {
 		DocGeoSignature g = new DocGeoSignature(dbtable)
-		g.dgs_id = row['dgs_id']
-		g.dgs_document = row['dgs_document']
+		if (row['dgs_id']) g.dgs_id = row['dgs_id']
+		if (row['dgs_document']) g.dgs_document = row['dgs_document']
 		if (row['dgs_signature']) g.dgs_signature = row['dgs_signature']
 		if (row['dgs_tag']) 
 			g.dgs_tag = (row['dgs_tag'] instanceof Tag ? row['dgs_tag'] :
@@ -56,11 +56,8 @@ class DocGeoSignature extends DBObject { // implements JSONable {
 		if (row['dgs_date_created']) g.dgs_date_created = (Date)row['dgs_date_created']
 
 		// meta-info
-		try {g.dgs_document_original_id = row['doc_original_id']}
-		catch(Exception e) {}
-		try {g.dgs_document_id = row['doc_id']}
-
-		catch(Exception e) {}
+		if (row['doc_original_id']) g.dgs_document_original_id = row['doc_original_id']
+		if (row['doc_id']) g.dgs_document_id = row['doc_id']
 		return g
 	}
 

@@ -47,7 +47,6 @@ import saskia.util.validator.*
 class GenerateTimeIndexForCollection extends IndexGenerator {
 
 	static Configuration conf = Configuration.newInstance()
-	static Logger log = Logger.getLogger("IndexGeneration")
 	static String timeIndexDirLabel = "time-index"
 	static String collectionLabel = "col"
 	static String time_label = conf.get("saskia.index.time_label","tg")
@@ -120,14 +119,13 @@ class GenerateTimeIndexForCollection extends IndexGenerator {
 			docstats.beginBatchOfDocs(limit)
 
 			ts.each {t ->
-				//log.debug "I'm with geo $geo"
-				TimeSignature timesig = new TimeSignature(t)
 
+				TimeSignature timesig = new TimeSignature(t)
 				LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
 				ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), timesig.doc_original_id)
 				ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), timesig.doc_id.toString())
 
-				log.trace "ldoc with doc_original_id $timesig.doc_original_id"
+				log.trace "ldoc with doc_original_id ${timesig.doc_original_id}"
 
 				/*****  NEs in body ******/
 				timesig.timelist.each{time ->

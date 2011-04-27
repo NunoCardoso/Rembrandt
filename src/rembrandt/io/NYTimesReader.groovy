@@ -25,11 +25,11 @@ import java.util.regex.*
  * This is a reader for the NYT collection
  */
 class NYTimesReader extends Reader {
-	
+
 	public NYTimesReader(StyleTag style) {
 		super(style)
 	}
-	
+
 	/**
 	 * Process the HTML input stream
 	 */
@@ -38,7 +38,7 @@ class NYTimesReader extends Reader {
 		StringBuffer buffer = new StringBuffer()
 		String line
 		Matcher m
-		
+
 		while ((line = br.readLine()) != null) {
 			buffer.append(line+"\n")
 			if (line.matches(/<\/DOC>/)) {
@@ -51,9 +51,9 @@ class NYTimesReader extends Reader {
 			docs << createDocument(buffer.toString())
 		}
 	}
-	
+
 	public Document createDocument(String text) {
-		
+
 		Matcher m
 		boolean indoc = false
 		boolean intext = false
@@ -64,16 +64,17 @@ class NYTimesReader extends Reader {
 		StringBuffer title
 		StringBuffer body
 		String headline
-		
+		String lang = "en"
+
 		String docid = null
 		int total = 0
-		
-		while ((l = br.readLine()) != null) {
-			
-			m = line =~ /<DOC id="NYT_ENG_(\d{4})(\d{2})(\d{2})\.(\d+)" type=".*"\s?>/
+
+		text.split (/\n+/).each{l ->
+
+			m = l =~ /<DOC id="NYT_ENG_(\d{4})(\d{2})(\d{2})\.(\d+)" type=".*"\s?>/
 			if (m.matches()) {
 				if (indoc || intext || inheadline || indateline)
-				throw new IllegalStateException(" Reading line $l, but I'm still in doc!")
+					throw new IllegalStateException(" Reading line $l, but I'm still in doc!")
 				id = "NYT_ENG_"+m.group(1)+m.group(2)+m.group(3)+"."+m.group(4)
 				indoc = true
 				headline = null
@@ -86,86 +87,74 @@ class NYTimesReader extends Reader {
 				date_created.set(Calendar.SECOND, 0 )
 				title = new StringBuffer()
 				body = new StringBuffer()
-				return
 			}
 			m = l =~ /<\/DOC>/
 			if (m.matches()) {
 				if (!indoc || intext || inheadline || indateline)
-				throw new IllegalStateException(" Reading line $l, but I'm not in a doc!")
+					throw new IllegalStateException(" Reading line $l, but I'm not in a doc!")
 				indoc = false
-				return
 			}
 			m = l =~ /<HEADLINE>/
 			if (m.matches()) {
 				if (!indoc || intext || inheadline || indateline)
-				throw new IllegalStateException(" Reading line $l, but I'm still in headline!")
+					throw new IllegalStateException(" Reading line $l, but I'm still in headline!")
 				inheadline = true
-				return
 			}
 			m = l =~ /<\/HEADLINE>/
 			if (m.matches()) {
 				if (!indoc || intext || !inheadline || indateline)
-				throw new IllegalStateException(" Reading line $l, but I'm not in headline!")
+					throw new IllegalStateException(" Reading line $l, but I'm not in headline!")
 				inheadline = false
-				return
 			}
 			m = l =~ /<DATELINE>/
 			if (m.matches()) {
 				if (!indoc || intext || inheadline || indateline)
-				throw new IllegalStateException(" Reading line $l, but I'm still in dateline!")
+					throw new IllegalStateException(" Reading line $l, but I'm still in dateline!")
 				indateline = true
-				return
 			}
 			m = l =~ /<\/DATELINE>/
 			if (m.matches()) {
 				if (!indoc || intext || inheadline || !indateline)
-				throw new IllegalStateException(" Reading line $l, but I'm not in dateline!")
+					throw new IllegalStateException(" Reading line $l, but I'm not in dateline!")
 				indateline = false
-				return
 			}
 			m = l =~ /<TEXT>/
 			if (m.matches()) {
 				if (!indoc || intext || inheadline || indateline)
-				throw new IllegalStateException(" Reading line $l, but I'm still in text!")
+					throw new IllegalStateException(" Reading line $l, but I'm still in text!")
 				intext = true
-				return
 			}
 			m = l =~ /<\/TEXT>/
 			if (m.matches()) {
 				if (!indoc || !intext || inheadline || indateline)
-				throw new IllegalStateException(" Reading line $l, but I'm not in text!")
+					throw new IllegalStateException(" Reading line $l, but I'm not in text!")
 				intext = false
-				return
 			}
 			m = l =~ /<P>/
 			if (m.matches()) {
 				body.append "<P>\n"
-				return
 			}
 			m = l =~ /<\/P>/
 			if (m.matches()) {
 				body.append "\n</P>\n"
-				return
 			}
 			// catch all
-			
+
 			if (inheadline) {
 				title.append l+" "
-				return
 			}
 			if (indateline) {
-				return
 			}
 			if (intext) {
 				body.append l +" "
 			}
 		}// each line
-		
+
 		// create a document
-		Document doc = new Document(title:title, body:htmltext)
+		Document doc = new Document(title:title, body:body)
 		if (docid) doc.docid = docid
-		doc.lang = this.lang
-		
+		if (lang) doc.lang = lang
+
 		// tokenize it
 		doc.tokenizeTitle()
 		doc.tokenizeBody()
@@ -173,13 +162,13 @@ class NYTimesReader extends Reader {
 		// hacked NE list of the document
 
 		// note how s is just a value, it's passed to parseSentence as a value, but then it's
-		//  assigned to the collection item for the final modification.
+		// assigned to the collection item for the final modification.
 		// BUT the doc is passed as a reference, and I'm filling it with NEs -- I'm changing it!
 		// Note that the doc is not the one in the list iteration...
 
-		parseSentences(doc.title_sentences, doc)
-		parseSentences(doc.body_sentences, doc)
-		
+		//	parseSentences(doc.title_sentences, doc)
+		//	parseSentences(doc.body_sentences, doc)
+
 		// index it
 		doc.indexTitle()
 		doc.indexBody()

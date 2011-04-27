@@ -30,12 +30,12 @@ import saskia.bin.Configuration
  * @author Nuno Cardoso
  * Tester for WikipediaAPI.
  */
-class TestFilterTextFromHTMLDocument extends GroovyTestCase {
-	
-	 String text
-	
-    public TestFilterTextFromHTMLDocument() {    
-	   	text = """
+class FilterTextFromHTMLDocumentTest extends GroovyTestCase {
+
+	String text
+
+	public FilterTextFromHTMLDocumentTest() {
+		text = """
 <!DOCTYPE html> 
 <html> 
 <head> 
@@ -91,22 +91,22 @@ If that doesn't work, you can:
 <li>If you're on a slow connection, try <a href="?ui=html&zy=d">basic HTML view</a>.
 <li>For more troubleshooting tips, visit the <a href="http://mail.google.com/support/bin/answer.py?answer=8767&src=sl&hl=en">help center</a>.
 </body></html>	
-""" 
-    }
-  
-    void testParser() {
+"""
+	}
+
+	void testParser() {
 		String out =  FilterTextFromHTMLDocument.parse(text, "rembrandt")
 		/**
-		.JavaScript must be enabled in order for you to use Gmail in standard view. However, it seems JavaScript is either disabled or not supported by your browser. To use standard view, enable JavaScript by changing your browser options, then try again. 
-<p>To use Gmail basic HTML view, which does not require JavaScript, click here.</p>
-<p>If you want to view Gmail on a mobile phone or similar device click here.</p>     Loading nuno.cardoso@gmail.com…       Loading standard view | Load basic HTML (for slow connections)   
-<p> This is taking longer than usual. <b>Try reloading the page</b>. </p>  If that doesn't work, you can: 
-<ol> 
- <li>Disable Labs and try again. </li>
- <li>If you're on a slow connection, try basic HTML view. </li>
- <li>For more troubleshooting tips, visit the help center.  </li>
-</ol>
-*/
+		 .JavaScript must be enabled in order for you to use Gmail in standard view. However, it seems JavaScript is either disabled or not supported by your browser. To use standard view, enable JavaScript by changing your browser options, then try again. 
+		 <p>To use Gmail basic HTML view, which does not require JavaScript, click here.</p>
+		 <p>If you want to view Gmail on a mobile phone or similar device click here.</p>     Loading nuno.cardoso@gmail.com…       Loading standard view | Load basic HTML (for slow connections)   
+		 <p> This is taking longer than usual. <b>Try reloading the page</b>. </p>  If that doesn't work, you can: 
+		 <ol> 
+		 <li>Disable Labs and try again. </li>
+		 <li>If you're on a slow connection, try basic HTML view. </li>
+		 <li>For more troubleshooting tips, visit the help center.  </li>
+		 </ol>
+		 */
 	}
 }
 

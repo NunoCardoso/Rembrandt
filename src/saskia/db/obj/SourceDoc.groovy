@@ -62,17 +62,20 @@ public class SourceDoc extends DBObject implements JSONable {
 
 	static createNew(DBTable dbtable, row) {
 		SourceDoc sd = new SourceDoc(dbtable)
-		sd.sdoc_id = row['sdoc_id']
-		sd.sdoc_original_id = row['sdoc_original_id']
+		if (row['sdoc_id']) sd.sdoc_id = row['sdoc_id']
+		if (row['sdoc_original_id']) sd.sdoc_original_id = row['sdoc_original_id']
 		if (row['sdoc_collection']) 
 			sd.sdoc_collection = (row['sdoc_collection'] instanceof Collection ? 
 				row['sdoc_collection'] : dbtable.getSaskiaDB().getDBTable("CollectionTable").getFromID(row['sdoc_collection']) )
-		sd.sdoc_lang = row['sdoc_lang']
+		if (row['sdoc_lang']) sd.sdoc_lang = row['sdoc_lang']
 		sd.sdoc_date = (row['sdoc_date'] ?  (Date)row['sdoc_date']: new Date(0))
 		if (row['sdoc_doc']) sd.sdoc_doc = row['sdoc_doc']
-		sd.sdoc_comment = row['sdoc_comment']
+		if (row['sdoc_comment']) sd.sdoc_comment = row['sdoc_comment']
+		if (row['sdoc_proc']) 
+			sd.sdoc_proc = (row['sdoc_proc'] instanceof DocStatus ? 
+			row['sdoc_proc'] : DocStatus.getFromValue(row['sdoc_proc']))
 
-		sd.sdoc_webstore = row['sdoc_webstore']
+		if (row['sdoc_webstore']) sd.sdoc_webstore = row['sdoc_webstore']
 		
 		// A new SourceDoc coming from the DB...
 		if (row instanceof GroovyResultSet && row['sdoc_webstore']) {try {
@@ -81,16 +84,14 @@ public class SourceDoc extends DBObject implements JSONable {
 			}catch(Exception e) {log.warn e.getMessage()} 
 
 		// but it also may be a new SourceDoc to be added to the DB...
-		} else if (!row instanceof GroovyResultSet && 
-			!row['sdoc_webstore'] && row['sdoc_content']) {  try {
+		}
+		if (!row['sdoc_webstore'] && row.containsKey('sdoc_content')) {  
+			try {
 				sd.sdoc_content = row['sdoc_content']
 				sd.retrieved_sdoc_content = false
 			}catch(Exception e) { log.warn e.getMessage() }
 		} 		
-	
 
-		sd.sdoc_proc = (row['sdoc_proc'] instanceof DocStatus ? 
-			row['sdoc_proc'] : DocStatus.getFromValue(row['sdoc_proc']))
 		return sd
 	}
 

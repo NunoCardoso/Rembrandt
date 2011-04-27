@@ -37,14 +37,11 @@ class Type extends DBObject {// implements JSONable {
 		super(dbtable)
 	}
 	
-	public Type(DBTable dbtable, Long typ_id, String typ_name) {
-		super(dbtable)
-		this.typ_id = typ_id
-		this.typ_name = typ_name
-	}
-	
 	static Type createNew(DBTable dbtable, row) {
-		return new Type(dbtable, row['typ_id'], row['typ_name'] )
+		Type t = new Type(dbtable)
+		if (row['typ_id']) t.typ_id = row['typ_id']
+		if (row['typ_name']) t.typ_name = row['typ_name'] 
+		return t
 	}
 	
 	/** Add this NECategory o the database. Note that a null is a valid insertion...

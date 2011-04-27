@@ -86,16 +86,17 @@ abstract class Import {
 
 		SourceDoc s = SourceDoc.createNew(
 				db.getDBTable("SourceDocTable"),
-				[sdoc_original_cd:original_id, sdoc_collection:collection,
-				 sdoc_lang:lang, sdoc_content:content,
-				 sdoc_date:date, sdo_proc:DocStatus.READY,
+				[sdoc_original_id:original_id, 
+				 sdoc_collection:collection,
+				 sdoc_lang:lang, 
+				 sdoc_content:content,
+				 sdoc_date:date, 
+				 sdo_proc:DocStatus.READY,
 				 sdoc_comment:comment]
 				)
 
 		// why does it matter? So that SourceDoc s knows in which database it shall be stored.
 		// it's a big deal, so fail if there is no DB
-
-		s.setDBTable(db.getDBTable("SourceDocTable"))
 
 		// by adding to DB, it already checks for duplicates
 		try {

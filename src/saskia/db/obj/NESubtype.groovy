@@ -59,7 +59,7 @@ class NESubtype extends DBObject implements JSONable{
 		// returns an auto_increment value
 		if (res) {
 			nes_id = (long)res[0][0]
-			getDBTable().updateCacheElement(nes_id, nes_subtype)
+			getDBTable().updateCacheElement(this)
 			log.info "Inserted new NESubtype in DB: ${this}"
 		}
 		return nes_id

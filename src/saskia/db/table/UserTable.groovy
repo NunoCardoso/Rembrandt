@@ -119,11 +119,27 @@ class UserTable extends DBTable {
 		if (!cacheIDUser) refreshUserCache()
 		return cacheIDUser[id]
 	}
+	
+	public User getFromIDorLogin(String id_or_login) {
+		if (!id_or_login) return null
+		User user = getFromLogin(id_or_login)
+		if (!user) {
+			try {
+				user = getFromID(Long.parseLong(id_or_login))
+			} catch(Exception e) {}
+		}
+		return user
+	}
 
 	static User getFromID(SaskiaDB db, Long id) {
 		return  db.getDBTable("UserTable").getFromID(id)
 	}
 
+
+	static User getFromIDorLogin(SaskiaDB db, String id_or_login) {
+		return  db.getDBTable("UserTable").getFromIDorLogin(id_or_login)
+	}
+	
 	public User getFromEmail(String email) {
 		if (!email) return null
 		if (!cacheIDUser) refreshUserCache()

@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 package rembrandt.test.rules
 
 import saskia.bin.Configuration
@@ -25,17 +25,16 @@ import saskia.bin.Configuration
  * Tester for AbstractionRulesPT class 
  */
 public class AbstractionRulesPTTest extends RulesTest {
-     
-    static String path = Configuration.newInstance().get("rembrandt.home.dir",".")
-  
-    public AbstractionRulesPTTest() {	  
-	 super("pt","harem", path+"/resources/test/ExternalEvidencePT_Abstract.txt",
-		 path+"/resources/test/ExternalEvidencePT_Abstract_output.txt"
 
-	 )	
-     }
-     
-     void testCompareDocs() {
-	 super.testCompareDocs()
-     }	
- }
+
+	public AbstractionRulesPTTest() {
+		super("pt","harem",
+		"ExternalEvidencePT_Abstract.txt",
+		"ExternalEvidencePT_Abstract_output.txt"
+		)
+	}
+
+	void testCompareDocs() {
+		super.testCompareDocs()
+	}
+}

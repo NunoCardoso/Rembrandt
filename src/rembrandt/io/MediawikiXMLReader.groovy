@@ -26,7 +26,6 @@ import org.xml.sax.*
 import javax.xml.parsers.SAXParserFactory
 
 import rembrandt.obj.Document
-import saskia.converters.MediawikiDocument2RembrandtDocumentConverter
 
 
 /** 
@@ -63,10 +62,10 @@ import saskia.converters.MediawikiDocument2RembrandtDocumentConverter
  */
 
 class MediawikiXMLHandler extends DefaultHandler {
-	
+
 	MediawikiXMLReader _this_reader
-	MediawikiDocument2RembrandtDocumentConverter converter
-	
+	MediawikiSyntaxReader syntaxReader
+
 	def text
 	def content
 	Date date
@@ -74,84 +73,98 @@ class MediawikiXMLHandler extends DefaultHandler {
 	String id
 	String title
 	String doc_id
-	
+
+	Document doc
+
 	boolean inpage = false
 	boolean inrevision = false
 	boolean incontributor = false
-	
+
 	public MediawikiXMLHandler(MediawikiXMLReader this_) {
 		_this_reader = this_
 		// I will infer the doc language and set the
 		// converter language before using it.
-		converter = new MediawikiDocument2RembrandtDocumentConverter(null)
+		syntaxReader = new MediawikiSyntaxReader()
 	}
+
 	void startElement(String ns, String localName, String qName, Attributes atts) {
 		switch (qName) {
-			
+
 			case 'page':
+				doc = null;
 						text = ""; content = null; id = null;
 				inpage = true;
 				break
-			
+
 			case 'base':
 				lang=null;
 				break;
-			
+
 			case 'timestamp':
 				text = "";
 				date = null;
 				break
-			
+
 			case 'revision':
 				inrevision = true;
 				break;
-			
+
 			case 'title':
 				title = "";
 				break;
-			
+
 			case 'contributor':
 				incontributor=true;
 				break;
-			
+
 			// se for de ids que não interessam, não apagar
 			case 'id':
 				if (inpage && !inrevision & !incontributor) {
 					id="";
 				}
 				break;
-			
+
 			case 'text':
 				text = "";
 				content = null;
 				break
 		}
 	}
-	
+
 	void characters(char[] chars, int offset, int length) {
 		text += new String(chars, offset, length)
 	}
-	
+
 	void endElement(String ns, String localName, String qName) {
 		switch (qName) {
-			
+
 			case 'text':
+			// the Document returned by syntaxReader only has body sentences
+			// it misses the title and metadata info
+				doc = syntaxReader.createDocument(text)
+
 				if (title && id)  {
 					doc_id = id+"_"+title
 					int upperlimit = (doc_id.size() > 250 ? 250: doc_id.size())
 					doc_id = doc_id.substring(0, upperlimit);
+					doc.docid = doc_id
 				}
-				if (lang) converter.lang = lang
-				content = converter.parse(text.trim(), title, lang, doc_id)
+				if (lang) doc.lang = lang
+
+				if (title) {
+					doc.title = title
+					doc.tokenizeTitle()
+					doc.indexTitle()
+				}
 				inpage = false;
 				text = "";
 				break
-			
+
 			case 'base':
 				text.findAll(/http:\/\/(\w*).wikipedia.org\/.*/) {all, g1 -> lang = g1}
 				text = "";
 				break;
-			
+
 			case 'timestamp':
 				try {
 					date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
@@ -160,23 +173,23 @@ class MediawikiXMLHandler extends DefaultHandler {
 				}
 				text = "";
 				break
-			
+
 			case 'revision':
 				inrevision = false;
 				text = "";
 				break;
-			
+
 			case 'contributor':
 				incontributor=false;
 				text = "";
 				break;
-			
+
 			case 'title':
 			//				println "Got title: $text"
 				title = text.trim();
 				text = "";
 				break;
-			
+
 			case 'id':
 				if (inpage && !inrevision & !incontributor) {
 					//					println "Got id: $text"
@@ -184,16 +197,9 @@ class MediawikiXMLHandler extends DefaultHandler {
 				}
 				text = "";
 				break;
-			
+
 			case 'page':
-				Document doc = new Document()
-				doc.body = text
-				doc.docid = id
-				doc.lang = (lang ? lang : null)
-				doc.tokenize()	
 				_this_reader.docs << doc
-				
-				
 				text = "";
 				break
 		}
@@ -202,11 +208,11 @@ class MediawikiXMLHandler extends DefaultHandler {
 
 
 public class MediawikiXMLReader extends Reader {
-	
+
 	public MediawikiXMLReader(StyleTag style) {
 		super(style)
 	}
-	
+
 	/**
 	 * Process the HTML input stream
 	 */

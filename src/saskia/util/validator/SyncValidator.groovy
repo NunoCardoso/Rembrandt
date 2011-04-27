@@ -18,13 +18,13 @@
 
 package saskia.util.validator
 
-class SyncValidator {
+class SyncValidator extends Validator {
 		
 	/**
 	 * Validate the mode
 	 * 
 	 */
-	public String validate(given_sync, String DEFAULT_SYNC, boolean manadory) {
+	public String validate(String given_sync, String DEFAULT_SYNC, boolean manadory) {
 
 		String sync
 

@@ -45,15 +45,15 @@ class SubjectGround extends DBObject implements JSONable {
 
 	static SubjectGround createFromDB(DBTable dbtable, row) {
 		SubjectGround sg = new SubjectGround(dbtable)
-		sg.sgr_id = row['sgr_id']
+		if (row['sgr_id']) sg.sgr_id = row['sgr_id']
 		if (row['sgr_subject']) sg.sgr_subject = Subject.getFromID(row['sgr_subject'] )
 		if (row['sgr_geoscope']) 
 			sg.sgr_geoscope = (row['sgr_geoscope'] instanceof Geoscope ? 
 			row['sgr_geoscope'] : dbtable.getSaskiaDB().getDBTable("GeoscopeTable").getFromID(row['sgr_geoscope'] ) )
-		sg.sgr_dbpedia_resource = row['sgr_dbpedia_resource']
-		sg.sgr_dbpedia_class = row['sgr_dbpedia_class']
-		sg.sgr_wikipedia_category = row['sgr_wikipedia_category']
-		sg.sgr_comment = row['sgr_comment']
+		if (row['sgr_dbpedia_resource']) sg.sgr_dbpedia_resource = row['sgr_dbpedia_resource']
+		if (row['sgr_dbpedia_class']) sg.sgr_dbpedia_class = row['sgr_dbpedia_class']
+		if (row['sgr_wikipedia_category']) sg.sgr_wikipedia_category = row['sgr_wikipedia_category']
+		if (row['sgr_comment']) sg.sgr_comment = row['sgr_comment']
 		return sg
 	}
 

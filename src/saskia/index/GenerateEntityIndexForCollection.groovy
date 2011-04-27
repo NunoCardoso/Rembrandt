@@ -52,7 +52,6 @@ import saskia.util.validator.*
 class GenerateEntityIndexForCollection extends IndexGenerator {
 
 	static Configuration conf = Configuration.newInstance()
-	static Logger log = Logger.getLogger("IndexGeneration")
 	static String EntityIndexDirLabel = "entity-index"
 	static String collectionLabel = "col"
 	int doc_pool_size=conf.getInt("saskia.index.entity.doc_pool_size",1000)
@@ -119,94 +118,56 @@ class GenerateEntityIndexForCollection extends IndexGenerator {
 
 		/** ITERATOR **/
 		for (int i=stats['total']; i > 0; i -= doc_pool_size) {
+			Map rdocs = [:]
 
 			int limit = (i > doc_pool_size ? doc_pool_size : i)
 			log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
 
 			/** IF SYNC = RDOC **/
 			if (sync == "rdoc") {
-				List rdocs = rembrandtedDocTable.getBatchOfRembrandtedDocs(collection, limit, stats["processed"])
-				log.debug "Got ${rdocs?.size()} RembrandtedDoc(s)."
-
-				// if it's null, then there's no more docs to process. Leave the loop.
-				if (!rdocs) {
-					log.info "DB returned no more docs, I guess I'm done."
-					return
-				}
-				docstats.beginBatchOfDocs(limit)
-
-				rdocs.each {rdoc ->
-					//TODO
-					Document doc = reader.createDocument(rdoc.doc_content)
-					doc.tokenize()
-
-					LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
-					ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
-					ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id.toString())
-
-					/*****  NEs in body ******/
-
-					doc.titleNEs?.each{ne ->
-						ne.dbpediaPage?.values().toList().flatten()?.each{it ->
-							if (it != null) {
-								// indexString indexes but does not tokenize it
-								ldoc.indexString(entity_label, DBpediaResource.getShortName(it))
-
-								if (!stats.containsKey(entity_label)) stats[entity_label] = 0
-								stats[entity_label]++
-							}
-						}
-					}
-					doc.bodyNEs?.each{ne ->
-						ne.dbpediaPage?.values().toList().flatten()?.each{it ->
-							if (it != null) {
-								// indexString indexes but does not tokenize it
-								ldoc.indexString(entity_label, DBpediaResource.getShortName(it))
-
-								if (!stats.containsKey(entity_label)) stats[entity_label] = 0
-								stats[entity_label]++
-							}
-						}
-					}
-					if (doc.bodyNEs.size() == 0) {
-						log.warn "Doc ${rdoc.doc_original_id} has NO NEs on its body. Inserting an empty NE"
-					}
-					entwriter.addDocument(ldoc)
-				}
-
-				/** SYNC = POOL **/
-
+				rdocs = rembrandtedDocTable.getBatchDocsAndNEsFromRDOCToGenerateNEIndex(collection, limit, stats["processed"])
 			} else if (sync == "pool") {
-				Map rdocs = rembrandtedDocTable.getBatchDocsAndNEsToGenerateNEIndex(collection, limit, stats["processed"])
-				/*rdocs[doc_id] = ['lang':XXX, 'doc_original_id':XXX, nes:[]]
-				 docs[doc_id].nes << [section:XXX, sentence:XXX, term:XXX, name:XXXX, neid:XXX, 
-				 category:XXX, type:XXX, subtype:XXX, entity:XXXX] */
-				log.debug "Got ${rdocs?.size()} RembrandtedDoc(s)."
+				rdocs = rembrandtedDocTable.getBatchDocsAndNEsFromPoolToGenerateNEIndex(collection, limit, stats["processed"])
+			}
+			
+		// if it's null, then there's no more docs to process. Leave the loop.
+			if (!rdocs) {
+				log.info "DB returned no more docs, I guess I'm done."
+				return
+			}
+			docstats.beginBatchOfDocs(limit)
 
-				// if it's null, then there's no more docs to process. Leave the loop.
-				if (!rdocs) {
-					log.info "DB returned no more docs, I guess I'm done."
-					return
-				}
-				docstats.beginBatchOfDocs(limit)
+			log.debug "Got ${rdocs?.size()} RembrandtedDoc(s)."
 
-				rdocs.each {rdoc_id, rdoc ->
-					LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
-					ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
-					ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id)
-					log.trace "Wrote doc id ${rdoc.doc_original_id}."
+			// ADDING STUFF TO INDEX
+			rdocs.each {rdoc_id, rdoc ->
+				LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
+				ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
+				ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id.toString())
+				log.trace "Wrote doc id ${rdoc.doc_original_id}."
 
-					/*****  NEs in body ******/
-					rdoc.nes.each{ne ->
-						if (ne.entity && ne.entity.ent_dbpedia_resource) {
-							ldoc.indexString(entity_label,
-									ne.entity.ent_dbpedia_resource.replaceAll(/-/,"\\-")) // indexString indexes but does not tokenize it
+				/*****  NEs in body ******/
+				rdoc.nes.each{ne ->
+					/*ne.dbpediaPage?.values().toList().flatten()?.each{it ->
+						if (it != null) {
+							// indexString indexes but does not tokenize it
+							ldoc.indexString(entity_label, DBpediaResource.getShortName(it))
+
 							if (!stats.containsKey(entity_label)) stats[entity_label] = 0
 							stats[entity_label]++
 						}
+					}*/
+					if (ne.entity && ne.entity.ent_dbpedia_resource) {
+						ldoc.indexString(entity_label,
+							ne.entity.ent_dbpedia_resource.replaceAll(/-/,"\\-")) // indexString indexes but does not tokenize it
+						if (!stats.containsKey(entity_label)) stats[entity_label] = 0
+						stats[entity_label]++
 					}
-					entwriter.addDocument(ldoc)
 				}
+				if (rdoc.nes.size() == 0) {
+					log.warn "Doc ${rdoc.doc_original_id} has NO NEs on its body. Inserting an empty NE"
+				}
+				entwriter.addDocument(ldoc)
 			}
 
 			docstats.endBatchOfDocs(limit)

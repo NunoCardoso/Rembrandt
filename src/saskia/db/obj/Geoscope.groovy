@@ -51,8 +51,8 @@ class Geoscope extends DBObject implements JSONable {
 	
 	static Geoscope createNew(DBTable dbtable, row) {
 		Geoscope g = new Geoscope(dbtable)
-		g.geo_id = row['geo_id']
-		g.geo_name = row['geo_name']
+		if (row['geo_id']) g.geo_id = row['geo_id']
+		if (row['geo_name']) g.geo_name = row['geo_name']
 		if (row['geo_woeid']) g.geo_woeid = row['geo_woeid']
 		if (row['geo_woeid_type']) g.geo_woeid_type = row['geo_woeid_type']
 		if (row['geo_woeid_place']) g.geo_woeid_place = row['geo_woeid_place']

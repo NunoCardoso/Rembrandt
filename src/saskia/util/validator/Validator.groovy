@@ -20,7 +20,7 @@ package saskia.util.validator
 
 import org.apache.log4j.Logger
 
-abstract class Validador {
+abstract class Validator {
 
 	static Logger log = Logger.getLogger("Validator")
 	

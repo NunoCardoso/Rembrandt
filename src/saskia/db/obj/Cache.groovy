@@ -48,21 +48,22 @@ class Cache extends DBObject {
 	
 	static Cache createNew(DBTable dbtable, row) {
 		Cache cache = new Cache(dbtable)
-		cache.cac_id = row['cac_id']
-		cache.cac_collection = (row['cac_collection'] instanceof Collection ? 
+		if (row['cac_id']) cache.cac_id = row['cac_id']
+		if (row['cac_collection'])
+			cache.cac_collection = (row['cac_collection'] instanceof Collection ? 
 			row['cac_collection'] :
 			dbtable.getSaskiaDB().getDBTable("CollectionTable").getFromID(row['cac_collection']) )
-		cache.cac_lang = row['cac_lang']
-		cache.cac_date = (Date)row['cac_date']
-		cache.cac_expire = (Date)row['cac_expire']
+		if (row['cac_lang']) cache.cac_lang = row['cac_lang']
+		if (row['cac_date']) cache.cac_date = (Date)row['cac_date']
+		if (row['cac_expire']) cache.cac_expire = (Date)row['cac_expire']
 		
-		if (row instanceof GroovyResultSet) {
+		if (row instanceof GroovyResultSet && row['cac_obj']) {
 			java.sql.Blob blob = row.getBlob('cac_obj')
 			byte[] bdata = blob.getBytes(1, (int) blob.length())
 		// you have to say explicitly that mediawiki's mediumblob is in UTF-8
 			cache.cac_obj = new String(bdata, "UTF-8")
 		} else {
-			cache.cac_obj = row['cac_obj']
+			if (row['cac_obj']) cache.cac_obj = row['cac_obj']
 		}
 			
 		return cache

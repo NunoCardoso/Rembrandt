@@ -29,59 +29,68 @@ import saskia.bin.Configuration
  * This class is a writer for ACDC documents (see <a href="http://www.linguateca.pt/ACDC">Linguateca's ACDC page</a> for additional info.) 
  */
 class ACDCWriter extends Writer {
-    
-   String openSentenceSymbol = "<s>\n"
-   String closeSentenceSymbol = "</s>\n"
 
-    public ACDCWriter(StyleTag style) {
-	super(style)
-    }
-    
-    /**
-     * Print a document header, the &lt;DOC&gt; tag.
-     * @param Document The document
-     * @returns The header
-     */
-    public String printDocumentHeader(Document doc) {
-        return "<DOC docid=\"${doc.docid}\">\n<EM \"${doc.property['em']}\"\n"+
-        "<data ${doc.property['data']}>\n<CATEGORY ${doc.property['category']}>\n"
-    }
-        
-    /**
-     * Prints an empty string
-     */
-    public String printDocumentHeadHeader(Document doc) {return ""}
+	String openSentenceSymbol = "<s>\n"
+	String closeSentenceSymbol = "</s>\n"
 
-    /**
-     * Prints an empty string
-     */
-    public String printDocumentHeadFooter(Document doc) {return ""}
+	public ACDCWriter(StyleTag style) {
+		super(style)
+	}
 
-    /**
-     * Prints an empty string
-     */
-    public String printDocumentBodyHeader(Document doc) {return ""}
+	/**
+	 * Print a document header, the &lt;DOC&gt; tag.
+	 * @param Document The document
+	 * @returns The header
+	 */
+	public String printDocumentHeader(Document doc) {
+		return "<DOC docid=\"${doc.docid}\">\n<EM \"${doc.property['EM']}\"\n"+
+		"<data ${doc.property['data']}>\n<CATEGORY ${doc.property['CATEGORY']}>\n"
+	}
 
-    /**
-     * Prints an empty string
-     */
-    public String printDocumentBodyFooter(Document doc) {return ""} 
-    
-    /**
-     * it's always one tag or term per line
-     */
-    void printTerm(Term term, String tag, StringBuffer currentString) {	
-	
-      String lastChar = (currentString.size() > 0 ? 
-	     currentString.substring(currentString.size()-1, currentString.size()) : "")
+	/**
+	 * Prints an empty string
+	 */
+	public String printDocumentHeadHeader(Document doc) {
+		return ""
+	}
 
-	
-	// when closing sentences, it does not get a newline     
-	if (!lastChar || lastChar != "\n") currentString.append("\n")
-	     
-        if (tag) {currentString.append "$tag\n" }
-        if (term instanceof TermWithPoS) currentString.append term.text+"\t"+term.lemma+"\n"
-        else if (term instanceof Term) currentString.append term.text+"\n"
-    }
-   
+	/**
+	 * Prints an empty string
+	 */
+	public String printDocumentHeadFooter(Document doc) {
+		return ""
+	}
+
+	/**
+	 * Prints an empty string
+	 */
+	public String printDocumentBodyHeader(Document doc) {
+		return ""
+	}
+
+	/**
+	 * Prints an empty string
+	 */
+	public String printDocumentBodyFooter(Document doc) {
+		return ""
+	}
+
+	/**
+	 * it's always one tag or term per line
+	 */
+	void printTerm(Term term, String tag, StringBuffer currentString) {
+
+		String lastChar = (currentString.size() > 0 ?
+				currentString.substring(currentString.size()-1, currentString.size()) : "")
+
+
+		// when closing sentences, it does not get a newline
+		if (!lastChar || lastChar != "\n") currentString.append("\n")
+
+		if (tag) {currentString.append "$tag\n" }
+		// hided the stuff in term.lemma
+		if (term instanceof TermWithPoS) currentString.append term.text+"\t"+term.lemma+"\n"
+		else if (term instanceof Term) currentString.append term.text+"\n"
+	}
+
 }

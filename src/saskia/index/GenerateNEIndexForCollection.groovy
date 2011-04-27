@@ -48,10 +48,9 @@ import saskia.util.validator.*
  * This class generates NE index for a given collection. 
  *
  */
-class GenerateNEIndexForCollection {
+class GenerateNEIndexForCollection extends IndexGenerator {
 
 	static Configuration conf = Configuration.newInstance()
-	static Logger log = Logger.getLogger("IndexGeneration")
 	static String NEIndexDirLabel = "ne-index"
 	static String collectionLabel = "col"
 	static String luceneIndexFieldLabel = "ne"
@@ -201,9 +200,9 @@ class GenerateNEIndexForCollection {
 
 			/** IF SYNC = RDOC **/
 			if (sync == "rdoc") {
-				rdocs = rembrandtedDoc.getBatchDocsAndNEsFromRDOCToGenerateNEIndex(collection, limit, stats["processed"])
+				rdocs = rembrandtedDocTable.getBatchDocsAndNEsFromRDOCToGenerateNEIndex(collection, limit, stats["processed"])
 			} else if (sync == "pool") {
-				rdocs = rembrandtedDoc.getBatchDocsAndNEsFromPoolToGenerateNEIndex(collection, limit, stats["processed"])
+				rdocs = rembrandtedDocTable.getBatchDocsAndNEsFromPoolToGenerateNEIndex(collection, limit, stats["processed"])
 			}
 
 			// if it's null, then there's no more docs to process. Leave the loop.

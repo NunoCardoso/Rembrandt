@@ -20,7 +20,7 @@ package saskia.util.validator
 
 import saskia.db.database.*
 
-class DBValidator {
+class DBValidator extends Validator {
 	
 	/**
 	 * Let's validate if a given collection name and/or id gets to a

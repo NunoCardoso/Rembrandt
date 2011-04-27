@@ -142,7 +142,7 @@ class GeoscopeTable extends DBTable {
 		// if geoscope is a redirection, use it instead
 		if (geos) {
 			for (int i=0; i<geos.size(); i++) {
-				if (geos[i].geo_woeid_place.startsWith("301\t")) {
+				if (geos[i].geo_woeid_place?.startsWith("301\t")) {
 					String new_woeid_string = geos[i].geo_woeid_place.find(/301\t.*?\t(\d+)/) {all, g1 -> return g1}
 					geos[i] = Geoscope.getFromWOEID(Long.parseLong(new_woeid_string))
 				}
@@ -154,7 +154,7 @@ class GeoscopeTable extends DBTable {
 	}
 
 	public Geoscope getNewGeoscopeForPlacename(String placename) {
-		Geoscope geo = new Geoscope()
+		Geoscope geo = Geoscope.createNew(this, [])
 
 		// let's fetch it! Use terms from the named entity
 		log.info "New Geoscope, going to get GeoPlanet info for placename $placename"
@@ -187,7 +187,7 @@ class GeoscopeTable extends DBTable {
 		// there is no place in ancestor, let's fetch it
 		if (!geo) {
 			log.info "Ancestor has no Geoscope entry in DB, creating a new one"
-			geo = new Geoscope()
+			geo = Geoscope.createNew(this, [])
 
 			log.info "Fetching place info on Geoplanet"
 			geo.geo_woeid_place = geoplanet.getPlaceXMLByWOEID(woeid)
@@ -209,7 +209,7 @@ class GeoscopeTable extends DBTable {
 					if (!geo2) {
 						geo.geo_id = geo.addThisToDB()
 					}
-					Geoscope oldgeo = new Geoscope()
+					oldgeo = Geoscope.createNew(this, [])
 					oldgeo.geo_name = geo.geo_name
 					oldgeo.geo_woeid = woeid // HERE, I use the deprecated WOEID
 					oldgeo.geo_woeid_type = geo.geo_woeid_type

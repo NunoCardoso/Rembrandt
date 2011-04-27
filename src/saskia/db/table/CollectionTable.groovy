@@ -281,7 +281,7 @@ class CollectionTable extends DBTable {
 		if (!name) return null
 		if (!cacheIDCollection) refreshCache()
 		List collection_list = cacheIDCollection.values().toList().findAll{it.col_name==name}
-		log.info "Querying for collection name $name got Collection(s) $collection_list."
+//		log.info "Querying for collection name $name got Collection(s) $collection_list."
 		return collection_list
 	}
 
@@ -294,7 +294,7 @@ class CollectionTable extends DBTable {
 		if (!name) return null
 		if (!cacheIDCollection) refreshCache()
 		List collection_list = cacheIDCollection.values().toList().findAll{it.col_name==name && it.col_owner.equals(user)}
-		log.info "Querying for collection name $name and owner $user got Collection(s) $collection_list."
+//		log.info "Querying for collection name $name and owner $user got Collection(s) $collection_list."
 		return collection_list
 	}
 
@@ -343,7 +343,7 @@ class CollectionTable extends DBTable {
 		def res = getSaskiaDB().getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE col_id=?",[newvalue, col_id])
 		// if we have a User (object), add it to cache
 		cacheIDCollection[col_id][column] = (object ? object : newvalue)
-		log.info "Updating value $column to $value for collection ${this}"
+//		log.info "Updating value $column to $value for collection ${this}"
 		return res
 	}
 
@@ -351,5 +351,4 @@ class CollectionTable extends DBTable {
 		Map collections = listAccessibleCollectionsForUser(user)
 		return collections.findAll{it.value.ouc_own == true}.size()
 	}
-
 }

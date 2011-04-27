@@ -1,0 +1,239 @@
+<DOC>
+% NUMEROS
+%--------
+{[Eu][tenho][20,000][objectos][,][ou][20.0][itens][,][ou][9.800.000.000.000][milhões][deles][,][ou][3,245,300][deles][.]}
+</DOC>
+
+<DOC>
+% TEMPO
+%------
+{[Estamos][em][Jan.][de][2001][.]}
+{[Estamos][em][Fev.][de][2001][.]}
+{[Estamos][em][Feb.][of][2001][.]}
+{[Estamos][em][Mar.][de][2001][ou][em][mar.][de][2001][mas][a][ver][o][mar][.]}
+{[Estamos][em][Abr.][de][2001][.]}
+{[Estamos][em][Apr.][of][2001][.]}
+{[Estamos][em][Mai.][de][2001.][estamos][em][Jun.][de][2001][.]}
+{[Estamos][em][Jul.][de][2001][.]}
+{[Estamos][em][Ago.][de][2001][ou][em][ago.][de][2001][a][long][time][ago][.]}
+{[Estamos][em][Aug.][of][2001][Estamos][em][Set.][de][2001][ou][em][set.][de][2001][game][set][.]}
+{[Estamos][em][Sep.][of][2001][.]}
+{[Estamos][em][Out.][de][2001][out][em][out.][2001][and][going][out][.]}
+{[Estamos][em][Oct.][of][2001][.]}
+{[Estamos][em][Nov.][de][2001][.]}
+{[Estamos][em][Dez.][de][2001][ou][em][dez.][2001][e][conto][até][dez][.]}
+{[Estamos][em][Dec.][of][2001][ou][em][dec.][2001][e][leio][o][Dec.][16/45][.]}
+
+{[São][13:40][,][ou][13:40:00][mais][precisamente][.]}
+{[São][14][H.][e][15][min.][São][14][H.][Feito][há][3][hrs.][e][5][min.][atrás][.]}
+
+{[Hoje][é][Fev/2007][,][ou][20/02/2007][.]}
+{[Nasci][a][20-Fevereiro-1997][.]}
+{[Isso][foi][feito][ca.][1830][,][do][Séc.][3][bc][.][ou][séc.][3][a.c.][ou][III][d.c.]}
+{[Faço][na][seg.][feira][ou][qua.][feira][ou][qui.][feira][ou][sáb.][ou][no][dom.][vou][sair][.]}
+</DOC>
+
+<DOC>
+%VALOR PERCENTAGEM
+%-----------------
+{[São][cerca][de][3,9%][ou][3.4%][,][consoante][.]}
+</DOC>
+
+<DOC>
+%VALOR QUANTIDADE
+%-----------------
+{[Ando][a][130km/h][,][faço][140][m2/hora][e][viajo][15.000][km][/][ano][.]}
+{[Transferências][a][33][MB/s][.]}
+</DOC>
+
+<DOC>
+%VALOR CLASSIFICACAO
+%-----------------
+{[sou][o][1.º][aqui][,][o][2º][acolá][,][o][3º.][lá][,][o][4.o][ali][ou][o][5][.º][aqui][ou][o][6º][lá][ou][a][7a.][vez][.]}
+{[Fico][em][3º.][lugar][do][3º.][Encontro][.]}
+{[Nota][que][fiquei][em][3º.][E][isto][é][difícil][saber][que][é][outra][frase][.]}
+
+{[Quanto][a][números][,][o][n.º][1][ou][nº][2][ou][n.o][3][ou][no.][4][ou][nr.][5][ou][No.s][6][ou][n.][7][ou][num.][8][ou][No.][9][.]}
+</DOC>
+
+<DOC>
+% INTERNET
+%---------
+{[O][meu][mail][é][nuno_cardoso@gmail.com][.]}
+{[O][site][é][http://xldb.di.fc.ul.pt/Rembrandt/][.]}
+{[Procura][no][www.google.com][.]}
+{[A][página][é][a][http://xldb.di.fc.ul.pt/~ncardoso/index.php][,][e][o][cgi][é][http://xldb.di.fc.ul.pt/~ncardoso/cgi-bin?val=94][.]}
+{[Podes][descarregar][o][ficheiro.exe][.]}
+{[Ou][então][o][file.pdf][.]}
+</DOC>
+
+<DOC>
+% Frase simples.
+%---------------
+{[Esta][frase][tem][vírgula][,][tem][dois][pontos][:][ou][tem][ponto][e][vírgula][;][acaba][em][ponto][de][interrogação][?]}
+{[Sim][,][acaba][.]}
+{[Um][ponto][seguido][de][uma][vírgula][como][XPTO.][,][ou][ponto][seguido][de][um][ponto][como][ABCD.][.]}
+</DOC>
+
+<DOC>
+% Palavras com hífen.
+%-------------------
+{[Eu][esqueço-me][do][guarda-chuva][,][dá-lo-ei][quando][lembrarmo-nos][.]}
+{[O][jogo][Portugal][-][Hungria][foi][emotivo][.]}
+{[Não][tanto][como][o][F.][C.][Porto][-][S.][L.][Benfica][.]}
+</DOC>
+
+<DOC>
+% Aspas
+%------
+{[estas]["][aspas]["][ou][estas][«][aspas][»][ou][estas]['][plicas]['][ou][estas][`][aspas][`][ou][estas][''][aspas][''][ou][estas][``][aspas][''][ou][estas][``][aspas][´´][.]}
+{[Com][pontuação][à][frente][fica]["][aspas]["][,]["][aspas]["][:]["][aspas]["][?]}
+{[Nova][frase][.]}
+{[Como]["][fazer][aqui][.]["]}
+{["][Esta]["][é][a][frase][nova][.]}
+{[Vi][o]["][D.][João][VI][:][Um][Rei][Aclamado]["][e][era]["][um][bom][filme][.]["]}
+{[Mas][como]["][fazer][(][aqui][?][)]["][hã][?]}
+{[Esta][é]["][simples][.]["]}
+{[Nova][frase][.]}
+{[O][meu][gato][chama-se]["][Tareco]["][.]}
+{[O][meu][cão][chama-se]['][Bobi]['][.]}
+</DOC>
+
+<DOC>
+% Parêntesis
+%------------
+{[Parêntesis][(][curvos][)][ou][parênteses][\[][rectos][\]][ou][\{][chavetas][\}][.]}
+{[Parentesis][e][pontuações][(][curvas][)][,][\[][rectas][\]][:][\{][chavetas][\}][;][precisam][de][ser][separados][.]}
+{[Nota][que][(][into][.][)]}
+{[Nova][frase][.]}
+{[Ou][(][antiga][frase][!][)][que][não][muda][,][e][(][antiga][frase][!][)]}
+{[Nova][frase][.]}
+</DOC>
+
+<DOC>
+% Reticências
+%-----------------
+{[Quanto][às][reticências][...][na][frase][,][ou][reticências][...]}
+{[Noutra][frase][diferente][.]}
+{[Nota]["][as][reticências][...]["][.]}
+{[Ou][as]["][reticências][(...)]["][não][mudam][,][mas][as]["][reticências][(...)]["]}
+{[Mudam][na][nova][frase][.]}
+</DOC>
+
+<DOC>
+% Abreviaturas típicas no texto
+%------------------------------
+{{[Os][etc.][ou][etc.][,][na][mesma][frase][,][ou][etc][.]}
+{[Exemplos][como][Ex.][esta][ou][ex.][,][aquela][,][p.ex.][isto][ou][i.e.][,][aquilo][.]}
+{[Eu][sou][Ambicioso/a][e][um][cozinheira/o][etalvez][e/ou][um][desenhador/a][,][posso][ser][m/f][e][viver][no][r/c.][do][prédio][.]}
+{[P.S.][:][ver][como][o][P.S.][é][atomizado][.]}
+{[Obs.][:][Ver][como][a][Obs.][é][atomizada][.]}
+{[A][citação][ibid.][e][a][id.][também][ou][o][op.][cit.][separado][ou][op.cit.][conjunto][.]}
+</DOC>
+
+<DOC>
+% Apóstrofos em inglês
+%---------------------
+% TEM FALHAS em Jesus' 
+{[I]['ld][take][you][,][I]['d][take][you][,][I]['ll][take][you][,][I]['m][taking][you][,][I]['nt][going][,][don]['t][go][,][you]['re][leaving][,][we]['ve][met][.]}
+{[I][have][Nuno]['s][books][or][Jesus'][books][.]}
+{[I][have][O'Brien][book][or][O'Brien]['s][books][.]}
+{[It][is][Nuno]['s.][Or][it][is][O'Brien]['s][?]}
+{[Its][Jesus'][.]}
+{[Go][figure][.]}
+</DOC>
+
+<DOC>
+% Apóstrofos em português
+%---------------------
+{[a][fruta][dest'época][está][no][rio][d'][Ouro][ou][rio][D'][ouro][,][para][aqui][d'][el-rei][D.][Sebastião][.]}
+</DOC>
+
+<DOC>
+% Enumerações
+%------------
+{[nota][b][)][não][atomiza][ou][1][)][e][também][(][a][)][ou][(][1][)][não][atomiza][também][(...)][não][e][\[...\]][,][espero][.]}
+
+{[Com][a][seguinte][lista][:][1-][o][número][fica][colado][;][2-][Ele][permanece][.]}
+
+{[Números][no][início][da][frase][.]}
+{[1.][testar][.]}
+{[2.][evoluir][.]}
+
+{[Quando][a][frase][acaba][em][dois][pontos][:][não][é][esta][a][nova][frase][,][mas][com][maiúscula][:][Esta][é][a][nova][frase][.]}
+</DOC>
+
+<DOC>
+% Citações no texto / notas editoriais
+%-------------------
+{[Citações][como][Nuno][(][1][)][ou][Nuno][:1][)][seguem][,][ou][Nuno][et.][al.][e][não][deve][conflictuar][com][alameda][,][ou][Nuno][et.al.][também][.]}
+{[O][ed.][ou][eds.][do][livro][nas][págs.][34][ou][pg.][44][ou][pag.][37][ou][pp.][4][ou][p.][1][da][Ed.][América][.]}
+{[Nota][que][o][vol.][3][ou][o][v.][4][estão][assim][.]}
+</DOC>
+
+<DOC>
+% PESSOA
+%--------
+{[O][Dr.][Silva][ou][a][Dra.][Silva][ou][Drª][Silva][ou][as][Sras.][Silva][ou][a][Srta.][Silva][.]}
+{[A][Exa.][Silva][ou][o][Exmo.][Silva][ou][Exm.º][Silva][ou][o][Exmº][Silva][.]}
+{[O][Eng.o][Silva][ou][Eng.][Silva][ou][Eng.º][Silva][ou][Engº][Silva][.]}
+{[O][Arq.][Silva][ou][o][Prof.][Silva][ou][a][Profª][Silva][.]}
+{[O][Pe.][Silva][ou][Rev.][Silva][ou][o][Sen.][Silva][ou][o][d.][Silva][.]}
+{[Militares][:][o][Col.][Silva][ou][o][Gen.][Silva][ou][o][Maj.][Silva][.]}
+{[Mr.][Smith][ou][Mrs.][Smith][.]}
+{[O][Óscar][Jr.][chegou][.]}
+{[A][P.J.Harvey][ou][P.J.][Harvey][é][cantora][.]}
+{[O][A.-F.][Antoine][também][.]}
+{[O][B.J.][Armstrong][.]}
+{[O][PR.][Cavaco][chegou][.]}
+</DOC>
+
+<DOC>
+% ACRÓNIMOS
+%----------
+{[siglas][como][Washington][D.C.][nos][E.U.A][ou][a][L.A.P.D.][protegem-se][.]}
+{[O][Ministério][da][Justiça][(][M.J.][)][ou][(][MJ][)][ficam][dentro][.]}
+</DOC>
+
+<DOC>
+% OBRA
+%------
+{[Li][no][art.][3/95][ou][nos][Arts.][4/94][.]}
+{[Também][há][o][Dec.][34/96][,][que][não][deve][ser][confundido][com][o][mês][.]}
+{[Ouvi][o][concerto][Op][.][64][,][ver][FSP940921-089][.]}
+</DOC>
+
+<DOC>
+% LOCAL
+%-----
+{[Moro][na][R.][da][Vilarinha][,][na][av.][Comercial][,][na][Pr.][Gomes][,][na][Al.][Santos][.]}
+{[Segue][pela][Est.][Nacional][,][vai][ao][Lg.][Camões][e][na][Trav.][dos][pombos][.]}
+{[Vês][logo][o][Pq.][Eduardo][VII][,][o][Jd.][da][Estrela][,][e][o][Ft.][São][Julião][.]}
+{[Vivo][na][Hab.][12][do][edifício][,][no][r/c][esqº.][O][meu][tel.][ou][tel][:][e][o][fax][:][pode][ir][para][a][cx.][seguinte][.]}
+{[A][Rep.][Popular][da][China][.]}
+{[A][Alemanha][Or.][e][a][Alemanha][Oc.][e][cuidado][com][d'][Or][.]}
+</DOC>
+
+<DOC>
+% ORGANIZACAO
+%------------
+{[O][Dept.][ou][o][depto.][decidiu][que][a][Adm.][da][Galp][,][lda.][e][a][Cia.][das][águas][vão][ser][uma][S.A.][de][capitais][.]}
+{[A][nova][Org.][Mundial][abriu][.]}
+{[O][Min.][da][Educação][e][o][Inst.][da][Droga][.]}
+{[A][Warner][Bros.][e][a][Siemens][Co.][e][a][Amazon][Com.][e][a][Northrop][Corp.][e][a][Google][Inc.][e][a][Yahoo!][Ltd.][juntaram-se][.]}
+{[A][Google][Lab.][investiga][.]}
+{[O][Sp.][de][Braga][é][um][clube][.]}
+{[Há][as][Un.][do][Minho][e][a][Univ.][do][Porto][.]}
+</DOC>
+
+<DOC>
+% Outros
+%-------
+{[mistura][sal][q.b.][e][está][pronto][.]}
+{[Outra][sigla][Cf.][que][não][sei][o][que][significa][.]}
+{[Ter][um][Ph.D.][é][bom][.]}
+{[O][nome][é][Cardoso][,][PhD][.]}
+{[Já][visitei][a][St.][Peter]['s][Chapel][.]}
+{[A][Mme.][Chirac][é][uma][senhora][.]}
+{[Tenho][habilit.][do][12º][ano][.]}
+</DOC>

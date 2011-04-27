@@ -70,22 +70,22 @@ class User extends DBObject implements JSONable {
 
 	static User createNew(DBTable dbtable, row) {
 		User u = new User(dbtable)
-		u.usr_id = row['usr_id']
-		u.usr_login = row['usr_login']
-		u.usr_enabled = row['usr_enabled']
-		u.usr_groups = row['usr_groups']
-		u.usr_superuser = row['usr_superuser']
-		u.usr_firstname = row['usr_firstname']
-		u.usr_lastname = row['usr_lastname']
-		u.usr_email = row['usr_email']
-		u.usr_password = row['usr_password']
-		u.usr_api_key = row['usr_api_key']
-		u.usr_tmp_password = row['usr_tmp_password']
-		u.usr_tmp_api_key = row['usr_tmp_api_key']
-		u.usr_pub_key = row['usr_pub_key']
-		u.usr_max_number_collections = row['usr_max_number_collections']
-		u.usr_max_number_tasks = row['usr_max_number_tasks']
-		u.usr_max_docs_per_collection = row['usr_max_docs_per_collection']
+		if (row['usr_id']) u.usr_id = row['usr_id']
+		if (row['usr_login']) u.usr_login = row['usr_login']
+		if (row['usr_enabled']) u.usr_enabled = row['usr_enabled']
+		if (row['usr_groups']) u.usr_groups = row['usr_groups']
+		if (row['usr_superuser']) u.usr_superuser = row['usr_superuser']
+		if (row['usr_firstname']) u.usr_firstname = row['usr_firstname']
+		if (row['usr_lastname']) u.usr_lastname = row['usr_lastname']
+		if (row['usr_email']) u.usr_email = row['usr_email']
+		if (row['usr_password']) u.usr_password = row['usr_password']
+		if (row['usr_api_key']) u.usr_api_key = row['usr_api_key']
+		if (row['usr_tmp_password']) u.usr_tmp_password = row['usr_tmp_password']
+		if (row['usr_tmp_api_key']) u.usr_tmp_api_key = row['usr_tmp_api_key']
+		if (row['usr_pub_key']) u.usr_pub_key = row['usr_pub_key']
+		if (row['usr_max_number_collections']) u.usr_max_number_collections = row['usr_max_number_collections']
+		if (row['usr_max_number_tasks']) u.usr_max_number_tasks = row['usr_max_number_tasks']
+		if (row['usr_max_docs_per_collection']) u.usr_max_docs_per_collection = row['usr_max_docs_per_collection']
 		if (row['usr_max_daily_api_calls'])
 			u.usr_max_daily_api_calls = row['usr_max_daily_api_calls']
 
@@ -224,7 +224,7 @@ class User extends DBObject implements JSONable {
 	}
 
 
-	static updateValue(long usr_id, String column, newvalue) {
+	public updateValue(String column, newvalue) {
 		User usr = new User()
 		def el = usr."$column"
 		def newval
@@ -233,7 +233,9 @@ class User extends DBObject implements JSONable {
 		else if (el instanceof Integer) newval = Integer.parseInt(newvalue)
 		else if (el instanceof Long) newval = Long.parseLong(newvalue)
 
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate("UPDATE ${getDBTable().tablename} SET ${column}=? WHERE usr_id=?",[newval, usr_id])
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
+			"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE usr_id=?",
+			[newval, usr_id])
 		getDBTable().cacheIDUser[usr_id][column] = newval
 		if (column == "usr_api_key") {
 			getDBTable().cacheAPIKeyUser.remove(usr.usr_api_key)
@@ -245,7 +247,7 @@ class User extends DBObject implements JSONable {
 
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert("INSERT INTO ${getDBTable().tablename} "+
-				"VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				"VALUES(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
 				[
 					usr_login,
 					usr_enabled,
@@ -260,6 +262,7 @@ class User extends DBObject implements JSONable {
 					usr_tmp_api_key,
 					usr_pub_key,
 					usr_max_number_collections,
+					usr_max_number_tasks,
 					usr_max_docs_per_collection,
 					usr_max_daily_api_calls,
 					usr_current_daily_api_calls,
@@ -273,7 +276,9 @@ class User extends DBObject implements JSONable {
 	}
 
 	public int removeThisFromDB() {
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate("DELETE FROM ${getDBTable().tablename} WHERE usr_id=?", [usr_id])
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
+			"DELETE FROM ${getDBTable().tablename} WHERE usr_id=?", 
+			[usr_id])
 		getDBTable().cacheIDUser.remove(usr_id)
 		getDBTable().getSaskiaDB().getInstance("CollectionTable").cacheIDuoc.remove(usr_id)
 		log.info "Removed User ${this} into DB, got res $res"

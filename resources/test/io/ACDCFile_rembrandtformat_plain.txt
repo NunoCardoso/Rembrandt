@@ -1,0 +1,13 @@
+<DOC DOCID="FSP940101-001">
+<META name="EM" content="Brasil,Cotidiano,César Maia,Jarbas Vasconcelos,Lúdice da Mata,PF,PMDB,PPR,PSDB,PT,Paubrasil,Paulo Maluf,Pesquisa Datafolha,Porto Alegre,Recife,Rio,Salvador,São Paulo,Tarso Genro">
+<META name="data" content="940101">
+<META name="CATEGORY" content="indef">
+<TITLE>
+</TITLE>
+<BODY>
+{[Pesquisa][Datafolha][feita][nas][dez][principais][capitais][do][país][,][após][um][ano][de][mandato][,][aponta][o]<mwe blabla>[prefeito][de][Recife]</mwe>[,][Jarbas][Vasconcelos][(][PMDB][)][,][como][o][mais][popular][(][(][63][%][de][ótimo][e][bom][)][,][seguido][de][Tarso][Genro][(][PT][)][,][de][Porto][Alegre][,][com][55][%][de][aprovação][.]}
+{[Os][prefeitos][César][Maia][(][PMDB][)][)][,][do][Rio][,][com][50][%][de][ruim][e][péssimo][;][Lúdice][da][Mata][(][PSDB][)][,][de][Salvador][,][com][48][%][,][e][Paulo][Maluf][(][PPR][)][,][de][São][Paulo][,][com][41][%][,][tiveram][a][pior][avaliação][.]}
+{[A][PF][vai][investigar][pagamentos][da][Prefeitura][de][São][Paulo][a][construtoras][citadas][no][caso][Paubrasil][.]}
+{[Brasil][e][Cotidiano]}
+</BODY>
+</DOC>

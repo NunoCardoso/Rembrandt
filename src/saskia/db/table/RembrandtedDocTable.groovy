@@ -246,8 +246,13 @@ class RembrandtedDocTable extends DBTable {
 	public Map getBatchDocsAndNEsFromPoolToGenerateGeoSignatures(Collection collection, int limit) {
 
 		Map docs = [:]
-		NEType.createCache()
-		NESubtype.createCache()
+		NECategoryTable neCategoryTable = getSaskiaDB().getDBTable("NECategoryTable")
+		NETypeTable neTypeTable = getSaskiaDB().getDBTable("NETypeTable")
+		NESubtypeTable neSubtypeTable = getSaskiaDB().getDBTable("NESubtypeTable")
+
+		neCategoryTable.createCache()
+		neTypeTable.createCache()
+		neSubtypeTable.createCache()
 
 		db.getDB().withTransaction{
 
@@ -264,9 +269,9 @@ class RembrandtedDocTable extends DBTable {
 
 						//def labels = Class.forName("rembrandt.gazetteers.${lang.toLowerCase()}.SecondHAREMClassificationLabels${lang.toUpperCase()}").newInstance()
 
-						int ne_category_local_pt = NECategory.getIDforLOCAL("pt")
-						int ne_category_local_en = NECategory.getIDforLOCAL("en")
-						int ne_category_local_rm = NECategory.getIDforLOCAL("rembrandt")//
+						int ne_category_local_pt = neCategoryTable.getIDforLOCAL("pt")
+						int ne_category_local_en = neCategoryTable.getIDforLOCAL("en")
+						int ne_category_local_rm = neCategoryTable.getIDforLOCAL("rembrandt")//
 						//conf.get("rembrandt.output.styletag.lang",conf.get("global.lang")))
 
 						// println "$ne_category_local_pt $ne_category_local_en $ne_category_local_rm"
@@ -281,7 +286,7 @@ class RembrandtedDocTable extends DBTable {
 						db.getDB().eachRow(query, [], {row2 ->
 							docs[doc_id].nes << [section:row2['dhn_section'], sentence:row2['dhn_sentence'],
 										term:row2['dhn_term'], name:row2['nen_name'], //neid:row2['ne_id'],
-										type:NEType.all_id_type[row2['ne_type']], subtype:NESubtype.all_id_subtype[row2['ne_subtype']],
+										type:neTypeTable.all_id_type[row2['ne_type']], subtype:neSubtypeTable.all_id_subtype[row2['ne_subtype']],
 										entity:row2['ent_id'], dbpediaClass:row2['ent_dbpedia_class'] ]
 						})
 					})
@@ -293,8 +298,16 @@ class RembrandtedDocTable extends DBTable {
 	public Map getBatchDocsAndNEsFromRDOCToGenerateGeoSignatures(Collection collection, int limit) {
 
 		Map docs = [:]
-		NEType.createCache()
-		NESubtype.createCache()
+		NECategoryTable neCategoryTable = getSaskiaDB().getDBTable("NECategoryTable")
+		NENameTable neNameTable = getSaskiaDB().getDBTable("NENameTable")
+		NETable neTable = getSaskiaDB().getDBTable("NETable")
+		NETypeTable neTypeTable = getSaskiaDB().getDBTable("NETypeTable")
+		NESubtypeTable neSubtypeTable = getSaskiaDB().getDBTable("NESubtypeTable")
+		EntityTable entityTable = getSaskiaDB().getDBTable("EntityTable")
+
+		neCategoryTable.createCache()
+		neTypeTable.createCache()
+		neSubtypeTable.createCache()
 
 		List docs_list =
 
@@ -323,23 +336,24 @@ class RembrandtedDocTable extends DBTable {
 
 						ne.classification?.each{cl ->
 
-							NECategory category = (cl.c? NECategory.getFromCategory(cl.c) : null)
-							NEType type = (cl.t? NEType.getFromType(cl.t) : null)
-							NESubtype subtype = (cl.s? NESubtype.getFromSubtype(cl.s) : null)
+							NECategory category = (cl.c? neCategoryTable.getFromCategory(cl.c) : null)
+							NEType type = (cl.t? neTypeTable.getFromType(cl.t) : null)
+							NESubtype subtype = (cl.s? neSubtypeTable.getFromSubtype(cl.s) : null)
 
 							// use only those who are LOCAL
 
 							if (cl.c == "@LOCAL") {
-								EntityTable e = (ne.dbpediaPage.containsKey(cl) ?
+								Entity e = (ne.dbpediaPage.containsKey(cl) ?
 										(ne.dbpediaPage[cl] instanceof List ?
-										(!ne.dbpediaPage[cl].isEmpty() ? EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
-										: EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
+										(!ne.dbpediaPage[cl].isEmpty() ? entityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
+										: entityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
 										) : null)
 
 								if (!e) {
 									// if it does not have an Entity, let's check if NE can help us
-									NEName ne_name = NEName.getFromName(ne.printTerms())
-									NE ne2 = NE.getFromNameAndLangAndClassificationAndNonNullEntity(ne_name, lang, category, type, subtype)
+									NEName ne_name = neNameTable.getFromName(ne.printTerms())
+									NE ne2 = neTable.getFromNameAndLangAndClassificationAndNonNullEntity(
+										ne_name, lang, category, type, subtype)
 									if (ne2 && ne2.ne_entity) e = ne2.ne_entity
 								}
 
@@ -358,23 +372,23 @@ class RembrandtedDocTable extends DBTable {
 
 						ne.classification?.each{cl ->
 
-							NECategory category = (cl.c? NECategory.getFromCategory(cl.c) : null)
-							NEType type = (cl.t? NEType.getFromType(cl.t) : null)
-							NESubtype subtype = (cl.s? NESubtype.getFromSubtype(cl.s) : null)
+							NECategory category = (cl.c? neCategoryTable.getFromCategory(cl.c) : null)
+							NEType type = (cl.t? neTypeTable.getFromType(cl.t) : null)
+							NESubtype subtype = (cl.s? neSubtypeTable.getFromSubtype(cl.s) : null)
 
 							// use only those who are LOCAL
 
 							if (cl.c == "@LOCAL") {
-								EntityTable e = (ne.dbpediaPage.containsKey(cl) ?
+								Entity e = (ne.dbpediaPage.containsKey(cl) ?
 										(ne.dbpediaPage[cl] instanceof List ?
-										(!ne.dbpediaPage[cl].isEmpty() ? EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
-										: EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
+										(!ne.dbpediaPage[cl].isEmpty() ? entityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
+										: entityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
 										) : null)
 
 								if (!e) {
 									// if it does not have an Entity, let's check if NE can help us
-									NEName ne_name = NEName.getFromName(ne.printTerms())
-									NE ne2 = NE.getFromNameAndLangAndClassificationAndNonNullEntity(ne_name, lang, category, type, subtype)
+									NEName ne_name = neNameTable.getFromName(ne.printTerms())
+									NE ne2 = neTable.getFromNameAndLangAndClassificationAndNonNullEntity(ne_name, lang, category, type, subtype)
 									if (ne2 && ne2.ne_entity) e = ne2.ne_entity
 								}
 
@@ -446,9 +460,14 @@ class RembrandtedDocTable extends DBTable {
 	public Map getBatchDocsAndNEsFromPoolToGenerateNEIndex(Collection collection, int limit = 10,  offset = 0) {
 
 		Map docs = [:]
-		NECategory.createCache()
-		NEType.createCache()
-		NESubtype.createCache()
+		NECategoryTable neCategoryTable = getSaskiaDB().getDBTable("NECategoryTable")
+		NETypeTable neTypeTable = getSaskiaDB().getDBTable("NETypeTable")
+		NESubtypeTable neSubtypeTable = getSaskiaDB().getDBTable("NESubtypeTable")
+		EntityTable entityTable = getSaskiaDB().getDBTable("EntityTable")
+
+		neCategoryTable.createCache()
+		neTypeTable.createCache()
+		neSubtypeTable.createCache()
 
 		db.getDB().withTransaction{
 
@@ -471,10 +490,10 @@ class RembrandtedDocTable extends DBTable {
 						db.getDB().eachRow(query, [], {row2 ->
 							docs[doc_id].nes << [section:row2['dhn_section'], sentence:row2['dhn_sentence'],
 										term:row2['dhn_term'], name:row2['nen_name'], //neid:row2['ne_id'],
-										category: (row2['ne_category'] == null ? null : NECategory.getFromID(row2['ne_category'])),
-										type: (row2['ne_type'] == null ? null : NEType.getFromID(row2['ne_type'])),
-										subtype: (row2['ne_subtype'] == null ? null : NESubtype.getFromID(row2['ne_subtype'])),
-										entity: (row2['ne_entity'] == null ? null : EntityTable.getFromID(row2['ne_entity']))]
+										category: (row2['ne_category'] == null ? null : neCategoryTable.getFromID(row2['ne_category'])),
+										type: (row2['ne_type'] == null ? null : neTypeTable.getFromID(row2['ne_type'])),
+										subtype: (row2['ne_subtype'] == null ? null : neSubtypeTable.getFromID(row2['ne_subtype'])),
+										entity: (row2['ne_entity'] == null ? null : entityTable.getFromID(row2['ne_entity']))]
 
 						})
 					})
@@ -487,11 +506,19 @@ class RembrandtedDocTable extends DBTable {
 	static Map getBatchDocsAndNEsFromRDOCToGenerateNEIndex(Collection collection, int limit= 10, offset = 0) {
 
 		Map rdocs = [:]
-		NECategory.createCache()
-		NEType.createCache()
-		NESubtype.createCache()
+		NECategoryTable neCategoryTable = getSaskiaDB().getDBTable("NECategoryTable")
+		NENameTable neNameTable = getSaskiaDB().getDBTable("NENameTable")
+		NETable neTable = getSaskiaDB().getDBTable("NETable")
+		NETypeTable neTypeTable = getSaskiaDB().getDBTable("NETypeTable")
+		NESubtypeTable neSubtypeTable = getSaskiaDB().getDBTable("NESubtypeTable")
+		EntityTable entityTable = getSaskiaDB().getDBTable("EntityTable")
 
-		List rdocs_list = RembrandtedDoc.getBatchOfRembrandtedDocs(collection, limit, offset)
+		neCategoryTable.createCache()
+		neTypeTable.createCache()
+		neSubtypeTable.createCache()
+
+
+		List rdocs_list = getBatchOfRembrandtedDocs(collection, limit, offset)
 		log.debug "Got ${rdocs?.size()} RembrandtedDoc(s)."
 		rdocs_list?.each {rdoc ->
 			Document doc = reader.createDocument(rdoc.doc_content)
@@ -505,21 +532,21 @@ class RembrandtedDocTable extends DBTable {
 
 				ne.classification?.each{cl ->
 
-					NECategory category = (cl.c? NECategory.getFromCategory(cl.c) : null)
-					NEType type = (cl.t? NEType.getFromType(cl.t) : null)
-					NESubtype subtype = (cl.s? NESubtype.getFromSubtype(cl.s) : null)
+					NECategory category = (cl.c? neCategoryTable.getFromCategory(cl.c) : null)
+					NEType type = (cl.t? neTypeTable.getFromType(cl.t) : null)
+					NESubtype subtype = (cl.s? neSubtypeTable.getFromSubtype(cl.s) : null)
 
-					EntityTable e = (ne.dbpediaPage.containsKey(cl) ?
+					Entity e = (ne.dbpediaPage.containsKey(cl) ?
 							(ne.dbpediaPage[cl] instanceof List ?
-							(!ne.dbpediaPage[cl].isEmpty() ? EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
-							: EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
+							(!ne.dbpediaPage[cl].isEmpty() ? entityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
+							: entityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
 							) : null)
 
 					if (!e) {
 						// if it does not have an Entity, let's check if NE can help us
 						if (!(cl.c == "@TEMPO" || cl.c == "@VALOR" || cl.c == "@NUMERO")) {
-							NEName ne_name = NEName.getFromName(ne.printTerms())
-							NE ne2 = NE.getFromNameAndLangAndClassificationAndNonNullEntity(ne_name, rdoc.lang, category, type, subtype)
+							NEName ne_name = neNameTable.getFromName(ne.printTerms())
+							NE ne2 = neTable.getFromNameAndLangAndClassificationAndNonNullEntity(ne_name, rdoc.lang, category, type, subtype)
 							if (ne2 && ne2.ne_entity) e = ne2.ne_entity
 						}
 					}
@@ -535,21 +562,21 @@ class RembrandtedDocTable extends DBTable {
 
 				ne.classification?.each{cl ->
 
-					NECategory category = (cl.c? NECategory.getFromCategory(cl.c) : null)
-					NEType type = (cl.t? NEType.getFromType(cl.t) : null)
-					NESubtype subtype = (cl.s? NESubtype.getFromSubtype(cl.s) : null)
+					NECategory category = (cl.c? neCategoryTable.getFromCategory(cl.c) : null)
+					NEType type = (cl.t? neTypeTable.getFromType(cl.t) : null)
+					NESubtype subtype = (cl.s? neSubtypeTable.getFromSubtype(cl.s) : null)
 
-					EntityTable e = (ne.dbpediaPage.containsKey(cl) ?
+					Entity e = (ne.dbpediaPage.containsKey(cl) ?
 							(ne.dbpediaPage[cl] instanceof List ?
-							(!ne.dbpediaPage[cl].isEmpty() ? EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
-							: EntityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
+							(!ne.dbpediaPage[cl].isEmpty() ? entityTable.getFromDBpediaResource(ne.dbpediaPage[cl][0]) : null)
+							: entityTable.getFromDBpediaResource(ne.dbpediaPage[cl])
 							) : null)
 
 					if (!e) {
 						// if it does not have an Entity, let's check if NE can help us
 						if (!(cl.c == "@TEMPO" || cl.c == "@VALOR" || cl.c == "@NUMERO")) {
-							NEName ne_name = NEName.getFromName(ne.printTerms())
-							NE ne2 = NE.getFromNameAndLangAndClassificationAndNonNullEntity(ne_name, rdoc.lang, category, type, subtype)
+							NEName ne_name = neNameTable.getFromName(ne.printTerms())
+							NE ne2 = neTable.getFromNameAndLangAndClassificationAndNonNullEntity(ne_name, rdoc.lang, category, type, subtype)
 							if (ne2 && ne2.ne_entity) e = ne2.ne_entity
 						}
 					}

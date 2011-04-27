@@ -28,7 +28,7 @@ import saskia.db.obj.Collection
  * @author Nuno Cardoso
  * Tester for WikipediaAPI.
  */
-class TestGenerateNEIndex extends GroovyTestCase {
+class GenerateNEIndexTest extends GroovyTestCase {
 
 	static Logger log = Logger.getLogger("JUnitTest")
 	static Configuration conf = Configuration.newInstance()
@@ -37,7 +37,7 @@ class TestGenerateNEIndex extends GroovyTestCase {
 	static final int DOC_POOL_SIZE = 100
 	int number_docs
 
-	public TestGenerateNEIndex() {
+	public GenerateNEIndexTest() {
 		collection = Collection.getFromID(8)
 		if (!collection) {
 			log.error "Don't know collection 8. Exiting."

@@ -46,14 +46,15 @@ class Collection extends DBObject implements JSONable {
 
 	static Collection createNew(DBTable dbtable, row) {
 		Collection c = new Collection(dbtable)
-		c.col_id = row['col_id']
-		c.col_name = row['col_name']
-		c.col_owner = (row['col_owner'] instanceof User ? 
+		if (row['col_id']) c.col_id = row['col_id']
+		if (row['col_name']) c.col_name = row['col_name']
+		if (row['col_owner'])
+			c.col_owner = (row['col_owner'] instanceof User ? 
 			row['col_owner'] : 
 			dbtable.getSaskiaDB().getDBTable("UserTable").getFromID(row['col_owner']) )
-		c.col_lang = row['col_lang']
-		c.col_permission = row['col_permission']
-		c.col_comment = row['col_comment']
+		if (row['col_lang']) c.col_lang = row['col_lang']
+		if (row['col_permission']) c.col_permission = row['col_permission']
+		if (row['col_comment']) c.col_comment = row['col_comment']
 		return c
 	}
 
@@ -66,7 +67,6 @@ class Collection extends DBObject implements JSONable {
 	Map toSimpleMap() {
 		return ["col_id":col_id, "col_name":col_name]
 	}
-
 
 	/*
 	 * Returns the number of REMBRANDTed documents for this collection

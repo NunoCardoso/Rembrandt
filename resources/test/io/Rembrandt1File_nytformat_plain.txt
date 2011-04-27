@@ -1,0 +1,3 @@
+<DOC id="NYT_ENG_20020101.00001" type="foo">
+TODO
+</DOC>

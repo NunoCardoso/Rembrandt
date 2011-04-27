@@ -18,11 +18,16 @@
 
 package saskia.util.validator
 
-class  DocsValidator {
+class  DocsValidator extends Validator {
 	
-	public Integer validate(given_value, String mode,  DEFAULT_VALUE) {
 
-		String value
+		String mode
+	
+	public DocsValidator(String mode) {
+		this.mode = mode
+	}
+	
+	public Integer validate(String given_value, String DEFAULT_VALUE, boolean mandatory) {
 
 		if (!given_value) {
 			if (mode == "single") {
@@ -38,7 +43,7 @@ class  DocsValidator {
 			if (mode == "multiple") {
 				if (val) {
 					try {
-						value = Long.parseLong(val)
+						value = Integer.parseInt(val)
 					} catch(Exception e) {println "invalid amount: $mode."}
 			 	} else {
 						value = DEFAULT_VALUE
@@ -47,7 +52,11 @@ class  DocsValidator {
 				value = val
 			}
 		} else {
-			value = given_value
+			value = Integer.parseInt(given_value)
+		}
+		if (!value && mandatory) {
+			println "You have to specify a docs value. Exiting..."
+			System.exit(0)
 		}
 		return value
 	}

@@ -54,23 +54,23 @@ public class Task extends DBObject implements JSONable {
 
 	static Task createNew(DBTable dbtable, row) {
 		Task t = new Task(dbtable)
-		t.tsk_id = row['tsk_id']
-		t.tsk_task = row['tsk_task']
-		t.tsk_user= (row['tsk_user'] instanceof User? 
+		if (row['tsk_id']) t.tsk_id = row['tsk_id']
+		if (row['tsk_task']) t.tsk_task = row['tsk_task']
+		if (row['tsk_user']) t.tsk_user= (row['tsk_user'] instanceof User? 
 			row['tsk_user'] : 
 			dbtable.getSaskiaDB().getDBTable("UserTable").getFromID(row['tsk_user']))
-		t.tsk_collection = (row['tsk_collection'] instanceof Collection ? 		
+		if (row['tsk_collection']) t.tsk_collection = (row['tsk_collection'] instanceof Collection ? 		
 			row['tsk_collection'] : 
 			dbtable.getSaskiaDB().getDBTable("CollectionTable").getFromID(row['tsk_collection']) )
-		t.tsk_type = row['tsk_type']
-		t.tsk_priority = row['tsk_priority']
-		t.tsk_limit = row['tsk_limit']
-		t.tsk_offset = row['tsk_offset']
-		t.tsk_done = row['tsk_done']
-		t.tsk_scope = row['tsk_scope']
-		t.tsk_persistence = row['tsk_persistence']
-		t.tsk_status = row['tsk_status']
-		t.tsk_comment = row['tsk_comment']
+		if (row['tsk_type']) t.tsk_type = row['tsk_type']
+		if (row['tsk_priority']) t.tsk_priority = row['tsk_priority']
+		if (row['tsk_limit']) t.tsk_limit = row['tsk_limit']
+		if (row['tsk_offset']) t.tsk_offset = row['tsk_offset']
+		if (row['tsk_done']) t.tsk_done = row['tsk_done']
+		if (row['tsk_scope']) t.tsk_scope = row['tsk_scope']
+		if (row['tsk_persistence']) t.tsk_persistence = row['tsk_persistence']
+		if (row['tsk_status']) t.tsk_status = row['tsk_status']
+		if (row['tsk_comment']) t.tsk_comment = row['tsk_comment']
 		return t
 	}
 

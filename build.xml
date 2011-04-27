@@ -7,6 +7,7 @@
 
 	<property name="src.dir"    	value="src"/>
         <property name="lib.dir"        value="lib"/>
+        <property name="log.dir"        value="log"/>
         <property name="db.dir"        value="db"/>
         <property name="bin-groovy.dir"	value="bin-groovy"/>
 	<property name="build.dir"    	value="build"/>
@@ -72,7 +73,7 @@
  
           <groovyc encoding="UTF-8" srcdir="${src.dir}" destdir="${bin-groovy.dir}" memoryMaximumSize="1536m" memoryInitialSize="1024m">
             <include name="**/*.groovy"/>
-            <exclude name="*/test/**"/>
+            <exclude name="*/eval/**"/>
           </groovyc>
         </target>
 	
@@ -85,26 +86,69 @@
           </groovyc>
         </target>
 
-        <target name="compile-test" description="Compile test groovy/java files">
-          <groovyc encoding="UTF-8" srcdir="${src.dir}" destdir="${bin-groovy.dir}" memoryMaximumSize="1024m"
-            memoryInitialSize="1024m" includes="*/test/**" />
-        </target>
-
 	<target name="test" description="Run JUnit tests">
-	 <!--	  <junit fork="yes" haltonfailure="yes">-->
-<junit fork="yes" haltonfailure="no">
+<junit fork="yes" haltonfailure="no" filtertrace="on"
+       showoutput="true"
+       failureproperty="tests.failed"
+       errorproperty="tests.failed">
+    
           <classpath refid="all.classpath" />
           <formatter type="brief" usefile="false" />
-              <batchtest>
-              <fileset dir="${bin-groovy.dir}">
-		<include name="**/*Test*"/>
+           <batchtest todir="${log.dir}/test/rembrandt/">
+              <fileset dir="${bin-groovy.dir}/">
+		<include name="rembrandt/test/**/*Test.class"/>
       		<!-- a '$' in the filename means it's an inner class -->
       		<exclude name="**/*$*"/>
 	      </fileset>
+	      </batchtest>
+              <batchtest todir="${log.dir}/test/renoir/">
+             <fileset dir="${bin-groovy.dir}/">
+                <include name="renoir/test/**/*Test.class"/>
+                <!-- a '$' in the filename means it's an inner class -->
+                <exclude name="**/*$*, **/eval/*"/>
+              </fileset>
+              </batchtest>
+              <batchtest todir="${log.dir}/test/saskia/">
+            <fileset dir="${bin-groovy.dir}/">
+                <include name="saskia/test/**/*Test.class"/>
+                <!-- a '$' in the filename means it's an inner class -->
+                <exclude name="**/*$*"/>
+              </fileset>
       	      </batchtest>
          </junit>
 	</target>
 	
+       <target name="suite" description="Run JUnit Suite tests">
+<junit fork="yes" haltonfailure="no" filtertrace="on"
+       showoutput="true"
+       failureproperty="tests.failed"
+       errorproperty="tests.failed">
+
+          <classpath refid="all.classpath" />
+          <formatter type="brief" usefile="false" />
+           <batchtest todir="${log.dir}/test/rembrandt/">
+              <fileset dir="${bin-groovy.dir}/">
+                <include name="rembrandt/test/suite/*TestSuite.class"/>
+                <!-- a '$' in the filename means it's an inner class -->
+                <exclude name="**/*$*"/>
+              </fileset>
+              </batchtest>
+              <batchtest todir="${log.dir}/test/renoir/">
+             <fileset dir="${bin-groovy.dir}/">
+                <include name="renoir/test/suite/*TestSuite.class"/>
+                <!-- a '$' in the filename means it's an inner class -->
+              </fileset>
+              </batchtest>
+              <batchtest todir="${log.dir}/test/saskia/">
+            <fileset dir="${bin-groovy.dir}/">
+                <include name="saskia/test/suite/TestSuite.class"/>
+                <!-- a '$' in the filename means it's an inner class -->
+                <exclude name="**/*$*"/>
+              </fileset>
+              </batchtest>
+         </junit>
+        </target>
+
     <target name="groovydoc" description="Generate Groovy Doc">	
 	  <delete dir="${doc.dir}"/>
 	  <mkdir dir="${doc.dir}"/>
@@ -131,7 +175,7 @@
          </manifest>
 	 
         <jar destfile="${jar.dir}/${projectname}-${version}.jar" basedir="${bin-groovy.dir}" includes="**/*.class" 
-	     excludes="**/test/*" manifest="MANIFEST.MF" />
+	     excludes="**/eval/*" manifest="MANIFEST.MF" />
 	<echo message="Build nr. ${build.number}"/>
     </target>
 	

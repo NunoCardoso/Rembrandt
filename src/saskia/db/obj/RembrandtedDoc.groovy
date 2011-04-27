@@ -83,20 +83,25 @@ class RembrandtedDoc extends DBObject implements JSONable {
 
 	static RembrandtedDoc createNew(DBTable dbtable, row) {
 		RembrandtedDoc r = new RembrandtedDoc(dbtable)
-		r.doc_id = row['doc_id']
-		r.doc_original_id = row['doc_original_id']
+		if (row['doc_id']) r.doc_id = row['doc_id']
+		if (row['doc_original_id']) r.doc_original_id = row['doc_original_id']
 		if (row['doc_collection']) 
 			r.doc_collection = (row['doc_collection'] instanceof Collection ?
 			row['doc_collection'] : dbtable.getSaskiaDB().getDBTable("CollectionTable").getFromID(row['doc_collection']))
-		r.doc_webstore = row['doc_webstore']
-		r.doc_version = row['doc_version']
+
+		if (row['doc_webstore']) r.doc_webstore = row['doc_webstore']
+		if (row['doc_version']) r.doc_version = row['doc_version']
 		if (row['doc_lang']) r.doc_lang = row['doc_lang']
 		if (row['doc_date_created'] && (Date)row['doc_date_tagged'] != nulldate)
 			r.doc_date_created = (Date)row['doc_date_created'] // it's a java.sql.Timestamp, a subclass of Date
 		if (row['doc_date_tagged'] && (Date)row['doc_date_tagged'] != nulldate)
 			r.doc_date_tagged = (Date)row['doc_date_tagged'] // it's a java.sql.Timestamp, a subclass of Date
-		r.doc_proc = (row['doc_proc'] instanceof DocStatus ? row['doc_proc'] : DocStatus.getFromValue(row['doc_proc']))
-		r.doc_sync = (row['doc_sync'] instanceof DocStatus ? row['doc_sync'] : DocStatus.getFromValue(row['doc_sync']))
+		if (row['doc_proc']) 
+			r.doc_proc = (row['doc_proc'] instanceof DocStatus ? 
+			row['doc_proc'] : DocStatus.getFromValue(row['doc_proc']))
+		if (row['doc_sync']) 
+			r.doc_sync = (row['doc_sync'] instanceof DocStatus ? 
+			row['doc_sync'] : DocStatus.getFromValue(row['doc_sync']))
 
 		if (row['doc_latest_geo_signature']) r.doc_latest_geo_signature = row['doc_latest_geo_signature']
 		if (row['doc_latest_time_signature']) r.doc_latest_time_signature = row['doc_latest_time_signature']
@@ -111,14 +116,12 @@ class RembrandtedDoc extends DBObject implements JSONable {
 		// but it also may be a new RembrandtedDoc to be added to the DB...
 		} 
 		if (!row['doc_webstore'] && row.containsKey('doc_content')) { 
-			println "TOUTOUTOU"
 			 try {
 				r.doc_content = row['doc_content']
 				r.retrieved_doc_content = false
 			}catch(Exception e) { log.warn e.getMessage() }
 		}
-		
-		return r 		
+		return r 
 	}
 
 	public Map toMap() {

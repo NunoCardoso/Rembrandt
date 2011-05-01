@@ -1,4 +1,4 @@
-.<DOC DOCID="WPT-9-20080820024058-00090">
+<DOC DOCID="WPT-9-20080820024058-00090">
 <TITLE>
 </TITLE>
 <BODY>
@@ -3337,9 +3337,4 @@
 {[>][Lista][de][Documentos][e][Ficheiros][&mdash][;][Associação][Nacional][de][Desporto][para][a][Deficiência][Mental][Associação][Nacional][de][Desporto][para][a][Deficiência][Mental][Saltar][para][o][corpo][da][página][:][ALT+2][|][Saltar][para][a][pesquisa][:][ALT+1][Você][está][aqui][:][Entrada][&raquo][;][Documentos][e][Ficheiros][/][Lista][de][Documentos][e][Ficheiros][Mapa][do][Site][|][Pesquisa][Avançada][Pesquisar][Navegação][«][Entrada][Notícias][Documentos][e][Ficheiros][Agenda][Links][Lista][de][Documentos][e][Ficheiros][Document][Actions][Enviar][esta][página][a][alguém][Afixado][em][2005-04-07][Ler][mais][sobre][Afixado][em][2005-04-07][Ler][mais][sobre][Afixado][em][2005-04-07][Ler][mais][sobre][&laquo][;][3][itens][anteriores][Próximos][2][itens][&raquo][;][1][\[][2][\]][3][Última][modificação][2005-04-07][00:37][Setembro][2005][&laquo][;][&raquo][;][Do][2ª][3ª][4ª][5ª][6ª][Sá][1][2][3][4][5][6][7][8][9][10][11][12][13][14][15][16][17][18][19][20][21][22][23][24][25][26][27][28][29][30][Este][sítio][está][em][conformidade][com][as][seguintes][normas][do][W3C][:][XHTML][,][CSS][Símbolo][de][Acessibilidade][à][Web][D][Sobre][o][Site][|][Contactos][|][Perguntas][Frequentes][|][Avisos][Legais][|][Visualização][de][Documentos][©][2005][UMIC][-][Agência][para][a][Sociedade][do][Conhecimento][|][WebDesign][:][mediaprimer][.pt]}
 </BODY>
 </DOC>
-
-
-Time: 10,233
-
-OK (1 test)
 

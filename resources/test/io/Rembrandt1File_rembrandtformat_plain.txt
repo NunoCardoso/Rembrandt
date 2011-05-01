@@ -4,7 +4,7 @@
 </TITLE>
 <BODY>
 {[O]<B>[Rembrandt]</B>[é][um][pintor][holandês][.]}
-{<P>[Nasceu][a][15][de][Julho][de][1606][em][Leiden][,][nos][Países][Baixos][.]}
+{<P>[Nasceu][a][15][de][Julho][de][1606][em][Leiden][,][nos]<A HREF="Países_Baixos">[Países][Baixos]</A>[.]}
 {[Estudou][na][Universidade][de][Leiden][.]</P>}
 </BODY>
 </DOC>

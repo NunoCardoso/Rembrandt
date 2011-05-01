@@ -25,33 +25,59 @@ import org.apache.log4j.Logger
  * Abstract class from where reader subclasses must extend.
  */
 abstract class Reader {
-    
-    static Logger log = Logger.getLogger("Reader")
-    StyleTag style
-    
-    /**
-     * The main consctructor gets a StyleTag, when reading documents with tagged NEs. 
-     * If not specified, it's a NullStyleTag, used for documents without tagged NEs.
-     */
-    public Reader(StyleTag style) {
-	this.style=style
-    }
-    
-    public List<Document> docs = []
-    
-    /** retrieve list of documents */
-    //public abstract List<Document> getDocuments() 
-    
-    /** load the input stream and process it */
-    
-    public abstract void processInputStream(InputStreamReader is) 
-    
-    public int getNumberOfDocuments() {
-        return docs.size()
-    }
-    
-    public List<Document> getDocuments()  {
-        return docs
-    }  
-    
+
+	static Logger log = Logger.getLogger("Reader")
+	StyleTag style
+	InputStream is
+	
+	ReaderStatus status = ReaderStatus.INPUT_STREAM_NOT_INITIALIZED
+	/**
+	* Don't let others reach this variable, because it would fill out and empty.
+	*/
+    private List<Document> docs = []
+
+	/**
+	 * The main consctructor gets a StyleTag, when reading documents with tagged NEs. 
+	 * If not specified, it's a NullStyleTag, used for documents without tagged NEs.
+	 */
+	public Reader(InputStream is, StyleTag style) {
+		this.is = is
+		this.style=style
+	}
+	
+	public Reader(StyleTag style) {
+		this.style=style
+	}
+	
+	public setInputStream(InputStream is) {
+		this.is=is
+	}
+	
+	public boolean hasMoreDocumentsToRead() {
+		return status == ReaderStatus.INPUT_STREAM_BEING_PROCESSED
+	}
+
+	public boolean hasNoMoreDocumentsToRead() {
+		return status == ReaderStatus.INPUT_STREAM_FINISHED
+	}
+	
+	public void emptyDocumentCache() {
+		docs = []
+	}
+
+	public void addDocument(Document doc) {
+		docs << doc
+	}
+	
+	public int documentsSize() {
+		return docs.size()
+	}
+	
+	public List<Document> getDocuments() {
+		return docs
+	}
+	
+	/** retrieve list of documents */
+	public abstract List<Document> readDocuments(int howmany)
+
 }

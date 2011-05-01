@@ -18,12 +18,15 @@
 
 package rembrandt.io
 
+import java.io.InputStream;
+import java.util.List;
+
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
 
-import org.xml.sax.helpers.DefaultHandler
-import org.xml.sax.*
-import javax.xml.parsers.SAXParserFactory
+import javax.xml.stream.XMLInputFactory
+import javax.xml.stream.XMLStreamReader
+import javax.xml.stream.XMLStreamConstants
 
 import rembrandt.obj.Document
 
@@ -57,110 +60,178 @@ import rembrandt.obj.Document
  </rdf:Description>
  */
 
-
-class WPT05Handler extends DefaultHandler {
-
-	def text
-	def content
-	Date date_modified
-	Date date_fetched
-	String lang
-	String id
-	Document doc
-	WPT05Reader _this_reader
-
-	public WPT05Handler(WPT05Reader this_) {
-		_this_reader = this_
-	}
-
-	void startElement(String ns, String localName, String qName, Attributes atts) {
-		switch (qName) {
-			case 'rdf:Description':
-							text = ""; content = null; lang = null; id = null;
-				break
-			case 'dcterm:modified':
-				text = "";
-				date_modified = null;
-				break
-			case 'wpt:fetched':
-				text = "";
-				date_fetched = null;
-				break
-			case 'wpt:arcName':
-				id = atts.getValue('rdf:resource')
-				break
-			case 'dc:language':
-				text = "";
-				lang = null;
-				break
-			case 'wpt:filteredText':
-				text = "";
-				content = null;
-				break
-		}
-	}
-
-	void characters(char[] chars, int offset, int length) {
-		text += new String(chars, offset, length)
-	}
-
-	void endElement(String ns, String localName, String qName) {
-		switch (qName) {
-			case 'rdf:Description':
-				Date date = null
-				if (date_modified)
-					date = date_modified
-				if (!date && date_fetched)
-					date = date_fetched
-				if (!date)
-					date = new Date(0)
-
-			// Há alguns rdf.Description que não possuem doc.
-			// se não possuem, passar à frente.
-			// testar com id
-				if (doc && doc.docid) {
-					doc.date_created = date
-					_this_reader.docs << doc
-				}
-				doc = null
-				break
-			case 'dcterm:modified':
-				date_modified = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
-				break
-			case 'wpt:fetched':
-				date_fetched = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
-				break
-			case 'dc:language':
-				lang = text;
-				break
-			case 'wpt:filteredText':
-				doc = new Document()
-				doc.body = text
-				doc.docid = id
-				if (lang) doc.lang = lang
-				doc.tokenize()
-				break
-		}
-	}
-}
-
 public class WPT05Reader extends Reader {
 
-	public WPT05Reader(StyleTag style) {
+	XMLStreamReader xmlStreamReader
+
+
+	public WPT05Reader(InputStream is, StyleTag style) {
+		super(is, style)
+		this.is = is
+		xmlStreamReader =
+				XMLInputFactory.newInstance().createXMLStreamReader(is)
+	}
+
+	public WPT05Reader( StyleTag style) {
 		super(style)
 	}
 
-	/**
-	 * Process the HTML input stream
-	 */
-	public void processInputStream(InputStreamReader is) {
-		def handler = new WPT05Handler(this)
-		def reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader()
-		reader.setContentHandler(handler)
-		try {
-			reader.parse(new InputSource(is))
-		} catch(Exception e) {
-			log.error "Erro na leitura de XML: "+e.getMessage()
+	public setInputStream(InputStream is) {
+		this.is = is
+		xmlStreamReader =
+				XMLInputFactory.newInstance().createXMLStreamReader(is)
+	}
+
+	public List<Document> readDocuments(int docs_requested = 1) {
+		String text
+		String content
+		Date date_modified
+		Date date_fetched
+		String lang
+		String id
+		Document doc
+
+
+		emptyDocumentCache()
+
+		// let the handler read the howmany, and save the correct amount
+		// of docs in the docs list.
+		while (xmlStreamReader.hasNext() && documentsSize() <= docs_requested ) {
+
+			status = ReaderStatus.INPUT_STREAM_BEING_PROCESSED
+
+			try {
+				int eventCode = xmlStreamReader.next()
+
+				switch (eventCode) {
+
+					case XMLStreamConstants.START_ELEMENT :
+
+					log.trace "xmlStreamReader.getLocalName():"+xmlStreamReader.getLocalName()
+					log.trace "xmlStreamReader.getPrefix():"+xmlStreamReader.getPrefix()
+					log.trace "xmlStreamReader.getName():"+xmlStreamReader.getName()
+					
+						String tagname = (
+						xmlStreamReader.getPrefix() ?
+						xmlStreamReader.getPrefix()+":"+xmlStreamReader.getLocalName()
+						:xmlStreamReader.getLocalName() )
+
+						log.trace "open tagname:"+tagname
+						
+						switch(tagname) {
+
+							case 'rdf:Description':
+								text = "";
+								content = null;
+								lang = null;
+								id = null;
+								break
+							case 'dcterm:modified':
+								text = "";
+								date_modified = null;
+								break
+							case 'wpt:fetched':
+								text = "";
+								date_fetched = null;
+								break
+							case 'wpt:arcName':
+								text = "";
+							
+								for (int i=0; i<xmlStreamReader.getAttributeCount(); i++) {
+									
+									String attname = (
+										xmlStreamReader.getAttributePrefix(i) ?
+										xmlStreamReader.getAttributePrefix(i)+":"+xmlStreamReader.getAttributeLocalName(i)
+										:xmlStreamReader.getAttributeLocalName(i) )
+
+									if (attname.equals("rdf:resource")) {
+										id = xmlStreamReader.getAttributeValue(i)
+									}
+								}
+								break
+							case 'dc:language':
+								text = "";
+								lang = null;
+								break
+							case 'wpt:filteredText':
+								text = "";
+								content = null;
+								break
+
+						}
+
+						break
+
+					case XMLStreamConstants.END_ELEMENT :
+
+						String tagname = (
+						xmlStreamReader.getPrefix() ?
+						xmlStreamReader.getPrefix()+":"+xmlStreamReader.getLocalName()
+						:xmlStreamReader.getLocalName() )
+						
+						log.trace "close tagname:"+tagname
+						text = text?.trim()
+						log.trace "text:"+text
+						
+						switch(tagname) {
+
+							case 'rdf:Description':
+								Date date = null
+								if (date_modified)
+									date = date_modified
+								if (!date && date_fetched)
+									date = date_fetched
+								if (!date)
+									date = new Date(0)
+
+							// Há alguns rdf.Description que não possuem doc.
+							// se não possuem, passar à frente.
+							// testar com id
+								if (doc && doc.docid) {
+									doc.date_created = date
+									doc.preprocess()
+									
+									addDocument(doc)
+									if (documentsSize() >= docs_requested)
+										return getDocuments()
+								}
+								doc = null
+								break
+							case 'dcterm:modified':
+								date_modified = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
+								break
+							case 'wpt:fetched':
+								date_fetched = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
+								break
+							case 'dc:language':
+								lang = text;
+								break
+							case 'wpt:filteredText':
+
+								log.trace "Creating doc with ${text.size()} text, id:"+id+" lang:"+lang
+								doc = new Document()
+								doc.body = text
+								doc.docid = id
+								if (lang) doc.lang = lang
+								break
+						}
+					break
+
+					case XMLStreamConstants.CHARACTERS :
+						String t = xmlStreamReader.getText()
+						text += t
+					break
+
+
+				}
+			}catch (Exception e) {
+				log.fatal  "Erro na leitura de XML: "+e.printStackTrace()
+			}
+
 		}
+
+		// leftovers
+		status = ReaderStatus.INPUT_STREAM_FINISHED
+		return getDocuments()
 	}
 }

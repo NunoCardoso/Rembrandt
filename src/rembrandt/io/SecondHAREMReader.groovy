@@ -1,5 +1,7 @@
 package rembrandt.io
 
+import java.util.List;
+
 import rembrandt.obj.Document
 import rembrandt.obj.NamedEntity
 import rembrandt.obj.Sentence
@@ -51,10 +53,14 @@ class SecondHAREMReader extends Reader {
     Map<String,String> tags = [:] 
     int number = 0
     
-    public SecondHAREMReader(StyleTag style) {
-		super(style)
+    public SecondHAREMReader(InputStream is, StyleTag style) {
+		super(is, style)
     }
 
+	public SecondHAREMReader(StyleTag style) {
+		super(style)
+	}
+	
     private String save(item) {
         tags[++number] = item
         return  " ${startemmark}${number} "
@@ -67,21 +73,28 @@ class SecondHAREMReader extends Reader {
         }
     }
     
-    public void processInputStream(InputStreamReader is) {
-       // def resource = new XmlParser().parse(is)
-       // resource.DOC.each { docnode ->
-        BufferedReader br = new BufferedReader(is)	    
+ 	public List<Document> readDocuments(int docs_requested = 1) {
+
+		emptyDocumentCache()
+
+		BufferedReader br = new BufferedReader(	
+					new InputStreamReader(is))
+
         StringBuffer buffer = new StringBuffer()		    
         String line
         boolean indoc = false
         String docid = null
         
-        while ((line = br.readLine()) != null) {          
-            
+        while ((line = br.readLine()) != null   && documentsSize() <= docs_requested) {          
+			status = ReaderStatus.INPUT_STREAM_BEING_PROCESSED
+			
             if (line.matches(/\s*<\/DOC>\s*/)) {
                 buffer.append(line+"\n")
-                docs << createDocument(buffer.toString())
+                addDocument(createDocument(buffer.toString()) )
                 buffer = new StringBuffer()
+				if (documentsSize() >= docs_requested)
+					return getDocuments()
+
                 docid = null
                 indoc = false
             } else if (line.matches(/\s*<DOC DOCID=".*?">\s*/)) {                
@@ -91,7 +104,11 @@ class SecondHAREMReader extends Reader {
             } else {
         	if (indoc) buffer.append(line+"\n")
             }       
-        }    
+        }  
+		
+		status = ReaderStatus.INPUT_STREAM_FINISHED
+		return docs
+
     }
 
     /**

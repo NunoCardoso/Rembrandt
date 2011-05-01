@@ -81,11 +81,11 @@ class HTMLStyleTag extends StyleTag {
         return null       
     }
     
-    public boolean isOpenTag(String t) {
+    public boolean isOpenTag(String tag) {
 	return tag.matches(~/<DIV [^>]*?>/) 	
     }
     
-    public boolean isCloseTag(String t) {
+    public boolean isCloseTag(String tag) {
 	return tag.matches(~/<\/DIV>/) 	
     }
     

@@ -18,6 +18,7 @@
 
 package rembrandt.io
 
+import java.util.List;
 import java.util.regex.Matcher
 import rembrandt.obj.Document
 import rembrandt.obj.ListOfNE
@@ -32,29 +33,42 @@ import org.apache.log4j.Logger
  */
 class RembrandtReader extends Reader {
 
+	public RembrandtReader(InputStream is, StyleTag style) {
+		super(is, style)
+	}
+	
 	public RembrandtReader(StyleTag style) {
 		super(style)
 	}
+	
 
-	/**
-	 * Process the HTML input stream
-	 */
-	public void processInputStream(InputStreamReader is) {
-		BufferedReader br = new BufferedReader(is)
+	public List<Document> readDocuments(int docs_requested = 1) {
+
+		emptyDocumentCache()
+		
+		BufferedReader br = new BufferedReader(	
+					new InputStreamReader(is))
+
 		StringBuffer buffer = new StringBuffer()
 		String line
-		while ((line = br.readLine()) != null) {
+		while ((line = br.readLine()) != null  && documentsSize() <= docs_requested ) {
+			status = ReaderStatus.INPUT_STREAM_BEING_PROCESSED
 			if (!line.startsWith("%") && !line.startsWith("#") && !(line ==~ /^\s*$/))
 				buffer.append(line+"\n")
 
 			if (line ==~ /<\/DOC>/) {
-				docs << createDocument(buffer.toString())
+				addDocument( createDocument(buffer.toString()) )
 				buffer = new StringBuffer()
+				if (documentsSize() >= docs_requested) 
+					return getDocuments()
 			}
 		}
-		if (buffer.toString().trim()) {
-			docs << createDocument(buffer.toString())
+		if (buffer.toString().trim() != "") {
+			addDocument(  createDocument(buffer.toString()) )
 		}
+		
+		status = ReaderStatus.INPUT_STREAM_FINISHED
+		return getDocuments()
 	}
 
 	public Document createDocument(String text) {
@@ -84,8 +98,8 @@ class RembrandtReader extends Reader {
 		boolean inalt = false
 		boolean insubalt = false
 
-		long altid
-		int subaltid
+		Long altid
+		Integer subaltid
 
 		boolean intitle = false
 		boolean inbody = false
@@ -260,7 +274,6 @@ class RembrandtReader extends Reader {
 			}//switch
 		}// each c
 
-		// println "RembradntReader: doc.body_sentences = "+doc.body_sentences
 		return doc
 	}
 

@@ -1,4 +1,4 @@
-.<DOC DOCID="3fe217a0_100.pt" LANG="pt">
+<DOC DOCID="3fe217a0_100.pt" LANG="pt">
 <TITLE>
 {[Brevemente][...]}
 {[Um][projecto][100][Limite][,][Lda.]}
@@ -1565,9 +1565,4 @@
 {[Interesses][Na][secção]["][Os][nossos][interesses]["][,][fique][a][conhecer][o][nosso][«][SHOW][»][de][:]}
 </BODY>
 </DOC>
-
-
-Time: 8,832
-
-OK (1 test)
 

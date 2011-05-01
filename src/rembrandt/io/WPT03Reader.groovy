@@ -25,8 +25,7 @@ import rembrandt.obj.Document
  *
  */
 class WPT03Reader extends Reader {
-	
-	
+
 	/**
 	 * This class imports WPT03 files to the Source Documents
 	 ----!!- colecção WPT 03 - separador de documento -!!----
@@ -46,38 +45,38 @@ class WPT03Reader extends Reader {
 	 (title, Alves e Trigo)
 	 Alves e Trigo
 	 */
-	
-	
+
+
 	public WPT03Reader(StyleTag style) {
 		super(style)
 	}
-	
+
 	/**
 	 * Process the HTML input stream
 	 */
 	public void processInputStream(InputStreamReader is) {
-		
+
 		Matcher m
 		Boolean indoc = false
 		Boolean inbody = false
 		Boolean inheader = false
-		
+
 		String text // buffer
-		
+
 		Date date_modified
 		Date date_fetched
 		String lang
 		String id
-		
+
 		String content
 		String url
 		String title
-		
+
 		BufferedReader br = new BufferedReader(is)
-		
+
 		String l
 		while ((l = br.readLine()) != null) {
-			
+
 			m = l =~ /^----!!- .* WPT 03 - separador de documento -!!----$/
 			if (m.matches()) {
 				if (inbody && indoc) {
@@ -89,7 +88,7 @@ class WPT03Reader extends Reader {
 					doc.docid = id
 					doc.lang = lang
 					doc.tokenize()
-					
+
 					Date date = null
 					if (date_modified)
 						date = date_modified
@@ -97,20 +96,21 @@ class WPT03Reader extends Reader {
 						date = date_fetched
 					if (!date)
 						date = new Date(0)
-					
+
 					doc.date_created = date
 					docs << doc
+					log.info "Added #{docs.size()} doc $doc to docs."
 					text = "";title = ""; url = "";content = "";
 					lang="";id="";date_modified=null;date_fetched=null;
 				}
 			} else {
-				
+
 				m = l =~ /^\((.*?), (.*?)\)$/
 				if (m.matches()) {
 					if (inheader && !inbody) {
 						def key = m.group(1)
 						def value = m.group(2)
-						
+
 						if (key == "Last-Modified") {
 							if (value != "unknown") {
 								date_modified = Date.parse("dd/MM/yyyy", value)
@@ -141,17 +141,17 @@ class WPT03Reader extends Reader {
 							//System.exit(0)
 						}
 					}
-					
+
 				} else {
-					
+
 					Matcher m2 = l =~ /URL: https?:\/\/(.*)/
-					
+
 					if (m2.matches()) {
 						if (!inheader) {
 							inheader = true;
 							indoc = true
 							url = m2.group(1);
-							
+
 							// o id vai ser o URL, só que há URLs que, truncados a 255, ficam iguais.
 							// vou usar uma hash com 8 números, um '_', depois o URL truncado a 240.
 							String random =  Long.toHexString(Double.doubleToLongBits(Math.random()));
@@ -172,5 +172,28 @@ class WPT03Reader extends Reader {
 				}
 			}
 		}
-	}	
+
+		// last document from line leftovers!
+		if (text) {
+			Document doc = new Document()
+			doc.body = text.trim()
+			if (title && title != "null")
+				doc.title = title
+			doc.docid = id
+			doc.lang = lang
+			doc.tokenize()
+
+			Date date = null
+			if (date_modified)
+				date = date_modified
+			if (!date && date_fetched)
+				date = date_fetched
+			if (!date)
+				date = new Date(0)
+
+			doc.date_created = date
+			docs << doc
+			log.info "Added #${docs.size()} doc $doc to docs."
+		}
+	}
 }

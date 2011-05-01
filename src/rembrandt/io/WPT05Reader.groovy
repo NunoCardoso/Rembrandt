@@ -59,7 +59,7 @@ import rembrandt.obj.Document
 
 
 class WPT05Handler extends DefaultHandler {
-	
+
 	def text
 	def content
 	Date date_modified
@@ -68,88 +68,88 @@ class WPT05Handler extends DefaultHandler {
 	String id
 	Document doc
 	WPT05Reader _this_reader
-	
+
 	public WPT05Handler(WPT05Reader this_) {
 		_this_reader = this_
 	}
-	
+
 	void startElement(String ns, String localName, String qName, Attributes atts) {
 		switch (qName) {
 			case 'rdf:Description':
-			text = ""; content = null; lang = null; id = null;
-			break
+							text = ""; content = null; lang = null; id = null;
+				break
 			case 'dcterm:modified':
-			text = "";
-			date_modified = null;
-			break
+				text = "";
+				date_modified = null;
+				break
 			case 'wpt:fetched':
-			text = "";
-			date_fetched = null;
-			break
+				text = "";
+				date_fetched = null;
+				break
 			case 'wpt:arcName':
-			id = atts.getValue('rdf:resource')
-			break
+				id = atts.getValue('rdf:resource')
+				break
 			case 'dc:language':
-			text = "";
-			lang = null;
-			break
+				text = "";
+				lang = null;
+				break
 			case 'wpt:filteredText':
-			text = "";
-			content = null;
-			break
+				text = "";
+				content = null;
+				break
 		}
 	}
-	
+
 	void characters(char[] chars, int offset, int length) {
 		text += new String(chars, offset, length)
 	}
-	
+
 	void endElement(String ns, String localName, String qName) {
 		switch (qName) {
 			case 'rdf:Description':
-			Date date = null
-			if (date_modified)
-			date = date_modified
-			if (!date && date_fetched)
-			date = date_fetched
-			if (!date)
-			date = new Date(0)
-			
+				Date date = null
+				if (date_modified)
+					date = date_modified
+				if (!date && date_fetched)
+					date = date_fetched
+				if (!date)
+					date = new Date(0)
+
 			// Há alguns rdf.Description que não possuem doc.
 			// se não possuem, passar à frente.
 			// testar com id
-			if (doc && doc.docid) {
-				doc.date_created = date
-				_this_reader.docs << doc
-			}
-			doc = null
-			break
+				if (doc && doc.docid) {
+					doc.date_created = date
+					_this_reader.docs << doc
+				}
+				doc = null
+				break
 			case 'dcterm:modified':
-			date_modified = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
-			break
+				date_modified = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
+				break
 			case 'wpt:fetched':
-			date_fetched = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
-			break
+				date_fetched = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
+				break
 			case 'dc:language':
-			lang = text;
-			break
+				lang = text;
+				break
 			case 'wpt:filteredText':
-			doc = new Document()
-			doc.body = text
-			doc.docid = id
-			doc.lang = (lang ? lang : w2s.lang)
-			doc.tokenize()
-			break
+				doc = new Document()
+				doc.body = text
+				doc.docid = id
+				if (lang) doc.lang = lang
+				doc.tokenize()
+				break
 		}
 	}
 }
 
 public class WPT05Reader extends Reader {
-	
+
 	public WPT05Reader(StyleTag style) {
 		super(style)
 	}
-	
+
 	/**
 	 * Process the HTML input stream
 	 */

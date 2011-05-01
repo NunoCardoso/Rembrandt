@@ -46,7 +46,6 @@ class ImportPlainText_2_SourceDocument extends Import  {
 
 	
 	Configuration conf = Configuration.newInstance()
-	static Logger log = Logger.getLogger("SaskiaImports")
 	UnformattedReader reader
 	RembrandtWriter writer
 	

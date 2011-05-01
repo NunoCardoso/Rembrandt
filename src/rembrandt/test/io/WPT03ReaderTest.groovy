@@ -42,6 +42,9 @@ class WPT03ReaderTest extends ReaderTest {
 		super.processReaders()
 
 		reader_generated.docs?.eachWithIndex{generated_doc, doc_index ->
+			
+			// there are 101 docs in the WPT03-00001_sample_utf8_wpt03format.txt
+			
 			//println new RembrandtWriter(new RembrandtStyleTag("pt")).printDocument(generated_doc)
 			super.evaluateReaders()
 		}

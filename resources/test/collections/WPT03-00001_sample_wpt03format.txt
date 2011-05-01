@@ -1,0 +1,3000 @@
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://100.pt
+(Content-Length, 582)
+(Content-Type, text/html)
+(Last-Modified, 30/08/2002)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/33/44/0)
+(host, 100.pt)
+(ip, 195.22.10.103)
+(language, portuguese)
+(prof, 0)
+(realSize, 582)
+(textSize, 108)
+(title, Brevemente... Um projecto 100 Limite, Lda.)
+
+Brevemente... Um projecto 100 Limite, Lda.
+Brevemente... Um projecto 100 Limite
+100limite@100limite.com
+...
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://1000empresas.pt
+(Content-Length, 1177)
+(Content-Type, text/html)
+(Last-Modified, 14/01/2003)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/41/14/0)
+(host, 1000empresas.pt)
+(ip, 64.177.148.225)
+(language, portuguese)
+(prof, 0)
+(realSize, 1177)
+(textSize, 66)
+(title, 1000 Empresas - Desenvolvimento de Aplicações para Internet, Lda.)
+
+1000 Empresas - Desenvolvimento de Aplicações para Internet, Lda.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://1001festas.pt
+(Content-Length, 8221)
+(Content-Type, text/html)
+(Last-Modified, 24/01/2003)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/0/38/0)
+(host, 1001festas.pt)
+(ip, 64.226.40.196)
+(language, portuguese)
+(prof, 0)
+(realSize, 8221)
+(textSize, 704)
+(title, 1001 Festas - Catering)
+
+1001 Festas - Catering
+Quem Somos | A 1001 Festas | Espaços Ementas | Participação |
+Gostamos do que fazemos e essa
+é a chave do nosso Sucesso
+Somos uma empresa de Catering vocacionada para a
+organização e serviço de Festas Sociais e Profissionais.
+Estamos na Hotelaria há 31 anos, dos quais os últimos
+16 anos dedicados exclusivamente a esta actividade.
+Estamos por isso em condições de pôr ao seu serviço a
+nossa experiência e profissionalismo.
+Asseguramos um trabalho eficaz, competente e imaginativo.
+Morada: Casa de Murches
+Rua Gil Eanes
+Murches
+2750 CASCAIS
+Telefone: 21 487 2105/06 Fax: 21 487 2109
+Telemóvel: 93 702 1420 ou 96 702 1420
+e-mail: casademurches@1001festas.pt
+Consulte o
+nosso croqui
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://100ia.pt
+(Content-Length, 15184)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, microsoft-iis)
+(dataRec, 14/04/2003)
+(description, 100 IA, Base de dados de carros usados)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/9/29/603)
+(ip, 213.22.53.245)
+(keywords, automoveis, usados, carros, novos, viaturas, automóvel, automóveis, carro, viatura, comprar, vender, venda, Alfa Romeo, Aston Martin, Audi, Austin, Bentley, BMW, Crysler, Citroen, Daewoo, Daihatsu, Ferrari, Fiat, Ford, Honda, Hyundai, Jaguar, Kia, Innocenti, Lada, Lamborghini, Lancia, Lexus, Lotus, Mazerati, Mazda, Mercedes, MG, Mini, Mitsubishi, Morgan, Nissan, Opel, Peugeot, Porsche, Renault,Rolls Royce, Rover, Saab, Seat, Skoda, Ssangyong, Subaru, Suzuki, Toyota, Volkswagen, Volvo)
+(language, portuguese)
+(prof, 0)
+(realSize, 15184)
+(textSize, 502)
+(title, ::100ia.pt - Comercio Automovel Online::)
+
+::100ia.pt - Comercio Automovel Online::
+Procurar:
+Viaturas
+Onde Comprar
+Pedido de procura
+Vender:
+Viaturas
+Alterar s/Anúncio
+Apagar s/Anúncio
+Zona Privada
+Login Comerciante
+Serviços:
+Financiamentos
+Seguro Automóvel
+Acessórios
+Informações:
+Info Comerciantes
+Condições Gerais
+Pedido de Adesão
+Novidades
+Aqui pode Procurar ou Anunciar grátis a sua viatura
+Clique nas imagens para ver detalhes
+Webdesign PGSite
+Home
+E-Mail
+© Copyright 2001 - 100 I.A.
+Visitantes: Hit Counter
+Estão 21 utilizadores no site
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://10epcg.adetti.iscte.pt
+(Content-Length, 2424)
+(Content-Type, text/html)
+(Last-Modified, 09/10/2001)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/49/12/0)
+(host, 10epcg.adetti.iscte.pt)
+(ip, 193.136.190.97)
+(language, portuguese)
+(prof, 0)
+(realSize, 2424)
+(textSize, 295)
+(title, 10º Encontro Português Computação Gráfica )
+
+10º Encontro Português Computação Gráfica
+Iscte, Lisboa
+1-3 Outubro/October 2001
+Associação Portuguesa Reconhecimento Padrões Grupo Português Computação Gráfica Associação para o Desenvolvimento das Telecomunicações e Técnicas de Informática Instituto Superior Ciências do Trabalho e da Empresa
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://10epcg.adetti.iscte.pt/
+(Content-Length, 2424)
+(Content-Type, text/html)
+(Last-Modified, 09/10/2001)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/49/12/0)
+(host, 10epcg.adetti.iscte.pt)
+(language, portuguese)
+(prof, 0)
+(realSize, 2424)
+(textSize, 295)
+(title, 10º Encontro Português Computação Gráfica )
+
+10º Encontro Português Computação Gráfica
+Iscte, Lisboa
+1-3 Outubro/October 2001
+Associação Portuguesa Reconhecimento Padrões Grupo Português Computação Gráfica Associação para o Desenvolvimento das Telecomunicações e Técnicas de Informática Instituto Superior Ciências do Trabalho e da Empresa
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://10x5.pt
+(Content-Length, 1388)
+(Content-Type, text/html)
+(Last-Modified, 25/10/2002)
+(ServerSW, Microsoft-IIS)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/22/48/0)
+(host, 10x5.pt)
+(ip, 194.65.140.81)
+(language, portuguese)
+(prof, 0)
+(realSize, 1388)
+(textSize, 220)
+(title, Untitled Document)
+
+Untitled Document
+Por motivos de manutenção, o nosso site encontra-se temporariamente inactivo.
+Para qualquer esclarecimento contacte-nos através de:
+Telef: 234 394 249
+Fax: 234 394 248
+mail: 10x5@10x5.pt
+SEREMOS BREVES
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://13.bitterfairy.com/
+(Content-Length, 1191)
+(Content-Type, text/html)
+(Last-Modified, 17/01/2003)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/7/34/0)
+(host, 13.bitterfairy.com)
+(language, portuguese)
+(prof, 0)
+(realSize, 1191)
+(textSize, 84)
+(title, lost?)
+
+lost?
+Tristessa's
+secret place
+okie... smart cookie. o que você está procurando? :)
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://2000comp.pt
+(Content-Length, 1306)
+(Content-Type, text/html)
+(Last-Modified, 08/06/2002)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/5/27/0)
+(host, 2000comp.pt)
+(ip, 209.235.192.152)
+(language, portuguese)
+(prof, 0)
+(realSize, 1306)
+(textSize, 264)
+(title, Servidor Internet)
+
+Servidor Internet
+Web Server / Servidor Internet
+Para aceder ao seu site deve utilizar o nome de dominio.
+Contacte o seu suporte técnico se necessário.
+Obrigado.
+To access your site, you must use your domain name.
+Contact your technical support if needed.
+Thanks.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://25ras.pt
+(Content-Length, 777)
+(Content-Type, text/html)
+(Last-Modified, 09/10/2002)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/17/32/0)
+(host, 25ras.pt)
+(ip, 64.191.4.19)
+(language, unknown)
+(prof, 0)
+(realSize, 777)
+(textSize, 6)
+(title, 25ras)
+
+25ras
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://25ras.pt/
+(Content-Length, 777)
+(Content-Type, text/html)
+(Last-Modified, 09/10/2002)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/17/32/0)
+(host, 25ras.pt)
+(language, unknown)
+(prof, 0)
+(realSize, 777)
+(textSize, 6)
+(title, 25ras)
+
+25ras
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://2continentes.pt
+(Content-Length, 61)
+(Content-Type, text/html)
+(Last-Modified, 20/01/2003)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/62/20/0)
+(host, 2continentes.pt)
+(ip, 216.97.116.238)
+(language, unknown)
+(prof, 0)
+(realSize, 61)
+(textSize, 0)
+(title, null)
+
+http://2continentes.pt
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://2l2m-imobiliario.pt
+(Content-Length, 3563)
+(Content-Type, text/html)
+(Last-Modified, 04/10/2001)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(description, A 2L2M - Investimentos Imobiliários, Lda, está implantada à vários anos no sector, dedica-se à compra e venda de bens e imóveis, empreendimentos imobiliários e prestação de serviços. Sediada no Porto, a 2L2M possui um conhecimento aprofundado de todos os sectores do mercado imobiliário nacional combinando o profissionalismo com a qualidade. A 2L2M promove a venda e o arrendamento de imóveis em qualquer região do país. As soluções que aqui apresentamos, são somente algumas das opções que temos para oferecer: apartamentos, moradias e casas de férias.)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/36/29/0)
+(host, 2l2m-imobiliario.pt)
+(ip, 64.176.247.137)
+(keywords, 2l2m, apartamentos, moradias, casas, casa de férias, imobiliária, imobiliário, 2l2m imobiliario, venda, arrendamentos, empreendimentos, imóveis)
+(language, portuguese)
+(prof, 0)
+(realSize, 3563)
+(textSize, 116)
+(title, 2L2M - Investimentos Imobiliários, Lda)
+
+2L2M - Investimentos Imobiliários, Lda
+2001 - 2L2M Investimentos Imobiliários, Lda - Todos os direitos reservados .
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://360finance.com.pt
+(Content-Length, 1882)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, Netscape-Enterprise)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/46/9/0)
+(host, 360finance.com.pt)
+(ip, 198.240.212.199)
+(language, english)
+(prof, 0)
+(realSize, 1882)
+(textSize, 776)
+(title, null)
+
+If you are a PALM, PSION, WINDOWS CE or NOKIA user click here .
+The CREDIT SUISSE GROUP web sites have been optimised for browsers supporting cascading style sheets (i.e. Netscape Communicator v. 4.04 or higher or Microsoft Internet Explorer v.4.0 or higher). Additionally, please make sure that you have adjusted your browser to the following settings:
+Enable Java = YES
+Enable JavaScript = YES
+Viewers with other browsers may not see the entrire site and may not be able to use all aspects of the site's functionality.
+Please choose:
+1. Either adjust your browser settings to enable Java and JavaScript and press RELOAD.
+2. Or, if you want to view our pages with reduced functionality, click here.
+For further information about browser requirements and plug-ins, see help .
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://360graus.pt
+(Content-Length, 15721)
+(Content-Type, text/html)
+(Last-Modified, 01/10/2002)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/43/53/0)
+(host, 360graus.pt)
+(ip, 64.29.19.235)
+(language, portuguese)
+(prof, 0)
+(realSize, 15721)
+(textSize, 1505)
+(title, 360 Graus Internet Sistemas de Informação )
+
+360 Graus Internet Sistemas de Informação
+360 Graus Internet Sistemas de Informação Serviços Globais para Serviços e Soluções Produtos Tecnologia e-com Notícias Sobre a 360 Graus 1&ordf; Página Contactos Mapa
+Soluções Globais pensadas à medida da sua empresa
+360 G R A US
+Somos uma empresa que pela sua flexibilidade e conhecimento proporciona serviços de grande valor acrescentado.
+"Small is Beautifull"
+P a r c e i r o s utilizador palavra chave
+A 360 Graus, fornece soluções globais, na área de Sistemas de Informação, dirigidas a pequenas e médias empresas.
+S e quer dotar a sua empresa, de um sistema integrado e actual, nós temos a solução.
+A proveitando o potencial humano da 360 Graus, com larga experiência no sector, fornecemos soluções que vão de encontro às necessidades dos nossos clientes.
+F ornecemos soluções integradas que passam pelas seguintes áreas :
+Redes Microsoft com os diversos serviços &raquo;&raquo;
+Criação e manutenção de sites &raquo;&raquo;
+Criação de software específico &raquo;&raquo;
+Consultadoria na área de Internet e Sistemas de Informação, e muito mais .
+Para mais informação, contacte-nos !
+DESTAQUE Programa ASPSM : plataforma para criar e gerir conteúdos de sites
+Programa ASPSM
+Sistema essencial para criar e gerir conteúdos de sites.
+ler mais &raquo;&raquo;
+NOTÍCIAS Evolução das tecnologias de Informação nas empresas nacionais continua lenta
+ler mais &raquo;&raquo;
+e-mail: 360@360graus.pt | telef. 22 53 900 90 | Fax: 22 53 900 89 Copyright © 2002 •360 Graus
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://3c.pt
+(Content-Length, 402)
+(Content-Type, text/html)
+(Last-Modified, 14/03/2003)
+(ServerSW, Microsoft-IIS)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/34/40/0)
+(host, 3c.pt)
+(ip, 193.126.17.16)
+(language, portuguese)
+(prof, 0)
+(realSize, 402)
+(textSize, 49)
+(title, 3C - Comércio de Computadores e Componentes, Lda)
+
+3C - Comércio de Computadores e Componentes, Lda
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://3dplan.pt
+(Content-Length, 540)
+(Content-Type, text/html)
+(Last-Modified, 11/02/2003)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/56/28/0)
+(host, 3dplan.pt)
+(ip, 213.58.174.33)
+(language, unknown)
+(prof, 0)
+(realSize, 540)
+(textSize, 12)
+(title, 3DPlan, Lda)
+
+3DPlan, Lda
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://3ds.pt
+(Content-Length, 414)
+(Content-Type, text/html)
+(Last-Modified, 15/06/2001)
+(ServerSW, Microsoft-IIS)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/48/29/0)
+(host, 3ds.pt)
+(ip, 195.23.2.8)
+(language, unknown)
+(prof, 0)
+(realSize, 414)
+(textSize, 12)
+(title, null)
+
+www.mind.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://3dtech.pt
+(Content-Length, 6239)
+(Content-Type, text/html)
+(Last-Modified, 14/03/2003)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(description, Nextvision - Sistemas Gr&aacute;ficos, Computa&ccedil;&atilde;o e Informa&ccedil;&atilde;o, Lda.)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/21/13/0)
+(host, 3dtech.pt)
+(ip, 194.65.97.161)
+(keywords, nextvision sgi fujitsu siemens legasys camintonn dataram workstation estacao trabalho server servidor unix nt windows pc graficos gl video animacao silicon graphics)
+(language, portuguese)
+(prof, 0)
+(realSize, 6239)
+(textSize, 174)
+(title, Nextvision - Sistemas Gráficos, Computação e Informação, Lda.)
+
+Nextvision - Sistemas Gráficos, Computação e Informação, Lda.
+Staff Only...
+Copyright ©1997-2002 Nextvision, Lda. All Rights Reserved.
+webmaster@nextvision.pt
+Desde 97/08/01
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://3fitness.com
+(Content-Length, 2380)
+(Content-Type, text/html)
+(Last-Modified, 16/03/2003)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/24/6/0)
+(host, 3fitness.com)
+(ip, 195.22.10.103)
+(language, portuguese)
+(prof, 0)
+(realSize, 2380)
+(textSize, 50)
+(title, 3Fitness.com)
+
+3Fitness.com
+3Fitness.com
+Clique Aqui para Entrar
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://3m.com.pt
+(Content-Length, 22983)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, netscape-enterprise)
+(dataRec, 17/06/2003)
+(description, Explore 3M, the diversified technology company with leading positions consumer and office; display and graphics; electronics and telecommunications; health care; industrial; safety, security and protection services; transportation and other businesses.)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/27/18/1034)
+(ip, 192.28.1.249)
+(keywords, 3M about 3m innovation innovative products and technologies technology solutions architecture construction auto automotive marine aerospace electronics manufacturing graphic arts signs health care home leisure manufacturing industrial office products transportation personal safety utilities telecommunications investors financials 3m worldwide quarterly earnings skin health security touch systems)
+(language, english)
+(prof, 0)
+(realSize, 22983)
+(textSize, 1072)
+(title, 3M Worldwide)
+
+3M Worldwide
+3M
+Contact Us
+About 3M
+Search 3M
+Innovative and Practical Solutions from a Diversified Technology Company
+©3M 1995-2003 Legal Information Privacy Policy Careers | A-Z Product Index | Investor Relations | Corporate News Select your area of the world to
+view 3M products and services.
+Select a location Alaska Argentina Australia Austria Bahrain Belarus Belgium Bolivia Brasil Bulgaria Canada Chile China Colombia Costa Rica Croatia Czech Republic Denmark Dominican Republic Ecuador El Salvador Egypt Finland France Germany Greece Guam Guatemala Hawaii Honduras Hong Kong Hungary India Indonesia Ireland Israel Italy Jamaica Japan Kazakhstan Kenya Korea Kuwait Lebanon Malaysia Mexico Montenegro Morocco The Netherlands New Zealand Nicaragua Norway Oman Pakistan Panama Paraguay Peru Philippines Poland Portugal Puerto Rico Qatar Romania Russia Saudi Arabia Serbia Singapore Slovakia Slovenia South Africa Spain Sri Lanka Sweden Switzerland Syria Taiwan Thailand Trinidad Turkey UAE Ukraine United Kingdom United States Uruguay Venezuela Vietnam Yemen Zimbabwe
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://3o-dpg.pt
+(Content-Length, 14)
+(Content-Type, text/html)
+(Last-Modified, 04/06/2002)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/56/0/0)
+(host, 3o-dpg.pt)
+(ip, 64.83.108.49)
+(language, unknown)
+(prof, 0)
+(realSize, 14)
+(textSize, 14)
+(title, null)
+
+www.3o-dpg.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://4assist.pt
+(Content-Length, 2237)
+(Content-Type, text/html)
+(Last-Modified, 08/06/2001)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/11/8/0)
+(host, 4assist.pt)
+(ip, 193.126.109.142)
+(language, unknown)
+(prof, 0)
+(realSize, 2237)
+(textSize, 13)
+(title, 4ASSIST, Lda)
+
+4ASSIST, Lda
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://4assoalhadas.imovel.web.pt
+(Content-Length, 947)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, Microsoft-IIS)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/36/51/0)
+(host, 4assoalhadas.imovel.web.pt)
+(ip, 194.65.140.73)
+(language, portuguese)
+(prof, 0)
+(realSize, 947)
+(textSize, 74)
+(title, http://Imovel.web.pt - Site de Divulgação e Promoção de Imóveis [Aguarde])
+
+http://Imovel.web.pt - Site de Divulgação e Promoção de Imóveis [Aguarde]
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://4cce.org/
+(Content-Length, 8391)
+(Content-Type, text/html)
+(Last-Modified, 27/02/2003)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/8/57/0)
+(host, 4cce.org)
+(language, portuguese)
+(prof, 0)
+(realSize, 8391)
+(textSize, 1652)
+(title, 4.ª Companhia de Caçadores Especiais (4.ª CCE))
+
+4.ª Companhia de Caçadores Especiais (4.ª CCE)
+[ Os Autores ]
+[ Introdução ]
+[ Histórico ]
+[ Operações ]
+[ Armamento ]
+[ Angola - Urbana ]
+[ Angola - Interior ]
+[ Os Camaradas ]
+[ Em M iss ão ]
+[ "A Jangada" ]
+[ Nambuangongo ]
+[ "Pedra Verde" ]
+[ Os Louvores ]
+[ Mapas ]
+[ Bibliografia ]
+4.ª Companhia
+de Caçadores
+Especiais (4CCE)
+A n g o l a , 1 9 6 0 - 1 9 6 2
+O peração "Pedra Verde" "A Jangada" 26 a 31 de Julho de 1961
+>>Desenvolvimento e Fotos
+Operação "Pedra Verde". Reconhecimento armado às matas da Quibaba (duas praças mortas).
+Excerto do som gravado
+durante os violentos confrontos no decurso da operação. Gravação realizada originalmente pelo jornalista Magalhães Monteiro. Duração de 13 segundos com 136Kb (formato .wav). Março de 1961
+>>Desenvolvimento e Fotos
+Na sequência de uma emboscada perto da Fazenda Alegria, numa das margens do Rio Bengo, procede-se à travessia improvisada do rio. Graças à "recuperação" local de material para a construção de uma jangada e
+aos treinos similares no CIOE de Lamego torna-se possível a travessia do Rio Bengo com a jangada apoiada por cabo de sisal e algumas roldanas.
+Mapas de Campanha
+>>Desenvolvimento e Fotos
+>>Sector Algodeiro do Cambo (*)
+>>Região entre Rio Luanda e Rio Cuango (*)
+>>Estradas da Região Norte de Angola
+(*) desenhados à mão.
+[ English Version ]
+© M. Mateus e P. Mateus, 1996-2003 - webmaster@4cce.org
+Online desde 25 de Dezembro de 1996 . Actualizado em 27-02-2003 .
+E-Services powered by Viriato.net
+As fotos e textos deste site são propriedade dos respectivos autores ( M. Mateus e P. Mateus )
+Não podem ser reproduzidos sem autorização expressa formalmente pelos mesmos.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://4d.pt
+(Content-Length, 3888)
+(Content-Type, text/html)
+(Last-Modified, 28/07/2002)
+(ServerSW, apache)
+(dataRec, 04/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/2/24/391)
+(host, 4d.pt)
+(ip, 213.58.204.81)
+(language, english)
+(prof, 0)
+(realSize, 3888)
+(textSize, 873)
+(title, Mac OS X Server)
+
+Mac OS X Server
+Welcome to your website!
+This page is just a placeholder. To publish your site, place your HTML and image files in the following directory:
+/Library/WebServer/Documents/
+Be sure to name your main page "index.html" and it will become the default page for visitors.
+Additional resources
+Apple
+For the latest information about Apple Computer, Mac OS X Server, and other Apple server products, visit:
+- Apple Computer
+- Mac OS X Server
+Apache Web Server
+Detailed documentation on the Apache web server is available:
+- In the Web Service section of the Mac OS X Users Guide
+- Locally
+- In the Apache.org on-line documentation
+Technical Problems
+If you have a question or encounter a problem with your server software you can:
+- Search the AppleCare Knowledge Base
+- Visit the Apple Support Site for an answer or a workaround
+©Copyright 2001 Apple Computer, Inc.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://4elementos.pt
+(Content-Length, 406)
+(Content-Type, text/html)
+(Last-Modified, 13/03/2002)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/6/12/0)
+(host, 4elementos.pt)
+(ip, 81.92.193.3)
+(language, unknown)
+(prof, 0)
+(realSize, 406)
+(textSize, 11)
+(title, 4elementos)
+
+4elementos
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://4health.pt
+(Content-Length, 2592)
+(Content-Type, text/html)
+(Last-Modified, 24/02/2002)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/30/43/0)
+(host, 4health.pt)
+(ip, 81.92.193.2)
+(language, portuguese)
+(prof, 0)
+(realSize, 2592)
+(textSize, 148)
+(title, 4Health)
+
+4Health
+Página em construção 4Health - Consultadoria na Área da Saúde, Lda Rua Fernando Pessoa, n&ordm;6 3060-171 Cantanhede Telm: 963019652 e-mail
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://6mil.pt
+(Content-Length, 768)
+(Content-Type, text/html)
+(Last-Modified, 19/12/2001)
+(ServerSW, Apache)
+(dataRec, 21/03/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/40/55/0)
+(host, 6mil.pt)
+(ip, 195.22.0.150)
+(language, portuguese)
+(prof, 0)
+(realSize, 768)
+(textSize, 194)
+(title, 6 Mil - Tecnologias de Informação )
+
+6 Mil - Tecnologias de Informação
+Frameless version is not available. Yet!
+Versão sem frames ainda não disponível
+Frameless version is not available. Yet!
+Versão sem frames ainda não disponível
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/129579/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/61/23/709)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 25459)
+(textSize, 1738)
+
+Texto seguindo o cursor
+#wicked_hogwarts Home
+BEM VINDOS AO SITE DOS TESTES DA #WICKED_HOGWARTS
+Neste site encontrarão os testes das disciplinas da escola de magia #wicked_hogwarts. Para acederem aos testes o professor irá dar-vos na aula a senha correcta com a qual poderão fazer o teste. Obrigado!
+Página principal Organização dos testes Professores Adivinhação Aritmancia Astronomia Cuidado com as Criaturas Mágicas Defesa contra as Artes Negras Encantamentos Estudo dos Muggles Herbologia História da Magia Poções Quidditch Transfiguração Estudo dos Muggles
+Como esta é uma página secundária da escola #wicked_hogwarts, decidimos colocar aqui também as notícias mais importantes da nossa escola. Para isso, sempre que seja necessário, alguém estará encarregue de o fazer. Contamos com a vossa ajuda!
+Na parte de baixo deste site está um calendário deste 2ºano da #wicked_hogwarts. Esperamos que vos seja util!
+ 
+ 
+Clica na imagem acima para acederes à página principal da nossa escola, a #wicked_hogwarts. Queres inscrever-te na nossa escola? Vai nosso canal no Mirc, fala com o ||_SMOKE_||. Disciplinas Temos 12 disciplinas as melhores do momento.
+Calendário de actividades para o ano
+- 27/28/29 Dezembro - 1ª Semana de Aulas
+- 3/4/5 Janeiro - 2ª Semana de Aulas
+- 10/11/12 Janeiro - 3ª Semana de Aulas
+- 17/18/19 Janeiro - 4ª Semana de Aulas
+- 24/25/26 Janeiro - 5ª Semana de Aulas
+- 31/1/2 Fevereiro - 6ª Semana de Aulas
+- 7/8/9 Fevereiro - 7ª Semana de Aulas
+- 14/15/16 Fevereiro - 8ª Semana de Aulas
+- 21/22/23 Fevereiro - 9ª Semana de Aulas
+- 31/1/2 Março - Testes
+   
+   
+Professores Os professores mais competentes estão na nossa escola. É só inscrever-te! Página criada com o sistema de edição do 7 mares.terravista.pt //-->
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/2hard/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/5/62/656)
+(ip, 62.151.16.12)
+(language, unknown)
+(prof, 0)
+(realSize, 966)
+(textSize, 16)
+(title, hard2swallow2.0)
+
+hard2swallow2.0
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/7colinas/index.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/61/6/648)
+(ip, 62.151.16.12)
+(language, unknown)
+(prof, 0)
+(realSize, 1352)
+(textSize, 25)
+(title, /7colinas/conseguimos...)
+
+/7colinas/conseguimos...
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/acaixapreta/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/37/37/692)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 13236)
+(textSize, 3698)
+(title, a caixa preta)
+
+a caixa preta
+a caixa preta
+um relato caótico da vida de um louco
+:: . . . . . . . . . . . . . . . . . . . ::
+FOLHAS ANTERIORES
+<a href="< -Value"> -Value
+:: . . . . . . . . . . . . . . . . . . . ::
+OUTROS BLOGS
+a cortina
+bricabraque
+chita e jane
+catarro verde
+let's blogar
+nonlinear
+respira doido!
+the strange mind of mario av
+tiago teixeira
+xuito
+:: . . . . . . . . . . . . . . . . . . . ::
+E-MAIL
+acaixapreta@yahoo.com.br
+:: . . . . . . . . . . . . . . . . . . . ::
+VISITAS E ESTATÍSTICAS
+visitas estatísticas
+:: . . . . . . . . . . . . . . . . . . . ::
+ARREDORES
+arredores
+:: pxm :: rdm :: lst ::
+:: . . . . . . . . . . . . . . . . . . . ::
+MANTIDO POR
+Blogger
+:: . . . . . . . . . . . . . . . . . . . ::
+:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ::
+Quarta-feira, Agosto 08, 2001
+Em breve eu volto com "a caixa preta". No início eu tinha uma idéia de me manter oculto ao escrever esse blog. Conforme os dias se passaram eu vi que isso seria uma tarefa muito dificil: alguém que eu conheço cedo ou tarde me descobriria aqui. Fui ficando encabulado e decidi parar por enquanto. Vou fazer umas reformulações e, assim que eu tiver um tempinho de sobra, unir esse blog ao meu site pessoal, ao meu outro blog e a alguns outros sites que eu mantenho, formando uma única página. O link atual de "a caixa preta" continuará a existir, não se preocupe.
+[ 18:43 ]
+&nbsp/font>
+:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ::
+Sexta-feira, Julho 13, 2001
+Existem duas coisas que eu odeio em meu banheiro: uma delas é o lixinho e a outra é o vaso sanitário sem assento.
+&nbspque eu mais odeio mesmo é o lixinho. Que raiva que eu tenho daquele maldito lixinho todo complicado. Ele tem uma tampa parecida com uma porta giratória que insiste em devolver todos os papéis higiênicos sujos que eu tento jogar. Todas as vezes eles voltam e caem no chão do banheiro, com a face suja voltada para baixo. É aquela meleca.
+[ 11:20 ]
+&nbsp/font>
+:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ::
+Terça-feira, Julho 10, 2001
+"PELADO, PELADO, NÚ COM A MÃO NO BOLSO..."
+&nbspunca imaginei que participaria de algo do gênero: uma festa cheia de amigos pelados... homens e mulher... pois é ... uma única e corajosa mulher (mas que mulher!).
+&nbspfeito das doses de pinga envelhecida doze anos que tomamos, claro.
+&nbspinalmente estamos prontos para as praias nudistas do Rio de Janeiro.
+[ 03:48 ]
+&nbsp/font>
+:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ::
+Quarta-feira, Julho 04, 2001
+MUITO TRABALHO
+&nbspesculpe se eu ficar sumido por alguns dias. De repente me apareceu bastante trabalho, e não estou tempo de nem ao menos ler meus e-mails tranquilamente.
+&nbspendo assim: see you around.
+[ 15:24 ]
+&nbsp/font>
+:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ::
+Segunda-feira, Julho 02, 2001
+DESTEMPERADO 2
+&nbsputz... essa maldita dor de barriga está custando a passar! Com certeza isso é fruto da dieta equilibrada do fim de semana: cerveja, cachorro-quente, costelinha de porco, tempurá mal concebido e amisoshiro de origem duvidosa.
+&nbspu sou um daqueles neuróticos que não conseguem deixar o telefone tocar mais de três toques. Incrivelmente todas as vezes que estou no banheiro o dito cujo resolve tocar, eu não posso atender e a pessoa não deixa recado na secretária. Que saco!
+[ 17:11 ]
+&nbsp/font>
+:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ::
+melhor visualizado em resolução 800x600; ie5+
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/aj_wild/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/30/59/682)
+(ip, 62.151.16.12)
+(language, unknown)
+(prof, 0)
+(realSize, 9126)
+(textSize, 16)
+(title, Risco por Risco)
+
+Risco por Risco
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/almnegreiros/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/14/12/663)
+(ip, 62.151.16.12)
+(language, english)
+(prof, 0)
+(realSize, 1254)
+(textSize, 79)
+(title, Almada Negreiros)
+
+Almada Negreiros
+This page uses frames, but your browser doesn't support them.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/antinepcia/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/24/57/680)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 7392)
+(textSize, 4724)
+(title, Manifesto Anti-Inépcia)
+
+Manifesto Anti-Inépcia
+MANIFESTO ANTI-
+Sem corantes nem conservantes
+Anda para aí um site que se diz satírico e que usa e abusa dessa situação para destilar veneno sobre tudo e sobre todos. Sobre tudo e todos não. Sobre tudo o que desagrade aos autores (ou autor, não se percebe bem) do site ou sobre todas as pessoas de que não gostem. Isto de se dizer mal não funciona só para um lado. Também temos o direito de o fazer e de forma anónima (a mesma sempre presente no site) e vamos fazê-lo doa a quem doer. Vamos por pontos.
+1-A questão do plágio. A Inépcia faz acusações frequentes de plágio aos autores de outras páginas portuguesas em termos completamente descabidos. Até parece que foram eles que inventaram este tipo de coisa. Páginas como o Melgabyte, o Diário Semanário ou a Mangalho Homepágina são muito superiores àInépcia. Plágio fizeram eles, já que estão sempre a dizer que foram os primeiros a fazer uma coisa deste género em Portugal, ou seja, copiaram o que se fazia lá fora. Parece que o plágio deixa de ser plágio quando éfeito noutra língua.
+2-A qualidade não existe. Os textos da Inépcia podem enganar mas não são tão bem escritos como se pensa. Se analisarmos àlupa vemos que são uma repetição constante da mesma fórmula. Inventa-se uma notícia absurda, incluem-se os depoimentos de personagens fictícias ou inventam-se nomes engraçados para organizações, mostram-se opiniões contraditórias (tudo inventado e para parecer o mais jornalístico possível) e abusa-se de expressões como "ao que a Inépcia apurou", "disse", "afirmou" ou "questionado sobre... recusou-se a responder."
+3-Os alvos são sempre os mesmos. Personalidades televisivas, os jornalistas, os políticos. Até parece que os autores (ou autor) têm alguma questão pessoal por resolver com os alvos que criticam nos textos. São incapazes de fazer um texto satírico que não ofenda ninguém, o que prova a falta do talento que pensam ter. Salvo algumas excepções, os textos atingem sempre ódios de estimação que são fáceis de detectar.
+4-Os links. Émuito bonito expor ao ridículo os sites de outras pessoas. Mais difícil éfazer um site próprio e ter coragem de partilhar o nosso trabalho com o mundo. Émais um exemplo da arrogância da Inépcia.
+5-O anonimato. E porque não dão a cara pelo que escrevem? Têm medo? Até parece que sim. Os sites que acusam de plágio, por exemplo, têm quase todos o nome do autor perfeitamente identificado. A isso chama-se cobardia meus amigos!
+6-O tamanho. A Inépcia tem textos a mais. E os textos que tem são longos! Éum erro crasso para quem quer fazer um site definido como e-zine. Ninguém tem paciência para ler textos que para além de serem maus e chatos, também são grandes demais.
+7-Os amigos. Primeiro o Rodrigo Moita de Deus, depois o Nuno Markl. Quem se segue? A Luísa Castel-Branco? Mas isto passa pela cabeça de alguém? Fala-se mal das pessoas, goza-se com a sua dignidade pessoal e elas gostam e agradecem? Se éverdade, então nada mais temos a dizer a este respeito. O mundo está muito doente.
+8-O aspecto. A Inépcia tem um aspecto completamente amador. Nota-se que quem faz aquilo não percebe nada das noções básicas de webdesing. Mais uma vez, os sites que estão sempre a atirar ao ridículo têm muito melhor aspecto. Podem não ter tanta coisa para ler, como eles nos estão sempre a atirar àcara, mas pelo menos o leitor não vomita de nojo durante a leitura.
+9-O humor. Os autores (autor) da Inépcia acham que são os donos e protectores do humor em Portugal. Não são. Há mais gente com talento e com vontade de fazer coisas com qualidade. Veja-se a polémica levantada com os comediantes de stand-up que foram completamente ridicularizados pela Inépcia e sem sequer terem visto os espectáculos. Perguntamos: Vocês faziam melhor? Acrescentamos: Mesmo que seja mau, que autoridade têm vocês para dizer isso? Pedro Tochas éum dos grandes valores do futuro do humor português. Herman José foi e continua a ser o MESTRE. Vejam bem o que dizem antes de abrir a boca. Uma questão para pensar...
+10-Conclusão. Por estes motivos e por outros mais ainda lançamos aqui um apelo a todos os que leiam este manifesto. Mandem um e-mail àInépcia para: inepcia@mail.pt e peçam-lhes para desistir. Para deixarem de nos chatear com as suas birras infantis e humor de má qualidade, fazerem a trouxa e irem trabalhar para outro ramo qualquer para que tenham jeito. Já agora, digam-lhes para deixarem a comédia na internet para quem percebe do assunto!
+Assinado: Grupo de webmasters de humor da internet portuguesa.
+Andamos a fazer um abaixo assinado para enviar para a Inépcia. Se concordas com o que dissemos em cima ou se tiveres algum facto relacionado com a Inépcia para nos contar, escreve para: antinepcia@hotmail.com
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/ap3e/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/37/51/682)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 1069)
+(textSize, 53)
+(title, New Page 1)
+
+New Page 1
+AP3E
+Estamos em http://www.dem.uc.pt/ap3e
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/armamar/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/23/29/678)
+(ip, 62.151.16.12)
+(language, english)
+(prof, 0)
+(realSize, 1116)
+(textSize, 105)
+(title, ESCOLA BÁSICA 2/3 GOMES TEIXEIRA - ARMAMAR)
+
+ESCOLA BÁSICA 2/3 GOMES TEIXEIRA - ARMAMAR
+This page uses frames, but your browser doesn't support them.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/armeria/2002/Pass0006.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/56/50/644)
+(ip, 62.151.16.12)
+(keywords, Ambiente, Arméria, Peniche, Consolação, S. Bernardino, Supertubos, Frades, Passeio Pedestre)
+(language, portuguese)
+(prof, 0)
+(realSize, 4400)
+(textSize, 2720)
+(title, 6º Passeio Pedestre - "Do Médão Grande à Praia dos Frades")
+
+6º Passeio Pedestre - "Do Médão Grande à Praia dos Frades"
+Devido às más condições atmosféricas que ocorreram a 8 de Setembro, o 6º Passeio Pedestre organizado pela ARMÉRIA foi adiado para dia 22 de Setembro de 2002. Tal como nas edições anteriores, podem participar nesta iniciativa gratuita e sem inscrição prévia, sócios e não-sócios da Arméria.
+Desta vez, sob a designação "Do Médão Grande à Praia dos Frades", o percurso escolhido terá início na Praia do Médão / Supertubos (localizada junto à entrada sul de Peniche), sendo o encontro pelas 9h30m junto ao bar / apoio de praia aí existente, terminando no mesmo local a meio da tarde. Deste modo os participantes devem levar almoço para realizar o já habitual piquenique convívio.
+Caminhando por um extenso areal, pelas zonas de natureza rochosa que desafiam a força do mar ou sobre a arriba, autêntico miradouro natural, esta será, sem dúvida, uma oportunidade única de conhecer melhor este recanto da costa de Portugal, onde se localizam 3 praias de bandeira azul.
+Este percurso tem um grau de dificuldade baixo a médio (a zona de maior dificuldade é o litoral rochoso, do quilómetro 2 ao 3,5) e apresenta sensivelmente 8 Km de extensão no seu total. Entre os inúmeros aspectos que este vai abranger destacam-se os relativos:
+- à flora típica das dunas, que impedem o avanço das águas do mar;
+- à erosão e à pressão humana sob as zonas costeiras;
+- ao património edificado, onde se destaca a existência de um Monumento Nacional, o Forte da Praia da Consolação (Link para página da DGMEN);
+- ao património geológico e paleológico, pois é um dos locais onde se encontram mais fósseis no Concelho de Peniche;
+- às zonas balneares e à atribuição da Bandeira Azul;
+- ao enquadramento cénico de todo o percurso, donde é possível avistar, nos dias de menos neblina, desde a Serra de Sintra a Sul, até às diversas ilhas do Arquipélago das Berlengas, que é uma Reserva Natural.
+6Passeio.jpg (35828 bytes)
+A imagem apresenta diversos aspectos do percurso (da esquerda para a direita e de cima para baixo): Praia do Médão / Supertubos; Praia da Consolação; Praia de S. Bernardino (com zona rochosa em 2º plano); Praia dos Frades.
+Esta iniciativa será descrita e ilustrada com mais imagens no Artigo de 8 de Outubro de 2002, do Jornal "A Voz do Mar" e na respectiva versão digital disponibilizada neste site. Esperamos que no futuro esta beleza possa ser também apreciada por quem aceda a esta página, podendo ainda motivar para uma visita ao vasto património do Concelho de Peniche.
+[ Arméria - Apartado 143, 2524-909 Peniche Codex ] [ http://7mares.terravista.pt/armeria/index.html ] [ associacaoarmeria@hotmail.com ]
+Copyright © Arméria 2002
+Webmaster: Jorge.Maia@mail.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/atlda/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/20/24/748)
+(ip, 62.151.16.12)
+(language, unknown)
+(prof, 0)
+(realSize, 778)
+(textSize, 14)
+(title, Alves e Trigo)
+
+Alves e Trigo
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/avifauna/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/29/53/747)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 19683)
+(textSize, 1360)
+(title, Home)
+
+Home
+Bem-vindos A PAGINA DE AVIFAUNA NUNO DOMINGUES
+AQUI PODERÁ ENCONTRAR ALGUMAS INFORMAÇÕES SOBRE AOS MEUS ANIMAIS FAVORITOS.
+AVIFAUNA NUNO DOMINGUES
+RUA DE LEIRIA LOJA 2 2405-018
+MACEIRA-LEIRIA
+TLF:244 772563 FAX: 244772563
+TLM:934130385
+LISTA DE PREÇOS IMAGENS DE AVES ANUNCIOS EXPOSIÇÕES 2002 CUIDADOS LORIES NEOPHEMAS PAPAGAIOS AUSTRALIOS AUSTRALIANOS 2 AUSTRALIANOS 3
+Nesta página poderá aceder a todos os conteúdos a partir da minha lista de menu.
+NA SECÇÃO AVES PODERÁ EMCONTRAR ALGUMAS INFORMAÇÕES SOBRE OS MAIS DIVERSOS TIPOS DE AVES. (PSITACIDEOS , EXOTICOS , CANARIOS ETC.)
+ PODERÁ TAMBEM COLOCAR OS SEUS ANÚNCIOS DE VENDA TROCA OU COMPRA DE AVES E OUTROS ANIMAIS.
+NÃO PERCA A IV EXPOAVE
+TELHEIRO
+MACEIRA- LEIRIA
+4.5 E 6 DE OUTUBRO   Quer ter uma página como a minha?
+Basta registar-se no Terràvista e escolher o modelo que mais gosta.  NÃO ESQUEÇA  SE PRECISAR DE QUALQUER TIPO DE AVE CONTACTE-NOS
+ ESTAMOS AO SEU DISPOR
+ AVIFAUNA
+RUA DE LEIRIA LOJA 2
+2405-018 MACEIRA-LEIRIA
+(EM FENTE AOS BOMBEIROS DE MACEIRA)
+TEL E FAX:244772563
+O NOSSO EMAIL:  
+avifauna@clix.pt
+ FORNECEMOS QUALQUER TIPO DE MATERIAL  NINHOS , REDES , GAIOLAS , AQUARIOS E UMA GRANDE VARIEDADE DE AVES E OUTROS ANIMAIS.
+O NOSSO CONTACTO É  AVIFAUNA RUA DE LEIRIA LOJA2
+2405-018 MACEIRA-LEIRIA
+TLF E FAX:244772563 Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/basededados/index.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/16/20/688)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 7537)
+(textSize, 871)
+(title, BASE DE DADOS)
+
+BASE DE DADOS
+BASE DE DADOS
+Todo o Portugal de Norte a Sul !
+Caros cibernautas...
+Esta página foi construida no intuito de poder proporcionar a todos os empresários interessados em efectuar mailings com CARTAS PERSONALIZADAS
+a nivel nacional, especialmente ás empresas de Venda Directa por catálogo,
+Route-Show, ou apenas campanhas publicitárias.
+Resposta a questões sobre este produto :
+Adianto desde já que qualquer informação acerca deste produto deverá ser remetida para o E-Mail goldchild@clix.pt.
+Posso no entanto adiantar aos possiveis interessados que esta Base de Dados
+não tem como proveniência a Lista Telefónica Nacional nem a
+ITT Páginas Amarelas.
+Quanto aos resultados eu diria que são excelentes !!!
+Contacte Já !
+Ligações para outros Sites http://www.terravista.pt Volte para o TERRAVISTA... Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/bento/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/4/30/662)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 8366)
+(textSize, 634)
+
+Bem-vindo a Brinquedos de Papel!
+Estão disponíveis para impressão, com imagem de várias entidades, os seguintes moldes:
+- PSP - Carro patrulha em tamanho grande | Carro patrulha para pintar
+- INEM - Novo molde e desenho de ambulância 112
+- Bombeiros - Jipe Comando | Ambulância 112 Pré-Hospitalar
+- Polícia Judiciária - Automóvel (em tamanho grande)
+- Autocarros - Com imagem da Carris , Sul Fertagus e TST
+- Jipe com imagem militar
+- Táxi (automóvel)
+- Alguns desenhos que mostram a evolução no molde das ambulâncias 112 Moldes | Professor | Home | Projecto Domingo, 23 de Março Trabalho original (c) 1998 - 2003 | Lisboa - Portugal
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/bibliomanias/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/4/43/703)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 5477)
+(textSize, 243)
+(title, BIBLIOMANIAS)
+
+BIBLIOMANIAS
+BIBLIOMANIAS
+Bem Vindo
+This Site has moved to
+http://bibliomanias.no.sapo.pt/
+Please update your bookmarks.
+Ligações para outros Sites http://bibliomanias.no.sapo.pt/ Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/caritaslei/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/29/32/666)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 3565)
+(textSize, 101)
+(title, O novo endereço do site da colónia é colonia)
+
+O novo endereço do site da colónia é colonia
+O novo endereço do site da colónia é colonia.no.sapo.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/carlix2/signossexualidade.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/40/0/657)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 17637)
+(textSize, 10295)
+(title, signossexualidade.htm)
+
+signossexualidade.htm
+VOLTAR MENU PROSA E POESIA INICIO MENU DIVERSOS MENU UTILIDADES
+Os signos e a sexualidade
+LEÃO, MULHER:
+Insinuante, lasciva, sedutora e preguiçosa. Consegue tudo o que quer. Necessita de demonstrar quem manda, por isso prefere ficar por cima. Assim o parceiro pode admirar a beleza do seu corpo.
+LEÃO, HOMEM:
+Simplesmente afasta-se de qualquer regra ou convenção. Uma regra importante, acerca dele: NUNCA o excite, o seu endurance é notável e tem um grande apetite para fazer amor. Gosta da mulher na posição submissa e sexo oral é aceite se poder dar e receber. Gosta de mulheres que demonstrem o quanto estão a gostar. Zona erógena: As suas costas são particularmente vulneráveis.
+VIRGEM, MULHER:
+Não tem ilusões acerca do sexo e deseja que toda a gente pare de ampliar a sua importância. Prefere homens que esperem pelo desenvolvimento da relação até ao ponto onde sexo é inevitável. Gosta de masturbação mútua e pequenos castigos. Timidez e modéstia excitam-na. É artista na forma como agrada ao seu amante. Perversão favorita: Não goza sem a presença de uma terceira parte. Melhores companheiros: Gémeos, Caranguejo e Aquário.
+VIRGEM, HOMEM:
+Demasiado tímido para começar uma aventura, mas quando o momento chega. É melhor preparar-se porque ele vai trazer os pijamas, a máquina de Barbear e a escova de dentes. Gosta de falar de como é que você gosta. Não espere imaginação, mas ele é um trabalhador incansável e aberto a sugestões. Vida secreta: Obcecado com pornografia. Zona erógena: nádegas.
+BALANÇA, MULHER:
+Drama é a palavra chave. Intensamente feminina e instintivamente exibicionista. Sente que o seu corpo foi feito para ser visto e admirado. Sente a sedução na arte, não no assalto. Quando abordada da maneira correcta é lhe fácil dizer que sim a tudo. Pouco controlo dos músculos vaginais. Melhores companheiros: Carneiro, Gémeos, Leão, Escorpião, Sagitário e Aquário. Gosta de qualquer posição onde as nádegas estejam expostas.
+BALANÇA, HOMEM:
+Procura a experiência toda, não apenas uma cambalhota entre os lençóis. Tem definitivamente um lado perverso, voyeur e desejo da menage a trois . Tem a paciência necessária para satisfazer. Gosta de mulheres que se vistam bem e de cabelo comprido. Se as roupas de uma mulher lhe parecerem fáceis de tirar, ele dificilmente a ignora. Zona erógena: Nádegas, especialmente o toque de mamilos erectos contra as nádegas.
+ESCORPIÃO, MULHER:
+Curiosa, procura e experimenta. Sabe que o erotismo consiste em mais do que o acto de fazer amor. Enquanto aparenta ser a mulher perfeita em público, veste-se e comporta-se como uma puta na cama. O controlo do orgasmo é muito importante e tenta tudo para ajudar o seu homem a manter a sua potência. Quando se interessa por alguém, nunca aceita um não. Melhores companheiros: Gémeos, Caranguejo, Escorpião e Touro. Perversão: Óleos para o corpo, gel lubrificante e vibradores.
+ESCORPIÃO, HOMEM:
+Um animal sexual. Gosta de bater e chupar, é um mestre no sexo oral. Infligir dor excita-o, por isso ele pode beliscá-la nos mamilos ou dentro de coisas. Gosta dentro de água, mas a sua perversão são mesas e madeira e chão duro.
+CARNEIRO, MULHER:
+Sensualmente selvagem, apaixonada e aventureira. Faz amor em qualquer lugar, e sabe o que quer - sexo frequente e intenso. Tem necessidade de controlar completamente. Mas quando ama, ama. Como companheira é ardente, sentimental. Maior emoção - o toque dos pelos faciais de um homem.
+CARNEIRO, HOMEM:
+Dormir com ele é como atravessar um campo minado, nunca se sabe o que vai acontecer. Ele nunca espera que você esteja pronta, por isso, rasga as suas roupas assim que estiver pronto. Não o excite ou esteja preparada para se entregar, prepare-se para ser escrava de jogos e ele gosta deles duros. Os nativos de carneiro são exploradores, portanto prepare-se para ir onde nenhuma mulher foi antes. Posição favorita: Uma mulher de joelhos em aprendizagem.
+TOURO, MULHER:
+Quer um homem meigo, paciente e que faça amor de acordo com as regras. Gosta de ser satisfeita pelo sexo, mas não procura aproximações estranhas. É uma amante exigente, deixa o seu parceiro sem fôlego. Sente necessidade de gratificação oral, dar e receber. Melhores companheiros no sexo: Caranguejo, Sagitário, Escorpião e Leão. Maiores perversões: Chupar os dedos, um por um. Também gosta de dentadinhas.
+TOURO, HOMEM:
+É o companheiro ideal, sensível e compreensivo em relação à companheira. Ele prefere lento, ele não será o seu guia para o exótico desconhecido, mas o que ele faz, faz lindamente. Este é o homem ideal para um longo e luxurioso sexo oral. Este homem é capaz de derreter um glaciar. Melhores companheiras: Escorpião, Virgem, Caranguejo. Zonas erógenas: Beijos gentis e lentos, dentadinhas na nuca.
+GÉMEOS, MULHER:
+Vulgo a agressora. Não fique embaraçada com o seu comportamento, já sabe que os únicos standards são os seus. A sua principal necessidade: Um amante que saiba o que o espera. Você é um harém, mas o seu parceiro deve saber que numa relação com uma mulher de gémeos, ela procura uma combinação de espírito e físico, romance e prático. Depois da "cambalhota" gosta de falar. Melhores companheiros: Leão, Escorpião, Aquário, Balança e Carneiro. Brinquedo favorito: Vibrador.
+GÉMEOS, HOMEM:
+Ele gosta de o fazer com as luzes acesas em frente de um espelho. Sexo oral não é o seu passatempo favorito, mas demora o seu tempo com outros preliminares. Tendência para ser rápido e furioso, mas preocupado em satisfazer-se a si próprio, mas é o mais adequado para fazer amor noutras áreas negligenciadas por outros homens. Não diz a uma mulher exactamente aquilo que ela quer ouvir. Zona erógena: Mexer os lábios e língua em torno dos braços.
+CARANGUEJO, MULHER:
+Nunca dá o primeiro passo, mas é uma amante maravilhosa, capaz de uma sensualidade intensa. Devolve paixão com um estímulo e fervor capaz das melhores performances. Tem um grande carinho por masturbação. A sua posição favorita: prostrada, enquanto o homem se encontra atrás. Melhores companheiros: Touro, Leão, Virgem, Escorpião e Peixes. Você pode tornar-se escrava dos prazeres sexuais.
+CARANGUEJO, HOMEM:
+A sua técnica mais surpreendente: relações sem mãos. Necessita de constante encorajamento, se o tiver será um maravilhoso namorado. Paciente e agressivo, muitas vezes começa fora da cama. Gosta de comandar e é um mestre na manipulação (manual) do clitóris.
+SAGITÁRIO, MULHER:
+Você gosta de actividades ao ar livre - mas passa-se se estiver numa tenda, a acampar ou na praia. Gosta de sexo, mas não lhe agrada prolongar os preliminares prefere começar logo com o espectáculo principal. Gosta de espicaçar o parceiro até ao ponto de este perder o controlo. Não se Importa que o seu homem se venha rapidamente - você é uma amante generosa. Melhores companheiros: Leão, Balança, e Aquário. O seu guarda roupa erótico é constituído por acessórios - luvas e sapatos!
+SAGITÁRIO, HOMEM:
+Sexo raramente é uma experiência intensa consigo - frequentemente vem-se rapidamente, mas você será o primeiro a experimentar uma posição nova. É o mestre da massagem erótica - tanto oral como manual. A sua língua pode ser um instrumento malvado quando combinada com os seus lábios, criando um efeito explosivo! Zonas erógenas: ancas e coxas. Gosta de olhar para pernas e coxas de uma mulher, e gosta de fazer sexo com uma mulher com meias.
+CAPRICÓRNIO, MULHER:
+Não necessita de muitos preliminares - vai do zero ao clímax num instante! Pouco interessada em variações exóticas; apenas em manter o poder. Uma vez que gosta de dominar, gosta de domesticar o seu homem, marcar o ritmo, e agradar a si própria. Uma vez dentro do ritmo, fazer amor torna-se um concurso selvagem que tem como prémio o orgasmo e você espera atingi-lo mais que uma vez. Também gosta de arranhar e gritar. Melhores companheiros: Touro, Escorpião e Peixes.
+CAPRICÓRNIO, HOMEM:
+O sexo evoca o melhor que tem para oferecer. É cheio de planos e esquemas. Prefere uma mulher que sabe o lhe agrada a si, e ele espera que ela tenha sempre vontade e esteja pronta sempre que ele a quiser. Tem a vitalidade de um corredor de maratona. Aqui está um homem que aguenta até que você esteja pronta para gritar! Zona erógena: uma massagem no início nas costas dada pela parceira que começa nos rins e suavemente vai subindo pelos lados e na coluna.
+AQUÁRIO, MULHER:
+De arranque lento, imagina o amor pausado e com muita ternura. Uma vez excitada, vale tudo! Extremamente imaginativa, gosta de experimentar coisas novas. Não existe nada nos manuais de sexo que não queira experimentar. Acredita que qualquer coisa que aumente o prazer do seu parceiro. Vale a pena tentar. Melhores companheiros: Carneiro, Gémeos, Balança, Sagitário, e Leão. Posição sexual favorita: em pé, e na água.
+AQUÁRIO, HOMEM:
+Nunca trata a mulher como um objecto sexual e prefere uma variedade de preliminares antes de ir direito ao assunto. Pode demorar a aquecer, mas depois de ter o motor a funcionar, fica desenfreado e imaginativo e muito persistente. Levará sempre a parceira ao clímax. A mulher que sabe o que quer será muito feliz com ele. Ele normalmente assegura um duplo orgasmo - uma vez e outra por penetração. Zonas erógenas: tocar suavemente as pernas e tornozelos é o suficiente para o excitar. No entanto tenha cuidado - um aquariano perverso poderá não aceitar uma recusa!
+PEIXES, MULHER:
+Faz sempre os movimentos certos, diz as coisas certas, e cria o ambiente certo. É sexualmente liberal e desfruta uma ampla gama de erotismo. Se as suas fantasias forem as mesmas do parceiro, a acção passará a ser escaldante! Raramente se recusa a fazer qualquer coisa sugerida pelo seu parceiro! Adora luz suave de velas, lareiras quentes, mistério, aplica romantismo a tudo o que faz. Uma verdadeira romântica de coração. Lugares favoritos: numa cama de água ou na banheira. Melhores companheiros: Caranguejo, Escorpião, Capricórnio, Peixes.
+PEIXES, HOMEM:
+Toma a liderança no fazer amor e fica impaciente se não obtêm uma resposta rápida. Indiferente às restrições sexuais, tanto morais como legais; prefere uma parceira com um desejo sexual enorme. Gosta de sexo numa cadeira. Gosta de ser submisso. Fica viciado em qualquer coisa que dê prazer. Zona erógena: massagens e carícias nos pés.
+VOLTAR MENU PROSA E POESIA INICIO MENU DIVERSOS MENU UTILIDADES
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/central1/LGC.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/17/21/714)
+(ip, 62.151.16.12)
+(language, english)
+(prof, 0)
+(realSize, 2786)
+(textSize, 91)
+
+>
+LGC
+Click here to Chat
+LGC
+WWW.cybercentral.tk
+www.webcreative.tk
+www.globaldecor-art.tk
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/cestas20/index.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/16/19/647)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 7761)
+(textSize, 1153)
+(title, LOJA DAS CESTAS)
+
+LOJA DAS CESTAS
+LOJA DAS CESTAS
+ARTÍSTICAS E ARTESANAIS
+As cestas geralmente são compostas por frutas, geléias, queijos, torradas e uma série de outros itens de acordo com a ocasião, porém sempre com a preocupação de unir o sabor nutritivo dos alimentos à sua apresentação visual.Seguindo a velha máxima de que pela boca se conquista melhor o coração.
+ARTE IMAGINAÇÃO E BOM GOSTO
+Fabricamos artesanalmente cestas café da manhã.Prendas com originalidade e arte.Prendas para os momentos especiais da vida.Cestas artísticas, para uma vida cheia de emoção e carinho.Cestas café da manhã.Ofertas originais.Prendas especiais.Uma oferta brilhante para pessoas excepcionais.Arte.Artesanato.Amor. Carinho.Paixão.Emoção.Originalidade.Fabricamos também: cestas maternidade, cestas amor, cestas vinhos diversos, cestas banho, cestas paixão, cestas eróticas, cestas aniversário, cestas de natal,cestas páscoa, e outras variedades,para as mais diversas ocasiões
+Ligações para outros Sites http://intermega.globo.com/lojacestas/ces.html LOJA DAS CESTAS CAFÉ DA MANHÃ ( FOTOS )
+Contacto
+rnadaz@hotmail.com
+Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/churrasqueira/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/9/18/719)
+(ip, 62.151.16.12)
+(language, english)
+(prof, 0)
+(realSize, 1119)
+(textSize, 85)
+(title, Churrasqueira Paulista)
+
+Churrasqueira Paulista
+This page uses frames, but your browser doesn't support them.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/cienciaquegira/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/54/39/657)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 2254)
+(textSize, 326)
+(title, Bem vindo ao clube de Ciências da Escola Básica dos 2)
+
+Bem vindo ao clube de Ciências da Escola Básica dos 2
+Bem vindo ao clube de Ciências da Escola Básica dos 2º e 3º Ciclos
+Dr. Guilherme Correia de Carvalho - Seia
+ESCOLA EB 2.3 DR. GUILHERME C. CARVALHO - SEIA    - Avançar ...
+Professores responsáveis: Maria Ivone Mendonça Respeita Amaro Viveiro e Francisco Borges Fernandes.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/clube205/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/20/62/692)
+(ip, 62.151.16.12)
+(language, unknown)
+(prof, 0)
+(realSize, 809)
+(textSize, 9)
+
+Clube205
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/colegiofaial/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/21/27/648)
+(ip, 62.151.16.12)
+(language, english)
+(prof, 0)
+(realSize, 1160)
+(textSize, 73)
+(title, New Page 1)
+
+New Page 1
+This page uses frames, but your browser doesn't support them.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/compositor/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, Página pessoal do Professor Fernando Corrêa de Oliveira, conhecido compositor portuense e criador da Assimetria Sonora)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/37/30/719)
+(ip, 62.151.16.12)
+(keywords, Assimetria, Sonora, Porto, Compositor, Música, Conservatório)
+(language, portuguese)
+(prof, 0)
+(realSize, 1204)
+(textSize, 94)
+(title, Fernando Corrêa de Oliveira : Compositor)
+
+Fernando Corrêa de Oliveira : Compositor
+© Copyright 1999 net@rroba.com, All rights reserved.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/contos-eroticos/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/59/11/664)
+(ip, 62.151.16.12)
+(language, german)
+(prof, 0)
+(realSize, 3364)
+(textSize, 291)
+(title, CONTOS ERÓTICOS)
+
+CONTOS ERÓTICOS
+O SEU ESPAÇO ERÓTICO
+mande-nos os seus contos, fotos, ... e serão postos aqui
+CONTOS ERÓTICOS
+FOTOS ONLINE
+<IMG   SRC="http://www.peak.org/cgi-bin/counter?contoseroticosafkanh&amp;width=5" ALT="counter"   ALIGN=BOTTOM BORDER=0 VSPACE=0 HSPACE=0&gt;&lt;/BODY&gt;<
+TOPSEXO.COM
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/ct4er/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, CT4ER, Radioamadorismo, Amateur Radio, Homebrewing, QRP and EVORA)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/14/15/703)
+(ip, 62.151.16.12)
+(keywords, CT4ER, HAMRADIO, QRP, Amateur Radio, HOMEBREW, EVORA, radioamadorismo, Construcção Caseira, Alentejo)
+(language, portuguese)
+(prof, 0)
+(realSize, 19142)
+(textSize, 6669)
+(title, CT4ER Radioamadorismo Amateur Radio Construção Caseira Homebrew QRP)
+
+CT4ER Radioamadorismo Amateur Radio Construção Caseira Homebrew QRP
+CT4ER
+Évora  -  Portugal
+mexe.gif
+QTH Locator IM68BN
+Muito obrigado por visitar esta página dedicada ao Radioamadorismo
+england.jpg
+mexe.gif
+As minhas Páginas Associações JF10ZL SM0VPO VK2TIP echoLink eQSO iLINK Paltalk QRP Radioamadorismo Repetidores HTML-KIT Notepad VFO ICP-ANACOM IARU ITU CT1BT AC6V Construção Caseira QRZ QSL ICQ ARRL LABRE RSGB URE ARVM CS0RCL Évora PTelecom KAMA
+mexe.gif
+Divirta-se á sua vontade!
+Autorizada a transmitir em Junho de 1976, a estação de Radioamador "CT4ER", está localizada junto ao TEMPLO ROMANO, em pleno centro de ÉVORA, Cidade MUSEU e Património Mundial .
+Sempre tenho utilizado equipamento de construção caseira nas bandas de HF. De momento tenho um mais velho com cerca de 50 Watts de saída e um mais novo com cerca de 20 Watts. 
+Atacam uma antena multibanda com traps fornecida por CT1AYM. 
+Outra antena que também está por cá a dar muito boa conta de si é a FD3 para 40, 20 e 10 metros. Com o sintonizador trabalha de 80 a 10 metros sem problemas. 
+Outras antenas que também foram utilizadas por cá, tais como, a G5RV e a WINDOM (FD4) com muito bons resultados.
+O local tem muito QRM e QRN, principalmente nos 80 e 40 metros.
+Também tenho testado por cá aparelhos da concorrência, YAESU, KENWOOD e outros. Todos têm passado o teste ainda que por vezes seja necessária a intervenção do CT4ER. Por esta última razão é que eles por aqui aparecem.
+Com o meu novo transceptor , para QRP e para todas as bandas HF de radioamador, tenho conseguido bons QSO, com apenas 250mW, tanto em 80 como em 20 metros. Algumas reportagens de 57!!!!. Todos os contactos feitos em fonia tanto para Portugal, Espanha como para outros países da Europa. 
+A potência total do transceptor será da ordem dos 20 Watts com possibilidade de regulação para QRP , neste momento um máximo de 5 Watts em todos os modos de emissão .
+No diagrama bloco encontrará a filosofia de funcionamento. 
+De momento ainda está a funcionar com um VFO que cobre toda a banda de 80 e 20 metros, quer em fonia com em telegrafia.
+ É um equipamento projectado para funcionar com um PLL mas com o aparecimento do VFO DIGITAL que cobre todas as bandas de HF de amador está a ser considerada a ideia de usar o dito cujo em detrimento do PLL.
+Em VHF utilizo um FT290R da YAESU. Normalmente está em PACKET RADIO. 
+Muitos bons QSO têm sido feitos em fonia (SSB e FM). Em CW também tem sido divertido, sobretudo para fora de CT. 
+A antena de VHF é uma DIAMOND F - 22 2x7/8 6.7dB 3.2m de comprimento.
+  Top
+Este foi o meu primeiro EMISSOR / RECEPTOR . É de dupla conversão. Grande parte do circuito ainda está em funcionamento. Na outra parte, ao longo dos anos, foram feitas alterações para actualização de componentes e funcionamento.
+O filtro da frequência intermédia é de 3180Khz. Estes circuitos têm alguma semelhança com o FT101 da YAESU. 
+Quer o detector de produto , quer o modulador balanceado são integrados uA796 ou equivalentes. Depois de diversas experiências estes circuitos ficaram no seu original.
+Os MOSFETS originais foram os 40673 mas como, os que tinha, eram ruidosos, foram substituídos por BFR84. Também tinha menos dificuldade em encontrar estes no mercado nacional do que os outros porque eram, na época, muito utilizados nos sintonizadores dos televisores.
+Os FETS são em maioria MPF102. Outros foram testados, mas o resultado não foi o melhor. Hoje já os poderia substituir por outros tão bons ou melhores. 
+No CAG o 2N5486 foi o que deu melhor resultado. 
+Os transístores bipolares são 2N706 ou BC107 ou relacionados com esta família. 
+O circuito integrado CA3053 teve de ser substituído pelo CA3028 para ganho mais elevado e melhor relação sinal ruído.
+O amplificador de áudio, tem capacidade para 5 watts sem distorção, é um integrado uA706 da FAIRCHILD. Outros circuitos têm sido testados com resultados idênticos. 
+O microfone pode ser de alta ou baixa impedância. Depende da resistência colocada na entrada do amplificador do micro . 
+No ínicio eu utilizei um com 250 Ohms e também foi testado um altifalante pequeno para servir de microfone. Este avariou com a humidade.
+Na parte de emissão os desenhos da drive e andar final não estão em boas condições para passar no scanner. São convencionais e podem ser encontrados em qualquer manual. 
+A drive é uma 12BY7 e a válvula do andar final uma 6146B que dá 50 watts a brincar e resiste muito ás malandrices que nós lhe fazemos. 
+No lugar da 12BY7 foram também utilizadas outras válvulas como a EF80, 6GK6 e os resultados foram semelhantes. 
+No andar final a primeira válvula foi uma QE05/40, a sua dissipação de placa é apenas 20 Watts. Depois de fazer a sintonia ficava num azul muito bonito.
+Para QRP existe um comutador de 50 para 10 Watts. Faz a comutação da tensão da placa da válvula 6146B.
+As bobinas, com a excepção da bobina da frequência intermédia do receptor que é YAESU, são de rádios ou televisores velhos e adaptadas para a frequência pretendida.
+Depois da montagem do equipamento e para fazer os testes de emissão era utilizada uma lâmpada de iluminação de 110 Volts e 40 Watts para fazer de antena não radiante. Medidor de estacionárias  não existia. A corrente de placa e grelha eram o controle do melhor rendimento.
+Hoje já existe por cá a modernice das antenas não radiantes e medidor de estacionárias porque com os transístores as impedâncias têm de estar muito bem adaptadas para um bom rendimento.
+Top
+diagram31.gif
+LPF
+BPF
+Pre Driver
+Driver
+Amplificador de RF
+Vfo
+Misturador de RX
+Misturador de TX
+Filtro de cristal
+Mod  Balanceado
+Amp de Microfone
+Amp de CW
+Amp de FI
+Detector de Produto
+BFO
+AGC
+AF LPF
+CW BPF
+Amp de Áudio
+mic.gif ........ Amplificador de microfone usado no novo emissor/receptor
+mic1.gif ...... Amplificador de microfone usado no emissor/receptor velho
+mic2.gif ....... Mais um amplificador de microfone
+cw.gif ... ...Monitor de CW e controle TX/RX usado no novo e no velho emissor/receptor
+cw1.gif .... Monitor de CW e controle TX/RX usado no novo e no velho emissor/receptor
+Dentro em breve outros esquemas aparecerão, por isso, de vez em quando faça uma visita a esta página. Muito obrigado e desculpe a lentidão com que os esquemas vão aparecendo.
+Ah! Eu não sou Alentejano! Sou natural de uma freguesia da capital do Ribatejo!
+Top
+Ainda se lembra do DECÁLOGO do RADIOAMADOR?
+Por favor ajude a construir uma página melhor enviando as suas sugestões e comentários para CT4ER
+73 de Carlos/CT4ER
+Top
+As minhas Páginas
+QRP
+Construção Caseira
+CLIX
+ICQ
+ONI
+QSL
+Terravista-7Mares
+Australian QRP Homepage
+CW Operator's QRP Club Inc.
+GQRP
+CT4ER
+JF10ZL
+SM0VPO
+Última modificação 15-10-2002 17:34
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/divxtemple/divxtemple.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/47/34/708)
+(ip, 62.151.16.12)
+(language, english)
+(prof, 0)
+(realSize, 1025)
+(textSize, 74)
+(title, DivX Temple )
+
+DivX Temple
+This page uses frames, but your browser doesn't support them.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/dogshop/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/16/61/683)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 19630)
+(textSize, 1881)
+(title, Home)
+
+Home
+Bem-vindos à pagina da DOG SHOP
+A DOGSHOP é uma marca de produtos e serviços para cães, que se ocupa deles desde da sua compra, até a sua vida do dia-dia .
+HOME CONT@CTOS
+Com a DOG SHOP pode compra ou vender cães de todas as raças , com entregas em todo o pais ; Encontramos um/a companheiro/a para o seu melhor amigo ; E vendemos as suas rações preferidas.
+Compra / Venda : Com a DOGSHOP pode comprar o cão dos seus sonhos, de todas as raças, com entrega em todo o país, facilidades de pagamento e garantias ! Ou pode simplesmente vender a sua ninhada .
+Namorados e Namoradas : Temos um serviço de busca do companheiro ideal para o seu animal, com um custo máximo de 20.000$.
+ Ofereça um amigo para toda a vida !
+Ligue já :
+963133246
+916293536 Não percam! Pet shop online: Todos os artigos para o seu animal e rações com entrega ao domicilio em 24 horas! Encomende!já, que nos telefonamos a confirmar preços e entrega ! Interesses  Compramos e vendemos cães de todas as raças . Não perca a oportunidade de ter o seu cão de sonho ou de vender a sua ninhada !!!!
+ 
+ 
+   
+  SERRA DA ESTRELA
+M/F LINDOS
+25.000$
+ROTTWEILLERS
+M/F LOP NETOS CAMPEÕES
+80.000$
+DALMATAS
+M/F
+30.000$
+Compra/Venda Comprar : Para comprar basta defenir a raça que pretende, o sexo, a idade, com ou sem LOP e o valor que pretende gastar.
+Em caso de dúvida nos aconselhamos e fornecemos informações .
+A Entrega : É feita no dia e hora pretendidos com um prazo mínimo de 3 dias utéis, após a encomenda. As entregas são gratuitas num raio de 50 km de Lisboa. Dístâncias superiores tem valores a acordar . Os nossos animaís são entregues vacinados e desparasita-dos.
+Pagamento : A dog shop aceita pagamentos em cheques visados, dinheiro , VISA, ou outros a combinar
+Venda : A venda dos seus animais terá de ser tratada directamente com a DOG SHOP. Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/fabreu_portugal/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/0/21/664)
+(ip, 62.151.16.12)
+(language, unknown)
+(prof, 0)
+(realSize, 1675)
+(textSize, 33)
+(title, Fã Clube Fernanda Abreu Portugal)
+
+Fã Clube Fernanda Abreu Portugal
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/faroldasletras/cv2.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/43/6/670)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 31986)
+(textSize, 16551)
+(title, Curriculum Vitae)
+
+Curriculum Vitae
+À CONVERSA COM...
+****************
+Padre António Vieira
+ATENÇÃO!
+É expressamente proibida a reprodução ou utilização desta entrevista, parcial ou total, sem a prévia autorização do autor, inscrito na Sociedade Portuguesa de Autores.
+Home Poesia
+Barroca P.e António
+Vieira Sermão Correia
+Garção Nicolau
+Tolentino Dicionários
+Enciclopédia
+Siglas
+ANTÓNIO VIEIRA
+Por
+Fernando Pessoa O céu 'strela o azul e tem grandeza./
+Este, que teve a fama e à glória tem,/
+Imperador da língua portuguesa,/
+Foi-nos um céu também./
+No imenso espaço seu de meditar,/
+Constelado de forma e de visão,/
+Surge, prenúncio claro do luar,/
+El-Rei D. Sebastião./
+Mas não, não é luar: é luz do etéreo./
+É um dia; e, no céu amplo do desejo,/
+A madrugada irreal do Quinto Império/
+Doira as margens do Tejo.
+Fernando Pessoa,
+MENSAGEM  
+ANTÓNIO VIEIRA
+Por
+Miguel Torga Filho peninsular e tropical/
+De Inácio de Loiola,/
+Aluno do Bandarra/
+E mestre/
+De Fernando Pessoa,/
+No Quinto Império que sonhou, sonhava/
+O homem lusitano/
+À medida do mundo./
+E foi ele o pioneiro./
+Original/
+No ser universal.../
+Misto de génio, mago e aventureiro.
+Miguel Torga,
+POEMAS IBÉRICOS  
+ 
+“Filho peninsular e tropical De Inácio de Loiola, aluno do Bandarra e mestre de Fernando Pessoa”, o Padre António Vieira é o “Imperador da língua portuguesa” com quem vamos conversar:  
+   
+   
+   
+   
+   
+   
+ 
+ENTREVISTADOR: Padre António Vieira, com que idade deixou o senhor Lisboa, pela primeira vez, a caminho do Brasil?
+PADRE ANTÓNIO VIEIRA: Tinha seis anos de idade, quando viajei com meus pais para a cidade da Baía.
+E: Que, na época, era a capital do Brasil...
+PAV: Exactamente. De facto, ao revelar-se ineficaz o sistema de capitanias ou donatorias, instituído ao tempo de D. João III, foi nomeado Governador Geral, em 1548, Tomé de Sousa, que se instalou naquela área, iniciando a construção de um novo lugar que viria a ser inaugurado, a 1 de Novembro de 1549, com o nome de S. Salvador da Baía.
+E: Não consta que os seus pais tenham sido movidos pela atracção da árvore das patacas.
+PAV: Árvore das patacas?
+E: Sim.
+PAV: Não conheço a expressão.
+E: É hoje muito utilizada para referir a atracção desmesurada pelo dinheiro fácil.
+PAV: Não creio, apesar da origem humilde da minha família. O meu pai era servidor do Paço, e embarcámos, porque fora nomeado para o exercício da função de secretário da Governação.
+E: E quando é que o jovem António se sente atraído pela vida eclesiástica?
+PAV: Era rapaz aí dos meus quinze anos, quando julgo ter interpretado o sinal do chamamento de Deus.
+E: E de que modo se revelou esse sinal?
+PAV: Através de um sermão pregado pelo Padre Manuel Couto sobre as eternas penas do inferno. Fiquei terrivelmente impressionado.
+E: Há quem afirme, hoje, que, além desse seu temperamento impressionável, era, igualmente, muito impulsivo.
+PAV: E impulsivo porquê?
+E: Só o Padre o pode esclarecer, não é verdade?
+PAV: Será por ter saído da casa de meus pais para fazer o noviciado no Colégio dos Jesuítas?
+E: Provavelmente.
+PAV: Como já referi, foi apenas a resposta ao que interpretei como um apelo de Deus.
+E: Segundo o que pude apurar, o Padre António Vieira já era aluno dos Jesuítas antes da sua entrada no noviciado.
+PAV: Assim é, de facto.
+E: E, segundo rezam os seus biógrafos, aluno exímio na língua de Cícero.
+PAV: Não erram os que atestam a minha competência no que respeita ao uso do Latim. Com apenas dezoito anos, fui convidado a redigir a Carta Annua, o relatório da Província a que pertencia, dirigida ao Geral da Ordem dos Jesuítas.
+E: E também convidado a ensinar...
+PAV: Como regente de Retórica no Colégio de Olinda.
+E: Recebe Ordens e inicia a sua carreira de pregador em...
+PAV: Em 1635. Três anos mais tarde, estávamos, de novo, a braços com os holandeses.
+E: Ainda hoje é célebre o seu sermão PELA VITÓRIA DAS NOSSA ARMAS CONTRA OS HOLANDESES, em que incita os colonos e os índios à resistência.
+PAV: Estávamos no ano de 1640. Era como rasgar-me as entranhas, a presença ali dos huguenotes.
+E: Receio bem que os meus alunos o não entendam.
+PAV: Não me diga que os seus alunos ainda não aprenderam que os huguenotes eram os protestantes calvinistas.
+E: Mas então não eram holandeses?
+PAV: Holandeses que eram sectários da doutrina de Calvino. Saiba que, em momentos de desespero, cheguei a pecar, proferindo imprecações contra Deus por desproteger os filhos da sua católica e apostólica Roma.
+E: A sua obsessão era mesmo a cristianização daquele território...
+PAV: Não lhe chamaria obsessão: julgo que não é a palavra adequada. A minha preocupação era mesmo responder ao espírito de missão.
+E: Por isso se dedica anos a fio a catequizar aldeias baianas.
+PAV: Parece estar bem informado. De facto, no Brasil, a primeira tentativa dos colonos foi também a de escravizar os índios, mas nós, os missionários cristãos, encontrávamos neles terreno propício à sua evangelização - lembremo-nos, a propósito, do relato que nos faz Pêro Vaz de Caminha na Carta do Achamento do Brasil dirigida ao rei D. Manuel -, pelo que os concentrávamos, em pequenos núcleos, em aldeias ou reduções, grupos de aldeias, sob a nossa directa responsabilidade, procurando defendê-los contra os abusos da escravatura.
+E: Facto que lhes valeu muitos dissabores.
+PAV: A mim particularmente, e mais ainda depois de proferido o meu SERMÃO DE SANTO ANTÓNIO AOS PEIXES.
+E: É uma delícia de sermão, mas isso acontece alguns anos mais tarde. Voltando atrás, a 1 de Dezembro de 1640, ano em que pregou o sermão PELA VITÓRIA DAS NOSSA ARMAS CONTRA OS HOLANDESES, inicia-se a conjura que haveria de conduzir a nação à restauração da independência.
+PAV: Assim é, com efeito. E, no ano imediato, o Governador Marquês de Montalvão, que havia estado do lado de Castela, encarrega-me de acompanhar o seu próprio filho a Lisboa para testemunhar a adesão da colónia à causa de D. João IV, o duque de Bragança coroado rei.
+E: É voz comum que, pelos seus sermões em S. Roque, rapidamente se tornou num protegido de toda a família real que o elegeu para pregador da corte.
+PAV: Não sem que, antes, tivesse passado por graves peripécias. Lembro apenas que, por altura do nosso desembarque em Peniche, não tendo ainda as autoridades e o povo conhecimento do partido que tomávamos, corremos sérios riscos, riscos mesmo muito sérios, de sermos presos e até mortos. Felizmente que tudo se esclareceu rapidamente e de conveniência com a realidade dos factos.
+E: Da extrema confiança depositada em si pelo rei, nasce então a sua brilhante carreira diplomática.
+PAV: Brilhante como quem diz... Muitos foram os que, na época, criticaram os meus pontos de vista, não entendendo, ou fingindo não entender, as circunstâncias em que eu desenvolvia a diplomacia nacional.
+E: Como assim?
+PAV: A independência nacional não se confinava ao simples golpe palaciano perpetrado no 1º de Dezembro de 1640. Essa data fora apenas o início de um conflito armado com Castela que haveria de se prolongar por muitos anos. E Portugal estava financeiramente depauperado. Se, por um lado, era necessário atrair novos capitais ao país, por outro, era imprescindível que a nova governação fosse reconhecida pelas mais importantes monarquias europeias e até pelo próprio Vaticano. Roma, por exemplo, não recebia o nosso embaixador.
+E: Daí a sua passagem também por Roma.
+PAV: Mas, antes disso, por Paris, Ruão, Haia, Amsterdão...
+E: Isto é, até por terras dos próprios holandeses.
+PAV: Era minha intenção negociar com os judeus portugueses as condições do seu regresso a Portugal. O seu dinheiro fazia-nos mais falta do que o pão para a boca, só que nos confrontávamos com a intolerância da Inquisição, um dos principais motivos da minha diplomacia em Roma. A minha proposta foi a da criação duma Companhia das Índias Ocidentais que pudesse defender o transporte das mercadorias entre o Brasil e a metrópole dos ataques dos corsários. Deste modo, todos os cristãos-novos que investissem os seus capitais nesta Companhia ficariam isentos do confisco da Inquisição. É claro que esta nunca mais me iria perdoar. Mais tarde, com a morte de D. João IV, criar-se-ão as circunstâncias que ditarão a minha prisão e o meu julgamento pelo tribunal do Santo Ofício.
+E: Diz-se que chegou a negociar a posse de terras do Brasil e de Angola com os próprios holandeses.
+PAV: O que estava em causa era mesmo um negócio. O meu objectivo era negociar a paz com os holandeses, a troco de Pernambuco e de Angola, de modo a que apenas fôssemos obrigados a preocupar-nos com a nossa fronteira na Europa. Era evidente que o meu propósito era um negócio meramente a prazo: até que estivéssemos refeitos da situação e pudéssemos tomar de volta os mesmos territórios.
+E: Foi então tudo muito complicado...
+PAV: Ao ponto de me ter tornado numa espécie de santo casamenteiro.
+E: Uma vez mais, ao jeito de Santo António...
+PAV: Isso é a voz do povo. Mas imagine que cheguei a negociar, com o cardeal Mazarino, o primeiro-ministro de Luís XIV, o casamento do príncipe herdeiro, D. Teodósio, filho de D. João IV, com Mademoiselle de Monpensier, filha do duque de Orleães.
+E: E o propósito era...
+PAV: Muito naturalmente, o de conseguir uma aliança com a França capaz de dissuadir Castela das suas intenções.
+E: O que não resultou...
+PAV: Por isso, mais tarde, tento, em Itália, negociar a paz com Castela, propondo o casamento da princesa Maria Teresa de Áustria com o mesmo príncipe D. Teodósio. Corria o ano de 1650. Missão frustrada: incompreendido, sugerem mesmo ao Geral da Companhia que me expulsasse de Roma.
+E: Pois, mas, muito antes disso, ainda regressa ao Brasil, ou não é verdade?
+PAV: De certo modo, podemos dizer que a minha vida é um permanente vaivém. Regresso ao Brasil em 1653, na sequência de uma intriga fomentada pela Inquisição junto dos Jesuítas que se preparavam para me expulsar da ordem com o pretexto de eu ter tomado o partido da coroa contra a própria Companhia na questão da sua organização em território português. Retorno à minha missão no Maranhão.
+E: E é quando surge o SERMÃO DE SANTO ANTÓNIO AOS PEIXES.
+PAV: No ano de 1654, no dia do nosso bom santo franciscano.
+E: Como já referi atrás, é uma delícia de sermão, mas, embora dirigido aos peixes, tem de concordar que nele não poupa minimamente os colonos.
+PAV: Sabe que a intenção era essa mesma. O sermão é todo ele uma alegoria sobre os desmandos dos colonos em relação aos índios, por isso tive de embarcar para Lisboa, imediatamente a seguir e às ocultas.
+E: Gostaria de nos falar um pouco mais sobre o sermão?
+PAV: Que posso eu dizer que as pessoas já não saibam?
+E: Não é bem assim e, além disso, tenho a certeza de que os meus alunos lhe ficariam imensamente gratos.
+PAV: Se assim é...
+E: Espanta-me, sobretudo, o acto de criação em si.
+PAV: O acto de criação deve ser um acto de inteligência: definidos os objectivos, parte-se para o acto criativo por forma a que o objecto final, neste caso, o sermão, sirva os objectivos definidos.
+E: Normalmente, as pessoas estranham que, querendo o Padre dirigir-se aos colonos, tenha pregado aos peixes.
+PAV: Era dia de Santo António e pensei que, nas festas dos santos é melhor pregar como eles, que pregar deles. Que fez ele? Eu que fiz? Santo António, em Arimino, mudou de púlpito e de auditório: deixa terra e vai-se ao mar; já que o não ouviam os homens, que o ouvissem os peixes. Assim, à imitação de Santo António, voltei-me da terra ao mar: já que os homens se não aproveitavam da minha doutrina, pregaria aos peixes, tanto mais que o mar estava ali tão perto; os homens poderiam, pois, deixar o sermão, já que o mesmo não era para eles.
+E: É demasiado evidente que, com essa atitude, o Padre António Vieira conseguiu exactamente o que lhe interessava. Eu próprio confesso que, se fizesse parte desse seu auditório, não sairia, antes redobrava a atenção para ouvir o que tinha para dizer a tão estranhas criaturas. Aliás, a tão estranhas criaturas, estranho sermão seria.
+PAV: Ora foi exactamente a pensar em reacções como a que acaba de revelar que decidi pregar aos peixes como Santo António. E dividi o sermão em duas partes: na primeira, louvando-os e mostrando como em tudo eram melhores do que os homens; na segunda, ocupando-me dos seus defeitos para evidenciar, de forma alegórica, os maiores defeitos dos mesmos homens. E agora, se me permite, não gostaria de falar muito mais sobre o sermão, que retiraria, certamente, o interesse e a curiosidade pela sua leitura.
+E: Permite-me uma inconfidência? É verdade que, se não fosse a protecção do rei, não poderia ter ido tão longe?
+PAV: Mas onde é que reside a dúvida? Se eu lutava por aquilo que considerava uma causa justa, por que é que não haveria de socorrer-me do favor do rei? Com o seu beneplácito, ao regressar, de novo ao Brasil, fundo a Junta das Missões, o que acabará por irritar ainda mais os colonos.
+E: Entretanto, morre o rei.
+PAV: Em 1656.
+E: E começam as suas desgraças.
+PAV: Três anos mais tarde, publico uma obra que será sempre uma referência na História de Portugal.
+E: Que é...
+PAV: ESPERANÇAS DE PORTUGAL, QUINTO IMPÉRIO DO MUNDO, PRIMEIRA E SEGUNDA VIDAS DE EL-REI D. JOÃO IV. O melhor pretexto para a Inquisição.
+E: Mas então...
+PAV: Acusado de opiniões heréticas por ter interpretado as Trovas do Bandarra, o sapateiro de Trancoso, e textos Bíblicos como profecias da ressurreição de D. João IV, futuro imperador do V Império, o judaico-cristão.
+E: O Padre António Vieira acreditava mesmo nisso?
+PAV: Por ventura, acha-me ingénuo? Nunca ouviu falar do Sebastianismo? Uma coisa é aquilo em que acreditamos, outra é aquilo em que é absolutamente fundamental que acreditem. Atente na mensagem que Fernando Pessoa deixou a propósito do mito no poema dedicado a Ulisses na sua MENSAGEM.
+E: MENSAGEM em que também é homenageado e, exactamente, a propósito do V Império.
+PAV: Bem o sei. Os maiores respeitam sempre os seus e abjuram a ingratidão.
+E: Já se vai tornando demasiado longa esta conversa. Diga-me só, para terminar, como é que ficou a sua história em relação à Inquisição.
+PAV: O conde de Castelo Melhor, o primeiro-ministro de D. Afonso VI, que odiava os Jesuítas e particularmente a mim, tudo facilitou. Primeiro, sou desterrado para o Porto; depois, para Coimbra, a meu pedido, onde sou julgado pelo Santo Ofício. Foram quatro anos de interrogatório, dois em regime de residência fixa e dois no cárcere.
+E: E a sentença foi...
+PAV: A proibição de pregar e o internamento num Colégio da Companhia. Não durou muito a pena. O débil mental que era o rei é preso e assume a regência seu irmão D. Pedro.
+E: De quem o Padre era partidário.
+PAV: A principal razão do ódio de Castelo Melhor. Com o afastamento de Afonso VI, são afastados também os principais inimigos e, ao fim de pouco tempo, a minha condenação não passava de letra-morta.
+E: Para concluir...
+PAV: Uma vez liberto, a pretexto duma missão da Companhia para a obtenção da canonização de mártires jesuítas, volto a Roma, conseguindo que o Papa ordenasse a suspensão dos autos-de-fé em Portugal e impedisse o confisco dos bens aos judeus.
+E: Vitória só parcialmente conseguida.
+PAV: Infelizmente, haverá sempre situações que se não podem alterar de um momento para o outro através dum simples decreto. Mas o tempo acaba sempre por se encarregar do resto. É também por essa altura que a rainha Cristina da Suécia, que abdicou do trono, convertendo-se ao catolicismo, e que se encontrava em Roma onde sustentava uma corte-academia, me nomeia orador da sua capela particular.
+E: Apesar duma vida tão cheia, parece desiludido.
+PAV: Regresso a Portugal com um documento papal que me liberta da Inquisição para sempre. Mas é desiludido que, em 1681, parto definitivamente para o Brasil, retomando a defesa dos índios e entregando-me à ordenação e revisão dos meus sermões até ao momento de ter de prestar contas a Deus.
+ 
+O Padre António Vieira morre na Baía a 18 de Julho de 1697. Manuel Maria
+   
+ 
+BIBLIOGRAFIA
+Barreiros, António José, HISTÓRIA DA LITERATURA PORTUGUESA, 1º vol., 14ª ed., Braga, 1992;
+Cidade, Hernani, LIÇÕES DE CULTURA E LITERATURA PORTUGUESAS, 1º vol., 7ª ed., Coimbra, 1984;
+Coelho, Jacinto do Prado, DICIONÁRIO DA LITERATURA, 4º vol., Porto, 1979;
+Pessoa, Fernando, MENSAGEM, 3ª ed., Lisboa, 1945;
+Saraiva, António José, DICIONÁRIO DE HISTÓRIA DE PORTUGAL, vol. VI, Porto, 1978;
+Saraiva, António José e Lopes, Óscar, HISTÓRIA DA LITERATURA PORTUGUESA, 10ª ed., Porto, 1978;
+Torga, Miguel, POEMAS IBÉRICOS, Coimbra;
+Vieira, Padre António, SERMÃO DE SANTO ANTÓNIO AOS PEIXES.
+ 
+   
+ 
+Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/farran2002/tridente/index.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/61/35/718)
+(ip, 62.151.16.12)
+(language, norwegian)
+(prof, 0)
+(realSize, 2517)
+(textSize, 42)
+(title, index)
+
+index
+TRIDENTES
+|| Home || seguinte hindu
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/ferreira12/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/41/13/687)
+(ip, 62.151.16.12)
+(language, german)
+(prof, 0)
+(realSize, 14435)
+(textSize, 397)
+(title, EMAIL- ANA FILIPA)
+
+EMAIL- ANA FILIPA
+Sorry, your browser doesn't support Java(tm).
+Olá
+Pessoal
+Aqui podes enviar os teus comentários sobre os meus Sites
+ou outros assuntos do teu interesse utilizando o QUICKMAIL directo
+uma forma mais rápida de Tu me enviares um email on-line
+esta a tua vontade.
+Quick-Mail
+Nome: E-mail: Mensagem para Ana Filipa
+VOCÊ É O(A) NOSSO(A) VISITANTE NÚMERO Bravenet.com DESDE: 03/03/2001
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/form/livrovisitas.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/26/60/645)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 14666)
+(textSize, 317)
+(title, Livro de Visitas)
+
+Livro de Visitas
+Forúm
+Tema livre
+Também podem comunicar uns com os outro
+HOME FORÚM
+Ideias Comente por exemplo o Dragon Ball, a Disney e a Gata 2@@1...
+Em Fim
+  João Fred Voltar Atráz
+ conte...  
+...tudo o que quiser...
+O seu nome O seu e-mail Mensagem
+Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/freevibes/1/Chat_de_IRC.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, Chat e IRC em Free Vibes.com)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/57/38/683)
+(ip, 62.151.16.12)
+(keywords, Email, sms, irc, grátis, ganhar dinheiro, chat, telefone, download de mp3, jogos on-line, ganhar $$, jogos, dicas, borlas, e-mail, motores, procurar, download mp3, banners, troca de banners, linkexchange, publicidade, faixa publicitaria, anuncio, promocao, webmaster, submit,  bannerexchange, gratuito, gratis, luso, exchange, click, pay per click, pago ao clique, adicionar web site)
+(language, unknown)
+(prof, 0)
+(realSize, 5526)
+(textSize, 30)
+(title, Chat e IRC)
+
+Chat e IRC
+www.free-vibes.com
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/freevibes/ch/chip7.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, Memórias para PC e portateis, Smartmédia. Disponha de grande velocidade e trabalhe com vários programas ao mesmo tempo.)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/5/23/678)
+(ip, 62.151.16.12)
+(keywords, Calculadoras,Acessórios,Computadores Portáteis,Gravadores,CD?s,Bundle,Caixas cd,Câmaras,Consumiveis,Controladoras,Drives,Impressoras,Faxes,Multifunções,Memórias,Modem,RDIS,Multimédia,Monitores,MotherBoards,PDA,Placas Gráficas,Processadores,Ratos,Teclados,Redes,Scanners,Software,UPS,Projectores,Discos,CDR,Cabos,Protectores de Corrente,Fichas,Filtros,DataSwitch,Cabos,Fotografia Digital,Video Conferência,CD-ROM,Magnéticos,Suportes Magnéticos,Ópticos,Jacto de Tinta,Laser,Plotter's,Acessórios para Plotter,Matriciais,Jet Direct,Memórias Para PC,Portateis,Smartmédia,Modem RDIS,Internos Externos,PCMCIA,Multimédia,Colunas,DVD,Joysticks,Placa de Rádio,Placa de Som,Placa de Video,MP3,DVD de mesa,Microgravadores,Óculos,Monitores 15,Polegadas,LCD,Placas Gráficas,PCI,AGP,Monitores 15 17 19 21)
+(language, portuguese)
+(prof, 0)
+(realSize, 6401)
+(textSize, 53)
+(title, Memorias)
+
+Memorias
+Agora estamos no Shopping Free Vibes
+Entrar
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/freevibes/html.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, Uma pequena introdução do código HTML. Cria um ficheiro em html.)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/17/57/681)
+(ip, 62.151.16.12)
+(keywords, html, jogos, sms, chat, Mirc script, irc, logos, on-line, procurar, download mp3, banners, troca de banners, linkexchange, publicidade, negocios na internet, ganhar, dinheiro na internet net, novidades, patrocinadores, adicionar website, adicionar, pagina, programas, receber dinheiro, publicidade, arcade)
+(language, english)
+(prof, 0)
+(realSize, 5835)
+(textSize, 377)
+(title, Introdução ao HTML e as côres em código hexadécimal)
+
+Introdução ao HTML e as côres em código hexadécimal
+html, jogos, sms, chat, Mirc script, irc, logos, on-line, procurar, download mp3, banners, troca de banners, linkexchange, publicidade, negocios na internet, ganhar, dinheiro na internet net, novidades, patrocinadores, adicionar website, adicionar, pagina, programas, receber dinheiro, publicidade, arcade
+www.free-vibes.com
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/freevibes/jogos.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, Espaço virtual em que pode aceder a Jogos on-line. Para divertimento de quem está muitas horas ligado na Internet.)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/40/18/695)
+(ip, 62.151.16.12)
+(keywords, jogos, sms, chat, Mirc, script, irc, jogos on-line, html, PacMan, BlackJack, 18 Hole, Golf, Bowling, Pong Attack, 3D Driver, Air Rescue, Tux on the Run, Cross Section, Battleship, Stakeout, 1on1Extreme, Torpedo, Pac Wars, Star Jam, Soccer, Shoot'n'Score, Shooting Skeet, Shooting, Snow Board, Space Run, Solitaire, Master, Match It Easy, Match It Medium, Match It Hard, Monty, Kung-Fu Quest, Feed the Pig, Penguin, Plunge, Block Madness, LA Stevenson, Rush Hour,Lightz Out, Tank Game, Tux on the Run, Don's Dougout, Hi Lo, Urbanoids, Benny, Sleeper, Rat In The Maze, Sokoban, Gomoku, Star Jam, Mini Golf, Surfing, Trivia, Cliffie, Caterpillar, Xball,  Real Checkers, Real Invaders, Giana, free, email, motores, procurar, download mp3, banners, troca de banners, linkexchange, publicidade, faixa publicitaria, anuncio, promocao, webmaster, submit, bannerexchange, gratuito, gratis, luso)
+(language, english)
+(prof, 0)
+(realSize, 7029)
+(textSize, 943)
+(title, Jogos on-line, procurar, download mp3)
+
+Jogos on-line, procurar, download mp3
+jogos, sms, chat, Mirc, script, irc, jogos on-line, html, PacMan, BlackJack, 18 Hole, Golf, Bowling, Pong Attack, 3D Driver, Air Rescue, Tux on the Run, Cross Section, Battleship, Stakeout, 1on1Extreme, Torpedo, Pac Wars, Star Jam, Soccer, Shoot'n'Score, Shooting Skeet, Shooting, Snow Board, Space Run, Solitaire, Master, Match It Easy, Match It Medium, Match It Hard, Monty, Kung-Fu Quest, Feed the Pig, Penguin, Plunge, Block Madness, LA Stevenson, Rush Hour,Lightz Out, Tank Game, Tux on the Run, Don's Dougout, Hi Lo, Urbanoids, Benny, Sleeper, Rat In The Maze, Sokoban, Gomoku, Star Jam, Mini Golf, Surfing, Trivia, Cliffie, Caterpillar, Xball,  Real Checkers, Real Invaders, Giana, free, email, motores, procurar, download mp3, banners, troca de banners, linkexchange, publicidade, faixa publicitaria, anuncio, promocao, webmaster, submit, bannerexchange, gratuito, gratis, luso
+www.free-vibes.com
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/gilprata/sp/sp.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, 21-Mar-01>)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/56/51/657)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 3058)
+(textSize, 84)
+(title, Sem título de diapositivo)
+
+Sem título de diapositivo
+Esta página utiliza frames, mas o browser não as suporta.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/hcesarop/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/33/10/657)
+(ip, 62.151.16.12)
+(keywords, battles,figures,history,discoveries, castles, palaces,museums)
+(language, english)
+(prof, 0)
+(realSize, 1321)
+(textSize, 84)
+(title, New Page 1New Page 1)
+
+New Page 1
+New Page 1
+This page uses frames, but your browser doesn't support them.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/hondaaccord/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/2/2/638)
+(ip, 62.151.16.12)
+(language, english)
+(prof, 0)
+(realSize, 5724)
+(textSize, 391)
+(title, JeTBoy's Honda Accord Homepage)
+
+JeTBoy's Honda Accord Homepage
+{short description of image} JeTBoy logo {short description of image}
+Welcome To My Honda Accord Webpage
+Benvindo àMinha P àgina Sobre o honda Accord
+{short description of image}
+Choose Your Language / Escolha o Idioma:
+English <=> Português
+{short description of image}
+[ Sign my Guestbook ] - [ Dê a sua opinião no livro de visitas ]
+FastCounter by bCentral
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/iiiepga2002/index.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/17/32/677)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 3899)
+(textSize, 403)
+(title, New Page 1apPopupMenu Examples)
+
+New Page 1
+apPopupMenu Examples
+Precisa dormir em Portimão??? Consulte a secção de alojamento
+Logotipo de Artur Pratas - Professor do 5º Grupo
+Escola Secundária Poeta António Aleixo
+Avenida 25 de Abril
+8500 PORTIMÃO 3º E.P.G.A. ©2002
+Todos os direitos reservados
+Departamento de Ciências Biológicas e Geológicas
+Última actualização 22-09-2002
+Tel. 282 470 140
+Fax. 282 423 803
+Email - epga2002@espaa.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/ilhabranca/index.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/20/23/686)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 10426)
+(textSize, 2140)
+(title, A minha página ...)
+
+A minha página ...
+A minha página ...
+Centro de Juventude e Informática da Graciosa
+Olá! O Centro de Juventude e Informática da Graciosa, graças às novas tecnologias e aos meios disponibilizados pelo "setemares.terravista", deseja convidar todos os jovens desta ilha a criarem as suas próprias páginas na Internet. Não é tarefa difícel, antes pelo contrário, é muitíssimo fácil. Para isso basta haver um certo interesse e gosto por estas coisas.
+Como funcionário deste Centro, espero que este convite sirva de incentivo a todos os que tenham interesse em ter a sua própria página pessoal publicada na Internet. Não percam esta oportunidade, estou aqui para, entre outras coisas, vos ajudar na construção das vossas páginas pessoais...
+JORGE M. GONÇALVES
+Centro de Juventude e Informática da Graciosa Resumo dos meus dados biográficos:
+Nasci nesta ilha a 21 de Maio de 1959. Em 1973, pouco tempo após completar os estudos básicos (nomeadamente a 4ª classe) emigrei para os Estados Unidos da América onde vivi grande parte da minha vida.
+Após completar os Estudos Secundários ingressei em vários cursos de nível superior e simultaneamente fui desenvolvendo outras tarefas de carácter laboral. Trabalhei em espresas de alta tecnologia, desempenhei funções em duas instituições bancárias e tambem dei aulas na Escola Oficial Portuguesa de Peabody, Massachusetts e em muitos outros estabelecimentos americanos de ensino. Ao longo desse período de tempo comecei a interessar-me pela arte e pelo jornalismo. Comecei a pintar temas paisagísticos a óleo e a escrever crónicas para vários jornais americanos da Nova Inglaterra.
+Actualmente a minha paixão reside dentro dos parâmetros da Pintura, Fotografia e Informática. Ligações para outros Sites http://www.terravista.pt Página do Terràvista http://www.cjigraciosa.pt.vu Site oficial deste centro http://communities.msn.com.br/Galeriacores O meu Site de temática Graciosense http://sites.netscape.net/Jorge295g A minha página em Inglês sobre a Graciosa http://www.cm-graciosa.pt/ Câmara Municipal da Graciosa
+Contacto
+jorge295@iol.pt
+Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/isagama1/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/16/36/680)
+(ip, 62.151.16.12)
+(keywords, Arte, Isa Gama, artesplásticas, acrílica,imagens, quadros, figurativo,tropical,africano,Brasil,Moçambique,Portugal )
+(language, portuguese)
+(prof, 0)
+(realSize, 4188)
+(textSize, 97)
+(title, Isa Gama)
+
+Isa Gama
+English
+Last reviewed at: 09-12-02 : ùltima actualização
+Português
+webmaster's Isa Gama
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/jcarvalhas/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, página pessoal sobre qigong. Pretende-se divulgar e incentivar a prática desta actividade)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/25/20/731)
+(ip, 62.151.16.12)
+(keywords, qigong, chi kung, tchi kun, meditação,yoga,curso, reiki ,karuna, usui, osho, respiração, relaxamento, curso, professores, livros, aulas, ensino a distancia, nova era, new age, fitness, stress, exercícios, artes marciais)
+(language, portuguese)
+(prof, 0)
+(realSize, 13441)
+(textSize, 666)
+(title, QIGONG)
+
+QIGONG
+Qi Gong
+A Via da Serenidade
+O que é?
+Métodos
+Textos
+Links
+sobre o autor - Entrar -
+Práticas
+Zhang Zhuang
+Meditação da Rosa
+Qigong e a Cura do Cancro
+Videos de Qigong Shibashi
+Com este Site pretendemos divulgar e incentivar a maravilhosa prática milenar do Qigong ( Chi Kung ), considerado a medicina preventiva do séc XXI
+------ Novo! -----
+Curso Prático
+"Iniciação ao Qigong Terapêutico"
+10 horas
+Férias da Páscoa
+Academia de Artes Maria Amélia Dias Simões
+OVAR
+Informações
+Gostaria de organizar um
+Encontro de Qigong Shibashi ?
+Visite a Página do Reiki
+Membro do:
+TC
+desde 30/05/2001
+Projecto - Internet sem Fumo
+OVAR - PORTUGAL
+clique aqui!
+by Banner-Link
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/jomegui/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/60/29/672)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 4782)
+(textSize, 213)
+(title, Eng. José Mesquita Guimarães)
+
+Eng. José Mesquita Guimarães
+Eng. José Manuel Cunha Mesquita Guimarães
+BIOGRAFIA
+CURRICULUM VITAE
+MORADA
+FAMÍLIA
+INTERESSES PESSOAIS
+CARA DIGITAL
+jomegui@hotmail.com
+Tel: 919785629
+Última Actualização: 16/04/2001
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/josemurteira/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/40/21/679)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 17945)
+(textSize, 453)
+(title, Home)
+
+Home
+Bem-vindos a SANTARRITA
+ 
+HOME album2 album album3 LIVRO DE VISITAS links
+ 
+ 
+ 
+         
+ 
+ 
+    SANTARRITA
+A Quinta de Sta. Rita, está situada a 2Km. de Évora, junto à EN 254 e nela são criados cavalos Puro Sangue Árabe e Gamos.
+Podemos ser contactados para Quinta de Sta.Rita - Apartado 331 7002-504 Évora ou através do telf. 266703128 ou e-mail jose.murteira@oninet.pt
+   
+Links   Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/jpastor/lomba.htm
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/25/36/676)
+(ip, 62.151.16.12)
+(language, italian)
+(prof, 0)
+(realSize, 3813)
+(textSize, 79)
+(title, NOVO ENDEREÇO DA LOMBA)
+
+NOVO ENDEREÇO DA LOMBA
+NOVO ENDEREÇO DA LOMBA
+Clique:
+http://lomba.no.sapo.pt/
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/lcorreia/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/9/44/700)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 1188)
+(textSize, 138)
+(title, Luís Correia - Sejam benvindos a esta Página. As contribuições são à saída.)
+
+Luís Correia - Sejam benvindos a esta Página. As contribuições são à saída.
+This page uses frames, but your browser doesn't support them.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/luissilvahcsol/index.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/36/57/712)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 20340)
+(textSize, 1756)
+(title, Home)
+
+Home
+Bem-vindos à minha página pessoal
+Neste site, você poderá saber tudo sobre mim: os meus interesses, a minha actividade, algumas fotografias dos meus amigos e familiares, uma páginas de links para os sites que mais gosto, etc. Espero que gostem e que voltem sempre!
+HOME SOBRE MIM CURRICULUM OS MEUS INTERESSES LINKS CONT@CTOS LIVRO DE VISITAS
+Nesta página poderá aceder a todos os conteúdos a partir da minha lista de menu.
+Na secção "Sobre Mim" poderá saber quem sou: O meu nome, a minha idade, onde moro, onde nasci e muito mais.
+Na secção "Curriculum" está descrito o meu percurso como estudante e profissional. Também poderá encontrar algumas imagens de trabalhos que já fiz.
+Veja as minhas fotos na secção "Album".
+Os meus amigos, a minha família, as minhas férias...
+está lá tudo! Não percam! Adicionem o endereço da minha página aos Favoritos. Em breve terei mais novidades!
+Quer ter uma página como a minha?
+Basta registar-se no Terràvista e escolher o modelo que mais gosta. Interesses Na secção "Os meus interesses", fique a conhecer o que gosto de fazer nos tempos livres, o que gosto de ler e o meu tipo de música preferido.
+As minhas colecções também o podem interessar!
+Novo!!
+Aqui poderei adicionar uma linha de destaque sempre que faça uma alteração ao meu site. Por exemplo:
+10/01/2001 - Veja as fotos fantásticas que tirei na passagem do Ano! Estão todas na secção "Album".
+25/12/2000 - Na secção "Os meus interesses", leia a minha opinião sobre o novo telemóvel colocado àvenda recentemente...
+...e que eu já comprei :-)
+Links Visite a minha página de Links!
+Lá poderá encontrar os endereços de sites úteis, como também de sites que dizem respeito aos meus interesses. Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/medcom/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/25/43/617)
+(ip, 62.151.16.12)
+(language, unknown)
+(prof, 0)
+(realSize, 464)
+(textSize, 0)
+
+http://7mares.terravista.pt/linsdorego/indicelixeiras.htm
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/megabyte/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/2/41/651)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 5628)
+(textSize, 378)
+(title, Mega Byte )
+
+Mega Byte
+MEGABYTE
+Venda de Material Informático
+- Este site encontra-se em constante actualização -
+Contacte-nos:
+António Ângelo Cabaço Cancela / Mário João Machado Pires Costa
+Redondo - Rua Conde redondo, lote 80 / Rua Comendador Rui Gomes, 15 - Redondo
+Telemóveis: 962679470 / 966080785
+(optimizado para a resolução de 1024x768)
+- ultima actualização em 17 de Maio de 2001 -
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/melhores/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/55/44/692)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 3485)
+(textSize, 624)
+(title, Home Page)
+
+Home Page
+os melhores da web
+ESTE SITE É PARA TI ENTRA E DIVERTE-TE
+Cinema
+Emprego
+Banca
+Artes Plásticas
+Literatura
+Museus
+Software
+Música
+Turismo/Lazer
+Curiosidades
+Para Crianças
+Culinária
+Imobiliário
+Humor
+Formação
+Jornais Nacionais
+Entidades
+Internet
+Alojamento na Web
+Sejam Bem Vindos
+Esta página pretende ser uma ferramenta de trabalho para quem utiliza a web para fazer pesquisas. Aqui encontra os melhores sites arrumados por temas. Assim tem mais tempo para outras coisas!!!!!!!!!
+Para mais informações contactar Webmaster/Webdesign
+mailto:armindoviegas@portugalmail.pt
+Resolução para 800 x 600 e True Color 24 Bits
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/mobilbox/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/52/54/637)
+(ip, 62.151.16.12)
+(language, german)
+(prof, 0)
+(realSize, 3167)
+(textSize, 181)
+(title, Mobilbox - Boxes Desmontaveis)
+
+Mobilbox - Boxes Desmontaveis
+A LUGAMOS B OXES
+PARA ALOJAMENTO DE CAVALOS
+DISPOMOS DE 112 BOXES EM GRUPOS DE 8
+MEDIDAS POR BOX :3mt x 3mt
+91 -7549807 / 96 -9094772
+E mail: mobilbox
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/oriflame03cjr/index.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/14/43/653)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 21543)
+(textSize, 4683)
+(title, Home)
+
+Home
+Bem-vindos à minha página pessoal
+A sua oportunidade na Oriflame
+A oportunidade oferecida pela Oriflame é válida e vasta, pois está assente em três pontos chave:
+· A aportunidade de comprar e vender um conjunto de produtos de beleza de elevadíssima qualidade, a preços competitivos.
+· A Oriflame proporciona elevados ganhos e uma oportunidade de carreira assente num dinâmico plano de negócios.
+· A Oriflame também procura desenvolver a afirmação pessoal e clarifica os objectivos a atingir para que os seus colaboradores possam alcançar o bem-estar económico e aumentar a auto estima.
+Estamos a promover um ambiente empresarial divertido, espirituoso e familiar, que reconhece e recompensa o sucesso. Se entrar no mundo Oriflame terá a oportunidade de mudar a sua vida, alcançando independência económica, desenvolvendo as suas capacidades pessoais e uma oportunidade única para fazer novas amizades.
+Ao oferecer esta oportunidade, a Oriflame compromete-se a fazer a diferença na vida das pessoas que aceitarem este desafio. A provar o nosso empenhamento neste objectivo, oferecemos todo o material e actividades de apoio aos nossos Assessores de Beleza:
+18 catálogos trisemanais repletos de promoções irresistiveis
+Formação em técnicas de vendas e recrutamento
+Guias sobre os produtos e respectivo treino
+Sessões de lançamento e muito mais ...
+E ainda será ?apadrinhado? por um Chefe de Sucesso que também irá em ajudá-lo a alcançar o seu sucesso.
+Aproveite esta oportunidade e junte-se a nós !
+HOME LINKS CONT@CTOS
+Assessor de Elite (Especial):
+30% de lucro ao atingir 150 000.00 de produtos pedidos à empresa acumulados em vários catálogos (do catálogo 1 ao 9 e do catálogo 10 ao 17).
+Ex.: logo que atinja este valor passará à nova categoria de Elite, desde que coloque uma pessoa a vender Oriflame.
+Para além dos 30% de lucro, ao atingir 45.000.00 acumulados num catálogo, terá direito a mais um bónus de 10% em produtos à sua escolha (Ex.: se facturar 50.000.00, recebe 5.000.00 em produtos que poderá vender com 100% de lucro).
+Construção de carreira:
+Através do recrutamento de pessoas, Você tem a possibilidade de começar a receber comissões de 3 em 3 semanas,ganhar produtos de oferta e até mesmo viagens. Não percam! Assessor (Normal):
+23% de lucro sobre os produtos vendidos (Ex.: 100 000Construção de carreira:
+Através do recrutamento de pessoas, Você tem a possibilidade de começar a receber comissões de 3 em 3 semanas,
+ganhar produtos de oferta e até mesmo viagens.0 de facturação recebe 23 000Construção de carreira:
+Através do recrutamento de pessoas, Você tem a possibilidade de começar a receber comissões de 3 em 3 semanas,
+ganhar produtos de oferta e até mesmo viagens.0 de comissão). Para todos os acessores  Crédito de 21 dias (recebe a encomenda e não paga de imediato, tem 21 dias para efectuar o pagamento).
+Recebe um produto de oferta sempre que atinge 12 500 0 de valor pedido (representa 17 000 0 em vendas)
+Não existe valor mínimo exigido pela empresa para fazer encomendas (cada qual faz a encomenda com o que conseguir vender)
+De 3 em 3 semanas saem novos catálogos com promoções novas (durante um ano existem 17 catálogos).
+ 
+QUEM SERÃO OS SEUS CLIENTES
+1º Faça uma lista de todas as pessoas que conhece até ter, pelo menos, 20 pessoas. Estas pessoas poderão vir a ser seus clientes. Todos os que conhece, no quotidiano, são potenciais clientes.
+2º Antes de apresentar os produtos aos seus clientes, aprenda tudo o que puder sobre os mesmos, mas não tente aprender tudo de uma vez. O seu catálogo é o seu acessório de venda mais importante.
+3º O mais importante que pode oferecer aos seus clientes é um serviço pessoal, exclusivo e directo em tudo o que necessitem.
+4º Depois de ter apresentado os produtos, anote os pedidos de cada cliente num bloco de encomendas que possue para esse efeito. Envie a encomenda à Oriflame na folha de pedido, dentro de um envelope que recebe na sua documentação.
+5º Os seus clientes são a sua melhor fonte de aquisição de contactos, inclusivamente para novos Assessores. Os compradores, que ficarem satisfeitos, recomendá-lo-ão a novos potenciais compradores. Fale com entusiasmo aos seus amigos sobre os produtos Oriflame.
+   Para mais informações clique nos meus contactos
+   
+A continuação das vantagens  Não fica obrigado a fazer sempre encomendas em todos os catálogos
+Poderá adquirir um Kit (mala com amostras), que contém 3 produtos de oferta, que só custará 2 500 0 se for adquirido na sua 1ª encomenda (facultativo)
+Terá direito a adquirir 4 códigos especiais (códigos 110, 120, 130 e 140) que ao vender poderá receber excelentes lucros. Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/paulaperna/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/59/11/665)
+(ip, 62.151.16.12)
+(language, unknown)
+(prof, 0)
+(realSize, 1016)
+(textSize, 15)
+(title, aeiou web site)
+
+aeiou web site
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/pedrabella/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, Ponto de vista sobre artes visuais, desehno e arte electrônica.)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/60/20/658)
+(ip, 62.151.16.12)
+(keywords, gráfica, arte, visual, arte electrônica, desehno, páginas internet, tipografia, teória)
+(language, portuguese)
+(prof, 0)
+(realSize, 9038)
+(textSize, 603)
+(title, PEDRA BELLA - Arte Visual)
+
+PEDRA BELLA - Arte Visual
+PEDRA BELLA
+Arte Visual
+Realidade - Imaginação - Ilusão
+Visitas:
+Criação Última imaginação
+30. Jul. 2001 14. Dec. 2001
+Página criada com o sistema de edição do 7 mares.terravista.pt
+Powered by Dynamic Drive DHTML code library. Visit Dynamic Drive for free, original DHTML scripts  and components, all of which utilize the latest in DHTML and JavaScript technology! A Dictionary of HTML META Tags Jasc Software - the power to create - Jasc Paint Shop Pro 7 Noesis: Philosophical Research On-line Web Color Theory Web Shots Photo Collections Ontological Foundation of Philosophy
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/personaldata/index.html
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/25/52/677)
+(ip, 62.151.16.12)
+(language, english)
+(prof, 0)
+(realSize, 10108)
+(textSize, 2007)
+(title, My Personal Page...)
+
+My Personal Page...
+My Personal Page...
+Centro de Juventude e Informática da Graciosa
+Hi! The Center for Youth and Computer Science of Graciosa, thanks to the new technologies and the means put at our disposal by "setemares.terravista", whishes to envite all the youth from this island in creating their own personal pages on the Internet. Its not a difficult task, on the contrary, its actually very easy. In order to do this you must have a certain interest and taste for these things.
+As an employee at this Center, I hope that this envitation serves as an incentive to all that wish to have their own personal pages published on the Net. Don't miss this opportunity, amongst other things, I am here to help you in the construction of your personal pages.
+Jorge M. Goncalves
+Center for Youth and Computer Science of Graciosa Resume of my biographical data
+I was born on this island on May 21, 1959. In 1973, a short while after I completed Elementary School, I emigrated with my parents to the United States of America, where I lived most of my life.
+After finishing High School I started taking University courses and at the same time, started doing other work related tasks. I worked for High Tech Companies, performed functions in two Banking Institutions and also worked as a Teacher for the Portuguese School in Peabody, Massachusetts and in many other american schools.
+During this time I started getting interested in Art and in Journalism. Started painting landscape themes in oil and writing articles for several newspapers of New England.
+As of now my great passion consists of Painting, Photography and Computer Science. Ligações para outros Sites http://www.cjigraciosa.pt.vu Official Site of this center in Graciosa http://communities.msn.com.br/Galeriacores My MegaSite about Graciosa http://sites.netscape.net/Jorge295g My Page about Graciosa http://www.cm-graciosa.pt/ Town Hall of Graciosa
+Contacto
+galeriacores@hotmail.com
+Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/pioneiros854/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/31/24/690)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 7100)
+(textSize, 67)
+(title, Agrupamento 854Java + Java)
+
+Agrupamento 854
+Java + Java
+Agrupamento 854 - Leça do Balio
+Entrar
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/podengos/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/63/11/671)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 2060)
+(textSize, 93)
+(title, Podengo Português)
+
+Podengo Português
+Benvindo Welcome
+Versão Portuguesa English Version
+FastCounter by bCentral
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/poetarum_domus/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, Página que pretende ser uma )
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/36/4/639)
+(ip, 62.151.16.12)
+(keywords, Horácio;Plauto,Cícero;Vergíli,Cátulo,Latinos;Domus,Influências Gregas,Poesia,Latim)
+(language, unknown)
+(prof, 0)
+(realSize, 1649)
+(textSize, 26)
+(title, Entrada na Poetarum Domus)
+
+Entrada na Poetarum Domus
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/pohzumano/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/55/7/641)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 2176)
+(textSize, 678)
+(title, Da Pohzumanidade, ou de como Issisteh N'Gozo se tornou num avatar)
+
+Da Pohzumanidade, ou de como Issisteh N'Gozo se tornou num avatar
+A partir do momento em que fez aquele seu último click , a avançada tecnologia que domina a WôWaiWè colocou-o(a) no domínio da pós-humanidade. Podia perfeitamente tê-lo evitado mas qualquer coisa impeliu-o(a) neste sentido. Não se preocupe... é apenas mais um(a).
+Esta é a página de um ser que apenas vive na Undernet. Anaeróbico, multiforme, lilás, metamorfoseante e devorador de Häagen Dasz Strawberry Cheese Cake . O seu nome...
+ 
+para mais informações, pronuncie-se a sua palavra-passe... ahoy!
+ 
+mais uma produção da neonard com n corporation
+® &© 1997 by the neonard com n corporation. all rights reserved
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/portatil/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(description, Esta página foi criada com o objectivo de divulgar o desaparecimento do Rui Pedro, e tentar ajudar os famíliares dele a encontrá-lo.)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/5/7/689)
+(ip, 62.151.16.12)
+(keywords, rui pedro teixeira mendonça; rui; pedro; teixeira; mendonça; menino desaparecido; menino; desaparecido; portugal; lousada; pedófilia; pedofilia; sexo; abuso; menores; policia judiciária; policia; judite; família; pessoas; desaparecidas; hacker; crack; ajuda; solidariedade; missing; pipol; xxx; máquinas; diversão; electrodiver; Ricardo; divulgue; banner; troca; fim.)
+(language, portuguese)
+(prof, 0)
+(realSize, 2012)
+(textSize, 92)
+(title, Menino Desaparecido)
+
+Menino Desaparecido
+Esta página é feita com frames, e o teu programa não funciona com isso.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/prepardegoleiro/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/28/38/722)
+(ip, 62.151.16.12)
+(language, unknown)
+(prof, 0)
+(realSize, 3250)
+(textSize, 28)
+(title, »» Preparador de Goleiro ««)
+
+»» Preparador de Goleiro ««
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/proarq/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/55/13/681)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 19156)
+(textSize, 1242)
+(title, Home)
+
+Home
+ProArq
+Projectos de Arquitectura
+HOME ProArq Maquetes Virtuais #1 cont@ctos Deixe-nos a sua mensagem Principais Obras Maquetes Virtuais #2 Maquetes Virtuais #3 Maquetes Virtuais #4
+Nesta página poderá aceder a todos os conteúdos a partir da minha lista de menu.
+Na secção "ProArq" poderá saber quem somos.
+Na secção "Principais Obras" poderá encontrar uma breve descrição sobre as nossas principais obras.
+Na secção "Maquetes Virtuais" poderá visualizar algumas das nossas obras em modelos 3D. Últimas Brevemente, planos dos edifícios a serem desenvolvidos pela ProArq. Projecto Actual Na secção "Projecto Actual", fique a conhecer o actual trabalho da equipa da ProArq, e acompanhe o seu desenvolvimento no tempo.
+Novidades
+Os últimos projectos e novidades da ProArq
+Abril/2001 Projecto Edifício Comércio e Habitação em Paredes. Brevemente na secção "Maquetes Virtuais", imagens 3D.
+Junho/2001 Lançamento do Concurso público para o Edifício Sede da Associação Musical Freamundense - nosso projecto - brevemente imagens 3D.
+Links Visite a nossa página de Links!
+Lá poderá encontrar os endereços de sites úteis, como também de sites que dizem respeito aos nossos interesses. Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/pscoforum/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/16/0/733)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 4896)
+(textSize, 201)
+(title, Esta página foi elaborada com o objectivo de dar voz aos alunos do curso de Psicologia)
+
+TC Esta página foi elaborada com o objectivo de dar voz aos alunos do curso de Psicologia
+Psicoforum
+Entrar
+Obrigada pela Visita...
+Textos e Artigos: Vários temas
+Contacto:
+psicoforum@portugalmail.com
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/puntacana/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/27/34/634)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 2633)
+(textSize, 107)
+(title, Viagem de Finalistas Ig 1997/2001 - Punta Cana)
+
+Viagem de Finalistas Ig 1997/2001 - Punta Cana
+Esta página utiliza molduras, mas o browser não as suporta.
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/quartos/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/1/49/729)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 1480)
+(textSize, 160)
+(title, quartos fechados virados para o mundo (e-book))
+
+quartos fechados virados para o mundo (e-book)
+quartos fechados
+quartos fechados virados para o mundo (click para abrir a porta do quarto)
+virados para o mundo
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/quercus-aveiro/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/41/27/702)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 14311)
+(textSize, 2419)
+(title, Núcleo Regional de Aveiro da Quercus)
+
+Núcleo Regional de Aveiro da Quercus
+Núcleo Regional de Aveiro da Quercus
+Página principal O Núcleo de Aveiro Plano de actividades Comunicados/Pareceres Aderir à Quercus Saídas de campo Boletim "Salgueiro" Salvamento de Espécimes Pertoleados - Maré Negra Denúncias A Ria de Aveiro Resíduos Urbanos O Litoral
+Bem-vindo à Quercus-Aveiro
+C ontactos da Quercus-Aveiro:
+Sede: - Urbanização de Santiago, Bloco 25, R/C F em Aveiro; Tlf/Fax: 234 42 50 72
+Endereço Postal: Apartado 363; 3811-901 AVEIRO
+Outros sites com interesse:
+Quercus - A.N.C.N.
+C entro de I nformação de R esíduos
+BIORREDE - Universidade de Aveiro
+SPEA - Sociedade Portuguesa para o Estudo das Aves
+AGROBIO -
+Associação Portuguesa de Agricultura Biológica
+Raizes.no.sapo.pt
+Página com interessante informação regional.
+Última actualização: 25-11-2002
+Conselhos para o salvamento de espécimes petroleados dedoanimado.gif (352 bytes)
+As aves encontradas na nossa região deverão ser encaminhadas para a Reserva Natural das Dunas de S. Jacinto
+Telefone: 234 331 282
+Próxima saída de campo : Visita à Rreserva Natural das Dunas de S. Jacinto dia 07 de Dezembro 2002.
+caminheiro.gif (1876 bytes)
+Detalhes dedoanimado.gif (352 bytes)
+Membros da Direcção do Núcleo Regional de Aveiro para o período
+(2002-11 a 2003-10) Presidente: Fernando Alberto Leão Courinha
+Vice-Presidente: Leonel Seroto Rocha
+Secretária: Elisabete Rosa Queiroz Marinho
+Tesoureiro: Paulo da Cruz Almeida
+Vogal: Armando Jorge de Carvalho Ferreira
+Vogal: Bruno Martins Ferreira Lucas
+Vogal: José Mário Bastos Gonçalves Anjos
+Vogal: Maria Teresa Rodrigues Páscoa
+Vogal: Nuno Miguel França Vieira
+Organização de equipas de voluntários para eventual necessidade de combate á maré negra provocada pelo navio "Prestige" ! dedoanimado.gif (352 bytes)
+Tome nota:
+Para uma participação mais efectiva dos cidadãos.
+Perante a agressão ao Ambiente ... denuncie através de:
+808 200 520 - "Linha SOS Ambiente"
+213 217 000 - SEPNA (GNR)
+Serviço de Protecção da Natureza e do Ambiente da Guarda Nacional Republicana -
+Fax 213 217 153
+Email: cg.rep3@gnr.pt
+Página Web:
+http://www.gnr.pt/portal/internet/sepna
+Livro Aveiro Natural
+Sobre este Livro... >>
+Apelo aos cibernautas:
+Solicitamos a todos os associados do nosso núcleo que disponham de conta de correio electrónico que nos enviem um email para poderem receber informações actualizadas sobre a vida da associação.
+É o visitante desde 15 de Julho de 1999
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/radiobaia/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/48/2/691)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 3806)
+(textSize, 400)
+(title, Associação Cultural Cultivarte)
+
+Associação Cultural Cultivarte
+Associação Cultural Cultivarte - Quarteto de Clarinetes de Lisboa
+Associação sem fins lucrativos, que se dedica à divulgação musical e organização de Masterclasses Internacionais especialmente na área do Clarinete.
+Com as suas actividades, tenta minorar as tão profundas lacunas, quer culturais quer pedagógicas do nosso país musical.
+Versão Portuguesa English Version
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/rosario_jorge/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/9/54/683)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 14357)
+(textSize, 957)
+(title, Home)
+
+Home
+:: Oi tudo bem. ::
+Aqui vais saber tudo sabre mim desde o meu nome até ao nº do meu sutien.
+HOME SOBRE MIM CURRICULUM OS MEUS INTERESSES ALBUM LINKS CONT@CTOS LIVRO DE VISITAS
+Entra no meu menú.
+Descobre-me.
+Aqui podes saber tudo desde o dia em que nasci até ao dia de hoje.
+Vê as minhas fotos lá vais encontrar-me a mim e as pessoas que mais gosto. :: Não percam!
+Adicionem o endereço da minha página aos Favoritos. Em breve terei mais novidades!
+Quer ter uma página como a minha?
+Basta registar-se no Terràvista e escolher o modelo que mais gosta.
+:: Contactos
+Queres saber como contactar-me então visita os meus contactos.
+Novo!!
+Anda lá despacha-te e vê.
+  - Vê algumas fotos ao longo da minha vida.
+  - Vê o que mais gosto de fazer.
+:: Links
+Visite a minha página de Links!
+Lá poderá encontrar os endereços de sites úteis, como também de sites que dizem respeito aos meus interesses.
+Página criada com o sistema de edição do 7 mares.terravista.pt
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/rufema/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/26/39/636)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 9277)
+(textSize, 1761)
+(title, Home Page)
+
+Home Page
+aqualogo.jpg (22982 bytes)
+linha1.jpg (3637 bytes) meuaqua.jpg (3132 bytes) outaqua.jpg (3267 bytes) perg.jpg (3063 bytes) dicas.jpg (2823 bytes) peix.jpg (2867 bytes)
+artigos.jpg (3233 bytes)
+plantas.jpg (2926 bytes) link.jpg (2802 bytes)
+Bem vindo ao fantástico mundo da criação de peixes ornamentais em aquário.
+Este site foi criado a pensar em todos aqueles que têm paixão pela manutenção de peixes em aquários, espero que ajude a tornar o hobbie mais bem sucedido e esclarecer muitas dúvidas que sempre surgem a quem pretende um aquário bem elaborado.
+Na secção "Artigos" , estão transcritos alguns textos publicados noutros Sites ou em revistas da especialidade, com os titulos abaixo transcritos.
+1 - Equilibrio dinãmico e caracois. Miguel Figueiredo. 2 - A temperatura da água. Alfredo Figueiredo. 3 - Killifish, o perigo total. Miguel Figueiredo. 4 - Reproduções ao Natural. Miguel Figueiredo.
+Espero que esta página contenha informação para vos ajudar, em caso de duvida podem sempre me perguntar (enviando um Email ).
+fish1.jpg (6139 bytes)
+barra.gif (1447 bytes)
+email_animado.gif (25129 bytes)
+aquanel.gif (4814 bytes)
+webring.gif (3912 bytes)
+barra.gif (1447 bytes) ______ ______ ______
+Rui Fernando Marques
+______ ______ ______ (Esta página encontra-se nos seguintes motores de busca)
+estounosapo.gif (3718 bytes) netindexDir.gif (1436 bytes) cade.jpg (6985 bytes)
+clix.gif (1643 bytes) google.jpg (4966 bytes) Cusco
+___________________________________________________
+Consulta ao Cade?
+peixes.jpg (5849 bytes) escalar.jpg (5143 bytes) bz1p.jpg (10580 bytes) beta1.jpg (2928 bytes)
+barra.gif (1447 bytes)
+Web Master: Rui Marques.
+Novembro de 2001- Todos os direitos reservados.
+terravista.gif (1964 bytes) portugalmail.gif (2931 bytes)
+
+----!!- colecção WPT 03 - separador de documento -!!----
+URL: http://7mares.terravista.pt/ruytexas/
+(Content-Length, -1)
+(Content-Type, text/html)
+(Last-Modified, unknown)
+(ServerSW, apache)
+(dataRec, 16/04/2003)
+(estado, 200)
+(filtrado, /vcrMom/data/WEBSTATS/filtrados/25/56/641)
+(ip, 62.151.16.12)
+(language, portuguese)
+(prof, 0)
+(realSize, 18856)
+(textSize, 1703)
+(title, Home)
+
+Home
+Bem-vindos à nossa página pessoal
+« RUY TEXAS * DUARTE FAYA &NINA »
+Neste site, você poderá saber tudo sobre «RUY TEXAS &DUARTE FAYA» "mágicos madeirenses": os seus interesses, as suas actividades, algumas fotografias dos seus espectáculos e amigos da magia, uma páginas de links para os sites que mais gostam, etc. Espero que gostem e que voltem sempre !!!
+NOSSOS INTERESSES ALBUM LINKS CONT@CTOS HOME
+Nesta página poderá aceder a todos os conteúdos a partir da nossa lista de menu.
+Na secção "Sobre Nós" poderá saber quem somos: Os nossos nomes, as nossas idades, onde moramos, onde nascemos e muito mais.
+Visite-nos em .:
+www.ruytexas.hpg.com.br/rtxmagicus.htm
+www.duartefaya.hpg.com.br/magico.htm
+Veja as nossas fotos na secção "Album".
+Os nossos amigos, as nossas tarefas mágicas.
+Está lá tudo! Não percam! Adicionem o endereço da nossa página aos Favoritos. Em breve teremos mais novidades!
+Quer ter uma página como a nossa?
+Basta registar-se no Terràvista e escolher o modelo que mais gosta. Interesses Na secção "Os nossos interesses", fique a conhecer o nosso «SHOW» de:

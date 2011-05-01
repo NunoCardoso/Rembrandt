@@ -34,7 +34,7 @@ class CollectionValidator extends Validator {
 		this.db = db
 	}
 	
-	Collection validate(String colletion_given_name, 
+	Collection validate(String collection_given_name, 
 		String DEFAULT_COLLECTION_NAME,
 		boolean mandatory = true) {
 

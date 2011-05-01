@@ -3,3 +3,4 @@ Mais abstracts / intefaces
 Meter porta no MySQL
 Instruções instalação Windows
 pagelinks. sql demora muito.
+meter REMBRANDT_HOME e REMBRANDT_CONFIGURATION_FILE

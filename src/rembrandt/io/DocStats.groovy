@@ -31,7 +31,7 @@ class DocStats {
     def parsedDocs, totalDocs
     def timeElapsed, remainingTime, avgTime
     def first, partialFirst, partialLast, last
-    Logger log = Logger.getLogger("RembrandtMain")
+    Logger log = Logger.getLogger("DocStats")
     MemoryMXBean mem 
     
     /**
@@ -51,7 +51,9 @@ class DocStats {
         timeElapsed = 0
         remainingTime = 0
         avgTime = 0	
-        log.info "Parsing ${totalDocs} docs, starting at ${new Date(first).toGMTString()}"
+		log.info "---------------------"
+		log.info "Task beginning: Annotate ${totalDocs} docs. Starting at ${new Date(first)}"
+		log.info "---------------------"
     }
     
     /**
@@ -61,8 +63,10 @@ class DocStats {
         last = (System.currentTimeMillis() - first)
         def printLast = getTimeValue(last)
         def lastUnits = getTimeUnits(last)
-        log.info sprintf ("Parsed %d docs in %.1f%s.", totalDocs, printLast, lastUnits)
-    }
+		log.info "---------------------"
+        log.info sprintf ("Task ending: Annotate %d docs. Done in %.1f%s.", totalDocs, printLast, lastUnits)
+ 		log.info "---------------------"
+   }
     
     /**
      * Println memory usage, using the java.lang.management.* stuff.
@@ -79,6 +83,7 @@ class DocStats {
                 "used = "+((int) ((float)nonheap.getUsed()/1024/1024))+"M " + 
                 "committed = "+((int) ((float)nonheap.getCommitted()/1024/1024))+"M " + 
                 "max = "+((int) ((float)nonheap.getMax()/1024/1024))+"M "
+        log.info "---------------------" 
     }
     
     /** 
@@ -86,7 +91,9 @@ class DocStats {
      */
     public void beginDoc(docid = null) {
         partialFirst = System.currentTimeMillis()
-        log.info "Parsing doc ${parsedDocs+1} of ${totalDocs}, id: "+(docid != null ? docid : "Unknown") 		  
+		log.info "---------------------"
+        log.info "Task status: annotating doc #${parsedDocs+1} of ${totalDocs} with "+(docid != null ? "id "+docid : "unknown id") 		  
+		log.info "---------------------"
     }
     
     /** 
@@ -94,8 +101,10 @@ class DocStats {
      */
     public void beginBatchOfDocs(int howmany) {
         partialFirst = System.currentTimeMillis()
-        log.info "Parsing a batch of $howmany docs"
-    }
+ 		log.info "---------------------"
+        log.info "Task status: annotating a batch of $howmany docs"
+ 		log.info "---------------------"
+   }
     
     public void endBatchOfDocs(int howmany) {
         endDoc(howmany)
@@ -124,7 +133,7 @@ class DocStats {
         
         def printAvgTime = DocStats.getTimeValue(avgTime)
         def timeAvgUnits = DocStats.getTimeUnits(avgTime)
-        
+		log.info "---------------------"
         log.info sprintf ("Time: %.1f%s. Total: %.1f%s. Avg: %.1f%s/doc. ETF: %.1f%s (%s).", 
                 printElapsed, elapsedUnits, printTimeElapsed, timeElapsedUnits, printAvgTime, timeAvgUnits,
                 printRemainingTime, timeRemainingUnits, new Date((long)(first+remainingTime)).toGMTString())

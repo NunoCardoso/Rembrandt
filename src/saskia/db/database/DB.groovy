@@ -35,7 +35,8 @@ abstract class DB {
 	def db
 	Configuration conf
 	static Logger log = Logger.getLogger("DB")
-
+	static Logger log_saskia = Logger.getLogger("SaskiaMain")
+	
 	String default_db_driver = 	'com.mysql.jdbc.Driver'
 	String default_db_url = 	'jdbc:mysql://127.0.0.1'
 	String default_db_name = 	'saskia'
@@ -101,7 +102,7 @@ abstract class DB {
 		}
 		param = saskia.util.XMLUtil.decodeAmpersand(param)
 
-		println "Connecting to $driver:$url/$name?${param}"
+		log.debug "Connecting to $driver:$url/$name?${param}"
 		try {
 			db = Sql.newInstance("$url/${name}?${param}", user, password, driver)
 			lastCall = System.currentTimeMillis()
@@ -112,6 +113,7 @@ abstract class DB {
 		}
 		if (db) {
 			log.info "Database initialized: $driver:$url/$name"
+			log_saskia.info "Database initialized: $driver:$url/$name"
 		} else {
 			log.fatal "Database NOT initialized. Exiting."
 			System.exit(0)

@@ -25,14 +25,18 @@ class FileValidator extends Validator {
 	 * @param filename The filename
 	 * @return File if exists, null otherwise
 	 */
-	public File validate(String filename, String default_filename = null, boolean mandatory = true) {
+	public File validate(String given_filename, String default_filename = null, boolean mandatory = true) {
 
-		File file = new File(filename)
-		if (!file.exists()) {
-			println "While file for document import?"
+		File file
+		if (!given_filename) {
+			println "While file for document import? (default: $default_filename)"
 			print "> "
 			BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
-			file = new File(input.readLine().trim())
+			String filename = input.readLine().trim()
+			if (!filename) filename = default_filename
+			try {
+				file = new File(filename)
+			} catch (Exception e) {}
 		}
 		
 		if (!file && mandatory) {

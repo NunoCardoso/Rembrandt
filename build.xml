@@ -1,6 +1,6 @@
 <project name="Rembrandt" basedir="." default="compile">
 	
-	<property name="version"    	value="1.3"/>
+	<property name="version"    	value="1.3rc1"/>
 	<property name="projectname"    value="rembrandt"/>
 	<property name="Project_Name"   value="Rembrandt"/>
 	<property name="user.name"      value="Nuno Cardoso"/>
@@ -18,7 +18,7 @@
 	<!-- include has files to put in the package; resources has files no not include (ex: tests) -->
 	<property name="include.dir"    value="include"/>
 	<!-- scripts has utilities to include in the package; sandbox has utilities to not include -->
-	<property name="script.dir"    value="script"/>
+	<property name="bin.dir"    value="bin"/>
 	<property name="jar.dir" 	    value="/Users/ncardoso/Programs/jar"/>
 
 	<!--
@@ -242,16 +242,19 @@
             <fileset dir="${db.dir}" includes="*" />
         </copy>
 
-     	<!-- script -->    	
-        <mkdir dir="${build.dir}/${script.dir}"/>
-        <copy todir="${build.dir}/${script.dir}">
-            <fileset dir="${script.dir}" includes="*" />
+     	<!-- bin -->    	
+        <mkdir dir="${build.dir}/${bin.dir}"/>
+        <copy todir="${build.dir}/${bin.dir}">
+            <fileset dir="${bin.dir}" includes="*" />
         </copy>
 
     	<!-- include -->    
      	<copy todir="${build.dir}"> 
     	    <fileset dir="${include.dir}" includes="*" />
     	</copy>
+
+	<!-- log -->
+	<mkdir dir="${build.dir}/${log.dir}"/>
 
     	<!-- jar -->
     	<copy file="${jar.dir}/${projectname}-${version}.jar" 

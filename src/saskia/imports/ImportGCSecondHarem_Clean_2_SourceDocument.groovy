@@ -34,7 +34,6 @@ import saskia.util.validator.*
 class ImportGCSecondHarem_Clean_2_SourceDocument extends Import {
 
 	Configuration conf = Configuration.newInstance()
-	static Logger log = Logger.getLogger("SaskiaImports")
 
 	SecondHAREMReader reader
 	RembrandtWriter writer

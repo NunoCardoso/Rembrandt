@@ -269,7 +269,7 @@ class RembrandtCoreENforHAREM extends RembrandtCore {
 	    /* ENTITY RELATION DETECTION */
 	    /*****************************/
 
-	    log.info "Doing entity relation: "+conf.getBoolean("rembrandt.core.doEntityRelation", true)
+	    log.debug "Doing entity relation: "+conf.getBoolean("rembrandt.core.doEntityRelation", true)
 	    if (conf.getBoolean("rembrandt.core.doEntityRelation", true)) {
 		// now, to find external Evidences, I'll index the Named Entities
 		

@@ -32,11 +32,9 @@ import rembrandt.io.RembrandtStyleTag
 /** 
  * This class imports NYT files to the Source Documents
  */
-class ImportNYTFile_2_SourceDocument {
-	
+class ImportNYTFile_2_SourceDocument extends Import {
 		
 	Configuration conf = Configuration.newInstance()
-	static Logger log = Logger.getLogger("SaskiaImports")
 	NYTimesReader reader
 	RembrandtWriter writer
 	
@@ -48,7 +46,7 @@ class ImportNYTFile_2_SourceDocument {
 			conf.get("rembrandt.output.styletag.lang", "pt")))
 	}
 		
-	public HashMap importDocs() {
+	public importer() {
 		reader.processInputStream(this.inputStreamReader)
 
 		reader.docs.each{doc ->

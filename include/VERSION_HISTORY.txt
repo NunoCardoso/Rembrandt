@@ -1,7 +1,11 @@
 VERSION HISTORY of REMBRANDT
 ============================
-v1.3
+v1.3rc1
   Allow Wikipedia mode off, rules only
+  Rewrote all Saskia DB classes to accomodate a test version
+  Test suites, revamped importers/exporters/readers/writers
+  Organised resources/scripts
+  Now on Git :)
 
 v1.2
   Added term filters.
@@ -19,7 +23,7 @@ v1.1
    New improved API access control and logging
    Several bugs on TimeGrounding 
    
-v1.0-beta2 (or 1.0)
+v1.0
    concurrence lock DB now handled with 5 retries
    lots of improvements on DB sync issues, workers are much stable now
    Support of geographic grounding by GeoPlanet's WOEIDs

@@ -35,7 +35,6 @@ import saskia.util.validator.*
 class ImportWPT03_2_SourceDocument extends Import {
 
 	Configuration conf = Configuration.newInstance()
-	static Logger log = Logger.getLogger("SaskiaImports")
 	WPT03Reader reader
 	RembrandtWriter writer
 
@@ -47,11 +46,12 @@ class ImportWPT03_2_SourceDocument extends Import {
 				conf.get("rembrandt.output.styletag.lang", "pt")))
 	}
 
-	public HashMap importer() {
+	public importer() {
 
 		// connect the file input stream reader to the SecondHaremReader
+println "Reading... "
 		reader.processInputStream(this.inputStreamReader)
-
+println "Reader done. "
 		// discard all existing NEs
 		reader.docs.each{doc ->
 			if (!doc.lang) doc.lang = collection.col_lang
@@ -118,6 +118,7 @@ class ImportWPT03_2_SourceDocument extends Import {
 		log.info "File: $file <"+encoding+"> "	
 		
 		importer.prepareInputStreamReader()
+		log.debug "Stream prepared."
 		importer.importer()
 		log.info importer.statusMessage()
 	

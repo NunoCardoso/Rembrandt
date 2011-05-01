@@ -38,7 +38,6 @@ import saskia.util.validator.*
 class ImportWPT05_2_SourceDocument extends Import {
    
    Configuration conf = Configuration.newInstance()
-   static Logger log = Logger.getLogger("SaskiaImports")
    WPT05Reader reader
    RembrandtWriter writer
    

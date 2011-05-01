@@ -36,7 +36,6 @@ import saskia.util.validator.*
 class ImportMediawikiXML_2_SourceDocument extends Import {
    
    Configuration conf = Configuration.newInstance()
-   static Logger log = Logger.getLogger("SaskiaImports")
    MediawikiXMLReader reader
    RembrandtWriter writer
    

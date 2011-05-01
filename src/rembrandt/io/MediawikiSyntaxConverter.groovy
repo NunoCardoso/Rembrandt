@@ -22,10 +22,8 @@ import rembrandt.obj.*
 import org.eclipse.mylyn.wikitext.core.parser.MarkupParser
 import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder
 import org.eclipse.mylyn.wikitext.mediawiki.core.MediaWikiLanguage
-//import javax.swing.text.html.HTMLEditorKit;
-//import javax.swing.text.html.parser.ParserDelegator;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.StringReader
+import java.io.StringWriter
 
 import org.apache.log4j.Logger
 
@@ -34,23 +32,8 @@ import org.apache.log4j.Logger
  * Retirado de //http://eclipse.dzone.com/announcements/textile-j-is-moving-mylyn-wiki
  * e de http://stackoverflow.com/questions/2863272/wikipedia-java-library-to-remove-wikipedia-text-markup-removal
  */
-class MediawikiSyntaxReader extends Reader {
+class MediawikiSyntaxConverter {
 
-	public MediawikiSyntaxReader(StyleTag style) {
-		super(style)
-	}
-
-	public void processInputStream(InputStreamReader is) {
-
-		BufferedReader br = new BufferedReader(is)
-		StringBuffer buffer = new StringBuffer()
-		String line
-
-		while ((line = br.readLine()) != null) {
-			buffer.append(line)
-		}
-		docs << createDocument(buffer.toString())
-	}
 
 	public Document createDocument(String text) {
 
@@ -110,7 +93,7 @@ class MediawikiSyntaxReader extends Reader {
 	/** Gets the Mediawiki page on STDIN, converts & outputs HTML in STDOUT */
 	static main(args) {
 
-		MediawikiSyntaxReader w2h = new MediawikiSyntaxReader()
+		MediawikiSyntaxConverter w2h = new MediawikiSyntaxConverter()
 		RembrandtWriter writer = new RembrandtWriter(new RembrandtStyleTag("pt"))
 
 		String text = ""

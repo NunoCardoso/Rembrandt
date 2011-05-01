@@ -41,8 +41,8 @@ class MediawikiXMLReaderTest extends ReaderTest {
 				fileseparator + "test" + fileseparator + "collections" + fileseparator + "ptwiki_sample_rembrandted.xml"
 		super.processReaders()
 
-		reader_generated.docs?.eachWithIndex{generated_doc, doc_index ->
+	//	generated_docs?.eachWithIndex{generated_doc, doc_index ->
 			super.evaluateReaders()
-		}
+	//	}
 	}
 }

@@ -35,11 +35,14 @@ class UnformattedReader extends Reader {
     int numbertag = 0
     String tagmark="REMBRANDTTAGMARK"
     
-    public UnformattedReader(StyleTag style) {
-	super(style)
+    public UnformattedReader(InputStream is, StyleTag style) {
+	super(is, style)
     }
-    
-    private String savetag(item) {
+	
+	public UnformattedReader(StyleTag style) {
+		super(style)
+	}
+      private String savetag(item) {
         tag[++numbertag] = item
         return  " ${tagmark}${numbertag} "
     }
@@ -50,7 +53,10 @@ class UnformattedReader extends Reader {
         }
     }
        
-    public void processInputStream(InputStreamReader is) {
+  	public List<Document> readDocuments(int docs_requested = 1) {
+
+		emptyDocumentCache()
+
         
         /* input stream come as:
          
@@ -63,12 +69,16 @@ class UnformattedReader extends Reader {
            % description2 (optional)         
         
         */ 
-        BufferedReader br = new BufferedReader(is)	    
+        BufferedReader br = new BufferedReader(					
+			new InputStreamReader(is))
+	    
         StringBuffer buffer = new StringBuffer()		    
         String line
         Document doc
         
         while ((line = br.readLine()) != null) {
+			status = ReaderStatus.INPUT_STREAM_BEING_PROCESSED
+			
             // following # or % are just discarted.
             if (line.startsWith("%") || line.startsWith("#")) {
                 // first occurence of # or % indicate a new document, with docid of its text 
@@ -103,8 +113,10 @@ class UnformattedReader extends Reader {
                     
                     // index body
                     doc.indexBody()
-                    docs << doc
-                
+                    addDocument(doc)
+					if (documentsSize() >= docs_requested)
+						return getDocuments()
+
                     // now, let's open the new one...
                     doc = new Document()
                     doc.docid = line.find(/(?<=[#%]+).+/).trim()
@@ -132,8 +144,12 @@ class UnformattedReader extends Reader {
             doc.tokenizeBody()
             parseSentences(doc.body_sentences, doc)
             doc.indexBody()
-            docs << doc
+            addDocument(doc)
+
         }
+		status = ReaderStatus.INPUT_STREAM_FINISHED
+		return getDocuments()
+
     }
     
     public Sentence parseSentences(List<Sentence> s, Document doc) {
@@ -146,8 +162,8 @@ class UnformattedReader extends Reader {
         boolean inalt = false
         boolean insubalt = false
         
-        long altid
-        int subaltid
+        Long altid
+        Integer subaltid
             
         List<Sentence> s_clone = s.clone() // the cloned list is for collection walking. 
         // I will make changes directly on the s variable (the reference sentences on the doc).

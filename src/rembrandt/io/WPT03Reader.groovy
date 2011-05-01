@@ -17,6 +17,7 @@
  */
 package rembrandt.io
 
+import java.util.List;
 import java.util.regex.*
 import rembrandt.obj.Document
 
@@ -47,14 +48,20 @@ class WPT03Reader extends Reader {
 	 */
 
 
+	public WPT03Reader(InputStream is, StyleTag style) {
+		super(is, style)
+	}
+
 	public WPT03Reader(StyleTag style) {
 		super(style)
 	}
-
+	
 	/**
 	 * Process the HTML input stream
 	 */
-	public void processInputStream(InputStreamReader is) {
+ 	public List<Document> readDocuments(int docs_requested = 1) {
+
+		emptyDocumentCache()
 
 		Matcher m
 		Boolean indoc = false
@@ -72,11 +79,13 @@ class WPT03Reader extends Reader {
 		String url
 		String title
 
-		BufferedReader br = new BufferedReader(is)
+		BufferedReader br = new BufferedReader(
+					new InputStreamReader(is))
 
 		String l
-		while ((l = br.readLine()) != null) {
-
+		while ((l = br.readLine()) != null   && documentsSize() <= docs_requested ) {
+			status = ReaderStatus.INPUT_STREAM_BEING_PROCESSED
+			
 			m = l =~ /^----!!- .* WPT 03 - separador de documento -!!----$/
 			if (m.matches()) {
 				if (inbody && indoc) {
@@ -98,10 +107,12 @@ class WPT03Reader extends Reader {
 						date = new Date(0)
 
 					doc.date_created = date
-					docs << doc
-					log.info "Added #{docs.size()} doc $doc to docs."
+					addDocument(doc)
+					log.info "Added #{documentsSize()} doc $doc to docs."
 					text = "";title = ""; url = "";content = "";
 					lang="";id="";date_modified=null;date_fetched=null;
+					if (documentsSize() >= docs_requested)
+						return getDocuments()
 				}
 			} else {
 
@@ -172,8 +183,10 @@ class WPT03Reader extends Reader {
 				}
 			}
 		}
-
+		status = ReaderStatus.INPUT_STREAM_FINISHED
+		
 		// last document from line leftovers!
+
 		if (text) {
 			Document doc = new Document()
 			doc.body = text.trim()
@@ -192,8 +205,9 @@ class WPT03Reader extends Reader {
 				date = new Date(0)
 
 			doc.date_created = date
-			docs << doc
-			log.info "Added #${docs.size()} doc $doc to docs."
+			addDocument(doc)
+			log.info "Added #${documentsSize()} doc $doc to docs."
+			return getDocuments()
 		}
 	}
 }

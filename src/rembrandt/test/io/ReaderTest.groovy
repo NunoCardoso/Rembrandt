@@ -41,9 +41,13 @@ public class ReaderTest extends GroovyTestCase {
 	Configuration conf
 	Logger log = Logger.getLogger("RembrandtTest")
 	static String fileseparator = System.getProperty("file.separator")
+
 	String file_input
 	String file_output
 
+	List<Document> generated_docs
+	List<Document> expected_docs
+	
 	public ReaderTest() {
 		conf = Configuration.newInstance()
 	}
@@ -52,23 +56,26 @@ public class ReaderTest extends GroovyTestCase {
 		File file_source = new File(file_input)
 		File file_expected = new File(file_output)
 
-		reader_generated.processInputStream(new InputStreamReader(
-				new FileInputStream(file_source)))
-		reader_expected.processInputStream(new InputStreamReader(
-				new FileInputStream(file_expected)))
+		reader_generated.setInputStream(
+				new FileInputStream(file_source))
+		reader_expected.setInputStream(
+				new FileInputStream(file_expected))
+		
+		generated_docs = reader_generated.readDocuments(10000)
+		expected_docs = reader_expected.readDocuments(10000)
 	}
 
 	void evaluateReaders() {
 
 		// same number of docs
-		assert reader_generated.docs.size() == reader_expected.docs.size()
+		assert generated_docs.size() == expected_docs.size()
 
 		int fails = 0
 
-		reader_generated.docs?.eachWithIndex{generated_doc, doc_index ->
+		generated_docs?.eachWithIndex{generated_doc, doc_index ->
 
 			log.debug "Doing generated doc#${doc_index} $generated_doc..."
-			Document expected_doc = reader_expected.docs[doc_index]
+			Document expected_doc = expected_docs[doc_index]
 
 			if (log.getLevel() == Level.TRACE) {
 				log.trace "DOC EXPECTED:"

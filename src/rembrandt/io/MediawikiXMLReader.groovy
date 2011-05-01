@@ -18,19 +18,21 @@
 
 package rembrandt.io
 
+import java.util.List;
+
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
 
-import org.xml.sax.helpers.DefaultHandler
-import org.xml.sax.*
-import javax.xml.parsers.SAXParserFactory
+import javax.xml.stream.XMLInputFactory
+import javax.xml.stream.XMLStreamReader
+import javax.xml.stream.XMLStreamConstants
 
 import rembrandt.obj.Document
 
 
 /** 
  * This class importsMediawiki XML dump files to the Source Documents
- * uses SAX.
+ * uses STAX parser.
  XML is:
  <?xml version="1.0" encoding="utf-8" ?>
  <mediawiki xmlns="http://www.mediawiki.org/xml/export-0.3/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.3/ http://www.mediawiki.org/xml/export-0.3.xsd" version="0.3" xml:lang="en">
@@ -61,165 +63,216 @@ import rembrandt.obj.Document
  </page>
  */
 
-class MediawikiXMLHandler extends DefaultHandler {
-
-	MediawikiXMLReader _this_reader
-	MediawikiSyntaxReader syntaxReader
-
-	def text
-	def content
-	Date date
-	String lang
-	String id
-	String title
-	String doc_id
-
-	Document doc
-
-	boolean inpage = false
-	boolean inrevision = false
-	boolean incontributor = false
-
-	public MediawikiXMLHandler(MediawikiXMLReader this_) {
-		_this_reader = this_
-		// I will infer the doc language and set the
-		// converter language before using it.
-		syntaxReader = new MediawikiSyntaxReader()
-	}
-
-	void startElement(String ns, String localName, String qName, Attributes atts) {
-		switch (qName) {
-
-			case 'page':
-				doc = null;
-						text = ""; content = null; id = null;
-				inpage = true;
-				break
-
-			case 'base':
-				lang=null;
-				break;
-
-			case 'timestamp':
-				text = "";
-				date = null;
-				break
-
-			case 'revision':
-				inrevision = true;
-				break;
-
-			case 'title':
-				title = "";
-				break;
-
-			case 'contributor':
-				incontributor=true;
-				break;
-
-			// se for de ids que não interessam, não apagar
-			case 'id':
-				if (inpage && !inrevision & !incontributor) {
-					id="";
-				}
-				break;
-
-			case 'text':
-				text = "";
-				content = null;
-				break
-		}
-	}
-
-	void characters(char[] chars, int offset, int length) {
-		text += new String(chars, offset, length)
-	}
-
-	void endElement(String ns, String localName, String qName) {
-		switch (qName) {
-
-			case 'text':
-			// the Document returned by syntaxReader only has body sentences
-			// it misses the title and metadata info
-				doc = syntaxReader.createDocument(text)
-
-				if (title && id)  {
-					doc_id = id+"_"+title
-					int upperlimit = (doc_id.size() > 250 ? 250: doc_id.size())
-					doc_id = doc_id.substring(0, upperlimit);
-					doc.docid = doc_id
-				}
-				if (lang) doc.lang = lang
-
-				if (title) {
-					doc.title = title
-					doc.tokenizeTitle()
-					doc.indexTitle()
-				}
-				inpage = false;
-				text = "";
-				break
-
-			case 'base':
-				text.findAll(/http:\/\/(\w*).wikipedia.org\/.*/) {all, g1 -> lang = g1}
-				text = "";
-				break;
-
-			case 'timestamp':
-				try {
-					date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
-				} catch(Exception e) {
-					date = new Date(0)
-				}
-				text = "";
-				break
-
-			case 'revision':
-				inrevision = false;
-				text = "";
-				break;
-
-			case 'contributor':
-				incontributor=false;
-				text = "";
-				break;
-
-			case 'title':
-			//				println "Got title: $text"
-				title = text.trim();
-				text = "";
-				break;
-
-			case 'id':
-				if (inpage && !inrevision & !incontributor) {
-					//					println "Got id: $text"
-					id = text.trim();
-				}
-				text = "";
-				break;
-
-			case 'page':
-				_this_reader.docs << doc
-				text = "";
-				break
-		}
-	}
-}
 
 
 public class MediawikiXMLReader extends Reader {
 
+	XMLStreamReader xmlStreamReader
+	MediawikiSyntaxConverter syntaxConverter
+
+	public MediawikiXMLReader(InputStream is, StyleTag style) {
+		super(is, style)
+		this.is = is
+		xmlStreamReader =
+				XMLInputFactory.newInstance().createXMLStreamReader(is)
+		syntaxConverter = new MediawikiSyntaxConverter()
+	}
+
 	public MediawikiXMLReader(StyleTag style) {
 		super(style)
 	}
-
+	
+	public setInputStream(InputStream is) {
+		this.is = is
+		xmlStreamReader =
+			XMLInputFactory.newInstance().createXMLStreamReader(is)
+		syntaxConverter = new MediawikiSyntaxConverter()
+	} 
+	
 	/**
 	 * Process the HTML input stream
 	 */
-	public void processInputStream(InputStreamReader is) {
-		def handler = new MediawikiXMLHandler(this)
-		def reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader()
-		reader.setContentHandler(handler)
-		reader.parse(new InputSource(is))
+	public List<Document> readDocuments(int docs_requested = 1) {
+
+		emptyDocumentCache()
+
+		def text // raw XML text
+		def content // parsed Wikipedia content
+		Date date
+
+		String lang
+		String id
+		String title
+		String doc_id
+
+		Document doc
+
+		// flags
+		boolean inpage = false
+		boolean inrevision = false
+		boolean incontributor = false
+
+
+		// let the handler read the howmany, and save the correct amount
+		// of docs in the docs list.
+		while (xmlStreamReader.hasNext() && documentsSize() <= docs_requested ) {
+
+			status = ReaderStatus.INPUT_STREAM_BEING_PROCESSED
+
+			try {
+				int eventCode = xmlStreamReader.next()
+
+				switch (eventCode) {
+
+					case XMLStreamConstants.START_ELEMENT :
+
+						String tagname = (
+							xmlStreamReader.getPrefix() ? 
+							xmlStreamReader.getPrefix()+":"+xmlStreamReader.getLocalName() 
+							:xmlStreamReader.getLocalName() )
+
+						switch(tagname) {
+
+							case 'page':
+								doc = null;
+								text = ""; 
+								content = null; 
+								id = null;
+								inpage = true;
+								break
+
+							case 'base':
+								lang=null;
+								break;
+
+							case 'timestamp':
+								text = "";
+								date = null;
+								break
+
+							case 'revision':
+								inrevision = true;
+								break;
+
+							case 'title':
+								title = "";
+								break;
+
+							case 'contributor':
+								incontributor=true;
+								break;
+
+							// se for de ids que não interessam, não apagar
+							case 'id':
+								if (inpage && !inrevision & !incontributor) {
+									id="";
+								}
+								break;
+
+							case 'text':
+								text = "";
+								content = null;
+								break
+						}
+					
+					break
+
+					case XMLStreamConstants.END_ELEMENT :
+
+						String tagname = (
+							xmlStreamReader.getPrefix() ? 
+							xmlStreamReader.getPrefix()+":"+xmlStreamReader.getLocalName() 
+							:xmlStreamReader.getLocalName() )
+
+
+						switch(tagname) {
+							case 'text':
+							// the Document returned by syntaxConverter only has body sentences
+							// it misses the title and metadata info
+								doc = syntaxConverter.createDocument(text)
+
+								if (title && id)  {
+									doc_id = id+"_"+title
+									int upperlimit = (doc_id.size() > 250 ? 250: doc_id.size())
+									doc_id = doc_id.substring(0, upperlimit);
+									doc.docid = doc_id
+								}
+								if (lang) doc.lang = lang
+
+								if (title) {
+									doc.title = title
+									doc.tokenizeTitle()
+									doc.indexTitle()
+								}
+								inpage = false;
+								text = "";
+								break
+
+							case 'base':
+								text.findAll(/http:\/\/(\w*).wikipedia.org\/.*/) {all, g1 -> lang = g1}
+								text = "";
+								break;
+
+							case 'timestamp':
+								try {
+									date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", text)
+								} catch(Exception e) {
+									date = new Date(0)
+								}
+								text = "";
+								break
+
+							case 'revision':
+								inrevision = false;
+								text = "";
+								break;
+
+							case 'contributor':
+								incontributor=false;
+								text = "";
+								break;
+
+							case 'title':
+							//				println "Got title: $text"
+								title = text.trim();
+								text = "";
+								break;
+
+							case 'id':
+								if (inpage && !inrevision & !incontributor) {
+									//					println "Got id: $text"
+									id = text.trim();
+								}
+								text = "";
+								break;
+
+							case 'page':
+								addDocument(doc)
+								text = "";
+								
+								if (documentsSize() >= docs_requested)
+									return getDocuments()
+			
+								break
+
+
+						}
+
+					break
+
+					case XMLStreamConstants.CHARACTERS :
+						text += xmlStreamReader.getText()
+					break
+
+				}
+			}
+			catch (Exception e) {
+				log.fatal  "Erro na leitura de XML: "+e.getMessage()
+			}
+		}
+		
+		// leftovers
+		status = ReaderStatus.INPUT_STREAM_FINISHED
+		return getDocuments()
 	}
 }

@@ -18,6 +18,8 @@
 
 package rembrandt.io
 
+import java.util.List;
+
 import rembrandt.obj.Document
 
 /**
@@ -25,39 +27,50 @@ import rembrandt.obj.Document
  * This class is a reader from a XStream object
  */
 class XStreamReader extends Reader {
-    
-    /** retrieve text content from the object */
-    def resource
-    
-    public XStreamReader(StyleTag style) {
-	super(style)
-    }
-    
-    public void processInputStream(InputStreamReader is) {
-        
-        def BufferedReader br = new BufferedReader(is)	    
-        def StringBuffer buffer = new StringBuffer()		    
-        def line
-        while ((line = br.readLine()) != null) {buffer.append(line+"\n")
-        }
-        def resource = XStream.fromXML(buffer.toString())
-        
-        if (resource instanceof Document) docs.add(resource)
-        else if (resource instanceof List) {
-            if (resource == []) log.warn "XStream input is a list with no documents."
-            else {
-                if (!(resource[0] instanceof Document)) {
-                    log.error "Xstream entries are not valid REMBRANDT documents: "+
-                            resource[0].class.name
-                } else {
-                    resource.each{r -> 
-                        docs.add(r)
-                    }
-                }
-            }
-        } else {
-            log.error "Xstream entries are not valid REMBRANDT documents: "+
-                    resource.class.name
-        }
-    }
+
+	/** retrieve text content from the object */
+	def resource
+
+	public XStreamReader(InputStream is, StyleTag style) {
+		super(is, style)
+	}
+	public XStreamReader(StyleTag style) {
+		super(style)
+	}
+
+	public List<Document> readDocuments(int docs_requested = 1) {
+
+		emptyDocumentCache()
+
+		def BufferedReader br = new BufferedReader(
+					new InputStreamReader(is))
+
+		def StringBuffer buffer = new StringBuffer()
+		def line
+		while ((line = br.readLine()) != null) {
+			status = ReaderStatus.INPUT_STREAM_BEING_PROCESSED
+			buffer.append(line+"\n")
+		}
+		def resource = XStream.fromXML(buffer.toString())
+
+		if (resource instanceof Document) docs.add(resource)
+		else if (resource instanceof List) {
+			if (resource == []) log.warn "XStream input is a list with no documents."
+			else {
+				if (!(resource[0] instanceof Document)) {
+					log.error "Xstream entries are not valid REMBRANDT documents: "+
+							resource[0].class.name
+				} else {
+					resource.each{r ->
+						addDocument(r)
+					}
+				}
+			}
+		} else {
+			log.error "Xstream entries are not valid REMBRANDT documents: "+
+					resource.class.name
+		}
+
+		return getDocuments()
+	}
 }

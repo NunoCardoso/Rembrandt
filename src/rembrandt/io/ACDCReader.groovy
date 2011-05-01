@@ -47,15 +47,22 @@ class ACDCReader extends Reader {
 	def endMWEPattern = /^<\/mwe>$/
 	def termPattern = /^(.*?)\s+(.*)$/
 
+	public ACDCReader(InputStream is, StyleTag style) {
+		super(is, style)
+	}
+	
 	public ACDCReader(StyleTag style) {
 		super(style)
 	}
 
 	/**
-	 * Process the ACDC input stream
+	 * Processes the ACDC input stream
 	 * @param is input stream reader
 	 */
-	public void processInputStream(InputStreamReader is) {
+	public List<Document> readDocuments(int docs_requested = 1) {
+		
+		emptyDocumentCache()
+				
 		Document doc
 		List<Sentence> sentences
 
@@ -65,11 +72,14 @@ class ACDCReader extends Reader {
 		boolean matched
 
 
-		BufferedReader br = new BufferedReader(is)
+		BufferedReader br = new BufferedReader(
+			new InputStreamReader(is))
 		String line
 
 		while ((line = br.readLine()) != null) {
 			log.trace "line:"+line
+			status = ReaderStatus.INPUT_STREAM_BEING_PROCESSED
+			
 			matched = false
 
 			// begin DOC pattern
@@ -86,7 +96,12 @@ class ACDCReader extends Reader {
 				def m = line =~ endDOCPattern
 				if (m.matches())  {
 					doc.body_sentences = sentences
-					docs << doc
+					doc.preprocess()
+					addDocument(doc)
+// return if buffer is full 
+					if (documentsSize() >= docs_requested) 
+						return getDocuments()
+						
 					matched=true
 				}
 			}
@@ -188,5 +203,10 @@ class ACDCReader extends Reader {
 				}
 			}
 		}
+		
+		// if i'm here, it's because the remaining docs 
+		// is not reaching the amount.
+		status = ReaderStatus.INPUT_STREAM_FINISHED
+		return getDocuments()
 	}
 }

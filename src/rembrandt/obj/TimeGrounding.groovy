@@ -151,7 +151,7 @@ class TimeGrounding {
               }
            }
         }
-        assert tg_string == tg.toString()
+       // assert tg_string == tg.toString()
         if (!found) println "Oops, couldn't understand TG info"
         return tg
     } 

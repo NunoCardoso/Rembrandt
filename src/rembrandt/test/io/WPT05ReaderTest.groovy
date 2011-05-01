@@ -32,7 +32,6 @@ class WPT05ReaderTest extends ReaderTest {
 		this.reader_expected = new RembrandtReader(new RembrandtStyleTag("pt"))
 	}
 
-
 	//	@org.junit.Ignore("not ready yet")
 	void testReaderPlainWPT05() {
 		this.file_input = conf.get("rembrandt.home.dir") + fileseparator + "resources" +
@@ -41,9 +40,9 @@ class WPT05ReaderTest extends ReaderTest {
 				fileseparator + "test" + fileseparator + "collections" + fileseparator + "WPT05-00002_sample_utf8_rembrandtformat.txt"
 		super.processReaders()
 
-		reader_generated.docs?.eachWithIndex{generated_doc, doc_index ->
-			println new RembrandtWriter(new RembrandtStyleTag("pt")).printDocument(generated_doc)
-			//super.evaluateReaders()
-		}
+		//generated_docs?.eachWithIndex{generated_doc, doc_index ->
+			//println new RembrandtWriter(new RembrandtStyleTag("pt")).printDocument(generated_doc)
+			super.evaluateReaders()
+		//}
 	}
 }

@@ -74,11 +74,16 @@ class HTMLReader extends Reader {
 
 	String lang
 
+	public HTMLReader(InputStream is, StyleTag style) {
+		super(is, style)
+		lang = Configuration.newInstance().get("global.lang")
+	}
+
 	public HTMLReader(StyleTag style) {
 		super(style)
 		lang = Configuration.newInstance().get("global.lang")
 	}
-
+	
 	private String saveanchor(item) {
 		anchor[++numberanchor] = item
 		return  " ${startanchormark}${numberanchor} "
@@ -104,24 +109,37 @@ class HTMLReader extends Reader {
 	/**
 	 * Process the input stream
 	 */
-	public void processInputStream(InputStreamReader is) {
-		BufferedReader br = new BufferedReader(is)
+	public List<Document> readDocuments(int docs_requested = 1) {
+		emptyDocumentCache()
+		
+		BufferedReader br = new BufferedReader(
+			new InputStreamReader(is))
 		StringBuffer buffer = new StringBuffer()
 		String  line
-		while ((line = br.readLine()) != null) {
+		while ((line = br.readLine()) != null && documentsSize() <= docs_requested ) {
+			status = ReaderStatus.INPUT_STREAM_BEING_PROCESSED
 			buffer.append(line+"\n")
 			if (line.matches(/(?i)<\/HTML>/)) {
-				docs << createDocument(buffer.toString())
+				addDocument(createDocument(buffer.toString()))
 				buffer = new StringBuffer()
+				// return if there is enough of them
+				if (documentsSize() >= docs_requested)
+					return getDocuments()
+
 			}
 			if (line =~ /(?i)<HTML\s*LANG.*?>/) {
 				line.find(/(?i)LANG="(.*?)"/) {all, g1 ->   lang = g1}
 			}
 		}
+		
+		
 		// case there's no HTML tags
-		if (buffer.toString().trim()) {
-			docs << createDocument(buffer.toString())
-		}
+		if (buffer.toString().trim()) 
+			addDocument(createDocument(buffer.toString()))
+		
+		status = ReaderStatus.INPUT_STREAM_FINISHED
+		return getDocuments()
+
 	}
 
 
@@ -231,11 +249,6 @@ class HTMLReader extends Reader {
 
 					//
 				} else if (term.text.equals(endanchormark)) {
-
-					term.index = -1 // don't increment
-					term.hidden = true
-					term.text = "</A>"
-					s_temp << term
 
 					/* If I want to use <A> as forcedNEs				
 					 insideAnchor = false

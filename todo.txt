@@ -1,6 +1,7 @@
 Suporte de mais ontologias (POWER)
-Mais abstracts / intefaces
-Meter porta no MySQL
+
+Meter porta no MySQL como conf(?)
 Instruções instalação Windows
 pagelinks. sql demora muito.
-meter REMBRANDT_HOME e REMBRANDT_CONFIGURATION_FILE
+meter REMBRANDT_HOME e REMBRANDT_CONFIGURATION_FILE no Configuration
+Os imports não estão a usar o encoding. O encoding precisa de ser passado aos Readers

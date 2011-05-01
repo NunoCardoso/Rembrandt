@@ -18,9 +18,6 @@
 
 package rembrandt.io
 
-import java.io.InputStream;
-import java.util.List;
-
 import org.apache.log4j.Logger
 import org.apache.commons.cli.*
 
@@ -65,21 +62,19 @@ public class WPT05Reader extends Reader {
 	XMLStreamReader xmlStreamReader
 
 
-	public WPT05Reader(InputStream is, StyleTag style) {
-		super(is, style)
-		this.is = is
+	public WPT05Reader(InputStream inputStream, StyleTag style) {
+		super(inputStream, style)
 		xmlStreamReader =
-				XMLInputFactory.newInstance().createXMLStreamReader(is)
+				XMLInputFactory.newInstance().createXMLStreamReader(inputStream)
 	}
 
 	public WPT05Reader( StyleTag style) {
 		super(style)
 	}
 
-	public setInputStream(InputStream is) {
-		this.is = is
+	public void setInputStream(InputStream inputStream) {
 		xmlStreamReader =
-				XMLInputFactory.newInstance().createXMLStreamReader(is)
+				XMLInputFactory.newInstance().createXMLStreamReader(inputStream)
 	}
 
 	public List<Document> readDocuments(int docs_requested = 1) {
@@ -90,7 +85,6 @@ public class WPT05Reader extends Reader {
 		String lang
 		String id
 		Document doc
-
 
 		emptyDocumentCache()
 
@@ -125,6 +119,20 @@ public class WPT05Reader extends Reader {
 								content = null;
 								lang = null;
 								id = null;
+								for (int i=0; i<xmlStreamReader.getAttributeCount(); i++) {
+									
+									String attname = (
+										xmlStreamReader.getAttributePrefix(i) ?
+										xmlStreamReader.getAttributePrefix(i)+":"+xmlStreamReader.getAttributeLocalName(i)
+										:xmlStreamReader.getAttributeLocalName(i) )
+
+									if (attname.equals("rdf:about")) {
+										id = xmlStreamReader.getAttributeValue(i)
+									}
+								}
+								
+								//<rdf:Description rdf:about="http://andarnotransito.no.sapo.pt/respcorr1.htm">
+								
 								break
 							case 'dcterm:modified':
 								text = "";
@@ -135,19 +143,7 @@ public class WPT05Reader extends Reader {
 								date_fetched = null;
 								break
 							case 'wpt:arcName':
-								text = "";
-							
-								for (int i=0; i<xmlStreamReader.getAttributeCount(); i++) {
-									
-									String attname = (
-										xmlStreamReader.getAttributePrefix(i) ?
-										xmlStreamReader.getAttributePrefix(i)+":"+xmlStreamReader.getAttributeLocalName(i)
-										:xmlStreamReader.getAttributeLocalName(i) )
-
-									if (attname.equals("rdf:resource")) {
-										id = xmlStreamReader.getAttributeValue(i)
-									}
-								}
+								text = "";							
 								break
 							case 'dc:language':
 								text = "";

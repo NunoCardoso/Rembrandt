@@ -28,7 +28,7 @@ abstract class Reader {
 
 	static Logger log = Logger.getLogger("Reader")
 	StyleTag style
-	InputStream is
+	InputStream inputStream
 	
 	ReaderStatus status = ReaderStatus.INPUT_STREAM_NOT_INITIALIZED
 	/**
@@ -40,8 +40,8 @@ abstract class Reader {
 	 * The main consctructor gets a StyleTag, when reading documents with tagged NEs. 
 	 * If not specified, it's a NullStyleTag, used for documents without tagged NEs.
 	 */
-	public Reader(InputStream is, StyleTag style) {
-		this.is = is
+	public Reader(InputStream inputStream, StyleTag style) {
+		this.inputStream = inputStream
 		this.style=style
 	}
 	
@@ -49,8 +49,8 @@ abstract class Reader {
 		this.style=style
 	}
 	
-	public setInputStream(InputStream is) {
-		this.is=is
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream
 	}
 	
 	public boolean hasMoreDocumentsToRead() {

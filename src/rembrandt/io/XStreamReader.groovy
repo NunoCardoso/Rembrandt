@@ -31,8 +31,8 @@ class XStreamReader extends Reader {
 	/** retrieve text content from the object */
 	def resource
 
-	public XStreamReader(InputStream is, StyleTag style) {
-		super(is, style)
+	public XStreamReader(InputStream inputStream, StyleTag style) {
+		super(inputStream, style)
 	}
 	public XStreamReader(StyleTag style) {
 		super(style)
@@ -43,7 +43,7 @@ class XStreamReader extends Reader {
 		emptyDocumentCache()
 
 		def BufferedReader br = new BufferedReader(
-					new InputStreamReader(is))
+					new InputStreamReader(inputStream))
 
 		def StringBuffer buffer = new StringBuffer()
 		def line

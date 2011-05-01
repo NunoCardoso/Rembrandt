@@ -70,11 +70,10 @@ public class MediawikiXMLReader extends Reader {
 	XMLStreamReader xmlStreamReader
 	MediawikiSyntaxConverter syntaxConverter
 
-	public MediawikiXMLReader(InputStream is, StyleTag style) {
-		super(is, style)
-		this.is = is
+	public MediawikiXMLReader(InputStream inputStream, StyleTag style) {
+		super(style)
 		xmlStreamReader =
-				XMLInputFactory.newInstance().createXMLStreamReader(is)
+				XMLInputFactory.newInstance().createXMLStreamReader(inputStream)
 		syntaxConverter = new MediawikiSyntaxConverter()
 	}
 
@@ -82,10 +81,9 @@ public class MediawikiXMLReader extends Reader {
 		super(style)
 	}
 	
-	public setInputStream(InputStream is) {
-		this.is = is
+	public void setInputStream(InputStream inputStream) {
 		xmlStreamReader =
-			XMLInputFactory.newInstance().createXMLStreamReader(is)
+			XMLInputFactory.newInstance().createXMLStreamReader(inputStream)
 		syntaxConverter = new MediawikiSyntaxConverter()
 	} 
 	
@@ -131,7 +129,9 @@ public class MediawikiXMLReader extends Reader {
 							xmlStreamReader.getPrefix()+":"+xmlStreamReader.getLocalName() 
 							:xmlStreamReader.getLocalName() )
 
-						switch(tagname) {
+						log.trace "open tagname:"+tagname
+
+						switch(tagname.toLowerCase()) {
 
 							case 'page':
 								doc = null;
@@ -184,33 +184,37 @@ public class MediawikiXMLReader extends Reader {
 							xmlStreamReader.getPrefix()+":"+xmlStreamReader.getLocalName() 
 							:xmlStreamReader.getLocalName() )
 
-
-						switch(tagname) {
+						log.trace "close tagname:"+tagname
+						
+						switch(tagname.toLowerCase()) {
 							case 'text':
 							// the Document returned by syntaxConverter only has body sentences
 							// it misses the title and metadata info
 								doc = syntaxConverter.createDocument(text)
 
 								if (title && id)  {
-									doc_id = id+"_"+title
+									doc_id = id+"_"+title.replaceAll(/\s/, "_")
 									int upperlimit = (doc_id.size() > 250 ? 250: doc_id.size())
 									doc_id = doc_id.substring(0, upperlimit);
 									doc.docid = doc_id
 								}
 								if (lang) doc.lang = lang
+								if (title) 	doc.title = title
+								
+								doc.preprocess()
 
-								if (title) {
-									doc.title = title
-									doc.tokenizeTitle()
-									doc.indexTitle()
-								}
 								inpage = false;
+								log.debug "Text captured with size (${text.size()}) "+
+									text.substring(0,(text.size() < 20 ? text.size(): 20)) 
 								text = "";
+									
 								break
 
 							case 'base':
 								text.findAll(/http:\/\/(\w*).wikipedia.org\/.*/) {all, g1 -> lang = g1}
 								text = "";
+								log.debug "Lang captured: $lang"
+								
 								break;
 
 							case 'timestamp':
@@ -219,6 +223,8 @@ public class MediawikiXMLReader extends Reader {
 								} catch(Exception e) {
 									date = new Date(0)
 								}
+								log.debug "Timestamp date: $date"
+								
 								text = "";
 								break
 
@@ -233,22 +239,24 @@ public class MediawikiXMLReader extends Reader {
 								break;
 
 							case 'title':
-							//				println "Got title: $text"
 								title = text.trim();
 								text = "";
+								log.debug "Title: $title"
+								
 								break;
 
 							case 'id':
 								if (inpage && !inrevision & !incontributor) {
-									//					println "Got id: $text"
 									id = text.trim();
 								}
 								text = "";
+								log.debug "id: $id"
 								break;
 
 							case 'page':
 								addDocument(doc)
 								text = "";
+								log.debug "Added document: $doc. Size: ${documentsSize()}"
 								
 								if (documentsSize() >= docs_requested)
 									return getDocuments()
@@ -261,7 +269,9 @@ public class MediawikiXMLReader extends Reader {
 					break
 
 					case XMLStreamConstants.CHARACTERS :
-						text += xmlStreamReader.getText()
+						String t = xmlStreamReader.getText()
+					//	log.debug "Text:"+t
+						text += t
 					break
 
 				}

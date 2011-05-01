@@ -35,8 +35,8 @@ class UnformattedReader extends Reader {
     int numbertag = 0
     String tagmark="REMBRANDTTAGMARK"
     
-    public UnformattedReader(InputStream is, StyleTag style) {
-	super(is, style)
+    public UnformattedReader(InputStream inputStream, StyleTag style) {
+	super(inputStream, style)
     }
 	
 	public UnformattedReader(StyleTag style) {
@@ -70,7 +70,7 @@ class UnformattedReader extends Reader {
         
         */ 
         BufferedReader br = new BufferedReader(					
-			new InputStreamReader(is))
+			new InputStreamReader(inputStream))
 	    
         StringBuffer buffer = new StringBuffer()		    
         String line

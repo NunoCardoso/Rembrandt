@@ -28,8 +28,8 @@ import java.util.regex.*
  */
 class NYTimesReader extends Reader {
 
-	public NYTimesReader(InputStream is, StyleTag style) {
-		super(is, style)
+	public NYTimesReader(InputStream inputStream, StyleTag style) {
+		super(inputStream, style)
 	}
 	
 	public NYTimesReader(StyleTag style) {
@@ -44,7 +44,7 @@ class NYTimesReader extends Reader {
 		emptyDocumentCache()
 
 		BufferedReader br = new BufferedReader(			
-			new InputStreamReader(is))
+			new InputStreamReader(inputStream))
 
 		StringBuffer buffer = new StringBuffer()
 		String line

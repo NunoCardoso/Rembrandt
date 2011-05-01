@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with REMBRANDT. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 package saskia.imports
 
 import saskia.bin.Configuration
@@ -39,48 +39,46 @@ import saskia.util.validator.*
 
 /** 
  * This class imports plain files to the Source Documents
-*/
+ */
 
 
 class ImportPlainText_2_SourceDocument extends Import  {
 
-	
-	Configuration conf = Configuration.newInstance()
-	UnformattedReader reader
-	RembrandtWriter writer
-	
 	public ImportPlainText_2_SourceDocument() {
 		super()
 		reader = new UnformattedReader(new UnformattedStyleTag(
-			conf.get("rembrandt.input.styletag.lang", "pt")))
+				conf.get("rembrandt.input.styletag.lang", "pt")))
 		writer = new RembrandtWriter(new RembrandtStyleTag(
-			conf.get("rembrandt.output.styletag.lang", "pt")))
+				conf.get("rembrandt.output.styletag.lang", "pt")))
 	}
 
 	public importer() {
-		
-		// connect the file input stream reader to the SecondHaremReader
-		reader.processInputStream(this.inputStreamReader)
-		
-		// discard all existing NEs
-		reader.docs.each{doc ->
-			if (!doc.lang) doc.lang = collection.col_lang
-			if (!doc.docid) doc.docid = "doc_"+new Date().format('yyyyMMddHHmmss')
-			String content = writer.printDocument(doc)
-			
-			// today's date
-			Date date_created = new Date()
-			
-			SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, date_created, "")
-			if (s) status.imported++ else status.skipped++
+
+		log.info "Starting the import... "
+		List docs = reader.readDocuments(doc_pool)
+		while (docs) {
+			log.info "read batch of ${docs.size()} documents. "
+			docs.each{doc ->
+				if (!doc.lang) doc.lang = collection.col_lang
+				if (!doc.docid) doc.docid = "doc_"+new Date().format('yyyyMMddHHmmss')
+				String content = writer.printDocument(doc)
+
+				// today's date
+				Date date_created = new Date()
+
+				SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, date_created, "")
+				if (s) status.imported++ else status.skipped++
+			}
+			docs = reader.readDocuments(doc_pool)
 		}
+		log.info "Import done. "
 	}
- 	
+	
 	static void main(args) {
-		
+
 		Options o = new Options()
 		Configuration conf = Configuration.newInstance()
-		
+
 		o.addOption("db", true, "target Saskia DB (main/test)")
 		o.addOption("col", false, "collection number/name")
 		o.addOption("file", false, "collection file to load")
@@ -88,17 +86,17 @@ class ImportPlainText_2_SourceDocument extends Import  {
 		o.addOption("doc_id", false, "document id")
 		o.addOption("lang", false, "language")
 		o.addOption("help", false, "Gives this help information")
-	    
+
 		CommandLineParser parser = new GnuParser()
 		CommandLine cmd = parser.parse(o, args)
-		
+
 		ImportPlainText_2_SourceDocument importer = new ImportPlainText_2_SourceDocument()
 
 		String DEFAULT_COLLECTION_NAME = 'DefaultCollection'
 		String DEFAULT_DB_NAME = 'main'
 		String DEFAULT_ENCODING = conf.get("rembrandt.input.encoding",
-			System.getProperty("file.encoding"))
-		
+				System.getProperty("file.encoding"))
+
 		// --help
 		if (cmd.hasOption("help")) {
 			HelpFormatter formatter = new HelpFormatter()
@@ -108,29 +106,29 @@ class ImportPlainText_2_SourceDocument extends Import  {
 
 		// --db
 		SaskiaDB db = new DBValidator()
-			.validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)	
+				.validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)
 		importer.setDb(db)
 		log.info "DB: $db"
 
 		// --col
 		Collection collection = new CollectionValidator(db)
-			.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
+				.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
 		importer.setCollection(collection)
-		log.info "Collection: $collection"		
-		
+		log.info "Collection: $collection"
+
 		// --file
 		File file = new FileValidator()
-			.validate(cmd.getOptionValue("file"), null, true)
-	
+				.validate(cmd.getOptionValue("file"), null, true)
+
 		//--encoding
 		String encoding = new EncodingValidator()
-			.validate(cmd.getOptionValue("encoding"), DEFAULT_ENCODING)
-	
+				.validate(cmd.getOptionValue("encoding"), DEFAULT_ENCODING)
+
 		importer.setFile(file)
 		importer.setEncoding(encoding)
-		log.info "File: $file <"+encoding+"> "	
-		
-		importer.prepareInputStreamReader()
+		log.info "File: $file <"+encoding+"> "
+
+		importer.prepareInputStream()
 		importer.importer()
 		log.info importer.statusMessage()
 	}

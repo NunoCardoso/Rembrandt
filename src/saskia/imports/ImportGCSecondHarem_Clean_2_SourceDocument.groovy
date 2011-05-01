@@ -33,11 +33,6 @@ import saskia.util.validator.*
  */
 class ImportGCSecondHarem_Clean_2_SourceDocument extends Import {
 
-	Configuration conf = Configuration.newInstance()
-
-	SecondHAREMReader reader
-	RembrandtWriter writer
-
 	public ImportGCSecondHarem_Clean_2_SourceDocument() {
 		super()
 		reader = new SecondHAREMReader(new SecondHAREMStyleTag(
@@ -48,16 +43,19 @@ class ImportGCSecondHarem_Clean_2_SourceDocument extends Import {
 
 	public importer() {
 
-		// connect the file input stream reader to the SecondHaremReader
-		reader.processInputStream(this.inputStreamReader)
-
-		// discard all existing NEs
-		reader.docs.each{doc ->
-			if (!doc.lang) doc.lang = collection.col_lang
-			doc.bodyNEs = new ListOfNE() // to erase the ALT print styles
-			String content = writer.printDocument(doc)
-			SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, new Date(0), "")
+		log.info "Starting the import... "
+		List docs = reader.readDocuments(doc_pool)
+		while (docs) {
+			log.info "read batch of ${docs.size()} documents. "
+			docs.each{doc ->
+				if (!doc.lang) doc.lang = collection.col_lang
+				doc.bodyNEs = new ListOfNE() // to erase the ALT print styles
+				String content = writer.printDocument(doc)
+				SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, new Date(0), "")
+			}
+			docs = reader.readDocuments(doc_pool)
 		}
+		log.info "Import done. "
 	}
 
 	static void main(args) {
@@ -74,10 +72,10 @@ class ImportGCSecondHarem_Clean_2_SourceDocument extends Import {
 		CommandLineParser parser = new GnuParser()
 		CommandLine cmd = parser.parse(o, args)
 
-	 	String DEFAULT_COLLECTION_NAME = "CD do Segundo HAREM"
-	 	String DEFAULT_DB_NAME = "main"
-	 	String DEFAULT_ENCODING = conf.get("rembrandt.input.encoding",
-			System.getProperty("file.encoding"))
+		String DEFAULT_COLLECTION_NAME = "CD do Segundo HAREM"
+		String DEFAULT_DB_NAME = "main"
+		String DEFAULT_ENCODING = conf.get("rembrandt.input.encoding",
+				System.getProperty("file.encoding"))
 
 		ImportGCSecondHarem_Clean_2_SourceDocument importer = new ImportGCSecondHarem_Clean_2_SourceDocument()
 
@@ -107,14 +105,14 @@ class ImportGCSecondHarem_Clean_2_SourceDocument extends Import {
 		File file = new FileValidator().validate(cmd.getOptionValue("file"), null)
 
 		//--encoding
-		String encoding = new EncodingValidator().validate(cmd.getOptionValue("encoding"), 
-		 DEFAULT_ENCODING)
-	
+		String encoding = new EncodingValidator().validate(cmd.getOptionValue("encoding"),
+				DEFAULT_ENCODING)
+
 		importer.setFile(file)
 		importer.setEncoding(encoding)
 		log.info "File: $file <"+encoding+"> "
 
-		importer.prepareInputStreamReader()
+		importer.prepareInputStream()
 		importer.importer()
 		println importer.statusMessage()
 	}

@@ -29,13 +29,13 @@ import rembrandt.gazetteers.SemanticClassificationDefinitions
  * sentence open and close symbols to <s>\n and </s>\n
  */
 class ACDCStyleTag extends RembrandtStyleTag {
-  
-    /**
-     * Public constructor.
-     * @param lang the language of the labels. Default: rembrandt.output.styletag.lang, or 
-     * global.lang if it's not specified.
-     */
-    public ACDCStyleTag(String lang) {
-	super(lang) 
-    }
+
+	/**
+	 * Public constructor.
+	 * @param lang the language of the labels. Default: rembrandt.output.styletag.lang, or 
+	 * global.lang if it's not specified.
+	 */
+	public ACDCStyleTag(String lang) {
+		super(lang)
+	}
 }

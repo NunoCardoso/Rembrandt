@@ -48,8 +48,8 @@ class WPT03Reader extends Reader {
 	 */
 
 
-	public WPT03Reader(InputStream is, StyleTag style) {
-		super(is, style)
+	public WPT03Reader(InputStream inputStream, StyleTag style) {
+		super(inputStream, style)
 	}
 
 	public WPT03Reader(StyleTag style) {
@@ -80,7 +80,7 @@ class WPT03Reader extends Reader {
 		String title
 
 		BufferedReader br = new BufferedReader(
-					new InputStreamReader(is))
+					new InputStreamReader(inputStream))
 
 		String l
 		while ((l = br.readLine()) != null   && documentsSize() <= docs_requested ) {
@@ -164,10 +164,11 @@ class WPT03Reader extends Reader {
 							url = m2.group(1);
 
 							// o id vai ser o URL, só que há URLs que, truncados a 255, ficam iguais.
-							// vou usar uma hash com 8 números, um '_', depois o URL truncado a 240.
-							String random =  Long.toHexString(Double.doubleToLongBits(Math.random()));
-							int index = (url.size() > 240 ? 240 : url.size())
-							id = random.substring(0,8)+"_"+url.substring(0,index)
+							// há que substituir por cima.
+							//String random =  Long.toHexString(Double.doubleToLongBits(Math.random()));
+							int index = (url.size() > 252 ? 252 : url.size())
+							//id = random.substring(0,8)+"_"+url.substring(0,index)
+							id = url.substring(0,index)
 						}
 						// body
 					} else {

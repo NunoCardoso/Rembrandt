@@ -85,7 +85,7 @@ public class SourceDoc extends DBObject implements JSONable {
 
 		// but it also may be a new SourceDoc to be added to the DB...
 		}
-		if (!row['sdoc_webstore'] && row.containsKey('sdoc_content')) {  
+		if (!(row instanceof GroovyResultSet) && !row['sdoc_webstore'] && row.containsKey('sdoc_content')) {  
 			try {
 				sd.sdoc_content = row['sdoc_content']
 				sd.retrieved_sdoc_content = false
@@ -200,8 +200,9 @@ public class SourceDoc extends DBObject implements JSONable {
 	public Long addThisToDB() {
 
 		try {
+			String key
 			if (sdoc_content) {
-				String key = getDBTable().getWebstore().store(sdoc_content, SaskiaWebstore.VOLUME_SDOC)
+				key = getDBTable().getWebstore().store(sdoc_content, SaskiaWebstore.VOLUME_SDOC)
 				log.info "Got content (${sdoc_content.size()} bytes), wrote to Webstore SDOC, got key $key"
 				def res = getDBTable().getSaskiaDB().getDB().executeInsert(
 						"INSERT INTO ${getDBTable().tablename}"+
@@ -240,6 +241,7 @@ public class SourceDoc extends DBObject implements JSONable {
 	public Long replaceThisToDB() {
 
 		try {
+			String key
 			if (sdoc_content) {
 				// apagar o conteúdo anterior
 				if (sdoc_webstore) {
@@ -249,9 +251,10 @@ public class SourceDoc extends DBObject implements JSONable {
 					} catch(Exception e) {
 						log.error "Error while replacing SourceDoc: "+e.getMessage()
 					}
-					String key = getWebstore().store(sdoc_content, SaskiaWebstore.VOLUME_SDOC)
-					log.info "Got content (${sdoc_content.size()} bytes), wrote to Webstore SDOC, got key $key"
 				}
+				key = getDBTable().getWebstore().store(sdoc_content, SaskiaWebstore.VOLUME_SDOC)
+				log.info "Got content (${sdoc_content.size()} bytes), wrote to Webstore SDOC, got key $key"
+				
 				// add sdoc_id so it can make the replacement
 				def res = getDBTable().getSaskiaDB().getDB().executeInsert(
 						"REPLACE INTO ${getDBTable().tablename}(sdoc_id, sdoc_original_id, sdoc_webstore, "+

@@ -34,32 +34,31 @@ import saskia.util.validator.*
 
 class ImportWPT03_2_SourceDocument extends Import {
 
-	Configuration conf = Configuration.newInstance()
-	WPT03Reader reader
-	RembrandtWriter writer
-
 	public ImportWPT03_2_SourceDocument() {
 		super()
 		reader = new WPT03Reader(new UnformattedStyleTag(
-				conf.get("rembrandt.input.styletag.lang", "pt")))
+		conf.get("rembrandt.input.styletag.lang", "pt")))
 		writer = new RembrandtWriter(new RembrandtStyleTag(
-				conf.get("rembrandt.output.styletag.lang", "pt")))
+		conf.get("rembrandt.output.styletag.lang", "pt")))
 	}
 
 	public importer() {
+	
+		log.info "Starting the import... "
 
-		// connect the file input stream reader to the SecondHaremReader
-println "Reading... "
-		reader.processInputStream(this.inputStreamReader)
-println "Reader done. "
-		// discard all existing NEs
-		reader.docs.each{doc ->
-			if (!doc.lang) doc.lang = collection.col_lang
-			if (!doc.date_created) doc.date_created = new Date(0)
-			String content = writer.printDocument(doc)
-			SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, doc.date_created, "")
-			if (s) status.imported++ else status.skipped++
-		}
+		List docs = reader.readDocuments(doc_pool)
+		while (docs) {
+			log.info "read batch of ${docs.size()} documents. "
+			docs.each{doc ->
+				if (!doc.lang) doc.lang = collection.col_lang
+				if (!doc.date_created) doc.date_created = new Date(0)
+				String content = writer.printDocument(doc)
+				SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, doc.date_created, "")
+				if (s) status.imported++ else status.skipped++
+			}
+			docs = reader.readDocuments(doc_pool)
+		} 
+		log.info "Import done. "
 	}
 
 	static void main(args) {
@@ -77,10 +76,11 @@ println "Reader done. "
 		CommandLine cmd = parser.parse(o, args)
 
 		ImportWPT03_2_SourceDocument importer = new ImportWPT03_2_SourceDocument()
+
 		String DEFAULT_COLLECTION_NAME = "WPT 03"
-	   String DEFAULT_DB_NAME = "main"
-	 	String DEFAULT_ENCODING = conf.get("rembrandt.input.encoding",
-			System.getProperty("file.encoding"))
+		String DEFAULT_DB_NAME = "main"
+		String DEFAULT_ENCODING = conf.get("rembrandt.input.encoding",
+		System.getProperty("file.encoding"))
 
 		log.info "******************************************"
 		log.info "* This class loads the WPT 03 Collection *"
@@ -95,33 +95,30 @@ println "Reader done. "
 
 		// --db
 		SaskiaDB db = new DBValidator()
-			.validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)	
+		.validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)
 		importer.setDb(db)
 		log.info "DB: $db"
 
 		// --col
 		Collection collection = new CollectionValidator(db)
-			.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
+		.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
 		importer.setCollection(collection)
-		log.info "Collection: $collection"		
-		
+		log.info "Collection: $collection"
+
 		// --file
 		File file = new FileValidator()
-			.validate(cmd.getOptionValue("file"), null, true)
-	
+		.validate(cmd.getOptionValue("file"), null, true)
+
 		//--encoding
 		String encoding = new EncodingValidator()
-			.validate(cmd.getOptionValue("encoding"), DEFAULT_ENCODING)
-	
+		.validate(cmd.getOptionValue("encoding"), DEFAULT_ENCODING)
+
 		importer.setFile(file)
 		importer.setEncoding(encoding)
-		log.info "File: $file <"+encoding+"> "	
-		
-		importer.prepareInputStreamReader()
-		log.debug "Stream prepared."
+		log.info "File: $file <"+encoding+"> "
+
+		importer.prepareInputStream()
 		importer.importer()
 		log.info importer.statusMessage()
-	
-	
 	}
 }

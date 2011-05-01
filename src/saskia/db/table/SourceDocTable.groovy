@@ -64,7 +64,7 @@ class SourceDocTable extends DBTable {
 	 */
 	public SourceDoc getFromID(long sdoc_id) {
 		if (!sdoc_id) return null
-		List<SourceDoc> l = queryDB("SELECT * FROM ${SourceDoc.tablename} WHERE sdoc_id=? ", [sdoc_id])
+		List<SourceDoc> l = queryDB("SELECT * FROM ${tablename} WHERE sdoc_id=? ", [sdoc_id])
 		//log.trace "Querying for SourceDoc $sdoc_id, got SourceDoc ${l}"
 		return (l ? l[0] : null)
 	}
@@ -82,7 +82,7 @@ class SourceDocTable extends DBTable {
 	 */
 	public SourceDoc getFromOriginalIDandCollectionIDandLang(String sdoc_original_id, long sdoc_collection, String sdoc_lang) {
 		if (!sdoc_original_id) return null
-		List<SourceDoc> l = queryDB("SELECT * FROM ${SourceDoc.tablename} WHERE "+
+		List<SourceDoc> l = queryDB("SELECT * FROM ${tablename} WHERE "+
 				"sdoc_original_id=? and sdoc_collection=? and sdoc_lang=?", [
 					sdoc_original_id,
 					sdoc_collection,
@@ -99,7 +99,7 @@ class SourceDocTable extends DBTable {
 	 */
 	public SourceDoc getFromOriginalIDandCollectionID(String sdoc_original_id, long sdoc_collection) {
 		if (!sdoc_original_id) return null
-		List<SourceDoc> l = queryDB("SELECT * FROM ${SourceDoc.tablename} WHERE "+
+		List<SourceDoc> l = queryDB("SELECT * FROM ${tablename} WHERE "+
 				"sdoc_original_id=? and sdoc_collection=?", [
 					sdoc_original_id,
 					sdoc_collection

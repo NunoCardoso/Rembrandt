@@ -19,8 +19,11 @@
 package saskia.imports
 
 import rembrandt.obj.Document
+import rembrandt.io.Reader
+import rembrandt.io.Writer
 import saskia.bin.Configuration
 import saskia.db.obj.*
+import saskia.db.table.*
 import saskia.db.database.*
 import saskia.db.DocStatus
 
@@ -36,17 +39,17 @@ abstract class Import {
 	Collection collection
 	SaskiaDB db
 	File file
-	InputStreamReader inputStreamReader
 	HashMap status
 	String lang
 	String encoding
 
+	Reader reader
+	Writer writer
+	
+	Integer doc_pool = 50
+
 	public Import() {
 		this.status = [imported:0, refreshed:0, skipped:0, failed:0]
-	}
-
-	public prepareInputStreamReader() {
-		inputStreamReader = new InputStreamReader(new FileInputStream(file), encoding)
 	}
 
 	public Import(File file, SaskiaDB db, Collection collection,
@@ -62,7 +65,11 @@ abstract class Import {
 		this.inputStreamReader = prepareInputStreamReader()
 	}
 
-
+	public void prepareInputStream() {
+		reader.setInputStream(new FileInputStream(this.file))
+		log.info "Stream prepared."
+	}
+	
 	abstract importer();
 
 	public String statusMessage() {
@@ -83,9 +90,15 @@ abstract class Import {
 			log.fatal "Please configure your importer to have a DB reference"
 			System.exit(0)
 		}
+		
+		SourceDocTable sdt = db.getDBTable("SourceDocTable")
+		
+		// check if exists in DB
+		SourceDoc sourceDocInDB = sdt.getFromOriginalIDandCollectionID(original_id, collection.col_id) 
 
-		SourceDoc s = SourceDoc.createNew(
-				db.getDBTable("SourceDocTable"),
+		// create the New 
+		SourceDoc sourceDocNew = SourceDoc.createNew(
+				sdt,
 				[sdoc_original_id:original_id, 
 				 sdoc_collection:collection,
 				 sdoc_lang:lang, 
@@ -94,23 +107,47 @@ abstract class Import {
 				 sdo_proc:DocStatus.READY,
 				 sdoc_comment:comment]
 				)
-
-		// why does it matter? So that SourceDoc s knows in which database it shall be stored.
-		// it's a big deal, so fail if there is no DB
-
-		// by adding to DB, it already checks for duplicates
-		try {
-			s.sdoc_id = s.addThisToDB()
-			log.info "SourceDoc $s is now into Saskia DB."
-			status.imported++
-		} catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
-			log.warn "Found duplicate entry in DB. Skipping SourceDoc $s."
-			status.skipped++
-		} catch(Exception e2) {
-			log.warn "Found error while adding SourceDoc $s into SaskiaDB. Skipping."
-			log.warn "Why? " + e2.getMessage()
-			status.skipped++
+		
+		// if there is sourceDocInDB, give its sdoc_id to the sourceDocNew
+		// so that REPLACE is successfully done in the DB
+		if (sourceDocInDB) {
+			sourceDocNew.sdoc_id = sourceDocInDB.sdoc_id
 		}
-		return s
+				
+		if (!sourceDocInDB) {
+			try {
+				sourceDocNew.sdoc_id = sourceDocNew.addThisToDB()
+				log.info "SourceDoc $sourceDocNew is now INSERTED into Saskia DB."
+				status.imported++
+			} 
+			// doesn't apply - There is a Primary Key only on sdoc_id
+			//catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
+			//	log.warn "Found duplicate entry in DB. Skipping SourceDoc $s."
+			//	status.skipped++
+			catch(Exception e2) {
+				log.warn "Found error while inserting SourceDoc $sourceDocNew into SaskiaDB. Skipping."
+				log.warn "Why? " + e2.getMessage()
+				status.skipped++
+			}
+		// 	
+		} else {
+			try {
+				sourceDocNew.sdoc_id = sourceDocNew.replaceThisToDB()
+				log.info "SourceDoc $sourceDocNew is now REPLACED into Saskia DB."
+				status.imported++
+			}
+			// doesn't apply - There is a Primary Key only on sdoc_id
+			//catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
+			//	log.warn "Found duplicate entry in DB. Skipping SourceDoc $s."
+			//	status.skipped++
+			catch(Exception e2) {
+				log.warn "Found error while replacing SourceDoc $sourceDocNew into SaskiaDB. Skipping."
+				log.warn "Why? " + e2.getMessage()
+				status.skipped++
+			}
+
+			
+		}
+		return sourceDocNew
 	}
 }

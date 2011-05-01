@@ -115,7 +115,7 @@ class RembrandtedDoc extends DBObject implements JSONable {
 
 		// but it also may be a new RembrandtedDoc to be added to the DB...
 		} 
-		if (!row['doc_webstore'] && row.containsKey('doc_content')) { 
+		if (!(row instanceof GroovyResultSet) && !row['doc_webstore'] && row.containsKey('doc_content')) { 
 			 try {
 				r.doc_content = row['doc_content']
 				r.retrieved_doc_content = false
@@ -420,8 +420,9 @@ class RembrandtedDoc extends DBObject implements JSONable {
 		// try to ground the document to an entity
 
 		try {
+			String key
 			if (doc_content) {
-				String key = getDBTable().webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
+				 key = getDBTable().webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
 				log.trace "Got content $doc_content, wrote to Webstore RDOC, got key $key"
 
 				def res = getDBTable().getSaskiaDB().getDB().executeInsert(
@@ -456,10 +457,20 @@ class RembrandtedDoc extends DBObject implements JSONable {
 		def res
 
 		try {
+			String key
 			if (doc_content) {
-				String key = getDBTable().webstore.store(doc_content, SaskiaWebstore.VOLUME_RDOC)
-				log.trace "Got content $doc_content, wrote to Webstore RDOC, got key $key"
-
+				// apagar o conteúdo anterior
+				if (doc_webstore) {
+					try {
+						getDBTable().getWebstore().delete(doc_webstore, SaskiaWebstore.VOLUME_RDOC)
+						log.info "Replacing RembrandtedDoc: deleted webstore $doc_webstore."
+					} catch(Exception e) {
+						log.error "Error while replacing RembrandtedDoc: "+e.getMessage()
+					}
+				}
+				key = getWebstore().store(doc_content, SaskiaWebstore.VOLUME_RDOC)
+				log.info "Got content (${doc_content.size()} bytes), wrote to Webstore RDOC, got key $key"
+				
 				res = getDBTable().getSaskiaDB().getDB().executeUpdate(
 						"UPDATE ${getDBTable().tablename} SET "+
 						"doc_original_id=?, doc_collection=?, doc_webstore=?, doc_lang=?, "+

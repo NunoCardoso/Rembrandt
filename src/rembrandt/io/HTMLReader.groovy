@@ -74,8 +74,8 @@ class HTMLReader extends Reader {
 
 	String lang
 
-	public HTMLReader(InputStream is, StyleTag style) {
-		super(is, style)
+	public HTMLReader(InputStream inputStream, StyleTag style) {
+		super(inputStream, style)
 		lang = Configuration.newInstance().get("global.lang")
 	}
 
@@ -113,7 +113,7 @@ class HTMLReader extends Reader {
 		emptyDocumentCache()
 		
 		BufferedReader br = new BufferedReader(
-			new InputStreamReader(is))
+			new InputStreamReader(inputStream))
 		StringBuffer buffer = new StringBuffer()
 		String  line
 		while ((line = br.readLine()) != null && documentsSize() <= docs_requested ) {

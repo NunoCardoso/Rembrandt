@@ -24,7 +24,7 @@ class StemValidator extends Validator {
 	 * Validate the mode
 	 * 
 	 */
-	public boolean validate(String given_stem, String DEFAULT_STEM, boolean manadory) {
+	public Boolean validate(String given_stem, String DEFAULT_STEM, boolean manadory) {
 
 		Boolean stem
 

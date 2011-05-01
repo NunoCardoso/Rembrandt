@@ -3,6 +3,11 @@ Ant-Version: Apache Ant 1.8.2
 Created-By: 1.6.0_24-b07-334-10M3326 (Apple Inc.)
 Built-By: ncardoso
 Main-Class: rembrandt.bin.Rembrandt
+<<<<<<< HEAD
 Implementation-Version: 1.3rc1-b1888
 Built-Date: 2011-05-01 17:04:13
+=======
+Implementation-Version: 1.3-b1877
+Built-Date: 2011-04-27 00:44:41
+>>>>>>> ed7e7c35f60adb3405c17f120c461c68649711bf
 

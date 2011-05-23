@@ -459,8 +459,8 @@ class ImportSourceDocument_2_RembrandtedDocument extends Import {
 		log.info "Mode: $mode"
 		
 		// --docs		
-		def docs = DocsValidator()
-			.validateDocs(cmd.getOptionValue("docs"), DEFAULT_DOCS)
+		def docs = new DocsValidator(mode)
+			.validate(cmd.getOptionValue("docs"), DEFAULT_DOCS)
 		importer.setDocs(docs)
 		log.info "Docs: $docs "
 

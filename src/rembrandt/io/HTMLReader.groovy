@@ -72,10 +72,11 @@ class HTMLReader extends Reader {
 	String tagmark="REMBRANDTTAGMARK"
 	String forcesentencetagmark="REMBRANDTFORCESENTENCETAGMARK"
 
+
 	String lang
 
-	public HTMLReader(InputStream inputStream, StyleTag style) {
-		super(inputStream, style)
+	public HTMLReader(InputStreamReader inputStreamReader, StyleTag style) {
+		super(inputStreamReader, style)
 		lang = Configuration.newInstance().get("global.lang")
 	}
 
@@ -83,7 +84,7 @@ class HTMLReader extends Reader {
 		super(style)
 		lang = Configuration.newInstance().get("global.lang")
 	}
-	
+
 	private String saveanchor(item) {
 		anchor[++numberanchor] = item
 		return  " ${startanchormark}${numberanchor} "
@@ -111,9 +112,8 @@ class HTMLReader extends Reader {
 	 */
 	public List<Document> readDocuments(int docs_requested = 1) {
 		emptyDocumentCache()
-		
-		BufferedReader br = new BufferedReader(
-			new InputStreamReader(inputStream))
+
+		BufferedReader br = new BufferedReader(inputStreamReader)
 		StringBuffer buffer = new StringBuffer()
 		String  line
 		while ((line = br.readLine()) != null && documentsSize() <= docs_requested ) {
@@ -131,12 +131,12 @@ class HTMLReader extends Reader {
 				line.find(/(?i)LANG="(.*?)"/) {all, g1 ->   lang = g1}
 			}
 		}
-		
-		
+
+
 		// case there's no HTML tags
-		if (buffer.toString().trim()) 
+		if (buffer.toString().trim())
 			addDocument(createDocument(buffer.toString()))
-		
+
 		status = ReaderStatus.INPUT_STREAM_FINISHED
 		return getDocuments()
 
@@ -203,16 +203,18 @@ class HTMLReader extends Reader {
 		// BUT the doc is passed as a reference, and I'm filling it with NEs -- I'm changing it!
 		// Note that the doc is not the one in the list iteration...
 
-		parseSentences(doc.title_sentences, doc)
-		parseSentences(doc.body_sentences, doc)
-
+		parseSentences(doc.title_sentences)
+//		println "BEFORE: "+doc.body_sentences
+		parseSentences(doc.body_sentences)
+//		println "AFTER: "+doc.body_sentences
+		
 		// index it
 		doc.indexTitle()
 		doc.indexBody()
 		return doc
 	}//createDocument
 
-	public void parseSentences(List<Sentence> s, Document doc) {
+	public void parseSentences(List<Sentence> s) {
 
 		int correctTermIndex = 0
 		int correctSentenceIndex = 0
@@ -220,13 +222,13 @@ class HTMLReader extends Reader {
 		NamedEntity ne = null
 
 		List<Sentence> s_clone = s.clone() // the cloned list is for collection walking.
-		// I wikk make changes directly on the s variable (the reference sentences on the doc).
+		// I will make changes directly on the s variable (the reference sentences on the doc).
 
 		s.clear()
 		Sentence s_temp = new Sentence(correctSentenceIndex)
 
 		for(sentence in s_clone) {
-			//     println "I'm with sentence $sentence"
+			//println "I'm with sentence $sentence"
 			sentence.each{term ->
 				// if starts: create NE, halt correctTermIndex counter
 				if (term.text.startsWith(startanchormark)) {
@@ -271,20 +273,21 @@ class HTMLReader extends Reader {
 					term.text = loadtag(term.text)
 					s_temp << term
 					// force a sentence break, don't add the term -- I add it to mark this forced break
-				}else if (term.text.equals(forcesentencetagmark)) {
+				} else if (term.text.equals(forcesentencetagmark)) {
+					//println "I'M IN wth text $term"
 					// but if the current sentence is just a </P> tag, it should belong to the
 					// previous sentence... let's correct that
 					if (s_temp.size() == 1 && s_temp[0].text.equalsIgnoreCase("</p>")) {
-						//	println "Correcting, adding ${s_temp} to ${correctSentenceIndex -1}"
-						Term pterm = new Term(s_temp[0].text, -1)
-						pterm.hidden = true
+						//println "Correcting, adding ${s_temp} to ${correctSentenceIndex -1}"
+						Term pterm = new Term(s_temp[0].text, -1, true)
 						s[(correctSentenceIndex-1)] << pterm
 					} else {
-						//	println "Adding $s_temp to $correctSentenceIndex"
+					//	println "Adding $s_temp to $correctSentenceIndex"
 						s[correctSentenceIndex++] = s_temp
 					}
 					s_temp = new Sentence(correctSentenceIndex)
 					correctTermIndex = 0
+					//println "s_temp is now "+s_temp
 
 				} else {
 					// regular terms will keep correctTermIndex counter running
@@ -298,6 +301,8 @@ class HTMLReader extends Reader {
 					s_temp << term
 				}
 			}
+			//println "Sentence is now $sentence"
+
 			// if the s_temp has terms, let's add it.
 			// if it's empty, it's probably because of a forced sentence break followed by a normal sentence break. THis will hold the
 			// sentence_temp empty for the next s_clone batch of terms.
@@ -322,7 +327,9 @@ class HTMLReader extends Reader {
 				}catch(java.lang.ArrayIndexOutOfBoundsException e) {}
 				s_temp = new Sentence(correctSentenceIndex)
 				correctTermIndex = 0
+
 			}
+
 		}
 	}
 }//class

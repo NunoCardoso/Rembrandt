@@ -53,8 +53,8 @@ class SecondHAREMReader extends Reader {
     Map<String,String> tags = [:] 
     int number = 0
     
-    public SecondHAREMReader(InputStream inputStream, StyleTag style) {
-		super(inputStream, style)
+    public SecondHAREMReader(InputStreamReader inputStreamReader, StyleTag style) {
+		super(inputStreamReader, style)
     }
 
 	public SecondHAREMReader(StyleTag style) {
@@ -77,8 +77,7 @@ class SecondHAREMReader extends Reader {
 
 		emptyDocumentCache()
 
-		BufferedReader br = new BufferedReader(	
-					new InputStreamReader(inputStream))
+		BufferedReader br = new BufferedReader(inputStreamReader)
 
         StringBuffer buffer = new StringBuffer()		    
         String line

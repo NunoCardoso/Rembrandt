@@ -33,8 +33,8 @@ import org.apache.log4j.Logger
  */
 class RembrandtReader extends Reader {
 
-	public RembrandtReader(InputStream inputStream, StyleTag style) {
-		super(inputStream, style)
+	public RembrandtReader(InputStream inputStreamReader, StyleTag style) {
+		super(inputStreamReader, style)
 	}
 	
 	public RembrandtReader(StyleTag style) {
@@ -46,8 +46,7 @@ class RembrandtReader extends Reader {
 
 		emptyDocumentCache()
 		
-		BufferedReader br = new BufferedReader(	
-					new InputStreamReader(inputStream))
+		BufferedReader br = new BufferedReader(inputStreamReader)
 
 		StringBuffer buffer = new StringBuffer()
 		String line

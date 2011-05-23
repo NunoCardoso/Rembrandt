@@ -70,10 +70,10 @@ public class MediawikiXMLReader extends Reader {
 	XMLStreamReader xmlStreamReader
 	MediawikiSyntaxConverter syntaxConverter
 
-	public MediawikiXMLReader(InputStream inputStream, StyleTag style) {
+	public MediawikiXMLReader(InputStreamReader inputStreamReader, StyleTag style) {
 		super(style)
 		xmlStreamReader =
-				XMLInputFactory.newInstance().createXMLStreamReader(inputStream)
+				XMLInputFactory.newInstance().createXMLStreamReader(inputStreamReader)
 		syntaxConverter = new MediawikiSyntaxConverter()
 	}
 
@@ -81,9 +81,9 @@ public class MediawikiXMLReader extends Reader {
 		super(style)
 	}
 	
-	public void setInputStream(InputStream inputStream) {
+	public void setInputStreamReader(InputStreamReader inputStreamReader) {
 		xmlStreamReader =
-			XMLInputFactory.newInstance().createXMLStreamReader(inputStream)
+			XMLInputFactory.newInstance().createXMLStreamReader(inputStreamReader)
 		syntaxConverter = new MediawikiSyntaxConverter()
 	} 
 	
@@ -190,6 +190,8 @@ public class MediawikiXMLReader extends Reader {
 							case 'text':
 							// the Document returned by syntaxConverter only has body sentences
 							// it misses the title and metadata info
+							
+							// you MUST USE the body sentences, not raw body text.
 								doc = syntaxConverter.createDocument(text)
 
 								if (title && id)  {
@@ -201,7 +203,8 @@ public class MediawikiXMLReader extends Reader {
 								if (lang) doc.lang = lang
 								if (title) 	doc.title = title
 								
-								doc.preprocess()
+								// do NOT preprocess, or else tokenization will dismantle the vody sentences!
+								doc.index()
 
 								inpage = false;
 								log.debug "Text captured with size (${text.size()}) "+

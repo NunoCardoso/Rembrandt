@@ -25,7 +25,7 @@ import org.apache.log4j.*
 import org.apache.commons.cli.*
 import java.util.jar.Manifest
 import java.util.jar.Attributes
-
+import java.io.Writer as JavaWriter
 
 /**
  * @author Nuno Cardoso
@@ -45,26 +45,28 @@ class Rembrandt {
 	static List<RembrandtCore> core = []
 	Configuration conf
 
-	def inputstream, inputstyle, inputreader
-	def outputstream, outputstyle, outputwriter
-	def errputstream, errputstyle, errputwriter
+	InputStreamReader inputstreamreader
+	OutputStreamWriter outputstreamwriter, errputstreamreader
+	Reader inputreader
+	Writer outputwriter, errputwriter
+	StyleTag inputstyle, outputstyle, errputstyle
 
 	// these vars store string messages that summarize the stream status
-	def outstream, instream, errstream
+	String outstream, instream, errstream
 
 	String inputFileName, outputFileName, errFileName
-	String rembrandtInputEncodingParamDefault, rembrandtOutputEncodingParamDefault, rembrandtErrEncodingParamDefault
-
-	def inputEncodingParam, outputEncodingParam, errEncodingParam
-	def inputReaderParam, outputWriterParam, errWriterParam
 	def inputStyleVerbose, outputStyleVerbose, errStyleVerbose
 	def inputStyleLang, outputStyleLang, errStyleLang
+	
+	// parameters
+	def inputEncodingParam, outputEncodingParam, errEncodingParam
+	def inputReaderParam, outputWriterParam, errWriterParam
 	def inputStyleParam, outputStyleParam, errStyleParam
 
 	String rembrandtRulesParamDefault = 'HAREM'
 
 	String rembrandtInputReaderParamDefault = 'rembrandt.io.UnformattedReader'
-	String rembrandtInputTagStyleParamDefault = 'rembrandt.io.RembrandtStyleTag'
+	String rembrandtInputTagStyleParamDefault = 'rembrandt.io.UnformattedStyleTag'
 	int rembrandtInputTagStyleVerboseParamDefault = 2
 
 	String rembrandtOutputTagStyleParamDefault = 'rembrandt.io.RembrandtStyleTag'
@@ -76,6 +78,10 @@ class Rembrandt {
 	boolean rembrandtErrEnabledParamDefault = true
 	String rembrandtErrFileDefault = 'rembrandt.err.log'
 	int rembrandtErrTagStyleVerboseParamDefault = 3
+
+	String rembrandtInputEncodingParamDefault = System.getProperty("file.encoding")
+	String rembrandtOutputEncodingParamDefault = System.getProperty("file.encoding")
+	String rembrandtErrEncodingParamDefault = System.getProperty("file.encoding")
 
 	static Logger log = Logger.getLogger("RembrandtMain")
 
@@ -128,14 +134,15 @@ class Rembrandt {
 	 */               
 	public Rembrandt(conf) {
 
-		this.conf=conf
+		this.conf = conf
 
 		String defaultEncoding = conf.get("global.encoding")
-		if (!(defaultEncoding)) defaultEncoding = System.getProperty('file.encoding')
-		rembrandtInputEncodingParamDefault = defaultEncoding
-		rembrandtOutputEncodingParamDefault = defaultEncoding
-		rembrandtErrEncodingParamDefault = defaultEncoding
-
+		
+		if (defaultEncoding) {
+			rembrandtInputEncodingParamDefault = defaultEncoding
+			rembrandtOutputEncodingParamDefault = defaultEncoding
+			rembrandtErrEncodingParamDefault = defaultEncoding
+		}
 		/* input configuration */
 
 		inputStyleParam = conf.get("rembrandt.input.styletag")
@@ -148,13 +155,6 @@ class Rembrandt {
 		}
 		inputstyle = Class.forName(inputStyleParam).newInstance(inputStyleLang)
 
-		inputReaderParam = conf.get("rembrandt.input.reader")
-		if (!inputReaderParam) {
-			log.debug "No input reader specified. Using $rembrandtInputReaderParamDefault"
-			inputReaderParam = rembrandtInputReaderParamDefault
-		}
-		inputreader = Class.forName(inputReaderParam).newInstance()
-
 		inputEncodingParam = conf.get("rembrandt.input.encoding")
 		if (!inputEncodingParam) {
 			log.debug "No input encoding specified. Using $rembrandtInputEncodingParamDefault"
@@ -165,12 +165,19 @@ class Rembrandt {
 		if (inputFileName) {
 			File f = new File(inputFileName)
 			if (!f) throw new Exception("No file found. Please check rembrandt.input.file")
-			inputstream = new InputStreamReader(new FileInputStream(f), inputEncodingParam)
-			instream ="File ${inputFileName} <${inputstream.getEncoding()}>"
+			inputstreamreader = new InputStreamReader(new FileInputStream(f), inputEncodingParam)
+			instream ="File ${inputFileName} <${inputstreamreader.getEncoding()}>"
 		} else {
-			inputstream = new InputStreamReader(System.in, inputEncodingParam);
-			instream ="System.in <${inputstream.getEncoding()}>"
+			inputstreamreader = new InputStreamReader(System.in, inputEncodingParam);
+			instream ="System.in <${inputstreamreader.getEncoding()}>"
 		}
+
+		inputReaderParam = conf.get("rembrandt.input.reader")
+		if (!inputReaderParam) {
+			log.debug "No input reader specified. Using $rembrandtInputReaderParamDefault"
+			inputReaderParam = rembrandtInputReaderParamDefault
+		}
+		inputreader = Class.forName(inputReaderParam).newInstance(inputstreamreader, inputstyle)
 
 		/* output configuration */
 
@@ -184,13 +191,6 @@ class Rembrandt {
 		}
 		outputstyle = Class.forName(outputStyleParam).newInstance(outputStyleLang)
 
-		outputWriterParam = conf.get("rembrandt.output.writer")
-		if (!outputWriterParam) {
-			log.debug "No output writer specified. Using $rembrandtOutputWriterParamDefault"
-			outputWriterParam = rembrandtOutputWriterParamDefault
-		}
-		outputwriter = Class.forName(outputWriterParam).newInstance(outputstyle)
-
 		outputEncodingParam = conf.get("rembrandt.output.encoding")
 
 		if (!outputEncodingParam) {
@@ -202,18 +202,25 @@ class Rembrandt {
 		if (outputFileName) {
 			File f = new File(outputFileName)
 			if (!f) throw new Exception("Output file cannot be written. Please check rembrandt.output.file")
-			outputstream = new OutputStreamWriter(new FileOutputStream(f), outputEncodingParam)
-			outstream ="File ${f.getName()} <${outputstream.getEncoding()}>"
+			outputstreamwriter = new OutputStreamWriter(new FileOutputStream(f), outputEncodingParam)
+			outstream ="File ${f.getName()} <${outputstreamwriter.getEncoding()}>"
 		} else {
-			outputstream = new OutputStreamWriter(System.out, outputEncodingParam);
-			outstream ="System.out <${outputstream.getEncoding()}>"
+			outputstreamwriter = new OutputStreamWriter(System.out, outputEncodingParam);
+			outstream ="System.out <${outputstreamwriter.getEncoding()}>"
 		}
+
+		outputWriterParam = conf.get("rembrandt.output.writer")
+		if (!outputWriterParam) {
+			log.debug "No output writer specified. Using $rembrandtOutputWriterParamDefault"
+			outputWriterParam = rembrandtOutputWriterParamDefault
+		}
+		outputwriter = Class.forName(outputWriterParam).newInstance(outputstyle)
 
 		/* stderr configuration */
 
 		boolean errEnabled = conf.getBoolean("rembrandt.err.enabled", rembrandtErrEnabledParamDefault)
 		if (!errEnabled) {
-			errputstream = null
+			errputstreamreader = null
 			errstream = "System.err disabled"
 		} else {
 			errStyleParam = conf.get("rembrandt.err.styletag")
@@ -226,13 +233,6 @@ class Rembrandt {
 			}
 			errputstyle = Class.forName(errStyleParam).newInstance(errStyleLang)
 
-			errWriterParam = conf.get("rembrandt.err.writer")
-			if (!errWriterParam) {
-				log.debug "No err writer specified. Using $rembrandtErrWriterParamDefault"
-				errWriterParam = rembrandtErrWriterParamDefault
-			}
-			errputwriter = Class.forName(errWriterParam).newInstance(errputstyle)
-
 			errEncodingParam = conf.get("rembrandt.err.encoding")
 			if (!errEncodingParam) {
 				log.debug "No err encoding specified. Using $rembrandtErrEncodingParamDefault"
@@ -243,31 +243,30 @@ class Rembrandt {
 			if (errFileName) {
 				File f = new File(errFileName)
 				if (!f) throw new Exception("Err file cannot be written. Please check rembrandt.err.file")
-				errputstream = new OutputStreamWriter(new FileOutputStream(f), errEncodingParam)
-				errstream ="File ${f.getName()} <${errputstream.getEncoding()}>"
+				errputstreamreader = new OutputStreamWriter(new FileOutputStream(f), errEncodingParam)
+				errstream ="File ${f.getName()} <${errputstreamreader.getEncoding()}>"
 			} else {
-				errputstream = new OutputStreamWriter(System.err, errEncodingParam);
-				errstream ="System.err <${errputstream.getEncoding()}>"
+				errputstreamreader = new OutputStreamWriter(System.err, errEncodingParam);
+				errstream ="System.err <${errputstreamreader.getEncoding()}>"
 			}
+
+			errWriterParam = conf.get("rembrandt.err.writer")
+			if (!errWriterParam) {
+				log.debug "No err writer specified. Using $rembrandtErrWriterParamDefault"
+				errWriterParam = rembrandtErrWriterParamDefault
+			}
+			errputwriter = Class.forName(errWriterParam).newInstance(errputstyle)
+
 		}
 
-	}
-
-	/** 
-	 * Invokes the rembrandt.io.*Reader to parse the input stream into workable Documents.
-	 * @return List of Documents
-	 */
-	List<Document> loadDocuments() {
-		inputreader.processInputStream(inputstream)
-		return inputreader.docs
 	}
 
 	/**
 	 * Prints a heads for the output stream
 	 */
 	public void printHeader() {
-		if (outputstream) outputstream.write outputwriter.printHeader()
-		if (errputstream) errputstream.write errputwriter.printHeader()
+		if (outputstreamwriter) outputstreamwriter.write outputwriter.printHeader()
+		if (errputstreamreader) errputstreamreader.write errputwriter.printHeader()
 	}
 
 	public Document releaseRembrandtOnDocument(Document doc) {
@@ -299,13 +298,13 @@ class Rembrandt {
 	 * Prints the document, invoking the Writer, for the output and err stream
 	 */
 	public void printDoc(Document processedDoc) {
-		if (outputstream) {
-			outputstream.write outputwriter.printDocument(processedDoc)
-			outputstream.flush()
+		if (outputstreamwriter) {
+			outputstreamwriter.write outputwriter.printDocument(processedDoc)
+			outputstreamwriter.flush()
 		}
-		if (errputstream) {
-			errputstream.write errputwriter.printDocument(processedDoc)
-			errputstream.flush()
+		if (errputstreamreader) {
+			errputstreamreader.write errputwriter.printDocument(processedDoc)
+			errputstreamreader.flush()
 		}
 	}
 
@@ -313,13 +312,13 @@ class Rembrandt {
 	 * Prints a footer for the output and err stream
 	 */
 	public void printFooter() {
-		if (outputstream) {
-			outputstream.write outputwriter.printFooter()
-			outputstream.close()
+		if (outputstreamwriter) {
+			outputstreamwriter.write outputwriter.printFooter()
+			outputstreamwriter.close()
 		}
-		if (errputstream) {
-			errputstream.write errputwriter.printFooter()
-			errputstream.close()
+		if (errputstreamreader) {
+			errputstreamreader.write errputwriter.printFooter()
+			errputstreamreader.close()
 		}
 	}
 
@@ -382,7 +381,6 @@ class Rembrandt {
 		rembrandt = new Rembrandt(conf)
 		log.info "Rembrandt version ${Rembrandt.getVersion()}. Welcome."
 
-
 		if (cmd.hasOption("gui")) {
 
 			RembrandtGui gui = new RembrandtGui(rembrandt, conf)//)
@@ -397,7 +395,8 @@ class Rembrandt {
 
 			log.debug "Invoking reader ${rembrandt.inputreader.class.name} to parse the input stream."
 
-			List<Document> docs = rembrandt.loadDocuments()
+
+			List<Document> docs = rembrandt.inputreader.readDocuments()
 			log.debug "Got ${docs.size()} doc(s). "
 
 			// give labels if the doc does not have...

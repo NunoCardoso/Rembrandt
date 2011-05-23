@@ -47,6 +47,8 @@ public class WriterTest extends GroovyTestCase {
 	static String fileseparator = System.getProperty("file.separator")
 	String file_input
 	String file_output
+	List<Document> expected_docs
+	List<Document> generated_docs
 	List writer_expected = []
 	List writer_generated = []
 
@@ -58,16 +60,22 @@ public class WriterTest extends GroovyTestCase {
 		File file_source = new File(file_input)
 		File file_expected = new File(file_output)
 
-		reader_generated.processInputStream(new InputStreamReader(
+		reader_generated.setInputStreamReader(
+			new InputStreamReader(
 				new FileInputStream(file_source)))
+		
+		generated_docs = reader_generated.readDocuments(1000)		
 
 		// use for debug only
 		// because Writing output should be evaluated against
 		// an existing file output, not against other Writer output
-		reader_expected.processInputStream(new InputStreamReader(
+		reader_expected.setInputStreamReader(
+			new InputStreamReader(
 				new FileInputStream(file_expected)))
+		
+		expected_docs = reader_expected.readDocuments(1000)		
 
-		reader_generated.docs.each{doc ->
+		generated_docs.each{doc ->
 			String output = writer.printDocument(doc)
 			writer_generated.addAll(writer_generated.size(), output.split(/\n/))
 		}
@@ -80,7 +88,7 @@ public class WriterTest extends GroovyTestCase {
 
 		if (log.getLevel() == Level.TRACE) {
 			log.trace ("WARNING: EXPECTED stuff may DIFFER from real expected file output")
-			reader_expected.docs.each{expected_doc ->
+			expected_docs.each{expected_doc ->
 				log.trace "DOC EXPECTED:"
 				log.trace new RembrandtWriter(new RembrandtStyleTag("pt")).printDocument(expected_doc)
 				log.trace "DOC EXPECTED title sentences:"
@@ -92,7 +100,7 @@ public class WriterTest extends GroovyTestCase {
 				log.trace "DOC EXPECTED body NEs:"
 				log.trace expected_doc?.bodyNEs
 			}
-			reader_generated.docs.each{generated_doc ->
+			generated_docs.each{generated_doc ->
 				log.trace "DOC GENERATED:"
 				log.trace new RembrandtWriter(new RembrandtStyleTag("pt")).printDocument(generated_doc)
 				log.trace "DOC GENERATED title sentences:"

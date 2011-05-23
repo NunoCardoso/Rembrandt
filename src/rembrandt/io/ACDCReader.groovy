@@ -47,8 +47,8 @@ class ACDCReader extends Reader {
 	def endMWEPattern = /^<\/mwe>$/
 	def termPattern = /^(.*?)\s+(.*)$/
 
-	public ACDCReader(InputStream inputStream, StyleTag style) {
-		super(inputStream, style)
+	public ACDCReader(InputStreamReader inputStreamReader, StyleTag style) {
+		super(inputStreamReader, style)
 	}
 	
 	public ACDCReader(StyleTag style) {
@@ -72,8 +72,7 @@ class ACDCReader extends Reader {
 		boolean matched
 
 
-		BufferedReader br = new BufferedReader(
-			new InputStreamReader(inputStream))
+		BufferedReader br = new BufferedReader(inputStreamReader)
 		String line
 
 		while ((line = br.readLine()) != null) {

@@ -14,7 +14,7 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/googleapi.jar"/>
-	<classpathentry kind="lib" path="lib/groovy-all-1.7.5.jar"/>
+	<classpathentry kind="lib" path="/Users/ncardoso/Programs/groovy-1.8.0/embeddable/groovy-all-1.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/highlighter-dev.jar"/>
 	<classpathentry kind="lib" path="lib/icu4j_3_4.jar"/>
 	<classpathentry kind="lib" path="lib/iri.jar"/>

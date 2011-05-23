@@ -85,8 +85,12 @@ class MediawikiSyntaxConverter {
 
 		// Note: the doc.title_sentences and doc.body_sentences are correctly parsed.
 		// use those!
+		
+		
+		//println "HTML: "+html
 		Document doc = reader.createDocument(html)
-
+		//println "Body sentenceS: "+doc.body_sentences
+			
 		return doc
 	}
 

@@ -56,10 +56,12 @@ public class ReaderTest extends GroovyTestCase {
 		File file_source = new File(file_input)
 		File file_expected = new File(file_output)
 
-		reader_generated.setInputStream(
-				new FileInputStream(file_source))
-		reader_expected.setInputStream(
-				new FileInputStream(file_expected))
+		reader_generated.setInputStreamReader(
+				new InputStreamReader(
+					new FileInputStream(file_source)))
+		reader_expected.setInputStreamReader(
+				new InputStreamReader(
+					new FileInputStream(file_expected)))
 		
 		generated_docs = reader_generated.readDocuments(10000)
 		expected_docs = reader_expected.readDocuments(10000)

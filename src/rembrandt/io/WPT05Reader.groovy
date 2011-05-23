@@ -62,19 +62,19 @@ public class WPT05Reader extends Reader {
 	XMLStreamReader xmlStreamReader
 
 
-	public WPT05Reader(InputStream inputStream, StyleTag style) {
-		super(inputStream, style)
+	public WPT05Reader(InputStream inputStreamReader, StyleTag style) {
+		super(inputStreamReader, style)
 		xmlStreamReader =
-				XMLInputFactory.newInstance().createXMLStreamReader(inputStream)
+				XMLInputFactory.newInstance().createXMLStreamReader(inputStreamReader)
 	}
 
 	public WPT05Reader( StyleTag style) {
 		super(style)
 	}
 
-	public void setInputStream(InputStream inputStream) {
+	public void setInputStreamReader(InputStreamReader inputStreamReader) {
 		xmlStreamReader =
-				XMLInputFactory.newInstance().createXMLStreamReader(inputStream)
+				XMLInputFactory.newInstance().createXMLStreamReader(inputStreamReader)
 	}
 
 	public List<Document> readDocuments(int docs_requested = 1) {

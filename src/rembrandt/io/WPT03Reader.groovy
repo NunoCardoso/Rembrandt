@@ -48,8 +48,8 @@ class WPT03Reader extends Reader {
 	 */
 
 
-	public WPT03Reader(InputStream inputStream, StyleTag style) {
-		super(inputStream, style)
+	public WPT03Reader(InputStreamReader inputStreamReader, StyleTag style) {
+		super(inputStreamReader, style)
 	}
 
 	public WPT03Reader(StyleTag style) {
@@ -79,8 +79,7 @@ class WPT03Reader extends Reader {
 		String url
 		String title
 
-		BufferedReader br = new BufferedReader(
-					new InputStreamReader(inputStream))
+		BufferedReader br = new BufferedReader(inputStreamReader)
 
 		String l
 		while ((l = br.readLine()) != null   && documentsSize() <= docs_requested ) {

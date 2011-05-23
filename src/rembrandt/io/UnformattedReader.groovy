@@ -34,14 +34,16 @@ class UnformattedReader extends Reader {
     Map<String,String> tag = [:]
     int numbertag = 0
     String tagmark="REMBRANDTTAGMARK"
-    
-    public UnformattedReader(InputStream inputStream, StyleTag style) {
-	super(inputStream, style)
+     
+
+	public UnformattedReader(InputStreamReader inputStreamReader, StyleTag style) {
+		super(inputStreamReader, style)
     }
 	
 	public UnformattedReader(StyleTag style) {
 		super(style)
 	}
+	
       private String savetag(item) {
         tag[++numbertag] = item
         return  " ${tagmark}${numbertag} "
@@ -66,11 +68,10 @@ class UnformattedReader extends Reader {
            (...)
            content
            % title2 (optional)
-           % description2 (optional)         
-        
+           % description2 (optional)                
         */ 
-        BufferedReader br = new BufferedReader(					
-			new InputStreamReader(inputStream))
+
+        BufferedReader br = new BufferedReader(inputStreamReader)
 	    
         StringBuffer buffer = new StringBuffer()		    
         String line

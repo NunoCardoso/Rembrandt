@@ -70,7 +70,7 @@ abstract class Writer {
      * @param style the StyleTag object
      */
     public Writer(StyleTag style) {
-	this.style=style
+		this.style=style
     }
     
     /**

@@ -29,12 +29,7 @@ import saskia.db.DocStatus;
 import saskia.db.database.*
 import saskia.db.obj.*
 import saskia.db.table.*
-import rembrandt.io.DocStats
-import rembrandt.io.HTMLReader
-import rembrandt.io.RembrandtReader
-import rembrandt.io.RembrandtWriter
-import rembrandt.io.RembrandtWriter
-import rembrandt.io.RembrandtStyleTag
+import rembrandt.io.*
 import rembrandt.obj.Document
 
 import saskia.util.validator.*
@@ -89,10 +84,10 @@ class ImportSourceDocument_2_RembrandtedDocument extends Import {
 	
 		taglang = conf.get("rembrandt.output.styletag.lang", this.lang)
 		styletag = new RembrandtStyleTag(taglang)
-	   readerHTML = new HTMLReader()
-	   readerRembrandt = new RembrandtReader(styletag)
-	   writer = new RembrandtWriter(styletag)
-	   core = Rembrandt.getCore(this.lang, "harem")
+	    readerHTML = new HTMLReader(new HTMLStyleTag(taglang))
+	    readerRembrandt = new RembrandtReader(styletag)
+	    writer = new RembrandtWriter(styletag)
+	    core = Rembrandt.getCore(this.lang, "harem")
 		log.info ("Rembrandt core initialized: ${core.class.name}")
 
 		// get rembrandtVersion
@@ -256,7 +251,7 @@ class ImportSourceDocument_2_RembrandtedDocument extends Import {
 			if (rdoc.doc_job == null) {
 				rdoc.doc_job = Job.createNew(jobTable, 
 					[job_task:task, job_worker:process_signature, //  
-					job_doc_type:RembrandtedDocTabke.job_doc_type_label,
+					job_doc_type:RembrandtedDocTable.job_doc_type_label,
 					job_doc_id:rdoc.doc_id, job_doc_edit:DocStatus.LOCKED, job_doc_edit_date:new Date()
 					])
 				rdoc.doc_job.job_id = rdoc.doc_job.addThisToDB()
@@ -413,7 +408,7 @@ class ImportSourceDocument_2_RembrandtedDocument extends Import {
 		String DEFAULT_DB_NAME = "main"
 		String DEFAULT_COLLECTION_NAME = "default_collection"
 		String DEFAULT_MODE = "multiple"
-		Integer DEFAULT_DOCS = 100
+		String DEFAULT_DOCS = "100"
 		
 		o.addOption("db", true, "target Saskia DB (main/test)")
 		o.addOption("col", true, "target collection name/id of the DB")

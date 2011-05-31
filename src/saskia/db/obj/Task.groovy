@@ -123,6 +123,7 @@ public class Task extends DBObject implements JSONable {
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
 				"UPDATE ${getDBTable().tablename} SET tsk_done=tsk_done+1 where tsk_id=?",
 				[tsk_id])
+		if (!getDBTable().cache) getDBTable().refreshCache()
 		getDBTable().cache[tsk_id].tsk_done++
 	}
 

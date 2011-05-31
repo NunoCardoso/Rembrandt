@@ -110,7 +110,7 @@ class ImportNYTFile_2_SourceDocument extends Import {
 		importer.setEncoding(encoding)
 		log.info "File: $file <"+encoding+"> "
 
-		importer.prepareInputStream()
+		importer.prepareInputStreamReader()
 		HashMap status = importer.importDocs()
 
 		log.info "Done. ${status.imported} doc(s) imported, ${status.skipped} doc(s) skipped."

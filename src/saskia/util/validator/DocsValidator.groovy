@@ -27,8 +27,10 @@ class  DocsValidator extends Validator {
 		this.mode = mode
 	}
 	
-	public Integer validate(String given_value, String DEFAULT_VALUE, boolean mandatory) {
+	public Integer validate(String given_value, String DEFAULT_VALUE, boolean mandatory = true) {
 
+		Integer value
+		
 		if (!given_value) {
 			if (mode == "single") {
 				println "Which document id for single tagging?"
@@ -38,7 +40,7 @@ class  DocsValidator extends Validator {
 	
 			print "> "
 			BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
-			val = input.readLine().trim()
+			String val = input.readLine().trim()
 			
 			if (mode == "multiple") {
 				if (val) {
@@ -46,10 +48,16 @@ class  DocsValidator extends Validator {
 						value = Integer.parseInt(val)
 					} catch(Exception e) {println "invalid amount: $mode."}
 			 	} else {
-						value = DEFAULT_VALUE
+						value = Integer.parseInt(DEFAULT_VALUE)
 				}
 			} else {
-				value = val
+				if (val) {
+					try {
+						value = Integer.parseInt(val)
+					} catch(Exception e) {println "invalid amount: $mode."}
+			 	} else {
+						value = Integer.parseInt(DEFAULT_VALUE)
+				}
 			}
 		} else {
 			value = Integer.parseInt(given_value)

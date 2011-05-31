@@ -112,7 +112,7 @@ class ImportGCSecondHarem_Clean_2_SourceDocument extends Import {
 		importer.setEncoding(encoding)
 		log.info "File: $file <"+encoding+"> "
 
-		importer.prepareInputStream()
+		importer.prepareInputStreamReader()
 		importer.importer()
 		println importer.statusMessage()
 	}

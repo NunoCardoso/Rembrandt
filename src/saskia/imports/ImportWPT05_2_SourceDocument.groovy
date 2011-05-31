@@ -118,7 +118,7 @@ class ImportWPT05_2_SourceDocument extends Import {
 		importer.setEncoding(encoding)
 		log.info "File: $file <"+encoding+"> "
 
-		importer.prepareInputStream()
+		importer.prepareInputStreamReader()
 		importer.importer()
 		log.info importer.statusMessage()
 

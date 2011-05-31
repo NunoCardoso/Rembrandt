@@ -150,7 +150,7 @@ class GenerateGeoSignatures  {
 		
 		String DEFAULT_DB_NAME = "main"
 		String DEFAULT_COLLECTION_NAME="none"
-		String DEFAULT_DOCS = 10000
+		String DEFAULT_DOCS = "10000"
 		String DEFAULT_SYNC = "pool"
 		
 		GenerateGeoSignatures ggs = new GenerateGeoSignatures()

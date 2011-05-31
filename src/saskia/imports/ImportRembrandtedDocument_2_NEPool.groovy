@@ -208,13 +208,13 @@ class ImportRembrandtedDocument_2_NEPool extends Import {
 		String DEFAULT_DB_NAME = "main"
 		String DEFAULT_COLLECTION_NAME = "default_collection"
 		String DEFAULT_MODE = "multiple"
-		Integer DEFAULT_DOCS = 100
+		Integer DEFAULT_DOCS = "100"
 		
 		o.addOption("db", true, "target Saskia DB (main/test)")
 		o.addOption("col", true, "target collection name/id of the DB")
-	   o.addOption("mode", true, "mode: (single/multiple)")
-	   o.addOption("docs", true, "number of docs (multiple mode), or docid (single mode)")
-	   o.addOption("answer", true, "automatic answer for [y]es/[n]o/[a]lways/n[e]ver questions")
+	    o.addOption("mode", true, "mode: (single/multiple)")
+	    o.addOption("docs", true, "number of docs (multiple mode), or docid (single mode)")
+	    o.addOption("answer", true, "automatic answer for [y]es/[n]o/[a]lways/n[e]ver questions")
 		o.addOption("help", false, "Gives this help information")
 
 		CommandLineParser parser = new GnuParser()

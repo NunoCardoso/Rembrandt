@@ -62,7 +62,7 @@ public class AskSaskiaMapping extends WebServiceRestletMapping {
         
 
 
-        User user = User.getFromAPIKey(api_key)           
+        User user = UserTable.getFromAPIKey(api_key)           
         if (!user) return sm.userNotFound()
         if (!user.isEnabled()) return sm.userNotEnabled()
             

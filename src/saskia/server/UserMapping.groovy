@@ -95,7 +95,7 @@ public class UserMapping extends WebServiceRestletMapping {
 				if (!api_key) api_key = par["COOKIE"]["api_key"]
 				if (!api_key) return sm.noAPIKeyMessage()
 
-				user_db = User.getFromAPIKey(api_key)
+				user_db = UserTable.getFromAPIKey(api_key)
 				if (!user_db) return sm.userNotFound()
 				if (!user_db.isEnabled()) return sm.userNotEnabled()
 
@@ -144,7 +144,7 @@ public class UserMapping extends WebServiceRestletMapping {
 				if (!api_key) api_key = par["COOKIE"]["api_key"]
 				if (!api_key) return sm.noAPIKeyMessage()
 
-				User user = User.getFromAPIKey(api_key)
+				User user = UserTable.getFromAPIKey(api_key)
 				if (!user) return sm.userNotFound()
 				if (!user.isEnabled()) return sm.userNotEnabled()
 
@@ -228,7 +228,7 @@ public class UserMapping extends WebServiceRestletMapping {
 
 			if (action == "confirmregister") {
 				api_key  = par["GET"]["a"]
-				user_db = User.getFromAPIKey(api_key)
+				user_db = UserTable.getFromAPIKey(api_key)
 
 				if (!user_db) {
 					message = i18n.servermessage['user_not_found'][lang]

@@ -40,7 +40,7 @@ class SaskiaWebstore {
 	}
 
 	private SaskiaWebstore() {
-
+		log.info "SaskiaWebstore initializing..."
 		Configuration conf = Configuration.newInstance()
 		try {
 			log.debug "Beginning Webstore..."
@@ -56,9 +56,10 @@ class SaskiaWebstore {
 				//      println "adding volume $v to key ${v.volId()}"
 				volumes[v.volId()] = v
 			}
-			log.debug "Final volumes:  $volumes"
+			log.info "Webstore Initialized. Final volumes: $volumes"
+			
 		} catch(Exception e) {
-			log.error e.getMessage()
+			log.error "Webstore NOT initialized: "+ e.getMessage()
 		}
 	//	log.info "Webstore initialized with volumes ${volumes.keySet()}"
 	}

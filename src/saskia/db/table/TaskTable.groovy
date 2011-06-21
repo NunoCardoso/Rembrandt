@@ -44,7 +44,7 @@ class TaskTable extends DBTable {
 
 	static String tablename = "task"
 
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Task")
 
 	Map<Long,Task> cache
 

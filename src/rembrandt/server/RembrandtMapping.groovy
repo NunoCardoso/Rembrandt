@@ -79,7 +79,7 @@ public class RembrandtMapping extends WebServiceRestletMapping {
 			if (!api_key) return sm.noAPIKeyMessage()
 
 			// verification of user
-			User user = User.getFromAPIKey(db, api_key)
+			User user = UserTable.getFromAPIKey(db, api_key)
 			if (!user) return sm.userNotFound()
 			if (! user.canExecuteAPICall()) return sm.dailyAPILimitExceeded()
 

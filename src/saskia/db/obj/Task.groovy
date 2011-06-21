@@ -42,7 +42,7 @@ public class Task extends DBObject implements JSONable {
 	String tsk_status // QUE, PRO, FIN, INT - Queued, processing, Finished, Interrupted,
 	String tsk_comment
 
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("Task")
 
 	static Map type = ['tsk_id':'Long','tsk_task':'String', 'tsk_user':'User', 'tsk_collection':'Collection','tsk_type':'String',
 		'tsk_priority':'Integer','tsk_limit':'Integer','tsk_offset':'Long','tsk_done':'Integer','tsk_scope':'String',
@@ -124,7 +124,12 @@ public class Task extends DBObject implements JSONable {
 				"UPDATE ${getDBTable().tablename} SET tsk_done=tsk_done+1 where tsk_id=?",
 				[tsk_id])
 		if (!getDBTable().cache) getDBTable().refreshCache()
-		getDBTable().cache[tsk_id].tsk_done++
+		if (getDBTable().cache.containsKey("tsk_id")) {
+			getDBTable().cache.containsKey("tsk_id").tsk_done++
+		} else {
+			log.warn "Should have task getDBTable().cache[tsk_id]: "+getDBTable().cache["tsk_id"]
+			//getDBTable().cache["tsk_id"].tsk_done = 1
+		}
 	}
 
 	/** Add this Rembrandt Tag to the database.

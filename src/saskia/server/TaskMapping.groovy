@@ -59,7 +59,7 @@ public class TaskMapping extends WebServiceRestletMapping {
 			if (!api_key) api_key = par["COOKIE"]["api_key"]
 			if (!api_key) return sm.noAPIKeyMessage()
 
-			User user = User.getFromAPIKey(api_key)
+			User user = UserTable.getFromAPIKey(api_key)
 			if (!user) return sm.userNotFound()
 			if (!user.isEnabled()) return sm.userNotEnabled()
 			if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")

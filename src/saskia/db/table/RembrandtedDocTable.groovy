@@ -65,6 +65,9 @@ class RembrandtedDocTable extends DBTable {
 		super(db)
 		conf = Configuration.newInstance()
 		webstore = SaskiaWebstore.newInstance()
+		if (!webstore) {
+			log.warn "RembrandtedDocTable: webstore not initialized, there may be some errors coming. Chewck the webstore."
+		}
 		lang = conf.get("global.lang")
 		reader = new RembrandtReader( new RembrandtStyleTag(
 				conf.get("rembrandt.input.styletag.lang", conf.get("global.lang"))))

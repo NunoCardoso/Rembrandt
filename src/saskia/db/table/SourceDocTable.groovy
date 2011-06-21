@@ -37,7 +37,7 @@ class SourceDocTable extends DBTable {
 	static String job_doc_type_label = "SDOC"
 	static String tablename = "source_doc"
 
-	static Logger log = Logger.getLogger("SaskiaDB")
+	static Logger log = Logger.getLogger("SourceDoc")
 
 	Configuration conf
 	SaskiaWebstore webstore
@@ -46,6 +46,9 @@ class SourceDocTable extends DBTable {
 		super(db)
 		conf = Configuration.newInstance()
 		webstore = SaskiaWebstore.newInstance()
+		if (!webstore) {
+			log.warn "RembrandtedDocTable: webstore not initialized, there may be some errors coming. Chewck the webstore."
+		} 
 	}
 
 	public List<SourceDoc> queryDB(String query, ArrayList params) {

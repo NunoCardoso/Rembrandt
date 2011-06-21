@@ -1,0 +1,221 @@
+
+#### 1. STANDALONE LOGS ####
+#### NOTE: One is for the console (set output level here), 
+#### The other is for logs (inherit appender level, so don't set level here!)
+
+# Rembrandt logs
+log4j.logger.RembrandtMain = , myConsoleInfo, myRembrandtFileDebug
+log4j.logger.DocStats = , myConsoleInfo, myRembrandtFileDebug
+log4j.logger.EntityRelationMain = , myConsoleWarn, myRembrandtFileDebug
+log4j.logger.NamedEntity = , myConsoleDebug, myRembrandtFileDebug
+log4j.logger.RuleMatcher = , myConsoleWarn, myRembrandtFileDebug
+log4j.logger.Detector = , myConsoleWarn, myRembrandtFileDebug
+log4j.logger.TimeGroundingDetector  = , myConsoleWarn, myRembrandtFileDebug
+log4j.logger.SplitNEDetector = , myConsoleWarn, myRembrandtFileDebug
+log4j.logger.Document = , myConsoleWarn, myRembrandtFileDebug
+log4j.logger.Courthouse  = , myConsoleWarn, myRembrandtFileDebug
+log4j.logger.Reader = , myConsoleWarn, myRembrandtFileDebug
+log4j.logger.Writer = , myConsoleWarn, myRembrandtFileDebug
+log4j.logger.Tokenizer = , myConsoleWarn, myRembrandtFileDebug
+
+# Renoir logs
+log4j.logger.RenoirMain = , myConsoleInfo, myRenoirFileDebug
+log4j.logger.SuggestionDB = , myConsoleWarn, myRenoirFileDebug
+log4j.logger.RenoirQuestionSolver = , myConsoleWarn, myRenoirFileDebug
+log4j.logger.SubjectParser = , myConsoleWarn, myRenoirFileDebug
+
+# Saskia logs
+
+## APIs
+log4j.logger.SaskiaMain = , myConsoleInfo, mySaskiaFileDebug
+log4j.logger.WikipediaAPI = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.DBpediaAPI = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.GeoPlanetAPI = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.WGO_API = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.AskSaskia = , myConsoleWarn, mySaskiaFileDebug
+## Wikis
+log4j.logger.WikipediaSearch = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.WikipediaTools = , myConsoleWarn, mySaskiaFileDebug
+## DBs
+log4j.logger.DB = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Cache = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Collection = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.DocGeoSignature = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.DocTimeSignature  = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Entity = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Geoscope = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Job = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.NE = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.NECategory = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.NEType = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.NESubtype = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Relation = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.RembrandtedDoc = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.SourceDoc = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Subject = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.SubjectGround = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Tag = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Task = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Type = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.User = , myConsoleWarn, mySaskiaFileDebug
+
+## Imports
+log4j.logger.DocumentConverter = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Imports = , myConsoleInfo, mySaskiaFileDebug
+log4j.logger.Exports = , myConsoleInfo, mySaskiaFileDebug
+log4j.logger.GeoSignature = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.TimeSignature = , myConsoleWarn, mySaskiaFileDebug
+log4j.logger.Validator = , myConsoleWarn, mySaskiaFileDebug
+## Indexes
+log4j.logger.IndexGeneration = , myConsoleWarn, mySaskiaFileDebug
+
+#### 2. SERVER LOGS ####
+
+# Rembrandt server logs 
+log4j.logger.RembrandtServerMain = info, myRembrandtServer
+log4j.logger.RembrandtServerErrors = debug, myRembrandtServer
+log4j.logger.RembrandtServerAccess = debug, myRembrandtServer
+log4j.logger.RembrandtServerProcessing = debug, myRembrandtServer
+
+# Renoir server logs
+log4j.logger.RenoirServerMain = info, myRenoirServer
+log4j.logger.RenoirServerErrors = debug, myRenoirServer
+log4j.logger.RenoirServerAccess = debug, myRenoirServer
+log4j.logger.RenoirServerProcessing = debug, myRenoirServer
+
+# Saskia server logs
+log4j.logger.SaskiaServerMain = info, mySaskiaServer
+log4j.logger.SaskiaServerErrors = debug, mySaskiaServer
+log4j.logger.SaskiaServerAccess = debug, mySaskiaServer
+log4j.logger.SaskiaServerProcessing = debug, mySaskiaServer
+
+#### 3. OTHER LOGS ####
+
+log4j.logger.Configuration =  myConsoleWarn, myRembrandtFileDebug
+log4j.logger.RembrandtTest = trace, junitTest
+log4j.logger.RenoirTest = debug, junitTest
+log4j.logger.SaskiaTest = debug, junitTest
+log4j.logger.JUnitTest = debug, junitTest
+log4j.logger.Patches = , myConsoleDebug
+
+
+#3rd party logs
+log4j.logger.pt.utl.ist.lucene.config.ConfigProperties = , myConsoleError
+log4j.logger.pt.utl.ist.lucene.LgteIndexWriter = , myConsoleError
+log4j.logger.pt.utl.ist.lucene.FilterOrchestrator = , myConsoleError
+log4j.logger.pt.utl.ist.lucene.utils.DataCacher = , myConsoleError
+log4j.logger.org.restlet.Component.Server  = , myConsoleDebug
+log4j.logger.org.restlet.Component.LogService = , myConsoleDebug
+
+#### 4. STREAMS ####
+
+# myConsoleInfo
+# plain output with no metadata. LEVEL: INFO
+log4j.appender.myConsoleInfo = org.apache.log4j.ConsoleAppender
+log4j.appender.myConsoleInfo.layout = org.apache.log4j.PatternLayout
+log4j.appender.myConsoleInfo.layout.ConversionPattern = %m%n
+log4j.appender.myConsoleInfo.Threshold=info
+
+# myConsoleDebug
+# metadata: level + class  LEVEL: DEBUG
+log4j.appender.myConsoleDebug = org.apache.log4j.ConsoleAppender
+log4j.appender.myConsoleDebug.layout = org.apache.log4j.PatternLayout
+log4j.appender.myConsoleDebug.layout.ConversionPattern = %-5p [%t] %m%n
+log4j.appender.myConsoleDebug.Threshold=debug
+
+# myConsoleWarn
+# metadata: level + class.  LEVEL: WARN
+log4j.appender.myConsoleWarn = org.apache.log4j.ConsoleAppender
+log4j.appender.myConsoleWarn.layout = org.apache.log4j.PatternLayout
+log4j.appender.myConsoleWarn.layout.ConversionPattern = %-5p [%t] %m%n
+log4j.appender.myConsoleWarn.Threshold=warn
+
+# myConsoleError
+# metadata: level + class.  LEVEL: ERROR
+log4j.appender.myConsoleError = org.apache.log4j.ConsoleAppender
+log4j.appender.myConsoleError.layout = org.apache.log4j.PatternLayout
+log4j.appender.myConsoleError.layout.ConversionPattern = %-5p [%t] %m%n
+log4j.appender.myConsoleError.Threshold=error
+
+# myConsoleTrace
+# note: %F is slow! $L is also slow! Use that on thorough debug
+log4j.appender.myConsoleTrace = org.apache.log4j.ConsoleAppender
+log4j.appender.myConsoleTrace.layout = org.apache.log4j.PatternLayout
+log4j.appender.myConsoleTrace.layout.ConversionPattern = %-5p %d:[%t]:[%F:%L] %m%n
+log4j.appender.myConsoleTrace.Threshold=trace
+
+# myRembrandtFileInfo
+log4j.appender.myRembrandtFileInfo=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.myRembrandtFileInfo.DatePattern = '.'yyyy-MM-dd
+log4j.appender.myRembrandtFileInfo.File = logs/rembrandt.log
+log4j.appender.myRembrandtFileInfo.layout = org.apache.log4j.PatternLayout
+log4j.appender.myRembrandtFileInfo.layout.ConversionPattern = [%d{ISO8601}]%5p%6.6r[%t]%x(%F:%L) - %m%n
+log4j.appender.myRembrandtFileInfo.Threshold=info
+
+# myRembrandtDebugFile
+log4j.appender.myRembrandtFileDebug=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.myRembrandtFileDebug.DatePattern = '.'yyyy-MM-dd
+log4j.appender.myRembrandtFileDebug.File = logs/rembrandt.log
+log4j.appender.myRembrandtFileDebug.layout = org.apache.log4j.PatternLayout
+log4j.appender.myRembrandtFileDebug.layout.ConversionPattern = [%d{ISO8601}]%5p%6.6r[%t]%x(%F:%L) - %m%n
+log4j.appender.myRembrandtFileDebug.Threshold=debug
+
+# myRenoirInfoFile
+log4j.appender.myRenoirFileInfo=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.myRenoirFileInfo.DatePattern = '.'yyyy-MM-dd
+log4j.appender.myRenoirFileInfo.File = logs/renoir.log
+log4j.appender.myRenoirFileInfo.layout = org.apache.log4j.PatternLayout
+log4j.appender.myRenoirFileInfo.layout.ConversionPattern = [%d{ISO8601}]%5p%6.6r[%t]%x(%F:%L) - %m%n
+log4j.appender.myRenoirFileInfo.Threshold=info 
+
+# myRenoirDebugFile
+log4j.appender.myRenoirFileDebug=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.myRenoirFileDebug.DatePattern = '.'yyyy-MM-dd
+log4j.appender.myRenoirFileDebug.File = logs/renoir.log
+log4j.appender.myRenoirFileDebug.layout = org.apache.log4j.PatternLayout
+log4j.appender.myRenoirFileDebug.layout.ConversionPattern = [%d{ISO8601}]%5p%6.6r[%t]%x(%F:%L) - %m%n
+log4j.appender.myRenoirFileDebug.Threshold=debug 
+
+# mySaskiaFile
+log4j.appender.mySaskiaFileInfo=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.mySaskiaFileInfo.DatePattern = '.'yyyy-MM-dd
+log4j.appender.mySaskiaFileInfo.File = logs/saskia.log
+log4j.appender.mySaskiaFileInfo.layout = org.apache.log4j.PatternLayout
+log4j.appender.mySaskiaFileInfo.layout.ConversionPattern = [%d{ISO8601}]%5p%6.6r[%t]%x(%F:%L) - %m%n
+log4j.appender.mySaskiaFile.Threshold=Info
+
+# mySaskiaFile
+log4j.appender.mySaskiaFileDebug=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.mySaskiaFileDebug.DatePattern = '.'yyyy-MM-dd
+log4j.appender.mySaskiaFileDebug.File = logs/saskia.log
+log4j.appender.mySaskiaFileDebug.layout = org.apache.log4j.PatternLayout
+log4j.appender.mySaskiaFileDebug.layout.ConversionPattern = [%d{ISO8601}]%5p%6.6r[%t]%x(%F:%L) - %m%n
+log4j.appender.mySaskiaFile.Threshold=debug
+
+# myRembrandtServer
+log4j.appender.myRembrandtServer = org.apache.log4j.RollingFileAppender
+log4j.appender.myRembrandtServer.File=logs/rembrandtServer.log
+log4j.appender.myRembrandtServer.layout = org.apache.log4j.PatternLayout
+log4j.appender.myRembrandtServer.Append=true
+log4j.appender.myRembrandtServer.layout.ConversionPattern = %-5p [%t][%F %L]: %m%n
+
+# myRenoirServer
+log4j.appender.myRenoirServer = org.apache.log4j.RollingFileAppender
+log4j.appender.myRenoirServer.File=logs/renoirServer.log
+log4j.appender.myRenoirServer.layout = org.apache.log4j.PatternLayout
+log4j.appender.myRenoirServer.Append=true
+log4j.appender.myRenoirServer.layout.ConversionPattern = %-5p [%t][%F %L]: %m%n
+
+# mySaskiaServer
+log4j.appender.mySaskiaServer = org.apache.log4j.RollingFileAppender
+log4j.appender.mySaskiaServer.File=logs/saskiaServer.log
+log4j.appender.mySaskiaServer.layout = org.apache.log4j.PatternLayout
+log4j.appender.mySaskiaServer.Append=true
+log4j.appender.mySaskiaServer.layout.ConversionPattern = %-5p [%t][%F %L]: %m%n
+
+log4j.appender.junitTest = org.apache.log4j.ConsoleAppender
+#log4j.appender.junitTest.threshold = debug
+#log4j.appender.junitTest.Encoding=UTF-8
+log4j.appender.junitTest.layout = org.apache.log4j.PatternLayout
+log4j.appender.junitTest.layout.ConversionPattern =%m%n
+

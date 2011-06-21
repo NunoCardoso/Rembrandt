@@ -21,8 +21,8 @@ import org.apache.log4j.*
 
 import renoir.util.MD5Hex
 import renoir.util.SHA1
-import saskia.db.obj.Collection
-import saskia.db.obj.User
+import saskia.db.obj.*
+import saskia.db.table.*
 import saskia.util.I18n
 
 public class UserMapping extends WebServiceRestletMapping {

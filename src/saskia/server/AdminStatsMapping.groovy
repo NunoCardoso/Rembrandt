@@ -19,10 +19,9 @@ package saskia.server
 
 import org.apache.log4j.*
 
-import saskia.db.database.SaskiaMainDB
-import saskia.db.obj.Collection
-import saskia.db.table.UserTable
-import saskia.db.obj.User
+import saskia.db.database.*
+import saskia.db.obj.*
+import saskia.db.table.*
 import saskia.stats.SaskiaStats
 import saskia.util.I18n
 

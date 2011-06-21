@@ -19,9 +19,8 @@ package saskia.server
 
 import org.apache.log4j.*
 
-import saskia.db.obj.Collection
-import saskia.db.obj.SourceDoc
-import saskia.db.obj.User
+import saskia.db.obj.*
+import saskia.db.table.*
 import saskia.util.I18n
 
 public class SourceDocMapping extends WebServiceRestletMapping {

@@ -25,6 +25,7 @@ import rembrandt.obj.Document
 import saskia.bin.Configuration
 import saskia.db.database.SaskiaDB
 import saskia.db.obj.User
+import saskia.db.table.UserTable
 import saskia.server.ServerMessage
 import saskia.util.I18n
 

@@ -18,8 +18,8 @@
 package saskia.server
 
 import saskia.bin.AskSaskia
-import saskia.db.table.UserTable
-import saskia.db.obj.User
+import saskia.db.table.*
+import saskia.db.obj.*
 import rembrandt.obj.Sentence
 import rembrandt.gazetteers.SemanticClassificationDefinitions
 import rembrandt.obj.NamedEntity

@@ -150,7 +150,7 @@ class ImportPTNews2SourceDocument {
 
 	static void main(args) {
 
-		String usage = "Usage: saskia.imports.ImportPTNews2Saskia -batchSize [target-collection] [number-documents]\n"+
+		String usage = "Usage: saskia.imports.ImportPTNews2SourceDocument -batchSize [target-collection] [number-documents]\n"+
 				"Learn it.";
 
 		if (!args || args.size() < 3 ) {
@@ -158,7 +158,7 @@ class ImportPTNews2SourceDocument {
 			System.exit(0)
 		}
 
-		ImportPTNews2Saskia w2r = new ImportPTNews2Saskia()
+		ImportPTNews2SourceDocument w2r = new ImportPTNews2SourceDocument()
 		HashMap status = [imported:0, skipped:0]
 
 		if (args[0] == "-batchSize") {

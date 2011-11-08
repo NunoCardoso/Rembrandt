@@ -106,7 +106,7 @@ class HTMLSaxlessStatistics {
 	}
 
 	static void main(args) {
-		def r = new HTMLstatistics2()
+		def r = new HTMLstatistics()
 		new File(args[0]).eachFileRecurse{f ->
 			if (f.isFile()) {
 				print "Parsing the file "+f.getName()+"... "

@@ -459,7 +459,7 @@ class ImportSourceDocument_2_RembrandtedDocument extends Import {
 		importer.setDocs(docs)
 		log.info "Docs: $docs "
 
-		def answer = new InteractiveAnwserValidator()
+		def answer = new InteractiveAnswerValidator()
 			.validate(cmd.getOptionValue("answer"), null, false)		
 		importer.setDefaultanswer(answer)
 

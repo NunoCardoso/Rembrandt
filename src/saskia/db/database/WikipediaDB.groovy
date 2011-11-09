@@ -35,7 +35,7 @@ class WikipediaDB extends DB {
 	String default_db_url = 'jdbc:mysql://127.0.0.1'
 	String default_db_name = 'wikipedia'
 	String default_db_user = 'wikipedia'
-	String default_db_password = 'saskia'
+	String default_db_password = 'wikipedia'
 	String default_db_param = 'useUnicode=yes&characterEncoding=UTF8&characterSetResults=UTF8&autoReconnect=true'
 
 	String default_conf_driver = 'saskia.wikipedia.db.driver'

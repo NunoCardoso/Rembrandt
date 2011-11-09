@@ -108,7 +108,7 @@ abstract class DB {
 			lastCall = System.currentTimeMillis()
 			log.trace "DB: lastCall initialized with "+new Date(lastCall)
 		}  catch (Exception e) {
-			log.fatal "Can't open db: "+e.getMessage()
+			log.fatal "Can't open db "+"$url/${name}?${param}"+": "+e.getMessage()
 			log.fatal "Is your MySQL server running? You should check it out."
 		}
 		if (db) {

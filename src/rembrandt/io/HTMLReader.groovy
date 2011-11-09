@@ -85,23 +85,23 @@ class HTMLReader extends Reader {
 		lang = Configuration.newInstance().get("global.lang")
 	}
 
-	private String saveanchor(item) {
+	protected String saveanchor(item) {
 		anchor[++numberanchor] = item
 		return  " ${startanchormark}${numberanchor} "
 	}
 
-	private String loadanchor(item) {
+	protected String loadanchor(item) {
 		return item.replaceAll(/^${startanchormark}(\d+)$/) {it, cap ->
 			return anchor[Integer.parseInt(cap)]
 		}
 	}
 
-	private String savetag(item) {
+	protected String savetag(item) {
 		tag[++numbertag] = item
 		return  " ${tagmark}${numbertag} "
 	}
 
-	private String loadtag(item) {
+	protected String loadtag(item) {
 		return item.replaceAll(/^${tagmark}(\d+)$/) {it, cap ->
 			return tag[Integer.parseInt(cap)]
 		}
@@ -149,7 +149,6 @@ class HTMLReader extends Reader {
 	 * @return the Document
 	 */
 	public Document createDocument(String htmltext) {
-
 
 		String title, docid, lang
 		// note that I capture the title, then I remove the tags and the title

@@ -67,7 +67,7 @@ abstract class Import {
 
 	public void prepareInputStreamReader() {
 		reader.setInputStreamReader(new InputStreamReader(new FileInputStream(this.file)))
-		log.info "Stream prepared."
+		log.debug "Stream prepared."
 	}
 	
 	abstract importer();

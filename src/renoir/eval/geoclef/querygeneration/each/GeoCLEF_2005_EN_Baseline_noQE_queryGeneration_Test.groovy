@@ -21,7 +21,7 @@ package renoir.eval.geoclef.querygeneration.each
 import org.apache.log4j.Logger
 
 import renoir.obj.*
-import renoir.test.geoclef.querygeneration.GeoCLEF_Baseline_NoQE_QueryGeneration_Test
+import renoir.eval.geoclef.querygeneration.GeoCLEF_Baseline_NoQE_QueryGeneration_Test
 import saskia.bin.Configuration
 
 /**

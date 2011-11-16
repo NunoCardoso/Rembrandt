@@ -24,9 +24,9 @@ class StemValidator extends Validator {
 	 * Validate the mode
 	 * 
 	 */
-	public Boolean validate(String given_stem, String DEFAULT_STEM, boolean manadory) {
+	public validate(String given_stem, String DEFAULT_STEM, boolean mandatory) {
 
-		Boolean stem
+		boolean stem = null
 
 		if (!given_stem) {
 			println "Stem (true/false)? (Default: $DEFAULT_STEM)"
@@ -35,9 +35,9 @@ class StemValidator extends Validator {
 			String answer = input.readLine().trim()
 			stem = Boolean.parseBoolean(answer)
 		} else {
-			stem = given_stem
+			stem = Boolean.parseBoolean(given_stem)
 		}
-		if (!stem && mandatory) {
+		if (stem == null && mandatory) {
 			log.fatal "Stem not given."
 			log.fatal "Please specify stem correctly (true or false)."
 			System.exit(0)

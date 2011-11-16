@@ -24,7 +24,7 @@ import rembrandt.gazetteers.CommonClassifications as SC
 import rembrandt.tokenizer.*
 import renoir.obj.*
 import renoir.rules.*
-import renoir.test.geoclef.pertopic.GeoCLEF_PerTopic_Test
+import renoir.eval.geoclef.pertopic.GeoCLEF_PerTopic_Test
 import saskia.bin.Configuration
 /**
  * @author Nuno Cardoso

@@ -21,7 +21,7 @@ package renoir.eval.geoclef.pertopic.year2005
 import groovy.util.GroovyTestCase
 import rembrandt.gazetteers.CommonClassifications as SC
 import renoir.obj.*
-import renoir.test.geoclef.pertopic.GeoCLEF_PerTopic_Test
+import renoir.eval.geoclef.pertopic.GeoCLEF_PerTopic_Test
 import saskia.bin.Configuration
 /**
  * @author Nuno Cardoso

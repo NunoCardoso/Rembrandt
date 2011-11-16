@@ -26,7 +26,7 @@
 	build + groovy = build-withdoc	
 	build-withdoc + package = deploy		
 	
-	for test: compile-test
+	for test: compile-all
 	-->
 	<path id="all.classpath">	
 		<pathelement location="${jar.dir}/hadoop.jar" />
@@ -73,7 +73,7 @@
  
           <groovyc encoding="UTF-8" srcdir="${src.dir}" destdir="${bin-groovy.dir}" memoryMaximumSize="1536m" memoryInitialSize="1024m">
             <include name="**/*.groovy"/>
-            <exclude name="*/eval/**"/>
+           <exclude name="*/eval/**/*Test.groovy"/>
           </groovyc>
         </target>
 	

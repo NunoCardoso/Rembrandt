@@ -112,6 +112,18 @@ class SourceDocTable extends DBTable {
 	}
 
 
+	public List<SourceDoc> getBatchOfSourceDocs(Collection collection, limit = 10,  offset = 0) {
+		// limit & offset can come as null... they ARE initialized...
+		if (!limit) limit = 10
+		if (!offset) offset = 0
+
+		return queryDB("SELECT SQL_CALC_FOUND_ROWS * "+
+		" FROM  source_doc  WHERE sdoc_collection=? "+
+		"ORDER BY sdoc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id])
+		// ORDER BY sdoc_id ASC assures that these batches are ordered
+	}
+
+
 	/**
 	 * Get pool of source documents in a thread-safe way. 
 	 * By enforcing withTransaction, I'm setting autocommit=0

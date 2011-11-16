@@ -4,7 +4,7 @@ package renoir.eval.geoclef.rungeneration.each
 import ireval.SetRetrievalEvaluator;
 import ireval.RetrievalEvaluator.Document;
 import ireval.RetrievalEvaluator.Judgment;
-import renoir.test.geoclef.rungeneration.GeoCLEF_Baseline_NoQE_RunGeneration_Test
+import renoir.eval.geoclef.rungeneration.GeoCLEF_Baseline_NoQE_RunGeneration_Test
 import org.junit.*
 import org.junit.runner.*
 import org.apache.log4j.*

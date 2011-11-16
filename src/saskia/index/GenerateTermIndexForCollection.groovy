@@ -253,11 +253,11 @@ class GenerateTermIndexForCollection extends IndexGenerator {
 			.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
 
 		boolean stem = new StemValidator()
-			.validate(cmd.getOptionValue("stem"), DEFAULT_STEMMING)
+			.validate(cmd.getOptionValue("stem"), DEFAULT_STEMMING, false)
 
 		String index_final_dir
-		if (stem) index_final_dir += termWithStemIndexDir
-		else index_final_dir += termWithoutStemIndexDir
+		if (stem) index_final_dir = termWithStemIndexDir
+		else index_final_dir = termWithoutStemIndexDir
 
 		String default_indexdir = IndexDirectoryValidator.buildIndexDirectory(
 			 conf, collection, index_final_dir)

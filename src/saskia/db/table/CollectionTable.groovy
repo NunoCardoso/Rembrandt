@@ -285,9 +285,9 @@ class CollectionTable extends DBTable {
 		return collection_list
 	}
 
-	static Collection getFromName(SaskiaDB db, Long id) {
+	static List<Collection> getFromName(SaskiaDB db, String collection_name) {
 		CollectionTable instance = db.getDBTable("CollectionTable")
-		return instance.getFromName(id)
+		return instance.getFromName(collection_name)
 	}
 
 	public Collection getFromNameAndOwner(String name, User user) {
@@ -303,7 +303,7 @@ class CollectionTable extends DBTable {
 		if (!id) return null
 		if (!cacheIDCollection) refreshCache()
 		Collection c = cacheIDCollection[id]
-		log.info "Querying for collection id $id got Collection $c."
+//		log.info "Querying for collection id $id got Collection $c."
 		return c
 	}
 

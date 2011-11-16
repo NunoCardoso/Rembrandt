@@ -18,7 +18,7 @@
  */
 package renoir.eval.geoclef.pertopic.year2005
 
-import renoir.test.geoclef.pertopic.GeoCLEF_PerTopic_Test
+import renoir.eval.geoclef.pertopic.GeoCLEF_PerTopic_Test
 import groovy.util.GroovyTestCase
 import org.apache.log4j.Logger
 import saskia.bin.Configuration

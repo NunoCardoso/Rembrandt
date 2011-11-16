@@ -53,6 +53,7 @@ class RenoirCore {
 				indexdir += fileseparator+"db-"+dbname
 				indexdir += fileseparator+Renoir.mainCollectionPrefix+"-"+col.col_id
 			}
+			
 			coreToReturn = new Renoir(conf, indexdir, col.col_lang, stem)
 			if (!this.cores.containsKey(col.col_id)) this.cores[col.col_id] = [:]
 			this.cores[col.col_id][stem.toString()] = coreToReturn

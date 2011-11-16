@@ -5,7 +5,7 @@ package renoir.eval.geoclef.rungeneration.each
 import org.junit.*
 import org.junit.runner.*
 import org.apache.log4j.*
-import renoir.test.geoclef.rungeneration.GeoCLEF_Baseline_NoQE_RunGeneration_Test
+import renoir.eval.geoclef.rungeneration.GeoCLEF_Baseline_NoQE_RunGeneration_Test
 import renoir.bin.Renoir
 import renoir.obj.RenoirQuery
 import renoir.obj.RenoirQueryParser

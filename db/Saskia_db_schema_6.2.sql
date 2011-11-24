@@ -56,7 +56,7 @@ ALTER TABLE `collection` ADD CONSTRAINT FOREIGN KEY (`col_owner`)
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `doc` ;
 
-CREATE  TABLE IF NOT EXISTS `doc` (
+CREATE TABLE IF NOT EXISTS `doc` (
   `doc_id` INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT ,
   `doc_original_id` VARCHAR(255) NULL,
   `doc_collection` int(10) unsigned NOT NULL,
@@ -77,6 +77,24 @@ CREATE INDEX `idx_doc_sync` ON `doc` (`doc_sync`) ;
 
 ALTER TABLE `doc` ADD CONSTRAINT FOREIGN KEY (`doc_collection`) 
  REFERENCES `collection` (`col_id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+-- -----------------------------------------------------
+-- Table `docpatches`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `docpatch` ;
+
+CREATE TABLE IF NOT EXISTS `docpatch` (
+  `pat_id` INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT ,
+  `pat_doc` INT UNSIGNED NOT NULL,
+  `pat_user` INT UNSIGNED NOT NULL,
+  `pat_date` DATETIME DEFAULT NULL, 
+  `pat_patch` TEXT NULL)
+ ENGINE = InnoDB;
+
+ALTER TABLE `docpatch` ADD CONSTRAINT FOREIGN KEY (`pat_doc`) 
+ REFERENCES `doc` (`doc_id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+ALTER TABLE `docpatch` ADD CONSTRAINT FOREIGN KEY (`pat_user`) 
+ REFERENCES `user` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE ;
 
 -- -----------------------------------------------------
 -- Table `tag`

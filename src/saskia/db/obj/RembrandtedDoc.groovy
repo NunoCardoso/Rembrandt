@@ -416,6 +416,7 @@ class RembrandtedDoc extends DBObject implements JSONable {
 	 * @return The new id for the doc table, from the DB
 	 */
 
+	public RembrandtedDoc
 	public Long addThisToDB() {
 		// try to ground the document to an entity
 

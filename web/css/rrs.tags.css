@@ -1,0 +1,99 @@
+.tag {
+	border: 1px solid #aaa;
+	font-size: 12px;
+   font-weight: bold;
+   padding: 2px 4px 4px 4px;
+	margin-right:10px;
+	display:block; 
+	float:left; 
+	text-align:center; 
+	overflow: hidden; /* for when they shrink on removal, don't try to wrap text */
+	-moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+	white-space: nowrap;
+}
+
+/* for selectable objects in admin */ 
+.saskia_object_tag {
+	border: 1px solid #aaa;
+	background: white;
+	font-size: 11px;
+   padding: 4px;
+   text-align:center;
+	display:block; 
+	overflow: hidden; /* for when they shrink on removal, don't try to wrap text */
+	-moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+/*class WhereQuestions (WQ)*/
+.tag_type_WQ{
+	background-color: #fcc;
+}
+
+/*class Predicates (PR)*/
+.tag_type_PR{
+	background-color: #cfc;
+}
+
+/*class NamedEntities (NE)*/
+.tag_type_NE{
+	background-color: #ccf;
+}
+
+/*class Scopes (SC)*/
+.tag_type_SC{
+	background-color: #ffc;
+}
+
+/*class DBpediaClasses (DB)*/
+.tag_type_DB{
+	background-color: #fcf;	
+}
+
+/*class WikiCategories (WC)*/
+.tag_type_WC{
+	background-color: #cff;	
+}
+
+/*class WikiCatGroups (WG)*/
+.tag_type_WG{
+	background-color: #ccc;
+}
+
+.tag_remove {
+	border: 1px solid #aaa;
+	font-size: 10px;
+	color: red;
+	background-color: white;
+    font-weight: bold;
+	margin-left:3px;
+	padding:0px 2px 0px 2px;
+	cursor:pointer;
+	overflow: hidden;
+	-moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    z-index:10;
+}
+
+.tag_remove_green {
+	border: 1px solid #aaa;
+	font-size: 10px;
+	font-weight:bold;
+	color: green;
+	display:inline;
+	background-color: white;
+	margin-left:3px;
+	padding:0px 2px 0px 2px;
+	cursor:pointer;
+	-moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+}
+
+.tag_placeholder {
+	border: 2px dashed #ddd;
+	width: auto; 
+	float: left;
+    padding: 4px;
+	margin-right:10px;
+}

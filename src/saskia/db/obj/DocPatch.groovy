@@ -33,6 +33,7 @@ public class DocPatch extends DBObject implements JSONable {
 	Date pat_date
 	String pat_patch
 	
+	static Date nulldate = new Date(0)
 	static Logger log = Logger.getLogger("DocPatch")
 
 	static Map type = ['pat_id':'Long','pat_doc':'RembrandtedDoc', 'pat_user':'User', 'pat_date':'Date','pat_patch':'String']
@@ -53,7 +54,7 @@ public class DocPatch extends DBObject implements JSONable {
 		if (row['pat_date'] && (Date)row['pat_date'] != nulldate)
 				dp.pat_date = (Date)row['pat_date'] // it's a java.sql.Timestamp, a subclass of Date
 		if (row['pat_patch']) dp.pat_patch = row['pat_patch']
-		return t
+		return dp
 	}
 
 	/** generic purpose value update on DB and cache */

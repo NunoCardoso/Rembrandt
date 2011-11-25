@@ -17,6 +17,10 @@
  */
 package saskia.server
 
+import saskia.db.database.SaskiaDB
+import saskia.db.obj.*
+import saskia.db.table.*
+
 import saskia.stats.SaskiaStats
 import org.apache.log4j.Logger
 import saskia.util.I18n
@@ -26,14 +30,17 @@ public class StatsMapping extends WebServiceRestletMapping {
     Closure HTMLanswer
     Closure JSONanswer
     I18n i18n
-	 SaskiaStats stats 
+	SaskiaDB db
+	SaskiaStats stats 
     static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
     static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
     static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
 
-	public StatsMapping() {
-		stats = new SaskiaStats()
+	public StatsMapping(SaskiaDB db) {
+	  this.db = db
+	  stats = new SaskiaStats()
       i18n = I18n.newInstance()
+	  CollectionTable collectionTable = db.getDBTable("CollectionTable")
 	   
 		HTMLanswer = { req, par, bind ->
 	    	String lang = par["GET"]["lg"] 
@@ -42,7 +49,7 @@ public class StatsMapping extends WebServiceRestletMapping {
         			collection_id = Long.parseLong(par["GET"]["ci"])
           } catch(Exception e) {e.printStackTrace()}
           if (!collection_id) return sm.notEnoughVars("ci=$ci")                                  
-			 collection = Collection.getFromID(collection_id)
+			 collection = collectionTable.getFromID(collection_id)
           if (!collection) return sm.noCollectionFound()
 
 			return stats.renderFrontPage(collection, lang)	

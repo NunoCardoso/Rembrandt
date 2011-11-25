@@ -21,7 +21,7 @@ package saskia.db.table
 import org.apache.log4j.*
 
 import saskia.db.database.SaskiaDB
-import saskia.db.obj.Task
+import saskia.db.obj.DocPatch
 import saskia.db.obj.User
 
 /** This class is an interface for the docpatch table in the Saskia database. 

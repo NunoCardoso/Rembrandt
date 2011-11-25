@@ -1,0 +1,322 @@
+/******************************************************/
+/* Main Display DIVS for REMBRANDT's tagged documents */
+/******************************************************/
+
+/** This container has it all */
+.rrs-doc-display {
+	 position:relative; /* important for canvas */		
+}
+
+/*rrs-doc-header is NOT part of docdisplay */
+
+#rrs-doc-display-header  {
+ margin-bottom:0px; /* no margin from menu to screen */
+ min-height:20px;
+ padding:0;
+}
+
+#rrs-doc-display-status  {
+ margin-bottom:2px; /* margin to menu */
+ min-height:20px;
+ padding:0;
+}
+
+/** commands at the top - see it as the keyboard */
+#rrs-doc-display-menu {
+   height:20px;
+   width:100%;
+   z-index:11;
+   background-image:url(../img/navi2_bg.png);
+	font-size:12px;
+	color:#000000;
+	position:relative; /** ESSENCIAL so that the pop up menu works */
+	text-indent:0;
+	list-style: none;
+}
+
+#rrs-doc-display-menu ul li {
+	list-style: none;
+	display:block;
+	float:left;
+	background-image: url(../img/navi2_bg_divider.png);
+   background-repeat: no-repeat;
+   background-position: right;
+   padding-right: 10px;
+   padding-left: 10px;
+   line-height: 20px;
+}
+
+#rrs-doc-display-menu ul li a {
+ line-height: 20px;
+ text-decoration: none;
+ color: #000000;
+}
+
+#rrs-doc-display-menu ul div {
+  background:#dddddd; 
+  display:none;
+  margin-left:-10px; /* compensates the padding-left of #main-menu ul li */
+  padding-right:10px; 
+  position:absolute;
+  font-size:12px;
+  top:20px; /* 40 px below */
+}
+
+#rrs-doc-display-menu  ul li div ul li {
+	list-style: none;
+	display:block;
+   float:left;
+   clear:both;
+	background-image: none;
+   padding-right: 0px;
+   padding-left: 10px;
+   line-height: 20px;
+   margin-bottom:4px;
+   height: 20px;
+   width:100%; /* important to span all horizontal pace in the submenu */
+}
+
+#rrs-doc-display-menu  ul li div ul li a {
+ line-height: 20px;
+ display:block;
+ text-decoration: none;
+ color: #000000;
+}
+
+#rrs-doc-display-menu ul li:hover {
+	background-image: url(../img/navi2_bg_hover.png);
+	background-repeat: repeat;
+}
+
+/** see it as the TV  */
+#rrs-doc-display-body {
+	position:relative;
+}
+
+#rrs-doc-display-body UL {
+  display:inline-block;
+}
+
+/** display - see it as the screen */
+#rrs-doc-display-screen {
+	 padding: 3px;
+  	 border:2px solid #a0b7c4;
+	 background: #f8f8f8;
+	 min-height:50px;
+/*	 position:relative;  important for canvas: do NOT SET this */	
+}
+
+/* NEmessage - for when I want to print NE terms on modal windows */
+#rrs-doc-display-screen UL, #NEmessage UL { 
+	list-style-type: none; 
+	text-indent:0px;
+        padding-left:3px;
+	display:inline; /* important */
+	clear:left;/* important */
+/*	position:relative DO NOT SET - it messes with tooltips*/
+}
+
+#rrs-doc-display-screen LI, #NEmessage LI { 
+	list-style-type: none;
+	display:inline-block; 
+	text-indent:0px;
+	padding:0px;
+	margin-left: 2px; /* these are the spaces */
+	margin-right: 2px;	/* these are the spaces */
+	/* it HAS to be, to stay in the NE DIV */
+/*	position:relative;*//*	position:relative DO NOT SET - it messes with tooltips*/
+}
+
+#rrs-doc-display-screen UL li:before, #NEmessage ul li:before {
+	content:"";
+}
+
+#rrs-document-title {
+	background:#cccccc;
+}
+
+#rrs-document-body {
+
+}
+
+/** drawing canvas for relations **/
+.canvas {
+   position:absolute; /*important! */
+}
+
+/** drawing canvas for relations **/
+#rrs-doc-display-canvas {
+/*	 display:block;/* important for canvas */		
+	 position:relative; /* important for canvas */	
+}
+
+/** messages **/
+#rembrandt-messages {
+	position:absolute;
+}
+
+/** modal dialogs */
+.rembrandt-modal {
+	padding:3px;
+	margin:0px;
+	border:3px solid #1f3c58;
+	background-color:#effafc;
+}
+
+.rembrandt-modal TABLE {
+	margin: 5px;
+	border-collapse: collapse;
+	table-layout:fixed;
+}
+
+.rembrandt-modal TD {
+	padding: 3px;
+}
+
+.rembrandt-modal THEAD TH {
+	background-color:#dfeaec;
+	padding:3px;
+	white-space: nowrap;
+}
+
+.rembrandt-modal TBODY TH {
+	background-color:#dfeaec;
+}
+
+.rembrandt-modal TBODY TD {
+	
+}
+
+.rembrandt-modal-escape {
+	text-align:right; 
+	font-size:80%;
+}
+
+/************/
+/* Tooltips */
+/************/
+
+/** this is the hidden DIV with NE tooltips to be fed to the BeautyTips jQuery.*/
+.NEtooltip {
+	line-height:1.2em;
+	margin:0px;
+	padding:0px;
+}
+
+.NEtooltip p {	
+	margin:0px;
+	padding:0px 0px 0px 10px;
+    line-height:1.2em;	
+}
+
+/***********/
+/* buttons */
+/***********/
+
+.link-button {
+   background:#eee;
+   border:1px solid #666;
+   padding:2px 5px 2px 2px;
+   -moz-border-radius: 0.8em;
+   -webkit-border-radius: 0.8em;
+   margin:0px 3px 3px 3px;
+   float:left;
+   clear:left;
+   display:block;
+   text-decoration:none;
+}
+
+.link-button:hover {
+   background:#aaa;
+
+}
+
+.link-button:active {
+   background:#acc;
+}
+
+/**************/
+/* tag remove */
+/**************/
+
+.tag_edit {
+	border: 1px solid #aaa;
+	font-size: 10px;
+	font-weight:bold;
+	color: green;
+	display:inline;
+	background-color: white;
+	margin-left:3px;
+	padding:0px 2px 0px 2px;
+	cursor:pointer;
+	-moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    z-index:10;
+}
+
+/***************/
+/* select mode */
+/***************/
+
+.ui-selecting { 
+	background: #88BBFF; 
+	margin-left: 2px; /* these are the spaces */
+	margin-right: 2px;	/* these are the spaces */
+}
+
+.ui-selected { 
+	background: #3399FF; 
+	color: white; 
+	margin-left: 2px; /* these are the spaces */
+	margin-right: 2px;	/* these are the spaces */
+}
+
+/****************/
+/* context menu */
+/****************/
+
+.NEmenu {
+   min-width: 80px;
+   padding: 0px;
+   margin: 0px;
+}
+
+.NEmenu LI {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  display:block;
+  clear:both;
+  float:left;
+}
+
+.NEmenu A {
+  color: #333;
+  text-decoration: none;
+  display: block;
+  line-height: 20px;
+  height: 20px;
+  padding: 1px 5px;
+}
+
+.NEmenu A:hover {
+  color: #FFF;
+  background-color: #3399FF;
+}
+
+/*****************/
+/* modal dialogs */
+/*****************/
+
+.NEmodalDialog {
+	padding:10px;
+	color: #000033;
+	background-color: #effafc;
+	font-family:"Lucida Grande",Verdana,Arial,Helvetica,sans-serif;
+}
+
+.Relations {
+	clear:both;
+	position:relative;
+}
+

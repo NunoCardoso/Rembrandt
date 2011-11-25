@@ -21,8 +21,11 @@ import org.apache.log4j.*
 
 import renoir.util.MD5Hex
 import renoir.util.SHA1
+
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
 import saskia.db.table.*
+
 import saskia.util.I18n
 
 public class UserMapping extends WebServiceRestletMapping {
@@ -30,14 +33,18 @@ public class UserMapping extends WebServiceRestletMapping {
 	Closure JSONanswer
 	Closure HTMLanswer
 	I18n i18n
+	SaskiaDB db
 	static Logger mainlog = Logger.getLogger("SaskiaServerMain")
 	static Logger errorlog = Logger.getLogger("SaskiaServerErrors")
 	static Logger processlog = Logger.getLogger("SaskiaServerProcessing")
 
-	public UserMapping() {
+	public UserMapping(SaskiaDB db) {
 
+		this.db = db
 		User user_db
 		i18n = I18n.newInstance()
+		UserTable userTable = db.getDBTable("UserTable")
+		CollectionTable collectionTable = db.getDBTable("CollectionTable")
 
 		JSONanswer = {req, par, bind ->
 
@@ -95,7 +102,7 @@ public class UserMapping extends WebServiceRestletMapping {
 				if (!api_key) api_key = par["COOKIE"]["api_key"]
 				if (!api_key) return sm.noAPIKeyMessage()
 
-				user_db = UserTable.getFromAPIKey(api_key)
+				user_db = userTable.getFromAPIKey(api_key)
 				if (!user_db) return sm.userNotFound()
 				if (!user_db.isEnabled()) return sm.userNotEnabled()
 
@@ -144,12 +151,12 @@ public class UserMapping extends WebServiceRestletMapping {
 				if (!api_key) api_key = par["COOKIE"]["api_key"]
 				if (!api_key) return sm.noAPIKeyMessage()
 
-				User user = UserTable.getFromAPIKey(api_key)
+				User user = userTable.getFromAPIKey(api_key)
 				if (!user) return sm.userNotFound()
 				if (!user.isEnabled()) return sm.userNotEnabled()
 
 				Map m = user.toMap()
-				m.current_number_collections_owned = Collection.collectionsOwnedBy(user)
+				m.current_number_collections_owned = collectionTable.collectionsOwnedBy(user)
 				return sm.statusMessage(0,m)
 			}
 
@@ -228,7 +235,7 @@ public class UserMapping extends WebServiceRestletMapping {
 
 			if (action == "confirmregister") {
 				api_key  = par["GET"]["a"]
-				user_db = UserTable.getFromAPIKey(api_key)
+				user_db = userTable.getFromAPIKey(api_key)
 
 				if (!user_db) {
 					message = i18n.servermessage['user_not_found'][lang]

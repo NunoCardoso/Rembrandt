@@ -19,6 +19,7 @@ package saskia.server
 
 import org.apache.log4j.*
 
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
 import saskia.db.table.*
 import saskia.util.I18n
@@ -30,10 +31,15 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 	static Logger mainlog = Logger.getLogger("SaskiaServerMain")
 	static Logger errorlog = Logger.getLogger("SaskiaServerErrors")
 	static Logger processlog = Logger.getLogger("SaskiaServerProcessing")
+	SaskiaDB db
 
-	public SourceDocMapping() {
+	public SourceDocMapping(SaskiaDB db) {
 
+		this.db = db
 		i18n = I18n.newInstance()
+		UserTable userTable = db.getDBTable("UserTable")
+        CollectionTable collectionTable = db.getDBTable("CollectionTable")
+        SourceDocTable sourceDocTable = db.getDBTable("SourceDocTable")
 
 		JSONanswer = {req, par, bind ->
 			long session = System.currentTimeMillis()
@@ -61,7 +67,7 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 			if (!api_key) api_key = par["COOKIE"]["api_key"]
 			if (!api_key) return sm.noAPIKeyMessage()
 
-			User user = UserTable.getFromAPIKey(api_key)
+			User user = userTable.getFromAPIKey(api_key)
 			if (!user) return sm.userNotFound()
 			if (!user.isEnabled()) return sm.userNotEnabled()
 			if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")
@@ -79,11 +85,11 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 					collection_id = Long.parseLong(par["POST"]["ci"])
 				} catch(Exception e) {e.printStackTrace()}
 				if (!collection_id) return sm.notEnoughVars("ci=$ci")
-				collection = Collection.getFromID(collection_id)
+				collection = collectionTable.getFromID(collection_id)
 				if (!collection) return sm.noCollectionFound()
 
 				// check permissions
-				if (!Collection.canRead(user, collection))
+				if (!collectionTable.canRead(user, collection))
 					return sm.statusMessage(-1, i18n.servermessage['insufficient_permissions'][lang])
 
 				try {
@@ -94,7 +100,7 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 				}
 				// h already has col_id
 				h.result.eachWithIndex{sdoc, i -> h.result[i] = sdoc.toListMap() }
-				h.perms = Collection.getPermissionsFromUserOnCollection(user, collection)
+				h.perms = collectionTable.getPermissionsFromUserOnCollection(user, collection)
 				h.col_id=collection_id
 				return sm.statusMessage(0, h)
 
@@ -117,13 +123,13 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 
 				SourceDoc doc
 				try {
-					doc = SourceDoc.getFromID(doc_id)
+					doc = sourceDocTable.getFromID(doc_id)
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_sdoc_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage["error_getting_sdoc_list"][lang]+": "+e.getMessage())
 				}
 				// check permissions
-				if (!Collection.canRead(user, doc.sdoc_collection))
+				if (!collectionTable.canRead(user, doc.sdoc_collection))
 					return sm.statusMessage(-1, i18n.servermessage['insufficient_permissions'][lang])
 
 				return sm.statusMessage(0, doc.toShowMap())
@@ -143,18 +149,18 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 				if (par["POST"]["format"]) format = par["POST"]["format"]
 				if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")
 
-				if (!Collection.canRead(user, collection))
+				if (!collectionTable.canRead(user, collection))
 					return sm.statusMessage(-1, i18n.servermessage['insufficient_permissions'][lang])
 
 				SourceDoc doc
 				try {
-					doc = SourceDoc.getFromID(doc_id)
+					doc = sourceDocTable.getFromID(doc_id)
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_sdoc_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage["error_getting_sdoc_list"][lang]+": "+e.getMessage())
 				}
 				// check permissions
-				if (!Collection.canAdmin(user, doc.sdoc_collection))
+				if (!collectionTable.canAdmin(user, doc.sdoc_collection))
 					return sm.statusMessage(-1, i18n.servermessage['insufficient_permissions'][lang])
 
 				switch(column) {
@@ -190,13 +196,13 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 
 				SourceDoc doc
 				try {
-					doc = SourceDoc.getFromID(doc_id)
+					doc = sourceDocTable.getFromID(doc_id)
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_sdoc'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage["error_getting_sdoc"][lang]+": "+e.getMessage())
 				}
 				// check permissions
-				if (!Collection.canAdmin(user, doc.sdoc_collection))
+				if (!collectionTable.canAdmin(user, doc.sdoc_collection))
 					return sm.statusMessage(-1, i18n.servermessage['insufficient_permissions'][lang])
 
 				def res
@@ -232,7 +238,7 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 				Date sdoc_date// = par["POST"]["sdoc_date"]
 
 				if (!sdoc_original_id) return sm.notEnoughVars("sdoc_original_id=$sdoc_original_id")
-				Collection collection = Collection.getFromID(sdoc_collection)
+				Collection collection = collectionTable.getFromID(sdoc_collection)
 				if (!collection) return sm.collectionNotFound()
 				if (!sdoc_lang) return sm.notEnoughVars("sdoc_lang=$sdoc_lang")
 				if (!sdoc_content) return sm.notEnoughVars("sdoc_content=$sdoc_content")
@@ -240,7 +246,7 @@ public class SourceDocMapping extends WebServiceRestletMapping {
 				if (!sdoc_date) sdoc_date = new Date()
 
 				// check permissions
-				if (!Collection.canAdmin(user, collection))
+				if (!collectionTable.canAdmin(user, collection))
 					return sm.statusMessage(-1, i18n.servermessage['insufficient_permissions'][lang])
 
 				int number_sdocs = collection.getNumberOfSourceDocuments()

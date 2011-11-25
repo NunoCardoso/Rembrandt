@@ -22,6 +22,7 @@ import org.apache.log4j.*
 import saskia.db.database.*
 import saskia.db.obj.*
 import saskia.db.table.*
+
 import saskia.stats.SaskiaStats
 import saskia.util.I18n
 
@@ -32,15 +33,16 @@ public class AdminStatsMapping extends WebServiceRestletMapping {
 	static Logger mainlog = Logger.getLogger("SaskiaServerMain")
 	static Logger errorlog = Logger.getLogger("SaskiaServerErrors")
 	static Logger processlog = Logger.getLogger("SaskiaServerProcessing")
-	SaskiaMainDB db
+	SaskiaDB db
 
 	/** Note: this mapping should be used only by superuser folks *managing user stuff*, so 
 	 * it requires an api_key. For standard uses, the UserMapping is the one that has standard actions.
 	 */
-	public AdminStatsMapping() {
+	public AdminStatsMapping(SaskiaDB db) {
 
 		i18n = I18n.newInstance()
-		db = SaskiaMainDB.newInstance()
+		this.db = db
+		UserTable userTable = db.getDBTable("UserTable")
 
 		JSONanswer = {req, par, bind ->
 
@@ -59,7 +61,7 @@ public class AdminStatsMapping extends WebServiceRestletMapping {
 			if (!api_key) api_key = par["COOKIE"]["api_key"]
 			if (!api_key) return sm.noAPIKeyMessage()
 
-			User user = UserTable.getFromAPIKey(api_key)
+			User user = userTable.getFromAPIKey(api_key)
 			if (!user) return sm.userNotFound()
 			if (!user.isEnabled()) return sm.userNotEnabled()
 			// all Admin*Mappings must have this

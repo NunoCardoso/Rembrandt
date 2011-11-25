@@ -113,17 +113,17 @@ class CollectionTable extends DBTable {
 			}
 
 			if (canread || canwrite || canadmin || own) {
-				if (!cacheIDuoc[db.LABEL][user.usr_id].containsKey(col_id)) cacheIDuoc[db.LABEL][user.usr_id][col_id] = [:]
-				cacheIDuoc[db.LABEL][user.usr_id][col_id].uoc_own = own
-				cacheIDuoc[db.LABEL][user.usr_id][col_id].uoc_can_read = canread
-				cacheIDuoc[db.LABEL][user.usr_id][col_id].uoc_can_write = canwrite
-				cacheIDuoc[db.LABEL][user.usr_id][col_id].uoc_can_admin = canadmin
+				if (!cacheIDuoc[user.usr_id].containsKey(col_id)) cacheIDuoc[user.usr_id][col_id] = [:]
+				cacheIDuoc[user.usr_id][col_id].uoc_own = own
+				cacheIDuoc[user.usr_id][col_id].uoc_can_read = canread
+				cacheIDuoc[user.usr_id][col_id].uoc_can_write = canwrite
+				cacheIDuoc[user.usr_id][col_id].uoc_can_admin = canadmin
 			}
 		}
 		return cacheIDuoc[user.usr_id]
 	}
 
-	static List filterFromColumnAndNeedle(List haystack, column = null, needle = null) {
+	List filterFromColumnAndNeedle(List haystack, column = null, needle = null) {
 
 		if (column && needle) {
 
@@ -140,7 +140,7 @@ class CollectionTable extends DBTable {
 		return haystack
 	}
 
-	static List<Collection> filterFromLimitAndOffset( List<Collection> res, int limit = 0, long offset = 0) {
+	List<Collection> filterFromLimitAndOffset( List<Collection> res, int limit = 0, long offset = 0) {
 		List<Collection> res2
 		if (res.isEmpty()) return res
 
@@ -159,7 +159,7 @@ class CollectionTable extends DBTable {
 	 * Get the collection list with an optional colum/needle, page them with a limit/offset
 	 * All for admin user (that is, no user filtering)
 	 */
-	static HashMap listCollectionForAdminUser( limit = 0, offset = 0, column, needle) {
+	HashMap listCollectionForAdminUser( limit = 0, offset = 0, column, needle) {
 
 		List<Collection> res = filterFromColumnAndNeedle(getAllCollections().values().toList(), column, needle)
 		List<Collection> res2 = filterFromLimitAndOffset(res, limit, offset)
@@ -171,7 +171,7 @@ class CollectionTable extends DBTable {
 	 * Get the collection list with an optional colum/needle, page them with a limit/offset
 	 * All for a user (that is, with user filtering), and that the user can read
 	 */
-	static HashMap listReadableCollectionForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
+	HashMap listReadableCollectionForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
 
 		Map l = listAccessibleCollectionsForUser(user)
 		List<Collection> haystack = l.findAll{col_id, perms -> perms.uoc_can_read == true}
@@ -186,7 +186,7 @@ class CollectionTable extends DBTable {
 	/** 
 	 * same as above, but filtered to writable collections for user
 	 */
-	static HashMap listWritableCollectionsForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
+	HashMap listWritableCollectionsForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
 
 		Map l = listAccessibleCollectionsForUser(user)
 		List<Collection> haystack = l.findAll{col_id, perms -> perms.uoc_can_write == true}
@@ -201,7 +201,7 @@ class CollectionTable extends DBTable {
 	/** 
 	 * same as above, but filtered to showable collections for user
 	 */
-	static HashMap listAdminableCollectionsForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
+	HashMap listAdminableCollectionsForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
 
 		Map l = listAccessibleCollectionsForUser(user)
 		List<Collection> haystack = l.findAll{col_id, perms -> perms.uoc_can_admin == true}
@@ -216,7 +216,7 @@ class CollectionTable extends DBTable {
 	/** 
 	 * same as above, but filtered to showable collections for user
 	 */
-	static HashMap listOwnCollectionsForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
+	HashMap listOwnCollectionsForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
 
 		List<Collection> haystack = getAllCollections().values().toList().findAll{it.col_owner.equals(user)}
 		List<Collection> res = filterFromColumnAndNeedle(haystack, column, needle)
@@ -229,7 +229,7 @@ class CollectionTable extends DBTable {
 	/** 
 	 * same as above, but filtered to showable collections for user
 	 */
-	static HashMap listAllCollectionsForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
+	HashMap listAllCollectionsForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
 
 		Map l = listAccessibleCollectionsForUser(user)
 		List<Collection> haystack = l.collect{col_id, perms -> getFromID(col_id)}
@@ -244,29 +244,29 @@ class CollectionTable extends DBTable {
 			"result":res2, "perms":res3, "column":column, "value":needle]
 	}
 
-	static boolean canRead(User user, Collection collection) {
+	boolean canRead(User user, Collection collection) {
 		if (!user) return null
 		Map res = listAccessibleCollectionsForUser(user)
 		return (res[collection.col_id]? res[collection.col_id]?.uoc_can_read : false)
 	}
 
-	static boolean canWrite(User user, Collection collection) {
+	boolean canWrite(User user, Collection collection) {
 		if (!user) return null
 		Map res = listAccessibleCollectionsForUser(user)
 		return (res[collection.col_id]? res[collection.col_id]?.uoc_can_write : false)
 	}
 
-	static boolean canAdmin(User user, Collection collection) {
+	boolean canAdmin(User user, Collection collection) {
 		if (!user) return null
 		Map res = listAccessibleCollectionsForUser(user)
 		return (res[collection.col_id]? res[collection.col_id]?.uoc_can_admin : false)
 	}
 
-	static boolean canHaveANewCollection(User user) {
+	boolean canHaveANewCollection(User user) {
 		return user.usr_max_number_collections > collectionsOwnedBy(user)
 	}
 
-	static Map getPermissionsFromUserOnCollection(User user, Collection collection) {
+	Map getPermissionsFromUserOnCollection(User user, Collection collection) {
 		if (!user || !collection) return null
 		Map res = listAccessibleCollectionsForUser(user)
 		return res[collection.col_id]
@@ -347,7 +347,7 @@ class CollectionTable extends DBTable {
 		return res
 	}
 
-	static int collectionsOwnedBy(User user) {
+	int collectionsOwnedBy(User user) {
 		Map collections = listAccessibleCollectionsForUser(user)
 		return collections.findAll{it.value.ouc_own == true}.size()
 	}

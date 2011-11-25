@@ -1,0 +1,82 @@
+
+
+TABLE.tablesorter {
+	width:auto;
+	margin:0px;
+	border:1px solid #A0B7C4;
+}
+
+TABLE.tablesorter.admin {
+	border:2px solid #FF0000;
+}
+
+TABLE.tablesorter TH {
+	background-color:#C0D7E4;
+	font-weight:bold;
+}
+
+TABLE.tablesorter TH, TABLE.tablesorter TD {
+	padding:3px;
+	border:1px solid #A0B7C4;
+}
+
+TABLE.tablesorter TR:nth-child(odd) TD {
+	background-color:#D8F2F9;
+}
+
+TABLE.tablesorters TR::nth-child(even) TD {
+	background-color:#C8E2E9;
+}
+
+/* table sorter */
+
+/* this has to be the first one, so that headerSortUp and headerSortDown can override it */
+TABLE.tablesorter thead tr .header {
+	background-image: url('../img/bg.gif');
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+	padding-right:17px;	
+}
+
+TABLE.tablesorter thead tr th:hover {
+	background-color:#adddf8;
+}
+
+TABLE.tablesorter thead tr .headerSortUp {
+	background-image: url('../img/asc.gif');
+}
+
+TABLE.tablesorter thead tr .headerSortDown {
+	background-image: url('../img/desc.gif');
+}
+
+TABLE.tablesorter thead tr .headerSortDown, TABLE.tablesorter thead tr .headerSortUp {
+background-color: #8dbdd8;
+}
+
+/* for those ids that are hard to click */
+TABLE.tablesorter * A {
+	display:block;
+} 
+
+.rrs-admin-buttonrow {
+	display:inline-block;
+	margin-bottom:10px;
+}
+
+.rrs-admin-pager {
+  background: #C8E2E9;
+  padding: 4px;
+  margin-bottom:10px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+
+.rrs-admin-arrows {
+	margin-right:5px; 
+	display: inline; 
+	vertical-align:middle;
+	text-align:right; 
+	float:right;
+}

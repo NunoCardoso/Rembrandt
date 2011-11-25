@@ -1,0 +1,168 @@
+
+/** the collection management box */
+#rrs-collections {
+  font-size: 11px;
+  margin-right:15px;	
+}
+
+/** Box for error display in the waiting div */
+.rrs-error-message {
+	border:2px solid red; 
+  background:#FFAAAA;
+ -moz-border-radius: 4px;
+ -webkit-border-radius: 4px;
+}
+
+.rrs-logo {
+	display:inline-block; text-align:left; float:left; 
+	margin-right:10px;
+}
+
+
+/** The advanced search div */
+#rrs-search-advanced-div {
+ background:#c8e2e9;
+ padding:3px;
+ color:#1f3c58;	
+ text-indent: 10px;	
+ margin-left: 10px;
+ margin-right: 10px;
+ margin-top: 5px;
+ margin-bottom: 5px;
+ height:auto;
+ width:auto;
+ -moz-border-radius: 0.5em;
+ -webkit-border-radius: 0.5em; 
+ border: 1px solid #a0b7c4;
+}
+
+/** The div with the search tags */
+#rrs-search-tags {
+	display:block;
+	text-align:left;
+	/*min-height:25px;*/
+	height:auto;
+	margin-top:3px;
+	margin-left:10px;
+	margin-bottom:3px; 
+}
+
+
+/** The explain div */
+#rrs-searchresult-explanation {
+ margin: 5px;
+}
+
+#rrs-searchresult-map {
+	margin:10px;
+	width:300px;
+	height:300px;
+	float:right;
+}	
+
+/* search snippet text */
+.rrs-searchresult-snippet {
+	padding:3px;
+	margin-bottom:10px;
+}
+
+.rrs-searchresult-snippet-title a {
+  color:#142c46; 
+  text-indent:0px;
+  text-decoration: underline;
+}
+
+.rrs-searchresult-snippet-title {
+  text-indent:0px;
+  margin:0px;
+}
+
+.rrs-searchresult-snippet-abstract {
+   text-indent:0px;
+   margin:0px;
+}
+
+.rrs-searchresult-snippet-footer {
+   margin:0px;
+   color:#0000ff; 
+   font-size:10px;
+   text-indent:0px;
+}
+
+/** search snippet aditional info div */
+.rrs-searchresult-snippet-info, .rrs-searchresult-snippet-info A {
+	color:#4444AA;
+}
+
+/** When a map marker is clicked, this class is added to the target snippet **/
+.rrs-searchresult-snippet-active {
+	border: 1px solid #ffffaa;
+	background-color: #ffffdd;
+	-moz-border-radius: 4px;
+ 	-webkit-border-radius: 4px; 
+}
+
+
+/** The status div, to show result count and repeat query */
+#rrs-searchresult-status {
+  background: #DFE9F0;
+  clear:left;
+  margin-top:5px;
+  margin-bottom:5px;
+  padding: 3px;
+}
+
+/** User management box */
+#rrs-user {
+  font-size: 11px;	
+}
+
+/* the status div place above */
+#rrs-waiting-div {
+  z-index:5;  
+  position:absolute; 
+  top:0px; /* to be slightly above header */
+  left:180px;
+}
+
+/* to replicate waiting div messages everywhere */
+.rrs-waiting-div {
+  margin:auto; /* para alinhar ao centro */
+  width: auto;
+  text-align: center;	
+}
+
+.rrs-waiting-div-message {
+ -moz-border-radius: 4px;
+ -webkit-border-radius: 4px; 
+  background:#e2f2fa;
+  padding:5px; /* if not, empty message leaves a circle */	
+}
+
+.rrs-waiting-div-balloontip {
+	height:20px;
+	width:auto;
+	background:url('../img/balloontip.png') left no-repeat;
+}
+
+/* little button to close waiting divs */
+.rrs-waiting-div-close-button {
+	border: 1px solid #aaa;
+	font-size: 10px;
+	color: red;
+	background-color: white;
+   font-weight: bold;
+	margin-left:5px;
+	padding:0px 2px 0px 2px;
+	cursor:pointer;
+	overflow: hidden;
+	-moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    z-index:10;
+}
+
+
+/** hit counter numbers display inline in the rss-status bar */
+.HIT {
+   display:inline;	
+}

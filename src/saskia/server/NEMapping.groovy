@@ -17,8 +17,10 @@
  */
 package saskia.server
 
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
 import saskia.db.table.*
+
 import saskia.stats.SaskiaStats
 import saskia.util.I18n
 import org.apache.log4j.*
@@ -27,12 +29,15 @@ public class NEMapping extends WebServiceRestletMapping {
 
     Closure JSONanswer 
     SaskiaStats stats
+	SaskiaDB db
     static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
     static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
     static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
     
-    public NEMapping() {
-        
+    public NEMapping(SaskiaDB db) {
+       
+	   this.db = db
+	   UserTable userTable = db.getDBTable("UserTable")
        JSONanswer = {req, par, bind ->
         
            long session = System.currentTimeMillis()
@@ -57,7 +62,7 @@ public class NEMapping extends WebServiceRestletMapping {
             if (!api_key) api_key = par["COOKIE"]["api_key"]   
             if (!api_key) return sm.noAPIKeyMessage()
 
-            User user = UserTable.getFromAPIKey(api_key)           
+            User user = userTable.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
             if (!user.isEnabled()) return sm.userNotEnabled()
             if (!action || !lang) return sm.notEnoughVars(lang, "do=$action, lg=$lang")        	

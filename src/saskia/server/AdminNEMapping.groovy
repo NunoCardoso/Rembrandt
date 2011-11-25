@@ -17,8 +17,9 @@
  */
 package saskia.server
 
-import saskia.db.table.*
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
+import saskia.db.table.*
 
 import org.apache.log4j.*
 import rembrandt.obj.Sentence
@@ -29,14 +30,17 @@ public class AdminNEMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
     I18n i18n
+	SaskiaDB db
     static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
     static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
     static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
  
-    public AdminNEMapping() {
+    public AdminNEMapping(SaskiaDB db) {
         
+		this.db = db
         i18n = I18n.newInstance()
-        
+        UserTable userTable = db.getDBTable("UserTable")
+		
         JSONanswer = {req, par, bind ->
             long session = System.currentTimeMillis()
             processlog.debug "Session $session triggered with $par" 
@@ -64,7 +68,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
             if (!api_key) api_key = par["COOKIE"]["api_key"] 
             if (!api_key) return sm.noAPIKeyMessage()
                                                       
-            User user = UserTable.getFromAPIKey(api_key)           
+            User user = userTable.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
             if (!user.isEnabled()) return sm.userNotEnabled()
 				// all Admin*Mappings must have this

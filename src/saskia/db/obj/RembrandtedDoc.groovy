@@ -175,11 +175,9 @@ class RembrandtedDoc extends DBObject implements JSONable {
 	/* it both updates the entities var, and returns it */
 	List<Tag> getTags() {
 		if (tags == null) {
-			List res = []
-			getDBTable().getSaskiaDB().getDB().eachRow(
-					"SELECT dtg_tag FROM ${getDBTable().dtg_table} WHERE dtg_document=?",
-					[doc_id], {row -> res << Tag.getFromID(row[0])})
-			tags = res
+			tags = getDBTable().getSaskiaDB().getDBTable("TagTable").queryDB(
+					"SELECT * FROM ${getDBTable().dtg_table} WHERE dtg_document=?",
+					[doc_id])
 		}
 		return tags
 	}
@@ -415,8 +413,7 @@ class RembrandtedDoc extends DBObject implements JSONable {
 	/** Add the fields in this object to the DB
 	 * @return The new id for the doc table, from the DB
 	 */
-
-	public RembrandtedDoc
+	
 	public Long addThisToDB() {
 		// try to ground the document to an entity
 

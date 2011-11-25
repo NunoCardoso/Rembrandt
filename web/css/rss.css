@@ -1,0 +1,13 @@
+#main-body .rss_entry li{
+	margin-left:15px;
+	text-indent:10px;
+	list-style:disc;
+}
+
+div.rss_entry {
+  -moz-border-radius:4px 4px 4px 4px;	
+	-webkit-border-radius:4px 4px 4px 4px;
+	padding:10px;
+	margin:10px;
+	background-color:#effafc; 
+}

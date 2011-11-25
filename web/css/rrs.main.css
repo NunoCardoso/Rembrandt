@@ -1,0 +1,657 @@
+/* Takes care of main layout */
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,th,td{margin:0;padding:0}
+blockquote{padding:0;margin-left:15px;}
+table{border-collapse:collapse;border-spacing:0}
+fieldset,img{border:0}
+address,caption,cite,code,dfn,th,var{font-style:normal;font-weight:normal}
+ol,ul{list-style:none}
+caption,th{text-align:left}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-style:normal;font-weight:normal}
+/*q:before,q:after{content:''}*/
+body{font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;height:100%;} 
+select,input,textarea{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;} 
+pre,code{font:115% monospace;font-size:100%}
+body.top {color: #000000;background-color:rgb(223, 233, 240);padding:0}
+h1 {color: #fff;background: #06b;padding: 10px;font-size: 200%;}
+h2 {color: #000;font-size: 150%;padding: 10px 0;}
+h3 {color: #000;font-size: 120%;padding: 10px 0;}
+ul {list-style: disc inside;}
+a {color:#000088;text-decoration:none;}
+a:hover {color:#0000aa;text-decoration:underline;}
+
+/********/
+/* Body */ 
+/********/
+
+
+/* the main content, targeted to be updated via AJAX by side menus, etc */
+#main-body {
+ background-color:#ffffff;
+ text-indent: 0px;	
+ margin-left:150px;
+ margin-bottom:10px; /* to give space for lastModified */
+ position:relative;/** important a position-relative, so that the google map aligns */
+}
+
+#main-body.main-body-admin {
+ background-color:#FFDDDD;
+padding:3px;
+}
+
+#main-body h1,h2,h3,h4 {
+ text-indent:0;
+}
+
+#main-body ul {
+ line-height:1.4;
+}
+
+/*#main-body li {
+ list-style: none;
+ text-indent:10px;
+ line-height:1.4;
+}*/
+
+#main-body ol {
+	list-style-type: decimal;
+	margin-left:20px;
+}
+
+#main-body ol li {
+	 text-indent:10px;
+	list-style-type: decimal;
+}
+
+/*****************/
+/* breadcrumbles */
+/*****************/
+#main-breadcrumbles {
+	 padding: 0px;
+	 text-indent:0px;
+	 float:left;
+	 font-size:11px;
+}
+
+/* Add a > for breadcrumbles elements except the first one */
+.main-breadcrumbles-element:not(.main-breadcrumbles-header-element):before {
+	margin-left:3px;
+	content: "> ";
+}
+
+.main-breadcrumbles-element {
+	float:left;
+}
+
+/***********/
+/* buttons */
+/***********/
+a.main-button {
+    background: transparent url('../img/bg_button_a.png') no-repeat scroll top right;
+    color: #444;
+    display: inline-block;
+    font: normal 12px arial, sans-serif;
+    height: 24px;
+    margin-right: 6px;
+    padding-right: 18px; /* sliding doors padding */
+    text-decoration: none;
+}
+
+a.main-button span {
+    background: transparent url('../img/bg_button_span.png') no-repeat;
+    display: block;
+    color: #000;
+    line-height: 14px;
+    padding: 5px 0 5px 18px;
+}
+
+a.main-button:active {
+    background-position: bottom right;
+    color: #000;
+    outline: none; /* hide dotted outline in Firefox */
+}
+
+a.main-button:active span {
+    background-position: bottom left;
+    padding: 6px 0 4px 18px; /* push text down 1px */
+} 
+
+a.main-button-disabled {
+    background: transparent url('../img/bg_disabled_button_a.png') no-repeat scroll top right;
+    color: #444;
+    display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+    height: 24px;
+    margin-right: 6px;
+    padding-right: 18px; /* sliding doors padding */
+    text-decoration: none;
+}
+
+a.main-button-disabled span {
+    background: transparent url('../img/bg_disabled_button_span.png') no-repeat;
+    display: block;
+    color: #000;
+    line-height: 14px;
+    padding: 5px 0 5px 18px;
+}
+
+a.main-button-disabled:active {
+    background-position: bottom right;
+    color: #000;
+    outline: none; /* hide dotted outline in Firefox */
+}
+
+a.main-button-disabled:active span {
+    background-position: bottom left;
+    padding: 6px 0 4px 18px; /* push text down 1px */
+} 
+
+/*************/
+/* container */
+/*************/
+
+#main-container {
+ height:100%;
+ margin:15px;
+ padding:0px;
+ min-width:900px;
+ display:block;
+ vertical-align:baseline;
+}
+
+/***********/
+/* content */
+/***********/
+
+#main-content {
+ background-color:white;
+ padding:15px;
+ color:#000000;	
+ text-indent: 0px;	
+ margin-left:20px; /** separate menu from left */
+ margin-right:20px; /** separate menu from right */
+ position: relative;
+ -moz-border-radius:4px 4px 4px 4px;	
+ -webkit-border-radius:4px 4px 4px 4px;
+  min-height: 400px;
+}
+
+/**********/
+/* footer */
+/**********/
+
+#main-footer {
+  height: 30px;
+  line-height:30px;
+  background:  #142c46;
+  margin-top:20px;
+  text-align:center;
+  border-top: 1px solid #A0B7C4;
+  border-bottom: 1px solid #A0B7C4;
+  vertical-align:baseline;
+  color:#ffffff;
+}
+
+/******************/
+/* main form is for main input
+/* is between main-header-menu and main-body 
+/******************/
+#main-form {
+	margin-left:150px;
+	margin-bottom:10px;
+	min-height: 30px;
+}
+
+/********************/
+/* Header alignment */
+/*********************/
+#main-header {
+  height: 50px;	
+  padding-bottom:10px;
+}
+
+#main-header-logo {
+ float:left;
+}
+
+#main-header-right {
+ float:right;
+ text-align:right;
+}
+
+#main-header-heading {
+ display:inline;
+ margin-bottom:5px;
+ font-size:10px;
+}
+
+/***************/
+/* Header menu */
+/* the one inside the content, on the top */
+/***************/
+
+/** The header to fit collection options, nav pages */
+#main-header-menu {
+  min-height:20px; /* has to be, right-header is floating, so specify min height */	
+  margin-bottom:10px;
+  padding:0px;
+  border-bottom:1px solid black;
+}
+
+/** The floating right header menu */
+#main-header-menu-right {
+  position:absolute;
+  float:right;
+  text-align:right;
+  right:0;
+}
+
+/*****************/
+/* Language box */
+/****************/
+
+#main-languages {
+  font-size: 11px;	
+  padding: 2px;
+  text-align:right;
+}
+
+#main-languages a {
+  color:#142c46; 
+  text-decoration: none;
+}
+
+#main-languages a:hover {
+  color:#142c46; 
+  text-decoration: underline;
+}
+
+/***************/
+/*** Logo ******/
+/***************/
+
+#main-logo {
+  align:left;
+}
+
+
+/*************/
+/* main menu */
+/*************/
+
+#main-menu {
+	-moz-border-radius:4px 4px 4px 4px;	
+	-webkit-border-radius:4px 4px 4px 4px;
+   height:40px;
+   position:relative;
+   z-index:10;
+   background-image:url(../img/navi_bg.png);
+	font-size:14px;
+	font-weight: bold;
+	color:#effafc;
+	text-indent:0;
+	list-style: none;
+	margin-bottom:20px;
+	margin-left:20px;
+	margin-right:20px;
+}
+
+#main-menu ul li {
+	list-style: none;
+	display:block;
+	float:left;
+	background-image: url(../img/navi_bg_divider.png);
+   background-repeat: no-repeat;
+   background-position: right;
+   padding-right: 10px;
+   padding-left: 10px;
+   line-height: 40px;
+}
+
+#main-menu ul li a {
+ line-height: 40px;
+ text-decoration: none;
+ color: #effafc;
+}
+
+#main-menu ul div {
+  background:#142c46; 
+  display:none;
+  margin-left:-10px; /* compensates the padding-left of #main-menu ul li */
+  padding-right:10px; 
+  position:absolute;
+  font-size:12px;
+  top:40px; /* 40 px below */
+}
+
+#main-menu ul li div ul li {
+	list-style: none;
+	display:block;
+   float:left;
+   clear:both;
+	background-image: none;
+   padding-right: 0px;
+   padding-left: 10px;
+   line-height: 20px;
+   margin-bottom:4px;
+   height: 20px;
+   width:100%; /* important to span all horizontal pace in the submenu */
+}
+
+#main-menu ul li div ul li a {
+ line-height: 20px;
+ display:block;
+ text-decoration: none;
+ color: #effafc;
+}
+
+#main-menu ul li:hover {
+	background-image: url(../img/navi_bg_hover.png);
+	background-repeat: repeat;
+}
+
+/**************/
+/* Search box */
+/**************/
+
+#main-search-box {
+	float:right;
+	margin-right:10px;
+	margin-top:9px;
+}
+
+#form-input-search-box {
+
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	font-size:12px;	
+	height:20px;
+	line-height:16px;
+	padding-right:22px;
+	padding-left:5px;
+	text-indent:0;
+	width:150px;
+	border: 0 none;
+}
+
+.search-icon {
+	background-image:url("../img/arrows2.png");
+	background-color:#FFFFFF;
+	background-repeat:no-repeat;
+	background-position:right 0; /* para mostrar a lupa */
+
+}
+
+/*****************/
+/* last modified */
+/*****************/
+
+#lastModified {
+  clear:left;
+  text-align:center;
+  padding: 10px;
+  position:relative;
+  
+  display:block;
+}
+
+/******************/
+/* main side-menu */
+/* the one inside the content, on the left */
+/******************/
+
+#main-side-menu {
+  width:140px;
+  float:left;
+  text-align:left;
+}
+
+#main-side-menu-header {
+  border-bottom:1px solid black;
+  min-height:20px;
+  margin-bottom:5px; 
+}
+
+.main-side-menu-section {
+	margin-bottom:10px;
+}
+
+.main-side-menu-section-header {
+  border-bottom:1px solid black;
+  min-height:20px; 
+  font-size:11px;
+  font-variant:small-caps;
+}
+
+/* add a little arrow when the body is not collapsed */
+.main-side-menu-section-header:not(.main-side-menu-section-body-collapsed):hover {
+	background-image:url("../img/arrows2.png");
+	background-repeat:no-repeat;
+	background-position:right -60px; 
+}
+
+/* add a little arrow when the body is collapsed */
+.main-side-menu-section-body-collapsed:hover {
+	background-image:url("../img/arrows2.png");
+	background-repeat:no-repeat;
+	background-position:right -80px; 
+}
+
+.main-side-menu-section-body {
+  margin-top:3px; 
+}
+
+.main-side-menu-section-body a {
+  display:block; /* makes link span all DIV */
+  line-height:20px; /* to be vertically aligned */
+}
+
+.main-side-menu-section-body-element {
+  height:20px;
+  text-indent:10px;
+/*overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+width: 100%;*/
+}
+
+/** Add a button feel at body elements in anchor */
+.main-side-menu-section-body-element a {
+  display:block; /* makes link span all DIV */
+  line-height:20px; /* to be vertically aligned */
+}
+
+/** Add background on active element */
+.main-side-menu-section-body-element-active {
+	background-image:url("../img/arrows2.png");
+	background-color:#F0F0F0;
+	background-repeat:no-repeat;
+	background-position:right -100px; 
+
+}
+
+/** Make remaining menus (that are not active) animate at hover */
+.main-side-menu-section-body-element:not(.main-side-menu-section-body-element-active):hover {
+	background-image:url("../img/arrows2.png");
+	background-repeat:no-repeat;
+	background-position:left -40px; 	
+}
+
+#main-side-menu select {
+	font-size:10px;
+}
+
+/*****************/
+/** Slidable div */
+/*****************/
+
+/** header included in a slidable div, for iPhone-ish type navigation buttons  */
+.main-slidable-div-header {
+	margin-bottom:10px;
+	min-height:25px;
+}
+
+.main-slidable-div-header-left {
+	float:left;
+}
+
+.main-slidable-div-header-right {
+	float:right;
+}
+
+a.GO_BACK_IOS_ISH_BUTTON {
+    background: transparent url('../img/bg_button_a.png') no-repeat scroll top right;
+    color: #444;
+    display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+    height: 24px;
+    margin-right: 6px;
+    padding-right: 18px; /* sliding doors padding */
+    text-decoration: none;
+}
+
+a.GO_BACK_IOS_ISH_BUTTON span {
+    background: transparent url('../img/bg_arrow_button_span.png') no-repeat;
+    display: block;
+    color: #000;
+    line-height: 14px;
+    padding: 5px 0 5px 18px;
+}
+
+a.GO_BACK_IOS_ISH_BUTTON:active {
+    background-position: bottom right;
+    color: #000;
+    outline: none; /* hide dotted outline in Firefox */
+}
+
+a.GO_BACK_IOS_ISH_BUTTON:active span {
+    background-position: bottom left;
+    padding: 6px 0 4px 18px; /* push text down 1px */
+} 
+
+a.GO_FORWARD_IOS_ISH_BUTTON {
+    background: transparent url('../img/bg_arrow_button_a.png') no-repeat scroll top right;
+    color: #444;
+    display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+    height: 24px;
+    margin-right: 6px;
+    padding-right: 18px; /* sliding doors padding */
+    text-decoration: none;
+}
+
+a.GO_FORWARD_IOS_ISH_BUTTON span {
+    background: transparent url('../img/bg_button_span.png') no-repeat;
+    display: block;
+    color: #000;
+    line-height: 14px;
+    padding: 5px 0 5px 18px;
+}
+
+a.GO_FORWARD_IOS_ISH_BUTTON:active {
+    background-position: bottom right;
+    color: #000;
+    outline: none; /* hide dotted outline in Firefox */
+}
+
+a.GO_FORWARD_IOS_ISH_BUTTON:active span {
+    background-position: bottom left;
+    padding: 6px 0 4px 18px; /* push text down 1px */
+} 
+
+
+
+/** to give space for side menu */
+#main-right-space {
+ margin-left:160px;
+}
+
+
+/** for simple notes to appear on hte right side */
+.main-right-note {
+	-moz-border-radius:4px 4px 4px 4px;	
+	-webkit-border-radius:4px 4px 4px 4px;
+	float:right;
+	padding:10px;
+	margin:10px;
+	width:200px;
+	background-color:#ffffdd; 
+}
+
+/* used as a yellow sticker note on contents */
+.main-center-note {
+	-moz-border-radius:4px 4px 4px 4px;	
+	-webkit-border-radius:4px 4px 4px 4px;
+	padding:10px;
+	margin:10px;
+	background-color:#effafc; 
+}
+
+/* used to place description text on the left of textarea demos */
+.main-left-description {
+	display:inline-block; 
+	text-align:justify; 
+	width:300px; 
+	float:left; 
+	vertical-align:top; 
+	margin-right:20px;
+}
+
+/***********/
+/* Buttons */
+/***********/
+
+.clear { /* generic container (i.e. div) for floating buttons */
+    overflow: hidden;
+    width: 100%;
+}
+
+/*** END OLD ***/
+
+a.disabled { 
+	color:black;
+	cursor:default;	
+	text-decoration:none; 
+}
+
+
+/*******************************/
+/* site search results for all site */
+/*******************************/
+
+.search_results_summary {
+	-moz-border-radius:4px 4px 4px 4px;	
+	-webkit-border-radius:4px 4px 4px 4px;
+	background-color:#afdafc; 
+	padding:5px;
+}
+
+.search {
+  float:right;
+  margin-top: 5px;
+}	
+.search_results_link a {
+  color:#142c46; 
+  text-decoration: underline;
+}
+.search_results_link {
+  text-indent:0px;
+  margin:0px;
+}
+.search_results_url {
+   margin:0px;
+   color:#0000ff; 
+   font-size:10px;
+   text-indent:0px;
+}
+.search_results_abstract {
+   text-indent:0px;
+    margin:0px;
+}
+
+.intlink {
+   font-size:10px;
+}

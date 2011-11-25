@@ -1,0 +1,85 @@
+.NE {
+ -moz-border-radius: 0.8em;
+ -webkit-border-radius: 0.8em;
+ display:inline-block; 
+ border:1px solid #999;
+ width:auto;
+ padding:1px 5px 1px 5px;
+ margin:1px;
+ cursor:pointer;
+ position:relative;
+ z-index:9; /*important to be above canvas */
+ background: #fff;
+white-space: nowrap;
+}
+
+/* ALT */
+.ALT {
+ display:inline-block;
+ border:2px dashed gray;
+ padding:2px;
+ vertical-align:middle;
+	
+}
+
+.SUBALT {
+	
+}
+
+.EM {
+	background: #CCC url(../img/icon-unknown.png) no-repeat center left;
+	padding-left:17px;	
+}
+
+.VALOR, .VALUE {
+	background: #6666FF url(../img/icon-value.png) no-repeat center left;
+	padding-left:17px;	
+}
+
+.PESSOA, .PERSON {
+    background: #CAFF70 url(../img/icon-person-individual.png) no-repeat center left;
+	padding-left:17px;
+}
+
+.NUMBER, .NUMERO {
+	background: #FFA07A url(../img/icon-number.png) no-repeat center left;
+	padding-left:22px;
+}
+
+.LOCAL, .PLACE {
+	background: #FFBBFF	 url(../img/icon-local.png) no-repeat center left;
+	padding-left:18px;
+}
+
+.ACONTECIMENTO, .EVENT {
+	background: #ffa url(../img/icon-event.png) no-repeat center left;
+	padding-left:18px;
+}
+
+.TEMPO, .TIME {
+	background: #98F5FF url(../img/icon-time.png) no-repeat center left;
+	padding-left:18px;
+}
+
+.THING, .COISA {
+	background: #fed8c4 url(../img/icon-thing.png) no-repeat center left;
+	padding-left:18px;
+}
+
+.ORGANIZACAO, .ORGANIZATION {
+	background: #FFD700 url(../img/icon-organization.png) no-repeat center left;
+	padding-left:18px;
+}
+
+.ABSTRACCAO, .ABSTRACTION {
+	background: #B4EEB4 url(../img/icon-abstraction.png) no-repeat center left;
+	padding-left:18px;
+}
+
+.OBRA, .MASTERPIECE {
+	background: #aaa url(../img/icon-masterpiece.png) no-repeat center left;
+	padding-left:18px;
+}
+
+
+

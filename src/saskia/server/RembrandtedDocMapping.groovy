@@ -17,8 +17,10 @@
  */
 package saskia.server
 
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
 import saskia.db.table.*
+
 import saskia.stats.SaskiaStats
 import saskia.util.I18n
 import org.apache.log4j.*
@@ -33,16 +35,21 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
     I18n i18n   
-	 SaskiaStats stats
-
+	SaskiaStats stats
+	SaskiaDB db
+	
     static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
     static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
     static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
  
-    public RembrandtedDocMapping() {
+    public RembrandtedDocMapping(SaskiaDB db) {
         
+		this.db = db
         i18n = I18n.newInstance()
-        
+        UserTable userTable = db.getDBTable("UserTable")
+        CollectionTable collectionTable = db.getDBTable("CollectionTable")
+        RembrandtedDocTable rembrandtedDocTable = db.getDBTable("RembrandtedDocTable")
+		
         JSONanswer = {req, par, bind ->
             long session = System.currentTimeMillis()
             processlog.debug "Session $session triggered with $par" 
@@ -67,7 +74,7 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
             if (!api_key) api_key = par["COOKIE"]["api_key"]   
             if (!api_key) return sm.noAPIKeyMessage()
 
-            User user = UserTable.getFromAPIKey(api_key)           
+            User user = userTable.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
             if (!user.isEnabled()) return sm.userNotEnabled()
 
@@ -87,14 +94,14 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
         				collection_id = Long.parseLong(par["POST"]["ci"])
             	} catch(Exception e) {e.printStackTrace()}
            		if (!collection_id) return sm.notEnoughVars("ci="+par["POST"]["ci"])                                  
-					collection = Collection.getFromID(collection_id)
+					collection = collectionTable.getFromID(collection_id)
             	if (!collection) return sm.noCollectionFound()
 
-					if (!Collection.canRead(user, collection))
+					if (!collectionTable.canRead(user, collection))
 						return sm.insufficientPermissions()
 
         			try {
-                    h = RembrandtedDoc.listRembrandtedDocs(collection, limit, offset, column, value)
+                    h = rembrandtedDocTable.listRembrandtedDocs(collection, limit, offset, column, value)
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_rdoc_list'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc_list"][lang]+": "+e.getMessage())
@@ -102,7 +109,7 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
                 
                 // h already has col_id   
                 h.result.eachWithIndex{rdoc, i -> h.result[i] = rdoc.toMap() }
- 					 h.perms = Collection.getPermissionsFromUserOnCollection(user, collection)
+ 					 h.perms = collectionTable.getPermissionsFromUserOnCollection(user, collection)
 					 h.col_id=collection_id
                 return sm.statusMessage(0, h)                  
             }
@@ -123,14 +130,14 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
                 
                 RembrandtedDoc doc 
                 try {
-                    doc = RembrandtedDoc.getFromID(doc_id)
+                    doc = rembrandtedDocTable.getFromID(doc_id)
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_rdoc'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc"][lang]+": "+e.getMessage())                 
                 }
   
 					// check permissions
-					if (!Collection.canRead(user, doc.doc_collection))
+					if (!collectionTable.canRead(user, doc.doc_collection))
 						return sm.insufficientPermissions()
 
                 return sm.statusMessage(0, doc.toMap())
@@ -150,14 +157,14 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
       			
 					RembrandtedDoc doc 
                try {
-                    doc = RembrandtedDoc.getFromID(doc_id)
+                    doc = rembrandtedDocTable.getFromID(doc_id)
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_rdoc'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc"][lang]+": "+e.getMessage())                 
                 }
 					 
 					// check permissions
-					if (!Collection.canRead(user, doc.doc_collection))					
+					if (!collectionTable.canRead(user, doc.doc_collection))					
 						return sm.insufficientPermissions()
 
            		stats = new SaskiaStats()
@@ -191,13 +198,13 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
  					 String doc_content =  par["POST"]["doc_content"]
  
                 if (!doc_original_id) return sm.notEnoughVars("doc_original_id=$doc_original_id") 
-                Collection collection = Collection.getFromID(doc_collection)
+                Collection collection = collectionTable.getFromID(doc_collection)
 					 if (!collection) return sm.collectionNotFound()
                 if (!doc_lang) return sm.notEnoughVars("doc_lang=$doc_lang") 
                 if (!doc_content) return sm.notEnoughVars("doc_content=$doc_content") 
                    
              	  // check permissions
-                if (!Collection.canAdmin(user, collection)) 
+                if (!collectionTable.canAdmin(user, collection)) 
 						return sm.insufficientPermissions()
 					
 					 int number_rdocs = collection.getNumberOfRembrandtedDocuments()
@@ -241,7 +248,7 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
       
                RembrandtedDoc doc 
                try {
-                    doc = RembrandtedDoc.getFromID(doc_id)
+                    doc = rembrandtedDocTable.getFromID(doc_id)
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_rdoc'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc"][lang]+": "+e.getMessage())                 
@@ -250,7 +257,7 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
              	  // check permissions
                 
 					 if (!doc.doc_collection) return sm.collectionNotFound()
-                if (!Collection.canAdmin(user, doc.doc_collection)) 
+                if (!collectionTable.canAdmin(user, doc.doc_collection)) 
 						return sm.insufficientPermissions()
 					            
                 switch(column) {
@@ -298,7 +305,7 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
                 
 					RembrandtedDoc doc 
                try {
-                    doc = RembrandtedDoc.getFromID(doc_id)
+                    doc = rembrandtedDocTable.getFromID(doc_id)
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_rdoc'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_rdoc"][lang]+": "+e.getMessage())                 
@@ -306,7 +313,7 @@ public class RembrandtedDocMapping extends WebServiceRestletMapping {
 
             	 // check permissions
                 if (!doc.doc_collection) return sm.collectionNotFound()
-                if (!Collection.canAdmin(user, doc.doc_collection)) 
+                if (!collectionTable.canAdmin(user, doc.doc_collection)) 
 						return sm.insufficientPermissions()
 
                 def res          

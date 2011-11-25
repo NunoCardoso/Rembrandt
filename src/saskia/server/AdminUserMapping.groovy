@@ -17,8 +17,10 @@
  */
 package saskia.server
 
-import saskia.db.table.*
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
+import saskia.db.table.*
+
 import saskia.util.I18n
 import org.apache.log4j.*
 
@@ -26,6 +28,7 @@ public class AdminUserMapping extends WebServiceRestletMapping {
     
     Closure JSONanswer
     I18n i18n
+	SaskiaDB db
     static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
     static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
     static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
@@ -33,10 +36,12 @@ public class AdminUserMapping extends WebServiceRestletMapping {
 /** Note: this mapping should be used only by superuser folks *managing user stuff*, so 
  * it requires an api_key. For standard uses, the UserMapping is the one that has standard actions.
  */
-    public AdminUserMapping() {
+    public AdminUserMapping(SaskiaDB db) {
         
+		this.db = db
         i18n = I18n.newInstance()
-        
+        UserTable userTable = db.getDBTable("UserTable")
+		
         JSONanswer = {req, par, bind ->
             
             long session = System.currentTimeMillis()
@@ -64,7 +69,7 @@ public class AdminUserMapping extends WebServiceRestletMapping {
             if (!api_key) api_key = par["COOKIE"]["api_key"]   
             if (!api_key) return sm.noAPIKeyMessage()
 
-            User user = UserTable.getFromAPIKey(api_key)           
+            User user = userTable.getFromAPIKey(api_key)           
             if (!user) return sm.userNotFound()
             if (!user.isEnabled()) return sm.userNotEnabled()
 				// all Admin*Mappings must have this
@@ -82,7 +87,7 @@ public class AdminUserMapping extends WebServiceRestletMapping {
              if (!api_key) api_key = par["COOKIE"]["api_key"]   
              if (!api_key) return sm.noAPIKeyMessage()
 
-            user_db = UserTable.getFromAPIKey(api_key)           
+            user_db = userTable.getFromAPIKey(api_key)           
             if (!user_db) return sm.userNotFound()
             if (!user_db.isEnabled()) return sm.userNotEnabled()
 

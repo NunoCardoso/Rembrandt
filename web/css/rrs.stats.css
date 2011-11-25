@@ -1,0 +1,53 @@
+
+/* container for stats */
+.stats-main {
+	position:relative;
+/*	display:block;*/
+}
+
+/* stats box */ 
+.stats-box {
+  background: #c2e2f2;
+  border:1px solid #a0b7c4;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em; 
+  padding:4px;
+  margin:10px 5px 10px 5px;
+  position:relative;
+  display:block;
+  float:left;
+}
+
+.hidden-table {
+	display:none;
+}
+/* Header */
+#stats-header {
+  background: #cceae9;
+  font-size: 14px;	
+  clear:left;
+  text-align:left;
+  padding: 5px;
+  border: 1px solid  #a0b7c4;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em;
+}
+
+#stats-search-ne-div {
+	margin-right:20px; 
+	display: inline; 
+	font-size:12px; 
+	vertical-align:middle;
+	text-align:right; 
+	position:absolute; 
+	right:0;
+}
+/* container for collection counts */
+#stats-main-count-div {}
+#stats-graph-ne-per-doc-table-div {}
+#stats-graph-dist-ne-table-div {}
+#stats-ne-names-div {}
+#stats-top-ne-div {}
+#stats-graph-time-of-ne-div {}	
+#stats-top-docs-for-ne-div {}
+#stats-sentences-with-ne-div {}

@@ -18,8 +18,11 @@
 package saskia.server
 
 import saskia.bin.AskSaskia
-import saskia.db.table.*
+
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
+import saskia.db.table.*
+
 import rembrandt.obj.Sentence
 import rembrandt.gazetteers.SemanticClassificationDefinitions
 import rembrandt.obj.NamedEntity
@@ -32,14 +35,17 @@ public class AskSaskiaMapping extends WebServiceRestletMapping {
    Closure JSONanswer 
    Closure HTMLanswer 
    I18n i18n
+   SaskiaDB db
    static Logger mainlog = Logger.getLogger("SaskiaServerMain")  
    static Logger errorlog = Logger.getLogger("SaskiaServerErrors")  
    static Logger processlog = Logger.getLogger("SaskiaServerProcessing")  
 
-   public AskSaskiaMapping() {
-    
+   public AskSaskiaMapping(SaskiaDB db) {
+      
+      this.db = db
       i18n = I18n.newInstance()
       AskSaskia saskia
+	  UserTable userTable = db.getDBTable("UserTable")
     
       JSONanswer = {req, par, bind ->
         
@@ -62,7 +68,7 @@ public class AskSaskiaMapping extends WebServiceRestletMapping {
         
 
 
-        User user = UserTable.getFromAPIKey(api_key)           
+        User user = userTable.getFromAPIKey(api_key)           
         if (!user) return sm.userNotFound()
         if (!user.isEnabled()) return sm.userNotEnabled()
             

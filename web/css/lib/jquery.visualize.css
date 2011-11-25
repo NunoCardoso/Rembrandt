@@ -1,0 +1,40 @@
+/*plugin styles*/
+.visualize { border: 1px solid #888; position: relative; margin:15px 15px 10px 20px; padding:0px; background: #fafafa; }
+.visualize canvas { position: relative; padding:0; margin-left:-10px;}
+.visualize ul { margin-left:-10px; padding: 0;}
+.visualize li { margin-left:-10px; padding: 0; }
+
+/*table title, key elements*/
+.visualize .visualize-info { padding: 3px 5px; background: #fafafa; border: 1px solid #888; position: absolute; top: -15px; right: 10px; opacity: .8; }
+.visualize .visualize-title { display: block; color: #333; margin-bottom: 3px;  font-size: 1.0em; }
+.visualize ul.visualize-key { list-style: none;  }
+.visualize ul.visualize-key li { list-style: none; float: left; margin-right: 10px; padding-left: 10px; margin-left: 10px; position: relative;  font-size: 0.9em;}
+.visualize ul.visualize-key .visualize-key-color { width: 6px; height: 6px; left: 0; position: absolute; top: 50%; margin-top: -3px;  }
+.visualize ul.visualize-key .visualize-key-label { color: #000; }
+
+/*pie labels*/
+.visualize-pie  {padding-right:100px} /* legend space */
+.visualize-pie .visualize-labels { list-style: none; }
+.visualize-pie .visualize-info { padding: 3px 5px; background: #fafafa; border: 1px solid #888; position: absolute; top: 0px; right: 0px; opacity: .8; }
+.visualize-pie .visualize-label-pos, .visualize-pie .visualize-label { position: absolute;  margin: 0; padding:0; }
+.visualize-pie .visualize-key li { list-style: none; clear:left; }
+.visualize-pie .visualize-label { display: block; color: #fff; font-weight: bold; font-size: 0.9em; }
+.visualize-pie-outside .visualize-label { color: #000; font-weight: normal; }
+
+/*line,bar, area labels*/
+.visualize-labels-x,.visualize-labels-y { position: absolute;  list-style: none;}
+.visualize-labels-y li { position: absolute; bottom: 0; margin-left:0; font-size:9px;}
+.visualize-labels-x li { position: absolute; bottom: 0; margin-left:0; font-size:9px;}
+.visualize-labels-x li span.label, .visualize-labels-y li span.label { position: absolute; color: #555;  }
+.visualize-labels-x li span.line, .visualize-labels-y li span.line {  position: absolute; border: 0 solid #ccc; }
+.visualize-labels-x li { height: 100%; }
+.visualize-labels-x li span.label { top: 100%; margin-top: 5px; -moz-transform:rotate(30deg); }
+.visualize-labels-x li span.line { border-left-width: 1px; height: 100%; display: block; }
+.visualize-labels-x li span.line { border: 0;} /*hide vertical lines on area, line, bar*/
+.visualize-labels-y li { width: 100%;  }
+.visualize-labels-y li span.label { right: 100%; margin: 0px; }
+.visualize-labels-y li span.line { border-top-width: 1px; width: 100%; }
+
+.visualize-bar .visualize-labels-x li span.label { width: 100%; text-align: center; }
+.visualize-bar {margin-bottom:30px;} /* space for the x-labels*/
+.visualize-area {margin-bottom:30px;} /* space for the x-labels*/

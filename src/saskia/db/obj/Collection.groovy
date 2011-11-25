@@ -116,7 +116,7 @@ class Collection extends DBObject implements JSONable {
 		log.debug "query = $query params = $params class = "+params*.class
 
 		List u
-		try {u = queryDB(query, params) }
+		try {u = dbtable.getSaskiaDB().getDBTable("SourceDocTable").queryDB(query, params) }
 		catch(Exception e) {log.error "Error getting source doc list: ", e}
 
 		// last item is not a document... it's the count.
@@ -125,7 +125,7 @@ class Collection extends DBObject implements JSONable {
 
 		log.debug "Returning "+u.size()+" results."
 		return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,
-			"column":column, "value":needle, "col_id":collection.col_id]
+			"column":column, "value":needle, "col_id":col_id]
 	}
 
 

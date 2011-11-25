@@ -1,0 +1,101 @@
+2010/07/03 16:00:00
+REMBRANDT 1.1 released, and refreshed REMBRANDT website
+<DIV class="rss_entry">
+<P>REMBRANDT has been updated to version 1.1, and the project is now hosted on Google Code, in <a href="http://rembrandt.googlecode.com">http://rembrandt.googlecode.com</A>. there you can download tar.gz packages, browse the source code and send issues. Also, the <a href="http://xldb.di.fc.ul.pt/Rembrandt">Rembrandt website</a> was completely revamped, to allow better interaction in the futures for the web-services for tagging, searching and collection management that I am currently developing.</P>
+</DIV>
+---
+2009/12/02 09:00:00
+REMBRANDT 1.0beta-2 is out! 
+<DIV class="rss_entry">
+<P>This is becoming better and better, next release will probably be the 1.0 final, as I'm not planning on adding more features, just solving some minor issues. I'm tagging a 300K English collection, and solved many DB sync issues, workers can now tag pools of 10K documents without chrashing. When the DB I/O is full, they can wait and retry until it manages to distribute more untagged documents to them. Ah, and GeoPlanet WOEIDs are now being used to ground geographic entities, and I'm now generating document geographic signatures.</P>
+
+<P>Here is the list of changes</P>
+	<li>concurrence lock DB now handled with 5 retries</li>
+  	<li>lots of improvements on DB sync issues, workers are much stable now</li>
+   <li>Support of geographic grounding by GeoPlanet's WOEIDs</li>
+   <li>TimeGrounding finished.</li>
+   <li>Some bugs found and solved.</li>
+   <li>Proxies can now be dynamically selected for each web service </li>
+</UL>
+<P>For the 1.0 final version, I plan to finish the time signatures and just solve any minor issues while tagging the collection, and work on the manual.</P>  
+</DIV>
+---
+2009/11/24 09:00:00
+REMBRANDT 1.0beta-1 is out! 
+<DIV class="rss_entry">
+<P>After long weeks in a 'leve-no-class-untouched' revision approach, I proudly present the first beta version of REMBRANDT 1.0. It features many exciting features, but the major one is that it can be as 10x faster than the 0.8 version! </P>
+
+The main changes include:
+<UL>
+<LI> REMBRANDT Cores and patterns are all now in UTF-8 </LI>
+<LI> Indexes in documents and NE lists, to speed up rule match</LI>
+<LI> Pre-optimization of rule/sentence pairs for first-clauses of rules</LI>
+<LI> Pre-compilation of patterns, gazetteers is now static and final</LI>
+<LI>  Detector subclasses with pre-determined actions</LI>
+<LI> Better DB sync</LI>
+<LI> Separation from HAREM classification and internal REMBRANDT classification</LI>
+<LI> Gazetteer and pattern re-organiztion</LI>
+<LI> Memory usage output</LI>
+<LI> Rewritten Detector and MatcherObject, now they can call actions from rules, and allow actions to more than one NE at the same time</LI>
+<LI>  Wikipedia and DBpedia references are now linked to NE classifications, not just the NE</LI>
+<LI> External rules can now disambiguate and filter Wikipedia and DBpedia grounding references</LI>
+<LI> NE splitting tests are now in their own Rule class, after external evidence detection</LI>
+<LI> Several improvements on Reader and Writer classes, now REMBRANDT can read already tagged documents, with several document/ tag styles</LI>
+<LI> A more simple and better NE classification comparison engine</LI>
+<LI> Entity detection rewritten, much faster now</LI>
+<LI> NE history tracking rewritten, now it's printed for log.trace in NamedEntity logger</LI>
+<LI> Courthouse now gives verdicts (not actions), ListOfNE executes verdicts in a smarter way.</LI>
+<LI> Term count reviewed, better support for hidden terms</LI>
+<LI> Wikipedia Category mining now uses only plural evidence</LI>
+<LI>  Laws revised, to solve some precedence problems</LI>
+</UL>
+
+We recommend that you read in the REMBRANDT site some changes made in basic configuration setups. A manual is on the way, but meanwhile, you can already play with this baby around. 
+
+Happy tagging! 
+</DIV>
+---
+2009/06/23 17:00:00
+New formatted text, with balloon tooltips. 
+<DIV class="rss_entry">
+<P>Now, the annotated texts can be displayed with boxes of several colors, one for each NE category. If you click on the NE, it displays a balloon tooltip with additional information about the NE. </P>
+The REMBRANDT web service has a patched version of 0.8.6, which prevented the access to DBpedia. In other words, only NOW the service is using DBpedia. </P>
+<P>Have fun creating and killing balloon tooltips!</P>
+</DIV>
+---
+2009/06/22 09:00:00
+REMBRANDT 0.8.6 is out.
+<DIV class="rss_entry">
+<P>REMBRANDT 0.8.6 is now available to download. Hopefully, it does not have serious bugs (remember, it's still a 0.X version), and solved some of the issues with the language, and on DB connections, which sometimes killed the web service.</P>
+<P>Note that it includes now the Saskia and Renoir packages, but it now depends on other jars which can be found on the HP's Jena/ARQ package, a SPARQL storage/query interface, required for DBpedia queries.</P>
+<P>I'll be working now on the 0.8.7 version. Feedback is always welcome.</P>
+<P>Meanwhile, there's now a <a href="http://www.twitter.com/RembrandtNER">Twitter account for REMBRANDT</A>, to speed up update info and get your complaints/suggestions.</P>
+</DIV>
+---
+2009/06/15 09:00:00
+REMBRANDT 0.8.6 nearly out, uses DBpedia now.
+<DIV class="rss_entry">
+<P>I'll be releasing REMBRANDT 0.8.6 soon, as a download package and as a web service.</P>
+<P>It'll use DBpedia's ontology classifications before Wikipedia, which improves dramatically the precision of the results in English texts. It's a really nice improvement over the 0.8.5, but it'll be an unstable release. I'll announce it soon, have a few bugs to kill.</P>
+</DIV>
+---
+2009/05/19 14:11:00
+REMBRANDT now tags in English, and the website is now also in English.
+<DIV class="rss_entry">
+<P>REMBRANDT's site is now in English, and the REMBRANDT service can now tag English texts, using the English Wikipedia. There are now two RSS feeds: <a href="http://xldb.di.fc.ul.pt/Rembrandt/feeds/rembrandt_news_pt.php">Portuguese news</a> and <a href="http://xldb.di.fc.ul.pt/Rembrandt/feeds/rembrandt_news_en.php">English news</a>.</P> 
+<P>Note that REMBRANDT's English grammar rules are, at the moment, mere transpations from the Portuguese rules, and as such the REMBRANDT's performance over English text is not so good. The size of the English Wikipedia (more than 5 times the size of the Portuguese Wikipedia) may lead to longer waits while tagging.</P>
+<P>Nonetheless, I prefer to make REMBRANDT available right now for English texts, so that I can check the service stability over a much bigger Wikipedia database, and to get early feedback from eager users.</P>
+</DIV>
+---
+2009/05/19 10:34:00
+Rembrandt service stability
+<DIV class="rss_entry">
+<P>REMBRANDT service was down last weekend, due to a problem caused by PHP versions, which is now solved. One more bug down towards a more stable service. :)</P>
+<P>Meanwhile, I'll let the search service on for tests, even though Yahoo! only indexed two pages at the moment. So don't expect good search results yet.</P>
+</DIV>
+---
+2009/05/10 13:39:00
+English version of REMBRANDT website is ready.
+<DIV class="rss_entry">
+<P>The REMBRANDT website is now translated to English, and the service is ready to annotate English text.</P>
+</DIV>

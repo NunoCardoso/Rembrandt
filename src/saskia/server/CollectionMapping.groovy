@@ -19,8 +19,10 @@ package saskia.server
 
 import org.apache.log4j.*
 
+import saskia.db.database.SaskiaDB
 import saskia.db.obj.*
 import saskia.db.table.*
+
 import saskia.stats.SaskiaStats
 import saskia.util.I18n
 
@@ -28,14 +30,18 @@ public class CollectionMapping extends WebServiceRestletMapping {
 
 	Closure JSONanswer
 	I18n i18n
+	SaskiaDB db
 	SaskiaStats stats
 	static Logger mainlog = Logger.getLogger("SaskiaServerMain")
 	static Logger errorlog = Logger.getLogger("SaskiaServerErrors")
 	static Logger processlog = Logger.getLogger("SaskiaServerProcessing")
 
-	public CollectionMapping() {
+	public CollectionMapping(SaskiaDB db) {
 
+		this.db = db
 		i18n = I18n.newInstance()
+		UserTable userTable = db.getDBTable("UserTable")
+		CollectionTable collectionTable = db.getDBTable("CollectionTable")
 
 		JSONanswer = {req, par, bind ->
 
@@ -55,7 +61,7 @@ public class CollectionMapping extends WebServiceRestletMapping {
 			if (!api_key) api_key = par["COOKIE"]["api_key"]
 			if (!api_key) return sm.noAPIKeyMessage()
 
-			User user = UserTable.getFromAPIKey(api_key)
+			User user = userTable.getFromAPIKey(api_key)
 			if (!user) return sm.userNotFound()
 			if (!user.isEnabled()) return sm.userNotEnabled()
 			if (!action || !lang) return sm.notEnoughVars(lang, "do=$action, lg=$lang")
@@ -80,7 +86,7 @@ public class CollectionMapping extends WebServiceRestletMapping {
 
 				Map h
 				try {
-					h = Collection.listOwnCollectionsForUser(user, limit, offset, column, value)
+					h = collectionTable.listOwnCollectionsForUser(user, limit, offset, column, value)
 				}  catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_col_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage['error_getting_col_list'][lang]+": "+e.getMessage(), action)
@@ -98,7 +104,7 @@ public class CollectionMapping extends WebServiceRestletMapping {
 
 				Map h
 				try {
-					h = Collection.listAdminableCollectionsForUser(user, limit, offset, column, value)
+					h = collectionTable.listAdminableCollectionsForUser(user, limit, offset, column, value)
 				}  catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_col_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage['error_getting_col_list'][lang]+": "+e.getMessage(), action)
@@ -116,7 +122,7 @@ public class CollectionMapping extends WebServiceRestletMapping {
 
 				Map h
 				try {
-					h = Collection.listWritableCollectionsForUser(user, limit, offset, column, value)
+					h = collectionTable.listWritableCollectionsForUser(user, limit, offset, column, value)
 				}  catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_col_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage['error_getting_col_list'][lang]+": "+e.getMessage(), action)
@@ -134,7 +140,7 @@ public class CollectionMapping extends WebServiceRestletMapping {
 
 				Map h
 				try {
-					h = Collection.listReadableCollectionsForUser(user, limit, offset, column, value)
+					h = collectionTable.listReadableCollectionsForUser(user, limit, offset, column, value)
 				}  catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_col_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage['error_getting_col_list'][lang]+": "+e.getMessage(), action)
@@ -152,7 +158,7 @@ public class CollectionMapping extends WebServiceRestletMapping {
 
 				Map h
 				try {
-					h = Collection.listAllCollectionsForUser(user, limit, offset, column, value)
+					h = collectionTable.listAllCollectionsForUser(user, limit, offset, column, value)
 				}  catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_col_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage['error_getting_col_list'][lang]+": "+e.getMessage(), action)
@@ -160,7 +166,7 @@ public class CollectionMapping extends WebServiceRestletMapping {
 
 				h.result.eachWithIndex{col, i -> h.result[i] = col.toMap()}
 				h.max_number_collections_owned = user.usr_max_number_collections
-				h.collections_owned = Collection.collectionsOwnedBy(user)
+				h.collections_owned = collectionTable.collectionsOwnedBy(user)
 				return sm.statusMessage(0, h)
 			}
 
@@ -173,9 +179,9 @@ public class CollectionMapping extends WebServiceRestletMapping {
 				if (par["POST"]["id"]) id = Long.parseLong(par["POST"]["id"] )
 				if (!id) return sm.notEnoughVars("id=$id")
 
-				Collection collection = Collection.getFromID(id)
+				Collection collection = collectionTable.getFromID(id)
 				if (!collection) return sm.collectionNotFound()
-				if (!Collection.canRead(user, collection))
+				if (!collectionTable.canRead(user, collection))
 					return sm.statusMessage(-1, i18n.servermessage['insufficient_privileges'][lang])
 
 
@@ -197,9 +203,9 @@ public class CollectionMapping extends WebServiceRestletMapping {
 				if (!id) return sm.notEnoughVars("id=$id")
 
 				// let's check permissions
-				Collection collection = Collection.getFromID(id)
+				Collection collection = collectionTable.getFromID(id)
 				if (!collection) return sm.collectionNotFound()
-				if (!Collection.canAdmin(user, collection))
+				if (!collectionTable.canAdmin(user, collection))
 					return sm.statusMessage(-1, i18n.servermessage['no_collection_admin'][lang])
 
 				if (value == null || !column) return sm.notEnoughVars("v=$value, c=$column")
@@ -234,10 +240,10 @@ public class CollectionMapping extends WebServiceRestletMapping {
 				if (!col_name) return sm.notEnoughVars("col_name=$col_name")
 				if (!col_permission) return sm.notEnoughVars("col_permission=$col_permission")
 
-				Collection collection = Collection.getFromNameAndOwner(col_name, col_owner)
+				Collection collection = collectionTable.getFromNameAndOwner(col_name, col_owner)
 				if (collection) return sm.statusMessage(-1, i18n.servermessage['collection_already_exists'][lang])
 
-				if (!Collection.canHaveANewCollection(col_owner)) {
+				if (!collectionTable.canHaveANewCollection(col_owner)) {
 					return sm.statusMessage(-1, i18n.servermessage['user_not_allowed_to_create_more_collection'][lang],
 					"Max: "+col_owner.usr_max_number_collections)
 				}
@@ -266,9 +272,9 @@ public class CollectionMapping extends WebServiceRestletMapping {
 				if (!id) return sm.notEnoughVars("id=$id")
 
 				// let's check permissions
-				Collection collection = Collection.getFromID(id)
+				Collection collection = collectionTable.getFromID(id)
 				if (!collection) return sm.collectionNotFound()
-				if (!Collection.canAdmin(user, collection))
+				if (!collectionTable.canAdmin(user, collection))
 					return sm.statusMessage(-1, i18n.servermessage['no_collection_admin'][lang])
 
 				int res = -1
@@ -295,9 +301,9 @@ public class CollectionMapping extends WebServiceRestletMapping {
 				if (!id) return sm.notEnoughVars("id=$id")
 
 				// let's check permissions
-				Collection collection = Collection.getFromID(id)
+				Collection collection = collectionTable.getFromID(id)
 				if (!collection) return sm.collectionNotFound()
-				if (!Collection.canAdmin(user, collection))
+				if (!collectionTable.canAdmin(user, collection))
 					return sm.statusMessage(-1, i18n.servermessage['no_collection_admin'][lang])
 
 				stats = new SaskiaStats()

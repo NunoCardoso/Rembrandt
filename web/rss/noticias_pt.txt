@@ -1,0 +1,124 @@
+2010/07/03 16:00:00
+REMBRANDT 1.1 lançado, e novo visual da página do Rembrandt
+<DIV class="rss_entry">
+<P>O REMBRANDT foi actualizado para a versão 1.1, e o projecto está agora partilhado no Google Code, em <a href="http://rembrandt.googlecode.com">http://rembrandt.googlecode.com</A>. Lá, poderá descarregar os pacotes tar.gz, navegar no código fonte e relatar problemas. Adicionalmente, a <a href="http://xldb.di.fc.ul.pt/Rembrandt">página do Rembrandt</a> foi totalmente remodelada, para permitir uma melhor interacção no futuro dos serviços de pesquisa, anotação e gestão de colecções que estão na forja.</P>
+</DIV>
+---
+2009/12/02 09:00:00
+REMBRANDT 1.0beta-2 foi lançado hoje 
+<DIV class="rss_entry">
+<P>A aproximar-me rapidamente da versão 1.0 final, pois só quero adicionar mais uma pequena funcionalidade, e só resolver problemas que surjam. Estou a anotar uma colecção inglesa com 300K documentos, e entretanto resolvi muitos problemas de sincronização à BD, e os processos REMBRANDT conseguem agora anotar batches de 10K documentos sem estourar. Quando a BD está saturada, os processos podem esperar e votar a tentar, até que a BD consifa distribuir mais documewntos por anotar. Ah, e os WOEIDs da GeoPlanet já estão a ser usados para referenciar as entidaes geográficas, e já gero assinaturas geográficas dos documentos.</P>
+
+<P>Esta é a lista de alterações:</P>
+<UL>
+	<li>concurrence lock à BD agora é tratada, e tem 5 tentativas</li>
+  	<li>muitos melhoramentos em sincronização com a DB, os processos estão mais estáveis</li>
+   <li>Suporte à referenciação geográfica com WOEIDs do GeoPlanet</li>
+   <li>A referenciação temporal (TimeGrounding) está pronta e activa.</li>
+   <li>Alguns bugs encontrados e resolvidos.</li>
+   <li>Proxies podem agora ser dinamicamente escolhidas para cada serviço web</li>
+</UL>
+<P>Para a versão 1.0 final version, tencono terminar as assinaturas temporais, e resolver problemas durante a anotação que entretanto apareçam, e trabalhar no manual do REMBRANDT.</P>
+</DIV>  
+---
+2009/11/24 09:00:00
+REMBRANDT 1.0-beta está disponível! 
+<DIV class="rss_entry">
+<P>Depois de semanas numa revisão de código estilo 'leve-no-class-untouched', tenho o prazer de anunciar a primeira versão beta do REMBRANDT 1.0.Possui novas características, a melhor das quais é o facto de ser cerca de 10x mais rápido que a última versão 0.8!</P>
+
+As principais alterações são: 
+<UL>
+	<li>Core agora em UTF-8, capaz de processar agora todos os caracteres UTF-8</li>
+
+	<li>  Índices nos documentos e nas listas de EM, para acelerar as regras</li>
+  	<li>Pré-optimização de pares regras/frases consoante as primeiras cláusulas das regras</li>
+  	<li>Pré-compilação de padrões, gazetteeer agora está estático e final</li>
+   <li>Especialização de Detectores para várias funções, com acções pré-determinadas</li>
+   	<li> Melhorias na sincronização à DB</li>
+
+   	<li> Separação completa das classificações semânticas internas do REMBRANDT com as do HAREM</li>
+    	<li>Reorganização dos almanaques e dos padrões</li>
+    	<li>Amostragem de gestão de memória</li>
+    	<li>Detector e MatcherObject re-escritos, agora podem executar acções vindas das regras, e permitem acções a mais de uma NE</li>
+    	<li>As referências Wikipédia e DBpedia das EM estão agora associadas às classificações semânticas da EM</li>
+   	<li> Agora, as regras externas podem desambiguam EM já existentes, filtrando as ligações Wikipédia e DBpedia</li>
+
+   	<li> As divisões das EM são feitas agora depois das evidências externas, e em regras organizadas</li>
+   	<li> Vários melhoramentos nos Reader e Writer, possibilidade de ler documentos já anotados previamente, e com estilos de documento/etiqueta diferentes</li>
+   	<li> Motor de comparação de classificações de NE redesenhado, mais simples e versátil</li>
+   	<li> Detecção de relações entre entidades revisto, bem mais rápido</li>
+   	<li> Sistema de rastreio do historial das entidades mencionadas revisto, escreve quando NamedEntity logger é trace </li>
+
+   	<li> Courthouse agora só dá veredictos (e não lista de acções), ListOFNE executa os veredictos de forma mais inteligente agora.</li>
+    	<li>Contagem de termos revista, agora não conta com termos escondidos</li>
+   	<li> Uso de categorias para classificação agora só usa evidências em plural (ex: Partidos de Portugal sim, Partido Socialista não)</li>
+   	<li> Resolvido problema de leis, onde as leis específicas estavam a ser preteridas pelas leis genéricas</li>
+	</UL>
+
+Recomenda-se uma pequena leitura no sítio do REMBRANDT para estar a par das alterações feitas a nível de configuração. Um manual está na forja, mas entretanto, já dá para brincar com esta versão.
+
+Boas anotações!
+</DIV>
+---
+2009/06/23 17:00:00
+Novo formato de visualização com balões. 
+<DIV class="rss_entry">
+<P>Agora, os textos anotados podem ser exibidos com caixas de diferentes cores, uma para cada categorias de entidades. Clicando nas entidades, aparece um balão com informação adicional sobre a EM.</P>
+<P>O serviço tem uma versão rectificada da 0.8.6, que ocasionava um erro no acesso à DBpedia. Ou seja, só agora é que os resultados gerados usam a informação da DBpedia.</P>
+<P>Divirtam-se a criar e a matar balões!</P>
+</DIV>
+---
+2009/06/22 09:00:00
+REMBRANDT 0.8.6 está pronto.
+<DIV class="rss_entry">
+<P>REMBRANDT 0.8.6 já pode ser descarregado. Espero não ter erros significativos (por isso é que mantém a numeração 0.X na versão). Em princípio, resolve problemas relacionados com a escolha da língua, e ligações à BD que têm prejudicado o serviço de rede.</P>
+<P>Note que agora os pacotes Saskia e Renoir estão incluídos, mas dependem agora de outros pacotes jar externos que podem ser encontrados no módulo Jena/ARQ da HP, uma interface SPARQL necessária para interagir com a DBpedia.</P>
+<P>Vou agora trabalhar na versão 0.8.7. Feedback sobre a versão 0.8.6 é sempre benvindo.</P>
+<P>Entretanto, já está pronta uma <a href="http://www.twitter.com/RembrandtNER">conta do REMBRANDT no Twitter</a>, para pequenas informações sobre o progresso do módulo, e para receber sugestões rápidas de vocês.</P>
+</DIV>
+---
+2009/06/15 09:00:00
+REMBRANDT 0.8.6	quase a sair do forno, usa a DBpedia na classificação.
+<DIV class="rss_entry">
+<P>Vou lançar o REMBRANDT 0.8.6 brevemente, em pacote jar e como serviço web. Irá usar a classificação da DBpedia segundo a sua ontologia antes de usar a Wikipédia, o que melhora dramaticamente os resultados para textos em inglês. </P>
+<P>A versão 0.8.6 tem vários melhoramentos em relação à 0.8.5, mas ainda está algo instável. Assim que resolver uns pequenos problemas, irei colocá-la disponível. </P>
+</DIV>
+---
+2009/05/19 14:11:00
+REMBRANDT agora anota em inglês, e o sítio está traduzido para inglês.
+<DIV class="rss_entry">
+<P>O sítio tem agora páginas também em inglês, e o serviço de anotação REMBRANDT pode ser configurado para anotar textos em inglês, usando a base de dados da Wikipédia inglesa. Os feeds agora são dois: <a href="http://xldb.di.fc.ul.pt/Rembrandt/feeds/rembrandt_news_pt.php">notícias em português</a> e <a href="http://xldb.di.fc.ul.pt/Rembrandt/feeds/rembrandt_news_en.php">notícias em inglês</a>.</P> 
+<P>Note-se que as regras gramáticas do REMBRANDT para inglês por enquanto são conversões das regras em português, e como tal, não são específicas para o inglês, pelo que o desempenho do REMBRANDT em inglês é pobre por enquanto. O tamanho da Wikipédia inglesa (5x maior que a portuguesa) pode provocar também algum atraso na resposta. </P>
+<P>Seja como for, prefiro disponibilizar já o serviço REMBRANDT em inglês, para poder desde já ajustar o serviço às exigências de uma colecção da Wikipédia maior, e para obter desde já retorno dos utilizadores. </P>
+</DIV>
+---
+2009/05/19 10:34:00
+Instabilidade no serviço REMBRANDT
+<DIV class="rss_entry">
+<P>O serviço Rembrandt esteve em baixo no último fim-de-semana por causa de um problema causado por diferentes versões de PHP, que já está resolvido. Menos um erro a afectar a estabilidade do serviço. :)</P>
+<P>Entretanto, vou deixar o servido de pesquisa do sítio em funcionamento, apesar de a Yahoo! só ter indexado duas páginas até ao momento, só para testar o serviço. Assim sendo, não esperem resultados relevantes por enquanto.</P> 
+</DIV>
+---
+2009/05/08 17:02:00
+A monitorizar as vossas anotações.
+<DIV class="rss_entry">
+<P>Como acontece com qualquer lançamento de serviços, os primeiros dias são para limar as arestas que ainda estão por polir. Neste caso, tenho estado a monitorizar as primeiras anotações, para descobrir or primeiros erros de anotação. Para já, aqui fica um resumo do que alterei:</P>
+<ul>
+<li>Entidades como ANJE não são detectadas, porque não existe uma página na Wikipédia sobre essa associação; assim sendo, o REMBRANDT depende de pistas no texto, como a referência a 'uma associação', ou que alguém preside à ANJE. Seja como for, estes casos são interessantes e pretendo abordá-los no futuro.</li>
+<li>Entidades como 'dez anos' não estavam a ser etiquetadas, porque o REMBRANDT estava configurado para anotar segundo as directivas do HAREM, que estipulavam que uma EM precisa de ter pelo menos um termo com letra maiúscula. Já alterei o seu funcionamento para que anote também expressões numerais em texto, mesmo que não tenham letras maiúsculas.</li>
+</ul>
+<P>A interface também foi melhorada, de acordo com as sugestões de Daniel Gomes, David Cruz s Rui Lopes, mais legível e simples. Adicionalmente, preparei um sistema de pesquisa local, que irei activar assim que a Yahoo! indexe as páginas do sítio do REMBRANDT.</P>
+</DIV>
+---
+2009/05/07 19:50:00
+Servidor pronto para receber texto!
+<DIV class="rss_entry">
+<P>O serviço esteve em baixo durante a tarde, para uma troca de bastidores. Entretanto, a documentação está mais completa, e aproveitei para usar uma versão do Rembrandt que corrige uns problemas derivados de compilar código Java no JDK de MacOS. <BR>
+O serviço REMBRANDT está agora limitado a 3000 caracteres, para evitar sobrecargas no servidor. Todo o feedback é benvindo.</P>
+</DIV>
+---
+2009/05/05 13:39:00
+Web-Service do Rembrandt é lançado. 
+<DIV class="rss_entry">
+<P>O Web-Service do REMBRANDT está finalmente disponível online, para quem quiser anotar textos rapidamente. A versão 0.8.5 do REMBRANDT está disponível para ser usada.</P>
+</DIV>

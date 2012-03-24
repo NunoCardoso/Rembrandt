@@ -22,9 +22,9 @@ HTML;
 function generateJS($config) {
 	$gmaps = $config->google_maps_url;
 echo <<<HTML
-	<script type="text/javascript" src="{$gmaps}"></script>
+<!--	<script type="text/javascript" src="{$gmaps}"></script>
 	<script type="text/javascript"  src="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js" ></script>
-
+-->
 	<script type="text/javascript" src="js/lib/jquery-1.4.2.min.js" ></script>
 	<script type="text/javascript" src="js/lib/ICanHaz.js"></script>
 	<script type="text/javascript" src="js/lib/jquery.json-2.2.min.js" ></script>

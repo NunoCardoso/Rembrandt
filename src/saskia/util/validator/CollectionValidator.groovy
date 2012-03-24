@@ -59,7 +59,7 @@ class CollectionValidator extends Validator {
 		col = db.getDBTable("CollectionTable").getFromNameOrID(collection_name)
 		if (!col && mandatory) {
 			log.fatal "Collection couldn't be found."
-			log.fatal "Please make sure you have the specified collection in the DB: $colletion_name"
+			log.fatal "Please make sure you have the specified collection in the DB: $collection_name"
 			System.exit(0)
 		}
 		return col

@@ -175,8 +175,9 @@ class RembrandtedDoc extends DBObject implements JSONable {
 	/* it both updates the entities var, and returns it */
 	List<Tag> getTags() {
 		if (tags == null) {
-			tags = getDBTable().getSaskiaDB().getDBTable("TagTable").queryDB(
-					"SELECT * FROM ${getDBTable().dtg_table} WHERE dtg_document=?",
+			def tagtable = dbtable.getSaskiaDB().getDBTable("TagTable")
+			tags = tagtable.queryDB(
+				"SELECT * FROM ${tagtable.tablename}, doc_has_tag WHERE dtg_tag=tag_id and dtg_document=?",
 					[doc_id])
 		}
 		return tags

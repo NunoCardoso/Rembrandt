@@ -170,6 +170,7 @@ $this->saskia = array(
 $this->rembrandt = array (
 	"title"=> array("en" => "REMBRANDT tagger", "pt" => "Anotação REMBRANDT"),
 	"tag-options" => array("en" => "Annotation", "pt" => "Anotação"),
+	"tag-text" => array("en" => "Annotate text", "pt" => "Anotar texto"),
 	"main-page-text" => array(
 		"pt" => "
 	<P>Instruções:</P>

@@ -49,8 +49,8 @@ $(document).ready(function() {
 					setupNEs(display)	// sets both, I hope	
 				}
 			},
-			error: function () {
-				errorMessageWaitingDiv(lang, response['message'])		
+			error: function (response) {
+				errorMessageWaitingDiv(lang, response)		
 			}
 		});
 		debug("done")

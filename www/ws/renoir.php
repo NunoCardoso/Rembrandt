@@ -16,23 +16,23 @@ $collection_id = $_COOKIE['collection_id'];
 if (!$collection) $collection = $default_collection;
 if (!$collection_id) $collection_id = $default_collection_id;
 
-?>
-<html lang="<?php echo $lang;?>">
-<title><?php echo $i18n->renoir["title"][$lang];?></title>
+echo <<<HTML
+<!DOCTYPE html>
+<html lang="{$lang}">
+<title>{$i18n->renoir["title"][$lang]}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<base href="<?php echo $config->urlbasedir."/";?>">
-<?php
-	generateCSS($do);
-	generateJS($config);
+<base href="{$config->urlbasedir}/">
+HTML;
+generateCSS($do);
+generateJS($config);
 ?>
 </head>
-<body>
-<SCRIPT>
-function updateDisplay() {
-	displayBodyOfRenoir()
-}
+<body class="top">
+<script>
+$(document).ready(function() {
+   displayBodyOfRenoir()
+})
 </SCRIPT>
-
 <DIV ID='main-side-menu'>
 	<DIV ID='main-side-menu-header'>
 	 <?php echo $i18n->message['options'][$lang]; ?>
@@ -49,22 +49,24 @@ function updateDisplay() {
 			<DIV CLASS='main-side-menu-section-body-element'>
 				<fieldset>
 				<INPUT TYPE="CHECKBOX" ID="rrs-search-suggestion" 
-			<?php	if (!$suggestion || $suggestion != "false") echo "CHECKED";?>> 
-			 <label for="rrs-search-suggestion"><?php echo $i18n->search["suggestions"][$lang];?></label>
-		  </fieldset>
+				<?php if (!$suggestion || $suggestion != "false") echo "CHECKED";?>> 
+			 	<label for="rrs-search-suggestion">
+				<?php echo $i18n->search["suggestions"][$lang];?>
+				</label>
+				</fieldset>
 			</DIV>
 			
 			<!-- qe -->
 			<DIV CLASS='main-side-menu-section-body-element'>
-			<fieldset>
-			<label for="as_qe"><?php echo $i18n->search['qe'][$lang];?>:</label>
-			<select name="as_qe" id="as_qe">
-				<OPTION VALUE="no"<?php if ($_POST['as_qe'] === "no") echo " SELECTED";?>>
-				<?php echo $i18n->message['no'][lang]; ?></OPTION>
-				<OPTION VALUE="brf"<?php if ($_POST['as_qe'] === "brf") echo " SELECTED";?>>BRF</OPTION>
-				<OPTION VALUE="sqr"<?php if ($_POST['as_qe'] === "sqr") echo " SELECTED";?>>SQR</OPTION>
-			</select>
-			</fieldset>
+				<fieldset>
+					<label for="as_qe"><?php echo $i18n->search['qe'][$lang];?>:</label>
+					<select name="as_qe" id="as_qe">
+						<OPTION VALUE="no"<?php if ($_POST['as_qe'] === "no") echo " SELECTED";?>>
+						<?php echo $i18n->message['no'][lang]; ?></OPTION>
+						<OPTION VALUE="brf"<?php if ($_POST['as_qe'] === "brf") echo " SELECTED";?>>BRF</OPTION>
+						<OPTION VALUE="sqr"<?php if ($_POST['as_qe'] === "sqr") echo " SELECTED";?>>SQR</OPTION>
+					</select>
+				</fieldset>
 			</DIV>
 
 			<!-- model -->
@@ -98,8 +100,7 @@ function updateDisplay() {
 			</DIV>	
 		</DIV>
 	</DIV>	
-		
-		
+
 	<DIV CLASS='main-side-menu-section'>
 	
 		<DIV CLASS='main-side-menu-section-header'>
@@ -121,10 +122,6 @@ function updateDisplay() {
 </DIV>
 
 <DIV ID="main-header-menu">
-	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
-		<DIV CLASS="rrs-waiting-div-message"></DIV>
-		<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
-	</DIV> 
 	<DIV ID='main-breadcrumbles' style="display:block;"></DIV>
 	<DIV ID="main-header-menu-right">
 	   <!-- COLLECTION DIV  -->
@@ -143,6 +140,10 @@ function updateDisplay() {
 <DIV ID="main-form">
 <!-- SEARCH DIV - includes logo -->
 	<DIV ID="rrs-search-box">
+		<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
+			<DIV CLASS="rrs-waiting-div-message"></DIV>
+			<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
+		</DIV>
 		<DIV CLASS="rrs-logo"><IMG SRC="<?php echo $config->imgdir."/".$config->renoir_head_image;?>"></DIV>
 		<FORM ACTION="<?php echo curPageURL(array('do'=>'search'));?>" ID="rrs-search-form" 
 		  METHOD="POST" AUTOCOMPLETE="OFF" style="display:inline-block;">
@@ -172,7 +173,4 @@ function updateDisplay() {
    </DIV> 	
 </DIV>
 
-<DIV ID="main-body">
-<SCRIPT>updateDisplay()</SCRIPT>
-<?php // closing divs for right-space and main-body ?> 
-</DIV>
+<DIV ID="main-body"></DIV>

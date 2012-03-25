@@ -107,8 +107,8 @@ class ImportPublico_2_SourceDocument extends Import {
 				String content = writer.printDocument(doc)
 				// add now date
 				
-				print "doc: ${content}"
-				SourceDoc s = addSourceDoc(doc.doc_id, content, doc.lang, doc.date_created, "")
+			//	print "doc: ${content}"
+				SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, doc.date_created, "")
 				if (s) status.imported++ else status.skipped++
 			}
 

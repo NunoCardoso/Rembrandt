@@ -23,35 +23,40 @@ O REMBRANDT 1.3beta1 já está disponível. <a href="<?php echo curPageURL(array
 </div>
 
 <!-- position relative positions the waiting div. Margin is for getting space --> 	
-<div style="display:inline-block; clear:left; position:relative;padding-top:20px;">
-		<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
-			<DIV CLASS="rrs-waiting-div-message"></DIV>
-			<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
-		</DIV> 
-<FORM></FORM><!-- must stay -->
-  <DIV CLASS="rrs-logo" style="float:left;"><IMG SRC="<?php echo $config->imgdir."/".$config->rembrandt_head_image;?>"></DIV>
-  <FORM id="home1" TARGET="rembrandt-results-1" CLASS="rembrandt-submit" style="display:inline-block;">
-  <TEXTAREA id="text" name="text" style="width:400px; height:60px;"><?php echo $config->exampleText[$lang]; ?></textarea><BR>
-    <input type="hidden" id="language" name="language" value="<?php echo $lang; ?>">
-    <input type="hidden" id="type" name="type" value="simpleText">
-	 <div><?php echo $i18n->message['textisin'][$lang]; ?> 
-		<select size=1 id="submissionLang" name="submissionLang">
-		<option value="pt" default>Português</option>
-		<option value="en">English</option>
-		</select>.
-	 </DIV>
-	 <div style="display:inline-block;">
-		<A CLASS="main-button" id="rembrandt-submit-button" HREF="#">
-	   <SPAN><?php echo $i18n->buttons['execRembrandt'][$lang]; ?></SPAN></A>  
-	</div>	
-   </FORM>		
+<DIV style="display:inline-block;">
 
-   <DIV ID="rembrandt-results-1" CLASS="rrs-doc-display" style="width:460px;"></DIV>
+	<FORM></FORM><!-- must stay -->
+	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
+		<DIV CLASS="rrs-waiting-div-message"></DIV>
+		<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
+	</DIV>
+
+	<DIV CLASS="rrs-logo" style="float:left;">
+		<IMG SRC="<?php echo $config->imgdir."/".$config->rembrandt_head_image;?>">
+	</DIV>
+	<FORM id="home1" TARGET="rembrandt-results-1" CLASS="rembrandt-submit" style="display:inline-block;">
+		<TEXTAREA id="text" name="text" style="width:400px; height:60px;"><?php echo $config->exampleText[$lang]; ?></textarea>
+		<BR>
+    	<input type="hidden" id="language" name="language" value="<?php echo $lang; ?>" />
+    	<input type="hidden" id="type" name="type" value="simpleText" />
+		<DIV><?php echo $i18n->message['textisin'][$lang]; ?> 
+			<select size=1 id="submissionLang" name="submissionLang">
+				<option value="pt" default>Português</option>
+				<option value="en">English</option>
+			</select>.
+		</DIV>
+		<div style="display:inline-block;">
+			<A CLASS="main-button" id="rembrandt-submit-button" HREF="#">
+				<SPAN><?php echo $i18n->buttons['execRembrandt'][$lang]; ?></SPAN>
+			</A>  
+		</div>
+   </FORM>	
+
+   <DIV ID="rembrandt-results-1" CLASS="rrs-doc-display" style="width:auto;"></DIV>
    <script> $(document).ready(function() {			
 		appendDocDisplayTo($('#rembrandt-results-1'))
   })
   </script>		
-</div>
 </DIV>
 
 <P>Gostou? Muito bem! Leia também as <a href="<?php echo curPageURL(array('do'=>'help-faq'));?>">perguntas já respondidas</a> para saber o que é o REMBRANDT, e <a href="<?php echo curPageURL(array('do'=>'help-tutorial'));?>">faça o curso rápido</A> sobre este serviço, correndo exemplos e familiarizando-se com o resultados gerados. Se quiser já mais detalhes, pode dar uma vista de olhos à <a href="<?php echo curPageURL(array('do'=>'help-doc'));?>">documentação do REMBRANDT</a>, que inclui artigos e apresentações sobre o programa. </P>

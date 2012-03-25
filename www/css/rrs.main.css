@@ -12,7 +12,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-style:normal;font-weight:normal}
 body{font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;height:100%;} 
 select,input,textarea{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;} 
 pre,code{font:115% monospace;font-size:100%}
-body.top {color: #000000;background-color:rgb(223, 233, 240);padding:0}
+body.main {color: #000000;background-color:rgb(223, 233, 240);padding:0}
+body.top {padding: 10px;padding-top:20px;}
 h1 {color: #fff;background: #06b;padding: 10px;font-size: 200%;}
 h2 {color: #000;font-size: 150%;padding: 10px 0;}
 h3 {color: #000;font-size: 120%;padding: 10px 0;}
@@ -166,7 +167,7 @@ a.main-button-disabled:active span {
 
 #main-content {
  background-color:white;
- padding:15px;
+ padding:0;
  color:#000000;	
  text-indent: 0px;	
  margin-left:20px; /** separate menu from left */

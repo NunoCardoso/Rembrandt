@@ -5,12 +5,12 @@ require_once(dirname(__FILE__).'/config.inc');
 require_once(dirname(__FILE__).'/Snoopy.class.php');
 
 /* Generates an URL with available GET info */
-function curPageURL($morevars) {
+function curPageURL($morevars, $basepage_ = null) {
 
 	$config = Config::getInstance();
-
-	 $pageURL = $config->urlbasedir."/";
-	 if ((sizeof($_GET)>0 || sizeof($morevars)>0)) {
+	$basepage = (isset($basepage_) ? $basepage_ : "");
+	$pageURL = $config->urlbasedir."/".$basepage;
+	if ((sizeof($_GET)>0 || sizeof($morevars)>0)) {
 		$pageURL .= "?";
 		$vars = array();
 		foreach($morevars as $k=>$v) {$vars[] = urlencode($k)."=".urlencode($v);}
@@ -35,7 +35,7 @@ function generateNavMenu() {
 
 		echo "<LI>\n";
 		if ($nav_item['link'] == "yes") {
-			echo "<A HREF=\"".curPageURL(array('do'=>$nav_item['action']))."\">".$nav_item['label'][$lang]."</A>";
+			echo "<A TARGET='myframe' HREF=\"".curPageURL(array('do'=>$nav_item['action']), "frontpage.php")."\">".$nav_item['label'][$lang]."</A>";
 		} else {
 			echo "".$nav_item['label'][$lang]."";
 		}
@@ -49,9 +49,9 @@ function generateNavMenu() {
 				echo "<LI>\n";
 				if ($nav_subitem['link'] == "yes") {
 					if ($nav_subitem['url'] != null) {
-						echo "<A HREF=\"".$nav_subitem['url']."\">".$nav_subitem['label'][$lang]."</a>";
+						echo "<A TARGET='myframe' HREF=\"".$nav_subitem['url']."\">".$nav_subitem['label'][$lang]."</a>";
 					} else {
-						echo "<A HREF=\"".curPageURL(array('do'=>$nav_subitem['action']))."\">".$nav_subitem['label'][$lang]."</a>";
+						echo "<A TARGET='myframe' HREF=\"".curPageURL(array('do'=>$nav_subitem['action']), "frontpage.php")."\">".$nav_subitem['label'][$lang]."</a>";
 					}
 				} else {
 					echo "".$nav_subitem['label'][$lang]."";

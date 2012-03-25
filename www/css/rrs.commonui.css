@@ -7,8 +7,18 @@
 
 /** Box for error display in the waiting div */
 .rrs-error-message {
-	border:2px solid red; 
+  border:2px solid red; 
   background:#FFAAAA;
+  padding: 5px;
+ -moz-border-radius: 4px;
+ -webkit-border-radius: 4px;
+}
+
+/** Box for ok display in the waiting div */
+.rrs-ok-message {
+  border:2px solid green; 
+  background:#AAFFAA;
+  padding: 5px;
  -moz-border-radius: 4px;
  -webkit-border-radius: 4px;
 }
@@ -120,9 +130,11 @@
 /* the status div place above */
 #rrs-waiting-div {
   z-index:5;  
-  position:absolute; 
-  top:0px; /* to be slightly above header */
-  left:180px;
+  position: relative;
+  top: -50px;
+  height: 0;
+  display: inline-block;
+  float:left;
 }
 
 /* to replicate waiting div messages everywhere */
@@ -133,10 +145,10 @@
 }
 
 .rrs-waiting-div-message {
+  padding: 5px;
  -moz-border-radius: 4px;
  -webkit-border-radius: 4px; 
   background:#e2f2fa;
-  padding:5px; /* if not, empty message leaves a circle */	
 }
 
 .rrs-waiting-div-balloontip {

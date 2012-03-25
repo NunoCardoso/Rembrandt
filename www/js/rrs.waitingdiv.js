@@ -18,8 +18,8 @@ function getWaitingDivCloseButton() {
 }
 
 function waitmessage(language, message) {
-	return "<div class='rrs-waiting-div'><div class='rrs-waiting-div-message'><div style='text-align:center'>"+
-	"<img src=\"img/loading.gif\"> "+(message ? message : i18n['wait-please'][language]) + "</div></div></div>"
+	return "<div style='text-align:left'>"+
+	"<img src=\"img/loading.gif\"> "+(message ? message : i18n['wait-please'][language]) + "</div>"
 }
 
 function waitfunction(language, display) {

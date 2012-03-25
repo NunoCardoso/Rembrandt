@@ -34,24 +34,24 @@ if (!$collection) $collection = $default_collection;
 if (!$collection_id) $collection_id = $default_collection_id;
 
 $suggestion = $_COOKIE['search_suggestion']; // true or false, for checked 
-?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-<html lang="<?php echo $lang; ?>" xmlns="http://www.w3.org/1999/xhtml">
-
+echo <<<HTML
+<!DOCTYPE html">
+<HTML lang="{$lang}" xmlns="http://www.w3.org/1999/xhtml">
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php
+HTML;
 generateCSS($do);
 generateJS($config);
-?>
-<title><?php echo $i18n->title[$do][$lang];?></title>
-<link rel="alternate" type="application/rss+xml" title="<?php echo $i18n->news['title'][$lang];?>" href="<?php echo $config->feedrss[$lang];?>" />
+echo <<<HTML
+<title>{$i18n->title[$do][$lang]}</title>
+<link rel="alternate" type="application/rss+xml" title="{$i18n->news['title'][$lang]}" href="{$config->feedrss[$lang]}" />
 </HEAD>
+HTML;
+?>
 
 <BODY class="top">
-
-<DIV ID="main-container">
+<DIV ID="main-container">		
 	<DIV ID="main-header">
 		<DIV ID="main-header-logo">
 			<A HREF="<?php echo curPageURL(array('do'=>'home'));?>">
@@ -67,8 +67,8 @@ generateJS($config);
 			</DIV>
 			
 		 <!-- USER DIV -->
-	   	
-      	<?php if (!$user_login) {
+		
+ 			<?php if (!$user_login) {
 				$user_login = $config->default_user[$lang];
 				echo "<DIV ID='rrs-user' USER='" . $config->default_user[$lang] . "' USER_ID='". $config->default_user_id;
 				echo "' api_key='" . $config->api_key . "'>";
@@ -83,9 +83,8 @@ generateJS($config);
 			}
 			echo "</DIV>\n";
 			?>
-	   </DIV>
-    	</DIV>
-	</DIV>	
+		</DIV>
+   	</DIV>
 
 	<DIV ID="main-menu">
 

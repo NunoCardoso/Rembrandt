@@ -30,8 +30,12 @@ Rembrandt.Admin = (function ($) {
 			var api_key=getAPIKey()
 		
 			// Appearing this link means admin was already authenticated 
-			$("#main-content").html(generateHomepageAdminHTML( $(this).attr('USR_PUB_KEY')))
-			addBreadcrumbleHeader($("#rrs-homepage-admin").attr('title'), 'rrs-homepage-admin')				
+			$("body").html(
+				Rembrandt.Admin.generateHomepageAdminHTML( $(this).attr('USR_PUB_KEY') )
+			);
+			addBreadcrumbleHeader(
+				$("#rrs-homepage-admin").attr('title'), 'rrs-homepage-admin'
+			);				
 		})	
 	});
  

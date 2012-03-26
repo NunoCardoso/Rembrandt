@@ -12,7 +12,7 @@ O REMBRANDT 1.3beta1 já está disponível. <a href="<?php echo curPageURL(array
 <div CLASS="main-left-description">
 <B>1. Pesquisa de documentos</B> - Coloque questões simples e adicione entidades na sua consulta, para ver documentos que respondam o que pretende. Os resultados serão exibidos numa página nova.
 </div>
-<div style="display:inline-block; clear:left;">
+<div>
 <?php include("inc/renoir_search_complete.php"); ?>
 </div>
 </DIV>
@@ -23,7 +23,7 @@ O REMBRANDT 1.3beta1 já está disponível. <a href="<?php echo curPageURL(array
 </div>
 
 <!-- position relative positions the waiting div. Margin is for getting space --> 	
-<DIV style="display:inline-block;">
+<DIV>
 
 	<FORM></FORM><!-- must stay -->
 	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">

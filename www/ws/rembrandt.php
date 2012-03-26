@@ -55,7 +55,23 @@ $(document).ready(function() {
 	<DIV ID='main-breadcrumbles' style="display:block;">
 		<B><?php echo $i18n->rembrandt["tag-text"][$lang]; ?></B>  	
 	</DIV>
-	<DIV ID="main-header-menu-right"></DIV>
+	<DIV ID="main-header-menu-right">
+		 <!-- USER DIV -->
+		<?php if (!$user_login) {
+			$user_login = $config->default_user[$lang];
+			echo "<DIV ID='rrs-user' USER='" . $config->default_user[$lang] . "' USER_ID='". $config->default_user_id;
+			echo "' api_key='" . $config->api_key . "'>";
+			echo $config->default_user[$lang] . ". <A HREF='#' CLASS='USER_LOGIN'>" . $i18n->user['login'][$lang] ."</A>";
+		} else {
+			echo "<DIV ID='rrs-user' USER='" . $user_login . "' USER_ID='". $user_id ."'>";				
+			echo $i18n->user['user'][$lang].": ". $user_name . " | ";
+			echo "<A CLASS='USER_SETTINGS' HREF='#'>". $i18n->user['settings'][$lang]." </A> | ";
+			if ($su == true) {echo "<A CLASS='USER_ADMIN' HREF='#'>". $i18n->user['admin'][$lang]." </A> | ";}
+			echo "<A CLASS='USER_LOGOUT' HREF='#'>". $i18n->user['logout'][$lang]." </A>";	
+		}
+		echo "</DIV>\n";
+		?>
+	</DIV>
 </DIV>
 
  <!-- form  --> 

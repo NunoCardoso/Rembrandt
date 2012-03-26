@@ -18,6 +18,7 @@ _.extend(Rembrandt.urls, {
     mailconfirmregistration : 	"mailconfirmregistration.php",
     mailrecoverpassword : 			"mailrecoverpassword.php"
 });
+
 var selectLang={"pt":"Português","en":"Inglês"}
 var selectProc={"OK":"READY","KO":"NOT_READY"}
 var selectSync={"SO":"SO","SD":"SD","SN":"SN"}

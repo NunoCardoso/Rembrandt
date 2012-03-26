@@ -2,8 +2,6 @@
 var submissionLang = ""
 
 $(document).ready(function() {
-	
-	fillMenusAndModals($("#rrs-messages"))
 
    $("#rembrandt-submit-button").live("click",function(ev) {
 		
@@ -22,7 +20,7 @@ $(document).ready(function() {
 		submissionlang = $("#submissionLang").val()
 		var text= $("#text").val()
 
-		jQuery.ajax( { type:"POST", url:restlet_rembrandt_url, 
+		jQuery.ajax( { type:"POST", url:Rembrandt.urls.restlet_rembrandt_url, 
 		    contentType:"application/x-www-form-urlencoded",
 			data: "db="+urlencode(encode_utf8(text))+"&slg="+submissionlang+"&lg="+lang+
 			"&api_key="+guest_api_key,

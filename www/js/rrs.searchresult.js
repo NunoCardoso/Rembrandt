@@ -61,7 +61,7 @@ $().ready(function() {
 		var collection_id = getCollectionID()
 		var api_key = getAPIKey()
 		
-		jQuery.ajax({type:'POST', url:restlet_renoir_search_url+"?q="+urlencode(encode_utf8(query)),
+		jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_renoir_search_url+"?q="+urlencode(encode_utf8(query)),
 			contentType:"application/x-www-form-urlencoded", dataType:'json',
 			data: "u="+urlencode(encode_utf8(user))+
 			(tags ? "&t="+urlencode(encode_utf8($.toJSON(tags))) : "")+

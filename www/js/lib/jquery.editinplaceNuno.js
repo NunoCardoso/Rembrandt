@@ -170,7 +170,7 @@ jQuery.fn.editInPlace = function(options) {
 				//debug(settings.field_type+" "+autocomplete_id)
 				// added by Nuno
 				if(settings.field_type == "autocompletetextfield") {
-					$('#'+autocomplete_id).autocomplete(restlet_dbosuggestion_url, {
+					$('#'+autocomplete_id).autocomplete(Rembrandt.urls.restlet_dbosuggestion_url, {
 						minChars:2, dataType: "json", 
 						multiple: false,
 						mustMatch: false, autoFill: false, matchContains: false,

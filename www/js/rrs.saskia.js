@@ -23,7 +23,7 @@ function displayBodyOfSaskia() {
 
 	// let's query out stuff
 		
-	jQuery.ajax({type:'POST', url:restlet_saskia_collection_url,
+	jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_saskia_collection_url,
 		contentType:"application/x-www-form-urlencoded",
 		data: "do=list-all&l="+limit+"&o="+offset+"&lg="+lang+"&api_key="+api_key,
 		beforeSubmit: waitMessageBeforeSubmit(lang),

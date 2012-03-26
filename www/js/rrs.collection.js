@@ -67,7 +67,7 @@ $().ready(function() {
 		a_clicked.toggleClass("main-button","main-button-disabled")
 
 		jQuery.ajax({
-			type:"POST", url:restlet_saskia_collection_url, dataType:"json",
+			type:"POST", url:Rembrandt.urls.restlet_saskia_collection_url, dataType:"json",
 			data:"lg="+lang+"&do=refreshstats&id="+col_id+"&api_key="+getAPIKey(),
 			beforeSubmit:  button.find("SPAN").html(waitmessage(lang, i18n['refreshing_collection'][lang])), 
 			success:function(response) {

@@ -128,7 +128,7 @@ public class SearchMapping extends WebServiceRestletMapping {
 			User user
 			if (api_key) {
 				user = UserTable.getFromAPIKey(api_key)
-				if (!user) returm sm.userNotFound()
+				if (!user) return sm.userNotFound()
 			} else {
 				user = UserTable.getFromLogin(User.guest)
 			}

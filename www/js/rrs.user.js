@@ -68,7 +68,8 @@ function userSettings() {
 	var api_key = getAPIKey()
 	
 	jQuery.ajax( {
-		type:"POST", url:restlet_saskia_user_url, contentType:"application/x-www-form-urlencoded",
+		type:"POST", url:Rembrandt.urls.restlet_saskia_user_url, 
+		contentType:"application/x-www-form-urlencoded",
 		data: "do=show&lg="+lang+"&api_key="+api_key, 
 		beforeSubmit: waitMessageBeforeSubmit(lang),
 		success: function(response) {
@@ -305,7 +306,7 @@ function modalUserLogin() {
 				dialog.data.find("#login-status").show()
 			
 			// make the AJAX query
-				jQuery.ajax( {type:"POST", url:restlet_saskia_user_url,
+				jQuery.ajax( {type:"POST", url:Rembrandt.urls.restlet_saskia_user_url,
 				contentType:"application/x-www-form-urlencoded",
 				data: "do=login&lg="+lang+"&u="+urlencode(user_login)+"&p="+urlencode(hex_md5(user_password)),
 				beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
@@ -425,7 +426,7 @@ function modalUserForgotPassword() {
 			dialog.data.find("#SendButton").attr("disabled",true)
 			jQuery.ajax( {
 				type:"POST", 
-				url:restlet_saskia_user_url,
+				url:Rembrandt.urls.restlet_saskia_user_url,
 				contentType:"application/x-www-form-urlencoded",
 				data: "do=recoverpassword&lg="+lang+"&em="+urlencode(user_email), 
 				beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
@@ -439,7 +440,7 @@ function modalUserForgotPassword() {
 						// i have a newpassword & tmp_api_key to process
 						jQuery.ajax( {
 							type:"POST", 
-							url:mailrecoverpassword,
+							url:Rembrandt.urls.mailrecoverpassword,
 							contentType:"application/x-www-form-urlencoded",
 							data: "newpassword="+urlencode(response['newpassword'])+"&tmp_api_key="+
 							urlencode(response['tmp_api_key'])+"&lang="+lang+
@@ -507,7 +508,7 @@ function modalUserChangePassword() {
 				if (goodToGo) {
 					jQuery.ajax( {
 						type:"POST", 
-						url:restlet_saskia_user_url,
+						url:Rembrandt.urls.restlet_saskia_user_url,
 						contentType:"application/x-www-form-urlencoded",
 						data: "do=changepassword&lg="+lang+"&u="+urlencode(user)+
 					       "&op="+urlencode(hex_md5(oldpassword))+
@@ -629,7 +630,7 @@ function modalUserCreate() {
 			if (goodToGo) {
 				jQuery.ajax( {
 					type:"POST", 
-					url:restlet_saskia_user_url,
+					url:Rembrandt.urls.restlet_saskia_user_url,
 					contentType:"application/x-www-form-urlencoded",
 					data: "do=register&lg="+lang+"&u="+urlencode(user_login)+
 					       "&p="+urlencode(hex_md5(user_password))+
@@ -649,7 +650,7 @@ function modalUserCreate() {
 							//send confirmation mail
 							jQuery.ajax( {
 							type:"POST", 
-							url:mailconfirmregistration,
+							url:Rembrandt.urls.mailconfirmregistration,
 							contentType:"application/x-www-form-urlencoded",
 							data: "api_key="+urlencode(response['message']['usr_api_key'])+"&lang="+lang+
 							"&email="+urlencode(user_email),
@@ -692,7 +693,7 @@ function modalUserDelete(button) {
 		dialog.data.find("#YesButton").click(function(ev) {
 			
 			jQuery.ajax( {
-				type:"POST", url:restlet_admin_user_url,
+				type:"POST", url:Rembrandt.urls.restlet_admin_user_url,
 				contentType:"application/x-www-form-urlencoded",
 				data: "do=delete&ui="+usr_id+"&lg="+lang+"&api_key="+api_key,
 				beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 

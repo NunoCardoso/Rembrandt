@@ -68,10 +68,10 @@ public class UserMapping extends WebServiceRestletMapping {
 				String user = par["POST"]["u"]
 				String password = par["POST"]["p"]
 				try {
-					user_db = User.getFromLogin(user)
+					user_db = userTable.getFromLogin(user)
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error'][lang]+": "+e.printStackTrace()
-					returm sm.statusMessage(-1, i18n.servermessage['error'][lang], e.getMessage())
+					return sm.statusMessage(-1, i18n.servermessage['error'][lang], e.getMessage())
 				}
 				// no user found
 				if (!user_db) return sm.userNotFound()
@@ -124,7 +124,7 @@ public class UserMapping extends WebServiceRestletMapping {
 				def firstname = par["POST"]["fn"]
 				def lastname = par["POST"]["ln"]
 				def email = par["POST"]["em"]
-				user_db = User.getFromLogin(user)
+				user_db = userTable.getFromLogin(user)
 
 				if (user_db) return sm.statusMessage(-1, i18n.servermessage['user_login_already_taken'][lang])
 
@@ -136,7 +136,7 @@ public class UserMapping extends WebServiceRestletMapping {
 					newuser.usr_id = newuser.addThisToDB()
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error'][lang]+": "+e.printStackTrace()
-					returm sm.statusMessage(-1, i18n.servermessage['error'][lang], e.getMessage())
+					return sm.statusMessage(-1, i18n.servermessage['error'][lang], e.getMessage())
 				}
 				return sm.statusMessage(0, newuser.toMap())
 			}
@@ -194,7 +194,7 @@ public class UserMapping extends WebServiceRestletMapping {
 				user_db = User.getFromLogin(user_login)
 				if (!user_db) return sm.userNotFound()
 				if (user_db.usr_password != oldpassword)
-					returm sm.statusMessage(-1,i18n.servermessage['old_password_dont_match'][lang])
+					return sm.statusMessage(-1,i18n.servermessage['old_password_dont_match'][lang])
 
 				user_db.updatePassword(newpassword)
 				return sm.statusMessage(0, i18n.servermessage['password_changed'][lang])

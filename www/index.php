@@ -99,7 +99,7 @@ HTML;
 	</DIV>
 	
 	<DIV ID="main-content">
-		<IFRAME onload=\"$(this).height($(this).contents().height());\" id='myframe' name='myframe' width='100%' height='100%' frameborder=0 src='frontpage.php?lg=<?php echo $lang; ?>'>
+		<IFRAME onload="$(this).height($(this).contents().height());" id='myframe' name='myframe' width='100%' height='100%' frameborder=0 src='frontpage.php?lg=<?php echo $lang; ?>'>
 		</IFRAME>
 	</DIV> 	
 	<?php footer(); ?>

@@ -1,18 +1,23 @@
-var restlet_saskia_user_url = 	"/Saskia/user";
-var restlet_saskia_task_url =		"/Saskia/task"
-var restlet_saskia_search_url = 	"/Saskia/search";
-var restlet_renoir_search_url = 	"/Renoir/search";
-var restlet_saskia_stats_url = 	"/Saskia/stats";
-var restlet_saskia_collection_url = "/Saskia/collection";
-var restlet_saskia_rdoc_url = 	"/Saskia/rdoc";
-var restlet_saskia_sdoc_url = 	"/Saskia/sdoc";
-var restlet_saskia_ne_url = 		"/Saskia/ne";
-var restlet_suggestion_url = 		"/Renoir/suggest";
-var restlet_dbosuggestion_url =	"/Renoir/dbosuggest";
-var restlet_rembrandt_url = 		"/Rembrandt/api/rembrandt";
-var mailconfirmregistration = 	"mailconfirmregistration.php";
-var mailrecoverpassword = 			"mailrecoverpassword.php";
+var Rembrandt = Rembrandt || {};
 
+Rembrandt.urls = Rembrandt.urls || {};
+
+_.extend(Rembrandt.urls, {
+    restlet_saskia_user_url : 	"/Saskia/user", 
+    restlet_saskia_task_url :		"/Saskia/task",
+    restlet_saskia_search_url : 	"/Saskia/search",
+    restlet_renoir_search_url : 	"/Renoir/search",
+    restlet_saskia_stats_url : 	"/Saskia/stats",
+    restlet_saskia_collection_url : "/Saskia/collection",
+    restlet_saskia_rdoc_url : 	"/Saskia/rdoc",
+    restlet_saskia_sdoc_url : 	"/Saskia/sdoc",
+    restlet_saskia_ne_url : 		"/Saskia/ne",
+    restlet_suggestion_url : 		"/Renoir/suggest",
+    restlet_dbosuggestion_url :	"/Renoir/dbosuggest",
+    restlet_rembrandt_url : 		"/Rembrandt/api/rembrandt",
+    mailconfirmregistration : 	"mailconfirmregistration.php",
+    mailrecoverpassword : 			"mailrecoverpassword.php"
+});
 var selectLang={"pt":"Português","en":"Inglês"}
 var selectProc={"OK":"READY","KO":"NOT_READY"}
 var selectSync={"SO":"SO","SD":"SD","SN":"SN"}
@@ -200,7 +205,7 @@ function getServletEngineFromRole(role, context) {
 		return false
 	} 
 	var therole = (role.toLowerCase() == "admin" ? "admin" : "saskia" )
-	return eval("restlet_"+therole+"_"+context+"_url")
+	return eval("Rembrandt.urls.restlet_"+therole+"_"+context+"_url")
 }
 
 function getUser() {

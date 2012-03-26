@@ -9,7 +9,8 @@ ol,ul{list-style:none}
 caption,th{text-align:left}
 h1,h2,h3,h4,h5,h6{font-size:100%;font-style:normal;font-weight:normal}
 /*q:before,q:after{content:''}*/
-body{font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;height:100%;} 
+body, table td, table th{
+font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;height:100%;} 
 select,input,textarea{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;} 
 pre,code{font:115% monospace;font-size:100%}
 body.main {color: #000000;background-color:rgb(223, 233, 240);padding:0}

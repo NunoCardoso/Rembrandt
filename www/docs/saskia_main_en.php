@@ -4,4 +4,4 @@ To search the collections accessible to guests, visit the <a href="<?php echo cu
 
 	<H3>New user?</H3>
 	<P>To start your new collection, first you <a class='USER_LOGIN' href='#'>have to register or login</A>.
-	<H3>These are the accessible collections:</H3>
+	<P>These are the accessible collections:</P>

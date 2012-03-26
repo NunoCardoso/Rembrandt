@@ -3,7 +3,7 @@ $().ready(function() {
 	
 		// set the autocomplete, if the page loads with it on */
 	if ($("#rrs-search-suggestion").attr("checked")) {
-			$("#q").autocomplete(restlet_suggestion_url, {
+			$("#q").autocomplete(Rembrandt.urls.restlet_suggestion_url, {
 			minChars: 2, dataType: "json", multiple: true,
 			mustMatch: false, autoFill: false, matchContains: false,
 			formatItem: formatItem, formatMatch: formatMatch,

@@ -3,4 +3,4 @@
 
 <H3>Novo utilizador?</H3>
 <P>Para começar a sua nova colecção, primeiro <a class='USER_LOGIN' href='#'>registe-se ou entre o seu login</A>.
-<H3>Estas são as colecções disponíveis:</H3>
+<P>Estas são as colecções disponíveis:</P>

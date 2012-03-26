@@ -25,22 +25,23 @@
 #rrs-doc-display-menu {
    height:20px;
    width:100%;
-   z-index:11;
-   background-image:url(../img/navi2_bg.png);
+   z-index:10;
+   background-color: lightBlue;
 	font-size:12px;
 	color:#000000;
-	position:relative; /** ESSENCIAL so that the pop up menu works */
 	text-indent:0;
 	list-style: none;
 }
 
-#rrs-doc-display-menu ul li {
+#rrs-doc-display-menu div {
+   z-index:20;
+  position: relative;
+}
+
+#rrs-doc-display-menu div ul li {
 	list-style: none;
 	display:block;
 	float:left;
-	background-image: url(../img/navi2_bg_divider.png);
-   background-repeat: no-repeat;
-   background-position: right;
    padding-right: 10px;
    padding-left: 10px;
    line-height: 20px;

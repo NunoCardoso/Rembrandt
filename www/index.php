@@ -44,6 +44,7 @@ HTML;
 generateCSS($do);
 generateJS($config);
 echo <<<HTML
+<script type="text/javascript" src="js/lib/jquery.iframe-auto-height.plugin.1.6.0.min.js"></script>
 <title>{$i18n->title[$do][$lang]}</title>
 <link rel="alternate" type="application/rss+xml" title="{$i18n->news['title'][$lang]}" href="{$config->feedrss[$lang]}" />
 </HEAD>
@@ -51,6 +52,11 @@ HTML;
 ?>
 
 <BODY class="main">
+	<script>
+	$(document).ready(function () {
+    $('iframe').iframeAutoHeight();  
+  });
+</script>
 <DIV ID="main-container">		
 	<DIV ID="main-header">
 		<DIV ID="main-header-logo">
@@ -66,23 +72,6 @@ HTML;
 				<a href="<?php echo curPageURL(array('lg'=>'en'));?>">English</a>	
 			</DIV>
 			
-		 <!-- USER DIV -->
-		
- 			<?php if (!$user_login) {
-				$user_login = $config->default_user[$lang];
-				echo "<DIV ID='rrs-user' USER='" . $config->default_user[$lang] . "' USER_ID='". $config->default_user_id;
-				echo "' api_key='" . $config->api_key . "'>";
-				echo $config->default_user[$lang] . ". <A HREF='#' CLASS='USER_LOGIN'>" . $i18n->user['login'][$lang] ."</A>";
-			} else {
-				echo "<DIV ID='rrs-user' USER='" . $user_login . "' USER_ID='". $user_id ."'>";				
-				echo $i18n->user['user'][$lang].": ". $user_name . " | ";
-				echo "<A CLASS='USER_SETTINGS' HREF='#'>". $i18n->user['settings'][$lang]." </A> | ";
-				if ($su == true) {echo "<A CLASS='USER_ADMIN' HREF='#'>". $i18n->user['admin'][$lang]." </A> | ";}
-				echo "<A CLASS='USER_LOGOUT' HREF='#'>". $i18n->user['logout'][$lang]." </A>";
-				
-			}
-			echo "</DIV>\n";
-			?>
 		</DIV>
    	</DIV>
 
@@ -99,7 +88,7 @@ HTML;
 	</DIV>
 	
 	<DIV ID="main-content">
-		<IFRAME onload="$(this).height($(this).contents().height());" id='myframe' name='myframe' width='100%' height='100%' frameborder=0 src='frontpage.php?lg=<?php echo $lang; ?>'>
+		<IFRAME name='myframe' width='100%' height='100%' frameborder=0 src='frontpage.php?lg=<?php echo $lang; ?>'>
 		</IFRAME>
 	</DIV> 	
 	<?php footer(); ?>

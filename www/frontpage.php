@@ -113,7 +113,7 @@ if ($do == "search" || $do == "tag" || $do == "collections") {
 
 	} else if ($do != "search" && $do != "tag" && $do != "collections") { // renoir-search manages its own space */
 
-		echo "<DIV ID='main-body'>\n";
+		echo "<DIV ID='main-body' STYLE='margin-left:0px;'>\n";
 
 		switch($do) {
 

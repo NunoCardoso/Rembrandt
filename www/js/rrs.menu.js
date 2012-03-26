@@ -134,7 +134,7 @@ function addSlidableDIV(divtohide, divtoshow, options) {
 	// activate newdiv stuff, now that we have it on DOM
 	$('TABLE.tablesorter', divtoshow).tablesorter()
  	updateEditInPlace(divtoshow);
-					
+
 	// add submenu to side menu
 	if (!isUndefined(options.sidemenu)) {
 		var sidemenu = addSubmeuOnSideMenu(options.sidemenu, options.role)	
@@ -353,7 +353,8 @@ function callbackHorizontalSlide(divtohide, divtoshow) {
 	// iterate through all side menus, check if its main object (rdoc, collection, etc) 
 	// matches any of the divs	
 	$("DIV.main-side-menu-section").each(function(index, item) {
-		var section = $(item).attr("id").match(/main-side-menu-section-([^-]+)$/)
+		var id = $(item).attr("id"),
+		   section = (!isUndefined(id) ? id.match(/main-side-menu-section-([^-]+)$/) : undefined)
 		if (!isUndefined(section) && section.length >= 2) {
 			var sectionitem = section[1]
 			if (sectionitem == divtohideitem) {

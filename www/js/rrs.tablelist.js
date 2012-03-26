@@ -24,7 +24,7 @@ $().ready(function() {
 		var limit = pagerdiv.find("#limit option:selected").val() // limit
 		// offset eith comes from an arrow's link attr, or from the box
 		var offset = (a_clicked.attr("OFFSET") != null ? a_clicked.attr("OFFSET") : 
-			((parseInt(pagerdiv.find("INPUT:text#page").val())-1)*limit) ) 
+			((parseInt(pagerdiv.find("INPUT#page").val())-1)*limit) ) 
 		var selected = pagerdiv.find("#admin-filter-column-name option:selected").val() // selected
 		var column = (selected ? selected: "") // column
 		var value = pagerdiv.find("#admin-filter-column-value").val() // value to filter
@@ -55,10 +55,11 @@ $().ready(function() {
 				}
 				
 				divtoupdate = pagerdiv.parents('DIV.main-slidable-div')
-				var functiontocall = (!isUndefined(render) ?  eval(render) : 
-					eval("generate"+ UpperCaseFirstLetter(context)+"ListDIV") )
 				
-				var newdiv = functiontocall(response['message'],su, role, {})
+				var functiontocall = (!isUndefined(render) ?  eval(render) : 
+				eval("generate"+ UpperCaseFirstLetter(context)+"ListDIV") )
+				
+				var newdiv = functiontocall.call(response['message'],su, role, {})
 				$("DIV.rrs-pageable", divtoupdate).html( $("DIV.rrs-pageable", newdiv).html() )
 								
 				$('TABLE.tablesorter', divtoupdate).tablesorter()
@@ -178,7 +179,7 @@ function updateEditInPlace(div) {
 	
 	$(".editinplace", div).each(function() {
 		var self = $(this)
-		var url = eval("restlet_admin_"+self.attr("CONTEXT")+"_url")
+		var url = eval("Rembrandt.urls.restlet_admin_"+self.attr("CONTEXT")+"_url")
 		
 		var params = ""
 		// for user_on_collection, there's two additional parameters: 
@@ -371,7 +372,7 @@ function updateEditInPlace(div) {
 		self.editInPlace({
 			field_type:"select",
 			select_options:select_options,
-			url:eval("restlet_admin_"+self.attr("CONTEXT")+"_url"),
+			url:eval("Rembrandt.urls.restlet_admin_"+self.attr("CONTEXT")+"_url"),
 			dataType:"json",
 			default_text:i18n['default_text'][lang],
 			update_value:"v",

@@ -52,7 +52,7 @@ $().ready(function() {
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
 			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "rdoc"),
-			"postdata":"do=show&doc_id="+doc_id+"&lg="+lang+	"&api_key="+api_key,
+			"postdata":"do=show&doc_id="+doc_id+"&lg="+lang+"&api_key="+api_key,
 			"divcreator":generateRdocShowDIV, 
 			"divcreatoroptions":{},
 			"sidemenu":"rdoc", 
@@ -252,7 +252,6 @@ function generateSdocShowDIV(doc, su, role, options) {
 		
 	// now that we have a doc_div, let's set it up. 
 	appendDocDisplayTo(newdiv)
-					
 	addDocumentTitleToDocDisplay(newdiv, texttitle)
 	addDocumentBodyToDocDisplay(newdiv, textbody)
 	
@@ -271,15 +270,15 @@ function generateRdocShowDIV(doc, su, role, options) {
 	var canadmin = (su || role.toLowerCase() == "col-admin")
 	
 	// newdiv
-	var newdiv = $("<DIV ID='rrs-"+context+"-show-"+doc_id+"' CLASS='main-slidable-div' "+
+	var newdiv = $("<DIV ID='rrs-"+context+"-show-"+doc_id+"' CLASS='main-slidable-div rrs-doc-display' "+
 	" TITLE='"+shortenTitle(doc_original_id)+"' STYLE='display:none;overflow:auto;'></DIV>")
 	
 	var htmltitle = rembrandt2HTML(texttitle)
 	var htmlbody = rembrandt2HTML(textbody)
 	
 	// now that we have a doc_div, let's set it up. 
+
 	appendDocDisplayTo(newdiv)
-					
 	addDocumentTitleToDocDisplay(newdiv, htmltitle)
 	addDocumentBodyToDocDisplay(newdiv, htmlbody)
 	

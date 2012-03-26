@@ -319,21 +319,3 @@ var i18n = {'class':{'en':{
 	'yes':{'pt':'Sim', 'en':'Yes'}
 }
 
-
-// fill out modal windows
-function fillMenusAndModals(messages) {
-// menu edit
-
-    messages.append("<ul class='EditMenu NEmenu'>"+
-    	"<li><a href='#change'>"+i18n["change"][lang]+"...</a></li>"+
-    	"<li><a href='#delete'>"+i18n["delete"][lang]+"</a></li>"+
-    	"</ul>")
-
-// menu select
-   messages.append("<ul class='SelectionMenu NEmenu'>"+
-    "<li><a href='#createalt'>"+i18n["createalt"][lang]+"...</a></li>"+
-    "<li><a href='#createne'>"+i18n["createne"][lang]+"...</a></li>"+
-    "<li><a href='#deleteall'>"+i18n["deleteall"][lang]+"</a></li>"+
-    "</ul>")
-
-}

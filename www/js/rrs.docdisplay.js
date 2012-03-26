@@ -155,15 +155,9 @@ $(document).ready(function() {
 
 
 function showTooltip(ne) {	
-	debug("Show tooltip docdisplay 159")
-	debug(!hasTooltip(ne))
-	debug(ne.data('bt-box') != null)
-	// == 'object')
-	
 	if (!hasTooltip(ne) ) {
-		debug("Still here2")
-
 		var tooltip=$("#rrs-tooltips", ne.parents(".rrs-doc-display"))
+		if (ne.attr("title") === undefined) {ne.attr("title", "")}
 		tooltip.append(createTooltipText(ne))
 		addTooltip(ne);
 	}
@@ -176,21 +170,38 @@ function hasTooltip(ne) {
 
 function appendDocDisplayTo(element) {
    element.append(generateDocDisplay())
-	element.find("#rrs-doc-display-menu UL LI").hover(function() {
+   element.find("#rrs-doc-display-menu div UL LI").hover(function() {
 		$(this).children("DIV").show()
 	}, function() { 
 	   $(this).children("DIV").hide()
 	});
-	setupNEs(element)
 }
 
 function generateDocDisplay() {
 	var s = ""
 	  s += "<DIV ID=\"rrs-doc-display-header\">";
 	    s += "<DIV ID=\"rrs-doc-display-status\"></DIV>";
-	    s += "<DIV ID=\"rrs-doc-display-menu\">";
-	       s += populateMenu() 
-		 s += "</DIV>";
+	    s += "<DIV ID=\"rrs-doc-display-menu\"><DIV>";
+		s += "<UL>\n";	
+		s += "<LI>View";
+		s +=" <DIV class=\"main-nav-submenu\">";
+	 	   s += "<UL>";
+			s += "<LI><A ID='show-all-tooltips' HREF='#'>"+i18n['showalltooltips'][lang]+"</A></LI>";
+			s += "<LI><A ID='hide-all-tooltips' HREF='#'>"+i18n['hidealltooltips'][lang]+"</A></LI>";
+			s += "<LI><A ID='show-all-relations' HREF='#'>"+i18n['showallrelations'][lang]+"</A></LI>";
+			s += "<LI><A ID='hide-all-relations' HREF='#'>"+i18n['hideallrelations'][lang]+"</A></LI>";
+	 	   s += "</UL>";
+		s += " </DIV></LI>\n";
+		s += "<LI>Mode";
+		s +=" <DIV class=\"main-nav-submenu\">";
+	 	   s += "<UL>";
+			s += "<LI><A ID='view-mode-on' HREF='#'>"+i18n['viewon'][lang]+"</A></LI>";
+			s += "<LI><A ID='select-mode-on' HREF='#'>"+i18n['selecton'][lang]+"</A></LI>";
+			s += "<LI><A ID='edit-mode-on' HREF='#'>"+i18n['editon'][lang]+"</A></LI>";
+		   s += "</UL>";
+		s += " </DIV></LI>\n";
+		s += "</UL>\n";
+		 s += "</DIV></DIV>";
  	  s += "</DIV>";	
 	  s += "<DIV ID=\"rrs-doc-display-body\">";
 	  	 s += "<DIV ID=\"rrs-doc-display-canvas\"></DIV>";
@@ -212,30 +223,6 @@ function addDocumentBodyToDocDisplay(display, docbody) {
 	display.find("#rrs-document-body").html(docbody)
 }
 
-function populateMenu() {
-	var s = "<UL>\n";	
-	s += "<LI>View";
-	s +=" <DIV class=\"main-nav-submenu\">";
- 	   s += "<UL>";
-		s += "<LI><A ID='show-all-tooltips' HREF='#'>"+i18n['showalltooltips'][lang]+"</A></LI>";
-		s += "<LI><A ID='hide-all-tooltips' HREF='#'>"+i18n['hidealltooltips'][lang]+"</A></LI>";
-		s += "<LI><A ID='show-all-relations' HREF='#'>"+i18n['showallrelations'][lang]+"</A></LI>";
-		s += "<LI><A ID='hide-all-relations' HREF='#'>"+i18n['hideallrelations'][lang]+"</A></LI>";
- 	   s += "</UL>";
-	s += " </DIV></LI>\n";
-	
-	s += "<LI>Mode";
-	s +=" <DIV class=\"main-nav-submenu\">";
- 	   s += "<UL>";
-		s += "<LI><A ID='view-mode-on' HREF='#'>"+i18n['viewon'][lang]+"</A></LI>";
-		s += "<LI><A ID='select-mode-on' HREF='#'>"+i18n['selecton'][lang]+"</A></LI>";
-		s += "<LI><A ID='edit-mode-on' HREF='#'>"+i18n['editon'][lang]+"</A></LI>";
-	   s += "</UL>";
-	s += " </DIV></LI>\n";
-	s += "</UL>\n";
-	return s
-}
-
 function cleanDocDisplay(docdisplay) {
 	$("#rrs-doc-display-status", docdisplay).html("Ready.")
 	$("#rrs-doc-display-canvas", docdisplay).empty()
@@ -248,6 +235,7 @@ function addTooltip(ne) {
 	ne.bt({
 		trigger: 'none', 		// I'll handle the click events, to solve nested DIVs...
 		// get this HTML to display - for a given NE, and a civen classification
+
 		contentSelector: "$('#"+ getUniqueIDfor(ne,'tooltip')+"')", 
 		// add an opacity value
 		fill: ne.css('background-color').replace(/rgb/,"rgba").replace(/\)$/,",0.8)"),
@@ -272,17 +260,24 @@ function addTooltip(ne) {
 // add menu-tooltip for NE edit (triggered on icon click)
 function addEditMenuTooltip(ne_tag_edit) {
 	if (!hasTooltip(ne_tag_edit)) {
-		ne_tag_edit.bt({
+		if (ne_tag_edit.attr("title") === undefined) {ne_tag_edit.attr("title","")}
+		ne_tag_edit.bt(
+		"<ul class='EditMenu NEmenu'>"+
+			    	"<li><a href='#change'>"+i18n["change"][lang]+"...</a></li>"+
+			    	"<li><a href='#delete'>"+i18n["delete"][lang]+"...</a></li>"+
+			    	"</ul>",
+			{
 		trigger: 'none', 
 		// get this HTML to display - for a given NE, and a civen classification
 		contentSelector: "$('.EditMenu')", 
-		fill: 'rgba(239, 250, 252, .8)', //#effafc
+		fill: 'rgba(239, 250, 252, 1)', //#effafc
 		clickAnywhereToClose: true,
 	    closeWhenOthersOpen: true,
 		textzIndex:       499,                  // z-index for the text
     	boxzIndex:        498,                  // z-index for the "talk" box (should always be less than textzIndex)
     	wrapperzIndex:    497,
-		strokeWidth: 1, strokeStyle: '#a0b7c4',
+		strokeWidth: 1, 
+		strokeStyle: '#a0b7c4',
 		cssStyles: {padding: '5px', display:'block'},
 		positions: ['top'],
 		shadow: false,
@@ -302,12 +297,19 @@ function addSelectionMenuTooltip(selected_terms) {
 //	debug(term)
 	if (hasTooltip(term)) {showMenuTooltip(term)}
 	else {
-	term.bt({
+		if (term.attr("title") === undefined) {term.attr("title","")}
+		
+	term.bt(
+		"<ul class='SelectionMenu NEmenu'>"+
+    "<li><a href='#createalt'>"+i18n["createalt"][lang]+"...</a></li>"+
+    "<li><a href='#createne'>"+i18n["createne"][lang]+"...</a></li>"+
+    "<li><a href='#deleteall'>"+i18n["deleteall"][lang]+"...</a></li>"+
+    "</ul>",{
 		trigger: 'none', 
 		// get this HTML to display - for a given NE, and a civen classification
 		contentSelector: "$('.SelectionMenu')", 
 	    closeWhenOthersOpen: true,
-		fill: 'rgba(239, 250, 252, .8)', //#effafc
+		fill: 'rgba(239, 250, 252, 1)', //#effafc
    		textzIndex:       599,  
     	boxzIndex:        598,  
     	wrapperzIndex:    597,
@@ -1336,15 +1338,15 @@ function initializeSelectMode(display) {
 	 //delay helps prevent recursive selection. The menu hovers over selection, and menu click 
 	// could trigger a recursive selection. Well, delay is better than ev.stopPropagation
 
-	status = $("#rrs-doc-display-status", display.parents(".rrs-doc-display"))
+	stat = $("#rrs-doc-display-status", display.parents(".rrs-doc-display"))
 	display.selectable({filter:'li[t]',  delay: 100 })
 
 	
 	display.bind("selectablestart", function() {
-		status.html("Drag to choose terms. Drag with Ctrl/Meta for multiple terms.")
+		stat.html("Drag to choose terms. Drag with Ctrl/Meta for multiple terms.")
 	});
 	display.bind("selectablestop", function() {
-		status.html("Ended selection.")
+		stat.html("Ended selection.")
 		addSelectionMenuTooltip( $(".ui-selected", display))
 	});	
 }

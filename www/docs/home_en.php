@@ -11,7 +11,7 @@ REMBRANDT 1.3beta1 is avaliable. <a href="<?php echo curPageURL(array('do'=>'dow
 <DIV CLASS="main-center-note" >
 <div CLASS="main-left-description">
 <B>1. Document search</B> - Submit simple questions and add entities to your queries, to see documents that meet what you want. Results will be displayed in a new page.</div>
-<div style="display:inline-block; clear:left;">
+<div>
 <?php include("inc/renoir_search_complete.php"); ?>
 </div>
 </DIV>
@@ -20,7 +20,7 @@ REMBRANDT 1.3beta1 is avaliable. <a href="<?php echo curPageURL(array('do'=>'dow
 <div CLASS="main-left-description">
 <B>2. Document annotation</B> - Write / paste a text in the text area below, and push the button. Entities in the text will be annotated and grounded, and you may see relationships between them.</div>
 
-<DIV style="display:inline-block;">
+<DIV>
 
 	<FORM></FORM><!-- must stay -->
   	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">

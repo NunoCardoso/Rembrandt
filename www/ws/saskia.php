@@ -18,7 +18,7 @@ if (!$collection_id) $collection_id = $default_collection_id;
 
 echo <<<HTML
 <!DOCTYPE html">
-<html lang="{$lang}">
+<html lang="{$lang}" style="overflow: hidden;">
 <title>{$i18n->saskia["title"][$lang]}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <base href="{$config->urlbasedir}/">
@@ -38,28 +38,36 @@ $(document).ready(function() {
 	<DIV ID='main-side-menu-header'>
 	 <?php echo $i18n->message['options'][$lang]; ?>
 	</DIV>
-	
+	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
+		<DIV CLASS="rrs-waiting-div-message"></DIV>
+		<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
+	</DIV>
+	<DIV CLASS="rrs-saskia-logo">
+		<IMG SRC="<?php echo $config->imgdir."/".$config->saskia_head_image;?>">
+	</DIV>
 	<DIV CLASS='main-side-menu-section'>
 	</DIV>	
 </DIV>
 
 <DIV ID="main-header-menu" CLASS="main-space-for-side-menu">
-  <DIV ID='main-breadcrumbles'></DIV>
-</DIV>
-
-<!-- body --> 
-
-<DIV ID="main-form">
-<!-- SEARCH DIV - includes logo -->
-	<DIV ID="rrs-search-box">
-		<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
-			<DIV CLASS="rrs-waiting-div-message"></DIV>
-			<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
-		</DIV>
-		<DIV CLASS="rrs-logo">
-			<IMG SRC="<?php echo $config->imgdir."/".$config->saskia_head_image;?>">
-		</DIV>	
-	</DIV> 	
+    <DIV ID='main-breadcrumbles'></DIV>
+    <DIV ID="main-header-menu-right">
+		 <!-- USER DIV -->
+		<?php if (!$user_login) {
+			$user_login = $config->default_user[$lang];
+			echo "<DIV ID='rrs-user' USER='" . $config->default_user[$lang] . "' USER_ID='". $config->default_user_id;
+			echo "' api_key='" . $config->api_key . "'>";
+			echo $config->default_user[$lang] . ". <A HREF='#' CLASS='USER_LOGIN'>" . $i18n->user['login'][$lang] ."</A>";
+		} else {
+			echo "<DIV ID='rrs-user' USER='" . $user_login . "' USER_ID='". $user_id ."'>";				
+			echo $i18n->user['user'][$lang].": ". $user_name . " | ";
+			echo "<A CLASS='USER_SETTINGS' HREF='#'>". $i18n->user['settings'][$lang]." </A> | ";
+			if ($su == true) {echo "<A CLASS='USER_ADMIN' HREF='#'>". $i18n->user['admin'][$lang]." </A> | ";}
+			echo "<A CLASS='USER_LOGOUT' HREF='#'>". $i18n->user['logout'][$lang]." </A>";	
+		}
+		echo "</DIV>\n";
+		?>
+	</DIV>
 </DIV>
 
 <DIV ID="main-body">

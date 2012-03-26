@@ -39,6 +39,7 @@ a:hover {color:#0000aa;text-decoration:underline;}
 #main-body.main-body-admin {
  background-color:#FFDDDD;
 padding:3px;
+margin-left:0px;
 }
 
 #main-body h1,h2,h3,h4 {
@@ -243,7 +244,6 @@ a.main-button-disabled:active span {
 
 /** The floating right header menu */
 #main-header-menu-right {
-  position:absolute;
   float:right;
   text-align:right;
   right:0;

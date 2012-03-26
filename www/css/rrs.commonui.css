@@ -3,6 +3,7 @@
 #rrs-collections {
   font-size: 11px;
   margin-right:15px;	
+float: right;
 }
 
 /** Box for error display in the waiting div */
@@ -28,6 +29,12 @@
 	margin-right:10px;
 }
 
+.rrs-saskia-logo {
+	display: block;
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-top: 10px;
+}
 
 /** The advanced search div */
 #rrs-search-advanced-div {
@@ -125,6 +132,7 @@
 /** User management box */
 #rrs-user {
   font-size: 11px;	
+  float:right;
 }
 
 /* the status div place above */
@@ -148,6 +156,7 @@
  -moz-border-radius: 4px;
  -webkit-border-radius: 4px; 
   background:#e2f2fa;
+  padding:5px;
 }
 
 .rrs-waiting-div-balloontip {

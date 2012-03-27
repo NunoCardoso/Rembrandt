@@ -22,8 +22,8 @@ $(document).ready(function() {
 
 		jQuery.ajax( { type:"POST", url:Rembrandt.urls.restlet_rembrandt_url, 
 		    contentType:"application/x-www-form-urlencoded",
-			data: "db="+urlencode(encode_utf8(text))+"&slg="+submissionlang+"&lg="+lang+
-			"&api_key="+guest_api_key,
+			data: "db="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(text))+"&slg="+submissionlang+"&lg="+lang+
+		    "&api_key="+Rembrandt.constants.guest_api_key,
 			beforeSubmit: waitMessageBeforeSubmit(lang),
 			// respond with JSON
 			success: function (response) {
@@ -51,7 +51,6 @@ $(document).ready(function() {
 				errorMessageWaitingDiv(lang, response)		
 			}
 		});
-		debug("done")
 
 		submitbutton.attr('disabled',false)
 	});
@@ -130,7 +129,6 @@ function HTML2Rembrandt(sourcecode) {
 
 function rembrandt2HTML(response) {
 	if (!response) return response
-	//debug("Response length: "+response.length)
 	var state = 0;
 	var sindex = 0;
 	var tindex = 0;
@@ -193,7 +191,6 @@ function rembrandt2HTML(response) {
 		$(this).addClass("NE")
 		$(this).addClass($(this).attr("C1")).addClass($(this).attr("C2")).addClass($(this).attr("C3"))	
 	});
-//	debug("Convert: "+d.html())
 	return d.html()	 
 }
 

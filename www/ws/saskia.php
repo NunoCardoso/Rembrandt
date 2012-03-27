@@ -18,7 +18,7 @@ if (!$collection_id) $collection_id = $default_collection_id;
 
 echo <<<HTML
 <!DOCTYPE html">
-<html lang="{$lang}" style="overflow: hidden;">
+<html lang="{$lang}">
 <title>{$i18n->saskia["title"][$lang]}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <base href="{$config->urlbasedir}/">

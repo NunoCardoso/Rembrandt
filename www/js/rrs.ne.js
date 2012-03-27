@@ -13,7 +13,7 @@ $().ready(function() {
 		ev.preventDefault();
 		var a_clicked = $(this)
 		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
-		var api_key = getAPIKey()
+		var api_key = Rembrandt.Util.getApiKey()
 			
 		showSlidableDIV({
 			"title": title,
@@ -21,10 +21,10 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "ne"),
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "ne"),
 			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
-			"divcreator":generateNEListDIV, 
-			"divcreatoroptions":{},
+			"divRender":generateNEListDIV, 
+			"divRenderOptions":{},
 			"sidemenu":null, 
 			"sidemenuoptions":{}
 		})					
@@ -47,7 +47,7 @@ $().ready(function() {
 		ev.preventDefault();
 		var a_clicked = $(this)
 		var id = a_clicked.attr("ID")
-		var api_key = getAPIKey()
+		var api_key = Rembrandt.Util.getApiKey()
 		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
 			
 		showSlidableDIV({
@@ -56,10 +56,10 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "ne"),
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "ne"),
 			"postdata":"do=show&id="+id+"&lg="+lang+	"&api_key="+api_key,
-			"divcreator":generateNEShowDIV, 
-			"divcreatoroptions":{},
+			"divRender":generateNEShowDIV, 
+			"divRenderOptions":{},
 			"sidemenu":"ne", 
 			"sidemenuoptions":{"id":id, "ne_name":title}
 		})		
@@ -207,7 +207,7 @@ function generateNEShowDIV(response, su, role, options) {
 	
 	// newdiv
 	var newdiv = $("<DIV ID='rrs-"+context+"-show-"+id+"' CLASS='main-slidable-div' "+
-	" TITLE='"+shortenTitle(response['ne_name']['nen_name'])+"' STYLE='display:none;overflow:auto;'></DIV>")
+	" TITLE='"+Rembrandt.Util.shortenTitle(response['ne_name']['nen_name'])+"' STYLE='display:none;overflow:auto;'></DIV>")
 	
 	var s = "<DIV CLASS='rrs-pageable'>" 
 
@@ -262,9 +262,9 @@ function generateNEShowDIV(response, su, role, options) {
 
 function modalNECreate (button) {
 	
-	var api_key= getAPIKey()
-	var role = getRole(button)
-	var servlet_url = getServletEngineFromRole(role, 'ne')
+	var api_key= Rembrandt.Util.getApiKey()
+	var role = Rembrandt.Util.getRole(button)
+	var servlet_url = Rembrandt.Util.getServletEngineFromRole(role, 'ne')
 	
 	// admin or user
 	
@@ -323,11 +323,11 @@ function modalNECreate (button) {
 				jQuery.ajax( {
 					type:"POST", url:servlet_url,
 					contentType:"application/x-www-form-urlencoded",
-					data: "do=create&lg="+lang+"&ne_name="+urlencode(encode_utf8(ne_name))+
-					"&c1="+urlencode(encode_utf8(selectedClass))+
-					"&c2="+urlencode(encode_utf8(selectedType))+
-					"&c3="+urlencode(encode_utf8(selectedSubtype))+
-					"&ent="+urlencode(encode_utf8(selectedEntity))+
+					data: "do=create&lg="+lang+"&ne_name="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(ne_name))+
+					"&c1="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedClass))+
+					"&c2="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedType))+
+					"&c3="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedSubtype))+
+					"&ent="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedEntity))+
 					"&api_key="+api_key,					 
 					beforeSubmit: waitMessageBeforeSubmit(lang),
 
@@ -366,8 +366,8 @@ function modalNEDelete(button) {
 		'context':context,
 		'id': button.attr("ID"),
 		'info':button.attr('TITLE'),
-		'servlet_url': getServletEngineFromRole(getRole(button), context),
-		'postdata' : "do=delete&id="+button.attr("ID")+"&lg="+lang+"&api_key="+getAPIKey(),
+		'servlet_url': Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context),
+		'postdata' : "do=delete&id="+button.attr("ID")+"&lg="+lang+"&api_key="+Rembrandt.Util.getApiKey(),
 		'success_message' : i18n['ne_deleted'][lang]
 	})
 }	

@@ -2,7 +2,6 @@
 /** note that points_array not only contains latitude and longitude,
 but also references on the document and position.*/
 function createGoogleMap(map_div, points_array, polylines_array) {
- 		//debug(points_array)
 
          var map = new GMap2(document.getElementById(map_div.attr('id')))
         // definir os pontos
@@ -28,7 +27,6 @@ function createGoogleMap(map_div, points_array, polylines_array) {
 			
 			polylines.push(new GPolyline(polyline_points));
          }
-		//	debug(points)
         // definir a BB
         var bounds = new GLatLngBounds;
         for (var i=0; i<points.length; i++) {
@@ -49,7 +47,6 @@ function createGoogleMap(map_div, points_array, polylines_array) {
 			var position = points_array[i]["Position"]
 			// use the document position, if available, to select numbered icons
 			if (position) {
-			//	debug('Position:'+points_array[i]["Position"])
 				icon.image = "img/maps/iconr"+position+".png"
 			} 
 		//	var marker = new GMarker(points[i])
@@ -57,8 +54,6 @@ function createGoogleMap(map_div, points_array, polylines_array) {
 			markers.push(marker)	
      	
         }  
-//	 debug(markers)
-	
  	 mgr.addMarkers(markers,zoom);
 
 	 for (var i=0; i<polylines.length; i++) {

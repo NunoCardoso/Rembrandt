@@ -7,7 +7,7 @@ $().ready(function() {
 		ev.preventDefault();
 		var a_clicked = $(this)
 		var col_id = a_clicked.attr("ID")
-		var api_key = getAPIKey()
+		var api_key = Rembrandt.Util.getApiKey()
 		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
 			
 		showSlidableDIV({
@@ -25,7 +25,7 @@ $().ready(function() {
 
 		var a_clicked = $(this)
 		var col_id = a_clicked.attr("ID")
-		var api_key = getAPIKey()
+		var api_key = Rembrandt.Util.getApiKey()
 		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
 			
 		showSlidableDIV({
@@ -54,19 +54,19 @@ $().ready(function() {
 
 		// href is in form of offset=$nexthit&limit=$steps
 		var tags = null;
-		var query = $.trim(getQueryVariable("q"));
+		var query = $.trim(Rembrandt.Util.getQueryVariable("q"));
 		var queryterms; if (query) queryterms = query.split(/\s+/);
 		var lang = $("HTML").attr("lang")
-		var user = getUser()
-		var collection_id = getCollectionID()
-		var api_key = getAPIKey()
+		var user = Rembrandt.Util.getUser()
+		var collection_id = Rembrandt.Util.Rembrandt.Util.getCollectionId()
+		var api_key = Rembrandt.Util.getApiKey()
 		
-		jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_renoir_search_url+"?q="+urlencode(encode_utf8(query)),
+		jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_renoir_search_url+"?q="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(query)),
 			contentType:"application/x-www-form-urlencoded", dataType:'json',
-			data: "u="+urlencode(encode_utf8(user))+
-			(tags ? "&t="+urlencode(encode_utf8($.toJSON(tags))) : "")+
-			(qe ? "&qe="+urlencode(encode_utf8(qe)) : "") + 
-			(model ? "&model="+urlencode(encode_utf8(model)) : "") + 
+			data: "u="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(user))+
+			(tags ? "&t="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8($.toJSON(tags))) : "")+
+			(qe ? "&qe="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(qe)) : "") + 
+			(model ? "&model="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(model)) : "") + 
 			(maps ? "&maps="+maps : "") + 
 			"&ci="+collection_id+"&lg="+lang+
 			"&api_key="+api_key+"&o="+offset+"&l="+limit,
@@ -79,9 +79,9 @@ $().ready(function() {
 					var su = false
 					var pubkey = response['usr_pub_key']
 				
-					if (!isUndefined(pubkey)) {
+					if (!_.isUndefined(pubkey)) {
 						$("#main-body").attr('USR_PUB_KEY',pubkey)
-						su = validateSu(pubkey)
+						su = Rembrandt.Util.validadeSu(pubkey)
 					}
 				
 					
@@ -222,8 +222,7 @@ function processMap(res, mapdiv) {
 			} 
 			if (res[i]["polylines"]) {
 				var polylines = res[i]["polylines"]
-			//debug(polylines)
-				if (!isUndefined(polylines)) {
+				if (!_.isUndefined(polylines)) {
 					for (j in polylines) {
 						// let's mark it with the position
 						polylines[j]["Position"] = ii	

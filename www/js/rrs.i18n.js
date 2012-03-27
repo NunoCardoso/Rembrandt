@@ -160,6 +160,7 @@ var i18n = {'class':{'en':{
 	'max_number_docs_per_collection':{'pt':'Num. máx. de docs por colecção', 'en':'Max. nr. of docs per collection'},
 	'max_daily_api_calls':{'pt':'Num. máx. de chamadas diárias à API', 'en':'Max. nr. of API daily calls'},
 	'metadata':{'pt':'Metadados', 'en':'metadata'},
+	'mode':{'pt':'Modo', 'en':'Mode'},
 	'moreinfo':{'pt':'Mais informação', 'en':'More info'},
 	'name':{'pt':'Nome', 'en':'Name'},
 	'ne':{'pt':'EM', 'en':'NE'},

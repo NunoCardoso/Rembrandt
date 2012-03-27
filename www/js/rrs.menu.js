@@ -76,11 +76,11 @@ function showSlidableDIV(options) {
 	} else {	
 		
 		// if no ajax, invoke div creator with no response
-		if (isUndefined(options.ajax) || options.ajax == false) {
+		if (_.isUndefined(options.ajax) || options.ajax == false) {
 			
-			var divgenerator = options.divcreator
+			var divgenerator = options.divRender
 			// make sure the DIV has an id and a title, for the breadcrumble
-			divtoshow = divgenerator(null, options.su, options.role, options.divcreatoroptions)			
+			divtoshow = divgenerator(null, options.su, options.role, options.divRenderOptions)			
 			
 			addSlidableDIV(divtohide, divtoshow, options)
 			
@@ -98,14 +98,14 @@ function showSlidableDIV(options) {
 					var pubkey = response['usr_pub_key']
 				
 					// this is where I refresh the su validation...
-					if (!isUndefined(pubkey)) {
+					if (!_.isUndefined(pubkey)) {
 						$("#main-body").attr('USR_PUB_KEY',pubkey)
-						su = validateSu(pubkey)
+						su = Rembrandt.Util.validadeSu(pubkey)
 					}
 				
-					var divgenerator = options.divcreator
+					var divgenerator = options.divRender
 					// make sure the DIV has an id and a title, for the breadcrumble
-					divtoshow = divgenerator(response['message'], su, options.role, options.divcreatoroptions)
+					divtoshow = divgenerator(response['message'], su, options.role, options.divRenderOptions)
 					
 					addSlidableDIV(divtohide, divtoshow, options)			
 				
@@ -136,7 +136,7 @@ function addSlidableDIV(divtohide, divtoshow, options) {
  	updateEditInPlace(divtoshow);
 
 	// add submenu to side menu
-	if (!isUndefined(options.sidemenu)) {
+	if (!_.isUndefined(options.sidemenu)) {
 		var sidemenu = addSubmeuOnSideMenu(options.sidemenu, options.role)	
 		// show it
 		configureSubmenu(sidemenu, options.role, options.sidemenuoptions)
@@ -152,7 +152,6 @@ function addSlidableDIV(divtohide, divtoshow, options) {
 		substituteLastBreadcrumbleElement(divtoshow.attr('title'), divtoshow.attr('id'))
 		slideDownWith(divtoshow)	
 	} else {		
-		addBreadcrumbleElement(divtoshow.attr('title'), divtoshow.attr('id'))
 		slideLeftToRightWith(divtoshow)
 	}					
 }
@@ -196,7 +195,7 @@ function addSubmeuOnSideMenu(object, role) {
 		
 		case "collection":	
 
-				$("#main-side-menu").append("<DIV CLASS='main-side-menu-section' "+
+		$("#main-side-menu").append("<DIV CLASS='main-side-menu-section' "+
 		"ID='main-side-menu-section-collection' style='display:none'>\n" + 
 		" <DIV CLASS='main-side-menu-section-header'><A HREF='#'></A></DIV>"+
 				"<DIV CLASS='main-side-menu-section-body'> <DIV CLASS='main-side-menu-section-body-element'>"+
@@ -250,7 +249,7 @@ function configureSubmenu(submenu, role, options) {
 	} else if (submenu.attr('id') == "main-side-menu-section-collection") {
 	
 		// sub-menus clicked ask for a submenu refresh, but there is no need to change section header
-		if (options.col_name) $("DIV.main-side-menu-section-header A",submenu).html(shortenTitle(options.col_name))
+		if (options.col_name) $("DIV.main-side-menu-section-header A",submenu).html(Rembrandt.Util.shortenTitle(options.col_name))
 		
 		var links = $("DIV.main-side-menu-section-body-element A", submenu)
 		var id = options['id']
@@ -269,7 +268,7 @@ function configureSubmenu(submenu, role, options) {
 // check if link comes from side menu, so I know if link slide is left-right or up-down 
 
 function getSlideOrientationFromLink(link) {
-	return (link.hasClass('slide-vertically-link') ? 'vertical' : 'horizontal')
+	return ($(link).hasClass('slide-vertically-link') ? 'vertical' : 'horizontal')
 }
 
 function reviewSideMenuMakeActiveFor(submenu, visibledivid) {
@@ -301,7 +300,7 @@ function slideUpWith(newdiv) {
 	var divtohide = $("#main-body DIV.main-slidable-div:visible")
 	if (divtohide.attr('id') != newdiv.attr('id')) {
 	
-		divtohide.hide("slide",{direction: 'up'})
+		divtohide.hide()
 		newdiv.show()
 		callbackVerticalSlide(divtohide, newdiv) // callback function for menu reposition
 	}
@@ -312,7 +311,7 @@ function slideDownWith(newdiv) {
 	var divtohide = $("#main-body DIV.main-slidable-div:visible")
 	if (divtohide.attr('id') != newdiv.attr('id')) {
 	
-		divtohide.hide("slide",{direction: 'down'})
+		divtohide.hide()
 		newdiv.show()
 		callbackVerticalSlide(divtohide, newdiv) // callback function for menu reposition
 	}
@@ -328,6 +327,8 @@ function slideLeftToRightWith(newdiv) {
 	//  $('#'+divtohide.attr('id')+",#"+newdiv.attr('id')).slideToggle();
 		divtohide.hide("slide",{direction: 'left'})
 		newdiv.show("slide",{direction: 'right'})
+		addBreadcrumbleElement(newdiv.attr('title'), newdiv.attr('id'))
+		
 		callbackHorizontalSlide(divtohide, newdiv) // callback function for menu reposition
 	}
 }
@@ -354,8 +355,8 @@ function callbackHorizontalSlide(divtohide, divtoshow) {
 	// matches any of the divs	
 	$("DIV.main-side-menu-section").each(function(index, item) {
 		var id = $(item).attr("id"),
-		   section = (!isUndefined(id) ? id.match(/main-side-menu-section-([^-]+)$/) : undefined)
-		if (!isUndefined(section) && section.length >= 2) {
+		   section = (!_.isUndefined(id) ? id.match(/main-side-menu-section-([^-]+)$/) : undefined)
+		if (!_.isUndefined(section) && section.length >= 2) {
 			var sectionitem = section[1]
 			if (sectionitem == divtohideitem) {
 				hideSubmeuOnSideMenu($(item))
@@ -371,7 +372,7 @@ function callbackHorizontalSlide(divtohide, divtoshow) {
 function callbackVerticalSlide(divtohide, newdiv) {
 	
 	//if (newdiv.attr("id").match("rrs-search-*")) { 
-	//	reviewSideMenuMakeActiveFor($("#main-side-menu-section-search-results"), newdiv.attr("id"))
+	//reviewSideMenuMakeActiveFor($("#main-side-menu-section-search-results"), newdiv.attr("id"))
 	// etc... 
 	
 	// so, let's collect the main object (rdoc, collection, etc) and use it. 
@@ -387,10 +388,10 @@ function addSlidableDivHeaderTo(div, divforbackbutton, divforforwardbutton) {
 		"<DIV CLASS='main-slidable-div-header-left'></DIV>"+
 		"<DIV CLASS='main-slidable-div-header-right'></DIV>"+
 		"</DIV>")
-	if (!isUndefined(divforbackbutton)) {
+	if (!_.isUndefined(divforbackbutton)) {
 		addBackButtonTargeting(div, divforbackbutton)		
 	}
-	if (!isUndefined(divforforwardbutton)) {
+	if (!_.isUndefined(divforforwardbutton)) {
 		addForwardButtonTargeting(div, divforforwardbutton)		
 	}
 }
@@ -425,57 +426,7 @@ function generateForwardButton(div) {
 	"<SPAN>"+div.attr('title')+"</SPAN></A>";
 }			
 
-/****** GENERIC MODALS ********/
 
-function genericDeleteModal(options) {
-
-	$.modal("<div id='modal"+options.context+"Delete' class='rembrandt-modal'>"+
-      "<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+
- 		"<div style='text-align:center; padding:10px;'>"+i18n['delete'][lang]+" "+i18n[options.context][lang]+"</div>"+
-	   "<div style='text-align:left; padding:3px;'>"+i18n['ays'][lang]+" "+i18n['user'][lang]+"?"+
-	   "<div id='info'></div>"+
-		"<div id='rrs-waiting-div' style='text-align:center;margin-bottom:5px'>"+
-		"<div class='rrs-waiting-div-message'></div></div> "+ 
-		"<div id='buttons' style='text-align:center;'>"+
-		"<input type='button' id='YesButton' value='"+i18n["yes"][lang]+", "+i18n["delete"][lang]+"'>"+
-		"<input type='button' id='NoButton' value='"+i18n["no"][lang]+", "+i18n["cancel"][lang]+"'>"+
-		"</div></form></div></div>", {
-
-		onShow: function modalShow(dialog) {
-			// fill out table
-			dialog.data.find("#info").html(options.info)
-			dialog.data.find("#YesButton").click(function(ev) {
-			
-			jQuery.ajax( {
-				type:"POST", url:options.servlet_url,	
-				contentType:"application/x-www-form-urlencoded",
-				data: options.postdata,
-				beforeSubmit: waitMessageBeforeSubmit(lang),
-				success: function(response) {
-					if (response['status'] == -1) {
-						errorMessageWaitingDiv(lang, response['message'])
-						dialog.data.find("#YesButton").attr("value",i18n['retry'][lang])
-						dialog.data.find("#buttons").show()	
-					} else if (response['status'] == 0)  {
-						showCustomMessageWaitingDiv(options.success_message)
-						dialog.data.find("#YesButton").hide()
-						dialog.data.find("#NoButton").attr("value",i18n["OK"][lang])
-					}
-				},
-				error:function(response) {
-					errorMessageWaitingDiv(lang, response['message'])			
-				}
-			})
-		});
-		dialog.data.find("#NoButton").click(function(ev) {
-			ev.preventDefault();
-			$.modal.close();
-		});
-	},
-	overlayCss:{backgroundColor: '#888', cursor: 'wait'}
-	});
-}
-	
 /****** BREADCRUMBLE *******/
 
 function addBreadcrumbleHeader(label, target) {

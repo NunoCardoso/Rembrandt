@@ -18,7 +18,7 @@ $().ready(function() {
 		var context = pagerdiv.attr("CONTEXT") // context - the entity type being changed
 
 		var action = a_clicked.attr("DO") 
-		if (isUndefined(action)) action = "list"
+		if (_.isUndefined(action)) action = "list"
 		
 		var collection_id = pagerdiv.attr("COLID") // collection id, if found
 		var limit = pagerdiv.find("#limit option:selected").val() // limit
@@ -29,16 +29,16 @@ $().ready(function() {
 		var column = (selected ? selected: "") // column
 		var value = pagerdiv.find("#admin-filter-column-value").val() // value to filter
 		var role = pagerdiv.attr("ROLE") 		
-		var api_key = getAPIKey()
+		var api_key = Rembrandt.Util.getApiKey()
 	   
 		// for customized list render functions
 		var render = pagerdiv.attr("RENDER")
 		
-		jQuery.ajax({type:'POST', url:getServletEngineFromRole(role,context),
+		jQuery.ajax({type:'POST', url:Rembrandt.Util.getServletEngineFromRole(role,context),
 		contentType:"application/x-www-form-urlencoded", dataType:'json',
 		data: "do="+action+"&l="+limit+"&o="+offset+"&lg="+lang+
-		(isUndefined(collection_id) ? "" : "&ci="+collection_id)+ // collection_id is undefined if we are paging collections!
-		"&c="+column+"&v="+urlencode(encode_utf8(value))+"&api_key="+api_key, 
+		(_.isUndefined(collection_id) ? "" : "&ci="+collection_id)+ // collection_id is undefined if we are paging collections!
+		"&c="+column+"&v="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(value))+"&api_key="+api_key, 
 		beforeSubmit: waitMessageBeforeSubmit(lang),
 		
 		success: function(response)  {
@@ -49,15 +49,15 @@ $().ready(function() {
 				var su = false
 				var pubkey = response['usr_pub_key']
 				
-				if (!isUndefined(pubkey)) {
+				if (!_.isUndefined(pubkey)) {
 					$("#main-body").attr('USR_PUB_KEY',pubkey)
-					su = validateSu(pubkey)
+					su = Rembrandt.Util.validadeSu(pubkey)
 				}
 				
 				divtoupdate = pagerdiv.parents('DIV.main-slidable-div')
 				
-				var functiontocall = (!isUndefined(render) ?  eval(render) : 
-				eval("generate"+ UpperCaseFirstLetter(context)+"ListDIV") )
+				var functiontocall = (!_.isUndefined(render) ?  eval(render) : 
+				eval("Rembrandt."+Rembrandt.Util.UpperCaseFirstLetter(context)+".generate"+ Rembrandt.Util.UpperCaseFirstLetter(context)+"ListDIV") )
 				
 				var newdiv = functiontocall.call(response['message'],su, role, {})
 				$("DIV.rrs-pageable", divtoupdate).html( $("DIV.rrs-pageable", newdiv).html() )
@@ -85,97 +85,149 @@ $().ready(function() {
 /** create a pagination navigator DIV */
 function createPagerNavigation(options) {
 	
-	var limit = options.response['limit'] // max amount of itens per page
-	var page = options.response['page'] // real amount of itens per page
-	var offset = options.response['offset']
-	var total = options.response['total']
-	var column = options.response['column']
-	var value = options.response['value']
-	var collection_id = options.response['col_id'] // only relevant for sdoc, rdoc, etc
-	
-	var firstpage = (total > 0 ? 1 : 0)
-	
-	var currpage = Math.ceil((parseInt(offset)+parseInt(page))/limit)
-	var lastpage = Math.ceil(total/limit)
-	var prevpage = (currpage-1 < firstpage?  firstpage : currpage-1)
-	var nextpage = (currpage+1 > lastpage ? lastpage : currpage+1)
+	var data = {
+		limit		: options.response['limit'], // max amount of itens per page
+		page		: options.response['page'], // real amount of itens per page
+		offset		: options.response['offset'],
+		total		: options.response['total'],
+		column		: options.response['column'],
+		value		: (!_.isUndefined(options.response['value']) ?  options.response['value'] : ""),
+		collection_id: options.response['col_id'],
+		context		: options.context,
+		role		: options.role,
+		l_contexts	: i18n[options.contexts][lang],
+		l_showing	: i18n['showing'][lang],
+		l_page		: i18n['page'][lang],
+		l_of		: i18n['of'][lang],
+		l_perpage	: i18n['perpage'][lang],
+		l_filter_by : i18n['filterby'][lang],
+		l_having	: i18n['having'][lang],
+		l_go		: i18n['go'][lang]
+	} // only relevant for sdoc, rdoc, etc
 
-	var firstoffset = 0
-	var prevoffset = (prevpage-1)*limit
-	var nextoffset = (nextpage-1)*limit
-	var lastoffset = (lastpage-1)*limit
+	data.action = (!_.isUndefined(options.action) ? options.action : "list")
+	data.render = (!_.isUndefined(options.render) ? options.render : "")	
 	
-	var action = options.action	
-	if (isUndefined(action)) action = "list"
-	var render = options.render	
-	
-	// pager
-	// vars: l(limit) in some A.MANAGE_PAGER
-	//       o(offset) in some MANAGE_PAGER
-	//       do(context) in the DIV.rrs-admin-pager
-	//		   ci(collection_id), in the DIV.rrs-admin-pager (if required)
-	//       c(column) in the SELECT.admin-filter-column-name
-	// 		v(value) in the admin-filter-column-value 
-	//       lg(lang) & api_key 
-	
-	var t = "<DIV CLASS='rrs-admin-pager' CONTEXT='"+options.context+"' COLID='"+collection_id+"' "	
-	t += "ROLE='"+options.role+"' "+(!isUndefined(render) ? "RENDER='"+render+"'" : "")+">"
-	t+="<DIV>"+total+" "+i18n[options.contexts][lang]
-	t += ". "+i18n['showing'][lang]+" "+i18n['page'][lang]+" "+currpage+" "+i18n['of'][lang]+ " "+lastpage+", ";
-	t += "<SELECT ID='limit' SIZE=1>"
-	t += "<OPTION VALUE='10'"+(limit == 10 ? " SELECTED" : "")+">10</OPTION>"
-	t += "<OPTION VALUE='20'"+(limit == 20 ? " SELECTED" : "")+">20</OPTION>"
-	t += "<OPTION VALUE='50'"+(limit == 50 ? " SELECTED" : "")+">50</OPTION>"
-	t += "</SELECT> "
-	t += i18n[options.contexts][lang]+" "+i18n["perpage"][lang]+". </DIV>"
-	 
-	t += "<DIV CLASS='rrs-admin-arrows'>"
-	// pager arrows
-	if (currpage == firstpage) {
-		t += "<IMG SRC='img/arrow-first.png' style='vertical-align: middle; opacity:0.4'> "
-	} else { 
-		t += "<A HREF='#' DO='"+action+"' CLASS='MANAGE_PAGER' OFFSET='"+firstoffset+"'>"
-		t += "<IMG style='vertical-align: middle;' SRC='img/arrow-first.png'></A> "
-	}
-	if (currpage == prevpage) {
-		t += "<IMG SRC='img/arrow-left.png' style='vertical-align: middle; opacity:0.4'> "
-	} else { 
-		t += "<A HREF='#' DO='"+action+"' CLASS='MANAGE_PAGER' OFFSET='"+prevoffset+"'>"
-		t += "<IMG style='vertical-align: middle;' SRC='img/arrow-left.png'></A> "
-	}
-	t += "<FORM ID='page' style='display:inline;'><INPUT STYLE='display:inline;' TYPE='TEXT' ID='page' SIZE=3 VALUE='"+currpage+"'></FORM> "
-	if (currpage == nextpage) {
-		t += "<IMG SRC='img/arrow-right.png' style='vertical-align: middle; opacity:0.4'> "
-	} else { 
-		t += "<A HREF='#' DO='"+action+"' CLASS='MANAGE_PAGER' OFFSET='"+nextoffset+"'>"
-		t += "<IMG style='vertical-align: middle;' SRC='img/arrow-right.png'></A> "
-	}
-	if (currpage == lastpage) {
-		t += "<IMG SRC='img/arrow-last.png' style='vertical-align: middle; opacity:0.4'> "
-	} else { 
-		t += "<A HREF='#' DO='"+action+"' CLASS='MANAGE_PAGER' OFFSET='"+lastoffset+"'>"
-		t += "<IMG style='vertical-align: middle;' SRC='img/arrow-last.png'></A> "
-	}
-	t += "</DIV>"
-	
-	// searchable selection
-	t += "<DIV>"+i18n['filterby'][lang]+" <SELECT ID='admin-filter-column-name' SIZE=1><OPTION VALUE='' DEFAULT></OPTION>"
+	data.firstpage = (data.total > 0 ? 1 : 0),
+	data.currpage  = Math.ceil((parseInt(data.offset)+parseInt(data.page))/data.limit)
+	data.lastpage  = Math.ceil(data.total/data.limit)
+	data.prevpage  = (data.currpage-1 < data.firstpage? data.firstpage : data.currpage-1)
+	data.nextpage  = (data.currpage+1 > data.lastpage ? data.lastpage  : data.currpage+1)
+
+	data.searchableFields = [] 
 	for (i in options.allowedSearchableFields) { 
 		var defcolumn = ""
-		if (!(column === undefined) && i == column) defcolumn=" SELECTED" 
-		t+= "<OPTION VALUE='"+i+"'"+defcolumn+">"+options.allowedSearchableFields[i]+"</OPTION>"
+		if (!(data.column === undefined) && i == data.column) defcolumn=" SELECTED" 
+		data.searchableFields.push({
+			"html" :"<OPTION VALUE='"+i+"'"+defcolumn+">"+options.allowedSearchableFields[i]+"</OPTION>"
+		})
 	}
-	t += "</SELECT>, "+i18n['having'][lang]+" <INPUT TYPE='TEXT' ID='admin-filter-column-value' ";
-	t += " SIZE=10 VALUE='"+( (value === undefined || value == null) ? "" : value)+"'> "
 	
-	t += "<A HREF='#' CLASS='MANAGE_PAGER main-button' DO='"+action+"'><SPAN>"+i18n['go'][lang]+"</SPAN></A></DIV>"
-	t += "</DIV>"
-	return t
+	data.isfirstpage = (
+		(data.currpage == data.firstpage) ? {
+			action		: data.action,
+			firstoffset : 0
+		}
+		: false
+	);
+	data.isprevpage = (
+		(data.currpage == data.prevpage) ? {
+			action		: data.action,
+			prevoffset 	: (data.prevpage-1)*data.limit
+		}
+		: false
+	)
+	data.isnextpage = (
+		(data.currpage == data.nextpage) ? {
+			action		: data.action,
+			nextoffset : (data.nextpage-1)*data.limit
+		}
+		: false
+	);
+	data.islastpage = (
+		(data.currpage == data.lastpage) ? {
+			action		: data.action,
+			lastoffset 	: (data.lastpage-1)*data.limit
+		}
+		: false
+	)
+
+	data.selected_10 = (data.limit == 10 ? " SELECTED" : "")
+	data.selected_20 = (data.limit == 20 ? " SELECTED" : "")
+	data.selected_50 = (data.limit == 50 ? " SELECTED" : "")
+
+	/* pager
+	  vars: l(limit) in some A.MANAGE_PAGER
+			o(offset) in some MANAGE_PAGER	
+			do(context) in the DIV.rrs-admin-pager
+			ci(collection_id), in the DIV.rrs-admin-pager (if required)
+			c(column) in the SELECT.admin-filter-column-name
+			v(value) in the admin-filter-column-value 
+			lg(lang) & api_key 
+	*/
+	
+	var template = "\
+<DIV CLASS='rrs-admin-pager' CONTEXT='{{context}}' COLID='{{collection_id}}' ROLE='{{role}}' RENDER='{{render}}'>\
+	<DIV>{{total}} {{l_contexts}}. {{l_showing}} {{l_page}} {{currpage}} {{l_of}} {{lastpage}}, \
+		<SELECT ID='limit' SIZE=1>\
+			<OPTION VALUE='10' {{selected_10}}>10</OPTION>\
+			<OPTION VALUE='20' {{selected_20}}>20</OPTION>\
+			<OPTION VALUE='50' {{selected_50}}>50</OPTION>\
+		</SELECT>{{l_contexts}} {{l_perpage}}.\
+	</DIV>\
+	<DIV CLASS='rrs-admin-arrows'>\
+	{{#isfirstpage}}\
+		<IMG SRC='img/arrow-first.png' style='vertical-align: middle; opacity:0.4'>\
+	{{/isfirstpage}}\
+	{{^isfirstpage}}\
+		<A HREF='#' DO='{{action}}' CLASS='MANAGE_PAGER' OFFSET='{{firstoffset}}'>\
+		<IMG style='vertical-align: middle;' SRC='img/arrow-first.png'></A>\
+	{{/isfirstpage}}\
+	{{#isprevpage}}\
+		<IMG SRC='img/arrow-left.png' style='vertical-align: middle; opacity:0.4'>\
+	{{/isprevpage}}\
+	{{^isprevpage}}\
+		<A HREF='#' DO='{{action}}' CLASS='MANAGE_PAGER' OFFSET='{{prevoffset}}'>\
+		<IMG style='vertical-align: middle;' SRC='img/arrow-left.png'></A>\
+	{{/isprevpage}}\
+	<FORM ID='page' style='display:inline;'>\
+		<INPUT STYLE='display:inline;' TYPE='TEXT' ID='page' SIZE=3 VALUE='{{currpage}}'>\
+	</FORM>\
+	{{#isnextpage}}\
+		<IMG SRC='img/arrow-right.png' style='vertical-align: middle; opacity:0.4'>\
+	{{/isnextpage}}\
+	{{^isnextpage}}\
+		<A HREF='#' DO='{{action}}' CLASS='MANAGE_PAGER' OFFSET='{{nextoffset}}'>\
+		<IMG style='vertical-align: middle;' SRC='img/arrow-right.png'></A>\
+	{{/isnextpage}}\
+	{{#islastpage}}\
+		<IMG SRC='img/arrow-last.png' style='vertical-align: middle; opacity:0.4'>\
+	{{/islastpage}}\
+	{{^islastpage}}\
+		<A HREF='#' DO='{{action}}' CLASS='MANAGE_PAGER' OFFSET='{{lastoffset}}'>\
+		<IMG style='vertical-align: middle;' SRC='img/arrow-last.png'></A>\
+	{{/islastpage}}\
+	</DIV>\
+	{{! searchable selection}}\
+	<DIV>{{l_filter_by}} \
+		<SELECT ID='admin-filter-column-name' SIZE=1>\
+			<OPTION VALUE='' DEFAULT></OPTION>\
+			{{#searchableFields}}\
+				{{{html}}}\
+			{{/searchableFields}}\
+		</SELECT>, {{l_having}} <INPUT TYPE='TEXT' ID='admin-filter-column-value' SIZE=10 VALUE='{{value}}'>\
+		<A HREF='#' CLASS='MANAGE_PAGER main-button' DO='{{action}}'>\
+			<SPAN>{{l_go}}</SPAN>\
+		</A>\
+	</DIV>\
+</DIV>";
+
+	return Mustache.to_html(template, data);
 }
 
 function updateEditInPlace(div) {
 	
-	var api_key = getAPIKey();
+	var api_key = Rembrandt.Util.getApiKey();
 	
 	$(".editinplace", div).each(function() {
 		var self = $(this)
@@ -207,7 +259,7 @@ function updateEditInPlace(div) {
 			value_required:true,
 			params:params,
 		/*	newvalue: function(new_html) { 			
-				return urlencode(encode_utf8(new_html)) 
+				return Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(new_html)) 
 			}, */ 
 			success:function(response, el, original_html) { 
 				
@@ -216,18 +268,16 @@ function updateEditInPlace(div) {
 					// if it's a saskia object (that is, it has a DIV.saskia_object_tag instead of text),
 					// check the COL2 attr, and recreate the DIV.
 					
-					debug(el)
-					
 					var answer = response["message"][el.attr('COL')]
 					var sobj = el.attr('COL2')
-					if (isUndefined(sobj)) {
+					if (_.isUndefined(sobj)) {
 						el.html(answer)
 					} else {
 						el.html("<DIV CLASS='saskia_object_tag'>"+answer[sobj]+"</DIV>")
 					}
 		
 				} else {
-					el.html(errormessage(lang, response['message'])).pause(1000).hide("fast")
+					el.html(errormessage(lang, response['message'])).animate({dummy:1}, 1000).hide("fast")
 					el.html(original_html).show("fast")
 				}
 			}, 
@@ -264,7 +314,7 @@ function updateEditInPlace(div) {
 			saving_text:i18n['saving'][lang],
 			value_required:true,
 			params:params,
-			newvalue: function(new_html) { return urlencode(encode_utf8(new_html)) },
+			newvalue: function(new_html) { return Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(new_html)) },
 			success:function(response, el, original_html) { 
 				if (response["status"] > 0) {
 					// I get a full updated object, so let's display the field I want. 
@@ -309,7 +359,7 @@ function updateEditInPlace(div) {
 			saving_text:i18n['saving'][lang],
 			value_required:true,
 			params:params,
-			newvalue: function(new_html) { return urlencode(encode_utf8(new_html)) },
+			newvalue: function(new_html) { return Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(new_html)) },
 			success:function(response, el, original_html) { 
 				if (response["status"] > 0) {
 					// I get a full updated object, so let's display the field I want. 
@@ -350,22 +400,22 @@ function updateEditInPlace(div) {
 		}
 		if (self.hasClass("lang")) {
 			var it = new Array();
-			for(i in selectLang) {it[it.length] = selectLang[i]+":"+i}
+			for(i in Rembrandt.options.selectLang) {it[it.length] = selectLang[i]+":"+i}
 			select_options = it.join(", ")
 		}
 		if (self.hasClass("proc")) {
 			var it = new Array();
-			for(i in selectProc) {it[it.length] = selectProc[i]+":"+i}
+			for(i in Rembrandt.options.selectProc) {it[it.length] = selectProc[i]+":"+i}
 			select_options = it.join(", ")
 		}
 		if (self.hasClass("sync")) {
 			var it = new Array();
-			for(i in selectSync) {it[it.length] = selectSync[i]+":"+i}
+			for(i in Rembrandt.options.selectSync) {it[it.length] = selectSync[i]+":"+i}
 			select_options = it.join(", ")
 		}
 		if (self.hasClass("edit")) {
 			var it = new Array();
-			for(i in selectEdit) {it[it.length] = selectEdit[i]+":"+i}
+			for(i in Rembrandt.options.selectEdit) {it[it.length] = selectEdit[i]+":"+i}
 			select_options = it.join(", ")
 		}
 			
@@ -383,7 +433,7 @@ function updateEditInPlace(div) {
 			saving_text:i18n['saving'][lang],
 			value_required:true,
 			params:params,
-			newvalue: function(new_html) { return urlencode(encode_utf8(new_html)) },
+			newvalue: function(new_html) { return Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(new_html)) },
 			success:function(response, el, original_html) { 
 				if (response["status"] > 0) {
 					// I get a full updated object, so let's display the field I want. 
@@ -392,7 +442,7 @@ function updateEditInPlace(div) {
 
 					if (self.attr("valtype") == "Boolean") {
 
-						el.html(printYesOrNo(answer))
+						el.html(Rembrandt.Util.printYesOrNo(answer))
 					} else {
 						el.html(answer)
 					}

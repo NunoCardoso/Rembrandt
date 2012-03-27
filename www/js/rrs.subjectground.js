@@ -15,7 +15,7 @@ $().ready(function() {
 		ev.preventDefault();
 		var a_clicked = $(this)
 		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
-		var api_key = getAPIKey()
+		var api_key = Rembrandt.Util.getApiKey()
 			
 		showSlidableDIV({
 			"title": title,
@@ -23,10 +23,10 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "subjectground"),
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subjectground"),
 			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
-			"divcreator":generateSubjectgroundListDIV, 
-			"divcreatoroptions":{},
+			"divRender":generateSubjectgroundListDIV, 
+			"divRenderOptions":{},
 			"sidemenu":null, 
 			"sidemenuoptions":{}
 		})					
@@ -49,7 +49,7 @@ $().ready(function() {
 		ev.preventDefault();
 		var a_clicked = $(this)
 		var id = a_clicked.attr("ID")
-		var api_key = getAPIKey()
+		var api_key = Rembrandt.Util.getApiKey()
 		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
 			
 		showSlidableDIV({
@@ -58,10 +58,10 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "subjectground"),
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subjectground"),
 			"postdata":"do=show&id="+id+"&lg="+lang+	"&api_key="+api_key,
-			"divcreator":generateSubjectgroundShowDIV, 
-			"divcreatoroptions":{},
+			"divRender":generateSubjectgroundShowDIV, 
+			"divRenderOptions":{},
 			"sidemenu":"subjectground", 
 			"sidemenuoptions":{"id":id, "sgr_name":title}
 		})		
@@ -198,7 +198,7 @@ function generateSubjectgroundShowDIV(response, su, role, options) {
 	
 	// newdiv
 	var newdiv = $("<DIV ID='rrs-"+context+"-show-"+id+"' CLASS='main-slidable-div' "+
-	" TITLE='"+shortenTitle(response['sgr_name'])+"' STYLE='display:none;overflow:auto;'></DIV>")
+	" TITLE='"+Rembrandt.Util.shortenTitle(response['sgr_name'])+"' STYLE='display:none;overflow:auto;'></DIV>")
 	
 	var s = "<DIV CLASS='rrs-pageable'>" 
 
@@ -252,9 +252,9 @@ function generateSubjectgroundShowDIV(response, su, role, options) {
 
 function modalSubjectgroundCreate(button) {
 	
-	var api_key= getAPIKey()
-	var role = getRole(button)
-	var servlet_url = getServletEngineFromRole(role, 'subjectground')
+	var api_key= Rembrandt.Util.getApiKey()
+	var role = Rembrandt.Util.getRole(button)
+	var servlet_url = Rembrandt.Util.getServletEngineFromRole(role, 'subjectground')
 		
 	$.modal("<div id='modalCreateSubjectground' class='rembrandt-modal'>"+
       "<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+
@@ -354,8 +354,8 @@ function modalSubjectgroundDelete(button) {
 		'context':context,
 		'id': button.attr("ID"),
 		'info':button.attr('TITLE'),
-		'servlet_url': getServletEngineFromRole(getRole(button), context),
-		'postdata' : "do=delete&id="+button.attr("ID")+"&lg="+lang+"&api_key="+getAPIKey(),
+		'servlet_url': Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context),
+		'postdata' : "do=delete&id="+button.attr("ID")+"&lg="+lang+"&api_key="+Rembrandt.Util.getApiKey(),
 		'success_message' : i18n['subjectground_deleted'][lang]
 	})
 }	

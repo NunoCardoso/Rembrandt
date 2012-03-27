@@ -2,8 +2,8 @@
 $(document).ready(function() {
    $(document).ajaxError(function(e, xhr, settings, exception)  {
 		$('.rrs-waiting-div-message').html(errormessage(lang, i18n['service-unavailable-sorry'][lang] + getWaitingDivCloseButton()))	
-		debug('erro a pedir ' + settings.url + ' \n'+'error:\n' + xhr.responseText ); 
-		debug('e ' + e + ' \n'+'excepcao:\n' + exception ); 
+		console.log('erro a pedir ' + settings.url + ' \n'+'error:\n' + xhr.responseText ); 
+		console.log('e ' + e + ' \n'+'excepcao:\n' + exception ); 
 		$(".rrs-waiting-div").show()
 	});
 	
@@ -50,8 +50,6 @@ function hideWaitingDiv() {
 }
 
 function errorMessageWaitingDiv(lang, response) {
-//	debug(response)
-//	debug(typeof(response))
 	var res
 	if (typeof(response) == "string" && 
 	   (response.startsWith("<html>") || response.startsWith("<!DOCTYPE HTML")) ) {

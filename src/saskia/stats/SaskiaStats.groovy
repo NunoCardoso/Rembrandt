@@ -23,10 +23,9 @@ import java.text.SimpleDateFormat
 
 import org.apache.log4j.*
 
-import saskia.db.database.SaskiaMainDB
-import saskia.db.obj.Cache
-import saskia.db.obj.Collection
-import saskia.db.obj.RembrandtedDoc
+import saskia.db.database.*
+import saskia.db.obj.*
+import saskia.db.table.*
 import saskia.util.I18n
 
 class SaskiaStats {
@@ -50,7 +49,7 @@ class SaskiaStats {
 
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
 		log.debug "Asking cache for ${SaskiaStats.statsFrontPage}, ${collection_}, ${lang}"
-		Cache c = Cache.getFromIDAndCollectionAndLang(db, SaskiaStats.statsFrontPage, collection_, lang)
+		Cache c = db.getDBTable("CacheTable").getFromIDAndCollectionAndLang(SaskiaStats.statsFrontPage, collection_, lang)
 
 		if (c && c.isCacheFresh()) {
 			log.debug "Cache is new, let's use it."
@@ -76,7 +75,7 @@ class SaskiaStats {
 	public String renderNEPage(long ne_id, Collection collection, String lang) {
 		StringBuffer s = new StringBuffer()
 		log.debug "Request of stats for NE $ne_id, collection $collection, lang $lang";
-		Cache c = Cache.getFromIDAndCollectionAndLang(db, "NE:"+ne_id, collection, lang)
+		Cache c = db.getDBTable("CacheTable").getFromIDAndCollectionAndLang("NE:"+ne_id, collection, lang)
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
 
 		if (c && c.isCacheFresh()) {
@@ -102,7 +101,7 @@ class SaskiaStats {
 		StringBuffer s = new StringBuffer()
 		log.debug "Request of stats for doc ${rdoc.doc_id}, collection $collection, lang $lang";
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
-		Cache c = Cache.getFromIDAndCollectionAndLang(db, "DOC:"+rdoc.doc_id, collection, lang)
+		Cache c = db.getDBTable("CacheTable").getFromIDAndCollectionAndLang("DOC:"+rdoc.doc_id, collection, lang)
 		if (c && c.isCacheFresh()) {
 			log.debug "Cache is new, let's use it."
 			s.append "<DIV ID='rembrandt-detaildoc-${rdoc.doc_id}'  CLASS='stats-main'>\n"

@@ -80,7 +80,7 @@ if ($do != "news" && $do != "sitesearch" && $do != 'collections' && $do != 'tag'
 		
 // remove all pages where I don't want breadcrumbles or a flat line
 if ($do != "news" && $do != "sitesearch" && $do != 'collections' && $do != 'tag'  && $do != 'search')  {
-	echo "<DIV ID='main-header-menu'>\n";
+	echo "<DIV ID='main-header-menu' style='margin-left: 0px'>\n";
 		echo "<DIV ID='main-breadcrumbles'>\n";
 			echo generateBreadCrumbles($do, $lang); 
 		echo "</DIV>\n";

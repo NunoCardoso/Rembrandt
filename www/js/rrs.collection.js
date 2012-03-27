@@ -2,7 +2,7 @@ Rembrandt = Rembrandt || {};
 
 Rembrandt.Collection = (function ($) {
 	"use strict"
- 	$(function () {
+	$(function () {
 	
 		// 'new collection' button action, opens modal dialog 
 		$('A.COLLECTION_CREATE').live("click", function(ev, ui) {
@@ -51,27 +51,27 @@ Rembrandt.Collection = (function ($) {
 	});
 	
 	var createCollection = function(context) {
-		modalCollectionCreate($(context));
+		modalCollectionCreate(context);
 	
 		// let's refresh the content. How? triggering the admin-pager link if the 
 		// visible div is for a collection list or collection main page
 		var divshown = $('DIV.main-slidable-div:visible')
 		if (divshown.attr('id') == 'rrs-homepage-collection') {
-			displayBodyOfSaskia()				
-		} 
+			displayBodyOfSaskia()
+		}
 		if (divshown.attr('id') == 'rrs-collection-list') {
 			divshown.find("A.MANAGE_PAGER").trigger('click')
 		}
 	}, 
 	
 	deleteCollection = function(context) {
-		modalCollectionDelete($(context));
+		modalCollectionDelete(context);
 	
 		// let's refresh the content. How? triggering the admin-pager link if the 
 		// visible div is for a collection list or collection main page
 		var divshown = $('DIV.main-slidable-div:visible')
 		if (divshown.attr('id') == 'rrs-homepage-collection') {
-			displayBodyOfSaskia()				
+			displayBodyOfSaskia()
 		} 
 		if (divshown.attr('id') == 'rrs-collection-list') {
 			divshown.find("A.MANAGE_PAGER").trigger('click')
@@ -80,32 +80,35 @@ Rembrandt.Collection = (function ($) {
 	
 	listCollections = function (context) {
 
-		var a_clicked = $(context);
-		var api_key = getAPIKey()
+		var a_clicked = context,
+			api_key = Rembrandt.Util.getApiKey(),
+			role = $(a_clicked).attr('ROLE'),
+			title = ($(a_clicked).attr("TITLE") ? $(a_clicked).attr("TITLE") : $(a_clicked).text()),
+			target = $(a_clicked).attr("TARGET");
 			
 		showSlidableDIV({
-			"title": (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text()),
-			"target":a_clicked.attr("TARGET"),
-			"role":a_clicked.attr('ROLE'),
-			"slide": getSlideOrientationFromLink(a_clicked),
-			"ajax":true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "collection"),
+			"title": 	title,
+			"target": 	target,
+			"role": 	role,
+			"slide": 	getSlideOrientationFromLink(a_clicked),
+			"ajax": 	true,
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(role, "collection"),
 			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
-			"divcreator":generateCollectionListDIV, 
-			"divcreatoroptions":{},
+			"divRender":Rembrandt.Collection.generateCollectionListDIV, 
+			"divRenderOptions":{},
 			"sidemenu":null, 
 			"sidemenuoptions":{}
-		})					
+		})
 	},
-		
+
 	refreshStats = function (context) {
 
-		var a_clicked = $(context);
-		var col_id = a_clicked.attr("id")
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
-		var api_key = getAPIKey()
-		var role = a_clicked.attr('ROLE')
-		var servlet_url = getServletEngineFromRole(role, "collection")
+		var a_clicked = context,
+		 	col_id = $(a_clicked).attr("id"),
+			title = ($(a_clicked).attr("TITLE") ? a_clicked.attr("TITLE") : a_clicked.text()),
+			api_key = Rembrandt.Util.getApiKey(),
+			role = $(a_clicked).attr('ROLE'),
+			servlet_url = Rembrandt.Util.getServletEngineFromRole(role, "collection");
 
 		a_clicked.attr('disabled', true)
 		a_clicked.toggleClass("main-button", "main-button-disabled")
@@ -114,49 +117,55 @@ Rembrandt.Collection = (function ($) {
 			type:"POST", 
 			url:Rembrandt.urls.restlet_saskia_collection_url, 
 			dataType:"json",
-			data:"lg="+lang+"&do=refreshstats&id="+col_id+"&api_key="+getAPIKey(),
-			beforeSubmit: button.find("SPAN").html(waitmessage(lang, i18n['refreshing_collection'][lang])), 
+			data:"lg="+lang+"&do=refreshstats&id="+col_id+"&api_key="+Rembrandt.Util.getApiKey(),
+			beforeSubmit: button.find("SPAN").html(
+				waitmessage(lang, i18n['refreshing_collection'][lang])), 
+				
 			success:function(response) {
 
 				if (response["status"] == -1) {
 
 					errorMessageWaitingDiv(lang, response)
 					button.toggleClass('disabled',false)
-					button.toggleClass("main-button-disabled","main-button")
-					button.find("SPAN").html(i18n['refresh'][lang])
+						.toggleClass("main-button-disabled","main-button")
+						.find("SPAN")
+						.html(i18n['refresh'][lang])
 
 				} else if (response["status"] == 0) {
 
 					button.toggleClass("adminbuttondisabled","adminbutton")
-					button.find("SPAN").html(i18n['OK'][lang])
+						.find("SPAN")
+						.html(i18n['OK'][lang])
 				}	
 			},
 			error:function(response) {
 				// put it back
 				errorMessageWaitingDiv(lang, response)
 				button.toggleClass('disabled',false)
-				button.toggleClass("main-button-disabled","main-button")
+					.toggleClass("main-button-disabled","main-button")
 			}
 		})
 	},
 	
 	listRembrandtedDocs = function (context) {
 
-		var a_clicked = $(context);
-		var col_id = a_clicked.attr("id")
-		var api_key = getAPIKey()
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
+		var a_clicked = context,
+		    col_id = $(a_clicked).attr("id"),
+		    api_key = Rembrandt.Util.getApiKey(),
+		    title = ($(a_clicked).attr("title") ? $(a_clicked).attr("title") : $(a_clicked).text()),
+			role = $(a_clicked).attr('ROLE'),
+			target = $(a_clicked).attr("TARGET");
 
 		showSlidableDIV({
-			"title": title,
-			"target":a_clicked.attr("TARGET"),
-			"role":a_clicked.attr('ROLE'),
-			"slide": getSlideOrientationFromLink(a_clicked),
-			"ajax":true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "rdoc"),
+			"title" 	: title,
+			"target" 	:target,
+			"role" 		:role,
+			"slide"		: getSlideOrientationFromLink(a_clicked),
+			"ajax"		:true,
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(role, "rdoc"),
 			"postdata":"do=list&ci="+col_id+"&l=10&o=0&lg="+lang+"&api_key="+api_key,
-			"divcreator":generateCollectionRdocListDIV, 
-			"divcreatoroptions":{},
+			"divRender" :Rembrandt.Collection.generateCollectionRdocListDIV, 
+			"divRenderOptions":{},
 			"sidemenu":"collection", 
 			// only update col_id, no col_name -> it will change side menu header. Leave that to COLLECTION_SHOW
 			"sidemenuoptions":{"id":col_id}//, "col_name":title}
@@ -164,43 +173,49 @@ Rembrandt.Collection = (function ($) {
 	},
 
 	listSourceDocs = function (context) {
-		var a_clicked = $(context);
-		var col_id = a_clicked.attr("id")
-		var api_key = getAPIKey()
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
+
+		var a_clicked = context,
+		    col_id = $(a_clicked).attr("id"),
+		    api_key = Rembrandt.Util.getApiKey(),
+		    title = ($(a_clicked).attr("title") ? $(a_clicked).attr("title") : $(a_clicked).text()),
+			role = $(a_clicked).attr('ROLE'),
+			target = $(a_clicked).attr("TARGET");
 
 		showSlidableDIV({
-			"title": title,
-			"target":a_clicked.attr("TARGET"),
-			"role":a_clicked.attr('ROLE'),
-			"slide": getSlideOrientationFromLink(a_clicked),
-			"ajax":true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "sdoc"),
-			"postdata":"do=list&ci="+col_id+"&l=10&o=0&lg="+lang+	"&api_key="+api_key,
-			"divcreator":generateCollectionSdocListDIV, 
-			"divcreatoroptions":{},
+			"title" 	: title,
+			"target" 	:target,
+			"role" 		:role,
+			"slide"		: getSlideOrientationFromLink(a_clicked),
+			"ajax"		:true,
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(role, "sdoc"),
+			"postdata" 	:"do=list&ci="+col_id+"&l=10&o=0&lg="+lang+	"&api_key="+api_key,
+			"divRender" :Rembrandt.Collection.generateCollectionSdocListDIV, 
+			"divRenderOptions":{},
 			"sidemenu":"collection", 
 			"sidemenuoptions":{"id":col_id}//, "col_name":title}
 		})	
 	},
 	
 	listTasks = function (context) {
-		var a_clicked = $(context);
-		var col_id = a_clicked.attr("id")
-		var api_key = getAPIKey()
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
+
+		var a_clicked = context,
+			col_id = $(a_clicked).attr("id"),
+			api_key = Rembrandt.Util.getApiKey(),
+			title = ($(a_clicked).attr("title") ? $(a_clicked).attr("title") : $(a_clicked).text()),
+			role = $(a_clicked).attr('ROLE'),
+			target = $(a_clicked).attr("TARGET");
 
 		showSlidableDIV({
-			"title": title,
-			"target":a_clicked.attr("TARGET"),
-			"role":a_clicked.attr('ROLE'),
-			"slide": getSlideOrientationFromLink(a_clicked),
-			"ajax": true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "task"),
-			"postdata":"do=list&ci="+col_id+"&l=10&o=0&lg="+lang+	"&api_key="+api_key,
-			"divcreator":generateCollectionSdocListDIV, 
-			"divcreatoroptions":{},
-			"sidemenu":"collection", 
+			"title" 	: title,
+			"target" 	: target,
+			"role" 		: role,
+			"slide"		: getSlideOrientationFromLink(a_clicked),
+			"ajax"		:true,
+			"restlet_url" 	:Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "task"),
+			"postdata"	:"do=list&ci="+col_id+"&l=10&o=0&lg="+lang+	"&api_key="+api_key,
+			"divRender" :Rembrandt.Collection.generateCollectionSdocListDIV, 
+			"divRenderOptions":{},
+			"sidemenu" 	:"collection", 
 			"sidemenuoptions":{"id":col_id}//, "col_name":title}
 		})	
 	},
@@ -208,7 +223,7 @@ Rembrandt.Collection = (function ($) {
 	showCollection = function (context) {
 		var a_clicked = $(context);
 		var col_id = a_clicked.attr("ID")
-		var api_key = getAPIKey()
+		var api_key = Rembrandt.Util.getApiKey()
 		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
 			
 		showSlidableDIV({
@@ -217,10 +232,10 @@ Rembrandt.Collection = (function ($) {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "collection"),
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "collection"),
 			"postdata":"do=show&id="+col_id+"&lg="+lang+"&api_key="+api_key,
-			"divcreator":generateCollectionShowDIV, 
-			"divcreatoroptions":{},
+			"divRender":Rembrandt.Collection.generateCollectionShowDIV, 
+			"divRenderOptions":{},
 			"sidemenu":"collection", 
 			"sidemenuoptions":{"id":col_id, "col_name":title}
 		})
@@ -233,27 +248,24 @@ Rembrandt.Collection = (function ($) {
 	/** generate collection list DIV */
 	generateCollectionListDIV = function(response, su, role, options) {
 
-		var context = "collection"
-		var res = response['result']
-		var canadmin = (su || role.toLowerCase() == "col-admin")
-		var editinplace = (canadmin  ? "editinplace" : "")
-	
-		// pager
-		var navigation = createPagerNavigation({
-		"context":context,
-		"contexts":"collections", 
-		"response":response,
-		"role":role, 
-		"allowedSearchableFields":{
-			"col_id":i18n['id'][lang], 
-			"col_name":i18n['name'][lang], 
-			"col_lang":i18n['lang'][lang], 
-			"col_owner":i18n['owner'][lang], 
-			"col_permission":i18n['permissions'][lang]
-		}
-		})
-
-		var res_html = []
+		var context = "collection",
+			res = response['result'],
+			canadmin = (su || role.toLowerCase() == "col-admin"),
+			editinplace = (canadmin  ? "editinplace" : ""),
+			navigation = createPagerNavigation({
+				"context":context,
+				"contexts":"collections", 
+				"response":response,
+				"role":role, 
+				"allowedSearchableFields":{
+					"col_id":i18n['id'][lang], 
+					"col_name":i18n['name'][lang], 
+					"col_lang":i18n['lang'][lang], 
+					"col_owner":i18n['owner'][lang], 
+					"col_permission":i18n['permissions'][lang]
+				}
+			}),
+			res_html = [];
 		
 		for(i in res) {
 		
@@ -309,19 +321,23 @@ Rembrandt.Collection = (function ($) {
 					</DIV>\
 				</TD>\
 			{{/su}}\
-			{{#canadmin}}<TD>\
+			{{#canadmin}}\
+				<TD>\
 					<DIV CONTEXT='{{context}}' COL='col_permission' ID='{{id}}' \
 					CLASS='{{editinplace}} textfield'>{{col_permission}}</DIV>\
-				</TD>{{/canadmin}}\
+				</TD>\
+			{{/canadmin}}\
 			<TD>\
 				<DIV CONTEXT='{{context}}' COL='col_comment' ID='{{id}}' \
 				CLASS='{{editinplace}} textarea'>{{col_comment}}</DIV>\
 			</TD>\
-			{{#canadmin}}<TD>\
+			{{#canadmin}}\
+				<TD>\
 					<A HREF='#' CLASS='{{contextU}}_DELETE main-button' ROLE='{{role}}' ID='{{id}}' TITLE='{{col_name}}'>\
 						<SPAN>{{delete}}...</SPAN>\
 					</A>\
-				</TD>{{/canadmin}}\
+				</TD>\
+			{{/canadmin}}\
 			</TR>";
 			
 			res_html.push({"html":Mustache.to_html(res_template, res_data)})
@@ -414,93 +430,134 @@ Rembrandt.Collection = (function ($) {
 	</DIV>\
 </DIV>\
 </DIV>";
- 	return $(Mustache.to_html(template, data));
-},
+ 		return $(Mustache.to_html(template, data));
+	},
 
 	/** generate collection show DIV */
 	generateCollectionShowDIV = function(col, su, role, options) {
 
-		var context = "collection"
-		var number_sdocs = col['number_sdocs']
-		var number_rdocs = col['number_rdocs']
-		var canadmin = (su || role.toLowerCase() == "col-admin")
-		var editinplace = ( canadmin ? "editinplace" : "")
+		var context = "collection",
+			canadmin = (su || role.toLowerCase() == "col-admin"),
+			editinplace = ( canadmin ? "editinplace" : ""),
+			id = col['col_id'];
 	
-		var id = col['col_id']
-	
-		// newdiv
-		var newdiv = $("<DIV ID='rrs-"+context+"-show-"+id+"' CLASS='main-slidable-div' "+
-		" TITLE='"+shortenTitle(col['col_name'])+"' STYLE='display:none;overflow:auto;'></DIV>")
-	
-		var s = "<DIV CLASS='rrs-pageable'>" 
-
-		s += "<H3>"+i18n[context+'-show'][lang]+"</H3>"				
-		s += "<TABLE ID='rrs-"+context+"-show-table tablesorter' BORDER=0>"
-		s += "<TR><TD>"+i18n['id'][lang]+":</TD><TD>"+id+"</TD></TR>";
-
-		s += "<TR><TD>"+i18n['name'][lang]+":</TD><TD>";	
-		s += "<DIV CONTEXT='"+context+"'  COL='col_name' ID='"+id+"' "
- 		s += "CLASS='"+editinplace+" textfield'>"+col['col_name']+"</DIV></TD></TR>";
-
-		s += "<TR><TD>"+i18n['lang'][lang]+":</TD><TD>";
-		s += "<DIV CONTEXT='"+context+"'  COL='col_lang' ID='"+id+"' "
- 		s += "CLASS='"+editinplace+" textfield'>"+col['col_lang']+"</DIV></TD></TR>";
-
-		if (su) {
-			s += "<TR><TD><DIV CONTEXT='"+context+"'  COL='col_owner' COL2='usr_login' ID='"+id+"' "
-		 	s += "CLASS='"+editinplace+" autocompletetextfield'><DIV CLASS='saskia_object_tag'>"+col['col_owner']['usr_login']
-		 	s+= "</DIV></DIV></TD></TR>"		
+		var data = {
+			"context"		: context,
+			"id"			: id,
+			"colname"		: col['col_name'],
+			"collang"		: col['col_lang'], 
+			"colcomment"	: col['col_comment'],
+			"colpermission"	: col['col_permission'],
+			"number_sdocs"	: col['number_sdocs'],
+			"number_rdocs"	: col['number_rdocs'],
+			"number_tasks"	: 0,
+			"s_colname"		: Rembrandt.Util.shortenTitle(col['col_name']),
+			"context-show"	: i18n[context+'-show'][lang],
+			"l_id"			: i18n['id'][lang],
+			"l_name"		: i18n['name'][lang],
+			"l_lang"		: i18n['lang'][lang],
+			"l_comment"		: i18n['comment'][lang],
+			"l_permissions" : i18n['permissions'][lang],
+			"l_sdocs"		: i18n['sdocs'][lang],
+			"l_rdocs"		: i18n['rdocs'][lang],
+			"l_tasks"		: i18n['tasks'][lang],
+			"create_new_sdoc": i18n['create_new_sdoc'][lang],
+			"create_new_context" : i18n['create_new_'+context][lang],
+			"l_sdoc_import"	: i18n['sdoc_import'][lang],
+			"l_sdoc_export"	: i18n['sdoc_export'][lang],
+			"editinplace"	: editinplace,
+			"role"			: role,
+			"stats"			: i18n['stats'][lang],
+			"delete"		: i18n['delete'][lang],
+			"su"			:{
+				"context"		: context,
+				"id"			: id,
+				"login"			: col['col_owner']['usr_login']
+			},
+			"canadmin"		:{
+				"permissions": 	i18n['permissions'][lang]
+			}
 		}
 		
-		s += "<TR><TD>"+i18n['comment'][lang]+":</TD>";
-		s += "<DIV CONTEXT='"+context+"'  COL='col_comment' ID='"+id+"' "
- 		s += "CLASS='"+editinplace+" textfield'>"+col['col_comment']+"</DIV></TD></TR>";
+		var template = "\
+<DIV ID='rrs-{{context}}-show-{{id}}list' CLASS='main-slidable-div' TITLE='{{s_colname}}' STYLE='display:none;overflow:auto;'>\
+	<DIV CLASS='rrs-pageable'>\
+		<H3>{{context-show}}</H3>\
+		<TABLE ID='rrs-{{context}}-show-table tablesorter' BORDER=0>\
+			<TR>\
+				<TD>{{l_id}}:</TD>\
+				<TD>{{id}}</TD>\
+			</TR><TR>\
+				<TD>{{l_name}}:</TD>\
+				<TD><DIV CONTEXT='{{context}}' COL='col_name' ID='{{id}}' CLASS='{{editinplace}} textfield'>{{colname}}</DIV></TD>\
+			</TR><TR>\
+				<TD>{{l_lang}}:</TD>\
+				<TD><DIV CONTEXT='{{context}}' COL='col_lang' ID='{{id}}' CLASS='{{editinplace}} textfield'>{{collang}}</DIV></TD>\
+			</TR>\
+			{{#su}}
+				<TR>\
+					<TD><DIV CONTEXT='{{context}}' COL='col_owner' COL2='usr_login' ID='{{id}}' CLASS='{{editinplace}} autocompletetextfield'>\
+						<DIV CLASS='saskia_object_tag'>{{login}}</DIV>\
+					</DIV></TD>\
+				</TR>
+			{{/su}}
+			<TR>\
+				<TD>{{l_comment}}:</TD>\
+				<TD><DIV CONTEXT='{{context}}' COL='col_comment' ID='{{id}}' CLASS='{{editinplace}} textfield'>{{colcomment}}</DIV></TD>\
+			</TR>\
+			{{#canadmin}}\
+			<TR>\
+				<TD>{{l_permissions}}:</TD>\
+				<TD><DIV CONTEXT='{{context}}' COL='col_permission' ID='{{id}}' CLASS='{{editinplace}} textfield'>{{colpermission}}</DIV></TD>\
+			</TR>\
+			{{/canadmin}}\
+			<TR>\
+				<TD>\
+					<A HREF='#' CLASS='COLLECTION_SDOC_LIST slide-vertically-link' TARGET='rrs-collection-sdoc-list-{{id}}' ID='{{id}}' ROLE='{{role}}'>\
+					{{l_sdocs}}</A>:\
+				</TD>\
+				<TD>{{number_sdocs}}</TD>\
+			</TR><TR>\
+				<TD>\
+					<A HREF='#' CLASS='COLLECTION_RDOC_LIST slide-vertically-link' TARGET='rrs-collection-rdoc-list-{{id}}' ID='{{id}}' ROLE='{{role}}'>\
+					{{l_rdocs}}</A>:\
+				</TD>
+				<TD>{{number_rdocs}}</TD>\
+			</TR>\
+			{{#canadmin}}\
+				<TR>\
+					<TD>\
+						<A HREF='#' CLASS='COLLECTION_TASK_LIST slide-vertically-link' TARGET='rrs-collection-task-list-{{id}}' ID='{{id}}' ROLE='{{role}}'>\
+						{{l_tasks}}</A>:\
+					</TD>\
+					<TD>{{number_tasks}}</TD>\
+				</TR>\
+			{{/canadmin}}
+		</TABLE>\
+		<A HREF='#' CLASS='main-button'><SPAN>{{stats}}</SPAN></A>\
+		{{#canadmin}}\
+			<A HREF='#' CLASS='SDOC_CREATE main-button' ID='{{id}}' TARGET='rrs-collection-sdoc-create-{{id}}' \
+			TITLE='{{create_new_sdoc}}' ROLE='{{role}}'>\
+				<SPAN>{{crate_new_context}}</SPAN>\
+			</A>\
+			<A HREF='#' CLASS='SDOC_IMPORT main-button' ID='{{id}}' TARGET='rrs-collection-sdoc-import-{{id}}' \
+			TITLE='{{l_sdoc_import}}' ROLE='{{role}}'>\
+				<SPAN>{{l_sdoc_import}}</SPAN>\
+			</A>\
+			<A HREF='#' CLASS='SDOC_EXPORT main-button' ID='{{id}}' TARGET='rrs-collection-sdoc-export-{{id}}' \
+			TITLE='{{l_sdoc_export}}' ROLE='{{role}}'>\
+				<SPAN>{{l_sdoc_export}}</SPAN>\
+			</A>\
+			<A HREF='#' CLASS='SDOC_DELETE main-button' ID='{{id}}' TITLE='{{delete}}' ROLE='{{role}}'>\
+				<SPAN>{{delete}}...</SPAN>
+			</A>\
+		{{/canadmin}}\
+	</DIV>\
+</DIV>";
 	
-		if (canadmin) {
-			s += "<TR><TD>"+i18n['permissions'][lang]+":</TD>";
-			s += "<DIV CONTEXT='"+context+"'  COL='col_permission' ID='"+id+"' "
-			s += "CLASS='"+editinplace+" textfield'>"+col['col_permission']+"</DIV></TD></TR>";
-		}
-	
-		s += "<TR><TD><A HREF='#' CLASS='COLLECTION_SDOC_LIST slide-vertically-link' "+
-	   "TARGET='rrs-collection-sdoc-list-"+col['col_id']+"' ID='"+col['col_id']+"' ROLE='"+role+"'>"+
-		i18n['sdocs'][lang]+"</A>:</TD><TD>"+number_sdocs+"</TD></TR>";
-		s += "<TR><TD><A HREF='#' CLASS='COLLECTION_RDOC_LIST slide-vertically-link' "+
-		"TARGET='rrs-collection-rdoc-list-"+col['col_id']+"' ID='"+col['col_id']+"' ROLE='"+role+"'>"+
-		i18n['rdocs'][lang]+"</A>:</TD><TD>"+number_rdocs+"</TD></TR>";
-		if (canadmin) {
-			s += "<TR><TD><A HREF='#' CLASS='COLLECTION_TASK_LIST slide-vertically-link' "+
-			"TARGET='rrs-collection-task-list-"+col['col_id']+"' ID='"+col['col_id']+"' ROLE='"+role+"'>"+
-			i18n['tasks'][lang]+"</A>:</TD><TD>0</TD></TR>";
-		}
-		s += "</TABLE>"; 
-	
-		s += "<A HREF='#' CLASS='main-button'><SPAN>"+i18n['stats'][lang]+"</SPAN></A>";
-	
-		if (canadmin) {
-		
-			s += "<A HREF='#' CLASS='SDOC_CREATE main-button' ID='"+id+"' TARGET='rrs-collection-sdoc-create-"+id+"' "
-			s += " TITLE='"+i18n['create_new_sdoc'][lang]+"' ROLE='"+role+"'><SPAN>"
-			s += i18n['create_new_'+context][lang]+"</SPAN></A>"	
-		
-			s += "<A HREF='#' CLASS='SDOC_IMPORT main-button' ID='"+id+"' TARGET='rrs-collection-sdoc-import-"+id+"' "
-			s += " TITLE='"+i18n['sdoc_import'][lang]+"' ROLE='"+role+"'><SPAN>"
-			s += i18n['sdoc_import'][lang]+"</SPAN></A>"	
-
-			s += "<A HREF='#' CLASS='SDOC_EXPORT main-button' ID='"+id+"' TARGET='rrs-collection-sdoc-export-"+id+"' "
-			s += " TITLE='"+i18n['sdoc_export'][lang]+"' ROLE='"+role+"'><SPAN>"
-			s += i18n['sdoc_export'][lang]+"</SPAN></A>"	
-		
-			s += "<A HREF='#' CLASS='SDOC_DELETE main-button' ID='"+id+"' "
-			s += " TITLE='"+i18n['delete'][lang]+"' ROLE='"+role+"'><SPAN> "
-			s += i18n['delete'][lang]+"...</SPAN></A></TD>";
-		}
-		s += "</DIV>"
-	
-		newdiv.append(s)
-		return newdiv
+		return Mustache.to_html(template, data);
 	},
-
+	
 	/** fill source doc info in page */
 	generateCollectionSdocListDIV = function(response, su, role, options) {
 
@@ -514,7 +571,7 @@ Rembrandt.Collection = (function ($) {
 		// newdiv
 		// keep rrs-collection prefix so that collection sub-menu pops up
 	
-		var newdiv = $("<DIV ID='rrs-collection-sdoc-list' CLASS='main-slidable-div' \
+		var newdiv = $("<DIV ID='rrs-collection-sdoc-list-"+col_id+"' CLASS='main-slidable-div' \
 	 	TITLE='"+i18n[context+'_list'][lang]+"' STYLE='display:none;overflow:auto;'></DIV>")
 	
 		// Set pageable area for paging reposition
@@ -619,13 +676,14 @@ Rembrandt.Collection = (function ($) {
 		var context = "rdoc"
 		var res = response['result']
 		var perms = response['perms']
+		var col_id = response['col_id']
 		var canadmin = (su || perms['uoc_can_admin'])
 		var editinplace = ( canadmin ? "editinplace" : "")
 	
 	// newdiv
 	// keep rrs-collection prefix so that collection sub-menu pops up
 	
-	var newdiv = $("<DIV ID='rrs-collection-rdoc-list' CLASS='main-slidable-div' \
+	var newdiv = $("<DIV ID='rrs-collection-rdoc-list-"+col_id+"' CLASS='main-slidable-div' \
  TITLE='"+i18n[context+'_list'][lang]+"' STYLE='display:none;overflow:auto;'></DIV>")
 	
 	// Set pageable area for paging reposition
@@ -740,9 +798,9 @@ Rembrandt.Collection = (function ($) {
 
 	modalCollectionCreate = function (button) {
 	
-	var api_key= getAPIKey()
-	var role = getRole(button)
-	var servlet_url = getServletEngineFromRole(role, 'collection')
+	var api_key= Rembrandt.Util.getApiKey()
+	var role = Rembrandt.Util.getRole(button)
+	var servlet_url = Rembrandt.Util.getServletEngineFromRole(role, 'collection')
 	
 		$.modal("<div id='modalCreateCollection' class='rembrandt-modal' style='width:400px'>"+
 		"<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+
@@ -821,8 +879,8 @@ Rembrandt.Collection = (function ($) {
 			if (goodToGo) {
 				jQuery.ajax({ type:"POST", dataType:'json', url:servlet_url,
 					contentType:"application/x-www-form-urlencoded",
-					data: "do=create&col_name="+urlencode(encode_utf8(col_name))+
-					      "&col_comment="+urlencode(encode_utf8(col_comment))+
+					data: "do=create&col_name="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(col_name))+
+					      "&col_comment="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(col_comment))+
 						   "&col_lang="+col_lang+"&col_permission="+col_permission+						
 							"&lg="+lang+"&api_key="+api_key, 
 					beforeSubmit: waitMessageBeforeSubmit(lang),
@@ -858,11 +916,11 @@ Rembrandt.Collection = (function ($) {
 	// it has a spaecial confirmation, keep it away from generic delete model template
 	modalCollectionDelete = function (button) {
 	
-	var api_key= getAPIKey()
+	var api_key= Rembrandt.Util.getApiKey()
 	var ci = button.attr("ID")
-	var role = getRole(button)
-	var servlet_collection_url = getServletEngineFromRole(role, 'collection')
-	var servlet_user_url = getServletEngineFromRole(role, 'user')
+	var role = Rembrandt.Util.getRole(button)
+	var servlet_collection_url = Rembrandt.Util.getServletEngineFromRole(role, 'collection')
+	var servlet_user_url = Rembrandt.Util.getServletEngineFromRole(role, 'user')
 	
 		$.modal("<div id='modalDeleteCollection' class='rembrandt-modal' style='width:400px'>"+
 		"<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+
@@ -891,7 +949,7 @@ Rembrandt.Collection = (function ($) {
 			
 				jQuery.ajax( {type:"POST", url:servlet_user_url,
 				contentType:"application/x-www-form-urlencoded",
-				data:"do=auth&lg="+lang+"&p="+urlencode(hex_md5(password))+
+				data:"do=auth&lg="+lang+"&p="+Rembrandt.Util.urlEncode(hex_md5(password))+
 				"&api_key="+api_key,
 				beforeSubmit: waitMessageBeforeSubmit(lang),
 					success: function(response) {

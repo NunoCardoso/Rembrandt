@@ -1,19 +1,19 @@
 
 
 function displayBodyOfSaskia() {
-	var query = $.trim(getQueryVariable("q"));
+	var query = $.trim(Rembrandt.Util.getQueryVariable("q"));
 	var queryterms; if (query) queryterms = query.split(/\s+/);
 
 	var tags = null
 	lang = $("HTML").attr("lang")	// must be here!
-	var limit = getQueryVariable("l"); if (isUndefined(limit)) limit = 10;
-	var offset = getQueryVariable("o"); if (isUndefined(offset)) offset = 0;
-	var userid = getUserID()
-	var user = getUser()
-	var api_key = getAPIKey()
+	var limit = Rembrandt.Util.getQueryVariable("l"); if (_.isUndefined(limit)) limit = 10;
+	var offset = Rembrandt.Util.getQueryVariable("o"); if (_.isUndefined(offset)) offset = 0;
+	var userid = Rembrandt.Util.Rembrandt.Util.getUserId()
+	var user = Rembrandt.Util.getUser()
+	var api_key = Rembrandt.Util.getApiKey()
 	
 	var pubkey = $("A.USER_ADMIN").attr("USR_PUB_KEY")
-	var su = validateSu(pubkey)
+	var su = Rembrandt.Util.validadeSu(pubkey)
 	var role = (su ? "admin" : "saskia")
 	
 	var main_body = $("#main-body")
@@ -86,10 +86,10 @@ function generateCollectionMainPageDIV(response, su, role, options) {
 		s += "<TR><TD><A HREF='#' CLASS='COLLECTION_SHOW' ID='"+id+"' ROLE='"+role+"' "+
 		 "TITLE='"+cols[i]['col_name']+"' TARGET='rrs-collection-show-"+id+"'>"+
 		cols[i]['col_name']+"</A></TD><TD>"+
-		printYesOrNo(perms[i]['uoc_own'])+"</TD><TD>"+
-		printYesOrNo(perms[i]['uoc_can_read'])+"</TD><TD>"+
-		printYesOrNo(perms[i]['uoc_can_write'])+"</TD><TD>"+
-		printYesOrNo(perms[i]['uoc_can_admin'])+"</TD></TR>"
+		Rembrandt.Util.printYesOrNo(perms[i]['uoc_own'])+"</TD><TD>"+
+		Rembrandt.Util.printYesOrNo(perms[i]['uoc_can_read'])+"</TD><TD>"+
+		Rembrandt.Util.printYesOrNo(perms[i]['uoc_can_write'])+"</TD><TD>"+
+		Rembrandt.Util.printYesOrNo(perms[i]['uoc_can_admin'])+"</TD></TR>"
 		
 		if (perms[i]['uoc_own'] == true) ownablecollections.push(id)
 	}	

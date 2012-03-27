@@ -50,10 +50,11 @@ echo <<<HTML
 	<script type='text/javascript' src='js/lib/jquery.bgiframe.min.js' ></script>
 	<script type='text/javascript' src='js/lib/jquery.ajaxQueue.js' ></script>
 	<?php // editinplaceNuno requires cookie calls with getAPIKey() ?>
-	<script type="text/javascript" src="js/rrs.common.js" ></script>
+	<script type="text/javascript" src="js/rrs.util.js" ></script>
 	<script type="text/javascript" src="js/lib/jquery.editinplaceNuno.js" ></script> 
 
 	<script type="text/javascript" src="js/rrs.menu.js" ></script>
+	<script type="text/javascript" src="js/rrs.modal.js" ></script>
 	<script type="text/javascript" src="js/rrs.i18n.js" ></script>
 	<script type="text/javascript" src="js/rrs.tablelist.js" ></script>
 	<script type="text/javascript" src="js/rrs.docdisplay.js" ></script>

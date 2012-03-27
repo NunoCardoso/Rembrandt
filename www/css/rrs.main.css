@@ -37,9 +37,8 @@ a:hover {color:#0000aa;text-decoration:underline;}
 }
 
 #main-body.main-body-admin {
- background-color:#FFDDDD;
-padding:3px;
-margin-left:0px;
+  background-color:#FFDDDD;
+  margin-left:150px;
 }
 
 #main-body h1,h2,h3,h4 {
@@ -240,6 +239,7 @@ a.main-button-disabled:active span {
   margin-bottom:10px;
   padding:0px;
   border-bottom:1px solid black;
+  margin-left: 150px;
 }
 
 /** The floating right header menu */
@@ -502,75 +502,183 @@ width: 100%;*/
 	float:right;
 }
 
-a.GO_BACK_IOS_ISH_BUTTON {
-    background: transparent url('../img/bg_button_a.png') no-repeat scroll top right;
-    color: #444;
-    display: block;
-    float: left;
-    font: normal 12px arial, sans-serif;
-    height: 24px;
-    margin-right: 6px;
-    padding-right: 18px; /* sliding doors padding */
-    text-decoration: none;
+a.GO_BACK_IOS_ISH_BUTTON, #ios-arrow-left {
+    display : block; 
+    z-index : 0; 
+    height:30px;
+    width:auto;
+    padding: 0 10px 0 6px;
+position: absolute;
+	left:10px;
+
+    background-color: rgba(74,108,155,1);/*hovercolor*/
+    background-repeat:repeat-x;
+    -webkit-background-size : 30px;
+    background-position :0;
+    background-image : -webkit-linear-gradient(
+        bottom,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0) 50%,
+        rgba(255,255,255,0.1) 50%,
+        rgba(255,255,255,0.3) 100%
+        );
+
+    -webkit-border-radius: 5px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+
+    -webkit-box-shadow :0 -1px 1px rgba(0,0,0,0.2)inset,
+        0 1px 2px rgba(0,0,0,0.8)inset;
+
+    font-family : HelveticaNeue;
+    font-weight: 400;
+    font-size : 12px;
+    line-height : 30px;
+    text-align:center;
+    color:#fff;
+    text-shadow : 0px -1px 0px rgba(0,0,0,0.8);
 }
 
-a.GO_BACK_IOS_ISH_BUTTON span {
-    background: transparent url('../img/bg_arrow_button_span.png') no-repeat;
-    display: block;
-    color: #000;
-    line-height: 14px;
-    padding: 5px 0 5px 18px;
+a.GO_BACK_IOS_ISH_BUTTON:before, #ios-arrow-left:before{
+    content : ' ';
+    left:-8px;
+    top:3.5px;
+    height : 24px;
+    width: 24px;
+    z-index : 1;
+	position: absolute;
+
+    background-color: rgba(74,108,155,1);/*hovercolor*/
+    background-repeat:repeat-x;
+    -webkit-background-size : 20px 20px;
+    background-position :-1px -0.5px;
+    background-image :  
+        -webkit-gradient(linear, left bottom, right top, 
+            from(rgba(0,0,0,0)), 
+            color-stop(0.5, rgba(0,0,0,0)), 
+            color-stop(0.5, rgba(255,255,255,0.1)), 
+            to(rgba(255,255,255,0.3))); 
+
+
+    -webkit-transform : rotate(-45deg) skew(-10deg, -10deg);
+
+    -webkit-border-top-right-radius : 10px;
+    -webkit-border-top-left-radius :0px;
+    -webkit-border-bottom-right-radius : 0px;
+    -webkit-border-bottom-left-radius : 10px;
+
+    border-left : 1.5px solid rgba(255,255,255,0.4);
+
+    box-shadow :  1px 1px 1px rgba(0,0,0,0.4) inset,
+        -1px 1px 1px rgba(0,0,0,0.5) inset;
+
+    -webkit-mask-image : 
+        -webkit-gradient(linear, left top, right bottom,
+            from(#000000), 
+            color-stop(0.4,#000000), 
+            color-stop(0.5, transparent), 
+            to(transparent));
 }
 
-a.GO_BACK_IOS_ISH_BUTTON:active {
-    background-position: bottom right;
-    color: #000;
-    outline: none; /* hide dotted outline in Firefox */
+a.GO_BACK_IOS_ISH_BUTTON:hover,
+#ios-arrow-left:hover,
+a.GO_BACK_IOS_ISH_BUTTON:hover:before,
+#ios-arrow-left:hover:before {
+    background-color: rgba(54,88,135,1);/*hovercolor*/
 }
 
-a.GO_BACK_IOS_ISH_BUTTON:active span {
-    background-position: bottom left;
-    padding: 6px 0 4px 18px; /* push text down 1px */
-} 
 
-a.GO_FORWARD_IOS_ISH_BUTTON {
-    background: transparent url('../img/bg_arrow_button_a.png') no-repeat scroll top right;
-    color: #444;
-    display: block;
-    float: left;
-    font: normal 12px arial, sans-serif;
-    height: 24px;
-    margin-right: 6px;
-    padding-right: 18px; /* sliding doors padding */
-    text-decoration: none;
+a.GO_FORWARD_IOS_ISH_BUTTON, #ios-arrow-right {
+    display : block; 
+    z-index : 0;
+	position: absolute;
+    height:30px;
+    width:auto;
+    padding: 0 6px 0 10px;
+	right:8px;
+
+    background-repeat:repeat-x;
+    -webkit-background-size : 30px;
+    background-position :0;
+    background-image : -webkit-linear-gradient(
+        bottom,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0) 50%,
+        rgba(255,255,255,0.1) 50%,
+        rgba(255,255,255,0.3) 100%
+        );
+
+    -webkit-border-radius: 5px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+
+    -webkit-box-shadow :0 -1px 1px rgba(0,0,0,0.2)inset,
+        0 1px 2px rgba(0,0,0,0.8)inset;
+
+    font-family : HelveticaNeue;
+    font-weight: 400;
+    font-size : 12px;
+    line-height : 30px;
+    text-align:center;
+    color:#fff;
+    text-shadow : 0px -1px 0px rgba(0,0,0,0.8);
 }
 
-a.GO_FORWARD_IOS_ISH_BUTTON span {
-    background: transparent url('../img/bg_button_span.png') no-repeat;
-    display: block;
-    color: #000;
-    line-height: 14px;
-    padding: 5px 0 5px 18px;
+a.GO_FORWARD_IOS_ISH_BUTTON:after, #ios-arrow-right:after{
+    content : ' ';
+    right:-8px;
+    top:3.5px;
+    height : 24px;
+    width: 24px;
+    z-index : 1;
+	position: absolute;
+
+    background-repeat:repeat-x;
+    -webkit-background-size : 20px 20px;
+    background-position :-1px -0.5px;
+    background-image :  
+        -webkit-gradient(linear, right top, left bottom, 
+            from(rgba(0,0,0,0)), 
+            color-stop(0.5, rgba(0,0,0,0)), 
+            color-stop(0.5, rgba(255,255,255,0.1)), 
+            to(rgba(255,255,255,0.3))); 
+
+
+    -webkit-transform : rotate(-225deg) skew(-10deg, -10deg);
+
+    -webkit-border-top-right-radius : 10px;
+    -webkit-border-top-left-radius :0px;
+    -webkit-border-bottom-right-radius : 0px;
+    -webkit-border-bottom-left-radius : 10px;
+
+    border-left : 1.5px solid rgba(255,255,255,0.4);
+
+    box-shadow :  1px 1px 1px rgba(0,0,0,0.4) inset,
+        -1px 1px 1px rgba(0,0,0,0.5) inset;
+
+    -webkit-mask-image : 
+        -webkit-gradient(linear, left top, right bottom,
+            from(#000000), 
+            color-stop(0.4,#000000), 
+            color-stop(0.5, transparent), 
+            to(transparent));
 }
 
-a.GO_FORWARD_IOS_ISH_BUTTON:active {
-    background-position: bottom right;
-    color: #000;
-    outline: none; /* hide dotted outline in Firefox */
+a.GO_FORWARD_IOS_ISH_BUTTON,
+#ios-arrow-right,
+a.GO_FORWARD_IOS_ISH_BUTTON:after,
+#ios-arrow-right:after {
+    background-color: rgba(74,108,155,1);/*hovercolor*/
+
 }
 
-a.GO_FORWARD_IOS_ISH_BUTTON:active span {
-    background-position: bottom left;
-    padding: 6px 0 4px 18px; /* push text down 1px */
-} 
+a.GO_FORWARD_IOS_ISH_BUTTON.over,
+#ios-arrow-right.over,
+a.GO_FORWARD_IOS_ISH_BUTTON.over:after,
+#ios-arrow-right.over:after {
+    background-color: rgba(54,88,135,1);/*hovercolor*/
 
-
-
-/** to give space for side menu */
-#main-right-space {
- margin-left:160px;
 }
-
 
 /** for simple notes to appear on hte right side */
 .main-right-note {

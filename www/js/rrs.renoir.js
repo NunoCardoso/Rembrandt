@@ -26,11 +26,10 @@ $().ready(function() {
 		
 		// hard-code q as a GET variable, too
 		form.attr("action", "http://"+window.location.hostname+
-		window.location.pathname+setQueryVariable({"q":""+urlencode(text), "do":"search"}) )
+		window.location.pathname+Rembrandt.Util.setQueryVariable({"q":""+Rembrandt.Util.urlEncode(text), "do":"search"}) )
 		
 		var tags = getTags($("#rrs-search-tags"));
 		
-		//debug("tags:"+tags)
 		// Note: you MUST fill all important 
 		// insert tag info... collection and user info  can be captured later
 
@@ -93,7 +92,7 @@ $().ready(function() {
 function displayBodyOfRenoir() {
 	
 	// get query
-	var query = $.trim(getQueryVariable("q"));
+	var query = $.trim(Rembrandt.Util.getQueryVariable("q"));
 	var queryterms; if (query) queryterms = query.split(/\s+/);
 
 	// get tags
@@ -107,12 +106,12 @@ function displayBodyOfRenoir() {
 	
 	// other vars	
 	var lang = $('HTML').attr('lang')	
-	var limit = getQueryVariable("l");
-	var offset = getQueryVariable("o");
-	var user = getUser()
-	var collection = getCollection()
-	var collection_id = getCollectionID()
-	var api_key= getAPIKey();
+	var limit = Rembrandt.Util.getQueryVariable("l");
+	var offset = Rembrandt.Util.getQueryVariable("o");
+	var user = Rembrandt.Util.getUser()
+	var collection = Rembrandt.Util.getCollection()
+	var collection_id = Rembrandt.Util.Rembrandt.Util.getCollectionId()
+	var api_key= Rembrandt.Util.getApiKey();
 
 	var main_body = $("#main-body")
 	// not really slidable, but it must be included for hide/show
@@ -131,12 +130,12 @@ function displayBodyOfRenoir() {
 		var divtoshow = $("#"+target)
 		var slide = "horizontal"
 			
-		jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_renoir_search_url+"?q="+urlencode(encode_utf8(query)),
+		jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_renoir_search_url+"?q="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(query)),
 		    contentType:"application/x-www-form-urlencoded",
-			 data: "u="+urlencode(encode_utf8(user))+
-			 (tags ? "&t="+urlencode(encode_utf8($.toJSON(tags))) : "")+
-			 (qe ? "&qe="+urlencode(encode_utf8(qe)) : "") + 
-			 (model ? "&model="+urlencode(encode_utf8(model)) : "") + 
+			 data: "u="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(user))+
+			 (tags ? "&t="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8($.toJSON(tags))) : "")+
+			 (qe ? "&qe="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(qe)) : "") + 
+			 (model ? "&model="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(model)) : "") + 
 			 (maps ? "&maps="+maps : "") + 
 			 "&lg="+lang+"&ci="+collection_id+
 			 (limit ? "&l="+limit : "") + (offset ? "&o="+offset : "" )+
@@ -153,9 +152,9 @@ function displayBodyOfRenoir() {
 					var su = false
 					var pubkey = response['usr_pub_key']
 				
-					if (!isUndefined(pubkey)) {
+					if (!_.isUndefined(pubkey)) {
 						$("#main-body").attr('USR_PUB_KEY',pubkey)
-						su = validateSu(pubkey)
+						su = Rembrandt.Util.validadeSu(pubkey)
 					}
 				
 					divtoshow = generateSearchResultShowDIV(response,  su, 'saskia', {"id":id, "maps":maps, "query":query,})
@@ -298,14 +297,10 @@ function getTags(element) {
 			    tags.push(new Tag(value, cl[i].substring(9),$(this).attr("desc"), $(this).attr("ground") )); 
 		}
 	});
-//	debug("tags on getTags:"+tags)
 	return tags
 }	
 
 function findValueCallback(event, data, formatted) {
-//	debug("findValueCallback called")
-//	debug(event)
-//	debug(data)		
 	/** This function adds and deletes tags. data is an array [sug_name, sug_type]*/
 		addTag(new Tag(data[0], data[1], data[2], data[3]))
 };
@@ -313,8 +308,8 @@ function findValueCallback(event, data, formatted) {
 function Tag(name, type, desc, ground) {
 	this.name = name
 	this.type = type
-	if (!isUndefined(desc)) this.desc = desc
-	if (!isUndefined(ground)) this.ground = ground
+	if (!_.isUndefined(desc)) this.desc = desc
+	if (!_.isUndefined(ground)) this.ground = ground
 }
 
 

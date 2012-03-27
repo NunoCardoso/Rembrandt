@@ -27,7 +27,7 @@ Rembrandt.Admin = (function ($) {
 		$('A.USER_ADMIN', $("#rrs-user")).live("click", function(ev, ui) {
 			// draw the layout
 			ev.preventDefault();		
-			var api_key=getAPIKey()
+			var api_key=Rembrandt.Util.getApiKey()
 		
 			// Appearing this link means admin was already authenticated 
 			$("body").html(
@@ -94,20 +94,18 @@ Rembrandt.Admin = (function ($) {
 		</DIV>\
 	</DIV>\
 </DIV>\
-<DIV ID='main-right-space'>\
-	<DIV ID='main-header-menu'>\
-		<DIV ID='rrs-waiting-div' CLASS='rrs-waiting-div' style='display:none;'>\
-			<DIV CLASS='rrs-waiting-div-message'></DIV>\
-		</DIV>\
-		<DIV ID='main-breadcrumbles'>\
-			<DIV CLASS='main-breadcrumbles-element main-breadcrumbles-header-element' TARGET='rrs-admin-main'>{{admin}}</DIV>\
-		</DIV>\
+<DIV ID='main-header-menu'>\
+	<DIV ID='rrs-waiting-div' CLASS='rrs-waiting-div' style='display:none;'>\
+		<DIV CLASS='rrs-waiting-div-message'></DIV>\
 	</DIV>\
-	<DIV ID='main-body' CLASS='main-body-admin' USR_PUB_KEY='{{pubkey}}'>\
-		<DIV ID='rrs-homepage-admin' CLASS='main-slidable-div' TITLE='{{homepage}}'></DIV>\
+	<DIV ID='main-breadcrumbles'>\
+		<DIV CLASS='main-breadcrumbles-element main-breadcrumbles-header-element' TARGET='rrs-admin-main'>{{admin}}</DIV>\
 	</DIV>\
+</DIV>\
+<DIV ID='main-body' CLASS='main-body-admin' USR_PUB_KEY='{{pubkey}}'>\
+	<DIV ID='rrs-homepage-admin' CLASS='main-slidable-div' TITLE='{{homepage}}'></DIV>\
 </DIV>";
-			
+		
 		return Mustache.to_html(template, data);
 	};
 	

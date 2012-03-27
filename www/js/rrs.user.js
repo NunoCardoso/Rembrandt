@@ -11,7 +11,7 @@ $().ready(function() {
  		ev.preventDefault();
 		var a_clicked = $(this)
 		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
-		var api_key = getAPIKey()
+		var api_key = Rembrandt.Util.getApiKey()
 		
 		showSlidableDIV({
 			"title": title,
@@ -19,10 +19,10 @@ $().ready(function() {
 			"role": a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":getServletEngineFromRole(a_clicked.attr('ROLE'), "user"), 
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "user"), 
 			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
-			"divcreator":generateUserListDIV, 
-			"divcreatoroptions":{},
+			"divRender":generateUserListDIV, 
+			"divRenderOptions":{},
 			"sidemenu":null, 
 			"sidemenuoptions":{}
 		})					
@@ -65,7 +65,7 @@ $().ready(function() {
 // displays in #main-body setitngs for user
 function userSettings() {
 	
-	var api_key = getAPIKey()
+	var api_key = Rembrandt.Util.getApiKey()
 	
 	jQuery.ajax( {
 		type:"POST", url:Rembrandt.urls.restlet_saskia_user_url, 
@@ -191,10 +191,10 @@ function generateUserListDIV(response, su, role, options) {
 		t += "CLASS=''"+editinplace+"' textfield'>"+res[i]['usr_groups']+"</DIV></TD>"	
 
 		t += "<TD><DIV CONTEXT='user' COL='usr_enabled' ID='"+res[i]['usr_id']+"' "
-		t += "CLASS=''"+editinplace+"' selectfield 01'>"+printYesOrNo(res[i]['usr_enabled'])+"</DIV></TD>"
+		t += "CLASS=''"+editinplace+"' selectfield 01'>"+Rembrandt.Util.printYesOrNo(res[i]['usr_enabled'])+"</DIV></TD>"
 
 		t += "<TD><DIV CONTEXT='user' COL='usr_superuser' ID='"+res[i]['usr_id']+"' "
-		t += "CLASS=''"+editinplace+"' selectfield 01'>"+printYesOrNo(res[i]['usr_superuser'])+"</DIV></TD>"
+		t += "CLASS=''"+editinplace+"' selectfield 01'>"+Rembrandt.Util.printYesOrNo(res[i]['usr_superuser'])+"</DIV></TD>"
 
 		t += "<TD><DIV CONTEXT='"+context+"' COL='usr_api_key' ID='"+id+"' "
 		t += "CLASS=''"+editinplace+"' textfield'>"+res[i]['usr_api_key']+"</DIV></TD>"	
@@ -308,7 +308,7 @@ function modalUserLogin() {
 			// make the AJAX query
 				jQuery.ajax( {type:"POST", url:Rembrandt.urls.restlet_saskia_user_url,
 				contentType:"application/x-www-form-urlencoded",
-				data: "do=login&lg="+lang+"&u="+urlencode(user_login)+"&p="+urlencode(hex_md5(user_password)),
+				data: "do=login&lg="+lang+"&u="+Rembrandt.Util.urlEncode(user_login)+"&p="+Rembrandt.Util.urlEncode(hex_md5(user_password)),
 				beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
 				
 				success: function(response) {
@@ -336,7 +336,7 @@ function modalUserLogin() {
 							$.cookie('user_name', user_name) 
 							$.cookie('user_id', user_id) 
 							$.cookie('api_key', user['usr_api_key'])
-							if(!isUndefined(user['usr_pub_key_decoder'])) {
+							if(!_.isUndefined(user['usr_pub_key_decoder'])) {
 								$.cookie('su', user['usr_pub_key_decoder'])
 							}
 							$("#rrs-user").attr('api_key', user['usr_api_key'])	
@@ -345,7 +345,7 @@ function modalUserLogin() {
 						}
 						
 						// usr_pub_key is only sent from restlet if is confirmed as superuser
-						if (!isUndefined(user["usr_pub_key"]) && validateSu(user["usr_pub_key"])) {
+						if (!_.isUndefined(user["usr_pub_key"]) && Rembrandt.Util.validadeSu(user["usr_pub_key"])) {
 							$("#rrs-user").append("<A HREF='#' CLASS='USER_ADMIN' USR_PUB_KEY='"+user["usr_pub_key"]+"'>"+ i18n['admin'][lang]+"</A> | ")
 							//TODO
 						//	$.getScript("js/rembrandt.admin.js")
@@ -355,8 +355,8 @@ function modalUserLogin() {
 						$("#rrs-user").append("<A HREF='#' CLASS='USER_LOGOUT'>"+ i18n['logout'][lang]+"</A>")
 							
 						//update rembrandt collection div
-						var current_collection = getCollection()
-						var current_collection_id = getCollectionID()
+						var current_collection = Rembrandt.Util.getCollection()
+						var current_collection_id = Rembrandt.Util.Rembrandt.Util.getCollectionId()
 						
 						// change only if the current collection does not have read privileges 
 						// ajax perm to restlet_saskia_col_url do=list-all&api_key=&lg=
@@ -428,7 +428,7 @@ function modalUserForgotPassword() {
 				type:"POST", 
 				url:Rembrandt.urls.restlet_saskia_user_url,
 				contentType:"application/x-www-form-urlencoded",
-				data: "do=recoverpassword&lg="+lang+"&em="+urlencode(user_email), 
+				data: "do=recoverpassword&lg="+lang+"&em="+Rembrandt.Util.urlEncode(user_email), 
 				beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
 				success: function(response) {
 					// status is 0 for good login, -1 otherwise
@@ -442,9 +442,9 @@ function modalUserForgotPassword() {
 							type:"POST", 
 							url:Rembrandt.urls.mailrecoverpassword,
 							contentType:"application/x-www-form-urlencoded",
-							data: "newpassword="+urlencode(response['newpassword'])+"&tmp_api_key="+
-							urlencode(response['tmp_api_key'])+"&lang="+lang+
-							"&email="+urlencode(user_email), 
+							data: "newpassword="+Rembrandt.Util.urlEncode(response['newpassword'])+"&tmp_api_key="+
+							Rembrandt.Util.urlEncode(response['tmp_api_key'])+"&lang="+lang+
+							"&email="+Rembrandt.Util.urlEncode(user_email), 
 							success: function(response) {
 								dialog.data.find("#login-status").html(response)
 								dialog.data.find("#OKButton").attr("value",i18n["OK"][lang])
@@ -466,7 +466,7 @@ function modalUserForgotPassword() {
 		
 function modalUserChangePassword() {
 
-	var user = getUser()
+	var user = Rembrandt.Util.getUser()
 	
 	$.modal("<div id='modalChangePassword' class='rembrandt-modal'>"+
       "<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+
@@ -510,9 +510,9 @@ function modalUserChangePassword() {
 						type:"POST", 
 						url:Rembrandt.urls.restlet_saskia_user_url,
 						contentType:"application/x-www-form-urlencoded",
-						data: "do=changepassword&lg="+lang+"&u="+urlencode(user)+
-					       "&op="+urlencode(hex_md5(oldpassword))+
-						   "&np="+urlencode(hex_md5(newpassword)),
+						data: "do=changepassword&lg="+lang+"&u="+Rembrandt.Util.urlEncode(user)+
+					       "&op="+Rembrandt.Util.urlEncode(hex_md5(oldpassword))+
+						   "&np="+Rembrandt.Util.urlEncode(hex_md5(newpassword)),
 						beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
 						success: function(response) {
 							
@@ -613,14 +613,13 @@ function modalUserCreate() {
 				goodToGo = false	
 			}
 			
-			if (!emailCheck(user_email)) {
+			if (!Rembrandt.Util.emailCheck(user_email)) {
 				dialog.data.find("#login-status").show().html(i18n['invalid_email'][lang])
 				dialog.data.find("#YesButton").attr("value",i18n['retry'][lang])
 				goodToGo = false	
 			}
 			
 			var day = new Date().getDate()
-			debug(day+" "+captcha)
 			if(captcha != day) {
 				dialog.data.find("#login-status").show().html(i18n['captchamismatch'][lang])
 				dialog.data.find("#YesButton").attr("value",i18n['retry'][lang])	
@@ -632,11 +631,11 @@ function modalUserCreate() {
 					type:"POST", 
 					url:Rembrandt.urls.restlet_saskia_user_url,
 					contentType:"application/x-www-form-urlencoded",
-					data: "do=register&lg="+lang+"&u="+urlencode(user_login)+
-					       "&p="+urlencode(hex_md5(user_password))+
-						   "&fn="+urlencode(user_firstname)+
-						   "&ln="+urlencode(user_lastname)+
-						   "&em="+urlencode(user_email), 
+					data: "do=register&lg="+lang+"&u="+Rembrandt.Util.urlEncode(user_login)+
+					       "&p="+Rembrandt.Util.urlEncode(hex_md5(user_password))+
+						   "&fn="+Rembrandt.Util.urlEncode(user_firstname)+
+						   "&ln="+Rembrandt.Util.urlEncode(user_lastname)+
+						   "&em="+Rembrandt.Util.urlEncode(user_email), 
 					beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
 					success: function(response) {
 
@@ -652,8 +651,8 @@ function modalUserCreate() {
 							type:"POST", 
 							url:Rembrandt.urls.mailconfirmregistration,
 							contentType:"application/x-www-form-urlencoded",
-							data: "api_key="+urlencode(response['message']['usr_api_key'])+"&lang="+lang+
-							"&email="+urlencode(user_email),
+							data: "api_key="+Rembrandt.Util.urlEncode(response['message']['usr_api_key'])+"&lang="+lang+
+							"&email="+Rembrandt.Util.urlEncode(user_email),
 							success: function(response) {
 								dialog.data.find("#login-status").html(response)
 								dialog.data.find("#YesButton").hide()
@@ -676,7 +675,7 @@ function modalUserCreate() {
 
 function modalUserDelete(button) {
 	
-	var api_key=getAPIKey()
+	var api_key=Rembrandt.Util.getApiKey()
 	
 	$.modal("<div id='modalDeleteUser' class='rembrandt-modal'>"+
       "<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+
@@ -728,7 +727,7 @@ function modalUserDelete(button) {
 }	
 
 function modalUserLogout() {
-	user = getUser()
+	user = Rembrandt.Util.getUser()
 	$.modal( "<div id='modalLogoutUser' class='rembrandt-modal'>"+
       "<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+
 	   "<div style='text-align:center; padding:10px;'>"+i18n['logoutareyousure'][lang]+

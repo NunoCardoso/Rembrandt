@@ -80,7 +80,19 @@ class Collection extends DBObject implements JSONable {
 				"WHERE doc_collection=?",[col_id], {row -> i = row[0]})
 		return i
 	}
+	
+	public int getNumberOfRembrandtedDocsWithComment(String comment) {
 
+		int i
+		getDBTable().getSaskiaDB().getDB().eachRow(
+			"SELECT count(*) FROM  ${RembrandtedDocTable.tablename}, ${SourceDocTable.tablename} "+
+			" WHERE doc_collection=? and doc_id=sdoc_doc and sdoc_comment = ? "+
+			"ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id, comment], {row -> 
+			i = row[0]
+		})
+		return i
+	}
+	
 	/*
 	 * Returns the number of source documents for this collection
 	 */

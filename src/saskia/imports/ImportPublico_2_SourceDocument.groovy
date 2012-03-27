@@ -105,10 +105,10 @@ class ImportPublico_2_SourceDocument extends Import {
 			docs?.each{doc ->
 				if (!doc.lang) doc.lang = collection.col_lang
 				String content = writer.printDocument(doc)
-				// add now date
 				
 			//	print "doc: ${content}"
-				SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, doc.date_created, "")
+			// adding the table as a comment
+				SourceDoc s = addSourceDoc(doc.docid, content, doc.lang, doc.date_created, ""+this.table)
 				if (s) status.imported++ else status.skipped++
 			}
 
@@ -116,6 +116,7 @@ class ImportPublico_2_SourceDocument extends Import {
 			this.processed += limit
 			docstats.printMemUsage()
 		}
+		docstats.end()
 	}
 
 	static void main(args) {

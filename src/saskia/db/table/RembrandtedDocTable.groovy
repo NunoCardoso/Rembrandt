@@ -127,6 +127,19 @@ class RembrandtedDocTable extends DBTable {
 		// ORDER BY doc_id ASC assures that these batches are ordered
 	}
 
+	public List<RembrandtedDoc> getBatchOfRembrandtedDocsWithComment(Collection collection, String comment, limit = 10,  offset = 0) {
+		// limit & offset can come as null... they ARE initialized...
+		if (!limit) limit = 10
+		if (!offset) offset = 0
+
+		return queryDB("SELECT SQL_CALC_FOUND_ROWS * "+
+		" FROM  ${tablename}, source_doc  WHERE doc_collection=? and doc_id=sdoc_doc and sdoc_comment = ? "+
+		"ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id, comment])
+		// ORDER BY doc_id ASC assures that these batches are ordered
+	}
+	
+	getBatchOfRembrandtedDocsWithComment
+	
 	public List<RembrandtedDoc> getBatchOfRembrandtedDocsOrderedByOriginalDocId(Collection collection, limit = 10,  offset = 0) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10

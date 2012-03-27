@@ -40,6 +40,6 @@ class UnformattedWriter extends Writer {
     String afterSentenceEnd = "\n"
     
     public UnformattedWriter(StyleTag style) {
-	super(style)
+		super(style)
     }  
 }

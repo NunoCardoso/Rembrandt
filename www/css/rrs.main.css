@@ -166,8 +166,6 @@ a.main-button-disabled:active span {
  padding:0;
  color:#000000;	
  text-indent: 0px;	
- margin-left:20px; /** separate menu from left */
- margin-right:20px; /** separate menu from right */
  position: relative;
  -moz-border-radius:4px 4px 4px 4px;	
  -webkit-border-radius:4px 4px 4px 4px;
@@ -290,8 +288,6 @@ a.main-button-disabled:active span {
 	text-indent:0;
 	list-style: none;
 	margin-bottom:20px;
-	margin-left:20px;
-	margin-right:20px;
 }
 
 #main-menu ul li {
@@ -370,14 +366,6 @@ a.main-button-disabled:active span {
 	text-indent:0;
 	width:150px;
 	border: 0 none;
-}
-
-.search-icon {
-	background-image:url("../img/arrows2.png");
-	background-color:#FFFFFF;
-	background-repeat:no-repeat;
-	background-position:right 0; /* para mostrar a lupa */
-
 }
 
 /*****************/

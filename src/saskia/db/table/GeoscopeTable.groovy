@@ -223,6 +223,22 @@ class GeoscopeTable extends DBTable {
 		}
 		return  geo
 	}
+	
+	
+	public updateValue(Long geo_id, column, value) {
+	
+		if (!geo_id) throw new IllegalStateException("Geoscope geo_id is not valid: "+geo_id)
+		def newvalue
+		switch (type[column]) {
+			case 'String': newvalue = value; break
+			case 'Integer': newvalue = Integer.parseInt(value); break
+			case 'Long': newvalue = Long.parseLong(value); break
+		}
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
+			"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE geo_id=?",
+			[newvalue, geo_id])
+		return res
+	}
 
 	/** just add  justification of a country entry why it does not have ancestors */
 	public closeAncestorsForWOEID(long woeid) {

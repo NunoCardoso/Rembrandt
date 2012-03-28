@@ -68,6 +68,10 @@ class Collection extends DBObject implements JSONable {
 		return ["col_id":col_id, "col_name":col_name]
 	}
 
+	public updateValue(column, value) {
+		return getDBTable().updateValue(col_id, column, value);
+	}
+	
 	/*
 	 * Returns the number of REMBRANDTed documents for this collection
 	 */

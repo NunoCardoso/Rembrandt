@@ -127,13 +127,13 @@ public class SearchMapping extends WebServiceRestletMapping {
 
 			User user
 			if (api_key) {
-				user = UserTable.getFromAPIKey(api_key)
+				user = userTable.getFromAPIKey(api_key)
 				if (!user) return sm.userNotFound()
 			} else {
-				user = UserTable.getFromLogin(User.guest)
+				user = userTable.getFromLogin(User.guest)
 			}
 
-			if (!xollectionTable.canRead(user, collection) && !user.isSuperUser())
+			if (!collectionTable.canRead(user, collection) && !user.isSuperUser())
 				return sm.statusMessage(-1, i18n.servermessage['user_not_allowed_to_read_from_collection'][lang])
 
 			/*****************************/

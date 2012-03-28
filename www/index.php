@@ -81,7 +81,7 @@ HTML;
 
 		<DIV ID="main-search-box">
 			<FORM ID="form-search-box">
-				<input ID="form-input-search-box" class="search-icon" type="text" name="sitesearch" value="<?php if (isset($_GET["sitesearch"])) echo $_GET["sitesearch"];?>">
+				<input ID="form-input-search-box" class="search-icon" type="search" name="sitesearch" value="<?php if (isset($_GET["sitesearch"])) echo $_GET["sitesearch"];?>">
 	 			<input type="hidden" name="do" value="sitesearch">
 	 		</FORM>
 		</DIV> 		

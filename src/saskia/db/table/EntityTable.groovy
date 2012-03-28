@@ -59,7 +59,22 @@ class EntityTable extends DBTable {
 		return res
 	}
 
-
+	public updateValue(Long ent_id, column, value) {
+		if (!ent_id) throw new IllegalStateException("Entity ent_id is not valid: "+ent_id)
+	
+		def newvalue
+		switch (Entity.type[column]) {
+			case 'String': newvalue = value; break
+			case 'Long': newvalue = Long.parseLong(value); break
+		}
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
+			"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE ent_id=?",
+			[newvalue, ent_id])
+		if (ent_dbpedia_resource) getDBTable().entityDBPediaResourceCache[ent_dbpedia_resource][column] = newvalue
+		getDBTable().entityIDCache[ent_id][column] = newvalue
+		return res
+	}
+	
 	public Map listEntities(limit = 10, offset = 0, column = null, needle = null) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10

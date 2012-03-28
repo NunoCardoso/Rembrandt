@@ -29,7 +29,7 @@ function waitfunction(language, display) {
 
 
 function errormessage(language, message) {
-	if (isUndefined(language)) languge = "en"
+	if (_.isUndefined(language)) languge = "en"
 	return "<div class='rrs-error-message'>"+i18n['error'][language]+": "+
 	(message ? message : i18n['no-info-available'][language]) +"</div>"
 }

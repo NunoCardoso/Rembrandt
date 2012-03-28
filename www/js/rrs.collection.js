@@ -365,7 +365,7 @@ Rembrandt.Collection = (function ($) {
 		}
 		
 		var template = "\
-<DIV ID='rrs-collection-list' CLASS='main-slidable-div' TITLE='{{title}}' STYLE='display:none;overflow:auto;'>\
+<DIV ID='rrs-collection-list' CLASS='main-slidable-div' TITLE='{{title}}' STYLE='overflow:auto;'>\
 <DIV CLASS='rrs-pageable'>{{{navigation}}}\
 	<DIV CLASS='rrs-buttonrow'>\
 	{{#su}}\
@@ -480,7 +480,7 @@ Rembrandt.Collection = (function ($) {
 		}
 		
 		var template = "\
-<DIV ID='rrs-{{context}}-show-{{id}}list' CLASS='main-slidable-div' TITLE='{{s_colname}}' STYLE='display:none;overflow:auto;'>\
+<DIV ID='rrs-{{context}}-show-{{id}}' CLASS='main-slidable-div' TITLE='{{s_colname}}' STYLE='overflow:auto;'>\
 	<DIV CLASS='rrs-pageable'>\
 		<H3>{{context-show}}</H3>\
 		<TABLE ID='rrs-{{context}}-show-table tablesorter' BORDER=0>\
@@ -494,13 +494,13 @@ Rembrandt.Collection = (function ($) {
 				<TD>{{l_lang}}:</TD>\
 				<TD><DIV CONTEXT='{{context}}' COL='col_lang' ID='{{id}}' CLASS='{{editinplace}} textfield'>{{collang}}</DIV></TD>\
 			</TR>\
-			{{#su}}
+			{{#su}}\
 				<TR>\
 					<TD><DIV CONTEXT='{{context}}' COL='col_owner' COL2='usr_login' ID='{{id}}' CLASS='{{editinplace}} autocompletetextfield'>\
 						<DIV CLASS='saskia_object_tag'>{{login}}</DIV>\
 					</DIV></TD>\
-				</TR>
-			{{/su}}
+				</TR>\
+			{{/su}}\
 			<TR>\
 				<TD>{{l_comment}}:</TD>\
 				<TD><DIV CONTEXT='{{context}}' COL='col_comment' ID='{{id}}' CLASS='{{editinplace}} textfield'>{{colcomment}}</DIV></TD>\
@@ -521,7 +521,7 @@ Rembrandt.Collection = (function ($) {
 				<TD>\
 					<A HREF='#' CLASS='COLLECTION_RDOC_LIST slide-vertically-link' TARGET='rrs-collection-rdoc-list-{{id}}' ID='{{id}}' ROLE='{{role}}'>\
 					{{l_rdocs}}</A>:\
-				</TD>
+				</TD>\
 				<TD>{{number_rdocs}}</TD>\
 			</TR>\
 			{{#canadmin}}\
@@ -532,13 +532,13 @@ Rembrandt.Collection = (function ($) {
 					</TD>\
 					<TD>{{number_tasks}}</TD>\
 				</TR>\
-			{{/canadmin}}
+			{{/canadmin}}\
 		</TABLE>\
 		<A HREF='#' CLASS='main-button'><SPAN>{{stats}}</SPAN></A>\
 		{{#canadmin}}\
 			<A HREF='#' CLASS='SDOC_CREATE main-button' ID='{{id}}' TARGET='rrs-collection-sdoc-create-{{id}}' \
 			TITLE='{{create_new_sdoc}}' ROLE='{{role}}'>\
-				<SPAN>{{crate_new_context}}</SPAN>\
+				<SPAN>{{create_new_sdoc}}</SPAN>\
 			</A>\
 			<A HREF='#' CLASS='SDOC_IMPORT main-button' ID='{{id}}' TARGET='rrs-collection-sdoc-import-{{id}}' \
 			TITLE='{{l_sdoc_import}}' ROLE='{{role}}'>\
@@ -549,7 +549,7 @@ Rembrandt.Collection = (function ($) {
 				<SPAN>{{l_sdoc_export}}</SPAN>\
 			</A>\
 			<A HREF='#' CLASS='SDOC_DELETE main-button' ID='{{id}}' TITLE='{{delete}}' ROLE='{{role}}'>\
-				<SPAN>{{delete}}...</SPAN>
+				<SPAN>{{delete}}...</SPAN>\
 			</A>\
 		{{/canadmin}}\
 	</DIV>\
@@ -572,7 +572,7 @@ Rembrandt.Collection = (function ($) {
 		// keep rrs-collection prefix so that collection sub-menu pops up
 	
 		var newdiv = $("<DIV ID='rrs-collection-sdoc-list-"+col_id+"' CLASS='main-slidable-div' \
-	 	TITLE='"+i18n[context+'_list'][lang]+"' STYLE='display:none;overflow:auto;'></DIV>")
+	 	TITLE='"+i18n[context+'_list'][lang]+"' STYLE='overflow:auto;'></DIV>")
 	
 		// Set pageable area for paging reposition
 		var t = "<DIV CLASS='rrs-pageable'>" 
@@ -684,7 +684,7 @@ Rembrandt.Collection = (function ($) {
 	// keep rrs-collection prefix so that collection sub-menu pops up
 	
 	var newdiv = $("<DIV ID='rrs-collection-rdoc-list-"+col_id+"' CLASS='main-slidable-div' \
- TITLE='"+i18n[context+'_list'][lang]+"' STYLE='display:none;overflow:auto;'></DIV>")
+ TITLE='"+i18n[context+'_list'][lang]+"' STYLE='overflow:auto;'></DIV>")
 	
 	// Set pageable area for paging reposition
 	var t = "<DIV CLASS='rrs-pageable'>" 

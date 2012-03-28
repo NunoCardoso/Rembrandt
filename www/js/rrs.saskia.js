@@ -1,4 +1,4 @@
-
+var Rembrandt = Rembrandt || {};
 
 function displayBodyOfSaskia() {
 	var query = $.trim(Rembrandt.Util.getQueryVariable("q"));
@@ -8,12 +8,12 @@ function displayBodyOfSaskia() {
 	lang = $("HTML").attr("lang")	// must be here!
 	var limit = Rembrandt.Util.getQueryVariable("l"); if (_.isUndefined(limit)) limit = 10;
 	var offset = Rembrandt.Util.getQueryVariable("o"); if (_.isUndefined(offset)) offset = 0;
-	var userid = Rembrandt.Util.Rembrandt.Util.getUserId()
+	var userid = Rembrandt.Util.getUserId()
 	var user = Rembrandt.Util.getUser()
 	var api_key = Rembrandt.Util.getApiKey()
 	
 	var pubkey = $("A.USER_ADMIN").attr("USR_PUB_KEY")
-	var su = Rembrandt.Util.validadeSu(pubkey)
+	var su = Rembrandt.Util.validateSu(pubkey)
 	var role = (su ? "admin" : "saskia")
 	
 	var main_body = $("#main-body")
@@ -45,7 +45,7 @@ function generateCollectionMainPageDIV(response, su, role, options) {
 				
 	// response returns result [cols] and perms [cols]				
 
-	var cols = response['result']				
+	var cols = response['result']
 	var perms = response['perms']
 
 	// we need this, as pager will crop from here (normally, pageDIV creaters generate a main-slidable-div to encompass the pageable)

@@ -92,7 +92,7 @@ class RembrandtedDocTable extends DBTable {
 		String where = "WHERE doc_collection=? "
 		List params = [collection.col_id]
 		if (column && needle) {
-			switch (type[column]) {
+			switch (RembrandtedDoc.type[column]) {
 				case 'String': where += " AND $column LIKE '%${needle}%'"; break
 				case 'Long': where += " AND $column=? "; params << Long.parseLong(needle); break
 				case 'DocStatus':  where += " AND $column = ?"; params << needle; break
@@ -137,9 +137,7 @@ class RembrandtedDocTable extends DBTable {
 		"ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id, comment])
 		// ORDER BY doc_id ASC assures that these batches are ordered
 	}
-	
-	getBatchOfRembrandtedDocsWithComment
-	
+
 	public List<RembrandtedDoc> getBatchOfRembrandtedDocsOrderedByOriginalDocId(Collection collection, limit = 10,  offset = 0) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10

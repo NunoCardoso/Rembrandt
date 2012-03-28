@@ -13,7 +13,7 @@ $(document).ready(function() {
 		var display = $("#"+form.attr("target"))
 
 		// wipe everything
-		wipeDisplay(display); 
+		Rembrandt.Display.wipeDisplay(display); 
 		// now show it...
 		display.show().slideDown("fast")
 				
@@ -40,8 +40,8 @@ $(document).ready(function() {
 					// clear loading animation
 				//	$("#rrs-doc-display-status", display).html("Ready.")
 
-					addDocumentTitleToDocDisplay(display, htmltitle)
-					addDocumentBodyToDocDisplay(display, htmlbody)
+					Rembrandt.Display.addDocumentTitleToDocDisplay(display, htmltitle)
+					Rembrandt.Display.addDocumentBodyToDocDisplay(display, htmlbody)
 					
 					// setup NE DIVs				
 					setupNEs(display)	// sets both, I hope	
@@ -181,7 +181,7 @@ function rembrandt2HTML(response) {
 	
 	/* reconvert EM tags to DIV */
 	response2 = response2.replace(/<EM/gi,"<DIV").replace(/<\/EM>/gi,"<\/DIV>")
-        response2 = response2.replace(/<NE/gi,"<DIV").replace(/<\/NE>/gi,"<\/DIV>")
+    response2 = response2.replace(/<NE/gi,"<DIV").replace(/<\/NE>/gi,"<\/DIV>")
 	response2 = response2.replace(/<ALT>/gi,"<DIV CLASS=\"ALT\">").replace(/<\/ALT>/gi,"<\/DIV>")
 	response2 = response2.replace(/<SUBALT>/gi,"<DIV CLASS=\"SUBALT\" ALT=\"$1\"").replace(/<\/SUBALT>/gi,"<\/DIV>")
 

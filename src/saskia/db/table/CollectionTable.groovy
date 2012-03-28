@@ -335,7 +335,7 @@ class CollectionTable extends DBTable {
 	public updateValue(String column, value) {
 		def newvalue
 		def object
-		switch (type[column]) {
+		switch (Collection.type[column]) {
 			case 'String': newvalue = value; break
 			case 'Long': newvalue = Long.parseLong(value); break
 			case 'User': newvalue = Long.parseLong(value); object = User.getFromID(newvalue); break // value is usr_id

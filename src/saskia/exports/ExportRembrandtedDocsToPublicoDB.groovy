@@ -20,8 +20,8 @@ package saskia.exports
 
 import rembrandt.io.DocStats
 import rembrandt.obj.Document
-import rembrandt.io.RembrandtReader
-import rembrandt.io.RembrandtStyleTag
+import rembrandt.io.UnformattedWriter
+import rembrandt.io.JustCategoryStyleTag
 import org.apache.log4j.*
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
@@ -30,6 +30,8 @@ import saskia.db.obj.*
 import saskia.db.table.*
 import saskia.db.database.*
 import saskia.util.validator.*
+import groovy.sql.Sql
+
 /** 
  * This class exports Rembrandted Docs into PublicoDB
 */
@@ -179,13 +181,13 @@ class ExportRembrandtedDocsToPublicoDB extends Export {
 		def _db
 		
 		try {
-			_db = Sql.newInstance("$url/${sourcedb}?${param}", user, password, driver)
+			_db = Sql.newInstance("$url/${targetdb}?${param}", user, password, driver)
 		}  catch (Exception e) {
-			log.fatal "Can't open db "+"$url/${sourcedb}?${param}"+": "+e.getMessage()
+			log.fatal "Can't open db "+"$url/${targetdb}?${param}"+": "+e.getMessage()
 			log.fatal "Is your MySQL server running? You should check it out."
 		}
 		if (_db) {
-			log.info "Source database initialized: $driver:$url/$sourcedb"
+			log.info "Source database initialized: $driver:$url/$targetdb"
 		} else {
 			log.fatal "Source database NOT initialized. Exiting."
 			System.exit(0)

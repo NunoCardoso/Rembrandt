@@ -66,10 +66,17 @@ Rembrandt.Admin = (function ($) {
 		},
 									
 		template = "\
+<DIV ID='rrs-waiting-div' CLASS='rrs-waiting-div' style='display:none;'>\
+	<DIV CLASS='rrs-waiting-div-message'></DIV>\
+	<DIV CLASS='rrs-waiting-div-balloontip'></DIV>\
+</DIV>\
 <DIV ID='main-side-menu'>\
 	<DIV ID='main-side-menu-header'>{{admin}}</DIV>\
 	<DIV CLASS='main-side-menu-section'>\
 		<DIV CLASS='main-side-menu-section-body'>\
+			<DIV CLASS='rrs-saskia-logo'>\
+				<IMG SRC='img/saskia-head.png'>\
+			</DIV>\
 			<DIV CLASS='main-side-menu-section-body-element'>\
 				<A CLASS='COLLECTION_LIST' ROLE='admin' HREF='#' TITLE='{{collections}}' TARGET='rrs-admin-collection-list'>{{admin-collections}}</A>\
 			</DIV>\
@@ -95,9 +102,6 @@ Rembrandt.Admin = (function ($) {
 	</DIV>\
 </DIV>\
 <DIV ID='main-header-menu'>\
-	<DIV ID='rrs-waiting-div' CLASS='rrs-waiting-div' style='display:none;'>\
-		<DIV CLASS='rrs-waiting-div-message'></DIV>\
-	</DIV>\
 	<DIV ID='main-breadcrumbles'>\
 		<DIV CLASS='main-breadcrumbles-element main-breadcrumbles-header-element' TARGET='rrs-admin-main'>{{admin}}</DIV>\
 	</DIV>\

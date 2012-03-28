@@ -39,6 +39,7 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 		i18n = I18n.newInstance()
 		CollectionTable collectionTable = db.getDBTable("CollectionTable")
 		UserTable userTable = db.getDBTable("UserTable")
+		EntityTable entityTable = db.getDBTable("EntityTable")
 
 		JSONanswer = {req, par, bind ->
 			long session = System.currentTimeMillis()
@@ -67,7 +68,7 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 			if (!api_key) api_key = par["COOKIE"]["api_key"]
 			if (!api_key) return sm.noAPIKeyMessage()
 
-			User user = UserTable.getFromAPIKey(api_key)
+			User user = userTable.getFromAPIKey(api_key)
 			if (!user) return sm.userNotFound()
 			if (!user.isEnabled()) return sm.userNotEnabled()
 			// all Admin*Mappings must have this
@@ -83,7 +84,7 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 				Map h
 				try {
 					sm.logProcessDebug "Querying Entities: limit $limit offset $offset column $column value $value"
-					h = EntityTable.listEntities(limit, offset, column, value)
+					h = entityTable.listEntities(limit, offset, column, value)
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_entity_list'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage["error_getting_entity_list"][lang]+": "+e.getMessage())
@@ -107,10 +108,9 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 				if (!ent_id) return sm.notEnoughVars("id=$ent_id")
 				if (!column || !value) return sm.notEnoughVars("c=$column v=$value")
 
-				EntityTable entity
 				try {
 					log.debug "Querying Entity with id $ent_id"
-					entity = EntityTable.getFromID(ent_id)
+					entity = entityTable.getFromID(ent_id)
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_entity'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage["error_getting_entity"][lang]+": "+e.getMessage())
@@ -136,9 +136,9 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 				}catch(Exception e) {}
 				if (!id)  return sm.notEnoughVars("id=$id")
 
-				EntityTable entity
+				Entity entity
 				try {
-					entity = EntityTable.getFromID(id)
+					entity = entityTable.getFromID(id)
 				} catch(Exception e) {
 					errorlog.error i18n.servermessage['error_getting_entity'][lang]+": "+e.printStackTrace()
 					return sm.statusMessage(-1, i18n.servermessage["error_getting_entity"][lang]+": "+e.getMessage())
@@ -167,7 +167,7 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 				if (!ent_name || !ent_dbpedia_resource || !ent_dbpedia_class)
 					return sm.notEnoughVars("$ent_name $ent_dbpedia_resource $ent_dbpedia_class")
 
-				EntityTable ent = new EntityTable(ent_name:ent_name, ent_dbpedia_resource:ent_dbpedia_resource,
+				Entity ent = new Entity(ent_name:ent_name, ent_dbpedia_resource:ent_dbpedia_resource,
 						ent_dbpedia_class:ent_dbpedia_class)
 				try {
 					log.debug "Adding Entity"

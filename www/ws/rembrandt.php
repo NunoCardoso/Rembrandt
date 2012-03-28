@@ -22,15 +22,22 @@ generateJS($config);
 <body class="top">
 <script>
 $(document).ready(function() {
-    displayBodyOfRembrandt();
-	appendDocDisplayTo($('#rembrandt-results-1'))
+   // displayBodyOfRembrandt();
+	Rembrandt.Display.appendDocDisplayTo($('#rembrandt-results-1'))
 })
 </SCRIPT>
+<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
+	<DIV CLASS="rrs-waiting-div-message"></DIV>
+	<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
+</DIV>
 <DIV ID='main-side-menu'>
 	<DIV ID='main-side-menu-header'>
 	<?php echo $i18n->message['options'][$lang]; ?>
 	</DIV>
-	
+
+	<DIV CLASS="rrs-rembrandt-logo">
+		<IMG SRC="<?php echo $config->imgdir."/".$config->rembrandt_head_image;?>">
+	</DIV>
 	<DIV CLASS='main-side-menu-section'>
 		<DIV CLASS='main-side-menu-section-header'>
 			<A HREF="#"><?php echo $i18n->rembrandt['tag-options'][$lang]; ?></A> 
@@ -77,13 +84,7 @@ $(document).ready(function() {
  <!-- form  --> 
 
 <DIV ID="main-form">	
-	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
-		<DIV CLASS="rrs-waiting-div-message"></DIV>
-		<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
-	</DIV>
-	<DIV CLASS="rrs-logo">
-		<IMG SRC="<?php echo $config->imgdir."/".$config->rembrandt_head_image;?>">
-	</DIV>
+
 	<FORM id="home1" TARGET="rembrandt-results-1" CLASS="rembrandt-submit">
 		<TEXTAREA id="text" name="text" style="width:400px; height:60px;"><?php echo $config->exampleText[$lang]; ?></textarea>
 		<BR>

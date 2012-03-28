@@ -24,7 +24,7 @@ import saskia.db.database.SaskiaDB
 import saskia.db.obj.Type
 
 
-class TypeTable {
+class TypeTable extends DBTable {
 
 	static String tablename = "type"
 

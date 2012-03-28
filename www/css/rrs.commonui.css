@@ -29,7 +29,9 @@ float: right;
 	margin-right:10px;
 }
 
-.rrs-saskia-logo {
+.rrs-saskia-logo,
+.rrs-renoir-logo,
+.rrs-rembrandt-logo {
 	display: block;
 	margin-right: 10px;
 	margin-left: 10px;
@@ -138,11 +140,9 @@ float: right;
 /* the status div place above */
 #rrs-waiting-div {
   z-index:5;  
-  position: relative;
-  top: -50px;
+  position: absolute;
+  top: 0;
   height: 0;
-  display: inline-block;
-  float:left;
 }
 
 /* to replicate waiting div messages everywhere */

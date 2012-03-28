@@ -41,7 +41,7 @@
 }
 
 .ac_loading {
-	background: white url('../images/wait.gif') right center no-repeat;
+	background: white url('../../img/wait.gif') right center no-repeat;
 }
 
 /*.ac_odd {

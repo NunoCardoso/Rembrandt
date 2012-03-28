@@ -13,8 +13,8 @@ $su_collection = $_COOKIE['su_collection'];
 $collection = $_COOKIE['collection'];
 $collection_id = $_COOKIE['collection_id'];
 
-if (!$collection) $collection = $default_collection;
-if (!$collection_id) $collection_id = $default_collection_id;
+if (!$collection) $collection = $config->default_collection;
+if (!$collection_id) $collection_id = $config->default_collection_id;
 
 echo <<<HTML
 <!DOCTYPE html">

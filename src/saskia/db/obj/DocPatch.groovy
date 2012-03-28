@@ -57,45 +57,16 @@ public class DocPatch extends DBObject implements JSONable {
 		return dp
 	}
 
-	/** generic purpose value update on DB and cache */
-	public updateValue(String column, newvalue) {
-		if (!pat_id) throw new IllegalStateException("DocPatch pat_id is not valid: "+pat_id)
-		def newval
-		def object
-
-		switch (type[column]) {
-			case 'Integer':
-				if (!(newvalue instanceof Integer)) newval = Integer.parseInt(newvalue)
-				else newval = newvalue
-				break
-			case ['Long', 'User', 'RembrandtedDoc']:
-				if (newvalue instanceof User) {
-					newval = newvalue.usr_id
-					object = newvalue
-				}
-				else if (newvalue instanceof RembrandtedDoc) {
-					newval = newvalue.doc_id
-					object = newvalue
-				}
-				else if (!(newvalue instanceof Long)) newval = Long.parseLong(newvalue)
-				break
-			case 'String':
-				newval = newvalue
-				break
-		}
-
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE pat_id=?",
-				[newval, pat_id])
-		return res
-	}
-
 	Map toMap() {
 		return ['pat_id':pat_id,'pat_doc':pat_doc.toMap(),'pat_user':pat_user.toSimpleMap(), 'pat_date':pat_date,'pat_patch':pat_patch]
 	}
 
 	Map toSimpleMap() {
 		return toMap()
+	}
+
+	public updateValue(column, value) {
+		return getDBTable().updateValue(pat_id, column, value);
 	}
 
 	/** Add this DocPatch to the database.

@@ -26,7 +26,7 @@ echo <<<HTML
 	<script type="text/javascript"  src="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js" ></script>
 -->
 	<script type="text/javascript" src="js/lib/jquery-1.7.1.js" ></script>
-	<script type="text/javascript" src="js/lib/Mustache.js" ></script>
+	<script type="text/javascript" src="js/lib/mustache.js" ></script>
 	<script type="text/javascript" src="js/lib/underscore-1.1.5.js" ></script>
 	<script type="text/javascript" src="js/lib/ICanHaz.js"></script>
 	<script type="text/javascript" src="js/lib/jquery.json-2.2.min.js" ></script>

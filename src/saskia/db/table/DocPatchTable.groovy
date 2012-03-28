@@ -84,6 +84,42 @@ class DocPatchTable extends DBTable {
 		return res2
 	}
 
+
+	/** generic purpose value update on DB and cache */
+	public updateValue(Long pat_id, String column, newvalue) {
+
+		if (!pat_id) throw new IllegalStateException("DocPatch pat_id is not valid: "+pat_id)
+	
+		def newval
+		def object
+
+		switch (DocPatch.type[column]) {
+			case 'Integer':
+				if (!(newvalue instanceof Integer)) newval = Integer.parseInt(newvalue)
+				else newval = newvalue
+				break
+			case ['Long', 'User', 'RembrandtedDoc']:
+				if (newvalue instanceof User) {
+					newval = newvalue.usr_id
+					object = newvalue
+				}
+				else if (newvalue instanceof RembrandtedDoc) {
+					newval = newvalue.doc_id
+					object = newvalue
+				}
+				else if (!(newvalue instanceof Long)) newval = Long.parseLong(newvalue)
+				break
+			case 'String':
+				newval = newvalue
+				break
+		}
+
+		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
+				"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE pat_id=?",
+				[newval, pat_id])
+		return res
+	}
+	
 	/** Get a DocPatch from id.
 	 * @param id The id as needle.
 	 * return DocPatch result object, or null

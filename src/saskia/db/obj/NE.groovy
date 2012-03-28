@@ -87,91 +87,10 @@ class NE extends DBObject implements JSONable {
 		return "${ne_name?.nen_id} $ne_lang ${ne_category?.nec_id} ${ne_type?.net_id} ${ne_subtype?.nes_id} ${ne_entity?.ent_id}"
 	}
 
-
-	public updateNEName(NEName new_ne_name) {
-
-		if (!new_ne_name || !ne_id) return null
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${tablename} SET ne_name=? where ne_id=?",[new_ne_name.nen_id, ne_id])
-
-		if (res) {
-			ne_name = new_ne_name
-			String key = getKey()
-			if (neKeyCache.containsKey(key)) neKeyCache[key].ne_name = new_ne_name
-		}
-		return res
+	public updateValue(column, value) {
+		return getDBTable().updateValue(ne_id, column, value);
 	}
-
-	public updateNECategory(NECategory new_ne_category) {
-		if (!ne_id) return null
-		// new_ne_category can be null
-		def res =getDBTable().getSaskiaDB().executeUpdate(
-				"UPDATE ${getDBTable().tablename} SET ne_category=? where ne_id=?",
-				[
-					new_ne_category?.nec_id,
-					ne_id
-				])
-		if (res) {
-			ne_category = new_ne_category
-			String key = getKey()
-			if (getDBTable().neKeyCache.containsKey(key))
-				getDBTable().neKeyCache[key].ne_category = new_ne_category
-
-		}
-		return res
-	}
-
-	public updateNEType(NECategory new_ne_type) {
-		if (!ne_id) return null
-		// new_ne_category can be null
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getDBTable().tablename} SET ne_type=? where ne_id=?",
-				[new_ne_type?.net_id, ne_id])
-		if (res) {
-			ne_type = new_ne_type
-			String key = getKey()
-			if (getDBTable().neKeyCache.containsKey(key))
-				getDBTable().neKeyCache[key].ne_type = new_ne_type
-
-		}
-		return res
-	}
-
-	public updateNESubtype(NECategory new_ne_subtype) {
-		if (!ne_id) return null
-		// new_ne_category can be null
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getDBTable().tablename} SET ne_subtype=? where ne_id=?",
-				[
-					new_ne_subtype?.nes_id,
-					ne_id
-				])
-		if (res) {
-			ne_subtype = new_ne_subtype
-			String key = getKey()
-			if (getDBTable().neKeyCache.containsKey(key))
-				getDBTable().neKeyCache[key].ne_subtype = new_ne_subtype
-
-		}
-		return res
-	}
-
-	public updateEntity(Entity new_entity) {
-		if (!ne_id) return null
-		// new_entity can be null
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getDBTable().tablename} SET ne_entity=? where ne_id=?",
-				[new_entity?.ent_id, ne_id])
-		if (res) {
-			ne_entity = new_entity
-			String key = getKey()
-			if (getDBTable().neKeyCache.containsKey(key))
-				getDBTable().neKeyCache[key].ne_entity = new_entity
-
-		}
-		return res
-	}
-
+	
 	public Long addThisToDB() {
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
 				"INSERT INTO ${getDBTable().tablename}(ne_id, ne_name, ne_lang, ne_category, "+

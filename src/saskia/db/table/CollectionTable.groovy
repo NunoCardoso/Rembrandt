@@ -332,13 +332,19 @@ class CollectionTable extends DBTable {
 		}
 	}
 
-	public updateValue(String column, value) {
+	public updateValue(Long col_id, String column, value) {
+		if (!col_id) throw new IllegalStateException("Collection col_id is not valid: "+col_id)
 		def newvalue
 		def object
 		switch (Collection.type[column]) {
 			case 'String': newvalue = value; break
-			case 'Long': newvalue = Long.parseLong(value); break
-			case 'User': newvalue = Long.parseLong(value); object = User.getFromID(newvalue); break // value is usr_id
+			case 'Long': 
+				newvalue = Long.parseLong(value); 
+			break
+			case 'User': 
+				newvalue = Long.parseLong(value); 
+				object = UserTable.getFromID(db, newvalue); 
+			break
 		}
 		def res = getSaskiaDB().getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE col_id=?",[newvalue, col_id])
 		// if we have a User (object), add it to cache

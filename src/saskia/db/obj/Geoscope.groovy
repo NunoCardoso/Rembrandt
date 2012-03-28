@@ -94,16 +94,7 @@ class Geoscope extends DBObject implements JSONable {
 	}
 
 	public updateValue(column, value) {
-		def newvalue
-		switch (type[column]) {
-			case 'String': newvalue = value; break
-			case 'Integer': newvalue = Integer.parseInt(value); break
-			case 'Long': newvalue = Long.parseLong(value); break
-		}
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE geo_id=?",
-			[newvalue, geo_id])
-		return res
+		return getDBTable().updateValue(geo_id, column, value);
 	}
 
 	public Map getName() {

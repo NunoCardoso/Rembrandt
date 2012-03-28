@@ -13,8 +13,8 @@ $su_collection = $_COOKIE['su_collection'];
 $collection = $_COOKIE['collection'];
 $collection_id = $_COOKIE['collection_id'];
 
-if (!$collection) $collection = $default_collection;
-if (!$collection_id) $collection_id = $default_collection_id;
+if (!$collection) $collection = $config->default_collection;
+if (!$collection_id) $collection_id = $config->default_collection_id;
 
 echo <<<HTML
 <!DOCTYPE html>
@@ -151,7 +151,7 @@ $(document).ready(function() {
 		<DIV ID="rrs-collections" DEFAULT="<?php echo $default_collection; ?>" 
 			DEFAULT_ID="<?php echo $default_collection_id; ?>">
       <?php 
-			echo $user['collection'][$lang].": <A HREF='#' CLASS='collection' COLLECTION='";
+			echo $i18n->user['collection'][$lang].": <A HREF='#' CLASS='collection' COLLECTION='";
 			echo $collection .  "' COLLECTION_ID='" . $collection_id. "'>" . $collection . "</A>";
 		?>
 	   </DIV>

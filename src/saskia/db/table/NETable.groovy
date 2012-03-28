@@ -154,7 +154,48 @@ class NETable extends DBTable{
 		log.debug "Querying for ne_name $name and ne_lang $lang got NE $ne."
 		return ne
 	}
-
+	
+	public updateValue(Long ne_id, column, value) {
+		if (!ne_id) throw new IllegalStateException("NE ne_id is not valid: "+ne_id)
+		
+		NE ne = getFromID(ne_id);
+		if (!ne) throw new IllegalStateException("NE not found for ne_id: "+ne_id)
+		
+		def newvalue
+		switch (NE.type[column]) {
+			case 'String': 
+				newvalue = value; 
+			break
+			case 'Long': 
+				newvalue = Long.parseLong(value); 
+			break
+			case 'NEName': 
+				newvalue = Long.parseLong(value); 
+				object = NEName.getFromID(db, newvalue); 
+			case 'NECategory': 
+				newvalue = Long.parseLong(value); 
+				object = NECategory.getFromID(db, newvalue); 
+			break 
+			case 'NEType': 
+				newvalue = Long.parseLong(value); 
+				object = NEType.getFromID(db, newvalue); 
+			break			
+			case 'NESubtype': 
+				newvalue = Long.parseLong(value); 
+				object = NESubtype.getFromID(db, newvalue); 
+			break
+			case 'Entity': 
+				newvalue = Long.parseLong(value); 
+				object = Entity.getFromID(db, newvalue); 
+			break
+		}
+		def ne_key = ne.getKey();
+		def res = getSaskiaDB().getDB().executeUpdate("UPDATE ${tablename} SET ${column}=? WHERE ne_id=?",[newvalue, ne_id])
+		if (neKeyCache.containsKey(ne_key)){
+			neKeyCache.remove(ne_key)
+		}
+		return res
+	}
 
 	/** 
 	 * This function DOES use the cache, it's the main function used by RembrandtedDoc 

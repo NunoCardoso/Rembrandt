@@ -71,18 +71,9 @@ class Entity extends DBObject implements JSONable {
 	}
 	
 	public updateValue(column, value) {
-		def newvalue
-		switch (type[column]) {
-			case 'String': newvalue = value; break
-			case 'Long': newvalue = Long.parseLong(value); break
-		}
-		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-			"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE ent_id=?",
-			[newvalue, ent_id])
-		if (ent_dbpedia_resource) getDBTable().entityDBPediaResourceCache[ent_dbpedia_resource][column] = newvalue
-		getDBTable().entityIDCache[ent_id][column] = newvalue
-		return res
+		return getDBTable().updateValue(ent_id, column, value);
 	}
+
 
 	public Geoscope hasGeoscope() {
 		Geoscope g

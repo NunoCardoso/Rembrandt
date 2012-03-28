@@ -110,7 +110,7 @@ function displayBodyOfRenoir() {
 	var offset = Rembrandt.Util.getQueryVariable("o");
 	var user = Rembrandt.Util.getUser()
 	var collection = Rembrandt.Util.getCollection()
-	var collection_id = Rembrandt.Util.Rembrandt.Util.getCollectionId()
+	var collection_id = Rembrandt.Util.getCollectionId()
 	var api_key= Rembrandt.Util.getApiKey();
 
 	var main_body = $("#main-body")
@@ -154,7 +154,7 @@ function displayBodyOfRenoir() {
 				
 					if (!_.isUndefined(pubkey)) {
 						$("#main-body").attr('USR_PUB_KEY',pubkey)
-						su = Rembrandt.Util.validadeSu(pubkey)
+						su = Rembrandt.Util.validateSu(pubkey)
 					}
 				
 					divtoshow = generateSearchResultShowDIV(response,  su, 'saskia', {"id":id, "maps":maps, "query":query,})

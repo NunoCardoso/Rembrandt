@@ -66,7 +66,7 @@ class GeoscopeTable extends DBTable {
 		String from = " FROM ${tablename}"
 		List params = []
 		if (column && needle) {
-			switch (type[column]) {
+			switch (Geoscope.type[column]) {
 				case 'String': where += " WHERE $column LIKE '%${needle}%'"; break
 				case 'Integer': where += " WHERE $column=? "; params << Integer.parseInt(needle); break
 				case 'Long': where += " WHERE $column=? "; params << Long.parseLong(needle); break

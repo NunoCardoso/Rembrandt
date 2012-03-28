@@ -170,6 +170,7 @@ var i18n = {'class':{'en':{
 	'ne_updated':{'pt':'EM actualizada', 'en':'NE uppated'},
 	'ne_list':{'pt':'Lista de EM', 'en':'NEs list'},
 	'ne_category':{'pt':'Categoria', 'en':'Category'},
+	'ne_entity':{'pt':'Entidade', 'en':'Entity'},
 	'ne_type':{'pt':'Tipo', 'en':'Type'},
 	'ne_subtype':{'pt':'Subtipo', 'en':'Subtype'},
 	'nedetails':{'pt':'Detalhes da EM', 'en':'NE details'},

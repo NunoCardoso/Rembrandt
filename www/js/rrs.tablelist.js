@@ -51,7 +51,7 @@ $().ready(function() {
 				
 				if (!_.isUndefined(pubkey)) {
 					$("#main-body").attr('USR_PUB_KEY',pubkey)
-					su = Rembrandt.Util.validadeSu(pubkey)
+					su = Rembrandt.Util.validateSu(pubkey)
 				}
 				
 				divtoupdate = pagerdiv.parents('DIV.main-slidable-div')
@@ -60,7 +60,7 @@ $().ready(function() {
 				eval("Rembrandt."+Rembrandt.Util.UpperCaseFirstLetter(context)+".generate"+ Rembrandt.Util.UpperCaseFirstLetter(context)+"ListDIV") )
 				
 				var newdiv = functiontocall.call(response['message'],su, role, {})
-				$("DIV.rrs-pageable", divtoupdate).html( $("DIV.rrs-pageable", newdiv).html() )
+				$("DIV.rrs-pageable", divtoupdate).html( $("DIV.rrs-pageable", $(newdiv)).html() )
 								
 				$('TABLE.tablesorter', divtoupdate).tablesorter()
  				updateEditInPlace(divtoupdate);
@@ -400,22 +400,22 @@ function updateEditInPlace(div) {
 		}
 		if (self.hasClass("lang")) {
 			var it = new Array();
-			for(i in Rembrandt.options.selectLang) {it[it.length] = selectLang[i]+":"+i}
+			for(i in Rembrandt.options.selectLang) {it[it.length] = Rembrandt.options.selectLang[i]+":"+i}
 			select_options = it.join(", ")
 		}
 		if (self.hasClass("proc")) {
 			var it = new Array();
-			for(i in Rembrandt.options.selectProc) {it[it.length] = selectProc[i]+":"+i}
+			for(i in Rembrandt.options.selectProc) {it[it.length] = Rembrandt.options.selectProc[i]+":"+i}
 			select_options = it.join(", ")
 		}
 		if (self.hasClass("sync")) {
 			var it = new Array();
-			for(i in Rembrandt.options.selectSync) {it[it.length] = selectSync[i]+":"+i}
+			for(i in Rembrandt.options.selectSync) {it[it.length] = Rembrandt.options.selectSync[i]+":"+i}
 			select_options = it.join(", ")
 		}
 		if (self.hasClass("edit")) {
 			var it = new Array();
-			for(i in Rembrandt.options.selectEdit) {it[it.length] = selectEdit[i]+":"+i}
+			for(i in Rembrandt.options.selectEdit) {it[it.length] = Rembrandt.options.selectEdit[i]+":"+i}
 			select_options = it.join(", ")
 		}
 			

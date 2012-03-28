@@ -1,4 +1,4 @@
-Rembrandt = Rembrandt || {};
+var Rembrandt = Rembrandt || {};
 
 Rembrandt.Modal = (function ($) {
 	"use strict"

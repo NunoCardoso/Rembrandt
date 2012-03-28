@@ -76,7 +76,7 @@ class UserTable extends DBTable {
 				if (usr) res << usr
 			} else {
 				Closure pattern
-				switch (type[column]) {
+				switch (User.type[column]) {
 					case 'String': pattern = {it."${column}" =~ /(?i)${needle}/}; break
 					case 'Boolean': pattern = {it."${column}" == Boolean.parseBoolean(needle)}; break
 					case 'Integer': pattern = {it."${column}" == Integer.parseInt(needle)}; break

@@ -38,6 +38,7 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
         i18n = I18n.newInstance()
         this.db = db
 		UserTable userTable = db.getDBTable("UserTable")
+		GeoscopeTable geoscopeTable = db.getDBTable("GeoscopeTable")
 		
         JSONanswer = {req, par, bind ->
             long session = System.currentTimeMillis()
@@ -81,7 +82,7 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
             if (action == "list") {
         			Map h
                try {
-                   h = Geoscope.listGeoscopes(limit, offset, column, value)
+                   h = geoscopeTable.listGeoscopes(limit, offset, column, value)
                } catch(Exception e) {
                   errorlog.error i18n.servermessage['error_getting_geoscope_list'][lang]+": "+e.printStackTrace() 
 						return sm.statusMessage(-1, i18n.servermessage["error_getting_geoscope_list"][lang]+": "+e.getMessage())
@@ -107,7 +108,7 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
                 
                Geoscope geo
                try {
-                    geo = Geoscope.getFromID(id)
+                    geo = geoscopeTable.getFromID(id)
                } catch(Exception e) {
                     errorlog.error i18n.servermessage['error_getting_geoscope'][lang]+": "+e.printStackTrace() 
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_geoscope"][lang]+": "+e.getMessage())                 
@@ -132,9 +133,9 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
                 }catch(Exception e) {}                               
                 if (!id)  return sm.notEnoughVars("id=$id")      
                 
-					 Geoscope geo 
+				Geoscope geo 
                 try {
-                    geo = Geoscope.getFromID(id)
+                    geo = geoscopeTable.getFromID(id)
                 } catch(Exception e) {
                     errorlog.error i18n.servermessage['error_getting_geoscope'][lang]+": "+e.printStackTrace() 
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_geoscope"][lang]+": "+e.getMessage())                 

@@ -34,13 +34,13 @@ $(document).ready(function() {
    displayBodyOfSaskia();
 })
 </script>
+<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
+	<DIV CLASS="rrs-waiting-div-message"></DIV>
+	<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
+</DIV>
 <DIV ID='main-side-menu'>
 	<DIV ID='main-side-menu-header'>
 	 <?php echo $i18n->message['options'][$lang]; ?>
-	</DIV>
-	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
-		<DIV CLASS="rrs-waiting-div-message"></DIV>
-		<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
 	</DIV>
 	<DIV CLASS="rrs-saskia-logo">
 		<IMG SRC="<?php echo $config->imgdir."/".$config->saskia_head_image;?>">

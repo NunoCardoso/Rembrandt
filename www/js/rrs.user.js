@@ -345,7 +345,7 @@ function modalUserLogin() {
 						}
 						
 						// usr_pub_key is only sent from restlet if is confirmed as superuser
-						if (!_.isUndefined(user["usr_pub_key"]) && Rembrandt.Util.validadeSu(user["usr_pub_key"])) {
+						if (!_.isUndefined(user["usr_pub_key"]) && Rembrandt.Util.validateSu(user["usr_pub_key"])) {
 							$("#rrs-user").append("<A HREF='#' CLASS='USER_ADMIN' USR_PUB_KEY='"+user["usr_pub_key"]+"'>"+ i18n['admin'][lang]+"</A> | ")
 							//TODO
 						//	$.getScript("js/rembrandt.admin.js")
@@ -356,7 +356,7 @@ function modalUserLogin() {
 							
 						//update rembrandt collection div
 						var current_collection = Rembrandt.Util.getCollection()
-						var current_collection_id = Rembrandt.Util.Rembrandt.Util.getCollectionId()
+						var current_collection_id = Rembrandt.Util.getCollectionId()
 						
 						// change only if the current collection does not have read privileges 
 						// ajax perm to restlet_saskia_col_url do=list-all&api_key=&lg=

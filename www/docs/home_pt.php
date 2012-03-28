@@ -54,7 +54,7 @@ O REMBRANDT 1.3beta1 já está disponível. <a href="<?php echo curPageURL(array
 
    <DIV ID="rembrandt-results-1" CLASS="rrs-doc-display" style="width:auto;"></DIV>
    <script> $(document).ready(function() {			
-		appendDocDisplayTo($('#rembrandt-results-1'))
+		Rembrandt.Display.appendDocDisplayTo($('#rembrandt-results-1'))
   })
   </script>		
 </DIV>

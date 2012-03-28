@@ -58,7 +58,7 @@ $().ready(function() {
 		var queryterms; if (query) queryterms = query.split(/\s+/);
 		var lang = $("HTML").attr("lang")
 		var user = Rembrandt.Util.getUser()
-		var collection_id = Rembrandt.Util.Rembrandt.Util.getCollectionId()
+		var collection_id = Rembrandt.Util.getCollectionId()
 		var api_key = Rembrandt.Util.getApiKey()
 		
 		jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_renoir_search_url+"?q="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(query)),
@@ -81,7 +81,7 @@ $().ready(function() {
 				
 					if (!_.isUndefined(pubkey)) {
 						$("#main-body").attr('USR_PUB_KEY',pubkey)
-						su = Rembrandt.Util.validadeSu(pubkey)
+						su = Rembrandt.Util.validateSu(pubkey)
 					}
 				
 					

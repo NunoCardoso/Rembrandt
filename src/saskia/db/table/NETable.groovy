@@ -70,7 +70,7 @@ class NETable extends DBTable{
 		String from = " FROM ${tablename}"
 		List params = []
 		if (column && needle) {
-			switch (type[column]) {
+			switch (NE.type[column]) {
 				/*	['ne_id':'Long', 'ne_name':'NEName', 'ne_lang':'String',
 				 'ne_category':'NECategory', 'ne_type':'NEType', 'ne_subtype':'NESubtype',
 				 'ne_entity':'Entity'] 

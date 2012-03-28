@@ -37,7 +37,6 @@ a:hover {color:#0000aa;text-decoration:underline;}
 }
 
 #main-body.main-body-admin {
-  background-color:#FFDDDD;
   margin-left:150px;
 }
 
@@ -89,65 +88,61 @@ a:hover {color:#0000aa;text-decoration:underline;}
 /* buttons */
 /***********/
 a.main-button {
-    background: transparent url('../img/bg_button_a.png') no-repeat scroll top right;
-    color: #444;
-    display: inline-block;
-    font: normal 12px arial, sans-serif;
-    height: 24px;
-    margin-right: 6px;
-    padding-right: 18px; /* sliding doors padding */
-    text-decoration: none;
-}
 
-a.main-button span {
-    background: transparent url('../img/bg_button_span.png') no-repeat;
-    display: block;
-    color: #000;
-    line-height: 14px;
-    padding: 5px 0 5px 18px;
-}
+    display : inline-block; 
+    z-index : 0; 
+    height:25px;
+    width:auto;
+    padding: 0 10px 0 10px;
 
-a.main-button:active {
-    background-position: bottom right;
-    color: #000;
-    outline: none; /* hide dotted outline in Firefox */
-}
+    background-color: rgba(74,108,155,1);/*hovercolor*/
+    background-repeat:repeat-x;
+    -webkit-background-size : 30px;
+    background-position :0;
+    background-image : -webkit-linear-gradient(
+        bottom,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0) 50%,
+        rgba(255,255,255,0.1) 50%,
+        rgba(255,255,255,0.3) 100%
+        );
 
-a.main-button:active span {
-    background-position: bottom left;
-    padding: 6px 0 4px 18px; /* push text down 1px */
-} 
+    -webkit-border-radius: 5px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+
+    -webkit-box-shadow :0 -1px 1px rgba(0,0,0,0.2)inset,
+        0 1px 2px rgba(0,0,0,0.8)inset;
+
+    font-family : HelveticaNeue;
+    font-weight: 400;
+    font-size : 12px;
+    line-height : 25px;
+    text-align:center;
+    color:#fff;
+    text-shadow : 0px -1px 0px rgba(0,0,0,0.8);
+
+}
 
 a.main-button-disabled {
-    background: transparent url('../img/bg_disabled_button_a.png') no-repeat scroll top right;
-    color: #444;
-    display: block;
-    float: left;
-    font: normal 12px arial, sans-serif;
-    height: 24px;
-    margin-right: 6px;
-    padding-right: 18px; /* sliding doors padding */
-    text-decoration: none;
+ 
 }
 
 a.main-button-disabled span {
-    background: transparent url('../img/bg_disabled_button_span.png') no-repeat;
-    display: block;
-    color: #000;
-    line-height: 14px;
-    padding: 5px 0 5px 18px;
+
 }
 
 a.main-button-disabled:active {
-    background-position: bottom right;
-    color: #000;
-    outline: none; /* hide dotted outline in Firefox */
+ 
 }
 
 a.main-button-disabled:active span {
-    background-position: bottom left;
-    padding: 6px 0 4px 18px; /* push text down 1px */
+  
 } 
+
+.rrs-buttonrow {
+	margin-bottom:10px;
+}
 
 /*************/
 /* container */
@@ -508,7 +503,7 @@ a.GO_BACK_IOS_ISH_BUTTON, #ios-arrow-left {
     height:30px;
     width:auto;
     padding: 0 10px 0 6px;
-position: absolute;
+	position: absolute;
 	left:10px;
 
     background-color: rgba(74,108,155,1);/*hovercolor*/

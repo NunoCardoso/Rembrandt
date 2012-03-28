@@ -88,7 +88,7 @@ class TaskTable extends DBTable {
 				return haystack.findAll{it.tsk_user.usr_id == Long.parseLong(needle)}
 			} else if (column == "tsk_collection") {
 				return haystack.findAll{it.tsk_collection.col_id == Long.parseLong(needle)}
-			} else if (type[column] == 'Integer' || type[column] == 'Long') {
+			} else if (Task.type[column] == 'Integer' || Task.type[column] == 'Long') {
 				return haystack.findAll{it."${column}" == Long.parseLong(needle)}
 			} else {
 				// The rest of the colums are String

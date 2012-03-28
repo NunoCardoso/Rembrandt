@@ -40,7 +40,8 @@ public class AdminNEMapping extends WebServiceRestletMapping {
 		this.db = db
         i18n = I18n.newInstance()
         UserTable userTable = db.getDBTable("UserTable")
-		
+		NETable neTable = db.getDBTable("NETable")
+
         JSONanswer = {req, par, bind ->
             long session = System.currentTimeMillis()
             processlog.debug "Session $session triggered with $par" 
@@ -83,7 +84,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
             if (action == "list") {
         			Map h
                try {
-                    h = NE.getNEs(limit, offset, column, value)
+                    h = neTable.listNEs(limit, offset, column, value)
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_ne_list'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_ne_list"][lang]+": "+e.getMessage())
@@ -108,7 +109,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
                 
                NE ne 
                try {
-                    ne = NE.getFromID(ne_id)
+                    ne = neTable.getFromID(ne_id)
                } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_ne'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_ne"][lang]+": "+e.getMessage())                 
@@ -189,14 +190,14 @@ public class AdminNEMapping extends WebServiceRestletMapping {
 
                 NE ne 
                 try {
-                    ne = NE.getFromID(ne_id)
+                    ne = neTable.getFromID(ne_id)
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_ne'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_ne"][lang]+": "+e.getMessage())                 
                 }
                 def res          
                 try {
-                    res = NE.deleteNE(ne_id) 
+                    res = neTable.deleteNE(ne_id) 
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_deleting_ne'][lang]+": "+e.printStackTrace()
 						  return sm.statusMessage(-1, i18n.servermessage["error_deleting_ne"][lang]+": "+e.getMessage())
@@ -251,7 +252,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
                // let's see if there is already on DB
                EntityTable entity = EntityTable.getFromID(ent)
                
-               NE ne2 = NE.getFromNameAndLangAndClassificationAndEntity(db_ne_name, ne_lang, c1v, c2v, c3v, entity) 
+               NE ne2 = neTable.getFromNameAndLangAndClassificationAndEntity(db_ne_name, ne_lang, c1v, c2v, c3v, entity) 
         	   
                if (ne2) {
 						return sm.statusMessage(-1, i18n.serverMessage['ne_already_exists'][lang])

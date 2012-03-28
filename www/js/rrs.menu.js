@@ -100,14 +100,14 @@ function showSlidableDIV(options) {
 					// this is where I refresh the su validation...
 					if (!_.isUndefined(pubkey)) {
 						$("#main-body").attr('USR_PUB_KEY',pubkey)
-						su = Rembrandt.Util.validadeSu(pubkey)
+						su = Rembrandt.Util.validateSu(pubkey)
 					}
 				
 					var divgenerator = options.divRender
 					// make sure the DIV has an id and a title, for the breadcrumble
 					divtoshow = divgenerator(response['message'], su, options.role, options.divRenderOptions)
 					
-					addSlidableDIV(divtohide, divtoshow, options)			
+					addSlidableDIV(divtohide, $(divtoshow), options)			
 				
 				}	 
 		  },									
@@ -120,16 +120,16 @@ function showSlidableDIV(options) {
 function addSlidableDIV(divtohide, divtoshow, options) {
 
 	if (options.slide == 'horizontal') {
-		addSlidableDivHeaderTo(divtoshow, divtohide, null);
-		addForwardButtonTargeting(divtohide, divtoshow);	
+		addSlidableDivHeaderTo($(divtoshow), $(divtohide));
+		addForwardButtonTargeting($(divtohide), $(divtoshow));	
 	} else {
 		// copy slidable div header from the doc to hide
-		copySlidableDivHeaderFromTo(divtohide, divtoshow)
-		replaceForwardButtonsTargetingThisToThis(divtohide, divtoshow)
+		copySlidableDivHeaderFromTo($(divtohide), $(divtoshow))
+		replaceForwardButtonsTargetingThisToThis($(divtohide), $(divtoshow))
 	}
 								
 	// add the new div
-	divtoshow.appendTo($("#main-body"))
+	$(divtoshow).appendTo($("#main-body"))
 				
 	// activate newdiv stuff, now that we have it on DOM
 	$('TABLE.tablesorter', divtoshow).tablesorter()
@@ -142,14 +142,14 @@ function addSlidableDIV(divtohide, divtoshow, options) {
 		configureSubmenu(sidemenu, options.role, options.sidemenuoptions)
 		if (options.slide == 'horizontal') {
 			// up/down slides already make this check, this is for 'new' sidemenus 
-			reviewSideMenuMakeActiveFor(sidemenu, divtoshow.attr('id'))
+			reviewSideMenuMakeActiveFor(sidemenu, $(divtoshow).attr('id'))
 		}
 		showSubmeuOnSideMenu(sidemenu)
 	}
 										
 	// add breadcrumble (label, target)
 	if (options.slide == 'vertical') {
-		substituteLastBreadcrumbleElement(divtoshow.attr('title'), divtoshow.attr('id'))
+		substituteLastBreadcrumbleElement($(divtoshow).attr('title'), $(divtoshow).attr('id'))
 		slideDownWith(divtoshow)	
 	} else {		
 		slideLeftToRightWith(divtoshow)
@@ -213,9 +213,8 @@ function addSubmeuOnSideMenu(object, role) {
 				"</DIV></DIV>")
 		break;
 	}
-		
- 	sidemenu = $('#main-side-menu-section-'+object)
-	return sidemenu
+	
+	return $('#main-side-menu-section-'+object)
 } 
 
 function configureSubmenu(submenu, role, options) {
@@ -286,11 +285,11 @@ function reviewSideMenuMakeActiveFor(submenu, visibledivid) {
 }
 
 function hideSubmeuOnSideMenu(submenutohide) {
-	if(submenutohide.is(':visible')) submenutohide.slideUp("fast").hide()
+	if($(submenutohide).is(':visible')) $(submenutohide).slideUp("fast").hide()
 }
 
 function showSubmeuOnSideMenu(submenutoshow) {
-	if (submenutoshow.is(':hidden')) submenutoshow.slideDown("fast").show()
+	if ($(submenutoshow).is(':hidden')) $(submenutoshow).slideDown("fast").show()
 }
 
 /**** SLIDES *****/
@@ -298,10 +297,10 @@ function showSubmeuOnSideMenu(submenutoshow) {
 function slideUpWith(newdiv) {
 	// the current one is...
 	var divtohide = $("#main-body DIV.main-slidable-div:visible")
-	if (divtohide.attr('id') != newdiv.attr('id')) {
+	if (divtohide.attr('id') != $(newdiv).attr('id')) {
 	
 		divtohide.hide()
-		newdiv.show()
+		$(newdiv).show()
 		callbackVerticalSlide(divtohide, newdiv) // callback function for menu reposition
 	}
 }
@@ -309,10 +308,10 @@ function slideUpWith(newdiv) {
 function slideDownWith(newdiv) {
 	// the current one is...
 	var divtohide = $("#main-body DIV.main-slidable-div:visible")
-	if (divtohide.attr('id') != newdiv.attr('id')) {
+	if (divtohide.attr('id') != $(newdiv).attr('id')) {
 	
 		divtohide.hide()
-		newdiv.show()
+		$(newdiv).show()
 		callbackVerticalSlide(divtohide, newdiv) // callback function for menu reposition
 	}
 }
@@ -320,14 +319,14 @@ function slideDownWith(newdiv) {
 function slideLeftToRightWith(newdiv) {
 	// the current one is...
 	var divtohide = $("#main-body DIV.main-slidable-div:visible")
-	if (divtohide.attr('id') != newdiv.attr('id')) {
+	if (divtohide.attr('id') != $(newdiv).attr('id')) {
 	
 		//	'#'+divtohide.attr('id')+",#"+newdiv.attr('id')).slideToggle();
 		
 	//  $('#'+divtohide.attr('id')+",#"+newdiv.attr('id')).slideToggle();
 		divtohide.hide("slide",{direction: 'left'})
-		newdiv.show("slide",{direction: 'right'})
-		addBreadcrumbleElement(newdiv.attr('title'), newdiv.attr('id'))
+		$(newdiv).show("slide",{direction: 'right'})
+		addBreadcrumbleElement($(newdiv).attr('title'), $(newdiv).attr('id'))
 		
 		callbackHorizontalSlide(divtohide, newdiv) // callback function for menu reposition
 	}
@@ -337,10 +336,10 @@ function slideRightToLeftWith(newdiv) {
 	// the current one is...
 	var divtohide = $("#main-body DIV.main-slidable-div:visible")
 
-	if (divtohide.attr('id') != newdiv.attr('id')) {
+	if (divtohide.attr('id') != $(newdiv).attr('id')) {
 	//	  $('#'+divtohide.attr('id')+",#"+newdiv.attr('id')).slideToggle();
 		divtohide.hide("slide",{direction: 'right'})
-		newdiv.show("slide",{direction: 'left'})
+		$(newdiv).show("slide",{direction: 'left'})
 		callbackHorizontalSlide(divtohide, newdiv) // callback function for menu reposition
 	}
 }
@@ -348,21 +347,21 @@ function slideRightToLeftWith(newdiv) {
 // function to call when showing a slidable page vertically -> that is, a side menu must be updated 
 function callbackHorizontalSlide(divtohide, divtoshow) {
 		
-	var divtohideitem = divtohide.attr("id").match(/rrs-([^-]+)-/)[1]
-	var divtoshowitem = divtoshow.attr("id").match(/rrs-([^-]+)-/)[1]
+	var divtohideitem = $(divtohide).attr("id").match(/rrs-([^-]+)-/)[1]
+	var divtoshowitem = $(divtoshow).attr("id").match(/rrs-([^-]+)-/)[1]
 		
 	// iterate through all side menus, check if its main object (rdoc, collection, etc) 
 	// matches any of the divs	
 	$("DIV.main-side-menu-section").each(function(index, item) {
 		var id = $(item).attr("id"),
 		   section = (!_.isUndefined(id) ? id.match(/main-side-menu-section-([^-]+)$/) : undefined)
-		if (!_.isUndefined(section) && section.length >= 2) {
+		if ( (!_.isUndefined(section) && section != null) && section.length >= 2) {
 			var sectionitem = section[1]
 			if (sectionitem == divtohideitem) {
-				hideSubmeuOnSideMenu($(item))
+				hideSubmeuOnSideMenu(item)
 			}
 			if (sectionitem == divtoshowitem) {
-				showSubmeuOnSideMenu($(item))
+				showSubmeuOnSideMenu(item)
 			}
 		}
 	})
@@ -377,14 +376,14 @@ function callbackVerticalSlide(divtohide, newdiv) {
 	
 	// so, let's collect the main object (rdoc, collection, etc) and use it. 
 	// march returns array, 0 is the whole pattern, 1 is the () pattern
-	var item = newdiv.attr("id").match(/rrs-([^-]+)-/)[1]
-	reviewSideMenuMakeActiveFor($("#main-side-menu-section-"+item), newdiv.attr("id"))
+	var item = $(newdiv).attr("id").match(/rrs-([^-]+)-/)[1]
+	reviewSideMenuMakeActiveFor($("#main-side-menu-section-"+item), $(newdiv).attr("id"))
 }
 
 /****** BUTTONS *******/
 
 function addSlidableDivHeaderTo(div, divforbackbutton, divforforwardbutton) {
-	div.prepend("<DIV CLASS='main-slidable-div-header'>"+
+	$(div).prepend("<DIV CLASS='main-slidable-div-header'>"+
 		"<DIV CLASS='main-slidable-div-header-left'></DIV>"+
 		"<DIV CLASS='main-slidable-div-header-right'></DIV>"+
 		"</DIV>")
@@ -397,33 +396,33 @@ function addSlidableDivHeaderTo(div, divforbackbutton, divforforwardbutton) {
 }
 
 function copySlidableDivHeaderFromTo(divtohide, div) {
-	divtohide.find("DIV.main-slidable-div-header").clone().prependTo(div)	
+	$(divtohide).find("DIV.main-slidable-div-header").clone().prependTo(div)	
 }
 
 function addBackButtonTargeting(containerdiv, divforbackbutton) {
-	containerdiv.find("DIV.main-slidable-div-header-left").html(generateBackButton(divforbackbutton))
+	$(containerdiv).find("DIV.main-slidable-div-header-left").html(generateBackButton(divforbackbutton))
 }
 
 function addForwardButtonTargeting(containerdiv, divforforwardbutton) {
-	containerdiv.find("DIV.main-slidable-div-header-right").html(generateForwardButton(divforforwardbutton))	
+	$(containerdiv).find("DIV.main-slidable-div-header-right").html(generateForwardButton(divforforwardbutton))	
 }
 
 function replaceForwardButtonsTargetingThisToThis(divneedle, divnewtarget) {
- var buttons = $('A.GO_FORWARD_IOS_ISH_BUTTON[TARGET='+divneedle.attr('id')+']')
- buttons.attr('TARGET', divnewtarget.attr('TARGET'))
- buttons.find("SPAN").html(divnewtarget.attr('TITLE'))
+ var buttons = $('A.GO_FORWARD_IOS_ISH_BUTTON[TARGET='+$(divneedle).attr('id')+']')
+ buttons.attr('TARGET', $(divnewtarget).attr('TARGET'))
+ buttons.find("SPAN").html($(divnewtarget).attr('TITLE'))
 }
 
 /** Generates HTML for a back button */
 function generateBackButton(div) {
-	return "<A HREF='#' CLASS='GO_BACK_IOS_ISH_BUTTON' TARGET='"+div.attr('id')+"'>"+
-	"<SPAN>"+div.attr('title')+"</SPAN></A>";
+	return "<A HREF='#' CLASS='GO_BACK_IOS_ISH_BUTTON' TARGET='"+$(div).attr('id')+"'>"+
+	"<SPAN>"+$(div).attr('title')+"</SPAN></A>";
 }			
 
 /** Generates HTML for a forward button */
 function generateForwardButton(div) {
-	return "<A HREF='#' CLASS='GO_FORWARD_IOS_ISH_BUTTON' TARGET='"+div.attr('id')+"'>"+
-	"<SPAN>"+div.attr('title')+"</SPAN></A>";
+	return "<A HREF='#' CLASS='GO_FORWARD_IOS_ISH_BUTTON' TARGET='"+$(div).attr('id')+"'>"+
+	"<SPAN>"+$(div).attr('title')+"</SPAN></A>";
 }			
 
 

@@ -33,12 +33,20 @@ $(document).ready(function() {
    displayBodyOfRenoir()
 })
 </SCRIPT>
+<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
+	<DIV CLASS="rrs-waiting-div-message"></DIV>
+	<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
+</DIV>
 <DIV ID='main-side-menu'>
 	<DIV ID='main-side-menu-header'>
 	 <?php echo $i18n->message['options'][$lang]; ?>
 	</DIV>
 	
 	<DIV CLASS='main-side-menu-section'>
+		
+		<DIV CLASS="rrs-renoir-logo">
+			<IMG SRC="<?php echo $config->imgdir."/".$config->renoir_head_image;?>">
+		</DIV>
 		
 		<DIV CLASS='main-side-menu-section-header'>
 			<A HREF="#"><?php echo $i18n->renoir['advanced-search'][$lang]; ?></A> 
@@ -105,10 +113,10 @@ $(document).ready(function() {
 	
 		<DIV CLASS='main-side-menu-section-header'>
 			<A HREF="#"><?php echo $i18n->search['visualization'][$lang]; ?></A> 
-		</DIV>
-		
+		</DIV>		
 		<DIV CLASS='main-side-menu-section-body'>
 			<!-- suggestion checkbox --> 
+
 			<DIV CLASS='main-side-menu-section-body-element'>
 				<fieldset>
 				<INPUT TYPE="CHECKBOX" ID="as_maps" 
@@ -155,11 +163,7 @@ $(document).ready(function() {
 <DIV ID="main-form">
 <!-- SEARCH DIV - includes logo -->
 	<DIV ID="rrs-search-box">
-		<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
-			<DIV CLASS="rrs-waiting-div-message"></DIV>
-			<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
-		</DIV>
-		<DIV CLASS="rrs-logo"><IMG SRC="<?php echo $config->imgdir."/".$config->renoir_head_image;?>"></DIV>
+
 		<FORM ACTION="<?php echo curPageURL(array('do'=>'search'));?>" ID="rrs-search-form" 
 		  METHOD="POST" AUTOCOMPLETE="OFF" style="display:inline-block;">
 		 <TEXTAREA style="width:500px; height:22px;" CLASS="ac_input" AUTOCOMPLETE="OFF" ID="q" 

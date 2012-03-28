@@ -128,9 +128,9 @@ Rembrandt.Rdoc = (function ($) {
 
 		// now that we have a doc_div, let's set it up. 
 
-		appendDocDisplayTo(newdiv)
-		addDocumentTitleToDocDisplay(newdiv, htmltitle)
-		addDocumentBodyToDocDisplay(newdiv, htmlbody)
+		Rembrandt.Display.appendDocDisplayTo(newdiv)
+		Rembrandt.Display.addDocumentTitleToDocDisplay(newdiv, htmltitle)
+		Rembrandt.Display.addDocumentBodyToDocDisplay(newdiv, htmlbody)
 
 		return newdiv
 	},
@@ -308,9 +308,9 @@ Rembrandt.Sdoc = (function ($) {
 		" TITLE='"+Rembrandt.Util.shortenTitle(sdoc_original_id)+"' STYLE='display:none;overflow:auto;'></DIV>")
 		
 		// now that we have a doc_div, let's set it up. 
-		appendDocDisplayTo(newdiv)
-		addDocumentTitleToDocDisplay(newdiv, texttitle)
-		addDocumentBodyToDocDisplay(newdiv, textbody)
+		Rembrandt.Display.appendDocDisplayTo(newdiv)
+		Rembrandt.Display.addDocumentTitleToDocDisplay(newdiv, texttitle)
+		Rembrandt.Display.addDocumentBodyToDocDisplay(newdiv, textbody)
 	
 		return newdiv
 	},

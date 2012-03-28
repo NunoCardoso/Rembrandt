@@ -4,7 +4,7 @@ Rembrandt.urls = Rembrandt.urls || {};
 Rembrandt.constants = Rembrandt.constants || {};
 Rembrandt.options = Rembrandt.options || {};
 
-_.extend(Rembrandt.urls, {
+_.extend (Rembrandt.urls, {
     restlet_saskia_user_url 	: "/Saskia/user", 
     restlet_saskia_task_url 	: "/Saskia/task",
     restlet_saskia_search_url	: "/Saskia/search",
@@ -21,14 +21,14 @@ _.extend(Rembrandt.urls, {
     mailrecoverpassword 		: "mailrecoverpassword.php"
 });
 
-_.extend(Rembrandt.options, {
-	selectLang:{"pt":"Português","en":"Inglês"},
-	selectProc:{"OK":"READY","KO":"NOT_READY"},
-	selectSync:{"SO":"SO","SD":"SD","SN":"SN"},
-	selectEdit{"UL":"UNLOCKED","LK":"LOCKED"}
+_.extend (Rembrandt.options, {
+	selectLang	: {"pt":"Português","en":"Inglês"},
+	selectProc	: {"OK":"READY","KO":"NOT_READY"},
+	selectSync	: {"SO":"SO","SD":"SD","SN":"SN"},
+	selectEdit	: {"UL":"UNLOCKED","LK":"LOCKED"}
 });
 
-_.extend(Rembrandt.constants, {
+_.extend (Rembrandt.constants, {
 	guest_api_key :"db924ad035a9523bcf92358fcb2329dac923bf9c"
 });
 
@@ -45,9 +45,6 @@ Rembrandt.Util = (function ($) {
  	$(function () {
 		lang = $("HTML").attr("lang")	
 	});
-
-
-//if (window.opera && opera.postError) opera.postError(text);
 
 	var decodeUtf8 = function ( s ){
  		for(var a, b, i = -1, l = (s = s.split("")).length, o = String.fromCharCode, c = "charCodeAt"; ++i < l;
@@ -175,7 +172,7 @@ Rembrandt.Util = (function ($) {
 		// If we've gotten this far, everything's valid!
 		return true;
 	},
-	 
+
 	getCollection = function () {
 		return $("A.collection", $("#rrs-collections")).attr("COLLECTION") 
 	},
@@ -184,7 +181,7 @@ Rembrandt.Util = (function ($) {
 		return $("A.collection", $("#rrs-collections")).attr("COLLECTION_ID") 
 	},
 	
-	getUser = function  () {
+	getUser = function () {
 		return $("#rrs-user").attr("USER") 
 	},
 	
@@ -219,7 +216,7 @@ Rembrandt.Util = (function ($) {
 			vars = query.split("&");
 			var found = false
 
-			for (key in list) {
+			for (var key in list) {
 				for (var i=0;i<vars.length;i++) {
 					var pair = vars[i].split("=");
 					if (pair[0] == key) {
@@ -260,7 +257,7 @@ Rembrandt.Util = (function ($) {
 	printYesOrNo = function (item) {
 		if (item == true || item == 1) {return i18n["yes"][lang]} 
 		if (item == false || item == 0) {return i18n["no"][lang]} 
-	}
+	},
 
 	shortenTitle = function (string) {
 		if (string.length < 25) return string
@@ -274,17 +271,18 @@ Rembrandt.Util = (function ($) {
 	urlEncode = function (str) {
 		str = escape(str);
 		return str.replace(/[*+\/@]|%20/g, function (s) {
-		switch (s) {
-			case "*": s = "%2A"; break;
-			case "+": s = "%2B"; break;
-			case "/": s = "%2F"; break;
-			case "@": s = "%40"; break;
-			case "%20": s = "+"; break;
-		}
-		return s;
+			switch (s) {
+				case "*": s = "%2A"; break;
+				case "+": s = "%2B"; break;
+				case "/": s = "%2F"; break;
+				case "@": s = "%40"; break;
+				case "%20": s = "+"; break;
+			}
+			return s;
+		});
 	},
 
-	validadeSu = function (usr_pub_key) {
+	validateSu = function (usr_pub_key) {
 		var su = $.cookie("su")
 		if (_.isUndefined(su) || _.isUndefined(usr_pub_key)) return false
 		return (su == hex_md5(usr_pub_key)) 
@@ -310,5 +308,6 @@ Rembrandt.Util = (function ($) {
 		"UpperCaseFirstLetter"	:UpperCaseFirstLetter,
 		"urlEncode"				:urlEncode,
 		"validateSu"			:validateSu
-	}
-}(jQuery));
+	};
+	
+})(jQuery);

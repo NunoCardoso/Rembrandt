@@ -105,7 +105,7 @@ public class AdminUserMapping extends WebServiceRestletMapping {
             if (action == "list") {
                 Map h 
                 try {                
-                    h = User.listUsersForAdminUser(limit, offset, column, value)
+                    h = userTable.listUsersForAdminUser(limit, offset, column, value)
                 } catch(Exception e) {
                     errorlog.error i18n.servermessage['error_getting_user_list'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_user_list"][lang]+": "+e.getMessage())

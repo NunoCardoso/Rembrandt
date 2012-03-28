@@ -1,4 +1,4 @@
-Rembrandt = Rembrandt || {};
+var Rembrandt = Rembrandt || {};
 
 Rembrandt.Display = (function ($) {
 	"use strict"
@@ -40,7 +40,7 @@ Rembrandt.Display = (function ($) {
 			// hide the popup menu where I came from...
 			$(this).parents("DIV:first").hide()
 			var rrs_screen = $("#rrs-doc-display-screen", $(this).parents(".rrs-doc-display"))
-			hideAllTooltips(rrs_screen);
+			Rembrandt.Tooltip.hideAll(rrs_screen);
 		});
 
 		$(".link-button, .NE").live("mouseover",function() {	
@@ -59,7 +59,7 @@ Rembrandt.Display = (function ($) {
 			if (($(ev.target).is(".tag_edit"))) return
 			// if the click is a A[HREF], from one menu, do nothing.
 			if (($(ev.target).is("A"))) return
-			if (hasOpen($(this)) ) {hideTooltip($(this));}
+			if (Rembrandt.Tooltip.isOpen($(this)) ) {Rembrandt.Tooltip.hide($(this));}
 			else {Rembrandt.Tooltip.show($(this));}
 		});
 
@@ -101,7 +101,7 @@ Rembrandt.Display = (function ($) {
 			// hide the popup menu where I came from...
 			$(this).parents("DIV:first").hide()
 			var rrs_screen = $("#rrs-doc-display-screen", $(this).parents(".rrs-doc-display"))
-			showAllTooltips(rrs_screen);
+			Rembrandt.Tooltip.showAll(rrs_screen);
 		});
 	
 		$("#select-mode-on").live("click", function(ev) {
@@ -117,8 +117,11 @@ Rembrandt.Display = (function ($) {
 
 		$(".tag_edit").live("click", function(ev) {
 			ev.stopPropagation();
-			if ( !hasOpen($(this)) ) {addEditMenuTooltip($(this))}
-			else {hideTooltip($(this))}
+			if ( !Rembrandt.Tooltip.isOpen($(this)) ) {
+				Rembrandt.ContextMenu.addEditMenu($(this))
+			} else {
+				Rembrandt.Tooltip.hide($(this))
+			}
 		});
 	
 		$(".EditMenu A").live("click", function(ev) {
@@ -167,7 +170,7 @@ Rembrandt.Display = (function ($) {
 		template = "\
 <DIV ID='rrs-doc-display-header'>\
 	<DIV ID='rrs-doc-display-status'></DIV>\
-	<DIV ID='rrs-doc-display-menu'>
+	<DIV ID='rrs-doc-display-menu'>\
 		<DIV>\
 			<UL>\
 				<LI>{{view}}<DIV class='main-nav-submenu'>\
@@ -332,7 +335,7 @@ Rembrandt.Display = (function ($) {
 		ne.animate({ color: "#ff0000"}, 500)
 
 		// we should call a redraw on the baloon to accomodate the new info.
-		if (hasOpen(ne)) {refreshTooltipText(ne)}
+		if (Rembrandt.Tooltip.isOpen(ne)) {Rembrandt.Tooltip.refresh(ne)}
 	},
 
 	showAllRelations = function (display) {	
@@ -345,8 +348,8 @@ Rembrandt.Display = (function ($) {
 	
 	undoDocDisplayScreenFor = function (display, currstate) {
 
-		var change = true
-		canvas = display.siblings("#rrs-doc-display-canvas")
+		var change = true,
+			canvas = display.siblings("#rrs-doc-display-canvas")
 		switch(currstate) {
 			case "relations":
 			// if there's an active canvas, don't change.
@@ -384,10 +387,9 @@ Rembrandt.Display = (function ($) {
 		}
 	},
 
-	
 	wipeDisplay = function (display) {
 		cleanDocDisplay(display)
-		hideAllTooltips($("#rrs-doc-display-screen", display)) // clean ophan tooltips
+		Rembrandt.Tooltip.hideAll($("#rrs-doc-display-screen", display)) // clean ophan tooltips
 		// if someone re-submitted while the display was on a special mode... well, restore it
 		updateDocDisplayScreenFor( $("#rrs-doc-display-screen", display), "default")
 			//display results div
@@ -397,19 +399,17 @@ Rembrandt.Display = (function ($) {
 		 //delay helps prevent recursive selection. The menu hovers over selection, and menu click 
 		// could trigger a recursive selection. Well, delay is better than ev.stopPropagation
 
-		stat = $("#rrs-doc-display-status", display.parents(".rrs-doc-display"))
+		var stat = $("#rrs-doc-display-status", display.parents(".rrs-doc-display"))
 		display.selectable({filter:'li[t]',  delay: 100 })
-
 
 		display.bind("selectablestart", function() {
 			stat.html("Drag to choose terms. Drag with Ctrl/Meta for multiple terms.")
 		});
 		display.bind("selectablestop", function() {
 			stat.html("Ended selection.")
-			addSelectionMenuTooltip( $(".ui-selected", display))
+			Rembrandt.ContextMenu.addSelectionMenu( $(".ui-selected", display))
 		});	
-;
-	
+	};
 	
 	return {
 		"appendDocDisplayTo" : appendDocDisplayTo,
@@ -425,7 +425,7 @@ Rembrandt.Display = (function ($) {
 		"showAllRelations"				: showAllRelations,
 		"initializeSelectMode"		: initializeSelectMode
 	}
-}(jQuery))
+}(jQuery));
 
 Rembrandt.Tooltip = (function ($) {
 	"use strict"
@@ -474,7 +474,9 @@ Rembrandt.Tooltip = (function ($) {
 
 	showAll = function (display) {	
 		$.eachCallback($(".NE", display), function() {
-			if (!hasOpen($(this)) ) {show($(this)) }
+			if (!Rembrandt.Tooltip.isOpen($(this)) ) {
+				Rembrandt.Tooltip.show($(this)) 
+			}
 		}, function(loopcount) {});
 	},
 
@@ -490,6 +492,14 @@ Rembrandt.Tooltip = (function ($) {
 		ne.btOff();
 	},
 	
+	destroy = function (ne, display) {
+		$("#"+getUniqueIDfor(ne,'tooltip'), display).remove()
+	},
+	
+	isOpen = function (ne) {
+		return ne.hasClass("bt-active")
+	},
+
 	//create a display text to place in a tooltip
 	_getContent = function (ne) {
 		// build the baloon tooltip text
@@ -526,10 +536,8 @@ Rembrandt.Tooltip = (function ($) {
 		}
 		tooltip += "</DIV>"	
 		return tooltip 	
-	}
+	};
 	
-	
-
 	return {
 		"_add"	: _add,
 		"has"	: has,
@@ -538,10 +546,11 @@ Rembrandt.Tooltip = (function ($) {
 		"refresh" : refresh,
 		"show"	: show,
 		"showAll" : showAll,
-		"showMenu" : showMenu
-	}
-	
-}(jQuery));
+		"showMenu" : showMenu,
+		"destroy"	: destroy,
+		"isOpen"   : isOpen
+	}	
+})(jQuery);
 
 Rembrandt.ContextMenu = (function ($) {
 	"use strict"
@@ -572,7 +581,9 @@ Rembrandt.ContextMenu = (function ($) {
 					spikeLength: 1, spikeGirth: 1
 			});
 		}
-		if (!hasOpen(ne_tag_edit)) showMenuTooltip(ne_tag_edit);
+		if (!Rembrandt.Tooltip.isOpen(ne_tag_edit)) {
+			Rembrandt.Tooltip.showMenu(ne_tag_edit);
+		}
 	},
 
  	addSelectionMenu = function(selected_terms) {
@@ -580,16 +591,16 @@ Rembrandt.ContextMenu = (function ($) {
 		//let's index the tooltip to the last term
 		if (selected_terms.length == 0) return;	
 		var term = selected_terms.eq(selected_terms.length-1)
-		if (has(term)) {showMenuTooltip(term)}
+		if (has(term)) {Rembrandt.Tooltip.showMenu(term)}
 		else {
 			if (term.attr("title") === undefined) {term.attr("title","")}
 		
-		term.bt(
+			term.bt(
 			"<ul class='SelectionMenu NEmenu'>"+
-	    "<li><a href='#createalt'>"+i18n["createalt"][lang]+"...</a></li>"+
-	    "<li><a href='#createne'>"+i18n["createne"][lang]+"...</a></li>"+
-	    "<li><a href='#deleteall'>"+i18n["deleteall"][lang]+"...</a></li>"+
-	    "</ul>",{
+	    	"<li><a href='#createalt'>"+i18n["createalt"][lang]+"...</a></li>"+
+	    	"<li><a href='#createne'>"+i18n["createne"][lang]+"...</a></li>"+
+	    	"<li><a href='#deleteall'>"+i18n["deleteall"][lang]+"...</a></li>"+
+	    	"</ul>",{
 			trigger: 'none', 
 			// get this HTML to display - for a given NE, and a civen classification
 			contentSelector: "$('.SelectionMenu')", 
@@ -608,17 +619,16 @@ Rembrandt.ContextMenu = (function ($) {
 			postHide: function(){
 				 $(selected_terms).removeClass("ui-selected")
 			} 
-		});
-		showMenuTooltip(term);
-	},
+			});
+			Rembrandt.Tooltip.showMenu(term);
+		}
+	};
 	
 	return {
 	"addEditMenu"		: addEditMenu,
 	"addSelectionMenu" 	: addSelectionMenu
 	}
-}(jQuery));
-
-
+})(jQuery);
 
 //modal window for NE change 
 function changeNEclassModal(ne) {
@@ -928,19 +938,15 @@ function destroyEditButton(ne) {
 function destroyNE(ne) {	
 	// remove tag edit menu, hide / remove tooltip div
 	destroyEditButton(ne)
-	if (has(ne)) {
-		hideTooltip(ne)
-	 	destroyTooltip(ne)
+	if (Rembrandt.Tooltip.has(ne)) {
+		Rembrandt.Tooltip.hide(ne)
+	 	Rembrandt.Tooltip.destroy(ne)
 	}
 	//  replace contents
     var children = ne.contents()
 	ne.replaceWith(children);
 }
 
-// destroy a tooltip
-function destroyTooltip(ne, display) {
-	$("#"+getUniqueIDfor(ne,'tooltip'), display).remove()
-}
 
 // destroy a select mode
 function destroySelectMode(display) {
@@ -1061,10 +1067,6 @@ function hasRelationsCanvas(ne, display) {
 	return $("#"+getUniqueIDfor(ne,'canvas'), display.siblings("#rrs-doc-display-canvas")).length
 }
 
-function hasOpen(ne) {
-	return ne.hasClass("bt-active")
-}
-	
 function haveDifferentSentences(terms) {
 		// test for different sentences
 	if (terms.length == 1) { return false}
@@ -1141,7 +1143,7 @@ function hideRelationsFor(ne, display_) {
 	ne.animate({ color: ne.attr('original-color')}, 500)
 
 	// refresh the balloon tip
-	if (hasOpen(ne)) {refreshTooltipText(ne)}	
+	if (Rembrandt.Tooltip.isOpen(ne)) {Rembrandt.Tooltip.refresh(ne)}	
 }
 
 
@@ -1150,7 +1152,7 @@ function initializeEditMode(display) {
 }
 
 function setupNE(ne) {	
-	addIndirectRelationInfo(ne);
+	Rembrandt.Display.addIndirectRelationInfo(ne);
 }
 
 function setupNEs(display) {

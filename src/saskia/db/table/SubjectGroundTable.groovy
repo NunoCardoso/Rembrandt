@@ -49,7 +49,7 @@ class SubjectGroundTable extends DBTable {
 		String from = " FROM ${tablename}"
 		List params = []
 		if (column && needle) {
-			switch (type[column]) {
+			switch (SubjectGround.type[column]) {
 				case 'String': where += " WHERE $column LIKE '%${needle}%'"; break
 				case 'Long': where += " WHERE $column=? "; params << Long.parseLong(needle); break
 				case 'Subject': where += " WHERE $column=?"; params <<  Long.parseLong(needle); break

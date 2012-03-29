@@ -73,71 +73,59 @@ class Collection extends DBObject implements JSONable {
 	}
 	
 	/*
-	 * Returns the number of REMBRANDTed documents for this collection
+	 * Returns the number of docs for this collection
 	 */
-	public int getNumberOfRembrandtedDocuments() {
+	public int getNumberOfDocs() {
 		int i
 		if (!col_id) throw new IllegalStateException(
 			"Can't check the number of source documents of a collection without a collection ID.")
 		getDBTable().getSaskiaDB().getDB().eachRow(
-				"SELECT count(doc_id) from ${RembrandtedDocTable.tablename} "+
+				"SELECT count(doc_id) from ${DocTable.tablename} "+
 				"WHERE doc_collection=?",[col_id], {row -> i = row[0]})
 		return i
 	}
 	
-	public int getNumberOfRembrandtedDocsWithComment(String comment) {
+	public int getNumberOfDocsWithComment(String comment) {
 
 		int i
 		getDBTable().getSaskiaDB().getDB().eachRow(
-			"SELECT count(*) FROM  ${RembrandtedDocTable.tablename}, ${SourceDocTable.tablename} "+
-			" WHERE doc_collection=? and doc_id=sdoc_doc and sdoc_comment = ? "+
-			"ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id, comment], {row -> 
-			i = row[0]
-		})
+			"SELECT count(*) FROM  ${DocTable.tablename} "+
+			" WHERE doc_collection=? AND doc_comment = ? "+
+			"ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  
+			[collection.col_id, comment], {row -> 
+				i = row[0]
+			})
 		return i
 	}
 	
-	/*
-	 * Returns the number of source documents for this collection
-	 */
-	public int getNumberOfSourceDocuments() {
-		int i
-		if (!col_id) throw new IllegalStateException(
-			"Can't check the number of source documents of a collection without a collection ID.")
-		getDBTable().getSaskiaDB().getDB().eachRow(
-				"SELECT count(sdoc_id) from ${SourceDocTable.tablename} "+
-				"WHERE sdoc_collection=?",[col_id], {row -> i = row[0]})
-		return i
-	}
-
-	public HashMap listSourceDocs(limit = 10,  offset = 0, column = null, needle = null) {
+	public HashMap listDocs(limit = 10,  offset = 0, column = null, needle = null) {
 		// limit & offset can come as null... they ARE initialized...
 		if (!limit) limit = 10
 		if (!offset) offset = 0
 
-		String where = "WHERE sdoc_collection=?"
+		String where = "WHERE doc_collection=?"
 		List params = [col_id]
 		if (column && needle) {
 
-			switch (SourceDoc.type[column]) {
+			switch (Doc.type[column]) {
 				case 'String': where += " AND $column LIKE '%${needle}%'"; break
 				case 'Long': where += " AND $column=? "; params << Long.parseLong(needle); break
 				case 'DocStatus':  where += " AND $column = ?"; params << needle; break
 				case 'Date': where += " AND $column = ?"; params << needle; break
 			}
 		}
-		String query = "SELECT SQL_CALC_FOUND_ROWS * FROM ${SourceDocTable.tablename} $where "+
+		String query = "SELECT SQL_CALC_FOUND_ROWS * FROM ${DocTable.tablename} $where "+
 				"LIMIT ${limit} OFFSET ${offset} UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), NULL, NULL, NULL, "+
-				"NULL, NULL, NULL, NULL, NULL, NULL"
+				"NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL"
 		log.debug "query = $query params = $params class = "+params*.class
 
 		List u
-		try {u = dbtable.getSaskiaDB().getDBTable("SourceDocTable").queryDB(query, params) }
-		catch(Exception e) {log.error "Error getting source doc list: ", e}
+		try {u = dbtable.getSaskiaDB().getDBTable("DocTable").queryDB(query, params) }
+		catch(Exception e) {log.error "Error getting doc list: ", e}
 
 		// last item is not a document... it's the count.
-		SourceDoc fakesdoc = u.pop()
-		long total = fakesdoc.sdoc_id
+		Doc fakedoc = u.pop()
+		long total = fakedoc.doc_id
 
 		log.debug "Returning "+u.size()+" results."
 		return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,

@@ -130,11 +130,11 @@ C�rpatos	C�rpatos	PROP	0	P	M	<ACC	0
 
 		// PlanB_Strategy3 planb3 = new PlanB_Strategy3()
 		//	plan1.
-		/*List<RembrandtedDoc> docs = planb3.wr.queryWithTermsAndWikipediaCategory(
+		/*List<Doc> docs = planb3.wr.queryWithTermsAndWikipediaCategory(
 		 q.sentence.toStringLine(), q.expectedAnswerType.categoryWikipedia)
 		 docs.each{doc -> 
-		 println "Got document $doc, adding ${doc.rdoc_title} as answer."
-		 q.answer << doc.rdoc_title.replaceAll(" ","_") // category: 
+		 println "Got document $doc, adding ${doc.doc_title} as answer."
+		 q.answer << doc.doc_title.replaceAll(" ","_") // category: 
 		 }
 		 List answer = wr.format(q, "pt")
 		 answer.each{it -> println it.line}

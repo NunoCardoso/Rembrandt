@@ -43,7 +43,7 @@ class GenerateGeoIndexTest extends GroovyTestCase {
 			log.error "Don't know collection 8. Exiting."
 			System.exit(0)
 		}
-		number_docs = collection.getNumberOfRembrandtedDocuments()
+		number_docs = collection.getNumberOfDocuments()
 	}
 
 	void testMain() {
@@ -56,29 +56,28 @@ class GenerateGeoIndexTest extends GroovyTestCase {
 
 			// problema: isto tem de ser feito quando há doc_latest_geo_signature nulls.
 
-			Map rdocs_rdoc = RembrandtedDoc.getBatchDocsAndNEsFromRDOCToGenerateGeoSignatures(collection, limit)
-			Map rdocs_pool = RembrandtedDoc.getBatchDocsAndNEsFromPoolToGenerateGeoSignatures(collection, limit)
+			Map docs = Doc.getBatchDocsAndNEsFromPoolToGenerateGeoSignatures(collection, limit)
 
 			int fail = 0
 
-			rdocs_rdoc.each{doc_id, rdoc ->
-				def pool = rdocs_pool[doc_id]
-				if (rdoc.lang != pool.lang) {fail++; log.info "doc $doc_id: rdoc.lang = ${rdoc.lang}, pool.lang=${pool.lang}"}
-				if (rdoc.doc_original_id != pool.doc_original_id) {fail++; log.info "doc $doc_id: rdoc.doc_original_id = ${rdoc.doc_original_id}, pool.doc_original_id=${pool.doc_original_id}"}
-				rdoc.nes.eachWithIndex{rdoc_ne, i2 ->
+			docs.each{doc_id, doc ->
+				def pool = docs[doc_id]
+				if (doc.lang != pool.lang) {fail++; log.info "doc $doc_id: doc.lang = ${doc.lang}, pool.lang=${pool.lang}"}
+				if (doc.doc_original_id != pool.doc_original_id) {fail++; log.info "doc $doc_id: doc.doc_original_id = ${doc.doc_original_id}, pool.doc_original_id=${pool.doc_original_id}"}
+				doc.nes.eachWithIndex{doc_ne, i2 ->
 					def pool_ne = pool.nes[i2]
-					if (rdoc_ne != pool_ne) {
+					if (doc_ne != pool_ne) {
 						fail++
-						if (rdoc_ne.section != pool_ne.section) log.info "doc $doc_id: rdoc_ne.section = ${rdoc_ne.section}, pool_ne.section = ${pool_ne.section}"
-						if (rdoc_ne.sentence != pool_ne.sentence) log.info "doc $doc_id: rdoc_ne.sentence = ${rdoc_ne.sentence}, pool_ne.sentence = ${pool_ne.sentence}"
-						if (rdoc_ne.term != pool_ne.term) log.info "doc $doc_id: rdoc_ne.term = ${rdoc_ne.term}, pool_ne.term = ${pool_ne.term}"
-						if (rdoc_ne.name != pool_ne.name) log.info "doc $doc_id: rdoc_ne.name = ${rdoc_ne.name}, pool_ne.name = ${pool_ne.name}"
-						if (rdoc_ne.type != pool_ne.type) log.info "doc $doc_id: rdoc_ne.type = ${rdoc_ne.type}, pool_ne.type = ${pool_ne.type}"
-						if (rdoc_ne.subtype != pool_ne.subtype) log.info "doc $doc_id: rdoc_ne.subtype = ${rdoc_ne.subtype}, pool_ne.subtype = ${pool_ne.subtype}"
-						if (rdoc_ne.entity != pool_ne.entity) log.info "doc $doc_id: rdoc_ne.entity = ${rdoc_ne.entity}, pool_ne.entity = ${pool_ne.entity}"
-						if (rdoc_ne.dbpediaClass != pool_ne.dbpediaClass) log.info "doc $doc_id: rdoc_ne.dbpediaClass = ${rdoc_ne.dbpediaClass}, pool_ne.dbpediaClass = ${pool_ne.dbpediaClass}"
+						if (doc_ne.section != pool_ne.section) log.info "doc $doc_id: doc_ne.section = ${doc_ne.section}, pool_ne.section = ${pool_ne.section}"
+						if (doc_ne.sentence != pool_ne.sentence) log.info "doc $doc_id: doc_ne.sentence = ${doc_ne.sentence}, pool_ne.sentence = ${pool_ne.sentence}"
+						if (doc_ne.term != pool_ne.term) log.info "doc $doc_id: doc_ne.term = ${doc_ne.term}, pool_ne.term = ${pool_ne.term}"
+						if (doc_ne.name != pool_ne.name) log.info "doc $doc_id: doc_ne.name = ${doc_ne.name}, pool_ne.name = ${pool_ne.name}"
+						if (doc_ne.type != pool_ne.type) log.info "doc $doc_id: doc_ne.type = ${doc_ne.type}, pool_ne.type = ${pool_ne.type}"
+						if (doc_ne.subtype != pool_ne.subtype) log.info "doc $doc_id: doc_ne.subtype = ${doc_ne.subtype}, pool_ne.subtype = ${pool_ne.subtype}"
+						if (doc_ne.entity != pool_ne.entity) log.info "doc $doc_id: doc_ne.entity = ${doc_ne.entity}, pool_ne.entity = ${pool_ne.entity}"
+						if (doc_ne.dbpediaClass != pool_ne.dbpediaClass) log.info "doc $doc_id: doc_ne.dbpediaClass = ${doc_ne.dbpediaClass}, pool_ne.dbpediaClass = ${pool_ne.dbpediaClass}"
 
-						//log.info "doc $doc_id: ne i=$i2: rdoc_ne=$rdoc_ne, pool_ne=$pool_ne"}
+						//log.info "doc $doc_id: ne i=$i2: doc_ne=$doc_ne, pool_ne=$pool_ne"}
 					}
 				}
 			}

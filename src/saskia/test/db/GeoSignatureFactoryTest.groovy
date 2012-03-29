@@ -77,7 +77,7 @@ class GeoSignatureFactoryTest extends GroovyTestCase{
      */      
     void testGenerate() {
         
-        // let's simulate the output from RembrandtedDoc.getBatchDocsAndNEsFromPoolToGenerateGeoSignatures
+        // let's simulate the output from Doc.getBatchDocsAndNEsFromPoolToGenerateGeoSignatures
 
         def labels 
         GeoSignatureFactory gsf = new GeoSignatureFactory()

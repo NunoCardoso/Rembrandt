@@ -60,8 +60,7 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 
 				/* from type is: 
 				 * COLLECTION: col_owner(user)
-				 * RDOC: doc_collection(colletion), *doc_tag*(tag), *doc_type*(type), 
-				 * SDOC: sdoc_collection(colletion) 
+				 * DOC: doc_collection(colletion) 
 				 * NE: ne_name(nename), ne_category(necategory), ne_type(type), ne_subtype(subtype), ne_entity(entity)
 				 * ENTITY: *ent_geoscope*(geoscope)
 				 * GEOSCOPE: *geo_entity*(entity), 
@@ -70,7 +69,7 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 				 */
 
 				/* to type is:
-				 * collection (doc_collection, sdoc_collection, tsk_collection) -> CACHE
+				 * collection (doc_collection, tsk_collection) -> CACHE
 				 * user (col_owner, tsk_owner) -> CACHE
 				 * tag (dtg_tag) -> CACHE
 				 * type (dht_type) -> CACHE
@@ -87,7 +86,6 @@ public class DBObjectSuggestMapping extends WebServiceRestletMapping {
 					/*** COLLECTION ****/
 					case [
 						"doc_collection",
-						"sdoc_collection",
 						"tsk_collection"
 					]:
 					// needle

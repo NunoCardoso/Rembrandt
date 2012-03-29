@@ -27,7 +27,7 @@ import rembrandt.io.RembrandtStyleTag
 import rembrandt.obj.Document
 import saskia.db.GeoSignature
 import saskia.db.obj.Collection
-import saskia.db.obj.RembrandtedDoc
+import saskia.db.obj.Doc
 import saskia.db.table.DocGeoSignatureTable
 import saskia.db.table.DocTimeSignatureTable
 import saskia.util.I18n
@@ -41,13 +41,13 @@ class RenderDocDetailsStats {
 	SimpleDateFormat dateFormat
 	I18n i18n
 
-	public String render(RembrandtedDoc rdoc, Collection collection, String lang) {
+	public String render(Doc d, Collection collection, String lang) {
 		i18n = I18n.newInstance()
 		docstats = new RembrandtDocStats(collection, lang)
 		nestats = new NEPoolStats(collection, lang)
 		reader = new RembrandtReader(new RembrandtStyleTag(lang))
 		writer = new HTMLWriter(new HTMLStyleTag(lang))
-		Document doc = reader.createDocument(rdoc.doc_content)
+		Document doc = reader.createDocument(d.doc_content)
 
 		StringBuffer s = new StringBuffer()
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
@@ -55,13 +55,13 @@ class RenderDocDetailsStats {
 
 		s.append "<DIV ID='stats-header'>${i18n.statstitle['statsfordoc'][lang]} <B>"
 
-		s.append ""+(doc.title_sentences ? writer.printDocumentHeadContent(doc) : rdoc.doc_original_id)+"</B></DIV>";
+		s.append ""+(doc.title_sentences ? writer.printDocumentHeadContent(doc) : d.doc_original_id)+"</B></DIV>";
 
 		s.append "<DIV ID='stats-doc-details-div' class='stats-box'>\n"
 		s.append "<P><B>${i18n.statstitle['docdetails'][lang]}</B></P>";
-		s.append "<P>${i18n.statslabel['date_created'][lang]}: "+dateFormat.format(rdoc.doc_date_created)+"</P>\n"
-		s.append "<P>${i18n.statslabel['date_tagged'][lang]}: "+dateFormat.format(rdoc.doc_date_tagged)+"</P>\n"
-		s.append "<P>${i18n.statslabel['tag_version'][lang]}"+rdoc.getTags().join(", ")+"</P>\n"
+		s.append "<P>${i18n.statslabel['date_created'][lang]}: "+dateFormat.format(d.doc_date_created)+"</P>\n"
+		s.append "<P>${i18n.statslabel['date_tagged'][lang]}: "+dateFormat.format(d.doc_date_tagged)+"</P>\n"
+		s.append "<P>${i18n.statslabel['tag_version'][lang]}"+d.getTags().join(", ")+"</P>\n"
 		s.append "</DIV>\n"
 
 
@@ -71,19 +71,19 @@ class RenderDocDetailsStats {
 		s.append "<P>${i18n.statslabel['numbersentencesbody'][lang]}: "+(doc.body_sentences? doc.body_sentences.size() : 0)+"</P>\n"
 		s.append "<P>${i18n.statslabel['numberneindoctitle'][lang]}: "+(doc.titleNEs ? doc.titleNEs.size() : 0)+"</P>\n"
 		s.append "<P>${i18n.statslabel['numberneindocbody'][lang]}: "+(doc.bodyNEs ? doc.bodyNEs.size() : 0)+"</P>\n"
-		s.append "<P>${i18n.statslabel['numberneinpooltitle'][lang]}: "+docstats.getNumberNEinDocTitle(rdoc)+"</P>\n"
-		s.append "<P>${i18n.statslabel['numberneinpoolbody'][lang]}: "+docstats.getNumberNEinDocBody(rdoc)+"</P>\n"
+		s.append "<P>${i18n.statslabel['numberneinpooltitle'][lang]}: "+docstats.getNumberNEinDocTitle(d)+"</P>\n"
+		s.append "<P>${i18n.statslabel['numberneinpoolbody'][lang]}: "+docstats.getNumberNEinDocBody(d)+"</P>\n"
 		s.append "</DIV>\n"
 
 
 		s.append "<DIV ID='stats-nes-on-doc-div' class='stats-box'>\n"
 		s.append "<P><B>${i18n.statstitle['top10nes'][lang]}</B></P>"
-		s.append nestats.getTopNEsForDoc(rdoc)
+		s.append nestats.getTopNEsForDoc(d)
 		s.append "</DIV>\n"
 
 		s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-geo-signature-div' class='stats-box'>\n"
 		s.append "<P><B>${i18n.statstitle['doc_geo_signature'][lang]}</B></P>"
-		DocGeoSignatureTable dgs = rdoc.getGeographicSignature()
+		DocGeoSignatureTable dgs = d.getGeographicSignature()
 		String ss = ""
 		if (dgs?.dgs_signature)
 			dgs.dgs_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
@@ -92,7 +92,7 @@ class RenderDocDetailsStats {
 
 		s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-time-signature-div' class='stats-box'>\n"
 		s.append "<P><B>${i18n.statstitle['doc_time_signature'][lang]}</B></P>"
-		DocTimeSignatureTable dts = rdoc.getTimeSignature()
+		DocTimeSignatureTable dts = d.getTimeSignature()
 		if (dts?.dts_signature)
 			ss = dts.dts_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
 		s.append ss

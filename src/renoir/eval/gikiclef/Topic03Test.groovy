@@ -130,7 +130,7 @@ Deunov	Peter=Deunov	PROP	0	S	M	P<	0
 		// Add Wikipedia page id of Peter Dunov to the list of pages to visit.
 		// Get tagged version of Wikipedia pages of Ernest Hemingway
 		//	println "Wikipedia page(s) of ${c.object.ne.printTerms()} is(are) ${c.object.ne.wikipediaPage.keySet().toList()}"
-		//	List<RembrandtedDoc> docs = planb1.getWikipediaRembrandtedPages(
+		//	List<Doc> docs = planb1.getWikipediaRembrandtedPages(
 		//		c.object.ne.wikipediaPage.keySet().toList())
 
 

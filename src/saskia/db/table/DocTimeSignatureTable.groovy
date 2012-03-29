@@ -81,9 +81,9 @@ class DocTimeSignatureTable extends DBTable {
 
 		// ORDER BY doc_id ASC ensures that the TimeSignatures are batched just like in other indexes,
 		// to ensure Lucene gets identical indexes for identical documents
-		return queryDB("SELECT ${DocTimeSignatureTable.tablename}.*, ${RembrandtedDocTable.tablename}.doc_original_id, "+
-		"${RembrandtedDocTable.tablename}.doc_id "+
-		"FROM ${DocTimeSignatureTable.tablename}, ${RembrandtedDocTable.tablename} "+
+		return queryDB("SELECT ${DocTimeSignatureTable.tablename}.*, ${DocTable.tablename}.doc_original_id, "+
+		"${DocTable.tablename}.doc_id "+
+		"FROM ${DocTimeSignatureTable.tablename}, ${DocTable.tablename} "+
 		"WHERE doc_collection=? AND doc_id=dts_document "+
 		"ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id])
 

@@ -32,7 +32,6 @@ class Job extends DBObject implements JSONable {
 	Long job_id
 	Task job_task
 	String job_worker
-	String job_doc_type // SDOC, RDOC
 	Long job_doc_id
 	DocStatus job_doc_edit
 	Date job_doc_edit_date
@@ -50,7 +49,6 @@ class Job extends DBObject implements JSONable {
 		if (row['job_task']) j.job_task = (row['job_task'] instanceof Task ? 
 			row['job_task'] : 
 			dbtable.getSaskiaDB().getDBTable("TaskTable").getFromID(row['job_task']) )
-		if (row['job_doc_type']) j.job_doc_type = row['job_doc_type']
 		if (row['job_doc_id']) j.job_doc_id = row['job_doc_id']
 		if (row['job_doc_edit']) 
 			j.job_doc_edit = (row['job_doc_edit'] instanceof DocStatus ? 
@@ -60,12 +58,12 @@ class Job extends DBObject implements JSONable {
 		return j
 	}
 	
-	static Map type = ['job_id':'Long','job_task':'Task', 'job_worker':'String','job_doc_type':'String',
+	static Map type = ['job_id':'Long','job_task':'Task', 'job_worker':'String',
 		'job_doc_id':'Long','job_doc_edit':'DocStatus','job_doc_edit_date':'Date']
   
 	
 	Map toMap() {
-		return ['job_id':job_id,'job_task':job_task.toMap(), 'job_worker':job_worker,'job_doc_type':job_doc_type,
+		return ['job_id':job_id,'job_task':job_task.toMap(), 'job_worker':job_worker,
 	  'job_doc_id':job_doc_id,'job_doc_edit':job_doc_edit, 'job_doc_edit_date':job_doc_edit_date]
 	}
 	
@@ -90,8 +88,8 @@ class Job extends DBObject implements JSONable {
 	public Long addThisToDB() {
 		if (!getDBTable().cache) getDBTable().refreshCache()
 		def res = getDBTable().getSaskiaDB().getDB().executeInsert(
-			"INSERT INTO ${getDBTable().tablename} VALUES(0,?,?,?,?,?,?)",
-		[job_task.tsk_id, job_worker, job_doc_type, job_doc_id, job_doc_edit.text(), job_doc_edit_date])
+			"INSERT INTO ${getDBTable().tablename} VALUES(0,?,?,?,?,?)",
+		[job_task.tsk_id, job_worker, job_doc_id, job_doc_edit.text(), job_doc_edit_date])
 		// returns an auto_increment value
 		job_id = (long)res[0][0]
 		getDBTable().cache[job_id] = this

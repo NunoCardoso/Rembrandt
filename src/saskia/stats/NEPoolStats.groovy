@@ -24,7 +24,7 @@ import rembrandt.obj.Document
 import rembrandt.obj.Sentence
 import saskia.db.database.SaskiaMainDB
 import saskia.db.obj.Collection
-import saskia.db.obj.RembrandtedDoc
+import saskia.db.obj.Doc
 import saskia.util.I18n
 
 class NEPoolStats {
@@ -73,14 +73,14 @@ class NEPoolStats {
 		return res.toString()
 	}
 
-	String getTopNEsForDoc(RembrandtedDoc rdoc, int limit = 10) {
+	String getTopNEsForDoc(Doc doc, int limit = 10) {
 
 		StringBuffer res = new StringBuffer()
 		res.append "<UL  style='text-indent:0;'>\n"
 		db.getDB().eachRow("SELECT ne_id, nen_name, nec_category, net_type, nes_subtype, count(dhn_ne) as c "+
 				"FROM doc_has_ne, ne_name, ne, ne_category, ne_type, ne_subtype WHERE "+
 				"dhn_doc=? and dhn_ne= ne_id and ne_name=nen_id and ne_category=nec_id and ne_type=net_id and "+
-				"ne_subtype=nes_id group by dhn_ne order by c desc LIMIT ${limit}", [rdoc.doc_id], {row ->
+				"ne_subtype=nes_id group by dhn_ne order by c desc LIMIT ${limit}", [doc.doc_id], {row ->
 
 					res.append "<LI style='text-indent:0px; padding:3px;'>"
 					res.append "<B>${row['c']}</B> - <DIV style='display:inline;' CLASS='NE ${row['nec_category']}'>"
@@ -253,7 +253,7 @@ class NEPoolStats {
 					ne_id,
 					"B"
 				], {row ->
-					RembrandtedDoc doc = RembrandtedDoc.getFromID(row['dhn_doc'])
+					Doc doc = Doc.getFromID(row['dhn_doc'])
 					Document d = reader.createDocument(doc.doc_content)
 
 					// let's get 4 terms back, 4 terms front

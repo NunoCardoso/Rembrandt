@@ -64,18 +64,16 @@ class GenerateEntityIndexForCollection extends IndexGenerator {
 	Map<String, Analyzer> analyzerMap
 	LgteBrokerStemAnalyzer analyzer
 	String indexdir
-	String sync
 	File filestats
 	Map stats
 	RembrandtReader reader
 	String fileseparator = System.getProperty("file.separator")
 
 	// indexdir goes to ${rembrandt.home.dir}/index/db-X/col-X/
-	public GenerateEntityIndexForCollection(Collection collection, String indexdir, String sync) {
+	public GenerateEntityIndexForCollection(Collection collection, String indexdir) {
 		super()
 		this.collection=collection
 		this.indexdir=indexdir
-		this.sync = sync
 
 		reader = new RembrandtReader(
 				new RembrandtStyleTag(
@@ -98,8 +96,8 @@ class GenerateEntityIndexForCollection extends IndexGenerator {
 	}
 
 	public index() {
-		RembrandtedDocTable rembrandtedDocTable = collection
-			.getDBTable().getSaskiaDB().getDBTable("RembrandtedDocTable") 
+		DocTable docTable = collection
+			.getDBTable().getSaskiaDB().getDBTable("DocTable") 
 		DocStats docstats = new DocStats()
 		docstats.begin()
 
@@ -107,7 +105,7 @@ class GenerateEntityIndexForCollection extends IndexGenerator {
 			log.debug "stats file does not exist. Creating one."
 			filestats.createNewFile()
 			log.info "Pre-analysing collection $collection, please wait."
-			stats['total'] = collection.getNumberOfRembrandtedDocuments()
+			stats['total'] = collection.getNumberOfDocuments()
 			stats['processed'] = 0
 		} else {
 			stats = readFile(filestats)
@@ -118,36 +116,31 @@ class GenerateEntityIndexForCollection extends IndexGenerator {
 
 		/** ITERATOR **/
 		for (int i=stats['total']; i > 0; i -= doc_pool_size) {
-			Map rdocs = [:]
+			Map docs = [:]
 
 			int limit = (i > doc_pool_size ? doc_pool_size : i)
 			log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
 
-			/** IF SYNC = RDOC **/
-			if (sync == "rdoc") {
-				rdocs = rembrandtedDocTable.getBatchDocsAndNEsFromRDOCToGenerateNEIndex(collection, limit, stats["processed"])
-			} else if (sync == "pool") {
-				rdocs = rembrandtedDocTable.getBatchDocsAndNEsFromPoolToGenerateNEIndex(collection, limit, stats["processed"])
-			}
+			docs = docTable.getBatchDocsAndNEsFromPoolToGenerateNEIndex(collection, limit, stats["processed"])
 			
 		// if it's null, then there's no more docs to process. Leave the loop.
-			if (!rdocs) {
+			if (!docs) {
 				log.info "DB returned no more docs, I guess I'm done."
 				return
 			}
 			docstats.beginBatchOfDocs(limit)
 
-			log.debug "Got ${rdocs?.size()} RembrandtedDoc(s)."
+			log.debug "Got ${docs?.size()} Doc(s)."
 
 			// ADDING STUFF TO INDEX
-			rdocs.each {rdoc_id, rdoc ->
+			docs.each {doc_id, doc ->
 				LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
-				ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
-				ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id.toString())
-				log.trace "Wrote doc id ${rdoc.doc_original_id}."
+				ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), doc.doc_original_id)
+				ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), doc.doc_id.toString())
+				log.trace "Wrote doc id ${doc.doc_original_id}."
 
 				/*****  NEs in body ******/
-				rdoc.nes.each{ne ->
+				doc.nes.each{ne ->
 					/*ne.dbpediaPage?.values().toList().flatten()?.each{it ->
 						if (it != null) {
 							// indexString indexes but does not tokenize it
@@ -164,8 +157,8 @@ class GenerateEntityIndexForCollection extends IndexGenerator {
 						stats[entity_label]++
 					}
 				}
-				if (rdoc.nes.size() == 0) {
-					log.warn "Doc ${rdoc.doc_original_id} has NO NEs on its body. Inserting an empty NE"
+				if (doc.nes.size() == 0) {
+					log.warn "Doc ${doc.doc_original_id} has NO NEs on its body. Inserting an empty NE"
 				}
 				entwriter.addDocument(ldoc)
 			}
@@ -199,7 +192,6 @@ class GenerateEntityIndexForCollection extends IndexGenerator {
 		o.addOption("db", true, "database (main/test)")
 		o.addOption("col", true, "Collection name or ID")
 		o.addOption("db", true, "main or test")
-		o.addOption("sync", true, "Where will we get the NEs - rdoc or pool. rdoc parses the RembrandtedDoc to get NEs, pool will get NEs from DB")
 		o.addOption("help", false, "Gives this help information")
 		o.addOption("indexdir", false, "directory of the index")
 
@@ -214,16 +206,12 @@ class GenerateEntityIndexForCollection extends IndexGenerator {
 
 	 	String DEFAULT_COLLECTION_NAME = "CD do Segundo HAREM"
 	 	String DEFAULT_DB_NAME = "main"
-	 	String DEFAULT_SYNC = "pool"
 
 		SaskiaDB db = new DBValidator()
 			.validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)
 	
 		Collection collection = new CollectionValidator(db)
 			.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
-
-		String sync = new SyncValidator()
-			.validate(cmd.getOptionValue("sync"), DEFAULT_SYNC)
 
 		String default_indexdir = IndexDirectoryValidator.buildIndexDirectory(
 			 conf, collection, EntityIndexDirLabel)
@@ -235,7 +223,7 @@ class GenerateEntityIndexForCollection extends IndexGenerator {
 		if (!f.exists()) f.mkdirs()
 
 		GenerateNEIndexForCollection indexer = new GenerateNEIndexForCollection(
-				collection, indexdir, sync)
+				collection, indexdir)
 
 		indexer.index()
 		println indexer.statusMessage()

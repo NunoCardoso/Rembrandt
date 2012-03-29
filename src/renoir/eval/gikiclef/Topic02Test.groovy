@@ -109,7 +109,7 @@ nacional	nacional	ADJ	0	S	F	N<	0
 
 		//	PlanB_Strategy3 planb3 = new PlanB_Strategy3()
 		//	plan1.
-		/*List<RembrandtedDoc> docs = planb3.getDocsFromQueryAndDBpediaClass(
+		/*List<Doc> docs = planb3.getDocsFromQueryAndDBpediaClass(
 		 s3.toStringLine(), q.expectedAnswerType.ontologyClass)
 		 docs.each{doc -> 
 		 println "Got document $doc, pulling out resource "+ doc.doc_entity.ent_dbpedia_resource + " as answer."

@@ -35,10 +35,10 @@ import saskia.db.GeoSignature
 import saskia.db.database.SaskiaDB
 import saskia.db.obj.Collection
 import saskia.db.obj.DocGeoSignature
-import saskia.db.obj.RembrandtedDoc
+import saskia.db.obj.Doc
 import saskia.db.obj.User
 import saskia.db.table.CollectionTable
-import saskia.db.table.RembrandtedDocTable
+import saskia.db.table.DocTable
 import saskia.db.table.UserTable
 import saskia.server.ServerMessage
 import saskia.util.I18n
@@ -61,7 +61,7 @@ public class SearchMapping extends WebServiceRestletMapping {
 		this.db=db
 		CollectionTable collectionTable = db.getDBTable("CollectionTable")
 		UserTable userTable = db.getDBTable("UserTable")
-		RembrandtedDocTable rembrandtedDocTable = db.getDBTable("RembrandtedDocTable")
+		DocTable docTable = db.getDBTable("DocTable")
 
 		JSONanswer = {req, par, bind ->
 
@@ -204,19 +204,19 @@ public class SearchMapping extends WebServiceRestletMapping {
 				Map res
 				// now let's convert doc_original_id from the collection to the text
 				try {
-					RembrandtedDoc rdoc = RembrandtedDocTable.getFromOriginalDocIDandCollection(r["doc_original_id"], collection)
-					String body = rdoc.getPlainText(rdoc.getBodyFromContent())
-					String title = rdoc.getPlainText(rdoc.getTitleFromContent())
+					Doc doc = docTable.getFromOriginalDocIDandCollection(r["doc_original_id"], collection)
+					String body = doc.getPlainText(doc.getBodyFromContent())
+					String title = doc.getPlainText(doc.getTitleFromContent())
 					TokenStream ts = new StandardAnalyzer().tokenStream("text", new StringReader(body))
 
 					res = [
 								'i':r["i"],
 								'title':title.replaceAll(/\n/,""),
-								'doc_id':rdoc.doc_id,
-								'doc_original_id':rdoc.doc_original_id,
+								'doc_id':doc.doc_id,
+								'doc_original_id':doc.doc_original_id,
 								'abstract':h.getBestFragments(ts, body, 5,"(...)").replaceAll("\n"," "),
-								'size':rdoc.getBodyFromContent().size(),
-								'date':""+rdoc.doc_date_created,
+								'size':doc.getBodyFromContent().size(),
+								'date':""+doc.doc_date_created,
 								'score':r["score"]
 							]
 					if (r["partialscore"]) res['partial_score'] = r["partialscore"]
@@ -224,7 +224,7 @@ public class SearchMapping extends WebServiceRestletMapping {
 					List coordinates = [], polylines = []
 					if (maps) {
 						// get from table doc_geo_signature the stuff for this document
-						DocGeoSignature dgs = rdoc.getGeographicSignature()
+						DocGeoSignature dgs = doc.getGeographicSignature()
 						if (dgs) {
 							// get the dgs_signature. Note that is has only ancestors/centroid/bb info, no shape.
 							GeoSignature geosig = new GeoSignature(dgs)

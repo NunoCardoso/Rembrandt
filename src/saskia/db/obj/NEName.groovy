@@ -22,7 +22,6 @@ import saskia.db.table.DBTable
 
 /**
  * @author Nuno Cardoso
- *
  */
 class NEName extends DBObject implements JSONable {
 

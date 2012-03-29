@@ -91,7 +91,7 @@ class GenerateGeoIndexForCollection extends IndexGenerator {
 			log.debug "stats file does not exist. Creating one."
 			filestats.createNewFile()
 			log.info "Pre-analysing collection $collection, please wait."
-			stats['total'] = collection.getNumberOfRembrandtedDocuments()
+			stats['total'] = collection.getNumberOfDocuments()
 			stats['processed'] = 0
 		} else {
 			stats = readFile(filestats)

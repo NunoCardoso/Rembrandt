@@ -113,8 +113,8 @@ class GenerateTermIndexForCollection extends IndexGenerator {
 
 	public index() {
 		
-		RembrandtedDocTable rembrandtedDocTable = collection
-			.getDBTable().getSaskiaDB().getDBTable("RembrandtedDocTable") 
+		DocTable docTable = collection
+			.getDBTable().getSaskiaDB().getDBTable("DocTable") 
 
 		DocStats docstats = new DocStats()
 		docstats.begin()
@@ -124,7 +124,7 @@ class GenerateTermIndexForCollection extends IndexGenerator {
 			log.debug "stats file does not exist. Creating one."
 			filestats.createNewFile()
 			log.info "Pre-analysing collection $collection, please wait."
-			stats['total'] = collection.getNumberOfRembrandtedDocuments()
+			stats['total'] = collection.getNumberOfDocuments()
 			stats['processed'] = 0
 
 		} else {
@@ -139,20 +139,20 @@ class GenerateTermIndexForCollection extends IndexGenerator {
 			int limit = (i > doc_pool_size ? doc_pool_size : i)
 			log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
 
-			List rdocs = rembrandtedDocTable.getBatchOfRembrandtedDocs(collection, limit, stats["processed"])
-			log.debug "Got ${rdocs?.size()} RembrandtedDoc(s)."
+			List docs = DocTable.getBatchOfDocs(collection, limit, stats["processed"])
+			log.debug "Got ${docs?.size()} Doc(s)."
 
 			// if it's null, then there's no more docs to process. Leave the loop.
-			if (!rdocs) {
+			if (!docs) {
 				log.info "DB returned no more docs, I guess I'm done."
 				return
 			}
 			docstats.beginBatchOfDocs(limit)
 			int doc_title_sentences, doc_body_sentences, doc_title_terms, doc_body_terms
-			rdocs.each {rdoc ->
+			docs.each {d ->
 
 				//TODO
-				Document doc = reader.createDocument(rdoc.doc_content)
+				Document doc = reader.createDocument(d.doc_content)
 
 				doc.tokenize()
 				doc_title_sentences = 0
@@ -176,11 +176,11 @@ class GenerateTermIndexForCollection extends IndexGenerator {
 					}
 				}
 				log.trace "bodytext: $bodytext"
-				if (!bodytext && !titletext) log.warn "Doc ${rdoc.doc_original_id} does NOT have titletext and bodytext."
+				if (!bodytext && !titletext) log.warn "Doc ${d.doc_original_id} does NOT have titletext and bodytext."
 				LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
 
-				ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
-				ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id.toString())
+				ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), d.doc_original_id)
+				ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), d.doc_id.toString())
 
 				if (doc_body_sentences > 0 && doc_body_terms > 0) {
 					if (doc_title_sentences > 0 && doc_title_terms > 0) {
@@ -194,11 +194,11 @@ class GenerateTermIndexForCollection extends IndexGenerator {
 						ldoc.indexText(conf.get("saskia.index.title_label","title"),titletext)
 						ldoc.indexText(conf.get("saskia.index.contents_label","contents"),titletext)
 					} else {
-						log.warn "Doc ${rdoc.doc_original_id} does NOT have titletext and bodytext."
+						log.warn "Doc ${d.doc_original_id} does NOT have titletext and bodytext."
 					}
 				}
 
-				log.debug "Doc "+rdoc.doc_id.toString()+":"+rdoc.doc_original_id+" - Title:"+doc_title_sentences+":"+doc_title_terms+" Body:"+doc_body_sentences+":"+doc_body_terms+" titletext:"+titletext.size()+" bodytext:"+bodytext.size()
+				log.debug "Doc "+d.doc_id.toString()+":"+d.doc_original_id+" - Title:"+doc_title_sentences+":"+doc_title_terms+" Body:"+doc_body_sentences+":"+doc_body_terms+" titletext:"+titletext.size()+" bodytext:"+bodytext.size()
 				termwriter.addDocument(ldoc)
 			}
 			docstats.endBatchOfDocs(limit)

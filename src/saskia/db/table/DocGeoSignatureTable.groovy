@@ -82,14 +82,14 @@ class DocGeoSignatureTable extends DBTable {
 		if (!limit) limit = 10
 		if (!offset) offset = 0
 
-		// it HAS TO FOLLOW RembrnadtedDoc order, so that LuceneIDs are the same!
+		// it HAS TO FOLLOW Doc order, so that LuceneIDs are the same!
 
 
 		// ORDER BY doc_id ASC ensures that the GeoSignatures are batched just like in other indexes,
 		// to ensure Lucene gets identical indexes for identical documents
-		return queryDB("SELECT ${DocGeoSignatureTable.tablename}.*, ${RembrandtedDocTable.tablename}.doc_id, "+
-		"${RembrandtedDocTable.tablename}.doc_original_id "+
-		"FROM ${DocGeoSignatureTable.tablename}, ${RembrandtedDocTable.tablename} "+
+		return queryDB("SELECT ${DocGeoSignatureTable.tablename}.*, ${DocTable.tablename}.doc_id, "+
+		"${DocTable.tablename}.doc_original_id "+
+		"FROM ${DocGeoSignatureTable.tablename}, ${DocTable.tablename} "+
 		"WHERE doc_collection=? AND doc_id=dgs_document "+
 		"ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id])
 	}

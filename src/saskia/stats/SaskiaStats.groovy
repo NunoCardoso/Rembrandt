@@ -97,24 +97,24 @@ class SaskiaStats {
 		}
 	}
 
-	public String renderDocPage(RembrandtedDoc rdoc, Collection collection, String lang) {
+	public String renderDocPage(Doc doc, Collection collection, String lang) {
 		StringBuffer s = new StringBuffer()
-		log.debug "Request of stats for doc ${rdoc.doc_id}, collection $collection, lang $lang";
+		log.debug "Request of stats for doc ${doc.doc_id}, collection $collection, lang $lang";
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
-		Cache c = db.getDBTable("CacheTable").getFromIDAndCollectionAndLang("DOC:"+rdoc.doc_id, collection, lang)
+		Cache c = db.getDBTable("CacheTable").getFromIDAndCollectionAndLang("DOC:"+doc.doc_id, collection, lang)
 		if (c && c.isCacheFresh()) {
 			log.debug "Cache is new, let's use it."
-			s.append "<DIV ID='rembrandt-detaildoc-${rdoc.doc_id}'  CLASS='stats-main'>\n"
+			s.append "<DIV ID='rembrandt-detaildoc-${doc.doc_id}'  CLASS='stats-main'>\n"
 			s.append c.cac_obj
 			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
 			s.append dateFormat.format((Date)c.cac_date)+"</DIV>\n</DIV>\n"
 		} else {
 			log.debug "Cache is old or non-existent, time to refresh it."
 			RenderDocDetailsStats stat = new RenderDocDetailsStats()
-			String content = stat.render(rdoc, collection, lang)
+			String content = stat.render(doc, collection, lang)
 			if (!c) c = new Cache()
-			c.refreshCache("DOC:"+rdoc.doc_id, collection, lang, content, DOC_CACHE_REFRESH)
-			s.append "<DIV ID='rembrandt-detaildoc-${rdoc.doc_id}'  CLASS='stats-main'>\n"
+			c.refreshCache("DOC:"+doc.doc_id, collection, lang, content, DOC_CACHE_REFRESH)
+			s.append "<DIV ID='rembrandt-detaildoc-${doc.doc_id}'  CLASS='stats-main'>\n"
 			s.append content
 			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
 			s.append dateFormat.format(new Date())+"</DIV>\n</DIV>\n"

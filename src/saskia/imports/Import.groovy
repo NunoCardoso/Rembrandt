@@ -82,72 +82,71 @@ abstract class Import {
 		return message
 	}	
 	
-	public SourceDoc addSourceDoc(String original_id, String content, String lang, Date date,
+	public Doc addDoc(String original_id, String content, String lang, Date date,
 	String comment = "") {
 
 		if (!db) {
-			log.fatal "No DB specified, so SourceDoc doesn't know where to be stored."
+			log.fatal "No DB specified, so Doc doesn't know where to be stored."
 			log.fatal "Please configure your importer to have a DB reference"
 			System.exit(0)
 		}
 		
-		SourceDocTable sdt = db.getDBTable("SourceDocTable")
+		DocTable dt = db.getDBTable("DocTable")
 		
 		// check if exists in DB
-		SourceDoc sourceDocInDB = sdt.getFromOriginalIDandCollectionID(original_id, collection.col_id) 
+		Doc docInDB = dt.getFromOriginalIDandCollectionID(original_id, collection.col_id) 
 
 		// create the New 
-		SourceDoc sourceDocNew = SourceDoc.createNew(
-				sdt,
-				[sdoc_original_id:original_id, 
-				 sdoc_collection:collection,
-				 sdoc_lang:lang, 
-				 sdoc_content:content,
-				 sdoc_date:date, 
-				 sdo_proc:DocStatus.READY,
-				 sdoc_comment:comment]
-				)
+		Doc docNew = Doc.createNew( dt, [
+			doc_original_id:original_id, 
+			doc_collection:collection,
+			doc_lang:lang, 
+			doc_content:content,
+			doc_date_created:date, 
+			doc_proc:DocStatus.READY,
+			doc_comment:comment
+		])
 		
-		// if there is sourceDocInDB, give its sdoc_id to the sourceDocNew
+		// if there is docInDB, give its doc_id to the docNew
 		// so that REPLACE is successfully done in the DB
-		if (sourceDocInDB) {
-			sourceDocNew.sdoc_id = sourceDocInDB.sdoc_id
+		if (docInDB) {
+			docNew.doc_id = docInDB.doc_id
 		}
 				
-		if (!sourceDocInDB) {
+		if (!docInDB) {
 			try {
-				sourceDocNew.sdoc_id = sourceDocNew.addThisToDB()
-				log.info "SourceDoc $sourceDocNew is now INSERTED into Saskia DB."
+				docNew.doc_id = docNew.addThisToDB()
+				log.info "Doc $docNew is now INSERTED into Saskia DB."
 				status.imported++
 			} 
-			// doesn't apply - There is a Primary Key only on sdoc_id
+			// doesn't apply - There is a Primary Key only on doc_id
 			//catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
-			//	log.warn "Found duplicate entry in DB. Skipping SourceDoc $s."
+			//	log.warn "Found duplicate entry in DB. Skipping Doc $s."
 			//	status.skipped++
 			catch(Exception e2) {
-				log.warn "Found error while inserting SourceDoc $sourceDocNew into SaskiaDB. Skipping."
+				log.warn "Found error while inserting Doc $docNew into SaskiaDB. Skipping."
 				log.warn "Why? " + e2.getMessage()
 				status.skipped++
 			}
 		// 	
 		} else {
 			try {
-				sourceDocNew.sdoc_id = sourceDocNew.replaceThisToDB()
-				log.info "SourceDoc $sourceDocNew is now REPLACED into Saskia DB."
+				docNew.doc_id = docNew.replaceThisToDB()
+				log.info "Doc $docNew is now REPLACED into Saskia DB."
 				status.imported++
 			}
-			// doesn't apply - There is a Primary Key only on sdoc_id
+			// doesn't apply - There is a Primary Key only on doc_id
 			//catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
-			//	log.warn "Found duplicate entry in DB. Skipping SourceDoc $s."
+			//	log.warn "Found duplicate entry in DB. Skipping Doc $s."
 			//	status.skipped++
 			catch(Exception e2) {
-				log.warn "Found error while replacing SourceDoc $sourceDocNew into SaskiaDB. Skipping."
+				log.warn "Found error while replacing Doc $docNew into SaskiaDB. Skipping."
 				log.warn "Why? " + e2.getMessage()
 				status.skipped++
 			}
 
 			
 		}
-		return sourceDocNew
+		return docNew
 	}
 }

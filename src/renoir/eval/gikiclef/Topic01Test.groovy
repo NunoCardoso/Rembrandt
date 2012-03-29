@@ -14,7 +14,7 @@ import renoir.bin.WriteRun
 import renoir.obj.*
 import renoir.rules.*
 import saskia.bin.Configuration
-import saskia.db.obj.RembrandtedDoc
+import saskia.db.obj.Doc
 import saskia.dbpedia.*
 import saskia.ontology.*
 
@@ -123,10 +123,10 @@ visitou	visitar	V	PS_IND	3S	0	FMV	0
 
 		// Add Wikipedia page id of Ernest Hemingway to the list of pages to visit.
 		// Get tagged version of Wikipedia pages of Ernest Hemingway
-		List<RembrandtedDoc> docs = RembrandtedDoc.getFromOriginalIDs(
+		List<Doc> docs = Doc.getFromOriginalIDs(
 				c.object.ne.wikipediaPage.keySet().toList())
 
-		log.info "Got RembrandtedDoc pages ${docs} for object:${c.object.ne}"
+		log.info "Got Doc pages ${docs} for object:${c.object.ne}"
 
 		// filter docs with a NE that matches EAT.
 		// if the EAT is a LOCAL, check ontology for partOf
@@ -151,7 +151,7 @@ visitou	visitar	V	PS_IND	3S	0	FMV	0
 		docs.each{d ->
 			log.debug "Getting NEs for doc $d..."
 
-			Document doc =reader.createDocument(d.rdoc_content)
+			Document doc =reader.createDocument(d.doc_content)
 
 			log.debug "done."
 			// check for NEs that match the EAT criteria

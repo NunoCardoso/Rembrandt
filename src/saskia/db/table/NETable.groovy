@@ -141,7 +141,7 @@ class NETable extends DBTable{
 	}
 
 	/** Get a NE from name and language.
-	 * This has no cache, since it's only used by ImportSelectedWikipediaDocument2SourceDocument.groovy
+	 * This has no cache, since it's only used by ImportSelectedWikipediaDocument.groovy
 	 * 
 	 * @param name NE string name
 	 * @param lang NE language
@@ -198,7 +198,7 @@ class NETable extends DBTable{
 	}
 
 	/** 
-	 * This function DOES use the cache, it's the main function used by RembrandtedDoc 
+	 * This function DOES use the cache, it's the main function used by Doc 
 	 * on syncing a tagged document to NE Pool 
 	 */
 	public NE getFromNameAndLangAndClassificationAndEntity(NEName nen, String lang,

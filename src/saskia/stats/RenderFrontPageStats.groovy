@@ -40,9 +40,8 @@ class RenderFrontPageStats {
 	 		s.append "<SCRIPT>bindAutoCompleteOnNESearch(\$('#ne'))</SCRIPT>" // force bind of  autocomplete
 	 		
 	 		s.append "<DIV ID='stats-main-count-div' class='stats-box'>\n"
-	 		s.append "<P>${i18n.statslabel['numbersourcedocs'][lang]}: "+docstats.getTotalNumberOfSourceDocs()+"</P>\n"
-			s.append "<P>${i18n.statslabel['numberrembrandteddocs'][lang]}: "+docstats.getTotalNumberOfRembrantedOKDocs()+"</P>\n"
-			s.append "<P>${i18n.statslabel['numbersyncdocs'][lang]}: "+docstats.getTotalNumberOfSyncedDocs()+"</P>\n"
+	 		s.append "<P>${i18n.statslabel['numberdocs'][lang]}: "+docstats.getTotalNumberOfDocs()+"</P>\n"
+			s.append "<P>${i18n.statslabel['numberrembrandteddocs'][lang]}: "+docstats.getTotalNumberOfTaggedDocs()+"</P>\n"
 	 		s.append "<P>${i18n.statslabel['oldestdoc'][lang]}: "+docstats.getOldestDoc()+"</P>\n"
 	 		s.append "<P>${i18n.statslabel['newestdoc'][lang]}: "+docstats.getNewestDoc()+"</P>\n"
 	 		s.append "<P>&nbsp;</P>"

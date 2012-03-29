@@ -27,8 +27,7 @@ import org.apache.log4j.Logger
 class SaskiaWebstore {
 
 	static SaskiaWebstore _this
-	static String VOLUME_SDOC = "sdoc"
-	static String VOLUME_RDOC = "rdoc"
+	static String VOLUME_DOC = "doc"
 	WebStore webstore
 	Map<String,Volume> volumes
 

@@ -186,8 +186,7 @@ public class CollectionMapping extends WebServiceRestletMapping {
 
 
 				Map m = collection.toMap()
-				m['number_sdocs'] = collection.getNumberOfSourceDocuments()
-				m['number_rdocs'] = collection.getNumberOfRembrandtedDocuments()
+				m['number_docs'] = collection.getNumberOfDocuments()
 
 				return sm.statusMessage(0,m)
 			}

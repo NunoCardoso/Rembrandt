@@ -1,5 +1,64 @@
-Suporte de mais ontologias (POWER)
 
+mexer nas tabelas doc (+doc_comment), patch (new), commit (new), job (-job_doc_type)
+alter table doc add column doc_comment text null after doc_latest_time_signature;
+alter table job drop column job_doc_type;
+alter table doc change column doc_version doc_version int(11) DEFAULT 0;
+Alterar webstore:
+
+SOURCE DOC -> DOC. REDOC fica OBSOLETO
+
+mv sdoc -> doc
+rm -rf rdoc
+mexer no webstore-conf.xml
+
+SDOC_COMMENT -> DOC_COMMENT, SDOC_WEBSTORE -> DOC_WEBSTORE (perco info!)
+
+update doc, source_doc set doc_comment = sdoc_comment where doc_id = sdoc_doc;
+update source_doc set sdoc_webstore = REPLACE(sdoc_webstore, "sdoc", "doc");
+update doc, source_doc set doc_webstore=sdoc_webstore where doc_id=sdoc_doc; 
+
+agatha:
+
+ select col_id, col_name AS COLLECTION, count(doc_proc) as TOTAL, count(if (doc_proc='OK',1,NULL)) as OK,count(if (doc_proc='KO', 1, NULL)) as KO, count(if (doc_sync='SO',1,NULL)) as SO, count(if (doc_sync='SD', 1, NULL)) as SD, count(if (doc_sync='SN', 1, NULL)) as SN, count(if(doc_latest_geo_signature IS NOT NULL, 1, NULL)) as GEO, count(if(doc_latest_time_signature IS NOT NULL, 1, NULL)) as TIME from doc, collection where doc_collection=col_id group by col_name order by col_id asc
+
+
++--------+--------------------------------------------+--------+--------+----+--------+-------+------+--------+--------+
+| col_id | COLLECTION                                 | TOTAL  | OK     | KO | SO     | SD    | SN   | GEO    | TIME   |
++--------+--------------------------------------------+--------+--------+----+--------+-------+------+--------+--------+
+|      1 | Notícias PT                                | 157125 | 157125 |  0 | 157125 |     0 |    0 |      0 |      0 | 
+|      2 | Wikipédia PT                               |   6555 |   6555 |  0 |   4361 |  2194 |    0 |      0 |      0 | 
+|      3 | Wikipédia EN                               |   3687 |   3687 |  0 |      0 |  1448 | 2238 |      0 |      0 | 
+|      4 | CD do Segundo HAREM                        |    129 |    129 |  0 |    129 |     0 |    0 |      0 |      0 | 
+|      5 | CHAVE PT                                   | 210381 | 210381 |  0 | 210381 |     0 |    0 | 210381 |      0 | 
+|      6 | CHAVE EN                                   | 169447 | 169447 |  0 | 169447 |     0 |    0 | 169447 |      0 | 
+|      7 | New York Times 2002-2005                   | 315371 | 315371 |  0 | 315371 |     0 |    0 | 315371 | 315371 | 
+|      8 | CD2 do Segundo HAREM                       |    129 |    129 |  0 |      0 |   129 |    0 |      0 |    129 | 
+|      9 | Público 94-95 e Folha de São Paulo 94-95   | 210734 | 210734 |  0 | 210734 |     0 |    0 | 210734 |      0 | 
+|     10 | Los Angeles Times 94 e Glasgow Herald 95   | 169471 | 169471 |  0 | 169471 |     0 |    0 | 169471 |      0 | 
+|     14 | Publico10                                  |  45666 |  45666 |  0 |      0 | 45666 |    0 |      0 |      0 | 
++--------+--------------------------------------------+--------+--------+----+--------+-------+------+--------+--------+
+
+ select col_id, col_name AS COLLECTION, count(sdoc_id) as TOTAL from source_doc, collection where sdoc_collection=col_id group by col_name order by col_id asc;
+
++--------+--------------------------------------------+---------+
+| col_id | COLLECTION                                 | TOTAL   |
++--------+--------------------------------------------+---------+
+|      1 | Notícias PT                                |  157682 | 
+|      2 | Wikipédia PT                               |  441120 | 
+|      3 | Wikipédia EN                               | 2628002 | 
+|      7 | New York Times 2002-2005                   |  315417 | 
+|      8 | CD2 do Segundo HAREM                       |     129 | 
+|      9 | Público 94-95 e Folha de São Paulo 94-95   |  210734 | 
+|     10 | Los Angeles Times 94 e Glasgow Herald 95   |  169471 | 
+|     13 | Pagico                                     |  575382 | 
+|     14 | Publico10                                  |   52107 | 
++--------+--------------------------------------------+---------+
+
+= = = = 
+
+
+
+Suporte de mais ontologias (POWER)
 Meter porta no MySQL como conf(?)
 Instruções instalação Windows
 pagelinks. sql demora muito.

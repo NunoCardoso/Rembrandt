@@ -43,8 +43,7 @@ class GenerateGeoSignatures  {
 
     GeoSignatureFactory gsf
     Configuration conf = Configuration.newInstance()
-	 int rembrandted_doc_pool_size = conf.getInt("saskia.imports.rembrandted_doc_pool_size",30)
-    String sync
+	 int doc_pool_size = conf.getInt("saskia.imports.doc_pool_size",30)
 
     public GenerateGeoSignatures() {
         status = [generated:0, skipped:0, failed:0]
@@ -71,25 +70,19 @@ class GenerateGeoSignatures  {
       	def stats = new DocStats(docs)
         stats.begin()
      
-		  RembrandtedDocTable rembrandtedDocTable = db.getDBTable("RembrandtedDocTable")
+		  DocTable docTable = db.getDBTable("DocTable")
    
-        for (int i=docs; i > 0; i -= rembrandted_doc_pool_size) {
+        for (int i=docs; i > 0; i -= doc_pool_size) {
              
-            int limit = (i > rembrandted_doc_pool_size ? rembrandted_doc_pool_size : i)
+            int limit = (i > doc_pool_size ? doc_pool_size : i)
             log.debug "Initial batch size: $docs Remaining: $i Next pool size: $limit"
             
             // NOT THREAD-SAFE!
 
-            Map docs 
-			if (sync == "pool") {
-				docs = rembrandtedDocTable.getBatchDocsAndNEsFromPoolToGenerateGeoSignatures(
+            Map docs = docTable.getBatchDocsAndNEsFromPoolToGenerateGeoSignatures(
 					collection, limit)
-			} else if (sync == "rdoc") {
-				docs = rembrandtedDocTable.getBatchDocsAndNEsFromRDOCToGenerateGeoSignatures(
-					collection, limit)
-			}
-			
-            log.debug "Got ${docs?.size()} RembrandtedDoc(s)."
+
+            log.debug "Got ${docs?.size()} Doc(s)."
                     
             // if it's null, then there's no more docs to process. Leave the loop.
             if (!docs) return status
@@ -109,7 +102,7 @@ class GenerateGeoSignatures  {
                     	 dgs_tag:tag
 							])
                     long dgs_new_id = dgs.addThisToDB()
-                    rembrandtedDocTable.addGeoSignatureIDtoDocID(dgs_new_id, doc_id)
+                    docTable.addGeoSignatureIDtoDocID(dgs_new_id, doc_id)
                     status.generated++
                                        
                 } catch(Exception e) {
@@ -135,7 +128,6 @@ class GenerateGeoSignatures  {
         Options o = new Options()
         o.addOption("db", true, "DB (main/test)")
         o.addOption("col", true, "target collection. Can be id or name")
-        o.addOption("sync", true, "Get NEs from RDOC or from Pool")
         o.addOption("docs", true, "number of docs in batch process")    
         o.addOption("help", false, "Gives this help information")
         
@@ -173,12 +165,6 @@ class GenerateGeoSignatures  {
 		ggs.setDocs(docs)
 		log.info "Docs: $docs "
 		
-		// --sync		
-		def sync = new SyncValidator()
-			.validate(cmd.getOptionValue("sync"), DEFAULT_SYNC)
-		ggs.setSync(sync)
-		log.info "Sync: sync "
-
 		ggs.prepare()
       ggs.generate()
       log.info "Done. Generated ${ggs.status.generated} geosignatures, skipped ${ggs.status.skipped} geosignatures."

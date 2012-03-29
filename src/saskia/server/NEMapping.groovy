@@ -81,7 +81,7 @@ public class NEMapping extends WebServiceRestletMapping {
 	   		if (par["POST"]["c3"] && par["POST"]["c3"] != "undefined" && par["POST"]["c3"] != "null") 
 	   			c3 = par["POST"]["c2"]
   
-	 			ServerMessage sm = new ServerMessage("AdminRembrandtedDocMapping", lang, bind, session, processlog)  
+	 			ServerMessage sm = new ServerMessage("AdminDocMapping", lang, bind, session, processlog)  
        
             /******************/
             /** 1.5 metadata **/

@@ -34,7 +34,6 @@ import saskia.db.obj.User
  */
 public class SaskiaServerApplication extends Application {
 
-	//RembrandtedDocument2PlainTextConverter r2t
 	Logger log = Logger.getLogger("SaskiaServerMain")
 	List<User> superusers
 	Configuration conf
@@ -48,17 +47,13 @@ public class SaskiaServerApplication extends Application {
 	public synchronized Restlet createRoot() {
 
 		Router router = new Router(this.context)
-		//  r2t = new RembrandtedDocument2PlainTextConverter()
 
 		AskSaskiaMapping askSaskiaMapping = new AskSaskiaMapping(db)
 		// askSaskiaMapping.attach(MediaType.TEXT_HTML, askSaskiaMapping.HTMLanswer)
 		askSaskiaMapping.attach(MediaType.APPLICATION_JSON, askSaskiaMapping.JSONanswer)
 
-		SourceDocMapping sdocMapping = new SourceDocMapping(db)
-		sdocMapping.attach(MediaType.APPLICATION_JSON, sdocMapping.JSONanswer)
-
-		RembrandtedDocMapping rdocMapping = new RembrandtedDocMapping(db)
-		rdocMapping.attach(MediaType.APPLICATION_JSON, rdocMapping.JSONanswer)
+		DocMapping docMapping = new DocMapping(db)
+		docMapping.attach(MediaType.APPLICATION_JSON, docMapping.JSONanswer)
 
 		NEMapping neMapping = new NEMapping(db)
 		neMapping.attach(MediaType.APPLICATION_JSON, neMapping.JSONanswer)
@@ -88,11 +83,8 @@ public class SaskiaServerApplication extends Application {
 		AdminStatsMapping adminStatsMapping = new AdminStatsMapping(db)
 		adminStatsMapping.attach(MediaType.APPLICATION_JSON, adminStatsMapping.JSONanswer)
 
-		AdminSourceDocMapping adminSourceDocMapping = new AdminSourceDocMapping(db)
-		adminSourceDocMapping.attach(MediaType.APPLICATION_JSON, adminSourceDocMapping.JSONanswer)
-
-		AdminRembrandtedDocMapping adminRembrandtedDocMapping = new AdminRembrandtedDocMapping(db)
-		adminRembrandtedDocMapping.attach(MediaType.APPLICATION_JSON, adminRembrandtedDocMapping.JSONanswer)
+		AdminDocMapping adminDocMapping = new AdminDocMapping(db)
+		adminDocMapping.attach(MediaType.APPLICATION_JSON, adminDocMapping.JSONanswer)
 
 		AdminNEMapping adminNEMapping = new AdminNEMapping(db)
 		adminNEMapping.attach(MediaType.APPLICATION_JSON, adminNEMapping.JSONanswer)
@@ -111,8 +103,7 @@ public class SaskiaServerApplication extends Application {
 
 		router.attach("/Saskia/ask", askSaskiaMapping)
 
-		router.attach("/Saskia/rdoc", rdocMapping)
-		router.attach("/Saskia/sdoc", sdocMapping)
+		router.attach("/Saskia/doc", docMapping)
 		router.attach("/Saskia/collection", collectionMapping)
 		router.attach("/Saskia/task", taskMapping)
 		router.attach("/Saskia/ne", neMapping)
@@ -123,8 +114,7 @@ public class SaskiaServerApplication extends Application {
 		router.attach("/Saskia/admin/task", adminTaskMapping)
 		router.attach("/Saskia/admin/user", adminUserMapping)
 		router.attach("/Saskia/admin/stats", adminStatsMapping)
-		router.attach("/Saskia/admin/sdoc", adminSourceDocMapping)
-		router.attach("/Saskia/admin/rdoc", adminRembrandtedDocMapping)
+		router.attach("/Saskia/admin/doc", adminDocMapping)
 		router.attach("/Saskia/admin/ne", adminNEMapping)
 		router.attach("/Saskia/admin/entity", adminEntityMapping)
 		router.attach("/Saskia/admin/geoscope", adminGeoscopeMapping)

@@ -63,7 +63,6 @@ class GenerateNEIndexForCollection extends IndexGenerator {
 	Map<String, Analyzer> analyzerMap
 	LgteBrokerStemAnalyzer analyzer
 	String indexdir
-	String sync
 	File filestats
 	Map stats
 
@@ -137,11 +136,10 @@ class GenerateNEIndexForCollection extends IndexGenerator {
 		"ne-EM-index"
 	]
 	// indexdir goes to ${rembrandt.home.dir}/index/col-X/
-	public GenerateNEIndexForCollection(Collection collection, String indexdir, String sync) {
+	public GenerateNEIndexForCollection(Collection collection, String indexdir) {
 		super()
 		this.collection=collection
 		this.indexdir=indexdir
-		this.sync = sync
 
 		analyzerMap = [:]
 		analyzerMap.put(conf.get("saskia.index.id_label","id"), new LgteNothingAnalyzer())
@@ -171,8 +169,8 @@ class GenerateNEIndexForCollection extends IndexGenerator {
 	}
 
 	public index() {
-		RembrandtedDocTable rembrandtedDocTable = collection
-			.getDBTable().getSaskiaDB().getDBTable("RembrandtedDocTable") 
+		DocTable docTable = collection
+			.getDBTable().getSaskiaDB().getDBTable("DocTable") 
 
 		DocStats docstats = new DocStats()
 		docstats.begin()
@@ -181,7 +179,7 @@ class GenerateNEIndexForCollection extends IndexGenerator {
 			log.debug "stats file does not exist. Creating one."
 			filestats.createNewFile()
 			log.info "Pre-analysing collection $collection, please wait."
-			stats['total'] = collection.getNumberOfRembrandtedDocuments()
+			stats['total'] = collection.getNumberOfDocuments()
 			stats['processed'] = 0
 		} else {
 			stats = readFile(filestats)
@@ -196,31 +194,24 @@ class GenerateNEIndexForCollection extends IndexGenerator {
 			int limit = (i > doc_pool_size ? doc_pool_size : i)
 			log.debug "Initial batch size: ${stats['total']} Remaining: $i Next pool size: $limit"
 
-			Map rdocs = [:]
-
-			/** IF SYNC = RDOC **/
-			if (sync == "rdoc") {
-				rdocs = rembrandtedDocTable.getBatchDocsAndNEsFromRDOCToGenerateNEIndex(collection, limit, stats["processed"])
-			} else if (sync == "pool") {
-				rdocs = rembrandtedDocTable.getBatchDocsAndNEsFromPoolToGenerateNEIndex(collection, limit, stats["processed"])
-			}
+			Map docs = docTable.getBatchDocsAndNEsFromPoolToGenerateNEIndex(collection, limit, stats["processed"])
 
 			// if it's null, then there's no more docs to process. Leave the loop.
-			if (!rdocs) {
+			if (!docs) {
 				log.info "DB returned no more docs, I guess I'm done."
 				return
 			}
 			docstats.beginBatchOfDocs(limit)
 
 			// ADDING STUFF TO INDEX
-			rdocs.each {rdoc_id, rdoc ->
+			docs.each {doc_id, doc ->
 				LgteDocumentWrapper ldoc = new LgteDocumentWrapper()
-				ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), rdoc.doc_original_id)
-				ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), rdoc.doc_id.toString())
-				log.trace "Wrote doc id ${rdoc.doc_original_id}."
+				ldoc.storeUtokenized(conf.get("saskia.index.id_label","id"), doc.doc_original_id)
+				ldoc.storeUtokenized(conf.get("saskia.index.docid_label","docid"), doc.doc_id.toString())
+				log.trace "Wrote doc id ${doc.doc_original_id}."
 
 				/*****  NEs in body ******/
-				rdoc.nes.each{ne ->
+				doc.nes.each{ne ->
 					String cat = (ne.category == null ? null : ne.category.nec_category)
 					String typ = (ne.type == null ? null : ne.type.net_type)
 					String sub = (ne.subtype == null ? null : ne.subtype.nes_subtype)
@@ -269,7 +260,6 @@ class GenerateNEIndexForCollection extends IndexGenerator {
 
 		o.addOption("db", true, "database (main/test)")
 		o.addOption("col", true, "Collection name or ID")
-		o.addOption("sync", true, "Where will we get the NEs - rdoc or pool. rdoc parses the RembrandtedDoc to get NEs, pool will get NEs from DB")
 		o.addOption("help", false, "Gives this help information")
 		o.addOption("indexdir", false, "directory of the index")
 
@@ -284,16 +274,12 @@ class GenerateNEIndexForCollection extends IndexGenerator {
 
 	 	String DEFAULT_COLLECTION_NAME = "CD do Segundo HAREM"
 	 	String DEFAULT_DB_NAME = "main"
-	 	String DEFAULT_SYNC = "pool"
 
 		SaskiaDB db = new DBValidator()
 			.validate(cmd.getOptionValue("db"), DEFAULT_DB_NAME)
 	
 		Collection collection = new CollectionValidator(db)
 			.validate(cmd.getOptionValue("col"), DEFAULT_COLLECTION_NAME)
-
-		String sync = new SyncValidator()
-			.validate(cmd.getOptionValue("sync"), DEFAULT_SYNC)
 
 		String default_indexdir = IndexDirectoryValidator.buildIndexDirectory(
 			 conf, collection, NEIndexDirLabel)
@@ -305,7 +291,7 @@ class GenerateNEIndexForCollection extends IndexGenerator {
 		if (!f.exists()) f.mkdirs()
 
 		GenerateNEIndexForCollection indexer = new GenerateNEIndexForCollection(
-				collection, indexdir, sync)
+				collection, indexdir)
 
 		indexer.index()
 		println indexer.statusMessage()

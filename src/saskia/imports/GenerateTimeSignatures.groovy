@@ -43,8 +43,7 @@ class GenerateTimeSignatures {
 	
     TimeSignatureFactory tsf
     Configuration conf = Configuration.newInstance()
-	 int rembrandted_doc_pool_size = conf.getInt("saskia.imports.rembrandted_doc_pool_size",30)
-    String sync
+	 int doc_pool_size = conf.getInt("saskia.imports.doc_pool_size",30)
 
     public GenerateTimeSignatures() {
         status = [generated:0, skipped:0, failed:0] 
@@ -70,22 +69,17 @@ class GenerateTimeSignatures {
         def stats = new DocStats(docs)
         stats.begin()
         
-		  RembrandtedDocTable rembrandtedDocTable = db.getDBTable("RembrandtedDocTable")
-        for (int i=docs; i > 0; i -= rembrandted_doc_pool_size) {
+		DocTable docTable = db.getDBTable("DocTable")
+        for (int i=docs; i > 0; i -= doc_pool_size) {
              
-            int limit = (i > rembrandted_doc_pool_size ? rembrandted_doc_pool_size : i)
+            int limit = (i > doc_pool_size ? doc_pool_size : i)
             log.debug "Initial batch size: $docs Remaining: $i Next pool size: $limit"
             
             // NOT THREAD-SAFE!
-            Map docs 
-			if (sync == "pool") {
-				docs = rembrandtedDocTable.getBatchDocsAndNEsFromPoolToGenerateTimeSignatures(
+            Map docs = docTable.getBatchDocsAndNEsFromPoolToGenerateTimeSignatures(
 					collection, limit)
-			} else if (sync == "rdoc") {
-				docs = rembrandtedDocTable.getBatchDocsAndNEsFromRDOCToGenerateTimeSignatures(
-					collection, limit)
-			}
-			log.debug "Got ${docs?.size()} RembrandtedDoc(s)."
+					
+			log.debug "Got ${docs?.size()} Doc(s)."
                     
             // if it's null, then there's no more docs to process. Leave the loop.
             if (!docs) return status
@@ -105,7 +99,7 @@ class GenerateTimeSignatures {
                     	  dts_tag:tag
 							])
                     long dts_new_id = dts.addThisToDB()
-                    rembrandtedDocTable.addTimeSignatureIDtoDocID(dts_new_id, doc_id)
+                    docTable.addTimeSignatureIDtoDocID(dts_new_id, doc_id)
                     status.generated++
                                        
                 } catch(Exception e) {
@@ -131,7 +125,6 @@ class GenerateTimeSignatures {
         Options o = new Options()
         o.addOption("db", true, "DB (main/test)")
         o.addOption("col", true, "target collection. Can be id or name")
-        o.addOption("sync", true, "Get NEs from RDOC or from Pool")
         o.addOption("docs", true, "number of docs in batch process")    
         o.addOption("help", false, "Gives this help information")
         
@@ -169,13 +162,7 @@ class GenerateTimeSignatures {
 			.validate(cmd.getOptionValue("docs"), DEFAULT_DOCS)
 		gts.setDocs(docs)
 		log.info "Docs: $docs "
-		
-		// --sync		
-		def sync = new SyncValidator()
-		.validate(cmd.getOptionValue("sync"), DEFAULT_SYNC)
-		gts.setSync(sync)
-		log.info "Sync: sync "
-		
+				
       gts.prepare()
       gts.generate()
       log.info "Done. Generated ${gts.status.generated} geosignatures, skipped ${gts.status.skipped} geosignatures."

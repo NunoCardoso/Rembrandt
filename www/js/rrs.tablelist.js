@@ -103,7 +103,7 @@ function createPagerNavigation(options) {
 		l_filter_by : i18n['filterby'][lang],
 		l_having	: i18n['having'][lang],
 		l_go		: i18n['go'][lang]
-	} // only relevant for sdoc, rdoc, etc
+	} // only relevant for doc, etc
 
 	data.action = (!_.isUndefined(options.action) ? options.action : "list")
 	data.render = (!_.isUndefined(options.render) ? options.render : "")	

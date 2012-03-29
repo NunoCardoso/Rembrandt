@@ -152,7 +152,7 @@ function generateSearchResultShowDIV(searchresult, su, role, options) {
 		if (options.maps) s += "<A NAME='pos"+ii+"'><IMG style='float:left;margin:4px;' SRC='img/maps/iconr"+ii+".png'>"
 		
 		// snippet title
-		s += "<DIV class='rrs-searchresult-snippet-title'><A CLASS='RDOC_SHOW'ID='"+res[i]['doc_id']+"' "		
+		s += "<DIV class='rrs-searchresult-snippet-title'><A CLASS='DOC_SHOW'ID='"+res[i]['doc_id']+"' "		
 		s += " DOC_ORIGINAL_ID='"+res[i]['doc_original_id']+"' TITLE='"+title+"' ROLE='"+role+"' HREF='#'> ";
 		if (title == "") {s += res[i]['doc_original_id']} else {s += title}
 		s += "</A></DIV>\n";
@@ -163,11 +163,11 @@ function generateSearchResultShowDIV(searchresult, su, role, options) {
 		// get only the date, not the time - split by the '\s'
 		s += res[i]['date'].split(" ")[0];
 		// details on doc
-		s += " | <A CLASS='RDOC_SHOW' ID='"+res[i]['doc_id']+"' DOC_ORIGINAL_ID='"+res[i]['doc_original_id'];
+		s += " | <A CLASS='DOC_SHOW' ID='"+res[i]['doc_id']+"' DOC_ORIGINAL_ID='"+res[i]['doc_original_id'];
 		s += "' TITLE='"+title+"' ROLE='"+role+"' HREF='#'> ";
 		s += i18n["show"][lang] + "</A>\n";
 		
-		s += " | <A CLASS='RDOC_METADATA' ID='"+res[i]['doc_id']+"' DOC_ORIGINAL_ID='"+res[i]['doc_original_id'];
+		s += " | <A CLASS='DOC_METADATA' ID='"+res[i]['doc_id']+"' DOC_ORIGINAL_ID='"+res[i]['doc_original_id'];
 		s += "' TITLE='"+title+"' ROLE='"+role+"' HREF='#'> ";
 		s += i18n["detail"][lang]+"</A>\n";
 		// info on doc

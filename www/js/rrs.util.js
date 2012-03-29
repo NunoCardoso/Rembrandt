@@ -11,8 +11,7 @@ _.extend (Rembrandt.urls, {
     restlet_renoir_search_url 	: "/Renoir/search",
     restlet_saskia_stats_url 	: "/Saskia/stats",
     restlet_saskia_collection_url:"/Saskia/collection",
-    restlet_saskia_rdoc_url 	: "/Saskia/rdoc",
-    restlet_saskia_sdoc_url 	: "/Saskia/sdoc",
+    restlet_saskia_doc_url 	    : "/Saskia/doc",
     restlet_saskia_ne_url 		: "/Saskia/ne",
     restlet_suggestion_url 		: "/Renoir/suggest",
     restlet_dbosuggestion_url 	: "/Renoir/dbosuggest",
@@ -24,7 +23,6 @@ _.extend (Rembrandt.urls, {
 _.extend (Rembrandt.options, {
 	selectLang	: {"pt":"Português","en":"Inglês"},
 	selectProc	: {"OK":"READY","KO":"NOT_READY"},
-	selectSync	: {"SO":"SO","SD":"SD","SN":"SN"},
 	selectEdit	: {"UL":"UNLOCKED","LK":"LOCKED"}
 });
 

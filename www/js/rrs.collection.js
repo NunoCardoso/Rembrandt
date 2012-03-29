@@ -28,15 +28,9 @@ Rembrandt.Collection = (function ($) {
 			Rembrandt.Collection.refreshStats(this);
 		})
 		
-		$('A.COLLECTION_RDOC_LIST').live("click", function(ev, ui) {
+		$('A.COLLECTION_DOC_LIST').live("click", function(ev, ui) {
 			ev.preventDefault();
-			Rembrandt.Collection.listRembrandtedDocs(this);
-		})
-		
-		// List source docs
-		$('A.COLLECTION_SDOC_LIST').live("click", function(ev, ui) {
-			ev.preventDefault();
-			Rembrandt.Collection.listSourceDocs(this);
+			Rembrandt.Collection.listDocs(this);
 		})
 		
 		$('A.COLLECTION_TASK_LIST').live("click", function(ev, ui) {
@@ -147,7 +141,7 @@ Rembrandt.Collection = (function ($) {
 		})
 	},
 	
-	listRembrandtedDocs = function (context) {
+	listDocs = function (context) {
 
 		var a_clicked = context,
 		    col_id = $(a_clicked).attr("id"),
@@ -162,36 +156,12 @@ Rembrandt.Collection = (function ($) {
 			"role" 		:role,
 			"slide"		: getSlideOrientationFromLink(a_clicked),
 			"ajax"		:true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(role, "rdoc"),
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(role, "doc"),
 			"postdata":"do=list&ci="+col_id+"&l=10&o=0&lg="+lang+"&api_key="+api_key,
-			"divRender" :Rembrandt.Collection.generateCollectionRdocListDIV, 
+			"divRender" :Rembrandt.Collection.generateCollectionDocListDIV, 
 			"divRenderOptions":{},
 			"sidemenu":"collection", 
 			// only update col_id, no col_name -> it will change side menu header. Leave that to COLLECTION_SHOW
-			"sidemenuoptions":{"id":col_id}//, "col_name":title}
-		})	
-	},
-
-	listSourceDocs = function (context) {
-
-		var a_clicked = context,
-		    col_id = $(a_clicked).attr("id"),
-		    api_key = Rembrandt.Util.getApiKey(),
-		    title = ($(a_clicked).attr("title") ? $(a_clicked).attr("title") : $(a_clicked).text()),
-			role = $(a_clicked).attr('ROLE'),
-			target = $(a_clicked).attr("TARGET");
-
-		showSlidableDIV({
-			"title" 	: title,
-			"target" 	:target,
-			"role" 		:role,
-			"slide"		: getSlideOrientationFromLink(a_clicked),
-			"ajax"		:true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(role, "sdoc"),
-			"postdata" 	:"do=list&ci="+col_id+"&l=10&o=0&lg="+lang+	"&api_key="+api_key,
-			"divRender" :Rembrandt.Collection.generateCollectionSdocListDIV, 
-			"divRenderOptions":{},
-			"sidemenu":"collection", 
 			"sidemenuoptions":{"id":col_id}//, "col_name":title}
 		})	
 	},
@@ -213,7 +183,7 @@ Rembrandt.Collection = (function ($) {
 			"ajax"		:true,
 			"restlet_url" 	:Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "task"),
 			"postdata"	:"do=list&ci="+col_id+"&l=10&o=0&lg="+lang+	"&api_key="+api_key,
-			"divRender" :Rembrandt.Collection.generateCollectionSdocListDIV, 
+			"divRender" :Rembrandt.Collection.generateCollectionTaskListDIV, 
 			"divRenderOptions":{},
 			"sidemenu" 	:"collection", 
 			"sidemenuoptions":{"id":col_id}//, "col_name":title}
@@ -448,8 +418,8 @@ Rembrandt.Collection = (function ($) {
 			"collang"		: col['col_lang'], 
 			"colcomment"	: col['col_comment'],
 			"colpermission"	: col['col_permission'],
-			"number_sdocs"	: col['number_sdocs'],
-			"number_rdocs"	: col['number_rdocs'],
+			"number_docs"	: col['number_docs'],
+			"number_tagged_docs"	: col['number_tagged_docs'],
 			"number_tasks"	: 0,
 			"s_colname"		: Rembrandt.Util.shortenTitle(col['col_name']),
 			"context-show"	: i18n[context+'-show'][lang],
@@ -458,8 +428,7 @@ Rembrandt.Collection = (function ($) {
 			"l_lang"		: i18n['lang'][lang],
 			"l_comment"		: i18n['comment'][lang],
 			"l_permissions" : i18n['permissions'][lang],
-			"l_sdocs"		: i18n['sdocs'][lang],
-			"l_rdocs"		: i18n['rdocs'][lang],
+			"l_docs"		: i18n['docs'][lang],
 			"l_tasks"		: i18n['tasks'][lang],
 			"create_new_sdoc": i18n['create_new_sdoc'][lang],
 			"create_new_context" : i18n['create_new_'+context][lang],
@@ -513,16 +482,10 @@ Rembrandt.Collection = (function ($) {
 			{{/canadmin}}\
 			<TR>\
 				<TD>\
-					<A HREF='#' CLASS='COLLECTION_SDOC_LIST slide-vertically-link' TARGET='rrs-collection-sdoc-list-{{id}}' ID='{{id}}' ROLE='{{role}}'>\
-					{{l_sdocs}}</A>:\
+					<A HREF='#' CLASS='COLLECTION_DOC_LIST slide-vertically-link' TARGET='rrs-collection-doc-list-{{id}}' ID='{{id}}' ROLE='{{role}}'>\
+					{{l_docs}}</A>:\
 				</TD>\
-				<TD>{{number_sdocs}}</TD>\
-			</TR><TR>\
-				<TD>\
-					<A HREF='#' CLASS='COLLECTION_RDOC_LIST slide-vertically-link' TARGET='rrs-collection-rdoc-list-{{id}}' ID='{{id}}' ROLE='{{role}}'>\
-					{{l_rdocs}}</A>:\
-				</TD>\
-				<TD>{{number_rdocs}}</TD>\
+				<TD>{{number_docs}}</TD>\
 			</TR>\
 			{{#canadmin}}\
 				<TR>\
@@ -536,19 +499,19 @@ Rembrandt.Collection = (function ($) {
 		</TABLE>\
 		<A HREF='#' CLASS='main-button'><SPAN>{{stats}}</SPAN></A>\
 		{{#canadmin}}\
-			<A HREF='#' CLASS='SDOC_CREATE main-button' ID='{{id}}' TARGET='rrs-collection-sdoc-create-{{id}}' \
-			TITLE='{{create_new_sdoc}}' ROLE='{{role}}'>\
-				<SPAN>{{create_new_sdoc}}</SPAN>\
+			<A HREF='#' CLASS='DOC_CREATE main-button' ID='{{id}}' TARGET='rrs-collection-doc-create-{{id}}' \
+			TITLE='{{create_new_doc}}' ROLE='{{role}}'>\
+				<SPAN>{{create_new_doc}}</SPAN>\
 			</A>\
-			<A HREF='#' CLASS='SDOC_IMPORT main-button' ID='{{id}}' TARGET='rrs-collection-sdoc-import-{{id}}' \
-			TITLE='{{l_sdoc_import}}' ROLE='{{role}}'>\
-				<SPAN>{{l_sdoc_import}}</SPAN>\
+			<A HREF='#' CLASS='DOC_IMPORT main-button' ID='{{id}}' TARGET='rrs-collection-doc-import-{{id}}' \
+			TITLE='{{l_doc_import}}' ROLE='{{role}}'>\
+				<SPAN>{{l_doc_import}}</SPAN>\
 			</A>\
-			<A HREF='#' CLASS='SDOC_EXPORT main-button' ID='{{id}}' TARGET='rrs-collection-sdoc-export-{{id}}' \
-			TITLE='{{l_sdoc_export}}' ROLE='{{role}}'>\
-				<SPAN>{{l_sdoc_export}}</SPAN>\
+			<A HREF='#' CLASS='DOC_EXPORT main-button' ID='{{id}}' TARGET='rrs-collection-doc-export-{{id}}' \
+			TITLE='{{l_doc_export}}' ROLE='{{role}}'>\
+				<SPAN>{{l_doc_export}}</SPAN>\
 			</A>\
-			<A HREF='#' CLASS='SDOC_DELETE main-button' ID='{{id}}' TITLE='{{delete}}' ROLE='{{role}}'>\
+			<A HREF='#' CLASS='DOC_DELETE main-button' ID='{{id}}' TITLE='{{delete}}' ROLE='{{role}}'>\
 				<SPAN>{{delete}}...</SPAN>\
 			</A>\
 		{{/canadmin}}\
@@ -557,123 +520,10 @@ Rembrandt.Collection = (function ($) {
 	
 		return Mustache.to_html(template, data);
 	},
-	
-	/** fill source doc info in page */
-	generateCollectionSdocListDIV = function(response, su, role, options) {
-
-		var context = "sdoc"
-		var res = response['result']
-		var perms = response['perms']
-		var col_id = response['col_id']
-		var canadmin = (su || perms['uoc_can_admin'])
-		var editinplace = ( canadmin ? "editinplace" : "")
-	
-		// newdiv
-		// keep rrs-collection prefix so that collection sub-menu pops up
-	
-		var newdiv = $("<DIV ID='rrs-collection-sdoc-list-"+col_id+"' CLASS='main-slidable-div' \
-	 	TITLE='"+i18n[context+'_list'][lang]+"' STYLE='overflow:auto;'></DIV>")
-	
-		// Set pageable area for paging reposition
-		var t = "<DIV CLASS='rrs-pageable'>" 
-	
-		// pager
-		t += createPagerNavigation({
-			"context":context,
-			"contexts":"sdocs", 
-			"response":response,
-			"role":role, 
-			"allowedSearchableFields":{
-				"sdoc_id":i18n['id'][lang],
-	  			"sdoc_original_id":i18n['originalid'][lang],
-	  			"sdoc_webstore":i18n['webstore'][lang], 
-	  			"sdoc_lang":i18n['lang'][lang], 
-	  			"sdoc_doc":i18n['rdoc'][lang],
-	  			"sdoc_comment":i18n['comment'][lang], 
-	  			"sdoc_proc":i18n['processable'][lang]
-			},
-			'render':"Rembrandt.Collection.generateCollectionSdocListDIV"
-		})
-	
-		// buttons
-		t += "<DIV CLASS='rrs-buttonrow'>"
-		if (canadmin) {
-			t += "<A HREF='#' CLASS='"+context.toUpperCase()+"_CREATE main-button' ID='"+col_id+"' "
-			t += "ROLE='"+role+"'><SPAN>"
-			t += i18n['create_new_'+context][lang]+"</SPAN></A>"
-		}
-		t += "</DIV>"
-
-	// table
-		t += "<DIV>"
-		t += "<TABLE ID='rrs-collection-sdoc-list-table' CLASS='tablesorter' >"
-		t += "<THEAD><TR><TD><INPUT TYPE='CHECKBOX' CLASS='main-checkbox'></TD>"
-		t += "<TH>"+i18n['id'][lang]+"</TH>";
-		t += "<TH>"+i18n['originalid'][lang]+"</TH>"
-		t += "<TH>"+i18n['webstore'][lang]+"</TH>";
-		t += "<TH>"+i18n['lang'][lang]+"</TH>";
-		t += "<TH>"+i18n['rdoc'][lang]+"</TH>";
-		t += "<TH>"+i18n['comment'][lang]+"</TH>";
-		t += "<TH>"+i18n['processable'][lang]+"</TH>";
-		if (canadmin) {t += "<TD></TD>";}
-		t += "</TR></THEAD><TBODY>"
-	
-		for(i in res) {
-		
-			var id = res[i]['sdoc_id']
-			
-			t += "<TR><TD><INPUT TYPE='CHECKBOX' CLASS='sec-checkbox'></TD>"
-			t += "<TH><A CLASS='"+context.toUpperCase()+"_SHOW' ID='"+id+"' "
-			t += "TARGET='rrs-"+context+"-show-"+id+"' TITLE='"+res[i]['sdoc_original_id']
-			t += "' HREF='#' ROLE='"+role+"'>"+id+"</A></TH>"
-		
-			t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_original_id' ID='"+id+"' "
-			t += "CLASS='"+editinplace+" textfield'>"+res[i]['sdoc_original_id']+"</DIV></TD>"	
-			t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_webstore' ID='"+id+"' "
-			t += "CLASS='"+editinplace+" textfield '>"+res[i]['sdoc_webstore']+"</DIV></TD>"	
-			t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_lang' ID='"+id+"' "
-			t += "CLASS='"+editinplace+" selectfield lang'>"+res[i]['sdoc_lang']+"</DIV></TD>"	
-			t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_doc' ID='"+id+"' "
-			t += "CLASS='"+editinplace+" textfield'>"+res[i]['sdoc_doc']+"</DIV></TD>"	
-			t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_comment' ID='"+id+"' "
-			t += "CLASS='"+editinplace+" textarea'>"+(res[i]['sdoc_comment'] != null ? res[i]['sdoc_comment'] : "")+"</DIV></TD>"
-			t += "<TD><DIV CONTEXT=''"+context+"'  COL='sdoc_proc' ID='"+id+"' "
-			t += "CLASS='"+editinplace+" selectfield proc'>"+res[i]['sdoc_proc']+"</DIV></TD>"		
-			if (canadmin) {
-				t += "<TD><DIV><A HREF='#' ID='"+id+"' CLASS='"+context.toUpperCase()+"_DELETE main-button' "
-				t += "ROLE='"+role+"' TITLE='"+res[i]['sdoc_original_id']+"'>"
-				t += i18n['delete'][lang]+"</A></DIV></TD>";
-			}
-			t += "</TR>"
-			
-		}
-		t += "<TFOOT><TR><TD><INPUT TYPE='CHECKBOX' CLASS='main-checkbox'></TD>"
-		t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_id' "
-		t += "CLASS='"+editinplace+" textfield group'></DIV></TD>"
-		t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_original_id' "
-		t += "CLASS='"+editinplace+" textfield group'></DIV></TD>"
-		t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_webstore' "
-		t += "CLASS='"+editinplace+" textfield group'></DIV></TD>"
-		t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_lang' "
-		t += "CLASS='"+editinplace+" selectfield lang group'></DIV></TD>"
-		t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_doc' "
-		t += "CLASS='"+editinplace+" textfield group'></DIV></TD>"
-		t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_comment' "
-		t += "CLASS='"+editinplace+" textarea group'></DIV></TD>"
-		t += "<TD><DIV CONTEXT='"+context+"'  COL='sdoc_proc' "
-		t += "CLASS='"+editinplace+" selectfield group proc'></DIV></TD>"
-		if (canadmin) {t += "<TD></TD>";}
-		t += "</TR></TFOOT>"	
-		t += "</TABLE>"
-		t += "</DIV></DIV>"
-	
-		newdiv.append(t)
-		return newdiv
-	},
 
 	/** fill tagged doc info in page */
-	generateCollectionRdocListDIV = function(response, su, role, options) {
-		var context = "rdoc"
+	generateCollectionDocListDIV = function(response, su, role, options) {
+		var context = "doc"
 		var res = response['result']
 		var perms = response['perms']
 		var col_id = response['col_id']
@@ -683,7 +533,7 @@ Rembrandt.Collection = (function ($) {
 	// newdiv
 	// keep rrs-collection prefix so that collection sub-menu pops up
 	
-	var newdiv = $("<DIV ID='rrs-collection-rdoc-list-"+col_id+"' CLASS='main-slidable-div' \
+	var newdiv = $("<DIV ID='rrs-collection-doc-list-"+col_id+"' CLASS='main-slidable-div' \
  TITLE='"+i18n[context+'_list'][lang]+"' STYLE='overflow:auto;'></DIV>")
 	
 	// Set pageable area for paging reposition
@@ -692,7 +542,7 @@ Rembrandt.Collection = (function ($) {
 	// pager
 		t += createPagerNavigation({
 		"context":context,
-		"contexts":"rdocs", 
+		"contexts":"docs", 
 		"response":response,
 		"role":role, 
 		"allowedSearchableFields":{
@@ -706,7 +556,7 @@ Rembrandt.Collection = (function ($) {
 	  		"doc_proc":i18n['processable'][lang],
 	  		"doc_sync":i18n['syncable'][lang]
 		},
-		'render':"Rembrandt.Collection.generateCollectionRdocListDIV"
+		'render':"Rembrandt.Collection.generateCollectionDocListDIV"
 		})
 	
 			
@@ -716,7 +566,7 @@ Rembrandt.Collection = (function ($) {
 
 	// table
 	t += "<DIV>"
-	t += "<TABLE ID='rrs-collection-rdoc-list-table' CLASS='tablesorter' >"
+	t += "<TABLE ID='rrs-collection-doc-list-table' CLASS='tablesorter' >"
 	t += "<THEAD><TR><TD><INPUT TYPE='CHECKBOX' CLASS='main-checkbox'></TD>"
 	t += "<TH>"+i18n['id'][lang]+"</TH>";
 	t += "<TH>"+i18n['originalid'][lang]+"</TH>"
@@ -1000,14 +850,12 @@ Rembrandt.Collection = (function ($) {
 		"deleteCollection": deleteCollection,
 		"listCollections" : listCollections,
 		"refreshStats" : refreshStats,
-		"listRembrandtedDocs": listRembrandtedDocs,
-		"listSourceDocs": listSourceDocs, 
+		"listDocs": listDocs, 
 		"listTasks": listTasks,	
 		"showCollection": showCollection,
 		"generateCollectionListDIV":  generateCollectionListDIV,
 		"generateCollectionShowDIV" : generateCollectionShowDIV,
-		"generateCollectionSdocListDIV" : generateCollectionSdocListDIV,
-		"generateCollectionRdocListDIV" : generateCollectionRdocListDIV, 
+		"generateCollectionDocListDIV" : generateCollectionDocListDIV, 
 		"modalCollectionCreate" : modalCollectionCreate,
 		"modalCollectionDelete" : modalCollectionDelete
 	};

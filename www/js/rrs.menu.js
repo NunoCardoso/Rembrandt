@@ -178,17 +178,17 @@ function addSubmeuOnSideMenu(object, role) {
 			"</DIV>\n</DIV>\n</DIV>\n");
 		break;
 		
-		case "rdoc": 
-				$('#main-side-menu').append("<DIV ID='main-side-menu-section-rdoc'"+ 
+		case "doc": 
+				$('#main-side-menu').append("<DIV ID='main-side-menu-section-doc'"+ 
 			"	CLASS='main-side-menu-section' style='display:none'>\n" +
 			"<DIV CLASS='main-side-menu-section-header'><A HREF='#'>"+i18n['document'][lang]+"</A>\n"+ 
 			"</DIV>\n<DIV CLASS='main-side-menu-section-body'>\n"+
 			"<DIV CLASS='main-side-menu-section-body-element'>\n"+
-			"<A CLASS='RDOC_SHOW slide-vertically-link' HREF='#' TARGET='' ROLE='"+role+"'>"+
+			"<A CLASS='DOC_SHOW slide-vertically-link' HREF='#' TARGET='' ROLE='"+role+"'>"+
 					i18n['content'][lang]+"</A>"+
 			"</DIV>\n"+
 			"<DIV CLASS='main-side-menu-section-body-element'>\n"+
-			"<A CLASS='RDOC_METADATA slide-vertically-link' HREF='#' TARGET='' ROLE='"+role+"'>"+
+			"<A CLASS='DOC_METADATA slide-vertically-link' HREF='#' TARGET='' ROLE='"+role+"'>"+
 				i18n['metadata'][lang]+"</A>"+
 			"</DIV>\n</DIV>\n</DIV>\n");
 		break;
@@ -202,11 +202,8 @@ function addSubmeuOnSideMenu(object, role) {
 				"<A HREF='#' CLASS='COLLECTION_SHOW slide-vertically-link' TARGET='' ROLE='"+role+"'>"+
 					i18n["collection-show"][lang]+"</A></DIV>"+
 				"<DIV CLASS='main-side-menu-section-body'> <DIV CLASS='main-side-menu-section-body-element'>"+
-				"<A HREF='#' CLASS='COLLECTION_SDOC_LIST slide-vertically-link' TARGET='' ROLE='"+role+"'>"+
-					i18n["sdocs"][lang]+"</A></DIV>"+
-				"<DIV CLASS='main-side-menu-section-body'> <DIV CLASS='main-side-menu-section-body-element'>"+
-				"<A HREF='#' CLASS='COLLECTION_RDOC_LIST slide-vertically-link' TARGET='' ROLE='"+role+"'>"+
-					i18n["rdocs"][lang]+"</A></DIV>"+
+				"<A HREF='#' CLASS='COLLECTION_DOC_LIST slide-vertically-link' TARGET='' ROLE='"+role+"'>"+
+					i18n["docs"][lang]+"</A></DIV>"+
 				( (role == "admin" || role == "col-admin") ? "<DIV CLASS='main-side-menu-section-body'> <DIV CLASS='main-side-menu-section-body-element'>"+
 				"<A HREF='#' CLASS='COLLECTION_TASK_LIST slide-vertically-link' TARGET='' ROLE='"+role+"'>"+
 					i18n["tasks"][lang]+"</A></DIV>" : "")+
@@ -230,8 +227,8 @@ function configureSubmenu(submenu, role, options) {
 		$("DIV.main-side-menu-section-body-element A.SEARCHRESULT_EXPLANATION", submenu).attr("TARGET","rrs-searchresult-explanation-"+id);
 		
 	
-	}	// RDOC
-	else if (submenu.attr('id') == "main-side-menu-section-rdoc") {
+	}	// DOC
+	else if (submenu.attr('id') == "main-side-menu-section-doc") {
 
 		var links = $("DIV.main-side-menu-section-body-element A", submenu)
 		var id = options['id']
@@ -240,8 +237,8 @@ function configureSubmenu(submenu, role, options) {
 		links.attr("TITLE",options.title);
 		links.attr("ROLE",role);
 	
-		$("DIV.main-side-menu-section-body-element A.RDOC_SHOW", submenu).attr("TARGET","rrs-rdoc-show-"+id);
-		$("DIV.main-side-menu-section-body-element A.RDOC_METADATA", submenu).attr("TARGET","rrs-rdoc-metadata-"+id);
+		$("DIV.main-side-menu-section-body-element A.DOC_SHOW", submenu).attr("TARGET","rrs-doc-show-"+id);
+		$("DIV.main-side-menu-section-body-element A.DOC_METADATA", submenu).attr("TARGET","rrs-doc-metadata-"+id);
 		
 	// COLLECTION	
 	
@@ -256,8 +253,7 @@ function configureSubmenu(submenu, role, options) {
 		if (options.col_name) links.attr("TITLE", options.col_name);
 		links.attr("ROLE",role);
 		$("DIV.main-side-menu-section-body-element A.COLLECTION_SHOW", submenu).attr("TARGET","rrs-collection-show-"+id);
-		$("DIV.main-side-menu-section-body-element A.COLLECTION_SDOC_LIST", submenu).attr("TARGET","rrs-collection-sdoc-list-"+id);
-		$("DIV.main-side-menu-section-body-element A.COLLECTION_RDOC_LIST", submenu).attr("TARGET","rrs-collection-rdoc-list-"+id);
+		$("DIV.main-side-menu-section-body-element A.COLLECTION_DOC_LIST", submenu).attr("TARGET","rrs-collection-doc-list-"+id);
 		if (role == "admin" || role == "col-admin") {
 			$("DIV.main-side-menu-section-body-element A.COLLECTION_TASK_LIST", submenu).attr("TARGET","rrs-collection-task-list-"+id);
 		}
@@ -350,7 +346,7 @@ function callbackHorizontalSlide(divtohide, divtoshow) {
 	var divtohideitem = $(divtohide).attr("id").match(/rrs-([^-]+)-/)[1]
 	var divtoshowitem = $(divtoshow).attr("id").match(/rrs-([^-]+)-/)[1]
 		
-	// iterate through all side menus, check if its main object (rdoc, collection, etc) 
+	// iterate through all side menus, check if its main object (doc, collection, etc) 
 	// matches any of the divs	
 	$("DIV.main-side-menu-section").each(function(index, item) {
 		var id = $(item).attr("id"),
@@ -374,7 +370,7 @@ function callbackVerticalSlide(divtohide, newdiv) {
 	//reviewSideMenuMakeActiveFor($("#main-side-menu-section-search-results"), newdiv.attr("id"))
 	// etc... 
 	
-	// so, let's collect the main object (rdoc, collection, etc) and use it. 
+	// so, let's collect the main object (doc, collection, etc) and use it. 
 	// march returns array, 0 is the whole pattern, 1 is the () pattern
 	var item = $(newdiv).attr("id").match(/rrs-([^-]+)-/)[1]
 	reviewSideMenuMakeActiveFor($("#main-side-menu-section-"+item), $(newdiv).attr("id"))

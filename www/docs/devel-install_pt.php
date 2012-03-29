@@ -203,15 +203,14 @@ local volume servers up: (volume ids)
 Não há volumes, há que os criar: um para os documentos fonte, outro para os documentos anotados. Para tal, escreva os comandos:
 
 <PRE>
-webstore -m sdoc
-webstore -m rdoc
+webstore -m doc
 </PRE>
 
 <P>Agora lance os volumes (importante: o webstore TEM de ter o webstore-conf.xml configurado com a variável de ambiente WEBSTORE_CONFIG_XML definida). Se escrever 'webstore', deverá ver: </P>
 
 <PRE>
   local volume servers up: (volume ids)
-  sdoc rdoc
+  doc
 </PRE>
 
 <P>em vez de:</P>
@@ -341,7 +340,7 @@ mysql> SELECT sdoc_id, sdoc_webstore from source_doc where sdoc_collection=1;
 <P>To invoke REMBRANDT on the document(s) you just stored, use the script:</P>
 
 <P><CODE>
-./script/importS2Rdocs.sh
+./script/tagDocs.sh
 </CODE></P>
 
 <P>Give the user/collection, an amount of documents to parse, and it will 
@@ -353,14 +352,14 @@ mysql> select doc_id, doc_webstore from doc
 +--------+---------------------------+
 | doc_id | doc_webstore              |
 +--------+---------------------------+
-|      1 | 3813646601739006368@rdoc% |
+|      1 | 3813646601739006368@doc% |
 +--------+---------------------------+
 </PRE>
 
 <P>and: </P>
 
 <P><CODE>
-webstore -r 3813646601739006368@rdoc%
+webstore -r 3813646601739006368@doc%
 </CODE></P>
 
 <PRE>
@@ -378,7 +377,7 @@ webstore -r 3813646601739006368@rdoc%
 <P>To invoke REMBRANDT on the document(s) you just stored, use the script:</P>
 
 <P><CODE>
-./script/importS2Rdocs.sh
+./script/tagDocs.sh
 </CODE></P>
 
 <P>Give the user/collection, an amount of documents to parse, and it will 
@@ -394,14 +393,14 @@ mysql> select doc_id, doc_webstore from doc
 +--------+---------------------------+
 | doc_id | doc_webstore              |
 +--------+---------------------------+
-|      1 | 3813646601739006368@rdoc% |
+|      1 | 3813646601739006368@doc% |
 +--------+---------------------------+
 </PRE>
 
 <P>and: </P>
 
 <P><CODE>
-webstore -r 3813646601739006368@rdoc%
+webstore -r 3813646601739006368@doc%
 </CODE></P>
 
 </PRE>

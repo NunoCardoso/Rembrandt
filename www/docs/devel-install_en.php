@@ -191,8 +191,7 @@ local volume servers up: (volume ids)
 tagged documents. To do that, issue the following commands (they make take a while): </P>
 
 <P><CODE>
-webstore -m sdoc
-webstore -m rdoc
+webstore -m doc
 </CODE></P>
 
 <P>Now, launch the volumes (important: webstore MUST know where the webstore-conf.xml is, with the 
@@ -201,7 +200,7 @@ shall see:</P>
 
 <P><CODE>
   local volume servers up: (volume ids)
-  sdoc rdoc
+  doc
 </CODE></P>
 
 <P>instead of:</P>
@@ -340,7 +339,7 @@ mysql> SELECT sdoc_id, sdoc_webstore from source_doc where sdoc_collection=1;
 <P>To invoke REMBRANDT on the document(s) you just stored, use the script:</P>
 
 <P><CODE>
-./script/importS2Rdocs.sh
+./script/tagDocs.sh
 </CODE></P>
 
 <P>Give the user/collection, an amount of documents to parse, and it will 
@@ -352,14 +351,14 @@ mysql> select doc_id, doc_webstore from doc
 +--------+---------------------------+
 | doc_id | doc_webstore              |
 +--------+---------------------------+
-|      1 | 3813646601739006368@rdoc% |
+|      1 | 3813646601739006368@doc% |
 +--------+---------------------------+
 </PRE>
 
 <P>and: </P>
 
 <P><CODE>
-webstore -r 3813646601739006368@rdoc%
+webstore -r 3813646601739006368@doc%
 </CODE></P>
 
 <PRE>
@@ -377,7 +376,7 @@ webstore -r 3813646601739006368@rdoc%
 <P>To invoke REMBRANDT on the document(s) you just stored, use the script:</P>
 
 <P><CODE>
-./script/importS2Rdocs.sh
+./script/tagDocs.sh
 </CODE></P>
 
 <P>Give the user/collection, an amount of documents to parse, and it will 
@@ -393,14 +392,14 @@ mysql> select doc_id, doc_webstore from doc
 +--------+---------------------------+
 | doc_id | doc_webstore              |
 +--------+---------------------------+
-|      1 | 3813646601739006368@rdoc% |
+|      1 | 3813646601739006368@doc% |
 +--------+---------------------------+
 </PRE>
 
 <P>and: </P>
 
 <P><CODE>
-webstore -r 3813646601739006368@rdoc%
+webstore -r 3813646601739006368@doc%
 </CODE></P>
 
 </PRE>

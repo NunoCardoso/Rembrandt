@@ -20,8 +20,7 @@ package saskia.exports
 
 import rembrandt.io.DocStats
 import rembrandt.obj.Document
-import rembrandt.io.UnformattedWriter
-import rembrandt.io.JustCategoryStyleTag
+import rembrandt.io.*
 import org.apache.log4j.*
 import org.apache.commons.cli.*
 import saskia.bin.Configuration
@@ -45,7 +44,8 @@ class ExportRembrandtedDocsToPublicoDB extends Export {
 	def total
 	int processed
 	DocStats docstats
-
+	def writer
+    def reader
 	
 	public ExportRembrandtedDocsToPublicoDB() {
 		super()
@@ -54,7 +54,9 @@ class ExportRembrandtedDocsToPublicoDB extends Export {
 		*/		
 		// David's style		
 		writer = new UnformattedWriter(new JustCategoryStyleTag("pt"))
-				
+		reader = new RembrandtReader(new RembrandtStyleTag(
+				conf.get("rembrandt.output.styletag.lang", "pt")))
+		
 		this.processed = 0
 		docstats = new DocStats()
 	}
@@ -101,6 +103,7 @@ class ExportRembrandtedDocsToPublicoDB extends Export {
 			rdocs.each{rdoc -> 
 				
 				def url = rdoc.doc_id
+				Document doc = reader.readDocument(rdoc.doc_content.trim())
 				String title = writer.printDocumentHeadContent(doc)
 				String body = writer.printDocumentBodyContent(doc)
 				

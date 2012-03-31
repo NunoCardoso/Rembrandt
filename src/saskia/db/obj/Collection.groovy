@@ -90,10 +90,8 @@ class Collection extends DBObject implements JSONable {
 		int i
 		getDBTable().getSaskiaDB().getDB().eachRow(
 			"SELECT count(*) FROM  ${RembrandtedDocTable.tablename}, ${SourceDocTable.tablename} "+
-			" WHERE doc_collection=? and doc_id=sdoc_doc and sdoc_comment = ? "+
-			"ORDER BY doc_id ASC LIMIT $limit OFFSET $offset",  [collection.col_id, comment], {row -> 
-			i = row[0]
-		})
+			" WHERE doc_collection=? and doc_id=sdoc_doc and sdoc_comment = ? ",
+			  [col_id, comment], {row -> i = row[0] })
 		return i
 	}
 	

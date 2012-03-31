@@ -102,15 +102,25 @@ class ExportRembrandtedDocsToPublicoDB extends Export {
 			
 			rdocs.each{rdoc -> 
 				
-				def url = rdoc.doc_id
-				Document doc = reader.readDocument(rdoc.doc_content.trim())
-				String title = writer.printDocumentHeadContent(doc)
+				def url = rdoc.doc_original_id
+				Document doc = reader.createDocument(rdoc.doc_content.trim())
+				String all_title = writer.printDocumentHeadContent(doc)
+				List lines = all_title.split("\n")
+				String title = null
+				String subtitle = null				
+				if (lines.size() > 0) {
+				   title = lines[0]
+				   lines.remove(0)
+				} 
+				if (lines.size() > 0) {
+				   subtitle = lines.join("\n")
+				} 
 				String body = writer.printDocumentBodyContent(doc)
-				
-				println "url:${url}\ntitle:${title}\nbody:${body}\n\n";
+				target_db.eachRow("UPDATE ${this.target_table} SET ner=1, title_rembrandted=?, subtitle_rembrandted=?, text_rembrandted=? where origLink=?", [title, subtitle, body, url],  {row -> log.info "Inserted $url";})
+
+//				println "url:${url}\ntitle:${title}\nsubtitle:${subtitle}\nbody:${body}\n\n";
 				status.exported++	
-			// extrair primeiro título e subtítulo. 
-			
+				
 			}
 		
          docstats.endBatchOfDocs(limit)	

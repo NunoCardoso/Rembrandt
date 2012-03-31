@@ -528,6 +528,8 @@ ALTER TABLE `cache` ADD CONSTRAINT FOREIGN KEY (`cac_collection` )
 -- Table `task`
 -- -----------------------------------------------------
 
+DROP TABLE IF EXISTS `task` ;
+
 CREATE TABLE `task` (
 	 `tsk_id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, 
 	 `tsk_task` VARCHAR(255) NOT NULL,
@@ -552,6 +554,8 @@ ALTER TABLE `task` ADD CONSTRAINT FOREIGN KEY (`tsk_collection`)
 -- ----------------------------------------------------- 
 -- Table `job`
 -- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `job` ;
 
 CREATE TABLE `job` (
 	 `job_id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, 

@@ -116,7 +116,7 @@ class ExportRembrandtedDocsToPublicoDB extends Export {
 				   subtitle = lines.join("\n")
 				} 
 				String body = writer.printDocumentBodyContent(doc)
-				target_db.eachRow("UPDATE ${this.target_table} SET ner=1, title_rembrandted=?, subtitle_rembrandted=?, text_rembrandted=? where origLink=?", [title, subtitle, body, url],  {row -> log.info "Inserted $url";})
+				target_db.executeUpdate("UPDATE ${this.target_table} SET ner=1, title_rembrandted=?, subtitle_rembrandted=?, text_rembrandted=? where origLink=?", [title, subtitle, body, url])
 
 //				println "url:${url}\ntitle:${title}\nsubtitle:${subtitle}\nbody:${body}\n\n";
 				status.exported++	

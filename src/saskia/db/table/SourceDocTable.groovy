@@ -72,6 +72,10 @@ class SourceDocTable extends DBTable {
 		return (l ? l[0] : null)
 	}
 
+	public SaskiaWebstore getWebstore() {
+		return this.webstore
+	}
+	
 	static SourceDoc getFromID(SaskiaDB db, Long id) {
 		return  db.getDBTable("SourceDocTable").getFromID(id)
 	}

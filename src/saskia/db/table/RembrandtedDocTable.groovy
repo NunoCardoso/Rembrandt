@@ -73,6 +73,10 @@ class RembrandtedDocTable extends DBTable {
 				conf.get("rembrandt.input.styletag.lang", conf.get("global.lang"))))
 
 	}
+	
+	public SaskiaWebstore getWebstore() {
+		return this.webstore
+	}
 
 	public List<RembrandtedDoc> queryDB(String query, ArrayList params) {
 		List<RembrandtedDoc> l = []

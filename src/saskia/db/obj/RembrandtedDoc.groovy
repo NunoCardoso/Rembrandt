@@ -461,13 +461,13 @@ class RembrandtedDoc extends DBObject implements JSONable {
 				// apagar o conteúdo anterior
 				if (doc_webstore) {
 					try {
-						getDBTable().getWebstore().delete(doc_webstore, SaskiaWebstore.VOLUME_RDOC)
+						dbtable.getWebstore().delete(doc_webstore, SaskiaWebstore.VOLUME_RDOC)
 						log.info "Replacing RembrandtedDoc: deleted webstore $doc_webstore."
 					} catch(Exception e) {
 						log.error "Error while replacing RembrandtedDoc: "+e.getMessage()
 					}
 				}
-				key = getWebstore().store(doc_content, SaskiaWebstore.VOLUME_RDOC)
+				key = dbtable.getWebstore().store(doc_content, SaskiaWebstore.VOLUME_RDOC)
 				log.info "Got content (${doc_content.size()} bytes), wrote to Webstore RDOC, got key $key"
 				
 				res = getDBTable().getSaskiaDB().getDB().executeUpdate(

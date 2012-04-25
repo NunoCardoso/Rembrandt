@@ -339,7 +339,7 @@ class ImportSourceDocument_2_RembrandtedDocument extends Import {
 			newrdoc.replaceThisToDB()
 			newrdoc.associateWithTag(tag)
 			
-			status.updated++
+		//	status.updated++
 			newrdoc.doc_job.removeThisFromDB()
 			
 			current_rdoc = null

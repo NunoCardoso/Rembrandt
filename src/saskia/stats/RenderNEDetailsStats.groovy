@@ -26,7 +26,7 @@ import saskia.util.I18n
 
 class RenderNEDetailsStats {
 
-	RembrandtDocStats docstats
+	DocStats docstats
 	NEPoolStats nestats
 	SimpleDateFormat dateFormat
 	I18n i18n
@@ -34,7 +34,7 @@ class RenderNEDetailsStats {
 	public String render(long ne_id, Collection collection, String lang) {
 
 		i18n = I18n.newInstance()
-		docstats = new RembrandtDocStats(collection, lang)
+		docstats = new DocStats(collection, lang)
 		nestats = new NEPoolStats(collection, lang)
 		StringBuffer s = new StringBuffer()
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])

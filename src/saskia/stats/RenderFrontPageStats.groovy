@@ -23,13 +23,13 @@ import saskia.util.I18n
 
 class RenderFrontPageStats {
 
-     RembrandtDocStats docstats
+     DocStats docstats
      NEPoolStats nestats
      I18n i18n
      
      public String render(Collection collection, String lang) {
 		i18n = I18n.newInstance()
-	    docstats = new RembrandtDocStats(collection, lang)
+	    docstats = new DocStats(collection, lang)
 	 	nestats = new NEPoolStats(collection, lang)
 
 	 	StringBuffer s = new StringBuffer()

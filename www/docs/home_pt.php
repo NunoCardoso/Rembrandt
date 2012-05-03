@@ -26,11 +26,12 @@ O REMBRANDT 1.3beta1 já está disponível. <a href="<?php echo curPageURL(array
 <DIV>
 
 	<FORM></FORM><!-- must stay -->
+    <DIV style="margin-left: 310px; position: relative;" class="waiting-div-allocator">
 	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
 		<DIV CLASS="rrs-waiting-div-message"></DIV>
 		<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
 	</DIV>
-
+</DIV>
 	<DIV CLASS="rrs-logo" style="float:left;">
 		<IMG SRC="<?php echo $config->imgdir."/".$config->rembrandt_head_image;?>">
 	</DIV>

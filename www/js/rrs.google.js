@@ -3,7 +3,8 @@
 but also references on the document and position.*/
 function createGoogleMap(map_div, points_array, polylines_array) {
 
-         var map = new GMap2(document.getElementById(map_div.attr('id')))
+	var map = map_div.gmap3({action: 'init'})
+		//new GMap2(document.getElementById(map_div.attr('id')))
         // definir os pontos
          var points = [];
 		 var polylines = [];

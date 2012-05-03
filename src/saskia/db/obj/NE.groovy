@@ -103,10 +103,12 @@ class NE extends DBObject implements JSONable {
 					ne_subtype?.nes_id,
 					ne_entity?.ent_id
 				])
-		ne_id = (long)res[0][0]
+		this.ne_id = (long)res[0][0]
 		getDBTable().neKeyCache[getKey()] = this
+		getDBTable().neIdCache[this.ne_id] = this
+		
 		log.info "Inserted new NE in DB: ${this}"
-		return ne_id
+		return this.ne_id
 	}
 
 	public int removeThisFromDB() {
@@ -114,6 +116,7 @@ class NE extends DBObject implements JSONable {
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
 				"DELETE FROM  ${getDBTable().tablename} WHERE ne_id=?", [ne_id])
 		getDBTable().neKeyCache.remove(getKey())
+		getDBTable().neIdCache.remove(ne_id)
 		log.info "Removed NE ${this} from DB, got $res"
 		return res
 	}

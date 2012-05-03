@@ -31,7 +31,7 @@ import saskia.db.obj.Collection
 import saskia.db.obj.Doc
 import saskia.util.I18n
 
-class RembrandtDocStats {
+class DocStats {
 
 	SaskiaMainDB db
 	Collection collection
@@ -42,7 +42,7 @@ class RembrandtDocStats {
 	I18n i18n
 	static SaskiaWebstore webstore = SaskiaWebstore.newInstance()
 
-	public RembrandtDocStats(Collection collection, String lang) {
+	public DocStats(Collection collection, String lang) {
 		db = SaskiaMainDB.newInstance()
 		this.collection = collection
 		reader = new RembrandtReader(new RembrandtStyleTag(lang))

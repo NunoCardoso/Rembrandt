@@ -82,7 +82,7 @@ public class DocMapping extends WebServiceRestletMapping {
             sm.setAction(action)
              
             /*********************/
-            /** 1.1  List RDOCS **/
+            /** 1.1  List DOCS **/
             /*********************/
 						
             if (action == "list") {
@@ -114,9 +114,9 @@ public class DocMapping extends WebServiceRestletMapping {
                 return sm.statusMessage(0, h)                  
             }
                
-            /***************************/
-            /** 1.2 show RDOC content **/
-            /***************************/
+            /**************************/
+            /** 1.2 show DOC content **/
+            /**************************/
             
             if (action == "show") {
         	
@@ -130,21 +130,28 @@ public class DocMapping extends WebServiceRestletMapping {
                 
                 Doc doc 
                 try {
-                    doc = DocTable.getFromID(doc_id)
+                    doc = docTable.getFromID(doc_id)
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_doc'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_doc"][lang]+": "+e.getMessage())                 
                 }
   
-					// check permissions
-					if (!collectionTable.canRead(user, doc.doc_collection))
-						return sm.insufficientPermissions()
+				// check permissions
+				if (!collectionTable.canRead(user, doc.doc_collection))
+					return sm.insufficientPermissions()
 
-                return sm.statusMessage(0, doc.toMap())
+				def nes = doc.getNEs()
+				for (int i = 0; i < nes.size(); i++) {
+					// ask each NE to JSON itself
+					nes[i]["ne"] = nes[i]["ne"].toMap()
+				}
+				def answer = doc.toMap()
+				answer["nes"] = nes
+                return sm.statusMessage(0, answer)
             }
 
             /***********************/
-            /** 1.3 metadata RDOC **/
+            /** 1.3 metadata DOC **/
             /***********************/
 					
         		if (action == "metadata") {
@@ -157,7 +164,7 @@ public class DocMapping extends WebServiceRestletMapping {
       			
 					Doc doc 
                try {
-                    doc = DocTable.getFromID(doc_id)
+                    doc = docTable.getFromID(doc_id)
                 } catch(Exception e) {
                	  errorlog.error i18n.servermessage['error_getting_doc'][lang]+": "+e.printStackTrace()
                     return sm.statusMessage(-1, i18n.servermessage["error_getting_doc"][lang]+": "+e.getMessage())                 
@@ -291,8 +298,8 @@ public class DocMapping extends WebServiceRestletMapping {
             	} 
             }
 			
-				/*********************/
-            /** 1.5 delete RDOC **/
+			/*********************/
+            /** 1.5 delete DOC **/
             /*********************/
            
             if (action == "delete") {

@@ -94,7 +94,7 @@ abstract class Import {
 		DocTable dt = db.getDBTable("DocTable")
 		
 		// check if exists in DB
-		Doc docInDB = dt.getFromOriginalIDandCollectionID(original_id, collection.col_id) 
+		Doc docInDB = dt.getFromOriginalDocIDandCollection(original_id, collection) 
 
 		// create the New 
 		Doc docNew = Doc.createNew( dt, [
@@ -131,7 +131,7 @@ abstract class Import {
 		// 	
 		} else {
 			try {
-				docNew.doc_id = docNew.replaceThisToDB()
+				docNew.doc_id = docNew.replaceContent()
 				log.info "Doc $docNew is now REPLACED into Saskia DB."
 				status.imported++
 			}

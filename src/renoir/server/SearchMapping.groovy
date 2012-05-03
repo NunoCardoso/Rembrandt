@@ -200,6 +200,8 @@ public class SearchMapping extends WebServiceRestletMapping {
 			QueryScorer scorer = new QueryScorer(lquery)
 			Highlighter h = new Highlighter(scorer)
 
+            processlog.debug "Got results "+answer["result"]
+
 			answer["result"].each{r ->
 				Map res
 				// now let's convert doc_original_id from the collection to the text
@@ -211,10 +213,10 @@ public class SearchMapping extends WebServiceRestletMapping {
 
 					res = [
 								'i':r["i"],
-								'title':title.replaceAll(/\n/,""),
+								'title':title?.replaceAll(/\n/,""),
 								'doc_id':doc.doc_id,
 								'doc_original_id':doc.doc_original_id,
-								'abstract':h.getBestFragments(ts, body, 5,"(...)").replaceAll("\n"," "),
+								'abstract':h.getBestFragments(ts, body, 5,"(...)")?.replaceAll("\n"," "),
 								'size':doc.getBodyFromContent().size(),
 								'date':""+doc.doc_date_created,
 								'score':r["score"]
@@ -242,7 +244,7 @@ public class SearchMapping extends WebServiceRestletMapping {
 					result << res
 				} catch(Exception ex) {
 					errorlog.error "RENOIR result parsing went wrong: "+ex.printStackTrace()
-					return sm.serverMessage(-1, "RENOIR result parsing went wrong:"+ ex.getMessage())
+					return sm.statusMessage(-1, "RENOIR result parsing went wrong:"+ ex.getMessage())
 				}
 			}
 
@@ -258,6 +260,6 @@ public class SearchMapping extends WebServiceRestletMapping {
 		string = r2t.parse(string)
 		if (string) string = string.substring(0,(string.size() > 300 ? 300 : string.size()))
 		// \n are not valid json chars
-		return string.replaceAll(/\n/,"")
+		return string?.replaceAll(/\n/,"")
 	}
 }

@@ -51,7 +51,7 @@ class RenoirCore {
 				if (!indexdir.endsWith(fileseparator)) indexdir += fileseparator
 				indexdir += Renoir.mainIndexDir
 
-				String dbname = Class.forName(col.getDBTable().getSaskiaDB()).LABEL
+				String dbname = col.getDBTable().getSaskiaDB().LABEL
 				indexdir += fileseparator+"db-"+dbname
 				indexdir += fileseparator+Renoir.mainCollectionPrefix+"-"+col.col_id
 			}

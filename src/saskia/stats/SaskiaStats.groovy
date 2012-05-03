@@ -49,7 +49,8 @@ class SaskiaStats {
 
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
 		log.debug "Asking cache for ${SaskiaStats.statsFrontPage}, ${collection_}, ${lang}"
-		Cache c = db.getDBTable("CacheTable").getFromIDAndCollectionAndLang(SaskiaStats.statsFrontPage, collection_, lang)
+		CacheTable ct = db.getDBTable("CacheTable")
+		Cache c = ct.getFromIDAndCollectionAndLang(SaskiaStats.statsFrontPage, collection_, lang)
 
 		if (c && c.isCacheFresh()) {
 			log.debug "Cache is new, let's use it."
@@ -61,8 +62,7 @@ class SaskiaStats {
 			log.debug "Cache is old or non-existent, time to refresh it."
 			RenderFrontPageStats stat = new RenderFrontPageStats()
 			String content = stat.render(collection_, lang)
-			if (!c) c = new Cache()
-			c.refreshCache(SaskiaStats.statsFrontPage, collection_, lang, content, STATS_PAGE_CACHE_REFRESH)
+			ct.refreshCache(SaskiaStats.statsFrontPage, collection_, lang, content, STATS_PAGE_CACHE_REFRESH)
 			s.append "<DIV CLASS='stats-main'>\n"
 			s.append content
 			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
@@ -75,7 +75,8 @@ class SaskiaStats {
 	public String renderNEPage(long ne_id, Collection collection, String lang) {
 		StringBuffer s = new StringBuffer()
 		log.debug "Request of stats for NE $ne_id, collection $collection, lang $lang";
-		Cache c = db.getDBTable("CacheTable").getFromIDAndCollectionAndLang("NE:"+ne_id, collection, lang)
+		CacheTable ct = db.getDBTable("CacheTable")
+		Cache c = ct.getFromIDAndCollectionAndLang("NE:"+ne_id, collection, lang)
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
 
 		if (c && c.isCacheFresh()) {
@@ -88,8 +89,7 @@ class SaskiaStats {
 			log.debug "Cache is old or non-existent, time to refresh it."
 			RenderNEDetailsStats stat = new RenderNEDetailsStats()
 			String content = stat.render(ne_id, collection, lang)
-			if (!c) c = new Cache()
-			c.refreshCache("NE:"+ne_id, collection, lang, content, NE_CACHE_REFRESH)
+			ct.refreshCache("NE:"+ne_id, collection, lang, content, NE_CACHE_REFRESH)
 			s.append "<DIV ID='rembrandt-detailne-${ne_id}'  CLASS='stats-main'>\n"
 			s.append content
 			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
@@ -101,7 +101,8 @@ class SaskiaStats {
 		StringBuffer s = new StringBuffer()
 		log.debug "Request of stats for doc ${doc.doc_id}, collection $collection, lang $lang";
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
-		Cache c = db.getDBTable("CacheTable").getFromIDAndCollectionAndLang("DOC:"+doc.doc_id, collection, lang)
+		CacheTable ct = db.getDBTable("CacheTable")
+		Cache c = ct.getFromIDAndCollectionAndLang("DOC:"+doc.doc_id, collection, lang)
 		if (c && c.isCacheFresh()) {
 			log.debug "Cache is new, let's use it."
 			s.append "<DIV ID='rembrandt-detaildoc-${doc.doc_id}'  CLASS='stats-main'>\n"
@@ -112,8 +113,7 @@ class SaskiaStats {
 			log.debug "Cache is old or non-existent, time to refresh it."
 			RenderDocDetailsStats stat = new RenderDocDetailsStats()
 			String content = stat.render(doc, collection, lang)
-			if (!c) c = new Cache()
-			c.refreshCache("DOC:"+doc.doc_id, collection, lang, content, DOC_CACHE_REFRESH)
+			ct.refreshCache("DOC:"+doc.doc_id, collection, lang, content, DOC_CACHE_REFRESH)
 			s.append "<DIV ID='rembrandt-detaildoc-${doc.doc_id}'  CLASS='stats-main'>\n"
 			s.append content
 			s.append "<DIV ID='stats-header'>${i18n.statslabel['generatedin'][lang]} "
@@ -124,8 +124,8 @@ class SaskiaStats {
 	public void forceRefreshCacheOnFrontPage(Collection collection, String lang) {
 		RenderFrontPageStats stat = new RenderFrontPageStats()
 		String content = stat.render(collection, lang)
-		Cache c = new Cache()
-		c.refreshCache(SaskiaStats.statsFrontPage, collection, lang, content,
+		CacheTable ct = db.getDBTable("CacheTable")
+		ct.refreshCache(SaskiaStats.statsFrontPage, collection, lang, content,
 				SaskiaStats.STATS_PAGE_CACHE_REFRESH)
 	}
 

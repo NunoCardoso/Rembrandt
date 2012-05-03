@@ -207,6 +207,24 @@ class Doc extends DBObject implements JSONable {
 		return tags
 	}
 	
+	List<NE> getNEs() {
+		
+		def netable = dbtable.getSaskiaDB().getDBTable("NETable")
+		def nes = []
+		getDBTable().getSaskiaDB().getDB().eachRow("SELECT *  FROM ${getDBTable().dhn_table} "+
+			"WHERE dhn_doc=?", [doc_id], {row  ->
+			def neobj = [
+				"doc":row["dhn_doc"],
+				"ne" : netable.getFromID(row["dhn_ne"]),
+				"section": row["dhn_section"],
+				"sentence" : row["dhn_sentence"],
+				"term" : row["dhn_term"]
+			]
+			nes << neobj
+		})
+		return nes
+	}
+	
 	/** Remove entries from doc_has_ne table. It will NOT erase entries on other tables.
 	 *  This is required so that the document can be synced to the Saskia.
 	 */
@@ -404,6 +422,7 @@ class Doc extends DBObject implements JSONable {
 	}
 
 	String getPlainText(String text) {
+	    if (!text) return null
 		// take off tags
 		String res = text.replaceAll(/<[^>]*>/,"")
 		// protect escaped stuff
@@ -466,6 +485,49 @@ class Doc extends DBObject implements JSONable {
 		return doc_id
 	}
 
+	/** replace the fields in this object to the DB
+	 * @return The new id for the doc table, from the DB
+	 */
+	public Long replaceContent() {
+		// try to ground the document to an entity
+		if (!doc_id) {
+			throw IllegalStateException("Can't replace content without a doc_id set");
+		}
+		def res
+		try {
+			String key
+			if (doc_content) {
+				// apagar o conteúdo anterior
+			    if (doc_webstore) {
+					try {
+						getDBTable().webstore.delete(doc_webstore, SaskiaWebstore.VOLUME_DOC)
+						log.info "Replacing Doc: deleted webstore $doc_webstore."
+					} catch(Exception e) {
+						log.error "Error while replacing Doc: "+e.getMessage()
+					}
+				}
+				key = getDBTable().webstore.store(doc_content, SaskiaWebstore.VOLUME_DOC)
+				log.trace "Got content (${doc_content.size()} bytes), wrote to Webstore DOC, got key $key"
+
+				res = getDBTable().getSaskiaDB().getDB().executeUpdate(
+						"UPDATE ${getDBTable().tablename} SET doc_webstore=? WHERE doc_id=?",
+						[key ,doc_id]
+						)
+				doc_webstore = key
+				log.info "Inserted Doc into DB: ${this}"
+			} else {
+				log.error "Did NOT inserted Doc into DB: doc_content for {$this} is empty!"
+			}
+		} catch (VolumeUnreachable ve) {
+			log.fatal "Doc can't proceed with replaceContent. Reason: Webstore volume ${SaskiaWebstore.VOLUME_DOC} is not running."
+			log.fatal "Please launch the volume with 'webstore -l ${SaskiaWebstore.VOLUME_DOC}' and try again."
+			System.exit(0)
+		} catch (Exception e) {
+			log.error "Did NOT inserted Doc into DB: ${e.getMessage()}"
+		}
+		return doc_id
+	}
+	
 	public int removeThisFromDB() {
 		if (!doc_id) return null
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(

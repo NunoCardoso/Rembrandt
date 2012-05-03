@@ -23,11 +23,12 @@ REMBRANDT 1.3beta1 is avaliable. <a href="<?php echo curPageURL(array('do'=>'dow
 <DIV>
 
 	<FORM></FORM><!-- must stay -->
-  	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
+  	<div style="margin-left:310px; position: relative;" class="waiting-div-wallocator">
+	<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
 		<DIV CLASS="rrs-waiting-div-message"></DIV>
 		<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
 	</DIV>
-	
+	</DIV>
 	<DIV CLASS="rrs-logo">
 		<IMG SRC="<?php echo $config->imgdir."/".$config->rembrandt_head_image;?>">
 	</DIV>

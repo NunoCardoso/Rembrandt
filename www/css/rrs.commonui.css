@@ -145,12 +145,18 @@ float: right;
   height: 0;
 }
 
+.waiting-div-allocator #rrs-waiting-div {
+   top: -50px;
+}
+
 /* to replicate waiting div messages everywhere */
 .rrs-waiting-div {
   margin:auto; /* para alinhar ao centro */
   width: auto;
   text-align: center;	
 }
+
+
 
 .rrs-waiting-div-message {
  -moz-border-radius: 4px;

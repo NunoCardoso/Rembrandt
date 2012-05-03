@@ -224,6 +224,10 @@ Rembrandt.Util = (function ($) {
 				}
 				if (!found) vars[vars.length] = ""+key+"="+list[key]
 			}
+		} else {
+			for (var x in list) {
+				vars.push(x+"="+list[x])
+			}
 		}
 		return qmark+vars.join("&")
 	},

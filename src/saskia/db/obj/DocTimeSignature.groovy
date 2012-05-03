@@ -55,8 +55,15 @@ class DocTimeSignature extends DBObject {
 		if (row['dts_date_created']) g.dts_date_created = (Date)row['dts_date_created']
 
 		//meta
-		if (row['doc_id']) g.dts_document_id = row['doc_id']
-		if (row['doc_original_id']) g.dts_document_original_id = row['doc_original_id']
+		try {
+		    g.dts_document_id = row['doc_id']
+        } catch(Exception e) {
+		    // happens when I am creating an object that doesn't exist on DB yet.
+		    log.warn "There is no doc id for this time signature"
+		}
+        try {
+		    g.dts_document_original_id = row['doc_original_id']
+        }catch(Exception e) {}
 		return g
 	}
 

@@ -76,10 +76,11 @@ class CacheTable extends DBTable {
 	}
 
 	void refreshCache(String cac_id, Collection cac_collection, String cac_lang, String cac_obj, long howmuch) {
-		Cache c = new Cache(
-				cac_id:cac_id, cac_collection:cac_collection,
-				cac_lang:cac_lang, cac_obj:cac_obj
-				)
+		Cache c = new Cache(this)
+		c.cac_id = cac_id
+		c.cac_collection = cac_collection
+		c.cac_lang = cac_lang
+		c.cac_obj = cac_obj
 		c.cac_expire = new Date( (new Date().getTime()+howmuch) )
 		c.addThisToDB()
 		log.info "Cache successfully refreshened: ${c}"

@@ -766,11 +766,11 @@ Rembrandt.Collection = (function ($) {
 	// it has a spaecial confirmation, keep it away from generic delete model template
 	modalCollectionDelete = function (button) {
 	
-	var api_key= Rembrandt.Util.getApiKey()
-	var ci = button.attr("ID")
-	var role = Rembrandt.Util.getRole(button)
-	var servlet_collection_url = Rembrandt.Util.getServletEngineFromRole(role, 'collection')
-	var servlet_user_url = Rembrandt.Util.getServletEngineFromRole(role, 'user')
+		var api_key= Rembrandt.Util.getApiKey()
+		var ci = button.attr("ID")
+		var role = Rembrandt.Util.getRole(button)
+		var servlet_collection_url = Rembrandt.Util.getServletEngineFromRole(role, 'collection')
+		var servlet_user_url = Rembrandt.Util.getServletEngineFromRole(role, 'user')
 	
 		$.modal("<div id='modalDeleteCollection' class='rembrandt-modal' style='width:400px'>"+
 		"<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+

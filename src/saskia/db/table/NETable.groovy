@@ -44,21 +44,26 @@ class NETable extends DBTable{
 
 
 	// used by getFromNameAndLangAndClassificationAndEntity
-	LinkedHashMap<Long,NE> neKeyCache
+	LinkedHashMap<String,NE> neKeyCache
+	// used for ne fetch by doc
+	LinkedHashMap<Long,NE> neIdCache
 
 	public NETable(SaskiaDB db) {
 		super(db)
 		conf = Configuration.newInstance()
 		neKeyCache = new LinkedHashMap(
 				conf.getInt("saskia.ne.cache.number",1000), 0.75f, true) // true: access order.
+		neIdCache = new LinkedHashMap(
+				conf.getInt("saskia.ne.cache.number",1000), 0.75f, true) // true: access order.
 	}
 
 	public List<NE> queryDB(String query, ArrayList params = []) {
-		List<NE> res = []
+		List<NE> nes = []
 		db.getDB().eachRow(query, params, {row  ->
-			res << NE.createNew(this, row)
+			def ne = NE.createNew(this, row)
+			nes << ne
 		})
-		return res
+		return nes
 	}
 
 	public Map listNEs(limit = 10, offset = 0, column = null, needle = null) {
@@ -124,8 +129,11 @@ class NETable extends DBTable{
 	 */
 	public NE getFromID(Long ne_id) {
 		if (!ne_id) return null
+		if (neIdCache.containsKey(ne_id)) return neIdCache[ne_id]
+		
 		List<NE> ne = queryDB("SELECT * FROM ${tablename} WHERE ne_id=?", [ne_id])
 		log.info "Querying for ne_id $ne_id got NE $ne."
+		if (ne) neIdCache[ne_id] = ne[0]
 		if (ne) return ne[0] else return null
 	}
 
@@ -194,6 +202,9 @@ class NETable extends DBTable{
 		if (neKeyCache.containsKey(ne_key)){
 			neKeyCache.remove(ne_key)
 		}
+		if (neIdCache.containsKey(ne_id)) {
+			neIdCache.remove(ne_id)
+		}
 		return res
 	}
 
@@ -225,8 +236,9 @@ class NETable extends DBTable{
 		List<NE> ne = queryDB("SELECT * FROM ${tablename} WHERE ne_name=? and ne_lang=? and "+
 				"ne_category ${nec_string} AND ne_type ${net_string} AND ne_subtype ${nes_string}"+
 				" AND ne_entity ${ent_string}", params)
-		if (ne) {
+		if (ne && ne[0].ne_id) {
 			neKeyCache[key] = ne[0]
+			neIdCache[ne[0].ne_id] = ne[0]
 			return ne[0]
 		}
 		return null
@@ -255,10 +267,12 @@ class NETable extends DBTable{
 				"ne_category ${nec_string} AND ne_type ${net_string} AND ne_subtype ${nes_string}"+
 				" AND ne_entity IS NOT NULL", params)
 
-		if (ne) {
+		if (ne && ne[0].ne_id) {
 			String key = "${ne[0].ne_name.nen_id} ${ne[0].ne_lang} ${ne[0].ne_category?.nec_id} ${ne[0].ne_type?.net_id} "+
 					"${ne[0].ne_subtype?.nes_id} ${ne[0].ne_entity?.ent_id}"
 			if (!neKeyCache.containsKey(key)) neKeyCache[key] = ne[0]
+			if (!neIdCache.containsKey(ne[0].ne_id)) neIdCache[ne[0].ne_id] = ne[0]
+			
 			return ne[0]
 		}
 		return null

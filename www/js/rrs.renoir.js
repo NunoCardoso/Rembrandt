@@ -291,7 +291,7 @@ function getTags(element) {
 	var tags = new Array();		
 	$(".tag", element).each(function() {
 		var value = $(this).attr("value");
-		var cl = $(this).attr("className").split(" ")
+		var cl = $(this).attr("class").split(" ")
 		for (i in cl) {
 			if (cl[i].match("^tag_type_")) 
 			    tags.push(new Tag(value, cl[i].substring(9),$(this).attr("desc"), $(this).attr("ground") )); 

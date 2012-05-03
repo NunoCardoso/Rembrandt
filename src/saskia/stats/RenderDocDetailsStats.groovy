@@ -28,13 +28,13 @@ import rembrandt.obj.Document
 import saskia.db.GeoSignature
 import saskia.db.obj.Collection
 import saskia.db.obj.Doc
-import saskia.db.table.DocGeoSignatureTable
-import saskia.db.table.DocTimeSignatureTable
+import saskia.db.obj.DocGeoSignature
+import saskia.db.obj.DocTimeSignature
 import saskia.util.I18n
 
 class RenderDocDetailsStats {
 
-	RembrandtDocStats docstats
+	DocStats docstats
 	NEPoolStats nestats
 	RembrandtReader reader
 	HTMLWriter writer
@@ -43,7 +43,7 @@ class RenderDocDetailsStats {
 
 	public String render(Doc d, Collection collection, String lang) {
 		i18n = I18n.newInstance()
-		docstats = new RembrandtDocStats(collection, lang)
+		docstats = new DocStats(collection, lang)
 		nestats = new NEPoolStats(collection, lang)
 		reader = new RembrandtReader(new RembrandtStyleTag(lang))
 		writer = new HTMLWriter(new HTMLStyleTag(lang))
@@ -83,7 +83,7 @@ class RenderDocDetailsStats {
 
 		s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-geo-signature-div' class='stats-box'>\n"
 		s.append "<P><B>${i18n.statstitle['doc_geo_signature'][lang]}</B></P>"
-		DocGeoSignatureTable dgs = d.getGeographicSignature()
+		DocGeoSignature dgs = d.getGeographicSignature()
 		String ss = ""
 		if (dgs?.dgs_signature)
 			dgs.dgs_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
@@ -92,7 +92,7 @@ class RenderDocDetailsStats {
 
 		s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-time-signature-div' class='stats-box'>\n"
 		s.append "<P><B>${i18n.statstitle['doc_time_signature'][lang]}</B></P>"
-		DocTimeSignatureTable dts = d.getTimeSignature()
+		DocTimeSignature dts = d.getTimeSignature()
 		if (dts?.dts_signature)
 			ss = dts.dts_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
 		s.append ss

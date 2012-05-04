@@ -145,8 +145,10 @@ public class DocMapping extends WebServiceRestletMapping {
 					// ask each NE to JSON itself
 					nes[i]["ne"] = nes[i]["ne"].toMap()
 				}
-				def answer = doc.toMap()
-				answer["nes"] = nes
+				def answer = [
+					"doc":doc.toMap(),
+					"nes":nes
+				]
                 return sm.statusMessage(0, answer)
             }
 

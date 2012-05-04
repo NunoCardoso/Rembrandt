@@ -97,8 +97,6 @@ Rembrandt.Doc = (function ($) {
 		var context="doc"
 		var doc_id = doc["doc_id"]
 		var doc_original_id = doc["doc_original_id"]
-	//	var texttitle = doc["doc_content"]["title"]
-	//	var textbody = doc["doc_content"]["body"]
 
 		var canadmin = (su || role.toLowerCase() == "col-admin")
 		var newdiv = $("<DIV ID='rrs-"+context+"-metadata-"+doc_id+"' CLASS='main-slidable-div' "+
@@ -108,15 +106,14 @@ Rembrandt.Doc = (function ($) {
 		return newdiv						
 	},
 
-	generateDocShowDIV = function (doc, su, role, options) {
+	generateDocShowDIV = function (response, su, role, options) {
 
 		var context="doc"
-
+		var doc = response["doc"]
 		var doc_id = doc["doc_id"]
 		var doc_original_id = doc["doc_original_id"]
-		var texttitle = doc["doc_content"]["title"]
-		var textbody = doc["doc_content"]["body"]
-		var nes = doc["nes"]
+		var doc_content = doc["doc_content"]
+		var nes = response["nes"]
 
 		var canadmin = (su || role.toLowerCase() == "col-admin")
 
@@ -124,14 +121,13 @@ Rembrandt.Doc = (function ($) {
 		var newdiv = $("<DIV ID='rrs-"+context+"-show-"+doc_id+"' CLASS='main-slidable-div rrs-doc-display' "+
 		" TITLE='"+Rembrandt.Util.shortenTitle(doc_original_id)+"' STYLE='display:none;overflow:auto;'></DIV>")
 
-		var htmltitle = Rembrandt.Api.Rembrandt2HTML2(texttitle, nes)
-		var htmlbody = Rembrandt.Api.Rembrandt2HTML2(textbody, nes)
+		var html = Rembrandt.Api.Rembrandt2HTML2(doc_content, nes)
 
 		// now that we have a doc_div, let's set it up. 
 
 		Rembrandt.Display.appendDocDisplayTo(newdiv)
-		Rembrandt.Display.addDocumentTitleToDocDisplay(newdiv, htmltitle)
-		Rembrandt.Display.addDocumentBodyToDocDisplay(newdiv, htmlbody)
+		Rembrandt.Display.addDocumentTitleToDocDisplay(newdiv, html["title"])
+		Rembrandt.Display.addDocumentBodyToDocDisplay(newdiv, html["body"])
 
 		return newdiv
 	},

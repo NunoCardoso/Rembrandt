@@ -95,7 +95,7 @@ class DocTable extends DBTable {
 
 		String query = "SELECT SQL_CALC_FOUND_ROWS * FROM ${tablename} "+
 				"$where LIMIT ${limit} OFFSET ${offset} UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), "+
-				"NULL, NULL, NULL, NULL, NULL, NULL,NULL,NULL,NULL,NULL,NULL"
+				"NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL,NULL,NULL,NULL,NULL"
 		log.debug "query = $query params = $params class = "+params*.class
 		List u
 		try {u = queryDB(query, params) }

@@ -46,7 +46,7 @@ class NEName extends DBObject implements JSONable {
 	}
 
 	public Map toMap() {
-		return ["nen_id":nen_id, "nen_name":nen_name]
+		return ["nen_id":nen_id, "nen_name":nen_name, "nen_nr_terms":nen_nr_terms]
 	}
 
 	public Map toSimpleMap() {

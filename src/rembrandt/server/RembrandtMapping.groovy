@@ -101,20 +101,82 @@ public class RembrandtMapping extends WebServiceRestletMapping {
 			doc = core.releaseRembrandtOnDocument(doc)
 
 			Writer rw
+			Map res = [:]
 			if (format == "rembrandt") {
 				rw = new RembrandtWriter(new RembrandtStyleTag(lang))
+				if (doc.title || doc.body) res["document"] = [:]
+				if (doc.title) res["document"]["title"] = rw.printDocumentHeadContent(doc)?.replaceAll(/\n/, " ")
+				if (doc.body) res["document"]["body"] = rw.printDocumentBodyContent(doc)?.replaceAll(/\n/, " ")
+				processlog.info "$session Returning tagged doc:\n==========\ndt=${res['document']['title']}\ndb=${res['document']['body']}\n==============\n"
 				// formato dsbatista
 			} else if (format == "dsb") {
 				rw = new UnformattedWriter(new JustCategoryStyleTag(lang))
+				if (doc.title || doc.body) res["document"] = [:]
+				if (doc.title) res["document"]["title"] = rw.printDocumentHeadContent(doc)?.replaceAll(/\n/, " ")
+				if (doc.body) res["document"]["body"] = rw.printDocumentBodyContent(doc)?.replaceAll(/\n/, " ")
+				processlog.info "$session Returning tagged doc:\n==========\ndt=${res['document']['title']}\ndb=${res['document']['body']}\n==============\n"
+			} else if (format == "json") {
+				rw = new RembrandtWriter(new NoStyleTag(lang))
+				res["doc"] = [
+					"doc_content": [
+						"title" : rw.printDocumentHeadContent(doc)?.replaceAll(/\n/, " "),
+						"body" : rw.printDocumentBodyContent(doc)?.replaceAll(/\n/, " ")
+					], 
+					
+				]
+				res["nes"] = []
+				
+				doc.titleNEs?.each{ne -> 
+					ne?.classification?.each{c -> 
+						def ne_obj = [:]
+						ne_obj["section"] = "T"
+						ne_obj["term"] = ne.termIndex
+						ne_obj["sentence"] = ne.sentenceIndex
+						ne_obj["ne"] = [:]
+						ne_obj["ne"]["ne_name"] = [
+							"nen_name" : ne.printTerms(),
+							"nen_nr_terms" : ne.terms.size()
+						]
+						if (c.c) ne_obj["ne"]["ne_category"] = [
+							"nec_category": c.c
+						] 
+						if (c.t) ne_obj["ne"]["ne_type"] = [
+							"net_type": c.t
+						]
+						if (c.s) ne_obj["ne"]["ne_subtype"] = [
+							"nes_subtype": c.s
+						]
+						res["nes"] << ne_obj
+					}
+				}
+				 
+				doc.bodyNEs?.each{ne -> 
+					ne?.classification?.each{c -> 
+						def ne_obj = [:]
+						ne_obj["section"] = "B"
+						ne_obj["term"] = ne.termIndex
+						ne_obj["sentence"] = ne.sentenceIndex
+						ne_obj["ne"] = [:]
+						ne_obj["ne"]["ne_name"] = [
+							"nen_name" : ne.printTerms(),
+							"nen_nr_terms" : ne.terms.size()
+						]
+						if (c.c) ne_obj["ne"]["ne_category"] = [
+							"nec_category": c.c
+						] 
+						if (c.t) ne_obj["ne"]["ne_type"] = [
+							"net_type": c.t
+						]
+						if (c.s) ne_obj["ne"]["ne_subtype"] = [
+							"nes_subtype": c.s
+						]
+						res["nes"] << ne_obj
+					}
+				}
+				processlog.info "$session Returning tagged doc:\n==========\ndt=${res['doc']['doc_content']['title']}\ndb=${res['doc']['doc_content']['body']}\n==============\n"
+				
 			}
 
-			Map res = [:]
-
-			if (doc.title || doc.body) res["document"] = [:]
-			if (doc.title) res["document"]["title"] = rw.printDocumentTitleContent(doc)?.replaceAll(/\n/, " ")
-			if (doc.body) res["document"]["body"] = rw.printDocumentBodyContent(doc)?.replaceAll(/\n/, " ")
-
-			processlog.info "$session Returning tagged doc:\n==========\ndt=${res['document']['title']}\ndb=${res['document']['body']}\n==============\n"
 
 			int calls = user.addAPIcount()
 			processlog.info "$session User $user made a Rembrandt tagging request, now has $calls API daily calls\n"

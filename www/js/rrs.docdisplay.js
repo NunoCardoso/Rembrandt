@@ -431,7 +431,7 @@ Rembrandt.Tooltip = (function ($) {
 	"use strict"
 
 	var show = function (ne) {	
-		if (!has(ne) ) {
+		if (!Rembrandt.Tooltip.has(ne) ) {
 			var tooltip=$("#rrs-tooltips", ne.parents(".rrs-doc-display"))
 			if (ne.attr("title") === undefined) {ne.attr("title", "")}
 			tooltip.append(_getContent(ne))
@@ -556,7 +556,7 @@ Rembrandt.ContextMenu = (function ($) {
 	"use strict"
  	
 	var addEditMenu = function (ne_tag_edit) {
-		if (!has(ne_tag_edit)) {
+		if (!Rembrandt.Tooltip.has(ne_tag_edit)) {
 			if (ne_tag_edit.attr("title") === undefined) {ne_tag_edit.attr("title","")}
 			ne_tag_edit.bt(
 				"<ul class='EditMenu NEmenu'>"+
@@ -591,7 +591,7 @@ Rembrandt.ContextMenu = (function ($) {
 		//let's index the tooltip to the last term
 		if (selected_terms.length == 0) return;	
 		var term = selected_terms.eq(selected_terms.length-1)
-		if (has(term)) {Rembrandt.Tooltip.showMenu(term)}
+		if (Rembrandt.Tooltip.has(term)) {Rembrandt.Tooltip.showMenu(term)}
 		else {
 			if (term.attr("title") === undefined) {term.attr("title","")}
 		

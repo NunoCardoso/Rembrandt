@@ -56,7 +56,7 @@ class JustCategoryStyleTag extends StyleTag {
        
         NEtag = SemanticClassificationDefinitions.netag[lang.toLowerCase()]
         verbose = Configuration.newInstance().getInt("rembrandt.output.styletag.verbose", 2)
-        log.debug "RembrandtStyleTag initialized for language $lang, verbosity level $verbose, looking for <${NEtag}>"
+        log.debug "JustCategoryStyleTag initialized for language $lang, verbosity level $verbose, looking for <${NEtag}>"
     } 
     
     public String printOpenTag(NamedEntity ne) {     

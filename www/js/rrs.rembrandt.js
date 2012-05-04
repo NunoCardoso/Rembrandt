@@ -25,25 +25,23 @@ Rembrandt.Api = (function ($) {
 			jQuery.ajax({ type:"POST", url:Rembrandt.urls.restlet_rembrandt_url, 
 				contentType:"application/x-www-form-urlencoded",
 				data: "db="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(text))+"&slg="+submissionlang+"&lg="+lang+
-				"&api_key="+Rembrandt.constants.guest_api_key,
+				"&api_key="+Rembrandt.constants.guest_api_key+"&f=json",
 				beforeSubmit: waitMessageBeforeSubmit(lang),
 				// respond with JSON
 				success: function (response) {
 					if (response["status"] == -1) {
-						errorMessageWaitingDiv(lang, response['message'])		
+						errorMessageWaitingDiv(lang, response['message'])
 					} else {
 						hideWaitingDiv()
 
-						var doc = response['message']["document"]
+						var doc = response['message']["doc"]
+						var nes = response['message']["nes"]
+						var doc_content = doc["doc_content"]
+						
+						var html = Rembrandt.Api.Rembrandt2HTML(doc_content, nes)
 
-						var htmltitle = Rembrandt.Api.rembrandt2HTML(doc["title"])
-						var htmlbody = Rembrandt.Api.rembrandt2HTML(doc["body"])
-
-						// clear loading animation
-						//	$("#rrs-doc-display-status", display).html("Ready.")
-
-						Rembrandt.Display.addDocumentTitleToDocDisplay(display, htmltitle)
-						Rembrandt.Display.addDocumentBodyToDocDisplay(display, htmlbody)
+						Rembrandt.Display.addDocumentTitleToDocDisplay(display, html["title"])
+						Rembrandt.Display.addDocumentBodyToDocDisplay(display, html["body"])
 
 						// setup NE DIVs				
 						setupNEs(display)	// sets both, I hope	
@@ -128,7 +126,10 @@ Rembrandt.Api = (function ($) {
 
 	_parseText = function(response) {
 		var response2 = ""
-		for(i=0; i<response.length; i++) {
+		var state = 0;
+		var sindex = 0;
+		var tindex = 0;
+		for(var i=0; i<response.length; i++) {
 
 			switch(state) {
 				case 0:
@@ -175,16 +176,12 @@ Rembrandt.Api = (function ($) {
 		}//for each char
 		return response2
 	}, 
-	
+	/*
 	Rembrandt2HTML = function (response) {
 
 		if (!response) return response
-		var state = 0;
-		var sindex = 0;
-		var tindex = 0;
 		var response2 = _parseText(response)
 
-		/* reconvert EM tags to DIV */
 		response2 = response2.replace(/<EM/gi,"<DIV").replace(/<\/EM>/gi,"<\/DIV>")
 		response2 = response2.replace(/<NE/gi,"<DIV").replace(/<\/NE>/gi,"<\/DIV>")
 		response2 = response2.replace(/<ALT>/gi,"<DIV CLASS=\"ALT\">").replace(/<\/ALT>/gi,"<\/DIV>")
@@ -197,37 +194,74 @@ Rembrandt.Api = (function ($) {
 			$(this).addClass($(this).attr("C1")).addClass($(this).attr("C2")).addClass($(this).attr("C3"))	
 		});
 		return d.html()	 
-	},
+	},*/
 	
 	// this one has dhn e nes separated from doc
-	Rembrandt2HTML2 = function (response) {
+	Rembrandt2HTML = function (doc_content, nes) {
 
-		if (!response) return response
-		var state = 0;
-		var sindex = 0;
-		var tindex = 0;
-		var response2 = _parseText(response)
+		if (!doc_content) return doc_content
+		var title = _parseText(doc_content["title"])
+		var body = _parseText(doc_content["body"])
+		
+		var title_j = $(document.createElement("DIV")).append(title)
+		var body_j = $(document.createElement("DIV")).append(body)
+		
+		for (var i in nes) {
+			var ne = nes[i].ne
+			var nr_sentence = nes[i].sentence
+			var nr_term = nes[i].term
+			var section = nes[i].section
+			
+			var ne_div = "<DIV "
+			var ne_class = "CLASS='NE "
+			var ne_attr = ""
+			if (!_.isUndefined(ne.ne_category) && ne.ne_category != null) {
+				var cat = ne.ne_category.nec_category.replace(/@/,"")
+				ne_class += cat+" "
+				ne_attr += "CATEGORY='"+cat+"' "
+			} 
+			if (!_.isUndefined(ne.ne_type) && ne.ne_type != null) {
+				var cat = ne.ne_type.net_type.replace(/@/,"")
+				ne_class += cat+" "
+				ne_attr += "TYPE='"+cat+"' "
+			}
+			if (!_.isUndefined(ne.ne_subtype) && ne.ne_subtyle != null) {
+				var cat = ne.ne_subtype.nes_subtype.replace(/@/,"")
+				ne_class += cat+" "
+				ne_attr += "SUBTYPE='"+cat+"' "
+			}
+			ne_class += "' "
+			ne_div += ne_class
+			ne_div += ne_attr
+			ne_div += "ID='"+ne.ne_id+"' "
+			ne_div += "LANG='"+ne.ne_lang+"' "
+			ne_div += "/>"
+			
+			// now, build the selector to wrap them
+			var sentence
+			if (section == "T") {
+				sentence = title_j.find("UL[s="+nr_sentence+"]")
+			} else if (section == "B") {
+				sentence = body_j.find("UL[s="+nr_sentence+"]")
+			}
+			var next_selectors = []
+			for (var i = nr_term; i <= nr_term + ne.ne_name.nen_nr_terms; i++) {
+				next_selectors.push("li[t="+i+"]")
+			}
+			
+			var terms = sentence.find(next_selectors.join(","))
+			terms.wrapAll(ne_div)
+		}
 
-		console.log(response)
-		/* reconvert EM tags to DIV */
-		response2 = response2.replace(/<EM/gi,"<DIV").replace(/<\/EM>/gi,"<\/DIV>")
-		response2 = response2.replace(/<NE/gi,"<DIV").replace(/<\/NE>/gi,"<\/DIV>")
-		response2 = response2.replace(/<ALT>/gi,"<DIV CLASS=\"ALT\">").replace(/<\/ALT>/gi,"<\/DIV>")
-		response2 = response2.replace(/<SUBALT>/gi,"<DIV CLASS=\"SUBALT\" ALT=\"$1\"").replace(/<\/SUBALT>/gi,"<\/DIV>")
-
-		var d = $(document.createElement("DIV")).append(response2)
-		// this is where jQuery rules... let's aim for all DIVs that are NOT ALT or SUBALT
-		d.find("DIV:not(DIV.ALT, DIV.SUBALT)").each(function() {
-			$(this).addClass("NE")
-			$(this).addClass($(this).attr("C1")).addClass($(this).attr("C2")).addClass($(this).attr("C3"))	
-		});
-		return d.html()	 
+		return {
+			"title":title_j.html(),
+			"body": body_j.html()
+		}
 	};
 	
 	
 	return {
 		"HTML2Rembrandt" : HTML2Rembrandt,
 		"Rembrandt2HTML" : Rembrandt2HTML,
-		"Rembrandt2HTML2" : Rembrandt2HTML2
 	};
 }(jQuery));

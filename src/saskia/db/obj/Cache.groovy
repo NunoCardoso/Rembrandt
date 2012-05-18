@@ -41,7 +41,7 @@ class Cache extends DBObject {
 	}
 
 	boolean isCacheFresh() {
-		log.debug "Chech cahe fresh: cac_expire is "+(long)(cac_expire.getTime())+" d=$d"
+		log.debug "Chech cahe fresh: cac_expire is "+(long)(cac_expire.getTime())
 		return cac_expire.getTime() > new Date().getTime()
 	}
 	
@@ -76,7 +76,7 @@ class Cache extends DBObject {
 			"VALUES(?,?, NOW(),?, ?, ?) ON DUPLICATE KEY UPDATE cac_date=NOW(), cac_expire=?, cac_obj=?",
 			[cac_id, cac_collection.col_id, cac_expire, cac_lang, cac_obj, cac_expire, cac_obj])
 		log.info "Cache added to DB: ${this}"
-		return res
+		return (long)res[0][0]
 	}
 
 	public int removeThisFromDB() {

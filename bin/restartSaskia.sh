@@ -1,3 +1,3 @@
 #!/bin/bash 
-./killSaskiaServer.sh
-./runSaskiaServer.sh
+./bin/killSaskiaServer.sh
+./bin/runSaskiaServer.sh

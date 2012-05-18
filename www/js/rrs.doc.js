@@ -121,7 +121,7 @@ Rembrandt.Doc = (function ($) {
 		var newdiv = $("<DIV ID='rrs-"+context+"-show-"+doc_id+"' CLASS='main-slidable-div rrs-doc-display' "+
 		" TITLE='"+Rembrandt.Util.shortenTitle(doc_original_id)+"' STYLE='display:none;overflow:auto;'></DIV>")
 
-		var html = Rembrandt.Api.Rembrandt2HTML2(doc_content, nes)
+		var html = Rembrandt.Api.Rembrandt2HTML(doc_content, nes)
 
 		// now that we have a doc_div, let's set it up. 
 

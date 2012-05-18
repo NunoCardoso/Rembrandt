@@ -6,6 +6,9 @@ require_once(dirname(__FILE__).'/inc/i18n.inc');
 require_once(dirname(__FILE__).'/inc/config.inc');
 require_once(dirname(__FILE__).'/inc/Mustache.php');
 
+header('Content-Type: text/html; charset=utf-8');
+header('X-Frame-Options: GOFORIT'); 
+
 $i18n =  i18n::getInstance();
 $config = Config::getInstance();
 

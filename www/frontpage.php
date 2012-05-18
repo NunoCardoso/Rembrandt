@@ -6,6 +6,9 @@ require_once(dirname(__FILE__).'/inc/i18n.inc');
 require_once(dirname(__FILE__).'/inc/config.inc');
 require_once(dirname(__FILE__).'/inc/Mustache.php');
 
+header('Content-Type: text/html; charset=utf-8');
+header('X-Frame-Options: GOFORIT'); 
+
 $i18n =  i18n::getInstance();
 $config = Config::getInstance();
 
@@ -184,7 +187,7 @@ if ($do == "search" || $do == "tag" || $do == "collections") {
 	}	
 	
 	// main footer 
-	// n„o faz sentido colocar a data na p·gina de notÌcias, ou nos resultados da pesquisa
+	// n√£o faz sentido colocar a data na p√°gina de not√≠cias, ou nos resultados da pesquisa
 	 if ($do != "news-feeds" && $do != "search" && $do != 'collections' && $do != 'renoir' && $do != 'sitesearch' && $do != 'tag') 
 		{
 			getLastModified($page);}

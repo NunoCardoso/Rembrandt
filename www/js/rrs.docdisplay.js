@@ -5,6 +5,7 @@ Rembrandt.Display = (function ($) {
 	$(function () {
 
 		$(".SelectionMenu A").live("click", function(ev) {
+			ev.preventDefault();
 			ev.stopPropagation();
 	 		var action = $(this).attr("href")// #changene, #deleteall
 			var terms = $(".ui-selected") 
@@ -125,13 +126,14 @@ Rembrandt.Display = (function ($) {
 		});
 	
 		$(".EditMenu A").live("click", function(ev) {
+			ev.preventDefault();
 			ev.stopPropagation();
 			// get through parents ( menu ->  tooltip -> tag_edit -> first NE found)
 			// note that there is more than one NE (for nested ones), so go for the first. 
 			// look out, don't mess up their children.	
 		 	var action = $(this).attr("href")// #change of #delete
 			var ne = $(this).parents(".NE:first") 
-			if (action == "#change") {  changeNEclassModal(ne)}
+			if (action == "#change") {  changeNEclassModal(ne) }
 			if (action == "#delete") {	confirmDeletionModal(ne) }
 		
 		});
@@ -661,7 +663,7 @@ function changeNEclassModal(ne) {
 		dialog.data.find("#YesButton").click(function(ev) {
 			ev.preventDefault();
 			// remove tooltip
-			destroyTooltip(ne)
+			Rembrandt.Tooltip.destroy(ne)
 
 			ne.removeClass(ne.attr("C1"))
 			ne.removeClass(ne.attr("C2"))
@@ -870,7 +872,7 @@ function createNEModal(selected_terms) {
 					/* magic happens here */
 					var nextindex = getNextNEIndex($(".NE", selected_terms.parents("#rrs-doc-display-screen")))
 					// wrap terms with the NE
-					selected_terms.wrap("<DIV CLASS='NE' ID='"+nextindex+"'></DIV>")
+					selected_terms.wrapAll("<DIV CLASS='NE' ID='"+nextindex+"'></DIV>")
 					ne = selected_terms.parent("#"+nextindex)
 
 					

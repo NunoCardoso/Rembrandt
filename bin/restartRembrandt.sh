@@ -1,3 +1,3 @@
 #!/bin/bash 
-killRembrandtServer.sh
-runRembrandtServer.sh
+./bin/killRembrandtServer.sh
+./bin/runRembrandtServer.sh

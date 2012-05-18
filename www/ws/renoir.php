@@ -4,6 +4,8 @@ require_once(dirname(__FILE__).'/../inc/i18n.inc');
 require_once(dirname(__FILE__).'/../inc/config.inc');
 require_once(dirname(__FILE__).'/../inc/meta.inc');
 
+header('Content-Type: text/html; charset=utf-8');
+
 $i18n =  i18n::getInstance();
 $config = Config::getInstance();
 $lang = $_GET['lg']; if (!$lang) $lang = $_POST['lg']; if (!$lang) $lang = 'pt';

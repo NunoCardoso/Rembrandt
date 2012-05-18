@@ -1,3 +1,3 @@
 #!/bin/bash 
-./killRenoirServer.sh
-./runRenoirServer.sh
+./bin/killRenoirServer.sh
+./bin/runRenoirServer.sh

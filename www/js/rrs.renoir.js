@@ -3,8 +3,6 @@ var Renoir = (function ($) {
 	$(function () {
 		
 		if ($("#rrs-search-suggestion").attr("checked")) {
-
-//			$.fn.val = $.fn.html;
 			$("#q").autocomplete(Rembrandt.urls.restlet_suggestion_url, {
 				minChars: 2, 
 				dataType: "json", 
@@ -16,10 +14,7 @@ var Renoir = (function ($) {
 				formatMatch: _formatMatch,
 				multipleSeparator: " ",	
 				formatResult: _formatResult,
-				parse: _parser,
-				select: function(ev, ui) {
-					console.log(ev)
-				}
+				parse: _parser
 			});
 		}
 	
@@ -36,6 +31,15 @@ var Renoir = (function ($) {
 			var text = jQuery.trim(form.find("#q").val())
 			Renoir.display(text)
 		}); 
+		
+		/** submitting pre-existing queries */	
+		$("A#rrs-search-submit-button-2").click(function(e) {
+			e.preventDefault();
+			// important to sanitize the next page / query //
+			var form = $("#rrs-search-form")
+			var val = $("#query option:selected").val()
+			Renoir.fetchQrelsForQueryID(val)
+		});
 	
 		/** shows and hides advanced info **/
 		$("#rrs-search-advanced-link").live("click", function(e) {
@@ -249,6 +253,145 @@ var Renoir = (function ($) {
 		return parsed;
 	},
 	
+	fillQueryCollecions = function(select_) {
+		if (select_.find("option").size() > 1) return
+		jQuery.ajax({type:'GET', 
+			url:Rembrandt.urls.restlet_renoir_query_collection_url,
+			dataType:'json',
+		 	beforeSubmit: waitMessageBeforeSubmit(lang), 
+			success: function(response) {
+				if (response['status'] == -1) {
+					errorMessageWaitingDiv(lang, response) //['message'])
+				} else {
+					hideWaitingDiv()
+					select_.append("<option value=''>--</option>")
+					var message = response["message"]
+					for (var i in message) {
+						select_.append("<option value='"+message[i]["qcl_id"]+"'>"+message[i]["qcl_name"]+"</option>")
+					}
+				}
+			}, 
+			error: function(response) {
+				errorMessageWaitingDiv(lang, response)
+			}
+		})
+	},
+	
+	fillQueries = function(select_, val) {
+		if (select_.find("option").size() > 1) return
+		jQuery.ajax({type:'GET', 
+			url:Rembrandt.urls.restlet_renoir_queries_url+"?q="+val,
+			dataType:'json',
+		 	beforeSubmit: waitMessageBeforeSubmit(lang), 
+			success: function(response) {
+				if (response['status'] == -1) {
+					errorMessageWaitingDiv(lang, response) //['message'])
+				} else {
+					hideWaitingDiv()
+					var message = response["message"]
+					for (var i in message) {
+						var text = message[i]["que_query"]
+						text = text.replace(/\]/g," ").replace(/\[/g,"").trim()
+						select_.append("<option value='"+message[i]["que_id"]+"'>"+text+"</option>")
+					}
+				}
+			}, 
+			error: function(response) {
+				errorMessageWaitingDiv(lang, response)
+			}
+		})
+	},
+	
+	fetchQrelsForQueryID = function (queryid, query) {
+
+		var lang = $('HTML').attr('lang')	
+		var limit = Rembrandt.Util.getQueryVariable("l");
+		var offset = Rembrandt.Util.getQueryVariable("o");
+		var user = Rembrandt.Util.getUser()
+		var api_key= Rembrandt.Util.getApiKey();
+		var maps = $('#as_maps').attr('checked') // tells RENOIR to return coordinate stuff
+
+		var main_body = $("#main-body")
+		// not really slidable, but it must be included for hide/show
+		main_body.html("<DIV ID='rrs-homepage-search' CLASS='main-slidable-div' TITLE='"+
+		i18n['search'][lang]+"'></DIV>")	
+		// add this breadcrumble header, with or without query
+		addBreadcrumbleHeader($("#rrs-homepage-search").attr('title'), 'rrs-homepage-search')
+		
+		if (!_.isUndefined(queryid)) {
+	
+			var divtohide = $("DIV.main-slidable-div:visible")
+			var target = "rrs-searchresult-show-"+queryid
+			var divtoshow = $("#"+target)
+			var slide = "horizontal"
+			
+			jQuery.ajax({type:'POST', 
+				url:Rembrandt.urls.restlet_renoir_searchwithqrel_url+
+					"?q="+queryid,
+				contentType:"application/x-www-form-urlencoded",
+				data: "u="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(user))+
+				"&lg="+lang+
+				(limit ? "&l="+limit : "") + 
+				(offset ? "&o="+offset : "" )+
+				(maps ? "&maps="+maps : "") + 
+				"&api_key="+api_key,
+				dataType:'json',
+				beforeSubmit: waitMessageBeforeSubmit(lang), 
+			
+				success: function(response)  {
+					if (response['status'] == -1) {
+						errorMessageWaitingDiv(lang, response) //['message'])
+					} else {
+						hideWaitingDiv()
+					
+						var su = false
+						var pubkey = response['usr_pub_key']
+				
+						if (!_.isUndefined(pubkey)) {
+							$("#main-body").attr('USR_PUB_KEY',pubkey)
+							su = Rembrandt.Util.validateSu(pubkey)
+						}
+				
+						divtoshow = generateSearchResultShowDIV(response,  su, 'saskia', {"id":queryid, "maps":maps, "query":query})
+					
+						if (slide == 'horizontal') {
+							addSlidableDivHeaderTo(divtoshow, divtohide, null);
+							addForwardButtonTargeting(divtohide, divtoshow);	
+						} else {
+							// copy slidable div header from the doc to hide
+							copySlidableDivHeaderFromTo(divtohide, divtoshow)
+							replaceForwardButtonsTargetingThisToThis(divtohide, divtoshow)
+						}
+
+						// add the new divs
+						divtoshow.appendTo($("#main-body"))
+						
+						// add submenu to side menu
+						var sidemenu = addSubmeuOnSideMenu("searchresult", "saskia")
+						configureSubmenu(sidemenu, "saskia", {"id":queryid})
+						if (slide == 'horizontal') {
+							// up/down slides already make this check, this is for 'new' sidemenus 
+							reviewSideMenuMakeActiveFor(sidemenu, divtoshow.attr('id'))
+						}
+						showSubmeuOnSideMenu(sidemenu)
+				
+					// add breadcrumble (label, target)
+						if (slide == 'vertical') {
+							substituteLastBreadcrumbleElement(divtoshow.attr('title'), divtoshow.attr('id'))
+							slideDownWith(divtoshow)	
+						} else {		
+							addBreadcrumbleElement(divtoshow.attr('title'), divtoshow.attr('id'))
+							slideLeftToRightWith(divtoshow)
+						}	
+						// now process maps
+						if (maps) processMap(response, $('#rrs-searchresult-map', divtoshow))
+					}
+				},
+				error: function(response) {errorMessageWaitingDiv(lang, response)}
+			})
+		}
+	},
+	
 	_formatItem = function(row) {
 		// row0: name row1: type row2:NE-desc row3: ground info 
 	 	return "["+row[1]+"] "+row[0] + (row[2] != 'null' ? " <I>"+row[2]+"</I>" : "");
@@ -322,6 +465,9 @@ var Renoir = (function ($) {
 		"display":display,
 		"Tag":Tag,
 		"addTag":addTag,
-		"getTags":getTags
+		"getTags":getTags,
+		"fillQueryCollecions": fillQueryCollecions,
+		"fillQueries": fillQueries,
+		"fetchQrelsForQueryID":fetchQrelsForQueryID
 	}
 })(jQuery);

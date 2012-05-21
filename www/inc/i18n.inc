@@ -161,7 +161,9 @@ $this->renoir = array(
 	'advanced-search' => array("en" => "Advanced search", "pt" => "Pesquisa avançada"),
 	'search' => array("en" => "Search", "pt" => "Pesquisa"),
 	'new-query'  => array("en" => "New query", "pt" => "Nova pesquisa"),
-	'existing-query'  => array("en" => "Existing query", "pt" => "Pesquisa pré-definida")
+	'existing-query'  => array("en" => "Existing query", "pt" => "Pesquisa pré-definida"),
+	'query'  => array("en" => "Query", "pt" => "Consulta"),
+	'query-set'  => array("en" => "Query set", "pt" => "Lista de consultas")
 );
 
 $this->saskia = array(

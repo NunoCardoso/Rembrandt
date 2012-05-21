@@ -85,6 +85,14 @@ float: right;
 	margin-bottom:10px;
 }
 
+.relevant_document {
+	background-color: lightgreen;
+}
+
+.irrelevant_document {
+	background-color: pink;
+}
+
 .rrs-searchresult-snippet-title a {
   color:#142c46; 
   text-indent:0px;

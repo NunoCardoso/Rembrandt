@@ -56,9 +56,21 @@ public class RenoirServerApplication extends Application {
 		SearchMapping searchMapping = new SearchMapping(db)
 		searchMapping.attach(MediaType.APPLICATION_JSON, searchMapping.JSONanswer)
 
+		QueryCollectionMapping queryCollectionMapping = new QueryCollectionMapping(db)
+		queryCollectionMapping.attach(MediaType.APPLICATION_JSON, queryCollectionMapping.JSONanswer)
+
+		QueriesMapping queriesMapping = new QueriesMapping(db)
+		queriesMapping.attach(MediaType.APPLICATION_JSON, queriesMapping.JSONanswer)
+
+		SearchQrelMapping searchQrelMapping = new SearchQrelMapping(db)
+		searchQrelMapping.attach(MediaType.APPLICATION_JSON, searchQrelMapping.JSONanswer)
+
 		router.attach("/Renoir/suggest", suggestMapping)
 		router.attach("/Renoir/dbosuggest", dboMapping)
 		router.attach("/Renoir/search", searchMapping)
+		router.attach("/Renoir/querycollection", queryCollectionMapping)
+		router.attach("/Renoir/queries", queriesMapping)
+		router.attach("/Renoir/searchqrel", searchQrelMapping)
 
 		return router
 	}

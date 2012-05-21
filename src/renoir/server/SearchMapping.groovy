@@ -110,15 +110,15 @@ public class SearchMapping extends WebServiceRestletMapping {
 			if (par["POST"]["as_model"]) model = par["POST"]["as_model"]
 			if (!model) model = "bm25"
 			if (par["POST"]["stem"]) {
-				try {stem = Boolean.parseBoolean(par["POST"]["as_stem"])}
+				try {stem = Boolean.parseBoolean(par["POST"]["stem"])}
 				catch(Exception e) {}
 			}
 			if (par["POST"]["maps"]) {
-				try {maps = Boolean.parseBoolean(par["POST"]["as_maps"])}
+				try {maps = Boolean.parseBoolean(par["POST"]["maps"])}
 				catch(Exception e) {}
 			}
 			if (par["POST"]["partialscores"]) {
-				try {partialscores = Boolean.parseBoolean(par["POST"]["as_partialscores"])}
+				try {partialscores = Boolean.parseBoolean(par["POST"]["partialscores"])}
 				catch(Exception e) {}
 			}
 			/***********************/

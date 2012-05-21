@@ -146,7 +146,17 @@ function generateSearchResultShowDIV(searchresult, su, role, options) {
 		var title = res[i]['title'];
 		var abstract = res[i]['abstract']
 		
-		s += "<DIV CLASS='rrs-searchresult-snippet' ID='rrs-searchresult-snippet-pos"+ii+"'>";
+		// for qrel searches
+		var qrel_class = ""
+		if (!_.isUndefined(res[i]['qrel'])) {
+			if (res[i]['qrel'] == 1) {
+				qrel_class = "relevant_document"
+			}else if (res[i]['qrel'] == 0) {
+				qrel_class = "irrelevant_document"
+			}
+		}
+		
+		s += "<DIV CLASS='rrs-searchresult-snippet "+qrel_class+"' ID='rrs-searchresult-snippet-pos"+ii+"'>";
 		
 		// if we're going for maps, place an icon here.//
 		if (options.maps) s += "<A NAME='pos"+ii+"'><IMG style='float:left;margin:4px;' SRC='img/maps/iconr"+ii+".png'>"
@@ -176,7 +186,6 @@ function generateSearchResultShowDIV(searchresult, su, role, options) {
 		s += "</DIV>\n"; // snippet
 		pageablediv.append(s)
     }
-
 
 // start pager
 
@@ -231,7 +240,6 @@ function processMap(res, mapdiv) {
 				}
 			}
 		}	
-
 		createGoogleMap(mapdiv, points, plines)
 	
 }

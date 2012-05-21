@@ -29,15 +29,19 @@ HTML;
 generateCSS($do);
 generateJS($config);
 ?>
-<style>
-html {overflow: hidden;} 
-</style>
 </head>
 <body class="top">
 <script>
 $(document).ready(function() {
    Renoir.display();
    $( "#tabs" ).tabs();
+   Renoir.fillQueryCollecions($("#query_collection"))
+   $("#query_collection").live("change", function() {
+		$("#query").attr("disabled", false)
+		var val = $("#query_collection").find("option:selected").val()
+		var query = $("#query_collection").find("option:selected").text()
+		Renoir.fillQueries($("#query"), val, query)
+	})
 })
 </SCRIPT>
 <DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
@@ -210,31 +214,15 @@ $(document).ready(function() {
 		</div>
 		<div id="tabs-2">
 			<DIV ID="rrs-search-box">
-
-				<FORM ACTION="<?php echo curPageURL(array('do'=>'search'));?>" ID="rrs-search-form" 
-		  			METHOD="POST" AUTOCOMPLETE="OFF" style="display:inline-block;">
-		 			<TEXTAREA style="width:500px; height:22px;" CLASS="ac_input" AUTOCOMPLETE="OFF" ID="q" NAME="q"><?php echo utf8_encode($query); ?></TEXTAREA>
-
-					<!-- SEMANTIC TAGS DIV -->
-					<DIV ID="rrs-search-tags">
-					<?php 
-					if ($tag) {	$tags = json_decode($tag, true);}	
-				//echo $tags;
-					$index = 0;
-					if ($tags) {
-						foreach($tags as $tag){
-					echo "<DIV ID='tag_".(++$index)."' CLASS='tag tag_type_".$tag['type']."'" ;
-					echo " value='".$tag['name']."'>".$tag['name']." ";
-					echo "<A CLASS='tag_remove'>&times;</A></DIV>";
-				}
-			}
-			?>	
-					</DIV> 
-					<DIV style="margin-left:190px;">
-						<A CLASS="main-button" ID="rrs-search-submit-button" HREF="#">
-							<SPAN><?php echo $i18n->buttons["search"][$lang];?></SPAN></A>  	
-					</DIV>
-				</FORM>	
+				<DIV><?php echo $i18n->renoir["query-set"][$lang]; ?>: 
+					<select id="query_collection" size="1"></select></DIV>
+				<DIV><?php echo $i18n->renoir["query"][$lang]; ?>: 
+					<select id="query" size="1" disabled></select></DIV>
+				<DIV style="margin-left:190px;">
+					<A CLASS="main-button" ID="rrs-search-submit-button-2" HREF="#">
+						<SPAN><?php echo $i18n->buttons["search"][$lang];?></SPAN></A>  
+				</DIV>
+								
    			</DIV> 	
 		</div>		
 	</div>

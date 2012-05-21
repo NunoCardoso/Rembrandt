@@ -106,7 +106,8 @@ class RenderDocDetailsStats {
 		// points[0] = {"latitude":24t2.23, }
 		s.append "<DIV ID='stats-map-div' class='stats-box'>\n"
 		s.append "<P><B>${i18n.statstitle['doc_map'][lang]}</B></P>"
-		s.append "<DIV ID='stats-map' style='width:300px; height:300px;'><SCRIPT>createGoogleMap('stats-map', ["
+		s.append "<DIV ID='stats-map' style='width:300px; height:300px;'>"
+		s.append "<SCRIPT>createGoogleMap(\$('#stats-map'), ["
 		List s2 = []
 		coordinates?.eachWithIndex{c, i ->
 			s2 += "{'Latitude':"+c['Latitude']+", 'Longitude':"+c['Longitude']+"}"

@@ -48,13 +48,13 @@ REMBRANDT 1.3beta1 is avaliable. <a href="<?php echo curPageURL(array('do'=>'dow
 	   			<SPAN><?php echo $i18n->buttons['execRembrandt'][$lang]; ?></SPAN>
 			</A>  
 		</div>	
-   </FORM>		
+   </FORM>
 
    <DIV ID="rembrandt-results-1" CLASS="rrs-doc-display" style="width:auto;"></DIV>
-   <script> $(document).ready(function() {			
+   <script> $(document).ready(function() {
 		Rembrandt.Display.appendDocDisplayTo($('#rembrandt-results-1'))
   })
-  </script>		
+  </script>
 </DIV>
 
 <P>Liked it? Read also the <a href="<?php echo curPageURL(array('do'=>'help-faq'));?>">FAQ</a> to know what is REMBRANDT, and <a href="<?php echo curPageURL(array('do'=>'help-tutorial'));?>">do the tutorial</A> about this service, by running a few examples and get acquainted with the results. If you want, you can look into the <a href="<?php echo curPageURL(array('do'=>'help-doc'));?>">REMBRANDT documentation</a>, which includes papers and presentations about this annotation tool.</P>

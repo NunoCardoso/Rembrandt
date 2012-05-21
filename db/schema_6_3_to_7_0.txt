@@ -1,0 +1,84 @@
+-- -----------------------------------------------------
+-- Table `query_collection`
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `query_collection` ;
+
+CREATE TABLE `query_collection` (
+   `qcl_id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+   `qcl_collection` int(10) unsigned DEFAULT NULL,
+   `qcl_name` VARCHAR(255) NOT NULL, 
+   `qcl_owner` int(10) unsigned DEFAULT NULL,
+   `qcl_lang` VARCHAR(2) DEFAULT NULL, 
+   `qcl_permission` char(9) DEFAULT NULL,
+   `qcl_comment` VARCHAR(255) NULL DEFAULT NULL,
+    PRIMARY KEY (`qcl_id`)
+) 
+ENGINE = InnoDB;
+
+ALTER TABLE `query_collection` ADD CONSTRAINT FOREIGN KEY (`qcl_collection`) 
+ REFERENCES `collection` (`col_id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+ALTER TABLE `query_collection` ADD CONSTRAINT FOREIGN KEY (`qcl_owner`) 
+ REFERENCES `user` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+-- -----------------------------------------------------
+-- Table `query`
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `query` ;
+
+CREATE TABLE `query` (
+  `que_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `que_original_id` varchar(255) DEFAULT NULL,
+  `que_qcollection` int(10) unsigned NOT NULL,
+  `que_query` TEXT DEFAULT NULL,
+  PRIMARY KEY (`que_id`),
+  KEY `idx_que_original_id` (`que_original_id`)
+) 
+ENGINE = InnoDB;
+
+ALTER TABLE `query` ADD CONSTRAINT FOREIGN KEY (`que_qcollection`) 
+ REFERENCES `query_collection` (`qcl_id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+-- -----------------------------------------------------
+-- Table `qrel`
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `qrel` ;
+
+CREATE TABLE `qrel` (
+  `qrl_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `qrl_query` int(10) unsigned NOT NULL,
+  `qrl_doc` int(10) unsigned NOT NULL,
+  `qrl_user` int(10) unsigned NOT NULL,
+  `qrl_qrel` TINYINT DEFAULT NULL,
+  PRIMARY KEY (`qrl_id`)
+) 
+ENGINE = InnoDB;
+
+ALTER TABLE `qrel` ADD CONSTRAINT FOREIGN KEY (`qrl_query`) 
+ REFERENCES `query` (`que_id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+ALTER TABLE `qrel` ADD CONSTRAINT FOREIGN KEY (`qrl_doc`) 
+ REFERENCES `doc` (`doc_id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+ALTER TABLE `qrel` ADD CONSTRAINT FOREIGN KEY (`qrl_user`) 
+ REFERENCES `user` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+-- -----------------------------------------------------
+-- Table `query_has_ne`
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `query_has_ne` ;
+
+CREATE  TABLE IF NOT EXISTS `query_has_ne` (
+  `qhn_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `qhn_query` INT UNSIGNED NOT NULL ,
+  `qhn_ne` INT UNSIGNED NOT NULL ,
+  `dhn_term` INT NOT NULL,
+  PRIMARY KEY (`qhn_id`)
+)
+ENGINE = InnoDB;
+
+ALTER TABLE `query_has_ne` ADD CONSTRAINT  FOREIGN KEY (`qhn_query` ) 
+ REFERENCES `query` (`que_id` ) ON DELETE CASCADE ON UPDATE CASCADE ;
+ALTER TABLE `query_has_ne` ADD CONSTRAINT  FOREIGN KEY (`qhn_ne` ) 
+ REFERENCES `ne` (`ne_id` ) ON DELETE CASCADE ON UPDATE CASCADE ;

@@ -50,15 +50,22 @@ echo <<<HTML
 <script type="text/javascript" src="js/lib/jquery.iframe-auto-height.plugin.1.6.0.min.js"></script>
 <title>{$i18n->title[$do][$lang]}</title>
 <link rel="alternate" type="application/rss+xml" title="{$i18n->news['title'][$lang]}" href="{$config->feedrss[$lang]}" />
+
+<style>
+html, body { height: 100% }
+</style>
+
 </HEAD>
 HTML;
 ?>
 
 <BODY class="main">
 	<script>
-	$(document).ready(function () {
-    $('iframe').iframeAutoHeight();  
-  });
+
+	
+//	$(document).ready(function () {
+ //   $('iframe').iframeAutoHeight();  
+ // });
 </script>
 <DIV ID="main-container">		
 	<DIV ID="main-header">
@@ -91,7 +98,7 @@ HTML;
 	</DIV>
 	
 	<DIV ID="main-content">
-		<IFRAME name='myframe' width='100%' height='100%' frameborder=0 src='frontpage.php?lg=<?php echo $lang; ?>'>
+		<IFRAME id="myframe" name='myframe' width='100%' height='100%' frameborder=0 src='frontpage.php?lg=<?php echo $lang; ?>'>
 		</IFRAME>
 	</DIV> 	
 	<?php footer(); ?>

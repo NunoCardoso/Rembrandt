@@ -13,6 +13,7 @@ function createGoogleMap(map_div, points_array, polylines_array) {
          //points.push(new GLatLng(-14.1,-49.6));
          }
 
+		if (!_.isUndefined(polylines_array) ) {
 // A polyline must be splitted by space, then by comma (ex: -34.497291564941,-58.408298492432)
 		for (var i=0; i < polylines_array.length; i++) { 
 			var raw_points_array =  polylines_array[i].split(" ")
@@ -28,8 +29,9 @@ function createGoogleMap(map_div, points_array, polylines_array) {
 			
 			polylines.push(new GPolyline(polyline_points));
          }
+		}
         // definir a BB
-        var bounds = new GLatLngBounds;
+/*        var bounds = new GLatLngBounds;
         for (var i=0; i<points.length; i++) {
                 bounds.extend(points[i]);
     	}
@@ -63,6 +65,7 @@ function createGoogleMap(map_div, points_array, polylines_array) {
 
      map.addControl(new GLargeMapControl())
      mgr.refresh()
+*/
 }
 
 

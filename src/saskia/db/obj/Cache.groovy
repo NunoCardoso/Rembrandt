@@ -76,7 +76,7 @@ class Cache extends DBObject {
 			"VALUES(?,?, NOW(),?, ?, ?) ON DUPLICATE KEY UPDATE cac_date=NOW(), cac_expire=?, cac_obj=?",
 			[cac_id, cac_collection.col_id, cac_expire, cac_lang, cac_obj, cac_expire, cac_obj])
 		log.info "Cache added to DB: ${this}"
-		return (long)res[0][0]
+		if (res) return 1 else return 0
 	}
 
 	public int removeThisFromDB() {

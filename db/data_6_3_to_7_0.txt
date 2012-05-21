@@ -1,8 +1,7 @@
 
 INSERT INTO `user` VALUES (4,'teste',1,';teste;admin;',1,'Teste','Teste','teste@teste.com','698dc19d489c4e4db73e28a713eab07b','698dc19d489c4e4db73e28a713eab07b','0d6805d6eca3553940d69ce67ef1ae70','0d6805d6eca3553940d69ce67ef1ae70','75e907d88c2f73e19267cd24bcdf4320',10,10,100000,1000,0,0,'2012-05-20 18:11:34');
 
--- INSERT INTO `user` VALUES
--- (5,'geoclef',0,';geoclef;',0,'GeoCLEF','GeoCLEF','geoclef@geoclef.com','dff86cd537ef5583ef6ec915043d0807','dff86cd537ef5583ef6ec915043d0807','92fe0dd1881c55e2dea436d0e5b8e630','92fe0dd1881c55e2dea436d0e5b8e630','1777d4cd2b688ed9f761ed4f27bd0cab',10,10,100000,1000,0,0,'2012-05-20 18:33:03');
+INSERT INTO `user` VALUES  (5,'geoclef',0,';geoclef;',0,'GeoCLEF','GeoCLEF','geoclef@geoclef.com','dff86cd537ef5583ef6ec915043d0807','dff86cd537ef5583ef6ec915043d0807','92fe0dd1881c55e2dea436d0e5b8e630','92fe0dd1881c55e2dea436d0e5b8e630','1777d4cd2b688ed9f761ed4f27bd0cab',10,10,100000,1000,0,0,'2012-05-20 18:33:03');
 
 insert into query_collection(`qcl_collection`,`qcl_name`,`qcl_owner`,`qcl_lang`,`qcl_permission`,`qcl_comment`) values 
 (10,'GeoCLEF 2005 EN',5,'en','rwar--r--','GeoCLEF 2005 english'),

@@ -6,22 +6,29 @@ echo <<<HTML
 HTML;
 	}
 echo <<<HTML
+	<link rel="stylesheet" type="text/css" href="css/themes/base/jquery.ui.all.css" />	
+	<link rel="stylesheet" type="text/css" href="css/themes/base/jquery.ui.tabs.css" />	
+	<link rel="stylesheet" type="text/css" href="css/lib/jquery.autocomplete.css" />	
 	<link rel="stylesheet" type="text/css" href="css/rrs.main.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.commonui.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.ne.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.docdisplay.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.admin.css" />
-	<link rel="stylesheet" type="text/css" href="css/rrs.tabs.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.stats.css" />
-	<link rel="stylesheet" type="text/css" href="css/lib/jquery.visualize.css" />	
-	<link rel="stylesheet" type="text/css" href="css/lib/jquery.autocomplete.css" />
-	<link rel="stylesheet" type="text/css" href="css/rrs.tags.css" />	
+	<link rel="stylesheet" type="text/css" href="css/rrs.tabs.css" />
+	<link rel="stylesheet" type="text/css" href="css/rrs.tags.css" />
 HTML;
 }
 
 function generateJS($config) {
 echo <<<HTML
-	<script type="text/javascript" src="js/lib/jquery-1.7.1.js" ></script>
+	<script type="text/javascript" src="js/lib/jquery-1.7.2.js" ></script>
+	<script type="text/javascript" src="js/lib/ui/jquery-ui-1.8.20.custom.js" ></script>
+	<script type="text/javascript" src="js/lib/ui/jquery.ui.selectable.js" ></script>
+	<script type='text/javascript' src='js/lib/ui/jquery.ui.sortable.js' ></script>
+	<script type="text/javascript" src="js/lib/ui/jquery.effects.core.js" ></script>
+	<script type="text/javascript" src="js/lib/ui/jquery.effects.explode.js" ></script>
+
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript" src="js/lib/gmap3.min.js"></script>
 	<script type="text/javascript" src="js/lib/mustache.js" ></script>
@@ -30,11 +37,7 @@ echo <<<HTML
 	<script type="text/javascript" src="js/lib/jquery.json-2.2.min.js" ></script>
 	<script type='text/javascript' src='js/lib/jquery.cookie.js' ></script>
 	<script type="text/javascript" src="js/lib/jquery.tablesorter.js" ></script>
-	<script type="text/javascript" src="js/lib/jquery-ui-1.8.2.custom.min.js" ></script>
-	<script type="text/javascript" src="js/ui/jquery.ui.selectable.js" ></script>
-	<script type='text/javascript' src='js/ui/jquery.ui.sortable.js' ></script>
-	<script type="text/javascript" src="js/ui/jquery.effects.core.js" ></script>
-	<script type="text/javascript" src="js/ui/jquery.effects.explode.js" ></script>
+	
 	<script type='text/javascript' src='js/lib/jquery.hoverflow.min.js' ></script>
 	<script type="text/javascript" src="js/lib/jquery.bt.js" ></script>
 	<script type="text/javascript" src="js/lib/jquery.svg.js" ></script>

@@ -11,6 +11,7 @@ $config = Config::getInstance();
 $lang = $_GET['lg']; if (!$lang) $lang = $_POST['lg']; if (!$lang) $lang = 'pt';
 $su = $_COOKIE['su'];
 $su_collection = $_COOKIE['su_collection'];
+$query = $_GET['q'];
 
 $collection = $_COOKIE['collection'];
 $collection_id = $_COOKIE['collection_id'];
@@ -35,7 +36,8 @@ html {overflow: hidden;}
 <body class="top">
 <script>
 $(document).ready(function() {
-   displayBodyOfRenoir()
+   Renoir.display();
+   $( "#tabs" ).tabs();
 })
 </SCRIPT>
 <DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
@@ -167,15 +169,25 @@ $(document).ready(function() {
 
 <DIV ID="main-form">
 <!-- SEARCH DIV - includes logo -->
-	<DIV ID="rrs-search-box">
 
-		<FORM ACTION="<?php echo curPageURL(array('do'=>'search'));?>" ID="rrs-search-form" 
-		  METHOD="POST" AUTOCOMPLETE="OFF" style="display:inline-block;">
-		 <TEXTAREA style="width:500px; height:22px;" CLASS="ac_input" AUTOCOMPLETE="OFF" ID="q" 
-		 NAME="q"><?php echo utf8_encode($query); ?></TEXTAREA>
+	<div id="tabs">
+		<ul>
+			<li>
+				<a href="#tabs-1"><?php echo $i18n->renoir["new-query"][$lang];?></a>
+			</li>
+			<li>
+				<a href="#tabs-2"><?php echo $i18n->renoir["existing-query"][$lang];?></a>
+			</li>
+		</ul>
+		<div id="tabs-1">
+			<DIV ID="rrs-search-box">
 
-		<!-- SEMANTIC TAGS DIV -->
-		<DIV ID="rrs-search-tags">
+				<FORM ACTION="<?php echo curPageURL(array('do'=>'existing-search'));?>" ID="rrs-search-form" 
+		  			METHOD="POST" AUTOCOMPLETE="OFF" style="display:inline-block;">
+		 			<TEXTAREA style="width:500px; height:22px;" CLASS="ac_input" AUTOCOMPLETE="OFF" ID="q" NAME="q"><?php echo utf8_encode($query); ?></TEXTAREA>
+
+					<!-- SEMANTIC TAGS DIV -->
+					<DIV ID="rrs-search-tags">
 			<?php 
 			if ($tag) {	$tags = json_decode($tag, true);}	
 			//echo $tags;
@@ -188,13 +200,44 @@ $(document).ready(function() {
 				}
 			}
 			?>	
-		</DIV> 
-		<DIV style="margin-left:190px;">
-			<A CLASS="main-button" ID="rrs-search-submit-button" HREF="#">
-			<SPAN><?php echo $i18n->buttons["search"][$lang];?></SPAN></A>  
-		</DIV>
-		</FORM>	
-   </DIV> 	
+					</DIV> 
+					<DIV style="margin-left:190px;">
+						<A CLASS="main-button" ID="rrs-search-submit-button" HREF="#">
+							<SPAN><?php echo $i18n->buttons["search"][$lang];?></SPAN></A>  
+					</DIV>
+				</FORM>	
+   			</DIV> 	
+		</div>
+		<div id="tabs-2">
+			<DIV ID="rrs-search-box">
+
+				<FORM ACTION="<?php echo curPageURL(array('do'=>'search'));?>" ID="rrs-search-form" 
+		  			METHOD="POST" AUTOCOMPLETE="OFF" style="display:inline-block;">
+		 			<TEXTAREA style="width:500px; height:22px;" CLASS="ac_input" AUTOCOMPLETE="OFF" ID="q" NAME="q"><?php echo utf8_encode($query); ?></TEXTAREA>
+
+					<!-- SEMANTIC TAGS DIV -->
+					<DIV ID="rrs-search-tags">
+					<?php 
+					if ($tag) {	$tags = json_decode($tag, true);}	
+				//echo $tags;
+					$index = 0;
+					if ($tags) {
+						foreach($tags as $tag){
+					echo "<DIV ID='tag_".(++$index)."' CLASS='tag tag_type_".$tag['type']."'" ;
+					echo " value='".$tag['name']."'>".$tag['name']." ";
+					echo "<A CLASS='tag_remove'>&times;</A></DIV>";
+				}
+			}
+			?>	
+					</DIV> 
+					<DIV style="margin-left:190px;">
+						<A CLASS="main-button" ID="rrs-search-submit-button" HREF="#">
+							<SPAN><?php echo $i18n->buttons["search"][$lang];?></SPAN></A>  	
+					</DIV>
+				</FORM>	
+   			</DIV> 	
+		</div>		
+	</div>
 </DIV>
 
 <DIV ID="main-body"></DIV>

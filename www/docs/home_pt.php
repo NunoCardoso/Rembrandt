@@ -13,7 +13,12 @@ O REMBRANDT 1.3beta1 já está disponível. <a href="<?php echo curPageURL(array
 <B>1. Pesquisa de documentos</B> - Coloque questões simples e adicione entidades na sua consulta, para ver documentos que respondam o que pretende. Os resultados serão exibidos numa página nova.
 </div>
 <div>
-<?php include("inc/renoir_search_complete.php"); ?>
+	<div stlye="display:inline-block;">
+		<DIV CLASS="rrs-logo">
+			<IMG SRC="<?php echo $config->imgdir."/".$config->renoir_head_image;?>">
+		</DIV>
+	<a style="line-height:44px; font-size:16px;" href="frontpage.php?do=search">Pesquise nos documentos com o RENOIR</a>
+	</div>
 </div>
 </DIV>
 

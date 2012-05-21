@@ -2,8 +2,10 @@
 $(document).ready(function() {
    $(document).ajaxError(function(e, xhr, settings, exception)  {
 		$('.rrs-waiting-div-message').html(errormessage(lang, i18n['service-unavailable-sorry'][lang] + getWaitingDivCloseButton()))	
-		console.log('erro a pedir ' + settings.url + ' \n'+'error:\n' + xhr.responseText ); 
-		console.log('e ' + e + ' \n'+'excepcao:\n' + exception ); 
+		console.log('erro a pedir ' + settings.url + ' \n'+'error:\n');
+		console.log( xhr.responseText ); 
+		console.log('e ' + e + ' \n'+'excepcao:\n');
+		console.log( exception ); 
 		$(".rrs-waiting-div").show()
 	});
 	

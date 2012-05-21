@@ -82,7 +82,7 @@ if ($do != "news" && $do != "sitesearch" && $do != 'collections' && $do != 'tag'
 }
 		
 // remove all pages where I don't want breadcrumbles or a flat line
-if ($do != "news" && $do != "sitesearch" && $do != 'collections' && $do != 'tag'  && $do != 'search')  {
+if ($do != "news" && $do != "sitesearch" && $do != 'collections' && $do != 'tag'  && $do != 'search' && $do != 'existing-search' )  {
 	echo "<DIV ID='main-header-menu' style='margin-left: 0px'>\n";
 		echo "<DIV ID='main-breadcrumbles'>\n";
 			echo generateBreadCrumbles($do, $lang); 
@@ -92,9 +92,10 @@ if ($do != "news" && $do != "sitesearch" && $do != 'collections' && $do != 'tag'
 
 // main-body
 echo "<div>";	
-if ($do == "search" || $do == "tag" || $do == "collections") { 
+if ($do == "search" || $do == "existing-search" || $do == "tag" || $do == "collections") { 
 		switch($do) {
 			case "search":
+			case "existing-search":
 			echo "<script> window.location.href='".
 				$config->urlbasedir."/".$config->wsdir.'/renoir.php?lg='.$lang .
 			"';</script>";
@@ -114,7 +115,7 @@ if ($do == "search" || $do == "tag" || $do == "collections") {
 		}
 		echo "'></div>";
 
-	} else if ($do != "search" && $do != "tag" && $do != "collections") { // renoir-search manages its own space */
+	} else if ($do != "search" && $do != "existing-search" && $do != "tag" && $do != "collections") { // renoir-search manages its own space */
 
 		echo "<DIV ID='main-body' STYLE='margin-left:0px;'>\n";
 
@@ -188,7 +189,7 @@ if ($do == "search" || $do == "tag" || $do == "collections") {
 	
 	// main footer 
 	// não faz sentido colocar a data na página de notícias, ou nos resultados da pesquisa
-	 if ($do != "news-feeds" && $do != "search" && $do != 'collections' && $do != 'renoir' && $do != 'sitesearch' && $do != 'tag') 
+	 if ($do != "news-feeds" && $do != "search" && $do != "existing-search" && $do != 'collections' && $do != 'renoir' && $do != 'sitesearch' && $do != 'tag') 
 		{
 			getLastModified($page);}
 	 ?>	

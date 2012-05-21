@@ -159,7 +159,9 @@ class i18n {
 /** stuff for RENOIR search */
 $this->renoir = array(
 	'advanced-search' => array("en" => "Advanced search", "pt" => "Pesquisa avançada"),
-	'search' => array("en" => "Search", "pt" => "Pesquisa")
+	'search' => array("en" => "Search", "pt" => "Pesquisa"),
+	'new-query'  => array("en" => "New query", "pt" => "Nova pesquisa"),
+	'existing-query'  => array("en" => "Existing query", "pt" => "Pesquisa pré-definida")
 );
 
 $this->saskia = array(

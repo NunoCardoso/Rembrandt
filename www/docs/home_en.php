@@ -11,8 +11,11 @@ REMBRANDT 1.3beta1 is avaliable. <a href="<?php echo curPageURL(array('do'=>'dow
 <DIV CLASS="main-center-note" >
 <div CLASS="main-left-description">
 <B>1. Document search</B> - Submit simple questions and add entities to your queries, to see documents that meet what you want. Results will be displayed in a new page.</div>
-<div>
-<?php include("inc/renoir_search_complete.php"); ?>
+<div stlye="display:inline-block;">
+	<DIV CLASS="rrs-logo">
+		<IMG SRC="<?php echo $config->imgdir."/".$config->renoir_head_image;?>">
+	</DIV>
+<a style="line-height:44px; font-size:16px;" href="frontpage.php?do=search">Search documents with RENOIR</a>
 </div>
 </DIV>
 

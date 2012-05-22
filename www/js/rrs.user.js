@@ -361,7 +361,7 @@ function modalUserLogin() {
 						// change only if the current collection does not have read privileges 
 						// ajax perm to restlet_saskia_col_url do=list-all&api_key=&lg=
 						
-						var res = i18n['collection'][lang]+": <A CLASS='collection' HREF='#' "
+						var res = i18n['collection'][lang]+": <A CLASS='collection COLLECTION_SWITCH' HREF='#' "
 						res += " COLLECTION='"+$("#rrs-collections").attr("DEFAULT")
 						res += " COLLECTION_ID='"+$("#rrs-collections").attr("DEFAULT_ID")+"'>"
 						res += $("#rrs-collections").attr("DEFAULT") + "</A>"	

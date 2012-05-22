@@ -45,10 +45,9 @@ class DocGeoSignatureTable extends DBTable {
 				conf.getInt("saskia.doc_geo_signature.cache.number",1000), 0.75f, true) // true: access order.
 	}
 
-	public List<DocGeoSignatureTable> queryDB(String query, ArrayList params = []) {
+	public List<DocGeoSignature> queryDB(String query, ArrayList params = []) {
 
-		List<DocGeoSignatureTable> res = []
-		DocGeoSignatureTable g
+		List<DocGeoSignature> res = []
 
 		getSaskiaDB().getDB().eachRow(query, params, {row  ->
 			res << DocGeoSignature.createNew(this, row)
@@ -63,7 +62,7 @@ class DocGeoSignatureTable extends DBTable {
 	public DocGeoSignature getFromID(Long dgs_id) {
 		if (!dgs_id) return null
 		if (idCache.containsKey(dgs_id)) return idCache[dgs_id]
-		List<DocGeoSignatureTable> dgs = queryDB("SELECT * FROM ${tablename} WHERE dgs_id=?", [dgs_id])
+		List<DocGeoSignature> dgs = queryDB("SELECT * FROM ${tablename} WHERE dgs_id=?", [dgs_id])
 		log.info "Querying for dgs_id $dgs_id got DocGeoSignature $dgs."
 		if (dgs) {
 			idCache[dgs_id] = dgs[0]

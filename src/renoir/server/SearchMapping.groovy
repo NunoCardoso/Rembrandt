@@ -40,6 +40,7 @@ import saskia.db.obj.User
 import saskia.db.table.CollectionTable
 import saskia.db.table.DocTable
 import saskia.db.table.UserTable
+import saskia.db.table.GeoscopeTable
 import saskia.server.ServerMessage
 import saskia.util.I18n
 
@@ -212,27 +213,29 @@ public class SearchMapping extends WebServiceRestletMapping {
 					TokenStream ts = new StandardAnalyzer().tokenStream("text", new StringReader(body))
 
 					res = [
-								'i':r["i"],
-								'title':title?.replaceAll(/\n/,""),
-								'doc_id':doc.doc_id,
-								'doc_original_id':doc.doc_original_id,
-								'abstract':h.getBestFragments(ts, body, 5,"(...)")?.replaceAll("\n"," "),
-								'size':doc.getBodyFromContent().size(),
-								'date':""+doc.doc_date_created,
-								'score':r["score"]
-							]
+						'i':r["i"],
+						'title':title?.replaceAll(/\n/,""),
+						'doc_id':doc.doc_id,
+						'doc_original_id':doc.doc_original_id,
+						'abstract':h.getBestFragments(ts, body, 5,"(...)")?.replaceAll("\n"," "),
+						'size':doc.getBodyFromContent().size(),
+						'date':""+doc.doc_date_created,
+						'score':r["score"]
+					]
 					if (r["partialscore"]) res['partial_score'] = r["partialscore"]
 
 					List coordinates = [], polylines = []
 					if (maps) {
 						// get from table doc_geo_signature the stuff for this document
 						DocGeoSignature dgs = doc.getGeographicSignature()
+						GeoscopeTable gt = db.getDBTable("GeoscopeTable")
+			            
 						if (dgs) {
 							// get the dgs_signature. Note that is has only ancestors/centroid/bb info, no shape.
-							GeoSignature geosig = new GeoSignature(dgs)
+							GeoSignature geosig = new GeoSignature(gt, dgs)
 							// go to the Geoscope table and see if we can add shapes on it
 							geosig.addPolylineInfo()
-
+							
 							/** gives a list of centroids. Each centroid is a Map, easily JSONable. */ 
 							coordinates = geosig.places*.centroid
 							res['coordinates'] = coordinates

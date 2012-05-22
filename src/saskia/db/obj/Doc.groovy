@@ -149,7 +149,17 @@ class Doc extends DBObject implements JSONable {
 			"doc_content":[
 				"title": getTitleFromContent()?.replaceAll(/\n/, " "),
 				"body": getBodyFromContent()?.replaceAll(/\n/, " ")
-			]
+			],
+			"doc_latest_geo_signature":(doc_latest_geo_signature != null ? 
+				getDBTable().getSaskiaDB().getDBTable("DocGeoSignatureTable")
+				.getFromID(doc_latest_geo_signature)
+				: null)
+			,
+			"doc_latest_geo_signature":(doc_latest_time_signature != null ? 
+				getDBTable().getSaskiaDB().getDBTable("DocTimeSignatureTable")
+				.getFromID(doc_latest_time_signature)
+				: null)
+			
 		]
 	}
 
@@ -184,15 +194,19 @@ class Doc extends DBObject implements JSONable {
 	}
 
 	public DocGeoSignature getGeographicSignature() {
-		return getDBTable().getSaskiaDB()
-		.getDBTable("DocGeoSignatureTable")
-		.getFromID(doc_latest_geo_signature)
+		return (doc_latest_geo_signature != null ?
+			getDBTable().getSaskiaDB()
+			.getDBTable("DocGeoSignatureTable")
+			.getFromID(doc_latest_geo_signature)
+			: null)
 	}
 
 	public DocTimeSignature getTimeSignature() {
-		return getDBTable().getSaskiaDB()
-		.getDBTable("DocTimeSignatureTable")
-		.getFromID(doc_latest_time_signature)
+		return (doc_latest_time_signature != null ?
+			getDBTable().getSaskiaDB()
+			.getDBTable("DocTimeSignatureTable")
+			.getFromID(doc_latest_time_signature)
+			: null)
 	}
 
 	/* there's a difference between tags = null and tags = [] - the last one says that I cheched the DB */

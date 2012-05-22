@@ -36,7 +36,7 @@ html {overflow: hidden;}
 <body class="top">
 <script>
 $(document).ready(function() {
-   displayBodyOfSaskia();
+   Saskia.display();
 })
 </script>
 <DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">

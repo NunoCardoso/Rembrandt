@@ -171,7 +171,7 @@ class CollectionTable extends DBTable {
 	 * Get the collection list with an optional colum/needle, page them with a limit/offset
 	 * All for a user (that is, with user filtering), and that the user can read
 	 */
-	HashMap listReadableCollectionForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
+	HashMap listReadableCollectionsForUser(User user, limit = 0, offset = 0, column = null, needle = null) {
 
 		Map l = listAccessibleCollectionsForUser(user)
 		List<Collection> haystack = l.findAll{col_id, perms -> perms.uoc_can_read == true}

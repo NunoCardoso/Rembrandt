@@ -30,6 +30,7 @@ import saskia.db.obj.Collection
 import saskia.db.obj.Doc
 import saskia.db.obj.DocGeoSignature
 import saskia.db.obj.DocTimeSignature
+import saskia.db.table.*
 import saskia.util.I18n
 
 class RenderDocDetailsStats {
@@ -40,7 +41,8 @@ class RenderDocDetailsStats {
 	HTMLWriter writer
 	SimpleDateFormat dateFormat
 	I18n i18n
-
+	GeoscopeTable gt
+	
 	public String render(Doc d, Collection collection, String lang) {
 		i18n = I18n.newInstance()
 		docstats = new DocStats(collection, lang)
@@ -48,7 +50,8 @@ class RenderDocDetailsStats {
 		reader = new RembrandtReader(new RembrandtStyleTag(lang))
 		writer = new HTMLWriter(new HTMLStyleTag(lang))
 		Document doc = reader.createDocument(d.doc_content)
-
+		gt = d.getDBTable().getSaskiaDB().getDBTable("GeoscopeTable")
+		
 		StringBuffer s = new StringBuffer()
 		dateFormat = new SimpleDateFormat(i18n.dateformat[lang])
 
@@ -58,7 +61,7 @@ class RenderDocDetailsStats {
 		s.append ""+(doc.title_sentences ? writer.printDocumentHeadContent(doc) : d.doc_original_id)+"</B></DIV>";
 
 		s.append "<DIV ID='stats-doc-details-div' class='stats-box'>\n"
-		s.append "<P><B>${i18n.statstitle['docdetails'][lang]}</B></P>";
+		s.append "<H1>${i18n.statstitle['docdetails'][lang]}</H1>";
 		s.append "<P>${i18n.statslabel['date_created'][lang]}: "+dateFormat.format(d.doc_date_created)+"</P>\n"
 		s.append "<P>${i18n.statslabel['date_tagged'][lang]}: "+dateFormat.format(d.doc_date_tagged)+"</P>\n"
 		s.append "<P>${i18n.statslabel['tag_version'][lang]}"+d.getTags().join(", ")+"</P>\n"
@@ -66,7 +69,7 @@ class RenderDocDetailsStats {
 
 
 		s.append "<DIV ID='stats-doc-stats-div' class='stats-box'>\n"
-		s.append "<P><B>${i18n.statstitle['neandsentences'][lang]}</B></P>"
+		s.append "<H1>${i18n.statstitle['neandsentences'][lang]}</H1>"
 		s.append "<P>${i18n.statslabel['numbersentencestitle'][lang]}: "+(doc.title_sentences? doc.title_sentences.size() : 0)+"</P>\n"
 		s.append "<P>${i18n.statslabel['numbersentencesbody'][lang]}: "+(doc.body_sentences? doc.body_sentences.size() : 0)+"</P>\n"
 		s.append "<P>${i18n.statslabel['numberneindoctitle'][lang]}: "+(doc.titleNEs ? doc.titleNEs.size() : 0)+"</P>\n"
@@ -77,42 +80,39 @@ class RenderDocDetailsStats {
 
 
 		s.append "<DIV ID='stats-nes-on-doc-div' class='stats-box'>\n"
-		s.append "<P><B>${i18n.statstitle['top10nes'][lang]}</B></P>"
+		s.append "<H1>${i18n.statstitle['top10nes'][lang]}</H1>"
 		s.append nestats.getTopNEsForDoc(d)
 		s.append "</DIV>\n"
 
 		s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-geo-signature-div' class='stats-box'>\n"
-		s.append "<P><B>${i18n.statstitle['doc_geo_signature'][lang]}</B></P>"
+		s.append "<H1>${i18n.statstitle['doc_geo_signature'][lang]}</H1>"
 		DocGeoSignature dgs = d.getGeographicSignature()
-		String ss = ""
 		if (dgs?.dgs_signature)
-			dgs.dgs_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
-		s.append ss
+			s.append dgs.dgs_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
 		s.append "</DIV>\n"
 
 		s.append "<DIV style='height:300px; overflow:scroll;' ID='stats-doc-time-signature-div' class='stats-box'>\n"
-		s.append "<P><B>${i18n.statstitle['doc_time_signature'][lang]}</B></P>"
+		s.append "<H1>${i18n.statstitle['doc_time_signature'][lang]}</H1>"
 		DocTimeSignature dts = d.getTimeSignature()
 		if (dts?.dts_signature)
-			ss = dts.dts_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
-		s.append ss
+			s.append dts.dts_signature.replaceAll(/</,'&lt;').replaceAll(/>/,'&gt;').replaceAll(/\n/,"<BR>")
 		s.append "</DIV>\n"
 
 		List coordinates
 		if (dgs) {
-			GeoSignature geosig = new GeoSignature(dgs)
+			GeoSignature geosig = new GeoSignature(gt, dgs)
 			coordinates = geosig.places*.centroid
 		}
 		// points[0] = {"latitude":24t2.23, }
 		s.append "<DIV ID='stats-map-div' class='stats-box'>\n"
-		s.append "<P><B>${i18n.statstitle['doc_map'][lang]}</B></P>"
-		s.append "<DIV ID='stats-map' style='width:300px; height:300px;'>"
-		s.append "<SCRIPT>createGoogleMap(\$('#stats-map'), ["
+		s.append "<H1>${i18n.statstitle['doc_map'][lang]}</H1>"
+		s.append "<DIV ID='stats-map' style='width:auto; height:300px;'>"
+		s.append "<SCRIPT>var coordinates = ["
 		List s2 = []
 		coordinates?.eachWithIndex{c, i ->
 			s2 += "{'Latitude':"+c['Latitude']+", 'Longitude':"+c['Longitude']+"}"
 		}
-		s.append s2.join(",")+"]);</SCRIPT>"
+		s.append s2.join(",")+"];</SCRIPT>"
 		s.append "</DIV></DIV>\n"
 
 		return s.toString()

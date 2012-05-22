@@ -33,17 +33,25 @@ class DocTimeSignature extends DBObject {
 	Tag dts_tag
 	Date dts_date_created
 
-	// meta
+	static Logger log = Logger.getLogger("DocTimeSignature")	
 
-	Long dts_document_id
-	String dts_document_original_id
-
-	static Logger log = Logger.getLogger("DocTimeSignature")
-	
 	public DocTimeSignature(DBTable dbtable) {
 		super(dbtable)
 	}
+
+	static Map type = ['dts_id':'Long', 'dts_document':'Long', 'dts_signature':'String',
+		'dts_tag':'Tag','dts_date_created':'Date']
 	
+	public Map toMap() {
+		return [
+			"dts_id":dts_id, 
+			"dts_document":dts_document,
+			"dts_signature":dts_signature, 
+			"dts_tag":dts_tag,
+			"dts_date_created":dts_date_created
+		]
+	}
+		
 	static createNew(DBTable dbtable, row) {
 		DocTimeSignature g = new DocTimeSignature(dbtable)
 		if (row['dts_id']) g.dts_id = row['dts_id']

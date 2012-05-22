@@ -46,8 +46,8 @@ class DocTimeSignatureTable extends DBTable {
 				conf.getInt("saskia.doc_time_signature.cache.number",1000), 0.75f, true) // true: access order.
 	}
 
-	public List<DocTimeSignatureTable> queryDB(String query, ArrayList params = []) {
-		List<DocTimeSignatureTable> res = []
+	public List<DocTimeSignature> queryDB(String query, ArrayList params = []) {
+		List<DocTimeSignature> res = []
 		getSaskiaDB().getDB().eachRow(query, params, {row  ->
 			res << DocTimeSignature.createNew(this, row)
 		})
@@ -61,7 +61,7 @@ class DocTimeSignatureTable extends DBTable {
 	public DocTimeSignature getFromID(long dts_id) {
 		if (!dts_id) return null
 		if (idCache.containsKey(dts_id)) return idCache[dts_id]
-		List<DocTimeSignatureTable> dts = queryDB("SELECT * FROM ${tablename} WHERE dts_id=?", [dts_id])
+		List<DocTimeSignature> dts = queryDB("SELECT * FROM ${tablename} WHERE dts_id=?", [dts_id])
 		log.info "Querying for dts_id $dts_id got DocTimeSignature $dts."
 		if (dts) {
 			idCache[dts_id] = dts[0]

@@ -22,6 +22,12 @@ Rembrandt.Collection = (function ($) {
 			Rembrandt.Collection.listCollections(this);
 		})
 		
+		// 'new collection' button action, opens modal dialog 
+		$('A.COLLECTION_SWITCH').live("click", function(ev, ui) {
+			ev.preventDefault();
+			Rembrandt.Collection.switchCollection(this);
+		})
+		
 		// TODO
 		$('A.COLLECTION_REFRESH_STATS').live("click", function(ev, ui) {
 			ev.preventDefault();
@@ -51,11 +57,15 @@ Rembrandt.Collection = (function ($) {
 		// visible div is for a collection list or collection main page
 		var divshown = $('DIV.main-slidable-div:visible')
 		if (divshown.attr('id') == 'rrs-homepage-collection') {
-			displayBodyOfSaskia()
+			Saskia.display()
 		}
 		if (divshown.attr('id') == 'rrs-collection-list') {
 			divshown.find("A.MANAGE_PAGER").trigger('click')
 		}
+	}, 
+	
+	switchCollection = function(context) {
+		modalCollectionSwitch(context);
 	}, 
 	
 	deleteCollection = function(context) {
@@ -648,60 +658,120 @@ Rembrandt.Collection = (function ($) {
 
 	modalCollectionCreate = function (button) {
 	
-	var api_key= Rembrandt.Util.getApiKey()
-	var role = Rembrandt.Util.getRole(button)
-	var servlet_url = Rembrandt.Util.getServletEngineFromRole(role, 'collection')
+		var api_key= Rembrandt.Util.getApiKey()
+		var role = Rembrandt.Util.getRole(button)
+		var servlet_url = Rembrandt.Util.getServletEngineFromRole(role, 'collection')
 	
-		$.modal("<div id='modalCreateCollection' class='rembrandt-modal' style='width:400px'>"+
-		"<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+
-		"<div style='text-align:center; padding:10px;'>"+i18n['create_new_collection'][lang]+"</div>"+
-		"<div style='text-align:left; padding:3px;'>"+
-		"<form><table style='border:0px;border-spacing:3px;'>"+
-		"<TR><TD ALIGN=RIGHT>"+i18n["name"][lang]+"*</TD>"+
-		"<TD ALIGN=LEFT><INPUT TYPE='TEXT' SIZE='25' ID='col_name'></TD></TR>"+
-		"<TR><TD ALIGN=RIGHT>"+i18n["lang"][lang]+"*</TD>"+
-		"<TD ALIGN=LEFT><INPUT TYPE='TEXT' SIZE='5' ID='col_lang'></TD></TR>"+
-		"<TR><TD ALIGN=RIGHT>"+i18n["comment"][lang]+"</TD>"+
-		"<TD ALIGN=LEFT><TEXTAREA style='height:100px; width:250px;' ID='col_comment'></TEXTAREA></TD></TR>"+
-		"<TR><TD ALIGN=RIGHT>"+i18n["permissions"][lang]+"*</TD>"+
-		"<TD ALIGN=LEFT>"+
-		"<TABLE BORDER=0><THEAD><TR><TH></TH>"+
-		"<TH>"+i18n['read'][lang]+"</TH>"+
-		"<TH>"+i18n['write'][lang]+"</TH>"+
-		"<TH>"+i18n['admin'][lang]+"</TH></TR>"+
-		"<TR><TD>"+i18n['group'][lang]+"</TD>"+
-		"<TD><SELECT SIZE=1 ID='groupread'>"+
-		"<OPTION VALUE='-' SELECTED>"+i18n["no"][lang]+"</OPTION>"+
-		"<OPTION VALUE='r'>"+i18n["yes"][lang]+"</OPTION>"+
-		"</SELECT></TD>"+
-		"<TD><SELECT SIZE=1 ID='groupwrite'>"+
-		"<OPTION VALUE='-' SELECTED>"+i18n["no"][lang]+"</OPTION>"+
-		"<OPTION VALUE='w'>"+i18n["yes"][lang]+"</OPTION>"+
-		"</SELECT></TD>"+
-		"<TD><SELECT SIZE=1 ID='groupadmin'>"+
-		"<OPTION VALUE='-' SELECTED>"+i18n["no"][lang]+"</OPTION>"+
-		"<OPTION VALUE='a'>"+i18n["yes"][lang]+"</OPTION>"+
-		"</SELECT></TD></TR>"+
-		"<TR><TD>"+i18n['other'][lang]+"</TD>"+
-		"<TD><SELECT SIZE=1 ID='otherread'>"+
-		"<OPTION VALUE='-' SELECTED>"+i18n["no"][lang]+"</OPTION>"+
-		"<OPTION VALUE='r'>"+i18n["yes"][lang]+"</OPTION>"+
-		"</SELECT></TD>"+
-		"<TD><SELECT SIZE=1 ID='otherwrite'>"+
-		"<OPTION VALUE='-' SELECTED>"+i18n["no"][lang]+"</OPTION>"+
-		"<OPTION VALUE='w'>"+i18n["yes"][lang]+"</OPTION>"+
-		"</SELECT></TD>"+
-		"<TD><SELECT SIZE=1 ID='otheradmin'>"+
-		"<OPTION VALUE='-' SELECTED>"+i18n["no"][lang]+"</OPTION>"+
-		"<OPTION VALUE='a'>"+i18n["yes"][lang]+"</OPTION>"+
-		"</SELECT></TD></TR>"+
-		"</TABLE></TD></TR></TABLE><BR>"+
-		"<div id='rrs-waiting-div' style='text-align:center;margin-bottom:5px'>"+
-		"<div class='rrs-waiting-div-message'></div></div> "+ 
-		"<div id='buttons' style='text-align:center;'><input type='button' id='YesButton' value='"+
-		i18n["yes"][lang]+", "+i18n["create"][lang]+"'><input type='button' id='NoButton' value='"+
-		i18n["no"][lang]+", "+i18n["cancel"][lang]+"'></div></form>"+
-      "</div></div>	", {
+		var data = {
+			"pressEscape"			: i18n['pressescape'][lang],
+			"createNewCollection"	: i18n['create_new_collection'][lang],
+			"name"					: i18n["name"][lang],
+			"lang"					: i18n["lang"][lang],
+			"comment" 				: i18n["comment"][lang],
+			"permissions"			: i18n["permissions"][lang],
+			"read"					: i18n['read'][lang], 
+			"write"					: i18n['write'][lang], 
+			"admin"					: i18n['admin'][lang], 
+			"group"					: i18n['group'][lang], 
+			"no"					: i18n["no"][lang],
+			"yes"					: i18n["yes"][lang],
+			"other" 				: i18n['other'][lang],
+			"create"				: i18n["create"][lang],
+			"cancel"				: i18n["cancel"][lang]
+		}
+		
+		var template = "\
+<div id='modalCreateCollection' class='rembrandt-modal' style='width:400px'>\
+	<div class='rembrandt-modal-escape'>{{pressEscape}}</div>\
+	<div style='text-align:center; padding:10px;'>{{createNewCollection}}</div>\
+	<div style='text-align:left; padding:3px;'>\
+		<form>\
+			<table style='border:0px;border-spacing:3px;'>\
+				<TR>\
+					<TD ALIGN=RIGHT>{{name}}*</TD>\
+					<TD ALIGN=LEFT><INPUT TYPE='TEXT' SIZE='25' ID='col_name'></TD>\
+				</TR>\
+				<TR>\
+					<TD ALIGN=RIGHT>{{lang}}*</TD>\
+					<TD ALIGN=LEFT>\
+						<INPUT TYPE='TEXT' SIZE='5' ID='col_lang'>\
+					</TD>\
+				</TR>\
+				<TR>\
+					<TD ALIGN=RIGHT>{{comment}}</TD>\
+					<TD ALIGN=LEFT>\
+						<TEXTAREA style='height:100px; width:250px;' ID='col_comment'></TEXTAREA>\
+					</TD>\
+				</TR>\
+				<TR>\
+					<TD ALIGN=RIGHT>{{permissions}}*</TD>\
+					<TD ALIGN=LEFT>\
+						<TABLE BORDER=0>\
+							<THEAD>\
+								<TR>\
+									<TH></TH>\
+									<TH>{{read}}</TH>\
+									<TH>{{write}}</TH>\
+									<TH>{{admin}}</TH>\
+								</TR>\
+								<TR>\
+									<TD>{{group}}</TD>\
+									<TD>\
+										<SELECT SIZE=1 ID='groupread'>\
+											<OPTION VALUE='-' SELECTED>{{no}}</OPTION>\
+											<OPTION VALUE='r' SELECTED>{{yes}}</OPTION>\
+										</SELECT>\
+									</TD>\
+									<TD>\
+										<SELECT SIZE=1 ID='groupwrite'>\
+											<OPTION VALUE='-' SELECTED>{{no}}</OPTION>\
+											<OPTION VALUE='w' SELECTED>{{yes}}</OPTION>\
+										</SELECT>\
+									</TD>\
+									<TD>\
+										<SELECT SIZE=1 ID='groupadmin'>\
+											<OPTION VALUE='-' SELECTED>{{no}}</OPTION>\
+											<OPTION VALUE='a' SELECTED>{{yes}}</OPTION>\
+										</SELECT>\
+									</TD>\
+								</TR>\
+									<TD>{{other}}</TD>\
+									<TD>\
+										<SELECT SIZE=1 ID='otherread'>\
+											<OPTION VALUE='-' SELECTED>{{no}}</OPTION>\
+											<OPTION VALUE='r' SELECTED>{{yes}}</OPTION>\
+										</SELECT>\
+									</TD>\
+									<TD>\
+										<SELECT SIZE=1 ID='otherwrite'>\
+											<OPTION VALUE='-' SELECTED>{{no}}</OPTION>\
+											<OPTION VALUE='w' SELECTED>{{yes}}</OPTION>\
+										</SELECT>\
+									</TD>\
+									<TD>\
+										<SELECT SIZE=1 ID='otheradmin'>\
+											<OPTION VALUE='-' SELECTED>{{no}}</OPTION>\
+											<OPTION VALUE='a' SELECTED>{{yes}}</OPTION>\
+										</SELECT>\
+									</TD>\
+								</TR>\
+							</TABLE>\
+						</TD>\
+					</TR>\
+				</TABLE>\
+			<BR>\
+			<div id='rrs-waiting-div' style='text-align:center;margin-bottom:5px'>\
+				<div class='rrs-waiting-div-message'></div>\
+			</div>\
+			<div id='buttons' style='text-align:center;'>\
+				<input type='button' id='YesButton' value='{{yes}}, {{create}}'>\
+				<input type='button' id='NoButton' value='{{no}}, {{cancel}}'>\
+			</div>\
+		</form>\
+	</div>\
+</div>";
+
+	$.modal(Mustache.to_html(template, data), {
 	
 		onShow: function modalShow(dialog) {
 			// fill out table
@@ -730,9 +800,9 @@ Rembrandt.Collection = (function ($) {
 				jQuery.ajax({ type:"POST", dataType:'json', url:servlet_url,
 					contentType:"application/x-www-form-urlencoded",
 					data: "do=create&col_name="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(col_name))+
-					      "&col_comment="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(col_comment))+
-						   "&col_lang="+col_lang+"&col_permission="+col_permission+						
-							"&lg="+lang+"&api_key="+api_key, 
+						"&col_comment="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(col_comment))+
+						"&col_lang="+col_lang+"&col_permission="+col_permission+
+						"&lg="+lang+"&api_key="+api_key, 
 					beforeSubmit: waitMessageBeforeSubmit(lang),
 					success: function(response) {
 						if (response['status'] == -1) {
@@ -746,7 +816,7 @@ Rembrandt.Collection = (function ($) {
 						}
 					},
 					error:function(response) {
-						errorMessageWaitingDiv(lang, response['message'])			
+						errorMessageWaitingDiv(lang, response['message'])
 					}
 				})
 			}
@@ -760,6 +830,95 @@ Rembrandt.Collection = (function ($) {
 		});
 	}, 
 
+	/* first, AJAX call; then, table */
+	modalCollectionSwitch = function (button) {
+
+		var api_key= Rembrandt.Util.getApiKey()
+		var servlet_collection_url = Rembrandt.Util.getServletEngineFromRole('saskia', 'collection')
+
+		jQuery.ajax({ 
+			type:"POST", 
+			dataType:'json', url:servlet_collection_url,
+			contentType:"application/x-www-form-urlencoded",
+			data: "do=list-read&lg="+lang+"&api_key="+api_key, 
+			beforeSubmit: waitMessageBeforeSubmit(lang),
+			success: function(response) {
+				if (response['status'] == -1) {
+					errorMessageWaitingDiv(lang, response['message'])
+				} else {
+					hideWaitingDiv()
+					// dados na resposta vão ser linhas na tabela
+					var res_html = []
+					for (var i in response['message']['result']) {
+
+						var col = response['message']['result'][i]
+						var res_data = {
+							"col_id":col["col_id"],
+							"col_name":col["col_name"]
+						}
+						var res_template = "\
+<tr>\
+	<td style='border:1px solid #1F3C58;'>\
+		<a class='COLLECTION_SELECT' collectionid='{{col_id}}'>{{col_name}}</a>\
+	</td>\
+</tr>";
+						res_html.push({"html":Mustache.to_html(res_template, res_data)})
+					}
+					
+					var data = {
+						"pressEscape" 		: i18n['pressescape'][lang],
+						"switchCollection" 	: i18n['switchCollection'][lang],
+						"no"				: i18n["no"][lang],
+						"cancel"			: i18n["cancel"][lang],
+						"res_html"		 	: res_html
+					}
+
+					var template  = "\
+<div id='modalSwitchCollection' class='rembrandt-modal' style='width:400px'>\
+	<div class='rembrandt-modal-escape'>{{pressEscape}}</div>\
+	<div style='text-align:center; padding:10px;'>{{switchCollection}}</div>\
+	<div style='text-align:center; padding:3px;overflow:scroll;max-height:200px;'>\
+		<table style='margin:auto;border-spacing:3px;text-align:left;'>\
+		{{#res_html}}\
+			{{{html}}}\
+		{{/res_html}}\
+		</TABLE>\
+	</div>\
+	<div id='rrs-waiting-div' style='text-align:center;margin-bottom:5px'>\
+		<div class='rrs-waiting-div-message'></div>\
+	</div>\
+	<div id='buttons' style='text-align:center;'>\
+		<input type='button' id='NoButton' value='{{no}}, {{cancel}}'>\
+	</div>\
+</div>"
+					var html = Mustache.to_html(template, data)
+					$.modal(html, {
+						onShow: function modalShow(dialog) {
+							dialog.data.find("A.COLLECTION_SELECT").click(function(ev) {
+								ev.preventDefault();
+								$("#rrs-collections a.collection").attr("collection", 
+								$(this).text())
+								$("#rrs-collections a.collection").attr("collection_id", 
+								$(this).attr("collectionid"))
+								$("#rrs-collections a.collection").text($(this).text())
+								$.modal.close();
+							})
+							dialog.data.find("#NoButton").click(function(ev) {
+								ev.preventDefault();
+								$.modal.close();
+							});
+						},
+						overlayCss:{backgroundColor: '#888', cursor: 'wait'}
+					})
+				}
+			},
+
+			error:function(response) {
+				errorMessageWaitingDiv(lang, response['message'])			
+			}
+		});
+	},
+
 	// creates a modal window to switch collection. It will ask the server for user permissions 
 	// in those collections.  
 
@@ -771,27 +930,55 @@ Rembrandt.Collection = (function ($) {
 		var role = Rembrandt.Util.getRole(button)
 		var servlet_collection_url = Rembrandt.Util.getServletEngineFromRole(role, 'collection')
 		var servlet_user_url = Rembrandt.Util.getServletEngineFromRole(role, 'user')
-	
-		$.modal("<div id='modalDeleteCollection' class='rembrandt-modal' style='width:400px'>"+
-		"<div class='rembrandt-modal-escape'>"+i18n['pressescape'][lang]+"</div>"+
-		"<div style='text-align:center; padding:10px;'>"+i18n['delete_collection'][lang]+"</div>"+
-		"<div style='text-align:center; padding:3px;'>"+
-		"<form><table style='border:0px;border-spacing:3px;'>"+
-		"<TR><TD ALIGN=RIGHT>"+i18n["password"][lang]+"*</TD>"+
-		"<TD ALIGN=LEFT><INPUT TYPE='PASSWORD' SIZE='25' ID='password'></TD></TR>"+
-		"</TABLE><BR>"+
-		"<div id='rrs-waiting-div' style='text-align:center;margin-bottom:5px'>"+
-		"<div class='rrs-waiting-div-message'></div></div> "+ 
-		"<div id='button1' style='text-align:center;'><input type='button' id='AuthButton' "+
-		" value='"+i18n["authenticate"][lang]+"'></DIV></FORM>"+
-		"<DIV ID='info'>Waiting for password...</DIV>"+
-		"<FORM><div id='buttons' style='text-align:center;'>"+
-		"<input type='button' id='YesButton' value='"+i18n["yes"][lang]+", "+i18n["create"][lang]+"' DISABLED>"+
-		"<input type='button' id='NoButton' value='"+i18n["no"][lang]+", "+i18n["cancel"][lang]+"'>"+
-		"</div></form></div></div>	", {
+		
+		var data = {
+			"pressEscape" : i18n['pressescape'][lang],
+			"deleteCollection" : i18n['delete_collection'][lang],
+			"password" : i18n["password"][lang],
+			"authenticate" : i18n["authenticate"][lang],
+			"waitingForPassword" : i18n["waititngForPassword"][lang],
+			"no"					: i18n["no"][lang],
+			"yes"					: i18n["yes"][lang],
+			"delete"				: i18n["delete"][lang],
+			"cancel"				: i18n["cancel"][lang]
+		}
+		
+		var template  = "\
+<div id='modalDeleteCollection' class='rembrandt-modal' style='width:400px'>\
+	<div class='rembrandt-modal-escape'>{{pressEscape}}</div>\
+	<div style='text-align:center; padding:10px;'>{{deleteCollection}}</div>\
+	<div style='text-align:center; padding:3px;'>\
+		<form>\
+			<table style='border:0px;border-spacing:3px;'>\
+				<TR>\
+					<TD ALIGN=RIGHT>{{password}}*</TD>\
+					<TD ALIGN=LEFT>\
+						<INPUT TYPE='PASSWORD' SIZE='25' ID='password'>\
+					</TD>\
+				</TR>\
+			</TABLE>\
+			<BR>\
+			<div id='rrs-waiting-div' style='text-align:center;margin-bottom:5px'>\
+				<div class='rrs-waiting-div-message'></div>\
+			</div>\
+			<div id='button1' style='text-align:center;'>\
+				<input type='button' id='AuthButton' value='{{authenticate}}'>\
+			</DIV>\
+		</FORM>\
+		<DIV ID='info'>{{waitingForPassword}}...</DIV>\
+		<FORM>\
+			<div id='buttons' style='text-align:center;'>\
+				<input type='button' id='YesButton' value='{{yes}}, {{delete}}' DISABLED>\
+				<input type='button' id='NoButton' value='{{no}}, {{cancel}}'>\
+			</div>\
+		</form>\
+	</div>\
+</div>"
+
+		$.modal(Mustache.to_html(template, data), {
 			
-		onShow: function modalShow(dialog) {
-			// fill out table
+			onShow: function modalShow(dialog) {
+				// fill out table
 		   
 			dialog.data.find("#AuthButton").click(function(ev) {
 			
@@ -847,6 +1034,7 @@ Rembrandt.Collection = (function ($) {
 	
 	return {
 		"createCollection": createCollection,
+		"switchCollection": switchCollection,
 		"deleteCollection": deleteCollection,
 		"listCollections" : listCollections,
 		"refreshStats" : refreshStats,
@@ -857,6 +1045,7 @@ Rembrandt.Collection = (function ($) {
 		"generateCollectionShowDIV" : generateCollectionShowDIV,
 		"generateCollectionDocListDIV" : generateCollectionDocListDIV, 
 		"modalCollectionCreate" : modalCollectionCreate,
+		"modalCollectionSwitch" : modalCollectionSwitch,
 		"modalCollectionDelete" : modalCollectionDelete
 	};
 }(jQuery));

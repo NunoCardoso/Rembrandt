@@ -162,7 +162,7 @@ $(document).ready(function() {
 		<DIV ID="rrs-collections" DEFAULT="<?php echo $default_collection; ?>" 
 			DEFAULT_ID="<?php echo $default_collection_id; ?>">
       <?php 
-			echo $i18n->user['collection'][$lang].": <A HREF='#' CLASS='collection' COLLECTION='";
+			echo $i18n->user['collection'][$lang].": <A HREF='#' CLASS='collection COLLECTION_SWITCH' COLLECTION='";
 			echo $collection .  "' COLLECTION_ID='" . $collection_id. "'>" . $collection . "</A>";
 		?>
 	   </DIV>

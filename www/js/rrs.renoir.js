@@ -111,7 +111,7 @@ var Renoir = (function ($) {
 		var qe = $('#as_qe option:selected').val() // sets RENOIR QE
 		var model = $('#as_model option:selected').val() // sets RENOIR Model
 		var stem = $('#as_stem option:selected').attr('checked') // sets RENOIR Model
-		var maps = $('#as_maps').attr('checked') // tells RENOIR to return coordinate stuff
+		var maps = !_.isUndefined($('#as_maps').attr('checked')) // tells RENOIR to return coordinate stuff
 	
 		// other vars	
 		var lang = $('HTML').attr('lang')	
@@ -309,7 +309,7 @@ var Renoir = (function ($) {
 		var offset = Rembrandt.Util.getQueryVariable("o");
 		var user = Rembrandt.Util.getUser()
 		var api_key= Rembrandt.Util.getApiKey();
-		var maps = $('#as_maps').attr('checked') // tells RENOIR to return coordinate stuff
+		var maps = !_.isUndefined($('#as_maps').attr('checked')) // tells RENOIR to return coordinate stuff
 
 		var main_body = $("#main-body")
 		// not really slidable, but it must be included for hide/show

@@ -219,18 +219,20 @@ function processMap(res, mapdiv) {
 		var points = new Array();
 		var plines = new Array();
 		var ii = 0
-		for( i in res) {
+		if (res["result"]) { 
+		for( i in res["result"]) {
+			var result =  res["result"][i]
 			ii++
-			if (res[i]["coordinates"]) {
-				var coordinates = res[i]["coordinates"]
+			if (result["coordinates"]) {
+				var coordinates = result["coordinates"]
 				for (j in coordinates) {
 					// let's mark it with the position
 					coordinates[j]["Position"] = ii	
 					points.push(coordinates[j]) // in a {'Latitude':xxx, 'Longitude':xxx} format
 				}		
 			} 
-			if (res[i]["polylines"]) {
-				var polylines = res[i]["polylines"]
+			if (result["polylines"]) {
+				var polylines = result["polylines"]
 				if (!_.isUndefined(polylines)) {
 					for (j in polylines) {
 						// let's mark it with the position
@@ -240,6 +242,7 @@ function processMap(res, mapdiv) {
 				}
 			}
 		}	
+		}
 		createGoogleMap(mapdiv, points, plines)
 	
 }

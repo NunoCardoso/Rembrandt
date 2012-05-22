@@ -108,7 +108,9 @@ function showSlidableDIV(options) {
 					divtoshow = divgenerator(response['message'], su, options.role, options.divRenderOptions)
 					
 					addSlidableDIV(divtohide, $(divtoshow), options)			
-				
+					if (!_.isUndefined(options.callback)) {
+						options.callback.call()
+					}
 				}	 
 		  },									
 		  error: function(response) {errorMessageWaitingDiv(lang, response)}

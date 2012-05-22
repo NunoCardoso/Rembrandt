@@ -7,15 +7,22 @@
 
 /* stats box */ 
 .stats-box {
-  background: #c2e2f2;
+  background: #F8F8FF;
   border:1px solid #a0b7c4;
   -moz-border-radius: 0.5em;
   -webkit-border-radius: 0.5em; 
   padding:4px;
-  margin:10px 5px 10px 5px;
+  margin:10px 0px 10px 0px;
   position:relative;
   display:block;
-  float:left;
+}
+
+.stats-box h1 {
+font-size: 16px;
+background: #E2E2EF;
+color: black;
+padding: 3px;
+-webkit-border-radius: 0.3em;
 }
 
 .hidden-table {

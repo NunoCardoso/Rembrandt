@@ -31,18 +31,23 @@ class DocGeoSignature extends DBObject { // implements JSONable {
 	Tag dgs_tag
 	Date dgs_date_created
 
-	// meta information
-	String dgs_document_original_id
-	Long dgs_document_id
-
 	static Logger log = Logger.getLogger("DocGeoSignature")
 
 	static Map type = ['dgs_id':'Long', 'dgs_document':'Long', 'dgs_signature':'String',
-		'dgs_tag':'Tag','dgs_date_created':'Date',
-		'dgs_document_original_id':'String', 'dgs_document_id':'Long']
+		'dgs_tag':'Tag','dgs_date_created':'Date']
 	
 	public DocGeoSignature(DBTable dbtable) {
 		super(dbtable)
+	}
+	
+	public Map toMap() {
+		return [
+			"dgs_id":dgs_id, 
+			"dgs_document":dgs_document,
+			"dgs_signature":dgs_signature, 
+			"dgs_tag":dgs_tag,
+			"dgs_date_created":dgs_date_created
+		]
 	}
 	
 	static createNew(DBTable dbtable, row) {
@@ -55,9 +60,6 @@ class DocGeoSignature extends DBObject { // implements JSONable {
 			 	dbtable.getSaskiaDB().getDBTable("TagTable").getFromID(row['dgs_tag']) )
 		if (row['dgs_date_created']) g.dgs_date_created = (Date)row['dgs_date_created']
 
-		// meta-info
-		if (row['doc_original_id']) g.dgs_document_original_id = row['doc_original_id']
-		if (row['doc_id']) g.dgs_document_id = row['doc_id']
 		return g
 	}
 

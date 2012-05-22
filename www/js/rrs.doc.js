@@ -72,7 +72,7 @@ Rembrandt.Doc = (function ($) {
 			var doc_original_id = a_clicked.attr("DOC_ORIGINAL_ID")
 			var api_key = Rembrandt.Util.getApiKey()
 			var title = (a_clicked.attr("title") ? a_clicked.attr("title") : doc_original_id)
-			
+			var targeted_div_title = "rembrandt-detaildoc-"+doc_id
 			showSlidableDIV({
 				"title": title,
 				"target":a_clicked.attr("TARGET"),
@@ -80,11 +80,17 @@ Rembrandt.Doc = (function ($) {
 				"slide": getSlideOrientationFromLink(a_clicked),
 				"ajax":true,
 				"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "doc"),
-				"postdata":"do=metadata&doc_id="+doc_id+"&lg="+lang+	"&api_key="+api_key,
+				"postdata":"do=metadata&doc_id="+doc_id+"&lg="+lang+"&api_key="+api_key,
 				"divRender":generateDocMetadataDIV, 
 				"divRenderOptions":{},
 				"sidemenu":"doc", 
-				"sidemenuoptions":{'id':doc_id}
+				"sidemenuoptions":{'id':doc_id},
+				'callback': function() {
+					if (coordinates) {
+						// each unique map 
+						createGoogleMap($("#"+targeted_div_title+" #stats-map"), coordinates, []);
+					}
+				}
 			})
 		});
 	});	

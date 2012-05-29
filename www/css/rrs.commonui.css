@@ -164,8 +164,6 @@ float: right;
   text-align: center;	
 }
 
-
-
 .rrs-waiting-div-message {
  -moz-border-radius: 4px;
  -webkit-border-radius: 4px; 
@@ -185,7 +183,7 @@ float: right;
 	font-size: 10px;
 	color: red;
 	background-color: white;
-   font-weight: bold;
+	font-weight: bold;
 	margin-left:5px;
 	padding:0px 2px 0px 2px;
 	cursor:pointer;
@@ -194,7 +192,6 @@ float: right;
     -webkit-border-radius: 7px;
     z-index:10;
 }
-
 
 /** hit counter numbers display inline in the rss-status bar */
 .HIT {

@@ -15,6 +15,8 @@ _.extend (Rembrandt.urls, {
     restlet_saskia_stats_url 	: "/Saskia/stats",
     restlet_saskia_collection_url:"/Saskia/collection",
     restlet_saskia_doc_url 	    : "/Saskia/doc",
+    restlet_saskia_patch_url 	: "/Saskia/patch",
+    restlet_saskia_commit_url 	: "/Saskia/commit",
     restlet_saskia_ne_url 		: "/Saskia/ne",
     restlet_suggestion_url 		: "/Renoir/suggest",
     restlet_dbosuggestion_url 	: "/Renoir/dbosuggest",

@@ -63,7 +63,8 @@ public class Commit extends DBObject implements JSONable {
 	}
 
 	Map toSimpleMap() {
-		return toMap()
+		return ['cmm_id':cmm_id,'cmm_doc':cmm_doc.toSimpleMap(),'cmm_user':cmm_user.toSimpleMap(), 
+		'cmm_date':cmm_date,'cmm_commit':cmm_commit]
 	}
 
 	public updateValue(column, value) {

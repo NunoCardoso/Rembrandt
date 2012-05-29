@@ -71,8 +71,12 @@ class ServerMessage {
 		return statusMessage(-1, i18n.servermessage['no_user_found'][lang], message)
     }
 
-   public String collectionNotFound(String message = null) {
+    public String collectionNotFound(String message = null) {
 		return statusMessage(-1, i18n.servermessage['collection_not_found'][lang], message)
+    }
+
+    public String docNotFound(String message = null) {
+		return statusMessage(-1, i18n.servermessage['document_not_found'][lang], message)
     }
 
 	public String invalidID(String message = null) {

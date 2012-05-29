@@ -26,6 +26,7 @@ import org.restlet.data.CharacterSet
 import org.restlet.data.MediaType
 import org.restlet.data.Status
 import org.restlet.representation.StringRepresentation
+import com.google.gson.*
 /**
  * @author rlopes
  *
@@ -55,16 +56,23 @@ public class WebServiceRestletMapping extends Restlet {
 		HashMap res = [:]
 		res["GET"] = request.getResourceRef().getQueryAsForm().getValuesMap()
 		if (request.isEntityAvailable()) {
-			res["POST"] = request.getEntityAsForm().getValuesMap()
+			def type = request.getEntity().getMediaType() 
+			if (type.equals( MediaType.APPLICATION_JSON)) {
+				Gson g = new Gson()
+				res["POST"] = g.fromJson(request.getEntityAsText(), Object.class)
+			} else {
+				res["POST"] = request.getEntityAsForm().getValuesMap()
+			}
 		}
 		res["COOKIE"] = request.getCookies().getValuesMap()
+		println res
 		return res
 	}
 
 	public void handle(Request request, Response response) {
 		// println "request="+request
 		MediaType[] mimes = request.getClientInfo().getAcceptedMediaTypes().collect { pref -> pref.getMetadata() }
-		MediaType mime = MediaType.APPLICATION_JSON
+		MediaType mime =MediaType.APPLICATION_JSON
 
 		for (curr in mimes) {
 			if (this.mappings[curr.toString()]) {

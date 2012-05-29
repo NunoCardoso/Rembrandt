@@ -152,13 +152,13 @@ var Renoir = (function ($) {
 			 	(limit ? "&l="+limit : "") + (offset ? "&o="+offset : "" )+
 			 	"&api_key="+api_key,
 			 	dataType:'json',
-			 	beforeSubmit: waitMessageBeforeSubmit(lang), 
+			 	beforeSubmit: Rembrandt.Waiting.show(), 
 			
 				success: function(response)  {
 					if (response['status'] == -1) {
-						errorMessageWaitingDiv(lang, response) //['message'])
+						Rembrandt.Waiting.error(response) //['message'])
 					} else {
-						hideWaitingDiv()
+						Rembrandt.Waiting.hide()
 					
 						var su = false
 						var pubkey = response['usr_pub_key']
@@ -205,7 +205,7 @@ var Renoir = (function ($) {
 						if (maps) processMap(response, $('#rrs-searchresult-map', divtoshow))
 					}
 				},
-				error: function(response) {errorMessageWaitingDiv(lang, response)}
+				error: function(response) {Rembrandt.Waiting.error(response)}
 			})
 		}
 	},
@@ -258,12 +258,12 @@ var Renoir = (function ($) {
 		jQuery.ajax({type:'GET', 
 			url:Rembrandt.urls.restlet_renoir_query_collection_url,
 			dataType:'json',
-		 	beforeSubmit: waitMessageBeforeSubmit(lang), 
+		 	beforeSubmit: Rembrandt.Waiting.show(), 
 			success: function(response) {
 				if (response['status'] == -1) {
-					errorMessageWaitingDiv(lang, response) //['message'])
+					Rembrandt.Waiting.error(response) //['message'])
 				} else {
-					hideWaitingDiv()
+					Rembrandt.Waiting.hide()
 					select_.append("<option value=''>--</option>")
 					var message = response["message"]
 					for (var i in message) {
@@ -272,7 +272,7 @@ var Renoir = (function ($) {
 				}
 			}, 
 			error: function(response) {
-				errorMessageWaitingDiv(lang, response)
+				Rembrandt.Waiting.error(response)
 			}
 		})
 	},
@@ -282,12 +282,12 @@ var Renoir = (function ($) {
 		jQuery.ajax({type:'GET', 
 			url:Rembrandt.urls.restlet_renoir_queries_url+"?q="+val,
 			dataType:'json',
-		 	beforeSubmit: waitMessageBeforeSubmit(lang), 
+		 	beforeSubmit: Rembrandt.Waiting.show(), 
 			success: function(response) {
 				if (response['status'] == -1) {
-					errorMessageWaitingDiv(lang, response) //['message'])
+					Rembrandt.Waiting.error(response) //['message'])
 				} else {
-					hideWaitingDiv()
+					Rembrandt.Waiting.hide()
 					var message = response["message"]
 					for (var i in message) {
 						var text = message[i]["que_query"]
@@ -297,7 +297,7 @@ var Renoir = (function ($) {
 				}
 			}, 
 			error: function(response) {
-				errorMessageWaitingDiv(lang, response)
+				Rembrandt.Waiting.error(response)
 			}
 		})
 	},
@@ -336,13 +336,13 @@ var Renoir = (function ($) {
 				(maps ? "&maps="+maps : "") + 
 				"&api_key="+api_key,
 				dataType:'json',
-				beforeSubmit: waitMessageBeforeSubmit(lang), 
+				beforeSubmit: Rembrandt.Waiting.show(), 
 			
 				success: function(response)  {
 					if (response['status'] == -1) {
-						errorMessageWaitingDiv(lang, response) //['message'])
+						Rembrandt.Waiting.error(response) //['message'])
 					} else {
-						hideWaitingDiv()
+						Rembrandt.Waiting.hide()
 					
 						var su = false
 						var pubkey = response['usr_pub_key']
@@ -387,7 +387,7 @@ var Renoir = (function ($) {
 						if (maps) processMap(response, $('#rrs-searchresult-map', divtoshow))
 					}
 				},
-				error: function(response) {errorMessageWaitingDiv(lang, response)}
+				error: function(response) {Rembrandt.Waiting.error(response)}
 			})
 		}
 	},

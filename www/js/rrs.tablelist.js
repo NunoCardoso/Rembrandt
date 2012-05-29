@@ -39,12 +39,12 @@ $().ready(function() {
 		data: "do="+action+"&l="+limit+"&o="+offset+"&lg="+lang+
 		(_.isUndefined(collection_id) ? "" : "&ci="+collection_id)+ // collection_id is undefined if we are paging collections!
 		"&c="+column+"&v="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(value))+"&api_key="+api_key, 
-		beforeSubmit: waitMessageBeforeSubmit(lang),
+		beforeSubmit: Rembrandt.Waiting.show(),
 		
 		success: function(response)  {
-			if (response['status'] == -1) {errorMessageWaitingDiv(lang, response)}
+			if (response['status'] == -1) {Rembrandt.Waiting.error(response)}
 			else {
-				hideWaitingDiv()
+				Rembrandt.Waiting.hide()
 				
 				var su = false
 				var pubkey = response['usr_pub_key']
@@ -66,7 +66,7 @@ $().ready(function() {
  				updateEditInPlace(divtoupdate);
 			}
 		},
-		error: function(response) {errorMessageWaitingDiv(lang, response)}
+		error: function(response) {Rembrandt.Waiting.error(response)}
 		})
 	})
 	

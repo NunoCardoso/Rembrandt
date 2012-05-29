@@ -25,7 +25,13 @@ $(document).ready(function() {
 		
 	// back button os main-slidable-divs 
 	$('A.GO_BACK_IOS_ISH_BUTTON').live("click", function(ev, ui) {
-		ev.preventDefault();	
+		ev.preventDefault();
+		var divtohide = $("#main-body DIV.main-slidable-div:visible")
+		
+		if ( divtohide.is(".rrs-doc-display") && Rembrandt.Display.hasChanged(divtohide)) {
+			var _confirm = confirm("Do you really want leave document without saving modified NEs?")
+			if (!_confirm) return
+		} 
 		removeLastBreadcrumbleElement()
 		slideRightToLeftWith($("#"+$(this).attr("target")))	
 	})	
@@ -87,12 +93,12 @@ function showSlidableDIV(options) {
 		} else {
 					
 			jQuery.ajax({type:'POST', url:options.restlet_url,
-			data:options.postdata, beforeSubmit: waitMessageBeforeSubmit(lang),
+			data:options.postdata, beforeSubmit: Rembrandt.Waiting.show(),
 			success: function(response)  {		
 				if (response['status'] == -1) {
 					errorMessageWaitingDiv(lang, response['message'])
 				} else {								
-					hideWaitingDiv()
+					Rembrandt.Waiting.hide()
 					
 					var su = false
 					var pubkey = response['usr_pub_key']
@@ -113,7 +119,7 @@ function showSlidableDIV(options) {
 					}
 				}	 
 		  },									
-		  error: function(response) {errorMessageWaitingDiv(lang, response)}
+		  error: function(response) {Rembrandt.Waiting.error(response)}
 		})
 	}
 	}

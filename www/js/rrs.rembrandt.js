@@ -15,40 +15,42 @@ Rembrandt.Api = (function ($) {
 			var display = $("#"+form.attr("target"))
 
 			// wipe everything
-			Rembrandt.Display.wipeDisplay(display); 
-			// now show it...
-			display.show().slideDown("fast")
+			Rembrandt.Display.wipe(display); 
 
 			var submissionlang = $("#submissionLang").val() || lang;
 			var text= $("#text").val()
 
-			jQuery.ajax({ type:"POST", url:Rembrandt.urls.restlet_rembrandt_url, 
+			jQuery.ajax({ 
+				type:"POST", 
+				url:Rembrandt.urls.restlet_rembrandt_url, 
 				contentType:"application/x-www-form-urlencoded",
-				data: "db="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(text))+"&slg="+submissionlang+"&lg="+lang+
-				"&api_key="+Rembrandt.constants.guest_api_key+"&f=json",
-				beforeSubmit: waitMessageBeforeSubmit(lang),
+				data: "db="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(text))+
+					"&slg="+submissionlang+"&lg="+lang+
+					"&api_key="+Rembrandt.constants.guest_api_key+"&f=json",
+				beforeSubmit: Rembrandt.Waiting.show(),
 				// respond with JSON
 				success: function (response) {
 					if (response["status"] == -1) {
-						errorMessageWaitingDiv(lang, response['message'])
+						Rembrandt.Waiting.error(response)
 					} else {
-						hideWaitingDiv()
-
+						Rembrandt.Waiting.hide()
 						var doc = response['message']["doc"]
-						var nes = response['message']["nes"]
-						var doc_content = doc["doc_content"]
+						var nes = (!_.isUndefined (response['message']["nes"]) ? response['message']["nes"] : null)
+						var patches = (!_.isUndefined (response['message']["patches"]) ? response['message']["patches"] : null)
+						var commits = (!_.isUndefined (response['message']["commits"]) ? response['message']["commits"] : null)
 						
+						var doc_content = doc["doc_content"]
 						var html = Rembrandt.Api.Rembrandt2HTML(doc_content, nes)
-
-						Rembrandt.Display.addDocumentTitleToDocDisplay(display, html["title"])
-						Rembrandt.Display.addDocumentBodyToDocDisplay(display, html["body"])
-
-						// setup NE DIVs				
-						setupNEs(display)	// sets both, I hope	
+						Rembrandt.Display.addDoc(display, doc)
+						Rembrandt.Display.addDocumentContent(display, html["title"], html["body"])
+						Rembrandt.Display.addOriginalNEs(display, nes)
+						Rembrandt.Display.addPatches(display, patches)
+						Rembrandt.Display.addCommits(display, commits)
+						Rembrandt.DisplayNE.setupNEs(display)
 					}
 				},
 				error: function (response) {
-					errorMessageWaitingDiv(lang, response)		
+					Rembrandt.Waiting.error(response)
 				}
 			});
 
@@ -56,75 +58,7 @@ Rembrandt.Api = (function ($) {
 		});
 	});
 
-
-	var HTML2Rembrandt = function(sourcecode) {
-	if (!sourcecode) return sourcecode
-	sourcecode = sourcecode.replace(/([\Q[]{}\E])/ig,"\\$1") // escape terms
-	sourcecode = sourcecode.replace(/<li[^>]*>/ig,"[") // replace <li>
-	sourcecode = sourcecode.replace(/<\/li>/ig,"]") // replace </li>
-	sourcecode = sourcecode.replace(/<ul[^>]*>/ig,"{") // replace <ul>
-	sourcecode = sourcecode.replace(/<\/ul>/ig,"}") // replace </ul>
-	// now, we have only divs with classes: ALT, SUBALT, NE
-	// let's collect them in a stack, so that we can know its matching closing tag
-
-	var closedivs = new Array();
-	var re=/<(\/?)div([^>]*)>/ig
-	var re2=/(\w+)="(.+?)"/ig
-
-	sourcecode = sourcecode.replace(re, function(m, g1, g2) {
-		var answer = ""
-
-		// opening DIV
-		if (g1 == "") {
-
-			var hash_attrs = new Array();
-
-			// hash attrs
-			g2.replace(re2, function(m, g3, g4) {
-
-				hash_attrs[g3.toUpperCase()]=g4
-			})
-			// get classes
-			var classes = hash_attrs["CLASS"].split(/ /)
-
-			// SUBALT
-			if (jQuery.inArray("SUBALT", classes) >= 0) {
-
-				answer = "<A"+hash_attrs["ALT"]+">"
-				closedivs.push("</A"+hash_attrs["ALT"]+">")
-				//ALT
-			} else if (jQuery.inArray("ALT", classes)>= 0) {
-
-				answer= "<ALT>"
-				closedivs.push("</ALT>")
-				//NE
-			} else if (jQuery.inArray("NE", classes)>= 0) {
-
-				var netag = "<"+i18n["ne"][lang]
-				closedivs.push("</EM>")
-				netag += " ID=\""+hash_attrs["ID"]+"\""
-				netag += " S=\""+hash_attrs["S"]+"\""
-				netag += " T=\""+hash_attrs["T"]+"\""
-				if (hash_attrs["C1"]) netag += " C1=\""+hash_attrs["C1"]+"\""
-				if (hash_attrs["C2"]) netag += " C2=\""+hash_attrs["C2"]+"\""
-				if (hash_attrs["C3"]) netag += " C3=\""+hash_attrs["C2"]+"\""
-				if (hash_attrs["WK"]) netag += " WK=\""+hash_attrs["WK"]+"\""
-				if (hash_attrs["DB"]) netag += " DB=\""+hash_attrs["DB"]+"\""
-				if (hash_attrs["RI"]) netag += " RI=\""+hash_attrs["RI"]+"\""
-				if (hash_attrs["RT"]) netag += " RT=\""+hash_attrs["RT"]+"\""
-				netag += ">"
-				answer = netag
-			}
-			// closing div
-		} else if (g1 == "/") {
-			answer = closedivs.pop()
-		}
-		return ""+answer
-	})
-	return sourcecode.replace(/</g,"&lt;").replace(/>/g,"&gt;")
-	},
-
-	_parseText = function(response) {
+	var _parseText = function(response) {
 		var response2 = ""
 		var state = 0;
 		var sindex = 0;
@@ -196,6 +130,46 @@ Rembrandt.Api = (function ($) {
 		return d.html()	 
 	},*/
 	
+	NE2HTML = function(ne, nr_sentence, nr_term, no_body) {
+		var ne_div = "<DIV "
+		var ne_class = "CLASS='NE "
+		var ne_attr = "S='"+nr_sentence+"' T='"+nr_term+"' "
+		var no_body = (_.isUndefined(no_body) ? false : no_body)
+		
+		if (!_.isUndefined(ne.ne_category) && ne.ne_category != null) {
+			var cat = ne.ne_category.nec_category.replace(/@/,"")
+			ne_class += cat+" "
+			ne_attr += "CATEGORY='"+cat+"' "
+		} 
+		if (!_.isUndefined(ne.ne_type) && ne.ne_type != null) {
+			var cat = ne.ne_type.net_type.replace(/@/,"")
+			ne_class += cat+" "
+			ne_attr += "TYPE='"+cat+"' "
+		}
+		if (!_.isUndefined(ne.ne_subtype) && ne.ne_subtype != null) {
+			var cat = ne.ne_subtype.nes_subtype.replace(/@/,"")
+			ne_class += cat+" "
+			ne_attr += "SUBTYPE='"+cat+"' "
+		}
+		if (!_.isUndefined(ne.ne_entity) && ne.ne_entity != null) {
+			ne_attr += "ENTITY_ID='"+ne.ne_entity.ent_id+"' "
+			ne_attr += "ENTITY_CLASS='"+ne.ne_entity.ent_dbpedia_class+"' "
+			ne_attr += "ENTITY_RESOURCE='"+ne.ne_entity.ent_dbpedia_resource+"' "
+		}
+
+		ne_class += "' "
+		ne_div += ne_class
+		ne_div += ne_attr
+		ne_div += "NE_ID='"+ne.ne_id+"' "
+		ne_div += "NE_LANG='"+ne.ne_lang+"' "
+		if (no_body) {
+			ne_div += "/>"
+		} else {
+			ne_div += ">"+ne.ne_name.nen_name+"</DIV>"
+		}
+		return ne_div
+	},
+	
 	// this one has dhn e nes separated from doc
 	Rembrandt2HTML = function (doc_content, nes) {
 
@@ -207,49 +181,27 @@ Rembrandt.Api = (function ($) {
 		var body_j = $(document.createElement("DIV")).append(body)
 		
 		for (var i in nes) {
-			var ne = nes[i].ne
-			var nr_sentence = nes[i].sentence
-			var nr_term = nes[i].term
-			var section = nes[i].section
-			
-			var ne_div = "<DIV "
-			var ne_class = "CLASS='NE "
-			var ne_attr = ""
-			if (!_.isUndefined(ne.ne_category) && ne.ne_category != null) {
-				var cat = ne.ne_category.nec_category.replace(/@/,"")
-				ne_class += cat+" "
-				ne_attr += "CATEGORY='"+cat+"' "
-			} 
-			if (!_.isUndefined(ne.ne_type) && ne.ne_type != null) {
-				var cat = ne.ne_type.net_type.replace(/@/,"")
-				ne_class += cat+" "
-				ne_attr += "TYPE='"+cat+"' "
-			}
-			if (!_.isUndefined(ne.ne_subtype) && ne.ne_subtyle != null) {
-				var cat = ne.ne_subtype.nes_subtype.replace(/@/,"")
-				ne_class += cat+" "
-				ne_attr += "SUBTYPE='"+cat+"' "
-			}
-			ne_class += "' "
-			ne_div += ne_class
-			ne_div += ne_attr
-			ne_div += "ID='"+ne.ne_id+"' "
-			ne_div += "LANG='"+ne.ne_lang+"' "
-			ne_div += "/>"
+			var ne = nes[i].ne,
+				nr_sentence = nes[i].sentence,
+				nr_term = nes[i].term,
+				section = nes[i].section,
+				ne_div = NE2HTML(ne, nr_sentence, nr_term, true),
+				sentence,
+				next_selectors = [],
+				terms
 			
 			// now, build the selector to wrap them
-			var sentence
 			if (section == "T") {
 				sentence = title_j.find("UL[s="+nr_sentence+"]")
 			} else if (section == "B") {
 				sentence = body_j.find("UL[s="+nr_sentence+"]")
 			}
-			var next_selectors = []
-			for (var i = nr_term; i <= nr_term + ne.ne_name.nen_nr_terms; i++) {
-				next_selectors.push("li[t="+i+"]")
+			
+			for (var i = nr_term; i < nr_term + ne.ne_name.nen_nr_terms; i++) {
+				next_selectors.push("LI[T="+i+"]")
 			}
 			
-			var terms = sentence.find(next_selectors.join(","))
+			terms = sentence.find(next_selectors.join(","))
 			terms.wrapAll(ne_div)
 		}
 
@@ -261,7 +213,7 @@ Rembrandt.Api = (function ($) {
 	
 	
 	return {
-		"HTML2Rembrandt" : HTML2Rembrandt,
-		"Rembrandt2HTML" : Rembrandt2HTML,
+		"Rembrandt2HTML"	: Rembrandt2HTML,
+		"NE2HTML"			: NE2HTML
 	};
 }(jQuery));

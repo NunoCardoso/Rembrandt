@@ -65,7 +65,7 @@ Rembrandt.Admin = (function ($) {
 		},
 									
 		template = "\
-<DIV ID='rrs-waiting-div' CLASS='rrs-waiting-div' style='display:none;'>\
+<DIV ID='rrs-waiting-div' CLASS='rrs-waiting-div'>\
 	<DIV CLASS='rrs-waiting-div-message'></DIV>\
 	<DIV CLASS='rrs-waiting-div-balloontip'></DIV>\
 </DIV>\

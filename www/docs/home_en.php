@@ -1,6 +1,6 @@
-<DIV CLASS="main-right-note" style="font-size:1.2em;">
+<!--<DIV CLASS="main-right-note" style="font-size:1.2em;">
 REMBRANDT 1.3beta1 is avaliable. <a href="<?php echo curPageURL(array('do'=>'download-release'));?>">Download it now!</a>  
-</DIV>
+</DIV>-->
 
 <H2>Welcome to REMBRANDT website.</h2> 
 
@@ -55,7 +55,7 @@ REMBRANDT 1.3beta1 is avaliable. <a href="<?php echo curPageURL(array('do'=>'dow
 
    <DIV ID="rembrandt-results-1" CLASS="rrs-doc-display" style="width:auto;"></DIV>
    <script> $(document).ready(function() {
-		Rembrandt.Display.appendDocDisplayTo($('#rembrandt-results-1'))
+		Rembrandt.Display.create($('#rembrandt-results-1'), {menu:false})
   })
   </script>
 </DIV>

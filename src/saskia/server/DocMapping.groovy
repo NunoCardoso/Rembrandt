@@ -78,16 +78,16 @@ public class DocMapping extends WebServiceRestletMapping {
             if (!user) return sm.userNotFound()
             if (!user.isEnabled()) return sm.userNotEnabled()
 
-            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")        	
+            if (!action || !lang) return sm.notEnoughVars("do=$action, lg=$lang")
             sm.setAction(action)
              
             /*********************/
             /** 1.1  List DOCS **/
             /*********************/
-						
+
             if (action == "list") {
-	
-					Map h
+
+				Map h
             	Long collection_id 
             	Collection collection 
 					try {
@@ -145,9 +145,27 @@ public class DocMapping extends WebServiceRestletMapping {
 					// ask each NE to JSON itself
 					nes[i]["ne"] = nes[i]["ne"].toMap()
 				}
+				
+				// patches are accepted changes to docs, made of merged commits
+				def patches = doc.getPatchesToCurrentVersion()
+				for (int i = 0; i < patches.size(); i++) {
+					// ask each NE to JSON itself
+					patches[i] = patches[i].toMap()
+				}
+				
+				// commits are user changes (not yet approved) to docs 
+				def commits = doc.getCommitsForUser(user)
+				for (int i = 0; i < commits.size(); i++) {
+					// ask each NE to JSON itself
+					commits[i] = commits[i].toMap()
+				}
+
 				def answer = [
 					"doc":doc.toMap(),
-					"nes":nes
+					"nes":nes,
+					"patches":patches,
+					"commits":commits
+					
 				]
                 return sm.statusMessage(0, answer)
             }

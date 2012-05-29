@@ -172,22 +172,6 @@ a.main-button-disabled:active span {
   min-height: 400px;
 }
 
-/**********/
-/* footer */
-/**********/
-
-#main-footer {
-  height: 30px;
-  line-height:30px;
-  background:  #142c46;
-  margin-top:20px;
-  text-align:center;
-  border-top: 1px solid #A0B7C4;
-  border-bottom: 1px solid #A0B7C4;
-  vertical-align:baseline;
-  color:#ffffff;
-}
-
 /******************/
 /* main form is for main input
 /* is between main-header-menu and main-body 

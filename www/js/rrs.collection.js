@@ -122,14 +122,16 @@ Rembrandt.Collection = (function ($) {
 			url:Rembrandt.urls.restlet_saskia_collection_url, 
 			dataType:"json",
 			data:"lg="+lang+"&do=refreshstats&id="+col_id+"&api_key="+Rembrandt.Util.getApiKey(),
-			beforeSubmit: button.find("SPAN").html(
-				waitmessage(lang, i18n['refreshing_collection'][lang])), 
+			beforeSubmit: Rembrandt.WaitingDiv.show({
+				target: button.find("SPAN"),
+				message:i18n['refreshing_collection'][lang]
+			}), 
 				
 			success:function(response) {
 
 				if (response["status"] == -1) {
 
-					errorMessageWaitingDiv(lang, response)
+					Rembrandt.Waiting.error(response)
 					button.toggleClass('disabled',false)
 						.toggleClass("main-button-disabled","main-button")
 						.find("SPAN")
@@ -144,7 +146,7 @@ Rembrandt.Collection = (function ($) {
 			},
 			error:function(response) {
 				// put it back
-				errorMessageWaitingDiv(lang, response)
+				Rembrandt.Waiting.error(response)
 				button.toggleClass('disabled',false)
 					.toggleClass("main-button-disabled","main-button")
 			}
@@ -803,20 +805,23 @@ Rembrandt.Collection = (function ($) {
 						"&col_comment="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(col_comment))+
 						"&col_lang="+col_lang+"&col_permission="+col_permission+
 						"&lg="+lang+"&api_key="+api_key, 
-					beforeSubmit: waitMessageBeforeSubmit(lang),
+					beforeSubmit: Rembrandt.Waiting.show(),
 					success: function(response) {
 						if (response['status'] == -1) {
-							errorMessageWaitingDiv(lang, response['message'])
+							Rembrandt.Waiting.error(response)
 							dialog.data.find("#YesButton").attr("value",i18n['retry'][lang])
 							dialog.data.find("#buttons").show()	
 						} else if (response['status'] == 0)  {
-							showCustomMessageWaitingDiv(i18n['collection_created'][lang])
+							Rembrandt.Waiting.hide({
+								message:i18n['collection_created'][lang],
+								when: 3000
+							})
 							dialog.data.find("#YesButton").hide()
 							dialog.data.find("#NoButton").attr("value",i18n["OK"][lang])
 						}
 					},
 					error:function(response) {
-						errorMessageWaitingDiv(lang, response['message'])
+						Rembrandt.Waiting.error(response)
 					}
 				})
 			}
@@ -841,12 +846,12 @@ Rembrandt.Collection = (function ($) {
 			dataType:'json', url:servlet_collection_url,
 			contentType:"application/x-www-form-urlencoded",
 			data: "do=list-read&lg="+lang+"&api_key="+api_key, 
-			beforeSubmit: waitMessageBeforeSubmit(lang),
+			beforeSubmit: Rembrandt.Waiting.show(),
 			success: function(response) {
 				if (response['status'] == -1) {
 					errorMessageWaitingDiv(lang, response['message'])
 				} else {
-					hideWaitingDiv()
+					Rembrandt.Waiting.hide()
 					// dados na resposta vão ser linhas na tabela
 					var res_html = []
 					for (var i in response['message']['result']) {
@@ -988,7 +993,7 @@ Rembrandt.Collection = (function ($) {
 				contentType:"application/x-www-form-urlencoded",
 				data:"do=auth&lg="+lang+"&p="+Rembrandt.Util.urlEncode(hex_md5(password))+
 				"&api_key="+api_key,
-				beforeSubmit: waitMessageBeforeSubmit(lang),
+				beforeSubmit: Rembrandt.Waiting.show(),
 					success: function(response) {
 						if (response['status'] == -1) {
 							errorMessageWaitingDiv(lang, response['message'])			
@@ -1010,7 +1015,7 @@ Rembrandt.Collection = (function ($) {
 				jQuery.ajax({ type:"POST", dataType:'json', url:servlet_user_url,
 				contentType:"application/x-www-form-urlencoded",
 				data: "do=delete&ci="+ci+"&lg="+lang+"&api_key="+api_key, 
-				beforeSubmit: waitMessageBeforeSubmit(lang),
+				beforeSubmit: Rembrandt.Waiting.show(),
 				success: function(response) {
 					if (response['status'] == -1) {
 						errorMessageWaitingDiv(lang, response['message'])			

@@ -29,9 +29,6 @@ HTML;
 generateCSS($do);
 generateJS($config);
 ?>
-<style>
-html {overflow: hidden;} 
-</style>
 </head>
 <body class="top">
 <script>

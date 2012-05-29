@@ -17,6 +17,7 @@ import org.restlet.data.Status
 import org.restlet.representation.StringRepresentation
 import org.restlet.data.CharacterSet
 import org.restlet.data.Language
+import com.google.gson.*
 /**
  * @author rlopes
  *
@@ -46,8 +47,14 @@ public class WebServiceRestletMapping extends Restlet {
 	    HashMap res = [:] 
 	    res["GET"] = request.getResourceRef().getQueryAsForm().getValuesMap()
 	    if (request.isEntityAvailable()) {
-			res["POST"] = request.getEntityAsForm().getValuesMap()
-	    }
+			def type = request.getEntity().getMediaType() 
+			if (type.equals( MediaType.APPLICATION_JSON)) {
+				Gson g = new Gson()
+				res["POST"] = g.fromJson(request.getEntityAsText(), Object.class)
+			} else {
+				res["POST"] = request.getEntityAsForm().getValuesMap()
+			}
+		}
 	    res["COOKIE"] = request.getCookies().getValuesMap()
 	    
 	    return res

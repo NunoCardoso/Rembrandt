@@ -26,7 +26,7 @@ Rembrandt.Modal = (function ($) {
 					type:"POST", url:options.servlet_url,	
 					contentType:"application/x-www-form-urlencoded",
 					data: options.postdata,
-					beforeSubmit: waitMessageBeforeSubmit(lang),
+					beforeSubmit: Rembrandt.Waiting.show(),
 					success: function(response) {
 						if (response['status'] == -1) {
 							errorMessageWaitingDiv(lang, response['message'])

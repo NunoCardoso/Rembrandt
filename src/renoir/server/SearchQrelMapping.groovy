@@ -48,6 +48,8 @@ public class SearchQrelMapping extends WebServiceRestletMapping {
 
 		this.db = db
 		CollectionTable collectionTable = db.getDBTable("CollectionTable")
+		GeoscopeTable gt = db.getDBTable("GeoscopeTable")
+
 		UserTable userTable = db.getDBTable("UserTable")
 		DocTable docTable = db.getDBTable("DocTable")
 		
@@ -190,7 +192,7 @@ public class SearchQrelMapping extends WebServiceRestletMapping {
 						DocGeoSignature dgs = doc.getGeographicSignature()
 						if (dgs) {
 							// get the dgs_signature. Note that is has only ancestors/centroid/bb info, no shape.
-							GeoSignature geosig = new GeoSignature(dgs)
+							GeoSignature geosig = new GeoSignature(gt, dgs)
 							// go to the Geoscope table and see if we can add shapes on it
 							geosig.addPolylineInfo()
 

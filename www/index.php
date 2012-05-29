@@ -101,7 +101,6 @@ HTML;
 		<IFRAME id="myframe" name='myframe' width='100%' height='100%' frameborder=0 src='frontpage.php?lg=<?php echo $lang; ?>'>
 		</IFRAME>
 	</DIV> 	
-	<?php footer(); ?>
 </DIV>
 <DIV ID="rrs-messages" style="display:none;"></DIV>
 <?php 

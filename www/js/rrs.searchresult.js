@@ -70,11 +70,11 @@ $().ready(function() {
 			(maps ? "&maps="+maps : "") + 
 			"&ci="+collection_id+"&lg="+lang+
 			"&api_key="+api_key+"&o="+offset+"&l="+limit,
-			beforeSubmit:  waitMessageBeforeSubmit(lang),
+			beforeSubmit:  Rembrandt.Waiting.show(),
 			success: function(response)  {		
-				if (response['status'] == -1) {errorMessageWaitingDiv(lang, response)}
+				if (response['status'] == -1) {Rembrandt.Waiting.error(response)}
 				else {
-					hideWaitingDiv()
+					Rembrandt.Waiting.hide()
 				
 					var su = false
 					var pubkey = response['usr_pub_key']
@@ -91,7 +91,7 @@ $().ready(function() {
 					processMap(response, $('#rrs-searchresult-map', divtoupdate))
 				}
 			}, 
-			error: function(response) {errorMessageWaitingDiv(lang, response)}
+			error: function(response) {Rembrandt.Waiting.error(response)}
 		})
 	})
 })

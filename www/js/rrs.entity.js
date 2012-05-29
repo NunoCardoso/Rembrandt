@@ -238,7 +238,7 @@ Rembrandt.Entity = (function ($) {
 					"&ent_dbpedia_resource="+dialog.data.find("#ent_dbpedia_resource").val()+
 					"&ent_dbpedia_class="+dialog.data.find("#ent_dbpedia_class").val()+
 					"&api_key="+api_key, 
-					beforeSubmit: waitMessageBeforeSubmit(lang),
+					beforeSubmit: Rembrandt.Waiting.show(),
 
 					success: function(response) {
 						if (response['status'] == -1) {

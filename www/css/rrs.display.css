@@ -23,70 +23,88 @@
 
 /** commands at the top - see it as the keyboard */
 #rrs-doc-display-menu {
-   height:20px;
-   width:100%;
-   z-index:10;
-   background-color: lightBlue;
-	font-size:12px;
+	height:30px;
+	width:100%;
+	z-index:10;
+	background-color: #EEE;
+	border: 1px solid #EEE;
+	font-size:14px;
 	color:#000000;
 	text-indent:0;
 	list-style: none;
+	box-sizing: border-box;
 }
 
 #rrs-doc-display-menu div {
-   z-index:20;
-  position: relative;
+	z-index:20;
+	position: relative;
 }
 
 #rrs-doc-display-menu div ul li {
 	list-style: none;
 	display:block;
 	float:left;
-   padding-right: 10px;
-   padding-left: 10px;
-   line-height: 20px;
+	padding-right: 10px;
+	padding-left: 10px;
+	line-height: 30px;
+	border: 1px solid #EEE;
 }
 
 #rrs-doc-display-menu ul li a {
- line-height: 20px;
+ line-height: 30px;
  text-decoration: none;
  color: #000000;
 }
 
 #rrs-doc-display-menu ul div {
-  background:#dddddd; 
+  background:#EEE; 
   display:none;
-  margin-left:-10px; /* compensates the padding-left of #main-menu ul li */
-  padding-right:10px; 
+  margin-left:-10px; /* compensates the padding-left of #main-menu ul li + border*/
+  padding-right:20px; 
   position:absolute;
-  font-size:12px;
-  top:20px; /* 40 px below */
+  font-size:14px;
+  top:31px; 
+  border: 1px solid grey;
 }
 
 #rrs-doc-display-menu  ul li div ul li {
 	list-style: none;
 	display:block;
-   float:left;
-   clear:both;
+	float:left;
+	clear:both;
 	background-image: none;
-   padding-right: 0px;
-   padding-left: 10px;
-   line-height: 20px;
-   margin-bottom:4px;
-   height: 20px;
-   width:100%; /* important to span all horizontal pace in the submenu */
+	padding-right: 0px;
+	padding-left: 20px;
+	line-height: 30px;
+	height: 30px;
+	width:100%; 
+}
+
+#rrs-doc-display-menu  ul li div ul li:hover  {
+	border: 1px solid grey;
+	border-bottom: 1px solid grey;
+	background-color: #DDD;
 }
 
 #rrs-doc-display-menu  ul li div ul li a {
- line-height: 20px;
+ line-height: 30px;
  display:block;
  text-decoration: none;
  color: #000000;
 }
 
-#rrs-doc-display-menu ul li:hover {
-	background-image: url(../img/navi2_bg_hover.png);
+#rrs-doc-display-menu > div > ul > li:hover {
+	background-color: #DDD;
 	background-repeat: repeat;
+	border-top: 1px solid grey;
+	border-left: 1px solid grey;
+	border-right: 1px solid grey;
+}
+
+#rrs-doc-display-menu  ul li div ul li.selected  {
+	background-image: url(../img/check.gif);
+	background-repeat: no-repeat;
+	background-position: 0px 4px; 
 }
 
 /** see it as the TV  */
@@ -133,7 +151,21 @@
 }
 
 #rrs-document-title {
-	background:#cccccc;
+	font-size:15px;
+	border-bottom: 1px solid grey;
+}
+
+div.ne_commit_wrapper {
+	padding: 3px;
+	margin: 3px;
+}
+
+div.ne_commit_wrapper.add {
+	background-color: lightgreen;
+}
+
+div.ne_commit_wrapper.remove {
+	background-color: red;
 }
 
 #rrs-document-body {

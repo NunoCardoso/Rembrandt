@@ -329,7 +329,7 @@ function modalNECreate (button) {
 					"&c3="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedSubtype))+
 					"&ent="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedEntity))+
 					"&api_key="+api_key,					 
-					beforeSubmit: waitMessageBeforeSubmit(lang),
+					beforeSubmit: Rembrandt.Waiting.show(),
 
 					success: function(response) {
 						if (response['status'] == -1) {

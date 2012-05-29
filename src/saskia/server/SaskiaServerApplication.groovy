@@ -55,6 +55,9 @@ public class SaskiaServerApplication extends Application {
 		DocMapping docMapping = new DocMapping(db)
 		docMapping.attach(MediaType.APPLICATION_JSON, docMapping.JSONanswer)
 
+		CommitMapping commitMapping = new CommitMapping(db)
+		commitMapping.attach(MediaType.APPLICATION_JSON, commitMapping.JSONanswer)
+
 		NEMapping neMapping = new NEMapping(db)
 		neMapping.attach(MediaType.APPLICATION_JSON, neMapping.JSONanswer)
 
@@ -104,6 +107,8 @@ public class SaskiaServerApplication extends Application {
 		router.attach("/Saskia/ask", askSaskiaMapping)
 
 		router.attach("/Saskia/doc", docMapping)
+		router.attach("/Saskia/commit/{action}", commitMapping)
+
 		router.attach("/Saskia/collection", collectionMapping)
 		router.attach("/Saskia/task", taskMapping)
 		router.attach("/Saskia/ne", neMapping)

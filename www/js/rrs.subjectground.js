@@ -319,7 +319,7 @@ function modalSubjectgroundCreate(button) {
 					"&sgr_dbpedia_class="+dialog.data.find("#sgr_dbpedia_class").val()+
 					"&sgr_comment="+dialog.data.find("#sgr_comment").val()+
 					"&api_key="+api_key, 
-					beforeSubmit: waitMessageBeforeSubmit(lang),
+					beforeSubmit: Rembrandt.Waiting.show(),
 
 					success: function(response) {
 						if (response['status'] == -1) {

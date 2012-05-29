@@ -27,17 +27,17 @@ var Saskia = (function ($) {
 		jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_saskia_collection_url,
 			contentType:"application/x-www-form-urlencoded",
 			data: "do=list-all&l="+limit+"&o="+offset+"&lg="+lang+"&api_key="+api_key,
-			beforeSubmit: waitMessageBeforeSubmit(lang),
+			beforeSubmit: Rembrandt.Waiting.show(),
 			success: function(response)  {
 				if (response['status'] == -1 ) {
-					errorMessageWaitingDiv(lang, response)
+					Rembrandt.Waiting.error(response)
 				} else {
-					hideWaitingDiv()
+					Rembrandt.Waiting.hide()
 					$("#rrs-homepage-collection").append(
 						Saskia.generateCollectionMainPageDIV(response['message'], su, role, {}))			
 				}
 			},
-			error: function(response) {errorMessageWaitingDiv(lang, response)}
+			error: function(response) {Rembrandt.Waiting.error(response)}
 		})
 	},
 

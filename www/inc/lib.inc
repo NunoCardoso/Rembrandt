@@ -126,14 +126,6 @@ function getMenuFromAction($action) {
 	return false;
 }
 
-
-/* Generates a main footer */ 
-function footer() {
-	 echo "<DIV ID=\"main-footer\">\n";
-	 echo "Copyright &copy; 2010 FCUL.";
-	 echo "</DIV>\n";
-}
-
 /* analytics */
 function analytics() {
 	echo <<<OUTPUT

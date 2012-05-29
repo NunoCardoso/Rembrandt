@@ -152,12 +152,12 @@ class Doc extends DBObject implements JSONable {
 			],
 			"doc_latest_geo_signature":(doc_latest_geo_signature != null ? 
 				getDBTable().getSaskiaDB().getDBTable("DocGeoSignatureTable")
-				.getFromID(doc_latest_geo_signature)
+				.getFromID(doc_latest_geo_signature).toMap()
 				: null)
 			,
 			"doc_latest_geo_signature":(doc_latest_time_signature != null ? 
 				getDBTable().getSaskiaDB().getDBTable("DocTimeSignatureTable")
-				.getFromID(doc_latest_time_signature)
+				.getFromID(doc_latest_time_signature).toMap()
 				: null)
 			
 		]
@@ -237,6 +237,30 @@ class Doc extends DBObject implements JSONable {
 			nes << neobj
 		})
 		return nes
+	}
+	
+	List<Commit> getCommitsForUser(User user) {	
+		if (!user || !user.usr_id) throw new IllegalStateException("No user or usr_id")
+		def committable = dbtable.getSaskiaDB().getDBTable("CommitTable")
+		def commits = committable.queryDB("SELECT *  FROM ${committable.tablename} "+
+			"WHERE cmm_doc=? and cmm_user=?", [doc_id, user.usr_id])
+		return commits
+	}
+	
+	List<Patch> getPatches() {	
+		def patchtable = dbtable.getSaskiaDB().getDBTable("PatchTable")
+		def patches = patchtable.queryDB("SELECT *  FROM ${patchtable.tablename} "+
+			"WHERE pat_doc=?", [doc_id])
+		return patches
+	}
+	
+	List<Patch> getPatchesToCurrentVersion() {	
+		if (!doc_version) return []
+		def patchtable = dbtable.getSaskiaDB().getDBTable("PatchTable")
+		def patches = patchtable.queryDB("SELECT *  FROM ${patchtable.tablename} "+
+			"WHERE pat_doc=? and pat_version <= ? order by pat_version ASC",
+			[doc_id, doc_version])
+		return patches
 	}
 	
 	/** Remove entries from doc_has_ne table. It will NOT erase entries on other tables.

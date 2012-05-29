@@ -71,7 +71,7 @@ function userSettings() {
 		type:"POST", url:Rembrandt.urls.restlet_saskia_user_url, 
 		contentType:"application/x-www-form-urlencoded",
 		data: "do=show&lg="+lang+"&api_key="+api_key, 
-		beforeSubmit: waitMessageBeforeSubmit(lang),
+		beforeSubmit: Rembrandt.Waiting.show(),
 		success: function(response) {
 			if (response["status"] == -1) {
 				errorMessageWaitingDiv(lang, response['message'])
@@ -104,7 +104,7 @@ function userSettings() {
 	
 			}
 		},	
-		error: function(response) {errorMessageWaitingDiv(lang, response)}		
+		error: function(response) {Rembrandt.Waiting.error(response)}		
 	})
 }
 

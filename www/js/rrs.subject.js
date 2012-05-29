@@ -220,7 +220,7 @@ function modalSubjectCreate(button) {
 					data: "do=create&lg="+lang+
 					"&sbj_subject="+dialog.data.find("#sbj_subject").val()+
 					"&api_key="+api_key, 
-					beforeSubmit: waitMessageBeforeSubmit(lang),
+					beforeSubmit: Rembrandt.Waiting.show(),
 
 					success: function(response) {
 						if (response['status'] == -1) {

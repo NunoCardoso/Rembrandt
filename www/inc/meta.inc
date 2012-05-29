@@ -12,7 +12,7 @@ echo <<<HTML
 	<link rel="stylesheet" type="text/css" href="css/rrs.main.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.commonui.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.ne.css" />
-	<link rel="stylesheet" type="text/css" href="css/rrs.docdisplay.css" />
+	<link rel="stylesheet" type="text/css" href="css/rrs.display.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.admin.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.stats.css" />
 	<link rel="stylesheet" type="text/css" href="css/rrs.tabs.css" />
@@ -57,8 +57,8 @@ echo <<<HTML
 	<script type="text/javascript" src="js/rrs.modal.js" ></script>
 	<script type="text/javascript" src="js/rrs.i18n.js" ></script>
 	<script type="text/javascript" src="js/rrs.tablelist.js" ></script>
-	<script type="text/javascript" src="js/rrs.docdisplay.js" ></script>
-	<script type="text/javascript" src="js/rrs.waitingdiv.js" ></script>
+	<script type="text/javascript" src="js/rrs.display.js" ></script>
+	<script type="text/javascript" src="js/rrs.waiting.js" ></script>
 	<script type="text/javascript" src="js/rrs.stats.js" ></script>
 	<script type="text/javascript" src="js/rrs.google.js" ></script>
 

@@ -116,26 +116,30 @@ Rembrandt.Doc = (function ($) {
 
 		var context="doc"
 		var doc = response["doc"]
+		var nes = response["nes"]
+		var patches = response["patches"]
+		var commits = response["commits"]
+		
 		var doc_id = doc["doc_id"]
 		var doc_original_id = doc["doc_original_id"]
 		var doc_content = doc["doc_content"]
-		var nes = response["nes"]
 
 		var canadmin = (su || role.toLowerCase() == "col-admin")
 
 		// newdiv
-		var newdiv = $("<DIV ID='rrs-"+context+"-show-"+doc_id+"' CLASS='main-slidable-div rrs-doc-display' "+
+		var display = $("<DIV ID='rrs-"+context+"-show-"+doc_id+"' CLASS='main-slidable-div rrs-doc-display' "+
 		" TITLE='"+Rembrandt.Util.shortenTitle(doc_original_id)+"' STYLE='display:none;overflow:auto;'></DIV>")
 
 		var html = Rembrandt.Api.Rembrandt2HTML(doc_content, nes)
 
-		// now that we have a doc_div, let's set it up. 
+		Rembrandt.Display.create(display)
+		Rembrandt.Display.addDoc(display, doc)
+		Rembrandt.Display.addDocumentContent(display, html["title"], html["body"])
+		Rembrandt.Display.addOriginalNEs(display, nes)
+		Rembrandt.Display.addPatches(display, patches)
+		Rembrandt.Display.addCommits(display, commits)
 
-		Rembrandt.Display.appendDocDisplayTo(newdiv)
-		Rembrandt.Display.addDocumentTitleToDocDisplay(newdiv, html["title"])
-		Rembrandt.Display.addDocumentBodyToDocDisplay(newdiv, html["body"])
-
-		return newdiv
+		return display
 	},
 	
 	modalDocDelete = function (button) {

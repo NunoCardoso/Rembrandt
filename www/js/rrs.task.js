@@ -411,7 +411,7 @@ function modalTaskCreate(button) {
 					"&tsk_persistence="+dialog.data.find("#tsk_persistence :selected").val()+
 					"&tsk_comment="+dialog.data.find("#tsk_comment").val()+
 					"&api_key="+api_key, 
-					beforeSubmit: waitMessageBeforeSubmit(lang),
+					beforeSubmit: Rembrandt.Waiting.show(),
 
 					success: function(response) {
 						if (response['status'] == -1) {

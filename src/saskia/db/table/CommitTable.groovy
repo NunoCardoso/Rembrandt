@@ -43,6 +43,39 @@ class CommitTable extends DBTable {
 		return res
 	}
 
+	public Map listCommits(Doc doc, limit = 10,  offset = 0, column = null, needle = null) {
+
+		// limit & offset can come as null... they ARE initialized...
+		if (!limit) limit = 10
+		if (!offset) offset = 0
+
+		String where = "WHERE cmm_doc=? "
+		List params = [doc.doc_id]
+		if (column && needle) {
+			switch (Commit.type[column]) {
+				case 'String': where += " AND $column LIKE '%${needle}%'"; break
+				case 'Long': where += " AND $column=? "; params << Long.parseLong(needle); break
+				case 'User':  where += " AND $column = ?"; params << Long.parseLong(needle); break
+				case 'Doc':  where += " AND $column = ?"; params << Long.parseLong(needle); break
+				case 'Date': where += " AND $column = ?"; params << needle; break
+			}
+		}
+
+		String query = "SELECT SQL_CALC_FOUND_ROWS * FROM ${tablename} "+
+				"$where LIMIT ${limit} OFFSET ${offset} UNION SELECT CAST(FOUND_ROWS() as SIGNED INT), "+
+				"NULL, NULL, NULL, NULL"
+		log.debug "query = $query params = $params class = "+params*.class
+		List u
+		try {u = queryDB(query, params) }
+		catch(Exception e) {log.error "Error getting commit list: ", e}
+		// last "user" is not the user... it's the count.
+		Commit fake_commit = u.pop()
+		long total = fake_commit.cmm_id
+		log.debug "Returning "+u.size()+" results."
+		return ["total":total, "offset":offset, "limit":limit, "page":u.size(), "result":u,
+			"column":column, "value":needle, "doc_id":doc.doc_id]
+	}
+
 	public List<Commit> filterFromColumnAndNeedle(List<Commit> haystack, Map column = null, needle = null) {
 
 		if (column && needle) {
@@ -106,7 +139,7 @@ class CommitTable extends DBTable {
 		}
 
 		def res = getDBTable().getSaskiaDB().getDB().executeUpdate(
-				"UPDATE ${getDBTable().tablename} SET ${column}=? WHERE cmm_id=?",
+				"UPDATE ${tablename} SET ${column}=? WHERE cmm_id=?",
 				[newval, cmm_id])
 		return res
 	}

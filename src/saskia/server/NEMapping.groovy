@@ -45,13 +45,13 @@ public class NEMapping extends WebServiceRestletMapping {
         
        	  I18n i18n = I18n.newInstance()
        	  Long id
-       	  String action, collection_id, lang, nename, c1, c2, c3
+       	  String  collection_id, lang, nename, c1, c2, c3
        	  int s, t
         
        	  if (par["POST"]["id"] && par["POST"]["id"] != "undefined") 
-			  try {id =  Long.parseLong(par["POST"]["id"])}
+			  try {id =  (long) par["POST"]["id"]}
 			  catch(Exception e) {}
-       	  action =  par["POST"]["do"]
+           String action = req.getAttributes().get("action");
        	  if (par["POST"]["ci"]) 
 		     try {collection_id = par["POST"]["ci"]}
 		     catch(Exception e) {}
@@ -71,9 +71,9 @@ public class NEMapping extends WebServiceRestletMapping {
 	   		if (par["POST"]["ne"] && par["POST"]["ne"] != "undefined" && par["POST"]["ne"] != "null") 
 	   			nename = par["POST"]["ne"] 
 	   		if (par["POST"]["s"] && par["POST"]["s"] != "undefined" && par["POST"]["s"] != "null") 
-	   			s = Integer.parseInt(par["POST"]["s"])
+	   			s = (int) par["POST"]["s"]
 	   		if (par["POST"]["t"] && par["POST"]["t"] != "undefined" && par["POST"]["t"] != "null") 
-	   			t = Integer.parseInt(par["POST"]["t"])
+	   			t = (int) par["POST"]["t"]
 	   		if (par["POST"]["c1"] && par["POST"]["c1"] != "undefined" && par["POST"]["c1"] != "null") 
 	   			c1 = par["POST"]["c1"]
 		   	if (par["POST"]["c2"] && par["POST"]["c2"] != "undefined" && par["POST"]["c2"] != "null") 

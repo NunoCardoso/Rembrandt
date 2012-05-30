@@ -9,21 +9,21 @@ $().ready(function() {
 	$('A.USER_LIST').live("click", function(ev, ui) {
 
  		ev.preventDefault();
-		var a_clicked = $(this)
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
-		var api_key = Rembrandt.Util.getApiKey()
+		var a_clicked = $(this),
+			title = a_clicked.attr("title") || a_clicked.text(),
+			api_key = Rembrandt.Util.getApiKey();
 		
 		showSlidableDIV({
-			"title": title,
-			"target": "rrs-user-list", 
-			"role": a_clicked.attr('ROLE'),
-			"slide": getSlideOrientationFromLink(a_clicked),
-			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "user"), 
-			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
-			"divRender":generateUserListDIV, 
+			"title"			: title,
+			"target"		: "rrs-user-list", 
+			"role"			: a_clicked.attr('ROLE'),
+			"slide"			: getSlideOrientationFromLink(a_clicked),
+			"ajax"			: true,
+			"restlet_url"	: Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "user")+"/list", 
+			"data"			: {"lg":lang, "api_key":api_key},
+			"divRender"		: generateUserListDIV, 
 			"divRenderOptions":{},
-			"sidemenu":null, 
+			"sidemenu"		: null, 
 			"sidemenuoptions":{}
 		})					
 	});
@@ -68,13 +68,17 @@ function userSettings() {
 	var api_key = Rembrandt.Util.getApiKey()
 	
 	jQuery.ajax( {
-		type:"POST", url:Rembrandt.urls.restlet_saskia_user_url, 
-		contentType:"application/x-www-form-urlencoded",
-		data: "do=show&lg="+lang+"&api_key="+api_key, 
-		beforeSubmit: Rembrandt.Waiting.show(),
-		success: function(response) {
+		type				: "POST", 
+		url					: Rembrandt.urls.restlet_saskia_user_url+"/show",
+		contentType			: "application/json",
+		data				: JSON.stringify({
+			"lg":lang,
+			"api_key":api_key
+		}),
+		beforeSubmit		: Rembrandt.Waiting.show(),
+		success				: function(response) {
 			if (response["status"] == -1) {
-				errorMessageWaitingDiv(lang, response['message'])
+				Rembrandt.Waiting.error(response)
 			} else {
 				var user = response["message"]
 				var s = "<TABLE BORDER=0>";
@@ -104,7 +108,9 @@ function userSettings() {
 	
 			}
 		},	
-		error: function(response) {Rembrandt.Waiting.error(response)}		
+		error: function(response) {
+			Rembrandt.Waiting.error(response)
+		}
 	})
 }
 
@@ -306,94 +312,100 @@ function modalUserLogin() {
 				dialog.data.find("#login-status").show()
 			
 			// make the AJAX query
-				jQuery.ajax( {type:"POST", url:Rembrandt.urls.restlet_saskia_user_url,
-				contentType:"application/x-www-form-urlencoded",
-				data: "do=login&lg="+lang+"&u="+Rembrandt.Util.urlEncode(user_login)+"&p="+Rembrandt.Util.urlEncode(hex_md5(user_password)),
-				beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
-				
-				success: function(response) {
-					// status is 0 for good login, -1 otherwise
-					if (response['status'] == -1) {
+				jQuery.ajax( {
+					type		: "POST", 
+					url			: Rembrandt.urls.restlet_saskia_user_url+"/login",
+					contentType	: "application/json",
+					data		: JSON.stringify({
+						"lg"		: lang,
+						"u"			: user_login,
+						"p"			: hex_md5(user_password)
+					}),
+					beforeSubmit: Rembrandt.Waititng.show(),
+					success: function(response) {
+						// status is 0 for good login, -1 otherwise
+						if (response['status'] == -1) {
+							dialog.data.find("#login-status").html(response['message'])
+							dialog.data.find("#LoginButton").attr("value",i18n['retry'][lang])
+							dialog.data.find("#buttons").show()	
+						} else if (response['status'] == 0)  {
+							Rembrandt.Waiting.hide()
+							var user = response['message']
+							var user_name = user['usr_firstname']+" "+user['usr_lastname']
+							var user_id = user['usr_id']
+							dialog.data.find("#login-status").html(i18n['welcome'][lang]+", "+user_name)
+						
+							// update rembrandt-user div
+							$("#rrs-user").html(i18n['user'][lang]+": "+ user_name)
+							$("#rrs-user").attr('USER', user_login)
+							$("#rrs-user").attr('USER_ID', user_id)
+						
+							$("#rrs-user").append(" | <A HREF='#' CLASS='USER_SETTINGS'>"+i18n['settings'][lang]+"</A> | ")
+							// set cookie info, case I want to be remembered
+							if (rememberme != null) {
+								$.cookie('user_login', user_login) 
+								$.cookie('user_name', user_name) 
+								$.cookie('user_id', user_id) 
+								$.cookie('api_key', user['usr_api_key'])
+								if(!_.isUndefined(user['usr_pub_key_decoder'])) {
+									$.cookie('su', user['usr_pub_key_decoder'])
+								}
+								$("#rrs-user").attr('api_key', user['usr_api_key'])
+							} else {
+								$("#rrs-user").attr('api_key', user['usr_api_key'])
+							}
+
+							// usr_pub_key is only sent from restlet if is confirmed as superuser
+							if (!_.isUndefined(user["usr_pub_key"]) && Rembrandt.Util.validateSu(user["usr_pub_key"])) {
+								$("#rrs-user").append("<A HREF='#' CLASS='USER_ADMIN' USR_PUB_KEY='"+user["usr_pub_key"]+"'>"+ i18n['admin'][lang]+"</A> | ")
+								//TODO
+								//	$.getScript("js/rembrandt.admin.js")
+							}
+							$("#rrs-user").append("<A HREF='#' CLASS='USER_LOGOUT'>"+ i18n['logout'][lang]+"</A>")
+							
+							//update rembrandt collection div
+							var current_collection = Rembrandt.Util.getCollection()
+							var current_collection_id = Rembrandt.Util.getCollectionId()
+						
+							// change only if the current collection does not have read privileges 
+							// ajax perm to restlet_saskia_col_url do=list-all&api_key=&lg=
+						
+							var res = i18n['collection'][lang]+": <A CLASS='collection COLLECTION_SWITCH' HREF='#' "
+							res += " COLLECTION='"+$("#rrs-collections").attr("DEFAULT")
+							res += " COLLECTION_ID='"+$("#rrs-collections").attr("DEFAULT_ID")+"'>"
+							res += $("#rrs-collections").attr("DEFAULT") + "</A>"	
+						
+							$("#rrs-collections").html(res)
+							dialog.data.find("#LoginButton").hide()
+						
+							// ask for a page refresh
+							if(typeof updateDisplay == 'function') { updateDisplay();}
+						
+							// Let's reuse NoButon for a OK
+							dialog.data.find("#NoButton").attr('value',i18n['OK'][lang])
+							dialog.data.find("#buttons").show()	
+						}
+					}, 
+					error:function(response) {
 						dialog.data.find("#login-status").html(response['message'])
 						dialog.data.find("#LoginButton").attr("value",i18n['retry'][lang])
 						dialog.data.find("#buttons").show()	
-						
-					} else if (response['status'] == 0)  {
-						var user = response['message']
-						var user_name = user['usr_firstname']+" "+user['usr_lastname']
-						var user_id = user['usr_id']
-						dialog.data.find("#login-status").html(i18n['welcome'][lang]+", "+user_name)
-						
-						// update rembrandt-user div
-						$("#rrs-user").html(i18n['user'][lang]+": "+ user_name)
-						$("#rrs-user").attr('USER', user_login)
-						$("#rrs-user").attr('USER_ID', user_id)
-						
-						$("#rrs-user").append(" | <A HREF='#' CLASS='USER_SETTINGS'>"+i18n['settings'][lang]+"</A> | ")								
-						// set cookie info, case I want to be remembered
-						if (rememberme != null) {
-							$.cookie('user_login', user_login) 
-							$.cookie('user_name', user_name) 
-							$.cookie('user_id', user_id) 
-							$.cookie('api_key', user['usr_api_key'])
-							if(!_.isUndefined(user['usr_pub_key_decoder'])) {
-								$.cookie('su', user['usr_pub_key_decoder'])
-							}
-							$("#rrs-user").attr('api_key', user['usr_api_key'])	
-						} else {
-							$("#rrs-user").attr('api_key', user['usr_api_key'])					
-						}
-						
-						// usr_pub_key is only sent from restlet if is confirmed as superuser
-						if (!_.isUndefined(user["usr_pub_key"]) && Rembrandt.Util.validateSu(user["usr_pub_key"])) {
-							$("#rrs-user").append("<A HREF='#' CLASS='USER_ADMIN' USR_PUB_KEY='"+user["usr_pub_key"]+"'>"+ i18n['admin'][lang]+"</A> | ")
-							//TODO
-						//	$.getScript("js/rembrandt.admin.js")
-						
-						}
-						
-						$("#rrs-user").append("<A HREF='#' CLASS='USER_LOGOUT'>"+ i18n['logout'][lang]+"</A>")
-							
-						//update rembrandt collection div
-						var current_collection = Rembrandt.Util.getCollection()
-						var current_collection_id = Rembrandt.Util.getCollectionId()
-						
-						// change only if the current collection does not have read privileges 
-						// ajax perm to restlet_saskia_col_url do=list-all&api_key=&lg=
-						
-						var res = i18n['collection'][lang]+": <A CLASS='collection COLLECTION_SWITCH' HREF='#' "
-						res += " COLLECTION='"+$("#rrs-collections").attr("DEFAULT")
-						res += " COLLECTION_ID='"+$("#rrs-collections").attr("DEFAULT_ID")+"'>"
-						res += $("#rrs-collections").attr("DEFAULT") + "</A>"	
-						
-						$("#rrs-collections").html(res)
-						dialog.data.find("#LoginButton").hide()
-						
-						// ask for a page refresh
-						if(typeof updateDisplay == 'function') { updateDisplay();}
-						
-						// Let's reuse NoButon for a OK
-						dialog.data.find("#NoButton").attr('value',i18n['OK'][lang])
-						dialog.data.find("#buttons").show()	
 					}
-				}, 
-				error:function(response) {
-					dialog.data.find("#login-status").html(response['message'])
-					dialog.data.find("#LoginButton").attr("value",i18n['retry'][lang])
-					dialog.data.find("#buttons").show()	
-				}
-			})	
-			}				
+				})
+			}
 		});
+
 		dialog.data.find("#NoButton").click(function(ev) {
 			ev.preventDefault();
 			$.modal.close();
- 		})
+		})
+
 		dialog.data.find("#newuser").click(function(ev) {
 			ev.preventDefault();
 			$.modal.close();
 			modalUserCreate();
  		})
+
 		dialog.data.find("#forgotpassword").click(function(ev) {
 			ev.preventDefault();
 			$.modal.close();
@@ -425,18 +437,22 @@ function modalUserForgotPassword() {
 			var user_email = dialog.data.find("#email").val()
 			dialog.data.find("#SendButton").attr("disabled",true)
 			jQuery.ajax( {
-				type:"POST", 
-				url:Rembrandt.urls.restlet_saskia_user_url,
-				contentType:"application/x-www-form-urlencoded",
-				data: "do=recoverpassword&lg="+lang+"&em="+Rembrandt.Util.urlEncode(user_email), 
-				beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
-				success: function(response) {
+				type			: "POST", 
+				url				: Rembrandt.urls.restlet_saskia_user_url+"/recoverpassword",
+				contentType		: "application/json",
+				data			: JSON.stringify({
+					"lg":lang,
+					"em":user_email
+				}),
+				beforeSubmit	: Rembrandt.Waiting.show(), 
+				success			: function(response) {
 					// status is 0 for good login, -1 otherwise
 					if (response['status'] == -1) {
 						dialog.data.find("#login-status").html(response['message'])
 						dialog.data.find("#SendButton").attr("disabled",false)
 					}
 					else if (response['status'] == 0) {
+						Rembrandt.Waiting.hide()
 						// i have a newpassword & tmp_api_key to process
 						jQuery.ajax( {
 							type:"POST", 
@@ -449,6 +465,9 @@ function modalUserForgotPassword() {
 								dialog.data.find("#login-status").html(response)
 								dialog.data.find("#OKButton").attr("value",i18n["OK"][lang])
 								dialog.data.find("#SendButton").hide()
+							}, 
+							error: function (response) {
+								Rembrandt.Waiting.error()	
 							}
 						})
 					}
@@ -507,17 +526,18 @@ function modalUserChangePassword() {
 				}
 				if (goodToGo) {
 					jQuery.ajax( {
-						type:"POST", 
-						url:Rembrandt.urls.restlet_saskia_user_url,
-						contentType:"application/x-www-form-urlencoded",
-						data: "do=changepassword&lg="+lang+"&u="+Rembrandt.Util.urlEncode(user)+
-					       "&op="+Rembrandt.Util.urlEncode(hex_md5(oldpassword))+
-						   "&np="+Rembrandt.Util.urlEncode(hex_md5(newpassword)),
-						beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
-						success: function(response) {
-							
-
-							
+						type			: "POST", 
+						url				: Rembrandt.urls.restlet_saskia_user_url+"/changepassword",
+						contentType		: "application/json",
+						data			: JSON.stringify({
+							"lg":lang,
+							"u":user,
+							"op":hex_md5(oldpassword),
+							"np":hex_md5(newpassword)
+						}),
+						beforeSubmit	: Rembrandt.Waiting.show(),
+						success			: function(response) {
+							Rembrandt.Waiting.hide()
 						// status is 0 for good change, -1 otherwise
 							if (response['status'] == -1) {
 								dialog.data.find("#login-status").html(response['message'])
@@ -628,36 +648,43 @@ function modalUserCreate() {
 			
 			if (goodToGo) {
 				jQuery.ajax( {
-					type:"POST", 
-					url:Rembrandt.urls.restlet_saskia_user_url,
-					contentType:"application/x-www-form-urlencoded",
-					data: "do=register&lg="+lang+"&u="+Rembrandt.Util.urlEncode(user_login)+
-					       "&p="+Rembrandt.Util.urlEncode(hex_md5(user_password))+
-						   "&fn="+Rembrandt.Util.urlEncode(user_firstname)+
-						   "&ln="+Rembrandt.Util.urlEncode(user_lastname)+
-						   "&em="+Rembrandt.Util.urlEncode(user_email), 
-					beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
-					success: function(response) {
+					type			: "POST", 
+					url				: Rembrandt.urls.restlet_saskia_user_url+"/register",
+					contentType		: "application/json",
+					data			: JSON.stringify({
+						"lg"	: lang,
+						"u"		: user_login,
+						"p"		: user_password,
+						"fn"	: user_firstname,
+						"ln"	: user_lastname,
+						"em"	: user_email,
+					}),
+					beforeSubmit	: Rembrandt.Waiting.show(), 
+					success			: function(response) {
 
+						Rembrandt.Waiting.hide()
 						// status is 0 for good login, -1 otherwise
 						if (response['status'] == -1) {
-							dialog.data.find("#login-status").html(response['message'])
+							Rembrandt.Waiting.error()
 							dialog.data.find("#YesButton").attr("value",i18n['retry'][lang])
 							dialog.data.find("#buttons").show()	
 						} else if (response['status'] == 0)  {
-							
 							//send confirmation mail
 							jQuery.ajax( {
-							type:"POST", 
-							url:Rembrandt.urls.mailconfirmregistration,
-							contentType:"application/x-www-form-urlencoded",
-							data: "api_key="+Rembrandt.Util.urlEncode(response['message']['usr_api_key'])+"&lang="+lang+
-							"&email="+Rembrandt.Util.urlEncode(user_email),
-							success: function(response) {
-								dialog.data.find("#login-status").html(response)
-								dialog.data.find("#YesButton").hide()
-								dialog.data.find("#NoButton").attr("value",i18n["OK"][lang])
-							}
+								type:"POST", 
+								url:Rembrandt.urls.mailconfirmregistration,
+								contentType:"application/x-www-form-urlencoded",
+								data: "api_key="+Rembrandt.Util.urlEncode(response['message']['usr_api_key'])+"&lang="+lang+
+								"&email="+Rembrandt.Util.urlEncode(user_email),
+								success: function(response) {
+									Rembrandt.Waiting.show(), 
+									dialog.data.find("#login-status").html(response)
+									dialog.data.find("#YesButton").hide()
+									dialog.data.find("#NoButton").attr("value",i18n["OK"][lang])
+								}, 
+								error: function(response) {
+									Rembrandt.Waiting.error()
+								}
 							})
 						}
 					}
@@ -671,7 +698,7 @@ function modalUserCreate() {
 	},
 	overlayCss:{backgroundColor: '#888', cursor: 'wait'}
 	});
-}					
+}
 
 function modalUserDelete(button) {
 	
@@ -692,20 +719,25 @@ function modalUserDelete(button) {
 		dialog.data.find("#YesButton").click(function(ev) {
 			
 			jQuery.ajax( {
-				type:"POST", url:Rembrandt.urls.restlet_admin_user_url,
-				contentType:"application/x-www-form-urlencoded",
-				data: "do=delete&ui="+usr_id+"&lg="+lang+"&api_key="+api_key,
-				beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
-				success: function(response) {
-
+				type					: "POST", 
+				url						: Rembrandt.urls.restlet_admin_user_url+"/delete",
+				contentType				: "application/json",
+				data					: JSON.stringify({
+					"ui"	: usr_id,
+					"lg"	: lang,
+					"api_key":api_key,
+				}),
+				beforeSubmit			: Rembrandt.Waiting.show(),
+				success					: function(response) {
 					// status is 0 for good deletion, -1 for error
 					if (response['status'] == -1) {
-						dialog.data.find("#login-status").html(response['message'])
+						Rembrandt.Waiting.error()
 						// yes button kept hidden, cancel button is the new OK button
 						dialog.data.find("#YesButton").hide()
 						dialog.data.find("#NoButton").attr("value",i18n['OK'][lang])
 					} else if (response['status'] > 0)  {
 						//status is the number of deleted users 
+						Rembrandt.Waiting.hide()
 						dialog.data.find("#login-status").html(response['message'])
 						dialog.data.find("#YesButton").hide()
 						dialog.data.find("#NoButton").attr("value",i18n["OK"][lang])
@@ -714,7 +746,10 @@ function modalUserDelete(button) {
 						var a = button.parents("DIV.ui-tabs-panel:first").find("A.MANAGE_PAGER")
 						a.trigger('click')
 					}
-				}	
+				},
+				error					:  function(response) {
+					Rembrandt.Waiting.error()
+				}
 			})
 		});
 		dialog.data.find("#NoButton").click(function(ev) {
@@ -745,7 +780,7 @@ function modalUserLogout() {
 		dialog.data.find("#YesButton").click(function(ev) {
 			ev.preventDefault();
 			$("#rrs-user").html(i18n['guest'][lang]+". <A HREF='#' CLASS='USER_LOGIN'>"+
-			 i18n['login'][lang]+" / "+i18n['register'][lang]+"</A>")						
+			 i18n['login'][lang]+" / "+i18n['register'][lang]+"</A>")
 			// unset cookie.
 			$.cookie('user_login', null) 
 			$.cookie('user_name', null) 

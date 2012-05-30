@@ -46,7 +46,7 @@ public class StatsMapping extends WebServiceRestletMapping {
 	    	String lang = par["GET"]["lg"] 
 	    	Long collection_id 
 	    	try {
-        			collection_id = Long.parseLong(par["GET"]["ci"])
+        			collection_id = (long) par["GET"]["ci"]
           } catch(Exception e) {e.printStackTrace()}
           if (!collection_id) return sm.notEnoughVars("ci=$ci")                                  
 			 collection = collectionTable.getFromID(collection_id)

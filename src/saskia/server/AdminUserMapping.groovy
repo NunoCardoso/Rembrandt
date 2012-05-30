@@ -52,15 +52,15 @@ public class AdminUserMapping extends WebServiceRestletMapping {
             def column, value
             
             // core stuff
-            String action = par["POST"]["do"] //show, update, etc
+           String action = req.getAttributes().get("action");
             String lang = par["POST"]["lg"] 
             
             ServerMessage sm = new ServerMessage("AdminUserMapping", lang, bind, session, processlog)  
             
             // pager stuff
-            if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
+            if (par["POST"]["l"]) limit = (int) par["POST"]["l"]
 				if (!limit) limit = 0
-            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+            if (par["POST"]["o"]) offset = (long) par["POST"]["o"]
 				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
@@ -122,7 +122,7 @@ public class AdminUserMapping extends WebServiceRestletMapping {
             if (action == "update") {
                 //requires the column and value parameters
         			long id 
-               try {id = Long.parseLong(par["POST"]["id"])}
+               try {id = (long) par["POST"]["id"]}
 					catch(Exception e) {}
                if (!id) return sm.notEnoughVars("id=$id")     
                if (value == null || !column)  return sm.notEnoughVars("v=$value, c=$column")
@@ -149,7 +149,7 @@ public class AdminUserMapping extends WebServiceRestletMapping {
 			    
 	    	    // requires api_key now
 				Long ui 
-				try {ui = Long.parseLong(par["POST"]["ui"]) }
+				try {ui = (long) par["POST"]["ui"] }
 				catch(Exception e) {}
             if (!ui) return sm.notEnoughVars("ui=$ui")
            
@@ -183,19 +183,19 @@ public class AdminUserMapping extends WebServiceRestletMapping {
 					String usr_api_key = par["POST"]["usr_api_key"] 
 					String usr_tmp_api_key = par["POST"]["usr_tmp_api_key"] 
 					Integer usr_max_number_collections
-					try {usr_max_number_collections = Integer.parseInt(par["POST"]["usr_max_number_collections"])}
+					try {usr_max_number_collections = (int) par["POST"]["usr_max_number_collections"]}
 					catch(Exception e) {}
 					Integer usr_max_docs_per_collection
-					try {usr_max_docs_per_collection = Integer.parseInt(par["POST"]["usr_max_docs_per_collection"])}
+					try {usr_max_docs_per_collection = (int) par["POST"]["usr_max_docs_per_collection"]}
 					catch(Exception e) {}
 					Integer usr_max_daily_api_calls
-					try {usr_max_daily_api_calls = Integer.parseInt(par["POST"]["usr_max_daily_api_calls"])}
+					try {usr_max_daily_api_calls = (int) par["POST"]["usr_max_daily_api_calls"]}
 					catch(Exception e) {}
 					Integer usr_current_daily_api_calls
-					try {usr_current_daily_api_calls = Integer.parseInt(par["POST"]["usr_current_daily_api_calls"])}
+					try {usr_current_daily_api_calls = (int) par["POST"]["usr_current_daily_api_calls"]}
 					catch(Exception e) {}
    				Long usr_total_api_calls
-					try {usr_total_api_calls = Long.parseLong(par["POST"]["usr_total_api_calls"])}
+					try {usr_total_api_calls = (long) par["POST"]["usr_total_api_calls"]}
 					catch(Exception e) {}
    				Date usr_date_last_api_call = new Date()
 					
@@ -231,7 +231,7 @@ public class AdminUserMapping extends WebServiceRestletMapping {
            
             if (action == "delete") {
                 long usr_id 
-                try {usr_id=  Long.parseLong(par["POST"]["ui"]) }                     
+                try {usr_id=  (long) par["POST"]["ui"] }                     
                 catch(Exception e) {}                              
                 if (!usr_id)  return sm.notEnoughVars("ui=$usr_id")      
                 

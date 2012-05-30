@@ -51,14 +51,14 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 			long offset
 			def column, value
 
-			String action = par["POST"]["do"] //show, update, etc
+            String action = req.getAttributes().get("action");
 			String lang = par["POST"]["lg"]
 
 			ServerMessage sm = new ServerMessage("AdminCollectionMapping", lang, bind, session, processlog)
 
-			if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
+			if (par["POST"]["l"]) limit = (int)par["POST"]["l"]
 			if (!limit) limit = 0
-			if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+			if (par["POST"]["o"]) offset = (long)par["POST"]["o"]
 			if (!offset) offset = 0
 			if (par["POST"]["c"]) column = par["POST"]["c"]
 			if (par["POST"]["v"]) value = par["POST"]["v"]
@@ -103,7 +103,7 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 				// the id is from a collection
 				long id
 				if (par["POST"]["id"])
-					try {id = Long.parseLong(par["POST"]["id"] )}
+					try {id = (long)par["POST"]["id"] }
 					catch(Exception e) {}
 				if (!id) return sm.notEnoughVars("id=$id")
 
@@ -132,7 +132,7 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 
 				long id
 				if (par["POST"]["id"])
-					try {id = Long.parseLong(par["POST"]["id"] )}
+					try {id = (long) par["POST"]["id"] }
 					catch(Exception e) {}
 				if (!id) return sm.notEnoughVars("id=$id")
 
@@ -162,7 +162,7 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 				String col_comment =  par["POST"]["col_comment"]
 				String col_permission =  par["POST"]["col_permission"]
 				Long col_owner
-				try {col_owner = Long.parseLong(par["POST"]["col_owner"])}
+				try {col_owner = (long) par["POST"]["col_owner"]}
 				catch(Exception e) {}
 				User owner = User.getFromID(col_owner)
 
@@ -198,7 +198,7 @@ public class AdminCollectionMapping extends WebServiceRestletMapping {
 			if (action == "delete") {
 				long id
 				if (par["POST"]["id"])
-					try {id = Long.parseLong(par["POST"]["id"] )}
+					try {id = (long) par["POST"]["id"] }
 					catch(Exception e) {}
 				if (!id) return sm.notEnoughVars("id=$id")
 

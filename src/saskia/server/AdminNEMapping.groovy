@@ -51,15 +51,15 @@ public class AdminNEMapping extends WebServiceRestletMapping {
             def column, value
             
             // core stuff
-            String action = par["POST"]["do"] //show, update, etc
+           String action = req.getAttributes().get("action");
             String lang = par["POST"]["lg"] 
             
             ServerMessage sm = new ServerMessage("AdminNEMapping", lang, bind, session, processlog)  
             
             // pager stuff
-            if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
+            if (par["POST"]["l"]) limit = (int) par["POST"]["l"]
 				if (!limit) limit = 0
-            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+            if (par["POST"]["o"]) offset = (long) par["POST"]["o"]
 				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
@@ -103,7 +103,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
         	
         			Long ne_id
                if (par["POST"]["id"]) 
-					try {ne_id = Long.parseLong(par["POST"]["id"])}
+					try {ne_id = (long) par["POST"]["id"]}
 					catch(Exception e) {}
                if (!ne_id) return sm.notEnoughVars("id=$ne_id")
                 
@@ -119,7 +119,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
                   case "ne_name": 
                 	NEName ne_name
                   try {
-							ne_name = NEName.getFromID(Long.parseLong(value))
+							ne_name = NEName.getFromID((long) value)
                      ne.updateNEName(ne_name)
                   } catch(Exception e)  {
                	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
@@ -131,7 +131,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
   						case "ne_category": 
                 	NECategory ne_category
                 	try {	
-							ne_category = NECategory.getFromID(Long.parseLong(value))
+							ne_category = NECategory.getFromID((long) value)
                      ne.updateNECategory(ne_category)
 						} catch(Exception e)  {
                	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
@@ -143,7 +143,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
   						case "ne_type": 
                 	NEType ne_type
                 	try {
-                  	ne_type = NEType.getFromID(Long.parseLong(value))
+                  	ne_type = NEType.getFromID((long) value)
                      ne.updateNEType(ne_type)
                   } catch(Exception e)  {
                	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
@@ -155,7 +155,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
   						case "ne_subtype": 
                 	NESubtype ne_subtype
                 	try {
-                  	ne_subtype = NESubtype.getFromID(Long.parseLong(value))
+                  	ne_subtype = NESubtype.getFromID((long) value)
                     	ne.updateNESubtype(ne_subtype)
 						} catch(Exception e)  {
                	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
@@ -167,7 +167,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
   						case "ne_entity": 
                 	EntityTable ne_entity
                 	try {
-                     ne_entity = EntityTable.getFromID(Long.parseLong(value))
+                     ne_entity = EntityTable.getFromID((long) value)
                      res = ne.updateEntity(ne_entity)
                   } catch(Exception e)  {
                	   errorlog.error i18n.servermessage['error_updating_ne'][lang]+": "+e.printStackTrace()
@@ -184,7 +184,7 @@ public class AdminNEMapping extends WebServiceRestletMapping {
            
             if (action == "delete") {
                 long ne_id 
-                try {ne_id = Long.parseLong(par["POST"]["id"])                      
+                try {ne_id = (long) par["POST"]["id"]                      
                 }catch(Exception e) {}                              
                 if (!ne_id) return sm.notEnoughVars("id=$ne_id")      
 

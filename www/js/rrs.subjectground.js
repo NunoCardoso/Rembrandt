@@ -23,8 +23,8 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subjectground"),
-			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subjectground")+"/list",
+			"data":{"l":10, "o":0, "lg":lang, "api_key":api_key},
 			"divRender":generateSubjectgroundListDIV, 
 			"divRenderOptions":{},
 			"sidemenu":null, 
@@ -48,9 +48,9 @@ $().ready(function() {
 	$('A.SUBJECTGROUND_SHOW').live("click", function(ev, ui) {
 		ev.preventDefault();
 		var a_clicked = $(this)
-		var id = a_clicked.attr("ID")
+		var id = parseInt(a_clicked.attr("ID"))
 		var api_key = Rembrandt.Util.getApiKey()
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
+		var title = a_clicked.attr("title") || a_clicked.text()
 			
 		showSlidableDIV({
 			"title": title,
@@ -58,8 +58,8 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subjectground"),
-			"postdata":"do=show&id="+id+"&lg="+lang+	"&api_key="+api_key,
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subjectground")+"/show",
+			"data":{"id":id, "lg":lang, "api_key":api_key},
 			"divRender":generateSubjectgroundShowDIV, 
 			"divRenderOptions":{},
 			"sidemenu":"subjectground", 
@@ -351,11 +351,11 @@ function modalSubjectgroundDelete(button) {
 	var context = "subjectground"
 	
 	genericDeleteModel({
-		'context':context,
-		'id': button.attr("ID"),
-		'info':button.attr('TITLE'),
-		'servlet_url': Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context),
-		'postdata' : "do=delete&id="+button.attr("ID")+"&lg="+lang+"&api_key="+Rembrandt.Util.getApiKey(),
-		'success_message' : i18n['subjectground_deleted'][lang]
+		'context'			: context,
+		'id'				: parseInt(button.attr("ID")),
+		'info'				: button.attr('TITLE'),
+		'servlet_url'		: Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context)+"/delete",
+		'data' 				: {"id":parseInt(button.attr("ID")), "lg":lang, "api_key":Rembrandt.Util.getApiKey()},
+		'success_message'	: i18n['subjectground_deleted'][lang]
 	})
 }	

@@ -13,7 +13,7 @@ _.extend(Rembrandt.urls, {
 	restlet_admin_geoscope_url		:	"/Saskia/admin/geoscope",
 	restlet_admin_subject_url 		:	"/Saskia/admin/subject",
 	restlet_admin_subjectground_url	:	"/Saskia/admin/subjectground",
-	restlet_admin_url 				:	"/Saskia/admin/"
+	restlet_admin_url 				:	"/Saskia/admin"
 });
 
 // ROLE is just a hint on the UI to present: saskia or admin
@@ -26,7 +26,6 @@ Rembrandt.Admin = (function ($) {
 		$('A.USER_ADMIN', $("#rrs-user")).live("click", function(ev, ui) {
 			// draw the layout
 			ev.preventDefault();		
-			var api_key=Rembrandt.Util.getApiKey()
 		
 			// Appearing this link means admin was already authenticated 
 			$("body").html(
@@ -34,7 +33,7 @@ Rembrandt.Admin = (function ($) {
 			);
 			addBreadcrumbleHeader(
 				$("#rrs-homepage-admin").attr('title'), 'rrs-homepage-admin'
-			);				
+			);
 		})	
 	});
  

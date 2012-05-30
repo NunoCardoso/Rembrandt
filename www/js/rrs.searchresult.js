@@ -61,17 +61,26 @@ $().ready(function() {
 		var collection_id = Rembrandt.Util.getCollectionId()
 		var api_key = Rembrandt.Util.getApiKey()
 		
-		jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_renoir_search_url+"?q="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(query)),
-			contentType:"application/x-www-form-urlencoded", dataType:'json',
-			data: "u="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(user))+
-			(tags ? "&t="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8($.toJSON(tags))) : "")+
-			(qe ? "&qe="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(qe)) : "") + 
-			(model ? "&model="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(model)) : "") + 
-			(maps ? "&maps="+maps : "") + 
-			"&ci="+collection_id+"&lg="+lang+
-			"&api_key="+api_key+"&o="+offset+"&l="+limit,
-			beforeSubmit:  Rembrandt.Waiting.show(),
-			success: function(response)  {		
+		jQuery.ajax({
+			type			:'POST', 
+			url				: Rembrandt.urls.restlet_renoir_search_url+
+				"?q="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(query)),
+			contentType		: "application/jdson", 
+			dataType		:'json',
+			data			: JSON.stringify({
+				"u"		: Rembrandt.Util.encodeUtf8(user),
+				"t"		: Rembrandt.Util.encodeUtf8($.toJSON(tags)) || "",
+				"qe"	: Rembrandt.Util.encodeUtf8(qe) || "",
+				"model"	: Rembrandt.Util.encodeUtf8(model) || "", 
+				"maps"	: maps || "", 
+				"ci"	: collection_id,
+				"lg"	: lang,
+				"api_key":api_key,
+				"o"		: offset,
+				"l"		: limit
+			}),
+			beforeSubmit	: Rembrandt.Waiting.show(),
+			success			: function(response)  {		
 				if (response['status'] == -1) {Rembrandt.Waiting.error(response)}
 				else {
 					Rembrandt.Waiting.hide()
@@ -91,7 +100,9 @@ $().ready(function() {
 					processMap(response, $('#rrs-searchresult-map', divtoupdate))
 				}
 			}, 
-			error: function(response) {Rembrandt.Waiting.error(response)}
+			error: function(response) {
+				Rembrandt.Waiting.error(response)
+			}
 		})
 	})
 })

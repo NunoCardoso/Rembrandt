@@ -6,7 +6,8 @@ Rembrandt.Waiting = (function ($) {
 		
 		$(document).ajaxError(function(e, xhr, settings, exception)  {
 			$('.rrs-waiting-div-message').html(
-				_getErrorMessage(lang, i18n['service-unavailable-sorry'][lang] + _getCloseButton()))
+				_getErrorMessage(i18n['service-unavailable-sorry'][lang] +
+				": "+exception+ " "+ _getCloseButton()))
 				console.log('erro a pedir ' + settings.url + ' \n'+'error:\n');
 				console.log( xhr.responseText ); 
 				console.log('e ' + e + ' \n'+'excepcao:\n');
@@ -25,7 +26,7 @@ Rembrandt.Waiting = (function ($) {
 	},
 
 	_getWaitMessage = function (message) {
-		return "<div style='text-align:left'>"+
+		return "<div class='rrs-wait-message'>"+
 		"<img src=\"img/loading.gif\"> "+message  + "</div>"
 	},
 
@@ -48,7 +49,7 @@ Rembrandt.Waiting = (function ($) {
 		target.find($(".rrs-waiting-div-message")).html(_getWaitMessage(message))
 		target.fadeIn("fast")
 	},
-
+	
 	hide = function(options) {
 		if (!options) options = {} 
 		var target = (!_.isUndefined(options.target) ? options.target : $(".rrs-waiting-div") ),
@@ -56,7 +57,10 @@ Rembrandt.Waiting = (function ($) {
 		    message = (!_.isUndefined(options.message) ? options.message : i18n['OK'][language]),
 			when = (!_.isUndefined(options.when) ? options.when : 1000)
 		target.find($(".rrs-waiting-div-message")).html(_getOkMessage(message))
-		target.delay(when).fadeOut("fast")
+		target.delay(when)
+		if (when != 0) {
+			target.fadeOut("fast")
+		}
 	},
 	
 	error = function (response) {

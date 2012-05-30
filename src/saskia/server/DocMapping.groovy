@@ -59,14 +59,14 @@ public class DocMapping extends WebServiceRestletMapping {
             def column, value
             
             // core stuff
-            String action = par["POST"]["do"]
+           String action = req.getAttributes().get("action");
             String lang = par["POST"]["lg"] 
        
             ServerMessage sm = new ServerMessage("DocMapping", lang, bind, session, processlog)  
             
             // pager stuff
-            if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
-            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+            if (par["POST"]["l"]) limit = (int) par["POST"]["l"]
+            if (par["POST"]["o"]) offset = (long) par["POST"]["o"]
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
             
@@ -91,7 +91,7 @@ public class DocMapping extends WebServiceRestletMapping {
             	Long collection_id 
             	Collection collection 
 					try {
-        				collection_id = Long.parseLong(par["POST"]["ci"])
+        				collection_id = (long) par["POST"]["ci"]
             	} catch(Exception e) {e.printStackTrace()}
            		if (!collection_id) return sm.notEnoughVars("ci="+par["POST"]["ci"])                                  
 					collection = collectionTable.getFromID(collection_id)
@@ -123,7 +123,7 @@ public class DocMapping extends WebServiceRestletMapping {
                 Long doc_id
                 String format
                 if (par["POST"]["doc_id"]) 
-					   try {doc_id = Long.parseLong(par["POST"]["doc_id"])}
+					   try {doc_id = (long) par["POST"]["doc_id"]}
 						catch(Exception e) {}
                 if (par["POST"]["format"]) format = par["POST"]["format"]
                 if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")
@@ -177,7 +177,7 @@ public class DocMapping extends WebServiceRestletMapping {
         		if (action == "metadata") {
 					Long doc_id
                if (par["POST"]["doc_id"]) 
-					   try {doc_id = Long.parseLong(par["POST"]["doc_id"])}
+					   try {doc_id = (long) par["POST"]["doc_id"]}
 						catch(Exception e) {}
                if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")
                if (!lang) return sm.notEnoughVars("lg=$lang")
@@ -218,7 +218,7 @@ public class DocMapping extends WebServiceRestletMapping {
 
                 String doc_original_id =  par["POST"]["doc_original_id"] 
                 Long doc_collection
- 					 try {doc_collection = Long.parseLong(par["POST"]["doc_collection"])}
+ 					 try {doc_collection = (long) par["POST"]["doc_collection"]}
 					 catch(Exception e) {}
 					
                 String doc_lang =  par["POST"]["doc_lang"] 
@@ -267,7 +267,7 @@ public class DocMapping extends WebServiceRestletMapping {
 					Long doc_id
                String format
                if (par["POST"]["doc_id"]) 
-					   try {doc_id = Long.parseLong(par["POST"]["doc_id"])}
+					   try {doc_id = (long) par["POST"]["doc_id"]}
 						catch(Exception e) {}
                if (par["POST"]["format"]) format = par["POST"]["format"]
                if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")
@@ -292,7 +292,7 @@ public class DocMapping extends WebServiceRestletMapping {
 						case "doc_tag": 
                 	Tag tag
                   try {
-							tag = Tag.getFromID(Long.parseLong(value))
+							tag = Tag.getFromID((long) value)
                      doc.associateWithTag(tag) 
                   } catch(Exception e)  {
                	   errorlog.error i18n.servermessage['error_updating_doc'][lang]+": "+e.printStackTrace()
@@ -325,7 +325,7 @@ public class DocMapping extends WebServiceRestletMapping {
             if (action == "delete") {
                 Long doc_id
                if (par["POST"]["doc_id"]) 
-					   try {doc_id = Long.parseLong(par["POST"]["doc_id"])}
+					   try {doc_id = (long) par["POST"]["doc_id"]}
 						catch(Exception e) {}
                if (!doc_id) return sm.notEnoughVars("doc_id=$doc_id")  
                 

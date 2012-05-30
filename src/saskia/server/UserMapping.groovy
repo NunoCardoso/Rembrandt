@@ -51,9 +51,7 @@ public class UserMapping extends WebServiceRestletMapping {
 			long session = System.currentTimeMillis()
 			processlog.debug "Session $session triggered with $par"
 
-			def action
-			if (par["POST"]["do"]) action = par["POST"]["do"]
-			if (!action && par["GET"]["do"]) action = par["GET"]["do"]
+           String action = req.getAttributes().get("action");
 			def lang = par["POST"]["lg"]
 
 			ServerMessage sm = new ServerMessage("UserMapping-JSONanswer", lang, bind, session, processlog)

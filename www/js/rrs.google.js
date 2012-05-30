@@ -14,8 +14,8 @@ function createGoogleMap(map_div, points_array, polylines_array) {
 		} else {
 			image = "img/maps/iconr1.png"
 		}
-		
-    	map.gmap3({
+
+		map.gmap3({
 			action: 'addMarker',
 			latLng:[points_array[i]['Latitude'], points_array[i]['Longitude']],
 			marker:{
@@ -63,7 +63,7 @@ function createGoogleMap(map_div, points_array, polylines_array) {
 				},
 				paths:polyline_points
 			})
-    	}
+		}
 	}
 	map.gmap3({action:"autofit"})
 }

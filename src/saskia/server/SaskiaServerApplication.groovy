@@ -106,25 +106,25 @@ public class SaskiaServerApplication extends Application {
 
 		router.attach("/Saskia/ask", askSaskiaMapping)
 
-		router.attach("/Saskia/doc", docMapping)
+		router.attach("/Saskia/doc/{action}", docMapping)
 		router.attach("/Saskia/commit/{action}", commitMapping)
 
-		router.attach("/Saskia/collection", collectionMapping)
-		router.attach("/Saskia/task", taskMapping)
-		router.attach("/Saskia/ne", neMapping)
+		router.attach("/Saskia/collection/{action}", collectionMapping)
+		router.attach("/Saskia/task/{action}", taskMapping)
+		router.attach("/Saskia/ne/{action}", neMapping)
 		router.attach("/Saskia/stats", statsMapping)
-		router.attach("/Saskia/user", userMapping)
+		router.attach("/Saskia/user/{action}", userMapping)
 
-		router.attach("/Saskia/admin/collection", adminCollectionMapping)
-		router.attach("/Saskia/admin/task", adminTaskMapping)
-		router.attach("/Saskia/admin/user", adminUserMapping)
-		router.attach("/Saskia/admin/stats", adminStatsMapping)
-		router.attach("/Saskia/admin/doc", adminDocMapping)
-		router.attach("/Saskia/admin/ne", adminNEMapping)
-		router.attach("/Saskia/admin/entity", adminEntityMapping)
-		router.attach("/Saskia/admin/geoscope", adminGeoscopeMapping)
-		router.attach("/Saskia/admin/subject", adminSubjectMapping)
-		router.attach("/Saskia/admin/subjectground", adminSubjectGroundMapping)
+		router.attach("/Saskia/admin/collection/{action}", adminCollectionMapping)
+		router.attach("/Saskia/admin/task/{action}", adminTaskMapping)
+		router.attach("/Saskia/admin/user/{action}", adminUserMapping)
+		router.attach("/Saskia/admin/stats/{action}", adminStatsMapping)
+		router.attach("/Saskia/admin/doc/{action}", adminDocMapping)
+		router.attach("/Saskia/admin/ne/{action}", adminNEMapping)
+		router.attach("/Saskia/admin/entity/{action}", adminEntityMapping)
+		router.attach("/Saskia/admin/geoscope/{action}", adminGeoscopeMapping)
+		router.attach("/Saskia/admin/subject/{action}", adminSubjectMapping)
+		router.attach("/Saskia/admin/subjectground/{action}", adminSubjectGroundMapping)
 		return router
 	}
 }

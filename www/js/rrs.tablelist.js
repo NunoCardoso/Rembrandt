@@ -34,39 +34,50 @@ $().ready(function() {
 		// for customized list render functions
 		var render = pagerdiv.attr("RENDER")
 		
-		jQuery.ajax({type:'POST', url:Rembrandt.Util.getServletEngineFromRole(role,context),
-		contentType:"application/x-www-form-urlencoded", dataType:'json',
-		data: "do="+action+"&l="+limit+"&o="+offset+"&lg="+lang+
-		(_.isUndefined(collection_id) ? "" : "&ci="+collection_id)+ // collection_id is undefined if we are paging collections!
-		"&c="+column+"&v="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(value))+"&api_key="+api_key, 
-		beforeSubmit: Rembrandt.Waiting.show(),
-		
-		success: function(response)  {
-			if (response['status'] == -1) {Rembrandt.Waiting.error(response)}
-			else {
-				Rembrandt.Waiting.hide()
+		jQuery.ajax({
+			type					: 'POST', 
+			url						: Rembrandt.Util.getServletEngineFromRole(role,context)+"/"+action,
+			contentType				: "application/json", 
+			dataType				: 'json',
+			data					: JSON.stringify({
+				"l"		: limit,
+				"o"		: offset,
+				"lg"	: lang,
+				"ci"	: collection_id || "", // empty when browsing collections,
+				"c"		: column,
+				"v"		: Rembrandt.Util.encodeUtf8(value),
+				"api_key":api_key
+			}),
+			beforeSubmit			: Rembrandt.Waiting.show(),
+			success					: function(response)  {
+				if (response['status'] == -1) {
+					Rembrandt.Waiting.error(response)}
+				else {
+					Rembrandt.Waiting.hide()
 				
-				var su = false
-				var pubkey = response['usr_pub_key']
+					var su = false
+					var pubkey = response['usr_pub_key']
 				
-				if (!_.isUndefined(pubkey)) {
-					$("#main-body").attr('USR_PUB_KEY',pubkey)
-					su = Rembrandt.Util.validateSu(pubkey)
+					if (!_.isUndefined(pubkey)) {
+						$("#main-body").attr('USR_PUB_KEY',pubkey)
+						su = Rembrandt.Util.validateSu(pubkey)
+					}
+				
+					divtoupdate = pagerdiv.parents('DIV.main-slidable-div')
+				
+					var functiontocall = (!_.isUndefined(render) ?  eval(render) : 
+					eval("Rembrandt."+Rembrandt.Util.UpperCaseFirstLetter(context)+".generate"+ Rembrandt.Util.UpperCaseFirstLetter(context)+"ListDIV") )
+				
+					var newdiv = functiontocall.call(response['message'],su, role, {})
+					$("DIV.rrs-pageable", divtoupdate).html( $("DIV.rrs-pageable", $(newdiv)).html() )
+
+					$('TABLE.tablesorter', divtoupdate).tablesorter()
+					updateEditInPlace(divtoupdate);
 				}
-				
-				divtoupdate = pagerdiv.parents('DIV.main-slidable-div')
-				
-				var functiontocall = (!_.isUndefined(render) ?  eval(render) : 
-				eval("Rembrandt."+Rembrandt.Util.UpperCaseFirstLetter(context)+".generate"+ Rembrandt.Util.UpperCaseFirstLetter(context)+"ListDIV") )
-				
-				var newdiv = functiontocall.call(response['message'],su, role, {})
-				$("DIV.rrs-pageable", divtoupdate).html( $("DIV.rrs-pageable", $(newdiv)).html() )
-								
-				$('TABLE.tablesorter', divtoupdate).tablesorter()
- 				updateEditInPlace(divtoupdate);
+			},
+			error: function(response) {
+				Rembrandt.Waiting.error(response)
 			}
-		},
-		error: function(response) {Rembrandt.Waiting.error(response)}
 		})
 	})
 	

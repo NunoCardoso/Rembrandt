@@ -315,4 +315,3 @@ var i18n = {'class':{'en':{
 	'write':{'pt':'Escrita','en':'Write'},
 	'yes':{'pt':'Sim', 'en':'Yes'}
 }
-

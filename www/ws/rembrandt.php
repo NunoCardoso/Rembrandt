@@ -28,10 +28,10 @@ html {overflow: hidden;}
 <script>
 $(document).ready(function() {
    // displayBodyOfRembrandt();
-	Rembrandt.Display.appendDocDisplayTo($('#rembrandt-results-1'))
+	Rembrandt.Display.create($('#rembrandt-results-1'), {menu:false})
 })
 </SCRIPT>
-<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div" style="display:none;">
+<DIV ID="rrs-waiting-div" CLASS="rrs-waiting-div">
 	<DIV CLASS="rrs-waiting-div-message"></DIV>
 	<DIV CLASS="rrs-waiting-div-balloontip"></DIV>
 </DIV>

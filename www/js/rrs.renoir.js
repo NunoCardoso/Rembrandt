@@ -25,7 +25,6 @@ var Renoir = (function ($) {
 	      calls again te same page, relies on updateDisplay() to make the query*/	
 		$("A#rrs-search-submit-button").click(function(e) {
 			e.preventDefault();
-		
 			// important to sanitize the next page / query //
 			var form = $("#rrs-search-form")
 			var text = jQuery.trim(form.find("#q").val())
@@ -96,7 +95,7 @@ var Renoir = (function ($) {
 	var display = function(_query) {
 	
 		// get query
-		var query
+		var query 
 		if (_.isUndefined(_query)) {
 			query = $.trim(Rembrandt.Util.getQueryVariable("q"));
 		} else {
@@ -139,22 +138,26 @@ var Renoir = (function ($) {
 			var divtoshow = $("#"+target)
 			var slide = "horizontal"
 			
-			jQuery.ajax({type:'POST', 
-				url:Rembrandt.urls.restlet_renoir_search_url+
-					"?q="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(query)),
-				contentType:"application/x-www-form-urlencoded",
-				data: "u="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(user))+
-			 	(tags ? "&t="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8($.toJSON(tags))) : "")+
-			 	(qe ? "&qe="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(qe)) : "") + 
-			 	(model ? "&model="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(model)) : "") + 
-			 	(maps ? "&maps="+maps : "") + 
-			 	"&lg="+lang+"&ci="+collection_id+
-			 	(limit ? "&l="+limit : "") + (offset ? "&o="+offset : "" )+
-			 	"&api_key="+api_key,
-			 	dataType:'json',
-			 	beforeSubmit: Rembrandt.Waiting.show(), 
-			
-				success: function(response)  {
+			jQuery.ajax({
+				type			: 'POST', 
+				url				: Rembrandt.urls.restlet_renoir_search_url+
+									"?q="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(query)),
+				contentType		: "application/json",
+				data: JSON.stringify({
+					"u"		: Rembrandt.Util.encodeUtf8(user),
+				 	"tags"	: Rembrandt.Util.encodeUtf8($.toJSON(tags)) || "",
+				 	"qe"	: Rembrandt.Util.encodeUtf8(qe) || "", 
+				 	"model" : Rembrandt.Util.encodeUtf8(model) || "",
+				 	"maps"	: maps || "",
+				 	"lg"	: lang,
+					"ci"	: collection_id,
+				 	"l"		: limit || "",
+					"o"		: offset || "",
+					"api_key":api_key
+				}),
+				dataType		: 'json',
+			 	beforeSubmit	: Rembrandt.Waiting.show(), 
+				success			: function(response)  {
 					if (response['status'] == -1) {
 						Rembrandt.Waiting.error(response) //['message'])
 					} else {
@@ -205,7 +208,9 @@ var Renoir = (function ($) {
 						if (maps) processMap(response, $('#rrs-searchresult-map', divtoshow))
 					}
 				},
-				error: function(response) {Rembrandt.Waiting.error(response)}
+				error: function(response) {
+					Rembrandt.Waiting.error(response)
+				}
 			})
 		}
 	},
@@ -255,7 +260,8 @@ var Renoir = (function ($) {
 	
 	fillQueryCollecions = function(select_) {
 		if (select_.find("option").size() > 1) return
-		jQuery.ajax({type:'GET', 
+		jQuery.ajax({
+			type:'GET', 
 			url:Rembrandt.urls.restlet_renoir_query_collection_url,
 			dataType:'json',
 		 	beforeSubmit: Rembrandt.Waiting.show(), 
@@ -279,7 +285,8 @@ var Renoir = (function ($) {
 	
 	fillQueries = function(select_, val) {
 		if (select_.find("option").size() > 1) return
-		jQuery.ajax({type:'GET', 
+		jQuery.ajax({
+			type:'GET', 
 			url:Rembrandt.urls.restlet_renoir_queries_url+"?q="+val,
 			dataType:'json',
 		 	beforeSubmit: Rembrandt.Waiting.show(), 
@@ -325,20 +332,21 @@ var Renoir = (function ($) {
 			var divtoshow = $("#"+target)
 			var slide = "horizontal"
 			
-			jQuery.ajax({type:'POST', 
-				url:Rembrandt.urls.restlet_renoir_searchwithqrel_url+
-					"?q="+queryid,
-				contentType:"application/x-www-form-urlencoded",
-				data: "u="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(user))+
-				"&lg="+lang+
-				(limit ? "&l="+limit : "") + 
-				(offset ? "&o="+offset : "" )+
-				(maps ? "&maps="+maps : "") + 
-				"&api_key="+api_key,
-				dataType:'json',
-				beforeSubmit: Rembrandt.Waiting.show(), 
-			
-				success: function(response)  {
+			jQuery.ajax({
+				type			: 'POST', 
+				url				: Rembrandt.urls.restlet_renoir_searchwithqrel_url+"?q="+queryid,
+				contentType		: "application/json",
+				data			: JSON.stringify({
+					"u"		: Rembrandt.Util.encodeUtf8(user),
+					"lg"	: lang,
+					"maps"	: maps || "",
+				 	"l"		: limit || "",
+					"o"		: offset || "",
+					"api_key":api_key
+				}),
+				dataType		: 'json',
+				beforeSubmit	: Rembrandt.Waiting.show(), 
+				success			: function(response)  {
 					if (response['status'] == -1) {
 						Rembrandt.Waiting.error(response) //['message'])
 					} else {
@@ -387,7 +395,9 @@ var Renoir = (function ($) {
 						if (maps) processMap(response, $('#rrs-searchresult-map', divtoshow))
 					}
 				},
-				error: function(response) {Rembrandt.Waiting.error(response)}
+				error: function(response) {
+					Rembrandt.Waiting.error(response)
+				}
 			})
 		}
 	},
@@ -461,13 +471,13 @@ var Renoir = (function ($) {
 	};
 
 	return {
-		"bindAutoCompleteOnNESearch":bindAutoCompleteOnNESearch,
-		"display":display,
-		"Tag":Tag,
-		"addTag":addTag,
-		"getTags":getTags,
-		"fillQueryCollecions": fillQueryCollecions,
-		"fillQueries": fillQueries,
-		"fetchQrelsForQueryID":fetchQrelsForQueryID
+		"bindAutoCompleteOnNESearch": bindAutoCompleteOnNESearch,
+		"display"					: display,
+		"Tag"						: Tag,
+		"addTag"					: addTag,
+		"getTags"					: getTags,
+		"fillQueryCollecions"		: fillQueryCollecions,
+		"fillQueries"				: fillQueries,
+		"fetchQrelsForQueryID"		:fetchQrelsForQueryID
 	}
 })(jQuery);

@@ -23,8 +23,8 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "task"),
-			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "task")+"/list",
+			"data":{"l":10, "o":0, "lg":lang, "api_key":api_key},
 			"divRender":generateTaskListDIV, 
 			"divRenderOptions":{},
 			"sidemenu":null, 
@@ -48,7 +48,7 @@ $().ready(function() {
 	$('A.TASK_SHOW').live("click", function(ev, ui) {
 		ev.preventDefault();
 		var a_clicked = $(this)
-		var id = a_clicked.attr("ID")
+		var id = parseInta_clicked.attr("ID")
 		var api_key = Rembrandt.Util.getApiKey()
 		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
 			
@@ -58,8 +58,8 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "task"),
-			"postdata":"do=show&id="+id+"&lg="+lang+	"&api_key="+api_key,
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "task")+"/show",
+			"data":{"id":id, "lg":lang, "api_key":api_key},
 			"divRender":generateTaskShowDIV, 
 			"divRenderOptions":{},
 			"sidemenu":"task", 
@@ -398,34 +398,40 @@ function modalTaskCreate(button) {
 			dialog.data.find("#YesButton").click(function(ev) {
 
 				jQuery.ajax( {
-					type:"POST", url:servlet_url, contentType:"application/x-www-form-urlencoded",
-					data: "do=create&lg="+lang+
-					"&tsk_task="+dialog.data.find("#tsk_task").val()+
-					"&tsk_owner="+dialog.data.find("#tsk_owner").val()+
-					"&tsk_collection="+dialog.data.find("#tsk_collection").val()+
-					"&tsk_type="+dialog.data.find("#tsk_type :selected").val()+
-					"&tsk_priority="+dialog.data.find("#tsk_priority").val()+
-					"&tsk_limit="+dialog.data.find("#tsk_limit").val()+
-					"&tsk_offset="+dialog.data.find("#tsk_offset").val()+
-					"&tsk_scope="+dialog.data.find("#tsk_scope :selected").val()+
-					"&tsk_persistence="+dialog.data.find("#tsk_persistence :selected").val()+
-					"&tsk_comment="+dialog.data.find("#tsk_comment").val()+
-					"&api_key="+api_key, 
-					beforeSubmit: Rembrandt.Waiting.show(),
-
-					success: function(response) {
+					type				: "POST",
+					url					: servlet_url+"/create", 
+					contentType			: "application/json",
+					data: JSON.stringify({
+						"lg"			: lang,
+						"tsk_task"		: dialog.data.find("#tsk_task").val(),
+						"tsk_owner"		: dialog.data.find("#tsk_owner").val(),
+						"tsk_collection": dialog.data.find("#tsk_collection").val(),
+						"tsk_type"		: dialog.data.find("#tsk_type :selected").val(),
+						"tsk_priority"	: dialog.data.find("#tsk_priority").val(),
+						"tsk_limit"		: dialog.data.find("#tsk_limit").val(),
+						"tsk_offset"	: dialog.data.find("#tsk_offset").val(),
+						"tsk_scope"		: dialog.data.find("#tsk_scope :selected").val(),
+						"tsk_persistence":dialog.data.find("#tsk_persistence :selected").val(),
+						"tsk_comment"	: dialog.data.find("#tsk_comment").val(),
+						"api_key"		: api_key
+					}),
+					beforeSubmit		: Rembrandt.Waiting.show(),
+					success				: function(response) {
 						if (response['status'] == -1) {
-							errorMessageWaitingDiv(lang, response['message'])
+							Rembrandt.Waiting.error(response)
 							dialog.data.find("#YesButton").attr("value",i18n['retry'][lang])
 							dialog.data.find("#buttons").show()	
 						} else if (response['status'] == 0)  {
-							showCustomMessageWaitingDiv(i18n['task_created'][lang])
+							Rembrandt.Waiting.hide({
+								message:i18n['task_created'][lang],
+								when: 3000
+							})
 							dialog.data.find("#YesButton").hide()
 							dialog.data.find("#NoButton").attr("value",i18n["OK"][lang])
 						}
 					},
 					error:function(response) {
-						errorMessageWaitingDiv(lang, response['message'])			
+						Rembrandt.Waiting.error(response)
 					}
 				})
 			})
@@ -443,11 +449,11 @@ function modalTaskDelete(button) {
 	var context = "task"
 	
 	genericDeleteModel({
-		'context':context,
-		'id': button.attr("ID"),
-		'info':button.attr('TITLE'),
-		'servlet_url': Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context),
-		'postdata' : "do=delete&id="+button.attr("ID")+"&lg="+lang+"&api_key="+Rembrandt.Util.getApiKey(),
-		'success_message' : i18n['task_deleted'][lang]
+		'context'			: context,
+		'id'				: parseInt(button.attr("ID")),
+		'info'				: button.attr('TITLE'),
+		'servlet_url'		: Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context)+"/delete",
+		'data' 				: {"id":parseInt(button.attr("ID")), "lg":lang, "api_key":Rembrandt.Util.getApiKey()},
+		'success_message'	: i18n['task_deleted'][lang]
 	})
 }	

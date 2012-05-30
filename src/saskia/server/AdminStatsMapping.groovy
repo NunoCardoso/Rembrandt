@@ -52,7 +52,7 @@ public class AdminStatsMapping extends WebServiceRestletMapping {
 			Collection collection
 
 			// core stuff
-			String action = par["POST"]["do"] //show, update, etc
+           String action = req.getAttributes().get("action");
 			String lang = par["POST"]["lg"]
 
 			ServerMessage sm = new ServerMessage("AdminStatsMapping", lang, bind, session, processlog)
@@ -76,7 +76,7 @@ public class AdminStatsMapping extends WebServiceRestletMapping {
 			if (action == "show") {
 				long col_id
 				try {
-					col_id = Long.parseLong(par["POST"]["ci"])
+					col_id = (long) par["POST"]["ci"]
 				} catch(Exception e){}
 
 				if (!col_id) return sm.notEnoughVars("ci=$col_id")

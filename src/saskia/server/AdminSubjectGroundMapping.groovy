@@ -48,15 +48,15 @@ public class AdminSubjectGroundMapping extends WebServiceRestletMapping {
             def column, value
             
             // core stuff
-            String action = par["POST"]["do"] //show, update, etc
-            String lang = par["POST"]["lg"] 
+           String action = req.getAttributes().get("action");
+           String lang = par["POST"]["lg"] 
             
             ServerMessage sm = new ServerMessage("AdminSubjectGroundMapping", lang, bind, session, processlog)  
             
             // pager stuff
-            if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
+            if (par["POST"]["l"]) limit = (int) par["POST"]["l"]
 				if (!limit) limit = 0
-            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+            if (par["POST"]["o"]) offset = (long) par["POST"]["o"]
 				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
@@ -100,7 +100,7 @@ public class AdminSubjectGroundMapping extends WebServiceRestletMapping {
         		// the id is from a collection
             	long id 
 					if (par["POST"]["id"]) 
-					try {id = Long.parseLong(par["POST"]["id"] )}
+					try {id = (long) par["POST"]["id"] }
 					catch(Exception e) {}
 					if (!id) return sm.notEnoughVars("id=$id")
                 
@@ -129,9 +129,9 @@ public class AdminSubjectGroundMapping extends WebServiceRestletMapping {
 
                 Long sgr_subject
                 Long sgr_geoscope 
-					 try {sgr_subject = Long.parseLong(par["POST"]["sgr_subject"] )}
+					 try {sgr_subject = (long) par["POST"]["sgr_subject"] }
 					 catch(Exception e) {}
-					 try {sgr_geoscope = Long.parseLong(parpar["POST"]["sgr_geoscope"])}
+					 try {sgr_geoscope = (long) parpar["POST"]["sgr_geoscope"]}
 					 catch(Exception e) {}
                 String sgr_dbpedia_resource =  par["POST"]["sgr_dbpedia_resource"] 
                 String sgr_dbpedia_class =  par["POST"]["sgr_dbpedia_class"] 
@@ -164,7 +164,7 @@ public class AdminSubjectGroundMapping extends WebServiceRestletMapping {
             if (action == "delete") {
                 	long id 
 					if (par["POST"]["id"]) 
-					try {id = Long.parseLong(par["POST"]["id"] )}
+					try {id = (long) par["POST"]["id"] }
 					catch(Exception e) {}
 					if (!id) return sm.notEnoughVars("id=$id")
                 

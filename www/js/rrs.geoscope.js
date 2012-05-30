@@ -13,21 +13,21 @@ $().ready(function() {
 	
 	$('A.GEOSCOPE_LIST').live("click", function(ev, ui) {
 		ev.preventDefault();
-		var a_clicked = $(this)
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
-		var api_key = Rembrandt.Util.getApiKey()
+		var a_clicked = $(this),
+			title = a_clicked.attr("title") || a_clicked.text(),
+			api_key = Rembrandt.Util.getApiKey();
 			
 		showSlidableDIV({
-			"title": title,
-			"target":a_clicked.attr("TARGET"),
-			"role":a_clicked.attr('ROLE'),
-			"slide": getSlideOrientationFromLink(a_clicked),
-			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "geoscope"),
-			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
-			"divRender":generateGeoscopeListDIV, 
+			"title"			: title,
+			"target"		: a_clicked.attr("TARGET"),
+			"role"			: a_clicked.attr('ROLE'),
+			"slide"			: getSlideOrientationFromLink(a_clicked),
+			"ajax"			: true,
+			"restlet_url"	: Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "geoscope")+"/list",
+			"data"			: {"l":10, "o":0, "lg":lang, "api_key":api_key},
+			"divRender"		: generateGeoscopeListDIV, 
 			"divRenderOptions":{},
-			"sidemenu":null, 
+			"sidemenu"		: null, 
 			"sidemenuoptions":{}
 		})					
 	});
@@ -43,31 +43,30 @@ $().ready(function() {
 			divshown.find("DIV.rrs-pageable").html(i18n['geoscope_deleted'][lang])
 			hideSubmeuOnSideMenu($("#main-side-menu-section-geoscope"))
 		}
-	})	
+	});
 
 	$('A.GEOSCOPE_SHOW').live("click", function(ev, ui) {
 		ev.preventDefault();
-		var a_clicked = $(this)
-		var id = a_clicked.attr("ID")
-		var api_key = Rembrandt.Util.getApiKey()
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
+		var a_clicked = $(this),
+			id = parseInt(a_clicked.attr("ID")),
+			api_key = Rembrandt.Util.getApiKey(),
+			title = a_clicked.attr("title") || a_clicked.text();
 			
 		showSlidableDIV({
-			"title": title,
-			"target":a_clicked.attr("TARGET"),
-			"role":a_clicked.attr('ROLE'),
-			"slide": getSlideOrientationFromLink(a_clicked),
-			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "geoscope"),
-			"postdata":"do=show&id="+id+"&lg="+lang+	"&api_key="+api_key,
-			"divRender":generateGeoscopeShowDIV, 
-			"divRenderOptions":{},
-			"sidemenu":"geoscope", 
-			"sidemenuoptions":{"id":id, "geo_name":title}
-		})		
+			"title"				: title,
+			"target"			: a_clicked.attr("TARGET"),
+			"role"				: a_clicked.attr('ROLE'),
+			"slide"				: getSlideOrientationFromLink(a_clicked),
+			"ajax"				: true,
+			"restlet_url"		: Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "geoscope")+"/show",
+			"data"				: {"id":id, "lg":lang, "api_key":api_key},
+			"divRender"			: generateGeoscopeShowDIV, 
+			"divRenderOptions"	: {},
+			"sidemenu"			: "geoscope", 
+			"sidemenuoptions"	: {"id":id, "geo_name":title}
+		});		
 	});
-
-})
+});
 
 /*************************/
 /*** content creation ****/
@@ -277,27 +276,35 @@ function modalGeoscopeCreate(button) {
 			dialog.data.find("#YesButton").click(function(ev) {
 
 				jQuery.ajax( {
-					type:"POST", url:servlet_url,
-					contentType:"application/x-www-form-urlencoded",
-					data: "do=create&lg="+lang+
-					"&geo_name="+dialog.data.find("#geo_name").val()+
-					"&geo_woeid="+dialog.data.find("#geo_woeid").val()+
-					"&geo_woeid_type="+dialog.data.find("#geo_woeid_type").val()+
-					"&api_key="+api_key, 
-					beforeSubmit: waitfunction(lang, dialog.data.find("#login-status")), 
-					success: function(response) {
+					type			: "POST", 
+					url				: servlet_url,
+					contentType		: "application/json",
+					data			: JSON.stringify({
+						"lg"				: lang,
+						"geo_name"			: dialog.data.find("#geo_name").val(),
+						"geo_woeid"			: dialog.data.find("#geo_woeid").val(),
+						"geo_woeid_type"	: dialog.data.find("#geo_woeid_type").val(),
+						"api_key"			: api_key
+					}),
+					beforeSubmit	: Rembrandt.Waiting.show({
+						target: dialog.data.find("#login-status")
+					}), 
+					success			: function(response) {
 						if (response['status'] == -1) {
-							errorMessageWaitingDiv(lang, response['message'])
+							Rembrandt.Waiting.error(response)
 							dialog.data.find("#YesButton").attr("value",i18n['retry'][lang])
 							dialog.data.find("#buttons").show()	
 						} else if (response['status'] == 0)  {
-							showCustomMessageWaitingDiv(i18n['entity_created'][lang])
+							Rembrandt.Waiting.hide({
+								message:i18n['entity_created'][lang],
+								when: 3000
+							})
 							dialog.data.find("#YesButton").hide()
 							dialog.data.find("#NoButton").attr("value",i18n["OK"][lang])
 						}
 					},
-					error:function(response) {
-						errorMessageWaitingDiv(lang, response['message'])			
+					error			:function(response) {
+						Rembrandt.Waiting.error(response)
 					}
 				})
 			})
@@ -315,12 +322,11 @@ function modalDeleteGeoscope(button) {
 	var context = "geoscope"
 	
 	genericDeleteModel({
-		'context':context,
-		'id': button.attr("ID"),
-		'info':button.attr('TITLE'),
-		'servlet_url': Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context),
-		'postdata' : "do=delete&id="+button.attr("ID")+"&lg="+lang+"&api_key="+Rembrandt.Util.getApiKey(),
-		'success_message' : i18n['gescope_deleted'][lang]
+		'context'			: context,
+		'id'				: parseInt(button.attr("ID")),
+		'info'				: button.attr('TITLE'),
+		'servlet_url'		: Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context)+"/delete",
+		'data' 				: {"id":parseInt(button.attr("ID")), "lg":lang, "api_key":Rembrandt.Util.getApiKey()},
+		'success_message'	: i18n['gescope_deleted'][lang]
 	})
-}	
-	
+}

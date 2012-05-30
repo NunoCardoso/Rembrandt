@@ -50,15 +50,15 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 			def column, value
 
 			// core stuff
-			String action = par["POST"]["do"] //show, update, etc
+           String action = req.getAttributes().get("action");
 			String lang = par["POST"]["lg"]
 
 			ServerMessage sm = new ServerMessage("AdminEntityMapping", lang, bind, session, processlog)
 
 			// pager stuff
-			if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
+			if (par["POST"]["l"]) limit = (int) par["POST"]["l"]
 			if (!limit) limit = 0
-			if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+			if (par["POST"]["o"]) offset = (long) par["POST"]["o"]
 			if (!offset) offset = 0
 			if (par["POST"]["c"]) column = par["POST"]["c"]
 			if (par["POST"]["v"]) value = par["POST"]["v"]
@@ -103,7 +103,7 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 
 				Long ent_id
 				if (par["POST"]["id"])
-					try {ent_id = Long.parseLong(par["POST"]["id"])}
+					try {ent_id = (long) par["POST"]["id"]}
 					catch(Exception e) {}
 				if (!ent_id) return sm.notEnoughVars("id=$ent_id")
 				if (!column || !value) return sm.notEnoughVars("c=$column v=$value")
@@ -132,7 +132,7 @@ public class AdminEntityMapping extends WebServiceRestletMapping {
 
 			if (action == "delete") {
 				Long id
-				try {id = Long.parseLong(par["POST"]["id"])
+				try {id = (long) par["POST"]["id"]
 				}catch(Exception e) {}
 				if (!id)  return sm.notEnoughVars("id=$id")
 

@@ -23,8 +23,8 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subject"),
-			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subject")+"/list",
+			"data":{"l":10, "o":0, "lg":lang, "api_key":api_key},
 			"divRender":generateSubjectListDIV, 
 			"divRenderOptions":{},
 			"sidemenu":null, 
@@ -48,9 +48,9 @@ $().ready(function() {
 	$('A.SUBJECT_SHOW').live("click", function(ev, ui) {
 		ev.preventDefault();
 		var a_clicked = $(this)
-		var id = a_clicked.attr("ID")
+		var id = parseInt(a_clicked.attr("ID"))
 		var api_key = Rembrandt.Util.getApiKey()
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
+		var title = a_clicked.attr("title") || a_clicked.text()
 			
 		showSlidableDIV({
 			"title": title,
@@ -58,8 +58,8 @@ $().ready(function() {
 			"role":a_clicked.attr('ROLE'),
 			"slide": getSlideOrientationFromLink(a_clicked),
 			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subject"),
-			"postdata":"do=show&id="+id+"&lg="+lang+	"&api_key="+api_key,
+			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "subject")+"/show",
+			"data":{"id":id, "lg":lang, "api_key":api_key},
 			"divRender":generateSubjectShowDIV, 
 			"divRenderOptions":{},
 			"sidemenu":"subject", 
@@ -216,25 +216,31 @@ function modalSubjectCreate(button) {
 			dialog.data.find("#YesButton").click(function(ev) {
 
 				jQuery.ajax( {
-					type:"POST", url:servlet_url, contentType:"application/x-www-form-urlencoded",
-					data: "do=create&lg="+lang+
-					"&sbj_subject="+dialog.data.find("#sbj_subject").val()+
-					"&api_key="+api_key, 
-					beforeSubmit: Rembrandt.Waiting.show(),
-
-					success: function(response) {
+					type			:"POST", 
+					url				:servlet_url+"/create", 
+					contentType		:"application/json",
+					data: JSON.stringify({
+						"lg"			: lang,
+						"sbj_subject"	: dialog.data.find("#sbj_subject").val(),
+						"api_key"		: api_key
+					}),
+					beforeSubmit	: Rembrandt.Waiting.show(),
+					success			: function(response) {
 						if (response['status'] == -1) {
-							errorMessageWaitingDiv(lang, response['message'])
+							Rembrandt.Waiting.error(response)
 							dialog.data.find("#YesButton").attr("value",i18n['retry'][lang])
 							dialog.data.find("#buttons").show()	
 						} else if (response['status'] == 0)  {
-							showCustomMessageWaitingDiv(i18n['subject_created'][lang])
+							Rembrandt.Waiting.hide({
+								message:i18n['subject_created'][lang],
+								when: 3000
+							})
 							dialog.data.find("#YesButton").hide()
 							dialog.data.find("#NoButton").attr("value",i18n["OK"][lang])
 						}
 					},
 					error:function(response) {
-						errorMessageWaitingDiv(lang, response['message'])			
+						errorMessageWaitingDiv(lang, response['message'])
 					}
 				})
 			})
@@ -252,11 +258,11 @@ function modalSubjectDelete(button) {
 	var context = "subject"
 	
 	genericDeleteModel({
-		'context':context,
-		'id': button.attr("ID"),
-		'info':button.attr('TITLE'),
-		'servlet_url': Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context),
-		'postdata' : "do=delete&id="+button.attr("ID")+"&lg="+lang+"&api_key="+Rembrandt.Util.getApiKey(),
-		'success_message' : i18n['subject_deleted'][lang]
+		'context'			: context,
+		'id'				: parseInt(button.attr("ID")),
+		'info'				: button.attr('TITLE'),
+		'servlet_url'		: Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context)+"/delete",
+		'data' 				: {"id":parseInt(button.attr("ID")), "lg":lang, "api_key":Rembrandt.Util.getApiKey()},
+		'success_message' 	: i18n['subject_deleted'][lang]
 	})
 }	

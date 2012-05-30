@@ -11,23 +11,23 @@ $().ready(function() {
 	
 	$('A.NE_LIST').live("click", function(ev, ui) {
 		ev.preventDefault();
-		var a_clicked = $(this)
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
-		var api_key = Rembrandt.Util.getApiKey()
+		var a_clicked = $(this),
+			title = a_clicked.attr("title") || a_clicked.text(),
+			api_key = Rembrandt.Util.getApiKey();
 			
 		showSlidableDIV({
-			"title": title,
-			"target":a_clicked.attr("TARGET"),
-			"role":a_clicked.attr('ROLE'),
-			"slide": getSlideOrientationFromLink(a_clicked),
-			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "ne"),
-			"postdata":"do=list&l=10&o=0&lg="+lang+"&api_key="+api_key,
-			"divRender":generateNEListDIV, 
+			"title"			: title,
+			"target"		: a_clicked.attr("TARGET"),
+			"role"			: a_clicked.attr('ROLE'),
+			"slide"			: getSlideOrientationFromLink(a_clicked),
+			"ajax"			: true,
+			"restlet_url"	: Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "ne")+"/list",
+			"data"			: {"l":10, "o":0, "lg":lang, "api_key":api_key},
+			"divRender"		: generateNEListDIV, 
 			"divRenderOptions":{},
-			"sidemenu":null, 
+			"sidemenu"		: null, 
 			"sidemenuoptions":{}
-		})					
+		})
 	});
 	
 	$('A.NE_DELETE').live("click", function(ev, ui) {
@@ -45,22 +45,22 @@ $().ready(function() {
 
 	$('A.NE_SHOW').live("click", function(ev, ui) {
 		ev.preventDefault();
-		var a_clicked = $(this)
-		var id = a_clicked.attr("ID")
-		var api_key = Rembrandt.Util.getApiKey()
-		var title = (a_clicked.attr("title") ? a_clicked.attr("title") : a_clicked.text())
+		var a_clicked = $(this),
+			id = parseInt(a_clicked.attr("ID")),
+			title = a_clicked.attr("title") || a_clicked.text(),
+			api_key = Rembrandt.Util.getApiKey();
 			
 		showSlidableDIV({
-			"title": title,
-			"target":a_clicked.attr("TARGET"),
-			"role":a_clicked.attr('ROLE'),
-			"slide": getSlideOrientationFromLink(a_clicked),
-			"ajax":true,
-			"restlet_url":Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "ne"),
-			"postdata":"do=show&id="+id+"&lg="+lang+	"&api_key="+api_key,
-			"divRender":generateNEShowDIV, 
+			"title"			: title,
+			"target"		: a_clicked.attr("TARGET"),
+			"role"			: a_clicked.attr('ROLE'),
+			"slide"			: getSlideOrientationFromLink(a_clicked),
+			"ajax"			: true,
+			"restlet_url"	: Rembrandt.Util.getServletEngineFromRole(a_clicked.attr('ROLE'), "ne")+"/show",
+			"data"			: {"id":id, "lg":lang, "api_key":api_key},
+			"divRender"		: generateNEShowDIV, 
 			"divRenderOptions":{},
-			"sidemenu":"ne", 
+			"sidemenu"		: "ne", 
 			"sidemenuoptions":{"id":id, "ne_name":title}
 		})		
 	});
@@ -294,12 +294,15 @@ function modalNECreate (button) {
 			
 		onShow: function modalShow(dialog) {
 			// fill out table
-			fillNEclasses(dialog.data.find("#selectNEclass"))
+			Rembrandt.DisplayNE.fillNEclasses(dialog.data.find("#selectNEclass"))
 			
 			// make it use the entity picker
 			dialog.data.find("#entity").autocomplete(restlet_dbosuggestion_url, {
-				minChars:3, dataType: "json", 
-				mustMatch: false, autoFill: false, matchContains: false,
+				minChars:3, 
+				dataType: "json", 
+				mustMatch: false, 
+				autoFill: false, 
+				matchContains: false,
 				multipleSeparator:"",
 				extraParams:{"t" : "entity"},
 				parse: theParse, 
@@ -321,29 +324,35 @@ function modalNECreate (button) {
 				if (selectedEntity === undefined || selectedEntity == "--") {selectedEntity = 'null'}
 		
 				jQuery.ajax( {
-					type:"POST", url:servlet_url,
-					contentType:"application/x-www-form-urlencoded",
-					data: "do=create&lg="+lang+"&ne_name="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(ne_name))+
-					"&c1="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedClass))+
-					"&c2="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedType))+
-					"&c3="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedSubtype))+
-					"&ent="+Rembrandt.Util.urlEncode(Rembrandt.Util.encodeUtf8(selectedEntity))+
-					"&api_key="+api_key,					 
-					beforeSubmit: Rembrandt.Waiting.show(),
-
-					success: function(response) {
+					type				: "POST", 
+					url					: servlet_url+"/create",
+					contentType			: "application/json",
+					data				: JSON.stringify({
+						"lg"		: lang,
+						"ne_name"	: Rembrandt.Util.encodeUtf8(ne_name),
+						"c1"		: Rembrandt.Util.encodeUtf8(selectedClass),
+						"c2"		: Rembrandt.Util.encodeUtf8(selectedType),
+						"c3"		: Rembrandt.Util.encodeUtf8(selectedSubtype),
+						"ent"		: Rembrandt.Util.encodeUtf8(selectedEntity),
+						"api_key"	: api_key
+					}),	 
+					beforeSubmit		: Rembrandt.Waiting.show(),
+					success				: function(response) {
 						if (response['status'] == -1) {
-							errorMessageWaitingDiv(lang, response['message'])
+							Rembrandt.Waiting.error(response)
 							dialog.data.find("#YesButton").attr("value",i18n['retry'][lang])
 							dialog.data.find("#buttons").show()	
 						} else if (response['status'] == 0)  {
-							showCustomMessageWaitingDiv(i18n['entity_created'][lang])
+							Rembrandt.Waiting.hide({
+								message:i18n['entity_created'][lang],
+								when: 3000
+							})
 							dialog.data.find("#YesButton").hide()
 							dialog.data.find("#NoButton").attr("value",i18n["OK"][lang])
 						}
 					},
 					error:function(response) {
-						errorMessageWaitingDiv(lang, response['message'])			
+						Rembrandt.Waiting.error(response)
 					}
 				})
 			})
@@ -356,18 +365,17 @@ function modalNECreate (button) {
 	});
 }	
 
-
 // admin only
 function modalNEDelete(button) {
 	
 	var context = "ne"
 	
 	genericDeleteModel({
-		'context':context,
-		'id': button.attr("ID"),
-		'info':button.attr('TITLE'),
-		'servlet_url': Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context),
-		'postdata' : "do=delete&id="+button.attr("ID")+"&lg="+lang+"&api_key="+Rembrandt.Util.getApiKey(),
-		'success_message' : i18n['ne_deleted'][lang]
+		'context'		: context,
+		'id'			: parseInt(button.attr("ID")),
+		'info'			: button.attr('TITLE'),
+		'servlet_url'	: Rembrandt.Util.getServletEngineFromRole(Rembrandt.Util.getRole(button), context)+"/delete",
+		'data' 			: {"id":parseInt(button.attr("ID")), "lg":lang, "api_key":Rembrandt.Util.getApiKey()},
+		'success_message': i18n['ne_deleted'][lang]
 	})
 }	

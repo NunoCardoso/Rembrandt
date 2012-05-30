@@ -217,17 +217,19 @@ Rembrandt.Display = (function ($) {
 					}
 					
 					jQuery.ajax({ 
-						type:"POST", 
-						url:Rembrandt.urls.restlet_saskia_commit_url+"/save", 
-						contentType:"application/json",
-						data: JSON.stringify(data),
-						beforeSubmit: Rembrandt.Waiting.show(),
-						// respond with JSON
+						type			: "POST", 
+						url				: Rembrandt.urls.restlet_saskia_commit_url+"/save", 
+						contentType		: "application/json",
+						data			: JSON.stringify(data),
+						beforeSubmit	: Rembrandt.Waiting.show(),
 						success: function (response) {
 							if (response["status"] == -1) {
 								Rembrandt.Waiting.error(response)
 							} else {
-								Rembrandt.Waiting.hide()
+								Rembrandt.Waiting.hide({
+									message :"Commit saved",
+									when	: 5000
+								})
 								Rembrandt.Display.addCommitToMenu(display, response["message"])
 								Rembrandt.Display.markAsSaved(display)
 							}
@@ -819,7 +821,7 @@ Rembrandt.Relation = (function ($) {
 	},
 	
 	// search sibling NEs for relations, update RI and RT info
-	addIndirectInfo = function (ne) {
+	addIndirectInfo = function (display, ne) {
 		var id = ne.attr('id')
 		var indirectRels = new Array();
 		var indirectReltypes = new Array();
@@ -1131,7 +1133,7 @@ Rembrandt.DisplayNE = (function ($) {
 				ne.addClass(ne.attr("CATEGORY")).addClass(ne.attr("TYPE")).addClass(ne.attr("SUBTYPE"))	
 				ne.addClass("NE")
 
-				Rembrandt.DisplayNE.setupNE(ne)
+				Rembrandt.DisplayNE.setupNE(display, ne)
 				Rembrandt.Display.markAsChanged(display)
 				$.modal.close();
  			});
@@ -1288,6 +1290,8 @@ Rembrandt.DisplayNE = (function ($) {
       "</div>"+
 	"</div>", {
 				onShow: function modalShow(dialog) {
+
+					
 				dialog.data.find("#NEmessage").append(msg)	
 				dialog.data.find("#NoButton").click(function(ev) {
 					ev.preventDefault();
@@ -1308,7 +1312,7 @@ Rembrandt.DisplayNE = (function ($) {
 			"<select size=1 id='selectNEclass' onChange='Rembrandt.DisplayNE.fillNEtypes($(this));'></select>"+
 			"<select size=1 id='selectNEtype' onChange='Rembrandt.DisplayNE.fillNEsubtypes($(this));' disabled></select>"+
 			"<select size=1 id='selectNEsubtype' disabled></select>"+
-		"<BR><BR>	"+
+		"<BR><BR>"+i18n["entity"][lang]+"* : <INPUT TYPE='TEXT' ID='entity' SIZE=20><BR><BR>"+
 			"<div style='text-align:center;'><input type='button' id='YesButton' value='"+i18n["yes"][lang]+", "+i18n["createnew"][lang]+"'>"+
 			"<input type='button' id='NoButton' value='"+i18n["no"][lang]+", "+i18n["cancel"][lang]+"'></div></form>"+
       "</div>"+
@@ -1316,8 +1320,22 @@ Rembrandt.DisplayNE = (function ($) {
 			onShow: function modalShow(dialog) {
 					
 				Rembrandt.DisplayNE.fillNEclasses(dialog.data.find("#selectNEclass"))
-					// filling types and subtypes are done automatically, don't worry.
-					
+				
+				dialog.data.find("#entity").autocomplete(restlet_dbosuggestion_url, {
+					minChars:3, 
+					dataType: "json", 
+					mustMatch: false, 
+					autoFill: false, 
+					matchContains: false,
+					multipleSeparator:"",
+					extraParams:{"t" : "entity"},
+					parse: theParse, 
+					formatItem: theFormatItem,
+					formatMatch: theFormatMatch,
+					formatResult: theFormatResult
+				})
+				dialog.data.find("#entity").result(theResult)
+				
 				dialog.data.find("#YesButton").click(function(ev) {
 					ev.preventDefault();
 					
@@ -1347,7 +1365,7 @@ Rembrandt.DisplayNE = (function ($) {
 					ne.addClass(ne.attr("CATEGORY")).addClass(ne.attr("TYPE")).addClass(ne.attr("SUBTYPE"))	
 					ne.addClass("NE")
 
-					setupNE(ne) 
+					Rembrandt.Display.setupNE(display, ne) 
 					Rembrandt.Display.markAsChanged( display )
 					
 					$.modal.close();
@@ -1511,13 +1529,13 @@ Rembrandt.DisplayNE = (function ($) {
 		tag_edit.hide("slow").remove();
 	},
 
-	setupNE = function(ne) {	
-		Rembrandt.Relation.addIndirectInfo(ne);
+	setupNE = function(display, ne) {	
+		Rembrandt.Relation.addIndirectInfo(display, ne);
 	},
 
 	setupNEs = function(display) {
 		$.eachCallback($(".NE", display), function() {
-			setupNE($(this))	
+				setupNE($(this), display)	
 		}, function(loopcount) {});
 	};
 

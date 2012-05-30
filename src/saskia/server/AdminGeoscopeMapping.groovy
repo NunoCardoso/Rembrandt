@@ -49,15 +49,15 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
             def column, value
             
             // core stuff
-            String action = par["POST"]["do"] //show, update, etc
-            String lang = par["POST"]["lg"] 
+           String action = req.getAttributes().get("action");
+             String lang = par["POST"]["lg"] 
             
             ServerMessage sm = new ServerMessage("AdminGeoscopeMapping", lang, bind, session, processlog)  
             
             // pager stuff
-            if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
+            if (par["POST"]["l"]) limit = (int) par["POST"]["l"]
 				if (!limit) limit = 0
-            if (par["POST"]["o"]) offset = Long.parseLong(par["POST"]["o"])
+            if (par["POST"]["o"]) offset = (long) par["POST"]["o"]
 				if (!offset) offset = 0
             if (par["POST"]["c"]) column = par["POST"]["c"]
             if (par["POST"]["v"]) value = par["POST"]["v"]
@@ -101,7 +101,7 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
         	
         			Long id
                if (par["POST"]["id"]) 
-					try {id = Long.parseLong(par["POST"]["id"])}
+					try {id = (long) par["POST"]["id"]}
 					catch(Exception e) {}
                if (!id) return sm.notEnoughVars("id=$id")
                if (!column || !value) return sm.notEnoughVars("c=$column v=$value")
@@ -129,7 +129,7 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
            
             if (action == "delete") {
                 Long id 
-                try {id = Long.parseLong(par["POST"]["id"])                      
+                try {id = (long) par["POST"]["id"]                      
                 }catch(Exception e) {}                               
                 if (!id)  return sm.notEnoughVars("id=$id")      
                 
@@ -159,10 +159,10 @@ public class AdminGeoscopeMapping extends WebServiceRestletMapping {
                   
                String geo_name = par["POST"]["geo_name"]
                Long geo_woeid
-               try {geo_woeid = Long.parseLong(par["POST"]["geo_woeid"])
+               try {geo_woeid = (long) par["POST"]["geo_woeid"]
                } catch(Exception e) {}
                Integer geo_woeid_type 
-               try {geo_woeid_type = Integer.parseInt(par["POST"]["geo_woeid_type"])
+               try {geo_woeid_type = (int) par["POST"]["geo_woeid_type"]
                } catch(Exception e) {}
               
 					if (!geo_name || !geo_woeid || !geo_woeid_type) return sm.notEnoughVars("$geo_name, $geo_woeid, $geo_woeid_type")      

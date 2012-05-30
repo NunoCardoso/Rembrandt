@@ -4,12 +4,12 @@ $(document).ready(function() {
 	
 	// Get the sub-menu hideable 
 	$("#main-menu UL LI").hover(function(e) {
-	  var div = $(this).children("DIV")
-    div.hoverFlow(e.type, { 'height': 'show' }, 'fast');
-  }, function(e) {
-	  var div = $(this).children("DIV")
-    div.hoverFlow(e.type, {'height': 'hide'}, 'fast');
-  });
+		var div = $(this).children("DIV")
+		div.hoverFlow(e.type, { 'height': 'show' }, 'fast');
+	}, function(e) {
+		var div = $(this).children("DIV")
+		div.hoverFlow(e.type, {'height': 'hide'}, 'fast');
+	});
 
 	$(".main-side-menu-section-header A").live("click", function(e) {
 		e.preventDefault();
@@ -67,18 +67,18 @@ $(document).ready(function() {
 
 /**** ADD SLIDABLE DIV ***/
 
-function showSlidableDIV(options) {		
+function showSlidableDIV(options) {
 			
 	var divtohide = $("DIV.main-slidable-div:visible")
 	var divtoshow = $("#"+options.target)
 		
 	if (divtoshow.size() > 0) {
 		if (options.slide == 'vertical') {
-			slideDownWith(divtoshow)	
-		} else {		
-	   	slideLeftToRightWith(divtoshow)
+			slideDownWith(divtoshow)
+		} else {
+			slideLeftToRightWith(divtoshow)
 		}
-		// the sliding funciton takes care already of the side menu! :)			
+		// the sliding funciton takes care already of the side menu! :)
 	} else {	
 		
 		// if no ajax, invoke div creator with no response
@@ -86,42 +86,44 @@ function showSlidableDIV(options) {
 			
 			var divgenerator = options.divRender
 			// make sure the DIV has an id and a title, for the breadcrumble
-			divtoshow = divgenerator(null, options.su, options.role, options.divRenderOptions)			
-			
+			divtoshow = divgenerator(null, options.su, options.role, options.divRenderOptions)
 			addSlidableDIV(divtohide, divtoshow, options)
 			
 		} else {
 					
-			jQuery.ajax({type:'POST', url:options.restlet_url,
-			data:options.postdata, beforeSubmit: Rembrandt.Waiting.show(),
-			success: function(response)  {		
-				if (response['status'] == -1) {
-					errorMessageWaitingDiv(lang, response['message'])
-				} else {								
-					Rembrandt.Waiting.hide()
-					
-					var su = false
-					var pubkey = response['usr_pub_key']
+			jQuery.ajax({
+				type			: 'POST', 
+				url				: options.restlet_url,
+				contentType		: "application/json",
+				dataType		: "json",
+				data  			: JSON.stringify(options.data),
+				beforeSubmit	: Rembrandt.Waiting.show(),
+				success			: function(response)  {
+					if (response['status'] == -1) {
+						Rembrandt.Waiting.error(response)
+					} else {
+						Rembrandt.Waiting.hide()
+						var su = false,
+							pubkey = response['usr_pub_key'],
+							divgenerator = options.divRender;
+						
+							// this is where I refresh the su validation...
+						if (!_.isUndefined(pubkey)) {
+							$("#main-body").attr('USR_PUB_KEY',pubkey)
+							su = Rembrandt.Util.validateSu(pubkey)
+						}
 				
-					// this is where I refresh the su validation...
-					if (!_.isUndefined(pubkey)) {
-						$("#main-body").attr('USR_PUB_KEY',pubkey)
-						su = Rembrandt.Util.validateSu(pubkey)
+						// make sure the DIV has an id and a title, for the breadcrumble
+						divtoshow = divgenerator(response['message'], su, options.role, options.divRenderOptions)
+						addSlidableDIV(divtohide, $(divtoshow), options)
+						if (!_.isUndefined(options.callback)) {
+							options.callback.call()
+						}
 					}
-				
-					var divgenerator = options.divRender
-					// make sure the DIV has an id and a title, for the breadcrumble
-					divtoshow = divgenerator(response['message'], su, options.role, options.divRenderOptions)
-					
-					addSlidableDIV(divtohide, $(divtoshow), options)			
-					if (!_.isUndefined(options.callback)) {
-						options.callback.call()
-					}
-				}	 
-		  },									
-		  error: function(response) {Rembrandt.Waiting.error(response)}
-		})
-	}
+				},
+				error: function(response) {Rembrandt.Waiting.error(response)}
+			})
+		}
 	}
 }
 
@@ -135,13 +137,13 @@ function addSlidableDIV(divtohide, divtoshow, options) {
 		copySlidableDivHeaderFromTo($(divtohide), $(divtoshow))
 		replaceForwardButtonsTargetingThisToThis($(divtohide), $(divtoshow))
 	}
-								
+
 	// add the new div
 	$(divtoshow).appendTo($("#main-body"))
-				
+
 	// activate newdiv stuff, now that we have it on DOM
 	$('TABLE.tablesorter', divtoshow).tablesorter()
- 	updateEditInPlace(divtoshow);
+	updateEditInPlace(divtoshow);
 
 	// add submenu to side menu
 	if (!_.isUndefined(options.sidemenu)) {
@@ -154,14 +156,14 @@ function addSlidableDIV(divtohide, divtoshow, options) {
 		}
 		showSubmeuOnSideMenu(sidemenu)
 	}
-										
+
 	// add breadcrumble (label, target)
 	if (options.slide == 'vertical') {
 		substituteLastBreadcrumbleElement($(divtoshow).attr('title'), $(divtoshow).attr('id'))
 		slideDownWith(divtoshow)	
 	} else {		
 		slideLeftToRightWith(divtoshow)
-	}					
+	}
 }
 
 /**** ADD MANAGE & CONFIGURE SIDE MENUS *****/
@@ -279,11 +281,11 @@ function reviewSideMenuMakeActiveFor(submenu, visibledivid) {
    submenu.find("DIV.main-side-menu-section-body-element").each(function(index, item) {
 
 		if ($(item).find("A").attr("target") == visibledivid) {
-			$(item).addClass("main-side-menu-section-body-element-active")			
-			$(item).find("A").addClass("disabled")			
+			$(item).addClass("main-side-menu-section-body-element-active")
+			$(item).find("A").addClass("disabled")
 		} else {
-			$(item).removeClass("main-side-menu-section-body-element-active")						
-			$(item).find("A").removeClass("disabled")			
+			$(item).removeClass("main-side-menu-section-body-element-active")
+			$(item).find("A").removeClass("disabled")
 		}		
 	})	
 }
@@ -461,7 +463,7 @@ function reformatBreadcrumbles() {
 		if (index < size-1) {
 			$(item).find("A").removeClass("disabled")
 		} else {
-			$(item).find("A").addClass("disabled")		
+			$(item).find("A").addClass("disabled")
 		}
 	})
 }

@@ -20,24 +20,33 @@ var Saskia = (function ($) {
 		var main_body = $("#main-body")
 		// not really slidable, but it must be included for hide/show
 		// add this breadcrumble header, with or without query
-		addBreadcrumbleHeader($("#rrs-homepage-collection").attr('title'), 'rrs-homepage-collection')			
+		addBreadcrumbleHeader($("#rrs-homepage-collection").attr('title'), 'rrs-homepage-collection')
 
 		// let's query out stuff
 		
-		jQuery.ajax({type:'POST', url:Rembrandt.urls.restlet_saskia_collection_url,
-			contentType:"application/x-www-form-urlencoded",
-			data: "do=list-all&l="+limit+"&o="+offset+"&lg="+lang+"&api_key="+api_key,
-			beforeSubmit: Rembrandt.Waiting.show(),
-			success: function(response)  {
+		jQuery.ajax({
+			type				: 'POST', 
+			url					: Rembrandt.urls.restlet_saskia_collection_url+"/list-all",
+			contentType			: "application/json",
+			data				: JSON.stringify({
+				"l"		: limit,
+				"o"		: offset,
+				"lg"	: lang,
+				"api_key":api_key
+			}),
+			beforeSubmit		: Rembrandt.Waiting.show(),
+			success				: function(response)  {
 				if (response['status'] == -1 ) {
 					Rembrandt.Waiting.error(response)
 				} else {
 					Rembrandt.Waiting.hide()
 					$("#rrs-homepage-collection").append(
-						Saskia.generateCollectionMainPageDIV(response['message'], su, role, {}))			
+						Saskia.generateCollectionMainPageDIV(response['message'], su, role, {}))
 				}
 			},
-			error: function(response) {Rembrandt.Waiting.error(response)}
+			error: function(response) {
+				Rembrandt.Waiting.error(response)
+			}
 		})
 	},
 

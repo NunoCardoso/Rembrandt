@@ -48,14 +48,14 @@ public class TaskMapping extends WebServiceRestletMapping {
 			def column, value
 
 			// core stuff
-			String action = par["POST"]["do"] //show, update, etc
+           String action = req.getAttributes().get("action");
 			String lang = par["POST"]["lg"]
 
 			ServerMessage sm = new ServerMessage("TaskMapping", lang, bind, session)
 
 			// pager stuff
-			if (par["POST"]["l"]) limit = Integer.parseInt(par["POST"]["l"])
-			if (par["POST"]["o"]) offset = Integer.parseInt(par["POST"]["o"])
+			if (par["POST"]["l"]) limit = (int) par["POST"]["l"]
+			if (par["POST"]["o"]) offset = (int) par["POST"]["o"]
 			if (par["POST"]["c"]) column = par["POST"]["c"]
 			if (par["POST"]["v"]) value = par["POST"]["v"]
 
@@ -96,7 +96,7 @@ public class TaskMapping extends WebServiceRestletMapping {
 				// the id is from a collection
 				long id
 				if (par["POST"]["id"])
-					try {id = Long.parseLong(par["POST"]["id"] )}
+					try {id = (long) par["POST"]["id"] }
 					catch(Exception e) {}
 				if (!id) return sm.notEnoughVars("id=$id")
 
@@ -126,22 +126,22 @@ public class TaskMapping extends WebServiceRestletMapping {
 
 				User tsk_user
 				Collection tsk_collection
-				try {tsk_user = User.getFromID(Long.parseLong(par["POST"]["tsk_user"]))
+				try {tsk_user = User.getFromID((long) par["POST"]["tsk_user"])
 				}catch(Exception e) {}
-				try {tsk_collection = Collection.getFromID(Long.parseLong(par["POST"]["tsk_collection"]))
+				try {tsk_collection = Collection.getFromID((long) par["POST"]["tsk_collection"])
 				}catch(Exception e) {}
 				String tsk_type = par["POST"]["tsk_type"]
 				Integer tsk_priority
-				try {tsk_priority = Integer.parseInt(par["POST"]["tsk_priority"])}
+				try {tsk_priority = (int) par["POST"]["tsk_priority"]}
 				catch(Exception e) {}
 				Integer tsk_limit
-				try {tsk_limit = Integer.parseInt(par["POST"]["tsk_limit"])}
+				try {tsk_limit = (int) par["POST"]["tsk_limit"]}
 				catch(Exception e) {}
 				Long tsk_offset
-				try {tsk_offset = Long.parseLong(par["POST"]["tsk_offset"])}
+				try {tsk_offset = (long) par["POST"]["tsk_offset"]}
 				catch(Exception e) {}
 				Integer tsk_done
-				try {tsk_done =  Integer.parseInt(par["POST"]["tsk_done"])}
+				try {tsk_done =  (int) par["POST"]["tsk_done"]}
 				catch(Exception e) {}
 				String tsk_scope = par["POST"]["tsk_scope"]
 				String tsk_persistence = par["POST"]["tsk_persistence"]
@@ -177,7 +177,7 @@ public class TaskMapping extends WebServiceRestletMapping {
 			if (action == "delete") {
 				long id
 				if (par["POST"]["id"])
-					try {id = Long.parseLong(par["POST"]["id"] )}
+					try {id = (long) par["POST"]["id"] }
 					catch(Exception e) {}
 				if (!id) return sm.notEnoughVars("id=$id")
 
